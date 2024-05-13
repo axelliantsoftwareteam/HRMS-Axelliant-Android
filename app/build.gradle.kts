@@ -1,6 +1,7 @@
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
+    alias(libs.plugins.androidApplication)
+    alias(libs.plugins.jetbrainsKotlin)
+    alias(libs.plugins.navigationSafeArgs)
     id("kotlin-kapt")
 }
 
@@ -34,24 +35,26 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-
     buildFeatures {
-        viewBinding =true
-        dataBinding =true
+        viewBinding = true
+        dataBinding = true
     }
 }
 
 dependencies {
 
-    implementation("androidx.core:core-ktx:1.13.1")
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.12.0")
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-
-    // text size and dimentions
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.material)
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+    implementation(libs.koin.android)
+    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
+//    implementation(libs.navigation.fragment)
     implementation("com.intuit.ssp:ssp-android:1.1.0") // multi screen text sizes support
     implementation("com.intuit.sdp:sdp-android:1.1.0") // multi screen width height support
+
 
 }
