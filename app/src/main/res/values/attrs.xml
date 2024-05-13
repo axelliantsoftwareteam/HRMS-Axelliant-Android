@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="RoundedButton">
+        <attr name="text" format="string" />
+        <attr name="buttonBg" format="reference" />
+        <attr name="textColor" format="color" />
+        <attr name="textSize" format="dimension" />
+        <attr name="textFont" format="reference" />
+        <attr name="isOutlineButton" format="boolean" />
+        <attr name="iconVisibility" format="boolean" />
+        <attr name="buttonIcon" format="reference" />
+    </declare-styleable>
+
+
+</resources>

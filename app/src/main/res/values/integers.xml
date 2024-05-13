@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <item name="gl_left" type="integer" format="float">0.03</item>
+    <item name="gl_right" type="integer" format="float">0.97</item>
+    <item name="gl_bottom" type="integer" format="float">0.97</item>
+    <item name="gl_bott" type="integer" format="float">0.97</item>
+    <item name="gl_top" type="integer" format="float">0.03</item>
+
+</resources>
