@@ -1,0 +1,38 @@
+[versions]
+androidx-junit = "1.1.5"
+appcompat = "1.6.1"
+core-ktx = "1.13.1"
+espresso-core = "3.5.1"
+junit = "4.13.2"
+koin-android = "3.5.6"
+material = "1.12.0"
+android-gradle-plugin = "8.2.0"
+jet-brains-plugin = "1.9.10"
+navigation-fragment = "1.0.0"
+navigation-fragment-ktx = "2.7.7"
+nav-safe-args = "2.5.0"
+
+[libraries]
+androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
+androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "core-ktx" }
+androidx-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espresso-core" }
+androidx-junit = { module = "androidx.test.ext:junit", version.ref = "androidx-junit" }
+androidx-navigation-fragment-ktx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigation-fragment-ktx" }
+androidx-navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigation-fragment-ktx" }
+junit = { module = "junit:junit", version.ref = "junit" }
+koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin-android" }
+material = { module = "com.google.android.material:material", version.ref = "material" }
+navigation-fragment = { module = "android.arch.navigation:navigation-fragment", version.ref = "navigation-fragment" }
+
+
+#implementation(libs.androidx.appcompat)
+#androidx.appcompat:appcompat:1.6.1
+
+#implementation("com.google.android.material:material:1.12.0")
+#implementation(libs.material)
+
+
+[plugins]
+androidApplication = {id="com.android.application",version.ref="android-gradle-plugin"}
+jetbrainsKotlin = {id="org.jetbrains.kotlin.android",version.ref="jet-brains-plugin"}
+navigationSafeArgs={id="androidx.navigation.safeargs",version.ref="nav-safe-args"}
