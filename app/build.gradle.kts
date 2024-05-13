@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlin)
     alias(libs.plugins.navigationSafeArgs)
+    id("kotlin-kapt")
 }
 
 android {
@@ -52,6 +53,8 @@ dependencies {
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
 //    implementation(libs.navigation.fragment)
+    implementation("com.intuit.ssp:ssp-android:1.1.0") // multi screen text sizes support
+    implementation("com.intuit.sdp:sdp-android:1.1.0") // multi screen width height support
 
 
 }

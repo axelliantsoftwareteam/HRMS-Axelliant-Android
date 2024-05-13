@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_left"
+            style="@style/gl_left"
+            android:orientation="vertical" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_right"
+            style="@style/gl_right"
+            android:orientation="vertical" />
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_bottom"
+            style="@style/gl_bottom" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_top"
+            style="@style/gl_top" />
+     <!--   <LinearLayout
+            android:id="@+id/ll_back"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_40sdp"
+            android:gravity="start|top"
+            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="@+id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@+id/guideline_top"
+            >
+
+            <ImageView
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:contentDescription="@string/todo"
+                android:src="@drawable/ic_left_arrow">
+
+            </ImageView>
+        </LinearLayout>
+
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_title"
+            style="@style/TEXT_MEDIUM_000000_25"
+            android:textSize="@dimen/_18ssp"
+            android:text="@string/botherYou"
+            android:textAlignment="textStart"
+            android:layout_marginTop="@dimen/_10sdp"
+            app:layout_constraintLeft_toRightOf="@id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@+id/ll_back" />
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_sub_title"
+            style="@style/TEXT_REGULAR_8D8D8D_15"
+            android:textAlignment="textStart"
+            android:text="@string/gotIt"
+            app:layout_constraintEnd_toEndOf="@id/guideline_right"
+            app:layout_constraintStart_toStartOf="@id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@+id/tv_title">
+        </com.google.android.material.textview.MaterialTextView>
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_item"
+            style="@style/TEXT_MEDIUM_0C0C0C_15"
+            android:layout_height="wrap_content"
+            android:height="@dimen/_40sdp"
+            android:background="@drawable/rectangle_button"
+            android:gravity="start|center"
+            android:paddingStart="@dimen/_5sdp"
+            tools:text="@string/item"
+            android:layout_marginTop="@dimen/_10sdp"
+            app:layout_constraintBottom_toTopOf="@+id/ll_mc"
+            app:layout_constraintEnd_toEndOf="@+id/guideline_right"
+            app:layout_constraintStart_toStartOf="@+id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@+id/tv_sub_title"
+            tools:ignore="RtlSymmetry">
+
+        </com.google.android.material.textview.MaterialTextView>-->
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
