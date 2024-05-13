@@ -16,7 +16,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         components = Components()
 
         Toast.makeText(
@@ -25,11 +24,12 @@ class MainActivity : AppCompatActivity() {
             Toast.LENGTH_SHORT
         ).show()
 
+
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         // above will assign it
-        GlobalConfig.getInstance().navController = navHostFragment.navController
-        GlobalConfig.getInstance().navController.addOnDestinationChangedListener { _, _, _ ->
+        components.globalConfig.navController = navHostFragment.navController
+        components.globalConfig.navController.addOnDestinationChangedListener { _, _, _ ->
 
         }
 
