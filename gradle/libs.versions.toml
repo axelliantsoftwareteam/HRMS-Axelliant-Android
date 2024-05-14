@@ -1,9 +1,11 @@
 [versions]
+android-gif-drawable = "1.2.28"
 androidx-junit = "1.1.5"
 appcompat = "1.6.1"
 converter-scalars = "2.9.0"
 core-ktx = "1.13.1"
 espresso-core = "3.5.1"
+glide = "4.15.1"
 gson = "2.10.1"
 junit = "4.13.2"
 koin-android = "3.5.6"
@@ -15,8 +17,11 @@ jet-brains-plugin = "1.9.10"
 navigation-fragment = "1.0.0"
 navigation-fragment-ktx = "2.7.7"
 nav-safe-args = "2.5.0"
+sdp-android = "1.1.0"
+ssp-android = "1.1.0"
 
 [libraries]
+android-gif-drawable = { module = "pl.droidsonroids.gif:android-gif-drawable", version.ref = "android-gif-drawable" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "core-ktx" }
 androidx-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espresso-core" }
@@ -27,6 +32,7 @@ androidx-navigation-fragment-ktx = { module = "androidx.navigation:navigation-fr
 androidx-navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigation-fragment-ktx" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converter-scalars" }
 converter-scalars = { module = "com.squareup.retrofit2:converter-scalars", version.ref = "converter-scalars" }
+glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 junit = { module = "junit:junit", version.ref = "junit" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin-android" }
@@ -35,6 +41,8 @@ material = { module = "com.google.android.material:material", version.ref = "mat
 navigation-fragment = { module = "android.arch.navigation:navigation-fragment", version.ref = "navigation-fragment" }
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "logging-interceptor" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "converter-scalars" }
+sdp-android = { module = "com.intuit.sdp:sdp-android", version.ref = "sdp-android" }
+ssp-android = { module = "com.intuit.ssp:ssp-android", version.ref = "ssp-android" }
 
 
 #implementation(libs.androidx.appcompat)

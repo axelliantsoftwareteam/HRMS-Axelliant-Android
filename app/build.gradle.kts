@@ -53,8 +53,11 @@ dependencies {
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
 //    implementation(libs.navigation.fragment)
-    implementation("com.intuit.ssp:ssp-android:1.1.0") // multi screen text sizes support
-    implementation("com.intuit.sdp:sdp-android:1.1.0") // multi screen width height support
+    implementation(libs.ssp.android) // multi screen text sizes support
+    implementation(libs.sdp.android) // multi screen width height support
+//gif image
+    implementation(libs.android.gif.drawable)
+    implementation(libs.glide)
 
     implementation(libs.converter.scalars)
     implementation(libs.gson)

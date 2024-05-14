@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Android-ERP</string>
+    <string name="welcome">Welcome Back</string>
+    <string name="please_login">Please login with Microsoft account to continue</string>
+    <string name="hello">Hello there, login to continue</string>
+    <string name="login_mic">Login with Microsoft</string>
 </resources>

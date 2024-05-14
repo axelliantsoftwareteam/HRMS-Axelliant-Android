@@ -1,14 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
-        android:id="@+id/loginView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="i am login fragment"
-        android:textSize="22sp" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-</LinearLayout>
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/start_guideline"
+            style="@style/start_gl"
+            android:orientation="vertical" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/end_guideline"
+            style="@style/end_gl"
+            android:orientation="vertical" />
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/bottom_guideline"
+            style="@style/bottom_gl" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/top_guideline"
+            style="@style/top_gl" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_title"
+            style="@style/TEXT_SEMI_BLACK_15"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:text="@string/welcome"
+            android:textAlignment="textStart"
+            android:textSize="@dimen/_18ssp"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintTop_toBottomOf="@+id/top_guideline" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_sub_title"
+            style="@style/TEXT_MEDIUM_GREY_10"
+            android:text="@string/hello"
+            android:textAlignment="textStart"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintTop_toBottomOf="@+id/tv_title" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_200sdp"
+            android:src="@drawable/ic_welocme"
+            app:layout_constraintLeft_toRightOf="@id/start_guideline"
+            app:layout_constraintRight_toLeftOf="@id/end_guideline"
+            app:layout_constraintTop_toBottomOf="@id/tv_sub_title"
+            app:layout_constraintBottom_toTopOf="@+id/divider" />
+
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@color/divider"
+            android:layout_marginStart="@dimen/_15sdp"
+            android:layout_marginEnd="@dimen/_15sdp"
+            android:layout_marginBottom="@dimen/_15sdp"
+            app:layout_constraintBottom_toTopOf="@+id/btn_mic_login"
+            app:layout_constraintLeft_toRightOf="@id/start_guideline"
+            app:layout_constraintRight_toLeftOf="@id/end_guideline">
+        </View>
+
+        
+        <com.axelliant.android_erp.components.RoundedButton
+            android:id="@+id/btn_mic_login"
+            style="@style/ButtonTextStyle"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_40sdp"
+            app:text="@string/login_mic"
+            app:textColor="@color/white"
+            app:buttonBg="@drawable/rounded_enabled"
+            app:buttonIcon="@drawable/ic_mic"
+            app:iconVisibility="true"
+            android:layout_marginStart="@dimen/_15sdp"
+            android:layout_marginEnd="@dimen/_15sdp"
+            android:layout_marginBottom="@dimen/_10sdp"
+            app:layout_constraintLeft_toRightOf="@id/start_guideline"
+            app:layout_constraintRight_toLeftOf="@id/end_guideline"
+            app:layout_constraintBottom_toBottomOf="@id/bottom_guideline">
+        </com.axelliant.android_erp.components.RoundedButton>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
