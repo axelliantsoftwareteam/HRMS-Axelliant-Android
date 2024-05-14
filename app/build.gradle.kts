@@ -56,5 +56,13 @@ dependencies {
     implementation("com.intuit.ssp:ssp-android:1.1.0") // multi screen text sizes support
     implementation("com.intuit.sdp:sdp-android:1.1.0") // multi screen width height support
 
+    implementation(libs.converter.scalars)
+    implementation(libs.gson)
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.logging.interceptor)
+    implementation(libs.okhttp)
 
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
 }

@@ -1,7 +1,11 @@
 package com.axelliant.android_erp.config
 
+import com.axelliant.android_erp.observable.ObservableCode
+
 object AppConst {
 
     const val KEY_PARAM  = "key"
+    val observableCode = ObservableCode()
+
 
 }

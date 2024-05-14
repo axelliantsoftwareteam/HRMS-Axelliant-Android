@@ -21,11 +21,27 @@ class AppNavigator {
             return getController().currentDestination?.id
         }
 
+        fun navigateToSplash(args: Bundle = Bundle()) {
+            Log.i(TAG, "navigateToLogin: $args")
+            val navAction = NavAction(R.id.splashFragment)
+            val navOptions = NavOptions.Builder()
+                .setPopUpTo(getCurrentDestinationId()!!, true).build()
+            navAction.navOptions = navOptions
+
+            val destination: NavDestination? = getCurrentDestinationId()?.let {
+                getController().graph.findNode(it)
+            }
+            if (destination != null) {
+                destination.putAction(R.id.splash_fragment_action, navAction)
+                getController().navigate(R.id.splash_fragment_action, args)
+            }
+        }
+
         fun navigateToLogin(args: Bundle = Bundle()) {
             Log.i(TAG, "navigateToLogin: $args")
             val navAction = NavAction(R.id.loginFragment)
             val navOptions = NavOptions.Builder()
-                .setPopUpTo(getCurrentDestinationId()!!, false).build()
+                .setPopUpTo(getCurrentDestinationId()!!, true).build()
             navAction.navOptions = navOptions
 
             val destination: NavDestination? = getCurrentDestinationId()?.let {
@@ -36,5 +52,8 @@ class AppNavigator {
                 getController().navigate(R.id.login_fragment_action, args)
             }
         }
+
+
+
     }
 }
