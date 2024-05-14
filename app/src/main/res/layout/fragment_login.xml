@@ -47,7 +47,7 @@
         <androidx.appcompat.widget.AppCompatImageView
             android:layout_width="0dp"
             android:layout_height="@dimen/_200sdp"
-            android:src="@drawable/ic_welocme"
+            android:src="@drawable/ic_welcome"
             app:layout_constraintLeft_toRightOf="@id/start_guideline"
             app:layout_constraintRight_toLeftOf="@id/end_guideline"
             app:layout_constraintTop_toBottomOf="@id/tv_sub_title"

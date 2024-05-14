@@ -13,6 +13,8 @@
 
     <!-- colors!-->
     <color name="colorApp">#035A90</color>
+    <color name="approved_bg">#F1FBFB</color>
+    <color name="approved">#1FCDC5</color>
     <color name="btn_text_color">#0C0C0C</color>
     <color name="grey">#8D8D8D</color>
     <color name="divider">#F3F3F4</color>
