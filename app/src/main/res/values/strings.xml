@@ -31,4 +31,12 @@
     <string name="apply_day">Apply Days</string>
     <string name="approved_by">Approved By</string>
     <string name="expense">Expense</string>
+    <string name="pending_expense">Pending\nExpense</string>
+    <string name="approved_expense">Approved\nExpense</string>
+    <string name="pending">Pending</string>
+    <string name="id">ID</string>
+    <string name="grand_total">Grand Total</string>
+    <string name="paid">Paid</string>
+    <string name="view_detail">View Detail</string>
+    <string name="delete">Delete</string>
 </resources>
