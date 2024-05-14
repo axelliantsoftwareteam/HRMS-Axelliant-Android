@@ -49,6 +49,12 @@
         tools:layout="@layout/fragment_profile" >
 
     </fragment>
+    <fragment
+        android:id="@+id/expenseFragment"
+        android:name="com.axelliant.android_erp.screens.ExpenseFragment"
+        android:label="Expense Fragment"
+        tools:layout="@layout/fragment_expense" >
 
+    </fragment>
 
 </navigation>

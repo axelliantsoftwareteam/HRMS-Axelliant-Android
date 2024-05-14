@@ -2,6 +2,7 @@
 android-gif-drawable = "1.2.28"
 androidx-junit = "1.1.5"
 appcompat = "1.6.1"
+circleimageview = "3.1.0"
 converter-scalars = "2.9.0"
 core-ktx = "1.13.1"
 espresso-core = "3.5.1"
@@ -30,6 +31,7 @@ androidx-lifecycle-livedata-ktx = { module = "androidx.lifecycle:lifecycle-lived
 androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle-viewmodel-ktx" }
 androidx-navigation-fragment-ktx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigation-fragment-ktx" }
 androidx-navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigation-fragment-ktx" }
+circleimageview = { module = "de.hdodenhof:circleimageview", version.ref = "circleimageview" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converter-scalars" }
 converter-scalars = { module = "com.squareup.retrofit2:converter-scalars", version.ref = "converter-scalars" }
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }

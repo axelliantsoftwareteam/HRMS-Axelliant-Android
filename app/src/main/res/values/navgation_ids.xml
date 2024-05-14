@@ -6,6 +6,7 @@
     <item name="home_fragment_action" type="id" />
     <item name="leaves_fragment_action" type="id" />
     <item name="profile_fragment_action" type="id" />
+    <item name="expense_fragment_action" type="id" />
 
 
 </resources>

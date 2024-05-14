@@ -11,6 +11,11 @@
         android:title="Leaves" />
 
     <item
+        android:id="@+id/expenseFragment"
+        android:icon="@drawable/ic_expense"
+        android:title="Expense" />
+
+    <item
         android:id="@+id/profileFragment"
         android:icon="@drawable/ic_profile"
         android:title="Profile" />

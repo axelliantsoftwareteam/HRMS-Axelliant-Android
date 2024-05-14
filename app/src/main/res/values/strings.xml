@@ -11,4 +11,24 @@
     <string name="profile">Profile</string>
 
 
+    <string name="date">Date</string>
+    <string name="location">Location</string>
+    <string name="today_attend">Today\'s Attendance</string>
+    <string name="check_in">Check In</string>
+    <string name="check_out">Check Out</string>
+    <string name="total_hours">Total Hours</string>
+    <string name="weekly_attend">Weekly Attendance</string>
+    <string name="view_all">View All</string>
+    <string name="all_leaves">All Leaves</string>
+    <string name="leave_balance">Leave\nBalance</string>
+    <string name="leave_bal">Leave Balance</string>
+    <string name="leave_approved">Leave\nApproved</string>
+    <string name="leave_pending">Leave\nPending</string>
+    <string name="leave_cancel">Leave\nCancelled</string>
+    <string name="upcoming">Upcoming</string>
+    <string name="past">Past</string>
+    <string name="teamleave">Team Leave</string>
+    <string name="apply_day">Apply Days</string>
+    <string name="approved_by">Approved By</string>
+    <string name="expense">Expense</string>
 </resources>

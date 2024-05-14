@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity() {
         diComponents.globalConfig.navController.addOnDestinationChangedListener { controller, destination, arguments ->
 
             when (destination.id) {
-                R.id.homeFragment, R.id.leavesFragment, R.id.profileFragment -> {
+                R.id.homeFragment, R.id.leavesFragment, R.id.profileFragment, R.id.expenseFragment -> {
                     bottomNavigation.visibility = View.VISIBLE
                 }
 
