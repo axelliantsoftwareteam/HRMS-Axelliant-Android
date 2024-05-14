@@ -2,16 +2,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/homeFragment"
-        android:icon="@drawable/ic_launcher_background"
+        android:icon="@drawable/ic_home"
         android:title="Home" />
 
     <item
-        android:id="@+id/favouritesFragment"
-        android:icon="@drawable/ic_launcher_background"
-        android:title="Favourites" />
+        android:id="@+id/leavesFragment"
+        android:icon="@drawable/ic_leaves"
+        android:title="Leaves" />
 
     <item
-        android:id="@+id/accountsFragment"
-        android:icon="@drawable/ic_launcher_background"
-        android:title="Account" />
+        android:id="@+id/profileFragment"
+        android:icon="@drawable/ic_profile"
+        android:title="Profile" />
 </menu>

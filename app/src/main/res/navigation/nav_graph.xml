@@ -24,4 +24,31 @@
             app:destination="@id/splashFragment" />
     </fragment>
 
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.axelliant.android_erp.screens.HomeFragment"
+        android:label="Home Fragment"
+        tools:layout="@layout/fragment_home" >
+
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/leavesFragment"
+        android:name="com.axelliant.android_erp.screens.LeavesFragment"
+        android:label="Leaves Fragment"
+        tools:layout="@layout/fragment_leaves" >
+
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.axelliant.android_erp.screens.ProfileFragment"
+        android:label="Profile Fragment"
+        tools:layout="@layout/fragment_profile" >
+
+    </fragment>
+
+
 </navigation>

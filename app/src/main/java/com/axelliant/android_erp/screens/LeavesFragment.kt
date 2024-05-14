@@ -5,16 +5,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.axelliant.android_erp.base.BaseFragment
+import com.axelliant.android_erp.databinding.FragmentHomeBinding
+import com.axelliant.android_erp.databinding.FragmentLeavesBinding
 import com.axelliant.android_erp.databinding.FragmentLoginBinding
-import com.axelliant.android_erp.navigation.AppNavigator
 import com.axelliant.android_erp.viewmodel.LoginViewModel
 import org.koin.android.ext.android.inject
 
-class LoginFragment : BaseFragment() {
+class LeavesFragment : BaseFragment() {
 
-    private var _binding: FragmentLoginBinding? = null
+    private var _binding: FragmentLeavesBinding? = null
     private val binding get() = _binding
-    private val loginViewModel: LoginViewModel by inject()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -22,7 +22,7 @@ class LoginFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        _binding = FragmentLoginBinding.inflate(inflater).also { _binding = it }
+        _binding = FragmentLeavesBinding.inflate(inflater).also { _binding = it }
         return binding?.root
     }
 
@@ -30,18 +30,6 @@ class LoginFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding?.btnMicLogin?.setOnClickListener {
-            AppNavigator.navigateToHome()
-
-        }
-
-//        if (arguments != null) {
-//            val comingFromValue =
-//                requireArguments().getString(AppConst.KEY_PARAM, "")
-//            binding?.loginView?.text = comingFromValue
-//        }
-
-//        loginViewModel.getConversationCall(1)
     }
 
 }

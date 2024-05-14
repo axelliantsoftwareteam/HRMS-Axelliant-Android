@@ -16,5 +16,6 @@
     <color name="btn_text_color">#0C0C0C</color>
     <color name="grey">#8D8D8D</color>
     <color name="divider">#F3F3F4</color>
+    <color name="bottom_layout">#E8E8E8</color>
 
 </resources>

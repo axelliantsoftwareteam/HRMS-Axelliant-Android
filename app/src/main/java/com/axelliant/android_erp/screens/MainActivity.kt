@@ -1,6 +1,7 @@
 package com.axelliant.android_erp.screens
 
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -16,37 +17,56 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 class MainActivity : AppCompatActivity() {
 
     private lateinit var diComponents: Components
+    private var lastBackPressedTime: Long = 0
+    private val exitThreshold: Long = 2000 // Time threshold in milliseconds
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         diComponents = Components()
 
-        Toast.makeText(
-            this,
-            "componoent= ${diComponents.testModelInjection.testInjection}",
-            Toast.LENGTH_SHORT
-        ).show()
-
+        val bottomNavigation: BottomNavigationView = findViewById(R.id.bottomNavigation)
 
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         // above will assign it
         diComponents.globalConfig.navController = navHostFragment.navController
-        diComponents.globalConfig.navController.addOnDestinationChangedListener { _, _, _ ->
+        diComponents.globalConfig.navController.addOnDestinationChangedListener { controller, destination, arguments ->
+
+            when (destination.id) {
+                R.id.homeFragment, R.id.leavesFragment, R.id.profileFragment -> {
+                    bottomNavigation.visibility = View.VISIBLE
+                }
+
+                else -> {
+                    bottomNavigation.visibility = View.GONE
+                }
+            }
 
         }
 
+        bottomNavigation.setupWithNavController(diComponents.globalConfig.navController)
 
-        AppConst.observableCode.observe(this, Observer { code ->
+        AppConst.observableCode.observe(this) { code ->
             if (code == 401) {
                 AppNavigator.navigateToLogin()
             }
-        })
-
-        val navView: BottomNavigationView = findViewById(R.id.bottomNavigation)
-        navView.setupWithNavController(diComponents.globalConfig.navController)
+        }
     }
 
+    override fun onBackPressed() {
+        if (diComponents.globalConfig.navController.currentDestination?.id == R.id.homeFragment) {
+            val currentTime = System.currentTimeMillis()
+            if (currentTime - lastBackPressedTime < exitThreshold) {
+                finish()
+            } else {
+                Toast.makeText(this, "Press back again to exit", Toast.LENGTH_SHORT).show()
+                lastBackPressedTime = currentTime
+            }
+        } else
+            super.onBackPressed()
+
+    }
 
 }

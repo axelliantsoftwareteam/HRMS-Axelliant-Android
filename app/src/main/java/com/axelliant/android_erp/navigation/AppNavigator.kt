@@ -54,6 +54,56 @@ class AppNavigator {
         }
 
 
+        fun navigateToHome(args: Bundle = Bundle()) {
+            Log.i(TAG, "navigateToHome: $args")
+            val navAction = NavAction(R.id.homeFragment)
+            val navOptions = NavOptions.Builder()
+                .setPopUpTo(getCurrentDestinationId()!!, false).build()
+            navAction.navOptions = navOptions
+
+            val destination: NavDestination? = getCurrentDestinationId()?.let {
+                getController().graph.findNode(it)
+            }
+            if (destination != null) {
+                destination.putAction(R.id.home_fragment_action, navAction)
+                getController().navigate(R.id.home_fragment_action, args)
+            }
+        }
+        fun navigateToLeaves(args: Bundle = Bundle()) {
+            Log.i(TAG, "navigateToLeaves: $args")
+            val navAction = NavAction(R.id.homeFragment)
+            val navOptions = NavOptions.Builder()
+                .setPopUpTo(getCurrentDestinationId()!!, false).build()
+            navAction.navOptions = navOptions
+
+            val destination: NavDestination? = getCurrentDestinationId()?.let {
+                getController().graph.findNode(it)
+            }
+            if (destination != null) {
+                destination.putAction(R.id.leaves_fragment_action, navAction)
+                getController().navigate(R.id.leaves_fragment_action, args)
+            }
+        }
+
+        fun navigateToProfile(args: Bundle = Bundle()) {
+            Log.i(TAG, "navigateToProfile: $args")
+            val navAction = NavAction(R.id.profileFragment)
+            val navOptions = NavOptions.Builder()
+                .setPopUpTo(getCurrentDestinationId()!!, false).build()
+            navAction.navOptions = navOptions
+
+            val destination: NavDestination? = getCurrentDestinationId()?.let {
+                getController().graph.findNode(it)
+            }
+            if (destination != null) {
+                destination.putAction(R.id.profile_fragment_action, navAction)
+                getController().navigate(R.id.profile_fragment_action, args)
+            }
+        }
+
+
+
+
 
     }
 }

@@ -20,4 +20,14 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
+
+    <style name="App.Custom.Indicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">@color/button_bg_color</item>
+        <item name="android:width">@dimen/_50sdp</item>
+        <item name="android:height">@dimen/_25sdp</item>
+        <item name="fabCradleRoundedCornerRadius">@dimen/_10sdp</item>
+    </style>
+
+
 </resources>
