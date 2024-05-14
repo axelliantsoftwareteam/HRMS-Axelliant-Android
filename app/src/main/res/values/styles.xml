@@ -27,7 +27,7 @@
 
 
     <!--Poppins MEDIUM Font-->
-    <style name="TEXT_MEDIUM_000000_10" parent="@style/TextAppearance.MaterialComponents.Subtitle1">
+    <style name="TEXT_MEDIUM_BLACK_10" parent="@style/TextAppearance.MaterialComponents.Subtitle1">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/black</item>
@@ -39,7 +39,7 @@
 
     </style>
 
-    <style name="TEXT_MEDIUM_000000_15" parent="@style/TextAppearance.MaterialComponents.Subtitle1">
+    <style name="TEXT_MEDIUM_BLACK_15" parent="@style/TextAppearance.MaterialComponents.Subtitle1">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/black</item>
@@ -51,7 +51,7 @@
 
     </style>
 
-    <style name="TEXT_MEDIUM_FFFFFF_10" parent="@style/TextAppearance.MaterialComponents.Subtitle1">
+    <style name="TEXT_MEDIUM_WHITE_10" parent="@style/TextAppearance.MaterialComponents.Subtitle1">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/white</item>
@@ -63,11 +63,35 @@
 
     </style>
 
-    <style name="TEXT_MEDIUM_FFFFFF_15" parent="@style/TextAppearance.MaterialComponents.Subtitle1">
+    <style name="TEXT_MEDIUM_WHITE_15" parent="@style/TextAppearance.MaterialComponents.Subtitle1">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">@dimen/_15ssp</item>
+        <item name="android:letterSpacing">0.01</item>
+        <item name="android:gravity">center</item>
+        <item name="android:fontFamily">@font/poppins_medium</item>
+        <item name="fontFamily">@font/poppins_medium</item>
+
+    </style>
+
+    <style name="TEXT_MEDIUM_GREY_10" parent="@style/TextAppearance.MaterialComponents.Subtitle1">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/grey</item>
+        <item name="android:textSize">@dimen/_10ssp</item>
+        <item name="android:letterSpacing">0.01</item>
+        <item name="android:gravity">center</item>
+        <item name="android:fontFamily">@font/poppins_medium</item>
+        <item name="fontFamily">@font/poppins_medium</item>
+
+    </style>
+
+    <style name="TEXT_MEDIUM_GREY_12" parent="@style/TextAppearance.MaterialComponents.Subtitle1">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/grey</item>
+        <item name="android:textSize">@dimen/_12ssp</item>
         <item name="android:letterSpacing">0.01</item>
         <item name="android:gravity">center</item>
         <item name="android:fontFamily">@font/poppins_medium</item>
@@ -103,7 +127,7 @@
     </style>
 
 
-    <style name="TEXT_SEMI_FFFFFF_10" parent="@style/TextAppearance.MaterialComponents.Subtitle1">
+    <style name="TEXT_SEMI_WHITE_10" parent="@style/TextAppearance.MaterialComponents.Subtitle1">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/white</item>
@@ -115,11 +139,35 @@
 
     </style>
 
-    <style name="TEXT_SEMI_FFFFFF_15" parent="@style/TextAppearance.MaterialComponents.Subtitle1">
+    <style name="TEXT_SEMI_WHITE_15" parent="@style/TextAppearance.MaterialComponents.Subtitle1">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">@dimen/_15ssp</item>
+        <item name="android:letterSpacing">0.01</item>
+        <item name="android:gravity">center</item>
+        <item name="android:fontFamily">@font/poppins_semibold</item>
+        <item name="fontFamily">@font/poppins_semibold</item>
+
+    </style>
+
+    <style name="TEXT_SEMI_GREY_10" parent="@style/TextAppearance.MaterialComponents.Subtitle1">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/grey</item>
+        <item name="android:textSize">@dimen/_10ssp</item>
+        <item name="android:letterSpacing">0.01</item>
+        <item name="android:gravity">center</item>
+        <item name="android:fontFamily">@font/poppins_semibold</item>
+        <item name="fontFamily">@font/poppins_semibold</item>
+
+    </style>
+
+    <style name="TEXT_SEMI_GREY_12" parent="@style/TextAppearance.MaterialComponents.Subtitle1">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/grey</item>
+        <item name="android:textSize">@dimen/_12ssp</item>
         <item name="android:letterSpacing">0.01</item>
         <item name="android:gravity">center</item>
         <item name="android:fontFamily">@font/poppins_semibold</item>
@@ -149,14 +197,14 @@
         <item name="layout_constraintGuide_percent">@integer/gl_left</item>
     </style>
 
-    <style name="gl_right">
+    <style name="end_gl">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:orientation">vertical</item>
         <item name="layout_constraintGuide_percent">@integer/gl_right</item>
     </style>
 
-    <style name="gl_bottom">
+    <style name="bottom_gl">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:orientation">horizontal</item>
@@ -170,7 +218,7 @@
         <item name="layout_constraintGuide_percent">@integer/gl_bott</item>
     </style>
 
-    <style name="gl_top">
+    <style name="top_gl">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:orientation">horizontal</item>
@@ -181,5 +229,10 @@
         <item name="colorSecondary">@color/colorApp</item>
         <item name="colorOnSecondary">@color/colorApp</item>
         <item name="colorOnSurface">@color/colorApp</item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay.Demo" parent="">
+        <item name="cornerSize">@dimen/_8sdp</item>
+        <item name="cornerFamily">rounded</item>
     </style>
 </resources>

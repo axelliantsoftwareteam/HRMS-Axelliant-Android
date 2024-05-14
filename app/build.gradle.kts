@@ -55,6 +55,8 @@ dependencies {
 //    implementation(libs.navigation.fragment)
     implementation("com.intuit.ssp:ssp-android:1.1.0") // multi screen text sizes support
     implementation("com.intuit.sdp:sdp-android:1.1.0") // multi screen width height support
-
+//gif image
+    implementation("pl.droidsonroids.gif:android-gif-drawable:1.2.28")
+    implementation("com.github.bumptech.glide:glide:4.15.1")
 
 }

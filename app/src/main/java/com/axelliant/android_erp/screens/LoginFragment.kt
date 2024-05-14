@@ -29,11 +29,11 @@ class LoginFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (arguments != null) {
-            val comingFromValue =
-                requireArguments().getString(AppConst.KEY_PARAM, "")
-            binding?.loginView?.text = comingFromValue
-        }
+//        if (arguments != null) {
+//            val comingFromValue =
+//                requireArguments().getString(AppConst.KEY_PARAM, "")
+//            binding?.loginView?.text = comingFromValue
+//        }
 
 
     }

@@ -36,5 +36,6 @@ class AppNavigator {
                 getController().navigate(R.id.login_fragment_action, args)
             }
         }
+
     }
 }
