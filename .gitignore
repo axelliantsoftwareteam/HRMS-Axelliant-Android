@@ -15,7 +15,8 @@
 /.idea/misc.xml
 /.idea/.name
 /.idea/sonarlint
-.idea/sonarlint/
+/.idea/sonarlint/
+/.idea/
 .DS_Store
 /build
 /captures
