@@ -39,4 +39,5 @@
     <string name="paid">Paid</string>
     <string name="view_detail">View Detail</string>
     <string name="delete">Delete</string>
+    <string name="apply_leave">Apply leave</string>
 </resources>
