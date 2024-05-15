@@ -51,6 +51,7 @@ class HomeFragment : BaseFragment() {
                 } else {
                     Toast.makeText(requireContext(), "ask permission", Toast.LENGTH_SHORT).show()
 
+
                 }
             }
 
