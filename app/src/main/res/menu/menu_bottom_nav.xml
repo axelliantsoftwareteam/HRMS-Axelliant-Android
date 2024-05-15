@@ -12,7 +12,7 @@
 
     <item
         android:id="@+id/expenseFragment"
-        android:icon="@drawable/ic_expense"
+        android:icon="@drawable/ic_expenses"
         android:title="Expense" />
 
     <item

@@ -15,12 +15,12 @@ import com.axelliant.android_erp.base.BaseFragment
 import com.axelliant.android_erp.callback.AdapterItemClick
 import com.axelliant.android_erp.databinding.FragmentHomeBinding
 import com.axelliant.android_erp.extention.showSuccessMsg
+import com.axelliant.android_erp.utils.Utils.getCurrentDate
 
 class HomeFragment : BaseFragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,11 +46,9 @@ class HomeFragment : BaseFragment() {
                 }
 
                 if (allAreGranted) {
-                    // request permission
-                    Toast.makeText(requireContext(), "get location", Toast.LENGTH_SHORT).show()
+//                    requireContext().showSuccessMsg("Location permission granted")
                 } else {
-                    Toast.makeText(requireContext(), "ask permission", Toast.LENGTH_SHORT).show()
-
+//                    requireContext().showSuccessMsg("Ask Location permission")
 
                 }
             }
@@ -63,6 +61,8 @@ class HomeFragment : BaseFragment() {
 
         // data population
         dataPopulate()
+
+        binding?.tvDateTxt?.text = getCurrentDate()
 
     }
 

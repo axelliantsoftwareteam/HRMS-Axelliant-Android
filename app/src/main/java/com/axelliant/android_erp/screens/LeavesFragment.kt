@@ -13,9 +13,9 @@ import com.axelliant.android_erp.base.BaseFragment
 import com.axelliant.android_erp.callback.AdapterItemClick
 import com.axelliant.android_erp.databinding.FragmentLeavesBinding
 import com.axelliant.android_erp.extention.showSuccessMsg
-import com.axelliant.android_erp.screens.Events.*
+import com.axelliant.android_erp.screens.LeaveEvents.*
 
-enum class Events {
+enum class LeaveEvents {
     Upcoming,
     Past,
     TeamLeave
@@ -23,7 +23,7 @@ enum class Events {
 
 class LeavesFragment : BaseFragment() {
 
-    private var event = Upcoming
+    private var leaveEvent = Upcoming
 
     private var _binding: FragmentLeavesBinding? = null
     private val binding get() = _binding
@@ -59,7 +59,7 @@ class LeavesFragment : BaseFragment() {
         binding?.tvLikeSent?.setTextColor(requireContext().getColor(R.color.btn_text_color))
         binding?.tvLikeMatches?.setTextColor(requireContext().getColor(R.color.btn_text_color))
 
-        when (event) {
+        when (leaveEvent) {
             Upcoming -> {
                 binding?.tvLikeReceived?.background =
                     ContextCompat.getDrawable(requireContext(), R.drawable.rounded_enabled)
@@ -83,19 +83,19 @@ class LeavesFragment : BaseFragment() {
         }
 
         binding?.tvLikeReceived?.setOnClickListener {
-            event = Upcoming
+            leaveEvent = Upcoming
             eventSelection()
         }
 
 
         binding?.tvLikeSent?.setOnClickListener {
-            event = Past
+            leaveEvent = Past
             eventSelection()
         }
 
 
         binding?.tvLikeMatches?.setOnClickListener {
-            event = TeamLeave
+            leaveEvent = TeamLeave
             eventSelection()
         }
 

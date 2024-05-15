@@ -7,5 +7,7 @@ object AppConst {
     const val KEY_PARAM  = "key"
     val observableCode = ObservableCode()
 
+    const val DATE_FORMAT =  "dd MMM,yyyy"
+
 
 }

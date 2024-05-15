@@ -169,12 +169,11 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/ly_action_btn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:weightSum="1"
         android:padding="@dimen/_5sdp"
         android:background="@drawable/rounded_leave_filter"
         android:orientation="horizontal"
@@ -189,8 +188,12 @@
             android:id="@+id/tv_view_detail"
             style="@style/TEXT_REGULAR_WHITE_10"
             android:layout_width="0dp"
+            android:paddingTop="@dimen/_6sdp"
+            android:paddingBottom="@dimen/_6sdp"
             android:layout_height="match_parent"
-            android:layout_weight=".5"
+           app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/tv_delete"
+            app:layout_constraintTop_toTopOf="parent"
             android:background="@drawable/rounded_enabled"
             android:text="@string/view_detail" />
 
@@ -198,17 +201,17 @@
             android:id="@+id/tv_delete"
             style="@style/TEXT_REGULAR_WHITE_10"
             android:layout_width="0dp"
-            android:layout_weight=".5"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginStart="@dimen/_5sdp"
             android:background="@drawable/rounded_enabled"
             android:backgroundTint="#F78061"
-            android:paddingStart="@dimen/_5sdp"
-            android:paddingTop="@dimen/_5sdp"
-            android:paddingEnd="@dimen/_5sdp"
-            android:paddingBottom="@dimen/_5sdp"
+            android:paddingTop="@dimen/_6sdp"
+
+            android:paddingBottom="@dimen/_6sdp"
             android:text="@string/delete"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tv_view_detail"
             />
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
