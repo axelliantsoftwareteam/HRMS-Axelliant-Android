@@ -117,6 +117,8 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_date" />
 
+
+
             <View
                 android:id="@+id/line"
                 android:layout_width="@dimen/_2sdp"
@@ -146,13 +148,15 @@
                 style="@style/TEXT_MEDIUM_GREY_10"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Lahore, Punjab"
+                tools:text="Lahore, Punjab"
+                android:text="NA"
                 android:textAlignment="textStart"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/line"
                 app:layout_constraintTop_toBottomOf="@+id/tv_location" />
 
             <LinearLayout
+                android:id="@+id/ll_ch"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@+id/tv_date_txt"
@@ -209,6 +213,17 @@
                     />
             </LinearLayout>
 
+            <!--on below line we are creating a text clock-->
+            <TextClock
+                android:id="@+id/text_clock"
+                android:layout_width="1dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:textColor="@color/white"
+                android:format12Hour="hh:mm:ss a"
+                android:format24Hour="hh:mm:ss"
+             />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
