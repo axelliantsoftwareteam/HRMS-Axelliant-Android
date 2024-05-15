@@ -57,4 +57,12 @@
 
     </fragment>
 
+    <fragment
+        android:id="@+id/applyLeavesFragment"
+        android:name="com.axelliant.android_erp.screens.ApplyLeavesFragment"
+        android:label="Apply Leaves Fragment"
+        tools:layout="@layout/fragment_apply_leaves" >
+
+    </fragment>
+
 </navigation>
