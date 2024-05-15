@@ -53,7 +53,7 @@
         <View
             android:id="@+id/divider"
             android:layout_width="0dp"
-            android:layout_height="1dp"
+            android:layout_height="@dimen/_1sdp"
             android:background="@color/divider"
             android:layout_marginBottom="@dimen/_15sdp"
             android:layout_marginTop="@dimen/_10sdp"
@@ -81,6 +81,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:gravity="center"
                 android:layout_weight=".35">
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tv_apply"
@@ -101,6 +102,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:gravity="center"
                 android:layout_weight=".30">
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tv_leave_bal"
@@ -121,6 +123,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:gravity="center"
                 android:layout_weight=".35">
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tv_approved_by"

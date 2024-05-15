@@ -13,6 +13,7 @@ import com.axelliant.android_erp.base.BaseFragment
 import com.axelliant.android_erp.callback.AdapterItemClick
 import com.axelliant.android_erp.databinding.FragmentLeavesBinding
 import com.axelliant.android_erp.extention.showSuccessMsg
+import com.axelliant.android_erp.navigation.AppNavigator
 import com.axelliant.android_erp.screens.LeaveEvents.*
 
 enum class LeaveEvents {
@@ -99,6 +100,10 @@ class LeavesFragment : BaseFragment() {
             eventSelection()
         }
 
+        binding?.imgAdd?.setOnClickListener{
+            AppNavigator.navigateToApplyLeaves()
+
+        }
 
     }
 

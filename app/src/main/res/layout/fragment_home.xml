@@ -6,7 +6,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#F8F8F8"
+        android:background="@color/layout_bg"
         >
 
         <androidx.constraintlayout.widget.Guideline
@@ -50,7 +50,7 @@
                 style="@style/TEXT_SEMI_BLACK_15"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
+                android:layout_marginLeft="@dimen/_5sdp"
                 android:text="Arslan"
                 android:textAlignment="textStart"
                 android:textSize="@dimen/_12sdp"
@@ -63,8 +63,8 @@
                 style="@style/TEXT_MEDIUM_GREY_10"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_5sdp"
                 android:text="Software engineer"
+                android:layout_marginStart="@dimen/_5sdp"
                 android:textAlignment="textStart"
                 app:layout_constraintLeft_toRightOf="@id/profile_img"
                 app:layout_constraintTop_toBottomOf="@+id/tv_title" />
@@ -74,7 +74,7 @@
         <View
             android:id="@+id/divider"
             android:layout_width="0dp"
-            android:layout_height="1dp"
+            android:layout_height="@dimen/_1sdp"
             android:layout_marginTop="@dimen/_10sdp"
             android:layout_marginBottom="@dimen/_10sdp"
             android:background="@color/divider"
@@ -87,7 +87,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_bg"
-            android:padding="@dimen/_10sdp"
+            android:padding="@dimen/_12sdp"
             app:layout_constraintLeft_toRightOf="@id/start_guideline"
             app:layout_constraintRight_toLeftOf="@id/end_guideline"
             app:layout_constraintTop_toBottomOf="@id/divider">
@@ -167,6 +167,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="10"
+                    android:textSize="@dimen/_12sdp"
                     android:layout_margin="@dimen/_3sdp"
                     android:paddingTop="@dimen/_5sdp"
                     android:paddingBottom="@dimen/_5sdp"
@@ -182,6 +183,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="10"
+                    android:textSize="@dimen/_12sdp"
                     android:paddingTop="@dimen/_5sdp"
                     android:paddingBottom="@dimen/_5sdp"
                     android:paddingStart="@dimen/_10sdp"
@@ -197,6 +199,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="10"
+                    android:textSize="@dimen/_12sdp"
                     android:layout_margin="@dimen/_3sdp"
                     android:paddingTop="@dimen/_5sdp"
                     android:paddingBottom="@dimen/_5sdp"
@@ -219,7 +222,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:background="@drawable/rounded_bg"
-            android:padding="@dimen/_10sdp"
+            android:padding="@dimen/_12sdp"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toRightOf="@id/start_guideline"
             app:layout_constraintRight_toLeftOf="@id/end_guideline"
@@ -336,7 +339,7 @@
             app:layout_constraintEnd_toEndOf="@id/end_guideline"
             app:layout_constraintStart_toStartOf="@id/start_guideline"
             app:layout_constraintTop_toBottomOf="@+id/tv_weekly"
-            app:layout_constraintBottom_toBottomOf="@id/bottom_guideline"
+            app:layout_constraintBottom_toBottomOf="parent"
             tools:itemCount="2"
             tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/weekly_row" />

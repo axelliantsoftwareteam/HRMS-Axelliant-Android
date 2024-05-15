@@ -6,7 +6,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#F8F8F8">
+        android:background="@color/layout_bg">
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/start_guideline"
@@ -64,7 +64,7 @@
             app:layout_constraintLeft_toRightOf="@+id/start_guideline"
             app:layout_constraintRight_toLeftOf="@+id/end_guideline"
             app:layout_constraintTop_toBottomOf="@+id/tv_title"
-            app:layout_constraintBottom_toBottomOf="@id/bottom_guideline"
+            app:layout_constraintBottom_toBottomOf="parent"
 
             >
 
@@ -106,7 +106,7 @@
                         android:layout_marginTop="@dimen/_10sdp"
                         android:text="20"
                         android:textAlignment="textStart"
-                        android:textColor="#2980FD"
+                        android:textColor="@color/color_secondry"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tv_date" />
 
@@ -237,6 +237,8 @@
                 android:background="@drawable/rounded_leave_filter"
                 android:orientation="horizontal"
                 android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_marginEnd="@dimen/_5sdp"
                 android:layout_marginBottom="@dimen/_15sdp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -291,7 +293,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ll_leave_filter"
                 app:layout_constraintBottom_toBottomOf="parent"
-                tools:itemCount="2"
+                tools:itemCount="3"
                 tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/leave_row" />
         </androidx.constraintlayout.widget.ConstraintLayout>
