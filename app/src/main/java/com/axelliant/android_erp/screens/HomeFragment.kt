@@ -8,8 +8,13 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.axelliant.android_erp.Test
+import com.axelliant.android_erp.adapter.WeeklyAdapter
 import com.axelliant.android_erp.base.BaseFragment
+import com.axelliant.android_erp.callback.AdapterItemClick
 import com.axelliant.android_erp.databinding.FragmentHomeBinding
+import com.axelliant.android_erp.extention.showSuccessMsg
 
 class HomeFragment : BaseFragment() {
 
@@ -43,7 +48,7 @@ class HomeFragment : BaseFragment() {
                 if (allAreGranted) {
                     // request permission
                     Toast.makeText(requireContext(), "get location", Toast.LENGTH_SHORT).show()
-                }else{
+                } else {
                     Toast.makeText(requireContext(), "ask permission", Toast.LENGTH_SHORT).show()
 
                 }
@@ -54,6 +59,36 @@ class HomeFragment : BaseFragment() {
             Manifest.permission.ACCESS_FINE_LOCATION
         )
         activityResultLauncher.launch(appPerms)
+
+        // data population
+        dataPopulate()
+
+    }
+
+
+    private fun dataPopulate() {
+        binding?.rvWeekly?.layoutManager = LinearLayoutManager(requireActivity())
+        val weeklyAdapter = WeeklyAdapter(
+            listOf(
+                Test("item1"),
+                Test("item2"),
+                Test("item3"),
+                Test("item4"),
+                Test("item5"),
+                Test("item6")
+            ),
+            object : AdapterItemClick {
+                override fun onItemClick(customObject: Any, position: Int) {
+                    val currentObject = customObject as Test
+                    requireContext().showSuccessMsg(
+                        currentObject.testString
+                    )
+
+                }
+
+            })
+        binding?.rvWeekly?.adapter = weeklyAdapter
+
 
     }
 
