@@ -49,4 +49,14 @@
     <string name="save">Save</string>
     <string name="favourite">Favourites</string>
     <string name="modules">Modules</string>
+    <string name="upcoming_birthday">Upcoming Birthday</string>
+    <string name="birthday">Birthday\'s</string>
+    <string name="hoildays">Upcoming Hoildays</string>
+    <string name="in_office">In office</string>
+    <string name="username">User Name</string>
+    <string name="password">Password</string>
+    <string name="remember_me">Remmeber me</string>
+    <string name="forget_pass">Forget Password</string>
+    <string name="employe">Employee</string>
+    <string name="Vendor">Vendor</string>
 </resources>

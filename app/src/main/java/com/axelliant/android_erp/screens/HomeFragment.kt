@@ -3,6 +3,7 @@ package com.axelliant.android_erp.screens
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Color
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
@@ -17,14 +18,22 @@ import android.view.ViewGroup
 
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getSystemService
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.axelliant.android_erp.R
 import com.axelliant.android_erp.Test
+import com.axelliant.android_erp.adapter.BirthdayAdapter
+import com.axelliant.android_erp.adapter.ModulesAdapter
 import com.axelliant.android_erp.adapter.WeeklyAdapter
 import com.axelliant.android_erp.base.BaseFragment
 import com.axelliant.android_erp.callback.AdapterItemClick
 import com.axelliant.android_erp.databinding.FragmentHomeBinding
 import com.axelliant.android_erp.extention.showSuccessMsg
+import com.axelliant.android_erp.model.Birthday
+import com.axelliant.android_erp.model.Modules
 import com.axelliant.android_erp.utils.Utils.getCurrentDate
 import java.io.IOException
 import java.util.Locale
@@ -61,8 +70,8 @@ class HomeFragment : BaseFragment() {
         override fun onProviderDisabled(provider: String) {}
     }
 
-    private fun setCurrentLocationText(){
-        binding?.tvLocTxt?.text = getLocationAddress(currentLocation)
+    private fun setCurrentLocationText() {
+//        binding?.tvLocTxt?.text = getLocationAddress(currentLocation)
 
     }
 
@@ -145,7 +154,6 @@ class HomeFragment : BaseFragment() {
                     }
 
 
-
                 } else {
 //                    requireContext().showSuccessMsg("Ask Location permission")
 
@@ -160,8 +168,7 @@ class HomeFragment : BaseFragment() {
 
         // data population
         dataPopulate()
-
-        binding?.tvDateTxt?.text = getCurrentDate()
+        birthdayPopulate()
 
     }
 
@@ -170,15 +177,95 @@ class HomeFragment : BaseFragment() {
     }
 
     private fun dataPopulate() {
-        binding?.rvWeekly?.layoutManager = LinearLayoutManager(requireActivity())
-        val weeklyAdapter = WeeklyAdapter(
+        binding?.rvModule?.layoutManager = GridLayoutManager(requireContext(), 2)
+        val modulesAdapter = ModulesAdapter(
             listOf(
-                Test("item1"),
-                Test("item2"),
-                Test("item3"),
-                Test("item4"),
-                Test("item5"),
-                Test("item6")
+                Modules(
+                    id = 0,
+                    name = "Attendance",
+                    color = requireContext().getColor(R.color.color_secondry),
+                    drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_loc_pin)
+                ),
+                Modules(
+                    id = 1,
+                    name = "Leaves",
+                    color = requireContext().getColor(R.color.yellow),
+                    drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_home)
+                ),
+                Modules(
+                    id = 2,
+                    name = "Expense",
+                    color = requireContext().getColor(R.color.greeny),
+                    drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_cake_tone)
+                ),
+                Modules(
+                    id = 3,
+                    name = "Pay Roll",
+                    color = requireContext().getColor(R.color.colorApp),
+                    drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_calendar)
+                ),
+                Modules(
+                    id = 4,
+                    name = "Employs",
+                    color = requireContext().getColor(R.color.purple),
+                    drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_loc_pin)
+                ),
+
+                ),
+            object : AdapterItemClick {
+                override fun onItemClick(customObject: Any, position: Int) {
+                    val currentObject = customObject as Test
+                    requireContext().showSuccessMsg(
+                        currentObject.testString
+                    )
+
+                }
+
+            })
+        binding?.rvModule?.adapter = modulesAdapter
+        binding?.rvModule?.isNestedScrollingEnabled = false;
+
+
+    }
+
+    private fun birthdayPopulate() {
+        binding?.rvBirthdays?.layoutManager =
+            LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+        val birthdayAdapter = BirthdayAdapter(
+            requireContext(),
+
+            listOf(
+                Birthday(
+                    id = 1,
+                    name = "Arslan Umar",
+                    dob = "07 june, 1993",
+                    icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_photo)
+                ),
+                Birthday(
+                    id = 1,
+                    name = "Zeeshan Habib",
+                    dob = "Today",
+                    icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_profile_man)
+                ),
+                Birthday(
+                    id = 1,
+                    name = "Adnan Maqbool",
+                    dob = "Tomorrow",
+                    icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_photo)
+                ),
+                Birthday(
+                    id = 1,
+                    name = "Ahsan Ali",
+                    dob = "14 feb, 1991",
+                    icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_profile_man)
+                ),
+                Birthday(
+                    id = 1,
+                    name = "Kashif Umar",
+                    dob = "04 Aug, 1999",
+                    icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_photo)
+                )
+
             ),
             object : AdapterItemClick {
                 override fun onItemClick(customObject: Any, position: Int) {
@@ -190,7 +277,7 @@ class HomeFragment : BaseFragment() {
                 }
 
             })
-        binding?.rvWeekly?.adapter = weeklyAdapter
+        binding?.rvBirthdays?.adapter = birthdayAdapter
 
 
     }

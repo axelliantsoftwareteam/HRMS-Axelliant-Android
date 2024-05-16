@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.axelliant.android_erp.Test
 import com.axelliant.android_erp.callback.AdapterItemClick
-import com.axelliant.android_erp.databinding.WeeklyRowBinding
+import com.axelliant.android_erp.databinding.ModulesRowBinding
 
 class WeeklyAdapter(
     private val list: List<Test>,
@@ -16,14 +16,14 @@ class WeeklyAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccountsVH {
         val layoutInflater = LayoutInflater.from(parent.context)
-        val binding = WeeklyRowBinding.inflate(layoutInflater, parent, false)
+        val binding = ModulesRowBinding.inflate(layoutInflater, parent, false)
         return AccountsVH(binding)
     }
 
     override fun onBindViewHolder(holder: AccountsVH, position: Int) {
         holder.bind(list[position])
 
-        holder.binding.lyWeekly.setOnClickListener {
+        holder.binding.lyModule.setOnClickListener {
             itemClick.onItemClick(list[position], position)
         }
     }
@@ -32,7 +32,7 @@ class WeeklyAdapter(
         return list.size
     }
 
-    class AccountsVH(val binding: WeeklyRowBinding) : RecyclerView.ViewHolder(binding.root) {
+    class AccountsVH(val binding: ModulesRowBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Test) {
 //            binding.tvTitle.text = item.title.toString()

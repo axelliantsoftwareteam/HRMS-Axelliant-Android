@@ -7,7 +7,7 @@
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/ly_day"
+        android:id="@+id/ly_module"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/rounded_enabled"
@@ -19,13 +19,14 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv_date"
+            android:id="@+id/tv_module"
             style="@style/TEXT_SEMI_WHITE_15"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Attendance"
             android:textAlignment="textStart"
             android:textColor="@color/white"
+            android:lines="2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -35,8 +36,8 @@
             android:layout_height="@dimen/_30sdp"
             app:tint="@color/white"
             android:src="@drawable/ic_loc_pin"
-            app:layout_constraintStart_toStartOf="@+id/tv_date"
-            app:layout_constraintTop_toBottomOf="@+id/tv_date"/>
+            app:layout_constraintStart_toStartOf="@+id/tv_module"
+            app:layout_constraintTop_toBottomOf="@+id/tv_module"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
