@@ -167,7 +167,6 @@
 
         </com.google.android.material.checkbox.MaterialCheckBox>
 
-
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_forget_password"
             style="@style/TEXT_MEDIUM_BLACK_10"
@@ -184,16 +183,14 @@
             style="@style/ButtonTextStyle"
             android:layout_width="0dp"
             android:layout_height="@dimen/_40sdp"
-            android:layout_marginStart="@dimen/_15sdp"
             android:layout_marginTop="@dimen/_30sdp"
-            android:layout_marginEnd="@dimen/_15sdp"
             android:layout_marginBottom="@dimen/_10sdp"
             app:buttonBg="@drawable/rounded_enabled"
             app:iconVisibility="false"
             app:layout_constraintLeft_toRightOf="@id/start_guideline"
             app:layout_constraintRight_toLeftOf="@id/end_guideline"
             app:layout_constraintTop_toBottomOf="@+id/tv_forget_password"
-            app:text="@string/login_mic"
+            app:text="@string/login"
             app:textColor="@color/white">
 
         </com.axelliant.android_erp.components.RoundedButton>
@@ -203,19 +200,17 @@
             style="@style/ButtonTextStyle"
             android:layout_width="0dp"
             android:layout_height="@dimen/_40sdp"
-            android:layout_marginStart="@dimen/_15sdp"
             android:layout_marginTop="@dimen/_10sdp"
-            android:layout_marginEnd="@dimen/_15sdp"
-            android:layout_marginBottom="@dimen/_10sdp"
             app:buttonBg="@drawable/rounded_enabled"
             app:buttonIcon="@drawable/ic_miclogoone"
             app:iconVisibility="true"
             app:isOutlineButton="true"
+            app:layout_constraintHorizontal_bias="0.487"
             app:layout_constraintLeft_toRightOf="@id/start_guideline"
             app:layout_constraintRight_toLeftOf="@id/end_guideline"
             app:layout_constraintTop_toBottomOf="@+id/btn_login"
             app:text="@string/login_mic"
-            app:textColor="@color/black" />
+            app:textColor="@color/colorApp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

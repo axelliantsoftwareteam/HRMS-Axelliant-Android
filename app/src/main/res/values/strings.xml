@@ -59,4 +59,6 @@
     <string name="forget_pass">Forget Password</string>
     <string name="employe">Employee</string>
     <string name="Vendor">Vendor</string>
+
+    <string name="login">Login</string>
 </resources>
