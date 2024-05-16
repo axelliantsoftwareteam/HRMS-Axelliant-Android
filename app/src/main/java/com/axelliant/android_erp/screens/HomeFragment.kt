@@ -162,22 +162,6 @@ class HomeFragment : BaseFragment() {
         dataPopulate()
 
         binding?.tvDateTxt?.text = getCurrentDate()
-        binding?.textClock?.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-
-            override fun afterTextChanged(editable: Editable?) {
-                if (editable.toString().length >= 3) {
-                    binding?.tvHour?.text = editable?.split(":")?.get(0)
-                    binding?.tvMin?.text = editable?.split(":")?.get(1)
-                    binding?.tvSec?.text = editable?.split(":")?.get(2)
-
-                }
-
-            }
-
-        })
 
     }
 
