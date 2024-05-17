@@ -47,4 +47,23 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="save">Save</string>
+    <string name="attendance">Attendance</string>
+    <string name="my_attendance">My Attendance</string>
+    <string name="view">View</string>
+    <string name="last_seven">Last 7 Days</string>
+    <string name="this_month">This Month</string>
+    <string name="absent">Absents</string>
+    <string name="half_day">Half days</string>
+    <string name="miss_punch_out">Missed punch-outs</string>
+    <string name="holiday">Holiday</string>
+    <string name="weekly_offs">Weekly offs</string>
+    <string name="my_team">My Team</string>
+    <string name="present_on_site">Present on site</string>
+    <string name="work_from_home">Working From Home</string>
+    <string name="on_leave">On Leave</string>
+    <string name="total_members">Total Team members</string>
+    <string name="my_shift">My shift details</string>
+    <string name="shift_name">Shift name</string>
+    <string name="shift_premiss">Shift premiss</string>
+    <string name="working_from">Working From</string>
 </resources>
