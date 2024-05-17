@@ -716,7 +716,7 @@
                 android:textAlignment="textStart"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ly_myteam_attend" />
-
+\
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/ly_my_shift"

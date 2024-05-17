@@ -25,65 +25,192 @@
             android:id="@+id/top_guideline"
             style="@style/top_gl" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv_title"
-            style="@style/TEXT_SEMI_BLACK_15"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:text="@string/welcome"
-            android:textAlignment="textStart"
-            android:textSize="@dimen/_18ssp"
+        <ImageView
+            android:id="@+id/iv_logo"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:src="@drawable/ic_applogo"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
             app:layout_constraintStart_toStartOf="@id/start_guideline"
             app:layout_constraintTop_toBottomOf="@+id/top_guideline" />
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/ly_action_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_15sdp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_logo">
+
+            <ImageView
+                android:id="@+id/tv_view_detail"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_70sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:background="@drawable/rounded_bgg"
+                android:padding="@dimen/_5sdp"
+                android:src="@drawable/ic_employee"
+                app:layout_constraintEnd_toStartOf="@+id/tv_delete"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_employ"
+                style="@style/TEXT_MEDIUM_BLACK_10"
+                android:layout_width="0dp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:gravity="center"
+                android:text="@string/employe"
+                app:layout_constraintEnd_toEndOf="@+id/tv_view_detail"
+                app:layout_constraintStart_toStartOf="@+id/tv_view_detail"
+                app:layout_constraintTop_toBottomOf="@+id/tv_view_detail" />
+
+
+            <ImageView
+                android:id="@+id/tv_delete"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_70sdp"
+                android:background="@drawable/rounded_bgg"
+                android:padding="@dimen/_5sdp"
+                android:src="@drawable/ic_vender"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tv_view_detail"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_vendor"
+                style="@style/TEXT_MEDIUM_BLACK_10"
+                android:layout_width="0dp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:gravity="center"
+                android:text="@string/Vendor"
+                app:layout_constraintEnd_toEndOf="@+id/tv_delete"
+                app:layout_constraintStart_toStartOf="@+id/tv_delete"
+                app:layout_constraintTop_toBottomOf="@+id/tv_delete" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv_sub_title"
-            style="@style/TEXT_MEDIUM_GREY_10"
-            android:text="@string/hello"
-            android:textAlignment="textStart"
+            android:id="@+id/tv_email"
+            style="@style/TEXT_MEDIUM_BLACK_10"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:text="@string/username"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintTop_toBottomOf="@+id/ly_action_btn" />
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_email"
+            style="@style/OutlinedTextInputLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_2sdp"
             app:layout_constraintEnd_toEndOf="@id/end_guideline"
             app:layout_constraintStart_toStartOf="@id/start_guideline"
-            app:layout_constraintTop_toBottomOf="@+id/tv_title" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_email">
 
-        <androidx.appcompat.widget.AppCompatImageView
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_email"
+                style="@style/TEXT_MEDIUM_BLACK_10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionNext"
+                android:inputType="textEmailAddress"
+                android:textColorHint="@color/grey" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_password"
+            style="@style/TEXT_MEDIUM_BLACK_10"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:text="@string/password"
+            android:textAllCaps="true"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintTop_toBottomOf="@+id/til_email" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_password"
+            style="@style/OutlinedTextInputLayout"
             android:layout_width="0dp"
-            android:layout_height="@dimen/_200sdp"
-            android:src="@drawable/ic_welcome"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_2sdp"
+            app:endIconMode="password_toggle"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintTop_toBottomOf="@+id/tv_password">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionDone"
+                android:inputType="textPassword"
+                android:textColorHint="@color/grey" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/rb_remember_me"
+            style="@style/CheckBoxStyle"
+            android:text="@string/remember_me"
+            android:textSize="@dimen/_12ssp"
+            app:layout_constraintStart_toStartOf="@+id/start_guideline"
+            app:layout_constraintTop_toBottomOf="@+id/til_password">
+
+        </com.google.android.material.checkbox.MaterialCheckBox>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_forget_password"
+            style="@style/TEXT_MEDIUM_BLACK_10"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:text="@string/forget_pass"
+            app:layout_constraintEnd_toEndOf="@+id/end_guideline"
+            app:layout_constraintTop_toBottomOf="@+id/til_password">
+
+        </com.google.android.material.textview.MaterialTextView>
+
+
+        <com.axelliant.android_erp.components.RoundedButton
+            android:id="@+id/btn_login"
+            style="@style/ButtonTextStyle"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_marginTop="@dimen/_30sdp"
+            android:layout_marginBottom="@dimen/_10sdp"
+            app:buttonBg="@drawable/rounded_enabled"
+            app:iconVisibility="false"
             app:layout_constraintLeft_toRightOf="@id/start_guideline"
             app:layout_constraintRight_toLeftOf="@id/end_guideline"
-            app:layout_constraintTop_toBottomOf="@id/tv_sub_title"
-            app:layout_constraintBottom_toTopOf="@+id/divider" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_forget_password"
+            app:text="@string/login"
+            app:textColor="@color/white">
 
+        </com.axelliant.android_erp.components.RoundedButton>
 
-        <View
-            android:id="@+id/divider"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/_1sdp"
-            android:background="@color/divider"
-            android:layout_marginStart="@dimen/_15sdp"
-            android:layout_marginEnd="@dimen/_15sdp"
-            android:layout_marginBottom="@dimen/_15sdp"
-            app:layout_constraintBottom_toTopOf="@+id/btn_mic_login"
-            app:layout_constraintLeft_toRightOf="@id/start_guideline"
-            app:layout_constraintRight_toLeftOf="@id/end_guideline">
-        </View>
-
-        
         <com.axelliant.android_erp.components.RoundedButton
             android:id="@+id/btn_mic_login"
             style="@style/ButtonTextStyle"
             android:layout_width="0dp"
             android:layout_height="@dimen/_40sdp"
-            app:text="@string/login_mic"
-            app:textColor="@color/white"
+            android:layout_marginTop="@dimen/_10sdp"
             app:buttonBg="@drawable/rounded_enabled"
-            app:buttonIcon="@drawable/ic_mic"
+            app:buttonIcon="@drawable/ic_miclogoone"
             app:iconVisibility="true"
-            android:layout_marginStart="@dimen/_15sdp"
-            android:layout_marginEnd="@dimen/_15sdp"
-            android:layout_marginBottom="@dimen/_10sdp"
+            app:isOutlineButton="true"
+            app:layout_constraintHorizontal_bias="0.487"
             app:layout_constraintLeft_toRightOf="@id/start_guideline"
             app:layout_constraintRight_toLeftOf="@id/end_guideline"
-            app:layout_constraintBottom_toBottomOf="@id/bottom_guideline">
-        </com.axelliant.android_erp.components.RoundedButton>
+            app:layout_constraintTop_toBottomOf="@+id/btn_login"
+            app:text="@string/login_mic"
+            app:textColor="@color/colorApp" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
