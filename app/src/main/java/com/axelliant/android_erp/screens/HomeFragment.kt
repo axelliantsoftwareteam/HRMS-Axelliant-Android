@@ -176,9 +176,7 @@ class HomeFragment : BaseFragment() {
         binding?.ivNotification?.setOnClickListener {
             requireContext().showSuccessMsg()
         }
-        binding?.ivNotification?.setOnClickListener {
-            requireContext().showSuccessMsg()
-        }
+
         binding?.btnCheckIn?.setOnClickListener{
             requireContext().showSuccessMsg()
         }
@@ -234,6 +232,11 @@ class HomeFragment : BaseFragment() {
 
                             showDialog()
                             AppNavigator.navigateToAttendanceStats()
+                        }
+
+                        "Leaves" -> {
+                            showDialog()
+                            AppNavigator.navigateToLeaves()
                         }
 
                         else -> {
