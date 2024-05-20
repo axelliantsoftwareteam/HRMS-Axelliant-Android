@@ -61,20 +61,30 @@
                 android:layout_height="wrap_content">
 
 
+                <ImageView
+                    android:id="@+id/iv_back"
+                    android:layout_width="@dimen/_30sdp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:layout_marginEnd="@dimen/_5sdp"
+                    android:src="@drawable/ic_left"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:contentDescription="@string/todo" />
+
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tv_title"
                     style="@style/TEXT_SEMI_BLACK_15"
-                    android:layout_marginTop="@dimen/_10sdp"
                     android:text="@string/my_team"
-                    android:textAlignment="textStart"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:gravity="start|center"
+                    app:layout_constraintStart_toEndOf="@+id/iv_back"
+                    app:layout_constraintTop_toTopOf="@+id/iv_back"
+                    app:layout_constraintBottom_toBottomOf="@+id/iv_back"/>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/ly_action_btn"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
                     android:background="@drawable/rounded_bgg"
                     android:gravity="center"
                     android:orientation="horizontal"
@@ -84,7 +94,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/tv_title">
 
                     <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/tv_view_detail"
+                        android:id="@+id/tv_week"
                         style="@style/TEXT_REGULAR_WHITE_10"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
@@ -92,12 +102,12 @@
                         android:paddingTop="@dimen/_6sdp"
                         android:paddingBottom="@dimen/_6sdp"
                         android:text="@string/last_seven"
-                        app:layout_constraintEnd_toStartOf="@+id/tv_delete"
+                        app:layout_constraintEnd_toStartOf="@+id/tv_month"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/tv_delete"
+                        android:id="@+id/tv_month"
                         style="@style/TEXT_REGULAR_BLACK_10"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
@@ -107,7 +117,7 @@
                         android:paddingBottom="@dimen/_6sdp"
                         android:text="@string/this_month"
                         app:layout_constraintEnd_toStartOf="@+id/tv_custom"
-                        app:layout_constraintStart_toEndOf="@+id/tv_view_detail" />
+                        app:layout_constraintStart_toEndOf="@+id/tv_week" />
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/tv_custom"
@@ -120,7 +130,7 @@
                         android:paddingBottom="@dimen/_6sdp"
                         android:text="@string/custom"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/tv_delete" />
+                        app:layout_constraintStart_toEndOf="@+id/tv_month" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -268,8 +278,8 @@
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/ly_teams_members"
-                        android:layout_width="381dp"
-                        android:layout_height="318dp"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
                         android:layout_margin="@dimen/_5sdp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -287,7 +297,7 @@
                             app:layout_constraintTop_toTopOf="parent"
                             tools:itemCount="2"
                             tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                            tools:listitem="@layout/ly_my_team_attendance" />
+                            tools:listitem="@layout/my_team_attend_row" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

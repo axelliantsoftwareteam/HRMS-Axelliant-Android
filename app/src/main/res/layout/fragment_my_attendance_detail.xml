@@ -58,13 +58,14 @@
                     android:text="@string/my_attendance"
                     android:textAlignment="textStart"
                     app:layout_constraintStart_toEndOf="@+id/iv_back"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@+id/iv_back"/>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/ly_action_btn"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
                     android:background="@drawable/rounded_bgg"
                     android:gravity="center"
                     android:orientation="horizontal"

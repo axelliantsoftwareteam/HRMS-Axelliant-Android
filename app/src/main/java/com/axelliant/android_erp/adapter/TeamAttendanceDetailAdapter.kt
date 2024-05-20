@@ -8,28 +8,22 @@ import androidx.recyclerview.widget.RecyclerView
 import com.axelliant.android_erp.Test
 import com.axelliant.android_erp.callback.AdapterItemClick
 import com.axelliant.android_erp.databinding.MyAttendanceDetailRowBinding
+import com.axelliant.android_erp.databinding.MyTeamAttendRowBinding
 
-class MyAttendanceDetailAdapter(
+class TeamAttendanceDetailAdapter(
     private val list: List<Test>
 ) :
-    RecyclerView.Adapter<MyAttendanceDetailAdapter.AccountsVH>() {
+    RecyclerView.Adapter<TeamAttendanceDetailAdapter.AccountsVH>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccountsVH {
         val layoutInflater = LayoutInflater.from(parent.context)
-        val binding = MyAttendanceDetailRowBinding.inflate(layoutInflater, parent, false)
+        val binding = MyTeamAttendRowBinding.inflate(layoutInflater, parent, false)
         return AccountsVH(binding)
     }
 
     override fun onBindViewHolder(holder: AccountsVH, position: Int) {
         holder.bind(list[position])
-
-        holder.binding.lyDropDown.isVisible = false
-        
-        holder.binding.tvDropDown.setOnClickListener {
-
-            holder.binding.lyDropDown.isVisible = !holder.binding.lyDropDown.isVisible
-        }
 
 
     }
@@ -38,7 +32,7 @@ class MyAttendanceDetailAdapter(
         return list.size
     }
 
-    class AccountsVH(val binding: MyAttendanceDetailRowBinding) :
+    class AccountsVH(val binding: MyTeamAttendRowBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Test) {
