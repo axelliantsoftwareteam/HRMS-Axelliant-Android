@@ -90,4 +90,6 @@
     <string name="expected_in">Expected In</string>
     <string name="actual_out">Actual Out</string>
     <string name="expected_out">Expected out</string>
+    <string name="working_from_home">Working From Home</string>
+    <string name="team_member">Team Members</string>
 </resources>

@@ -26,34 +26,34 @@
             android:id="@+id/top_guideline"
             style="@style/top_gl" />
 
-       <!-- <com.google.android.material.textview.MaterialTextView
-            style="@style/TEXT_SEMI_BLACK_15"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@string/attendance"
-            app:layout_constraintEnd_toEndOf="@id/end_guideline"
-            app:layout_constraintStart_toStartOf="@id/start_guideline"
-            app:layout_constraintTop_toTopOf="@id/top_guideline" />
+        <!-- <com.google.android.material.textview.MaterialTextView
+             style="@style/TEXT_SEMI_BLACK_15"
+             android:layout_width="0dp"
+             android:layout_height="wrap_content"
+             android:text="@string/attendance"
+             app:layout_constraintEnd_toEndOf="@id/end_guideline"
+             app:layout_constraintStart_toStartOf="@id/start_guideline"
+             app:layout_constraintTop_toTopOf="@id/top_guideline" />
 
-        <ImageView
-            android:id="@+id/img_add"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/_5sdp"
-            android:src="@drawable/ic_left"
-            app:layout_constraintLeft_toRightOf="@id/start_guideline"
-            app:layout_constraintTop_toBottomOf="@id/top_guideline">
+         <ImageView
+             android:id="@+id/img_add"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_marginEnd="@dimen/_5sdp"
+             android:src="@drawable/ic_left"
+             app:layout_constraintLeft_toRightOf="@id/start_guideline"
+             app:layout_constraintTop_toBottomOf="@id/top_guideline">
 
-        </ImageView>-->
+         </ImageView>-->
 
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintTop_toBottomOf="@+id/top_guideline"
-            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintBottom_toBottomOf="@id/bottom_guideline"
             app:layout_constraintEnd_toEndOf="@id/end_guideline"
-            app:layout_constraintBottom_toBottomOf="@id/bottom_guideline">
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintTop_toBottomOf="@+id/top_guideline">
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -65,7 +65,7 @@
                     android:id="@+id/tv_title"
                     style="@style/TEXT_SEMI_BLACK_15"
                     android:layout_marginTop="@dimen/_10sdp"
-                    android:text="@string/my_attendance"
+                    android:text="@string/my_team"
                     android:textAlignment="textStart"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -123,6 +123,96 @@
                         app:layout_constraintStart_toEndOf="@+id/tv_delete" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/ly_day_filter"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_5sdp"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/_3sdp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/ly_action_btn">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/ly_work_home"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/rounded_bgg"
+                        android:backgroundTint="@color/colorApp"
+                        android:padding="@dimen/_5sdp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/tv_work_from"
+                            style="@style/TEXT_MEDIUM_BLACK_10"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:text="@string/working_from_home"
+                            android:textColor="@color/white"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/tv_work_txt"
+                            style="@style/TEXT_MEDIUM_BLACK_10"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="@dimen/_5sdp"
+                            android:background="@drawable/circle_no_bg"
+                            android:padding="@dimen/_3sdp"
+                            android:text="10"
+                            android:textSize="@dimen/_8sdp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/tv_work_from"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/ly_present"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        android:padding="@dimen/_5sdp"
+                        android:background="@drawable/rounded_bgg"
+                        app:layout_constraintStart_toEndOf="@+id/ly_work_home"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/tv_present"
+                            style="@style/TEXT_MEDIUM_BLACK_10"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:text="@string/in_office"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/tv_present_txt"
+                            style="@style/TEXT_MEDIUM_BLACK_10"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="@dimen/_5sdp"
+                            android:background="@drawable/circle_no_bg"
+                            android:padding="@dimen/_3sdp"
+                            android:text="10"
+                            android:textSize="@dimen/_8sdp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/tv_present"
+                            app:layout_constraintTop_toTopOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/ly_myteam_attend"
                     android:layout_width="0dp"
@@ -131,7 +221,7 @@
                     android:background="@drawable/rounded_attend_row"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/ly_action_btn">
+                    app:layout_constraintTop_toBottomOf="@+id/ly_day_filter">
 
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -147,54 +237,32 @@
                         app:layout_constraintTop_toTopOf="parent">
 
                         <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/tv_date"
+                            android:id="@+id/tv_team_member"
                             style="@style/TEXT_MEDIUM_WHITE_12"
                             android:layout_width="0dp"
-                            app:layout_constraintHorizontal_weight="3"
                             android:layout_height="match_parent"
-                            android:text="@string/date"
+                            android:text="@string/team_member"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toStartOf="@+id/tv_hour"
+                            app:layout_constraintHorizontal_weight="3"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
+                            app:layout_constraintTop_toTopOf="parent"
+                            />
                         <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/tv_hour"
+                            android:id="@+id/tv_team_member_txt"
                             style="@style/TEXT_MEDIUM_WHITE_12"
                             android:layout_width="0dp"
-                            app:layout_constraintHorizontal_weight="3"
                             android:layout_height="match_parent"
+                            android:text="20"
+                            android:padding="@dimen/_3sdp"
+                            android:textSize="@dimen/_8sdp"
+                            android:background="@drawable/circle_no_bg"
+                            android:backgroundTint="@color/colorApp"
                             android:layout_marginStart="@dimen/_5sdp"
-                            android:text="@string/work_hour"
-                            app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toStartOf="@+id/tv_status"
-                            app:layout_constraintStart_toEndOf="@+id/tv_date" />
-
-                        <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/tv_status"
-                            style="@style/TEXT_MEDIUM_WHITE_12"
-                            android:layout_width="0dp"
                             app:layout_constraintHorizontal_weight="3"
-                            android:layout_height="match_parent"
-                            android:layout_marginStart="@dimen/_5sdp"
-                            android:background="@drawable/rounded_disabled"
-                            android:text="@string/status"
+                            app:layout_constraintStart_toEndOf="@id/tv_team_member"
                             app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toStartOf="@+id/view_expand"
-                            app:layout_constraintStart_toEndOf="@+id/tv_hour" />
-
-                        <View
-                            android:id="@+id/view_expand"
-                            android:layout_width="0dp"
-                            android:layout_height="@dimen/_2sdp"
-                            app:layout_constraintHorizontal_weight="1"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/tv_status"
-                            app:layout_constraintTop_toTopOf="parent"
-                            ></View>
-
+                            />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -212,6 +280,7 @@
                             android:id="@+id/rv_attend"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
+                            android:orientation="vertical"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -220,7 +289,6 @@
                             tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                             tools:listitem="@layout/ly_my_team_attendance" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>

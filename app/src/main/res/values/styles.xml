@@ -59,6 +59,17 @@
         <item name="fontFamily">@font/poppins_medium</item>
 
     </style>
+    <style name="TEXT_MEDIUM_BLACK_12" parent="@style/TextAppearance.MaterialComponents.Subtitle1">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">@dimen/_12ssp</item>
+        <item name="android:letterSpacing">0.01</item>
+        <item name="android:gravity">center</item>
+        <item name="android:fontFamily">@font/poppins_medium</item>
+        <item name="fontFamily">@font/poppins_medium</item>
+
+    </style>
 
     <style name="TEXT_MEDIUM_BLACK_15" parent="@style/TextAppearance.MaterialComponents.Subtitle1">
         <item name="android:layout_width">0dp</item>
@@ -141,6 +152,17 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">@dimen/_10ssp</item>
+        <item name="android:letterSpacing">0.01</item>
+        <item name="android:gravity">center</item>
+        <item name="android:fontFamily">@font/poppins_semibold</item>
+        <item name="fontFamily">@font/poppins_semibold</item>
+
+    </style>
+    <style name="TEXT_SEMI_BLACK_12" parent="@style/TextAppearance.MaterialComponents.Subtitle1">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">@dimen/_12ssp</item>
         <item name="android:letterSpacing">0.01</item>
         <item name="android:gravity">center</item>
         <item name="android:fontFamily">@font/poppins_semibold</item>
