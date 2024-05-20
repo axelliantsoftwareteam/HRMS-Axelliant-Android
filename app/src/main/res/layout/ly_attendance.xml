@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -41,9 +42,8 @@
             android:layout_marginEnd="@dimen/_5sdp"
             android:src="@drawable/ic_left"
             app:layout_constraintLeft_toRightOf="@id/start_guideline"
-            app:layout_constraintTop_toBottomOf="@id/top_guideline">
-
-        </ImageView>
+            app:layout_constraintTop_toBottomOf="@id/top_guideline"
+            android:importantForAccessibility="no" />
 
 
         <androidx.core.widget.NestedScrollView
@@ -155,7 +155,7 @@
                         style="@style/TEXT_MEDIUM_BLACK_15"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="3"
+                        android:text="@string/_3"
                         android:textColor="@color/colorApp"
                         android:textSize="@dimen/_20ssp"
                         app:layout_constraintStart_toStartOf="parent"
@@ -182,7 +182,7 @@
                         android:background="#E5E0D9"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/tv_absent_txt"></View>
+                        app:layout_constraintTop_toTopOf="@+id/tv_absent_txt" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -201,7 +201,7 @@
                         style="@style/TEXT_MEDIUM_BLACK_15"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="2"
+                        android:text="@string/_2"
                         android:textColor="@color/colorApp"
                         android:textSize="@dimen/_20ssp"
                         app:layout_constraintStart_toStartOf="parent"
@@ -227,7 +227,7 @@
                         android:background="#E5E0D9"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/tv_half_day_txt"></View>
+                        app:layout_constraintTop_toTopOf="@+id/tv_half_day_txt" />
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -248,7 +248,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="4dp"
-                        android:text="8"
+                        android:text="@string/_8"
                         android:textColor="@color/red"
                         android:textSize="@dimen/_20ssp"
                         app:layout_constraintStart_toStartOf="parent"
@@ -295,7 +295,7 @@
                         style="@style/TEXT_MEDIUM_BLACK_15"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="5"
+                        android:text="@string/_5"
                         android:textColor="@color/colorApp"
                         android:textSize="@dimen/_20ssp"
                         app:layout_constraintStart_toStartOf="parent"
@@ -323,7 +323,7 @@
                         android:background="#E5E0D9"
                         app:layout_constraintBottom_toBottomOf="@+id/tv_leaves"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/tv_leaves_txt"></View>
+                        app:layout_constraintTop_toTopOf="@+id/tv_leaves_txt" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -340,7 +340,7 @@
                         style="@style/TEXT_MEDIUM_BLACK_15"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="1"
+                        android:text="@string/_1"
                         android:textColor="@color/colorApp"
                         android:textSize="@dimen/_20ssp"
                         app:layout_constraintStart_toStartOf="parent"
@@ -366,7 +366,7 @@
                         android:background="#E5E0D9"
                         app:layout_constraintBottom_toBottomOf="@+id/tv_holiday"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/tv_holiday_txt"></View>
+                        app:layout_constraintTop_toTopOf="@+id/tv_holiday_txt" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -384,7 +384,7 @@
                         style="@style/TEXT_MEDIUM_BLACK_15"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="4"
+                        android:text="@string/_4"
                         android:textColor="@color/colorApp"
                         android:textSize="@dimen/_20ssp"
                         app:layout_constraintStart_toStartOf="parent"
@@ -461,7 +461,8 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:tint="@color/white" />
+                    app:tint="@color/white"
+                    tools:ignore="ContentDescription" />
 
                 <com.google.android.material.textview.MaterialTextView
                     style="@style/TEXT_MEDIUM_WHITE_10"
@@ -470,7 +471,7 @@
                     android:layout_marginStart="@dimen/_5sdp"
                     android:paddingTop="@dimen/_6sdp"
                     android:paddingBottom="@dimen/_6sdp"
-                    android:text="Today- 17 May 2024"
+                    android:text="@string/today_17_may_2024"
                     app:layout_constraintStart_toEndOf="@+id/iv_today"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -497,7 +498,7 @@
                         style="@style/TEXT_MEDIUM_BLACK_15"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="3"
+                        android:text="@string/_3"
                         android:textColor="@color/blue"
                         android:textSize="@dimen/_20ssp"
                         app:layout_constraintStart_toStartOf="parent"
@@ -544,7 +545,7 @@
                         style="@style/TEXT_MEDIUM_BLACK_15"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="3"
+                        android:text="@string/_3"
                         android:textColor="@color/green"
                         android:textSize="@dimen/_20ssp"
                         app:layout_constraintStart_toStartOf="parent"
@@ -570,7 +571,7 @@
                         android:background="#E5E0D9"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/tv_present_txt"></View>
+                        app:layout_constraintTop_toTopOf="@+id/tv_present_txt" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -589,7 +590,7 @@
                         style="@style/TEXT_MEDIUM_BLACK_15"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="2"
+                        android:text="@string/_2"
                         android:textColor="@color/colorApp"
                         android:textSize="@dimen/_20ssp"
                         app:layout_constraintStart_toStartOf="parent"
@@ -617,7 +618,7 @@
                 android:id="@+id/ly_teams_absent_leave"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_margin="@dimen/_5sdp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/ly_teams_details">
@@ -637,7 +638,7 @@
                         style="@style/TEXT_MEDIUM_BLACK_15"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="3"
+                        android:text="@string/_3"
                         android:textColor="@color/red"
                         android:textSize="@dimen/_20ssp"
                         app:layout_constraintStart_toStartOf="parent"
@@ -663,7 +664,7 @@
                         android:background="#E5E0D9"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/tv_teams_absent_txt"></View>
+                        app:layout_constraintTop_toTopOf="@+id/tv_teams_absent_txt" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -681,7 +682,7 @@
                         style="@style/TEXT_MEDIUM_BLACK_15"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="2"
+                        android:text="@string/_2"
                         android:textColor="@color/orange"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -716,7 +717,6 @@
                 android:textAlignment="textStart"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ly_myteam_attend" />
-\
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/ly_my_shift"
@@ -746,7 +746,7 @@
                         android:layout_marginStart="@dimen/_5sdp"
                         android:paddingTop="@dimen/_6sdp"
                         android:paddingBottom="@dimen/_6sdp"
-                        android:text="Today"
+                        android:text="@string/today"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -787,7 +787,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_5sdp"
                             android:background="@drawable/rounded_disabled"
-                            android:text="Morning(11:00AM - 8:00PM)"
+                            android:text="@string/morning_11_00am_8_00pm"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/tv_shift_name" />
 
@@ -829,7 +829,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/_5sdp"
                                 android:background="@drawable/rounded_disabled"
-                                android:text="Not Specified"
+                                android:text="@string/not_specified"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/tv_shift_premiss_txt" />
 
@@ -860,7 +860,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/_5sdp"
                                 android:background="@drawable/rounded_disabled"
-                                android:text="In Office"
+                                android:text="@string/in_office"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/tv_work_from_txt" />
 

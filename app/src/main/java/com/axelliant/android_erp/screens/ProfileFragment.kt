@@ -8,12 +8,13 @@ import com.axelliant.android_erp.base.BaseFragment
 import com.axelliant.android_erp.databinding.FragmentLeavesBinding
 import com.axelliant.android_erp.databinding.FragmentLoginBinding
 import com.axelliant.android_erp.databinding.FragmentProfileBinding
+import com.axelliant.android_erp.databinding.LyAttendanceBinding
 import com.axelliant.android_erp.viewmodel.LoginViewModel
 import org.koin.android.ext.android.inject
 
 class ProfileFragment : BaseFragment() {
 
-    private var _binding: FragmentProfileBinding? = null
+    private var _binding: LyAttendanceBinding? = null
     private val binding get() = _binding
 
     override fun onCreateView(
@@ -22,7 +23,7 @@ class ProfileFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        _binding = FragmentProfileBinding.inflate(inflater).also { _binding = it }
+        _binding = LyAttendanceBinding.inflate(inflater).also { _binding = it }
         return binding?.root
     }
 

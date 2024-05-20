@@ -80,4 +80,14 @@
     <string name="shift_name">Shift name</string>
     <string name="shift_premiss">Shift premiss</string>
     <string name="working_from">Working From</string>
+    <string name="_3">3</string>
+    <string name="_2">2</string>
+    <string name="_8">8</string>
+    <string name="_5">5</string>
+    <string name="_1">1</string>
+    <string name="_4">4</string>
+    <string name="today_17_may_2024">Today- 17 May 2024</string>
+    <string name="today">Today</string>
+    <string name="morning_11_00am_8_00pm">Morning(11:00AM - 8:00PM)</string>
+    <string name="not_specified">Not Specified</string>
 </resources>
