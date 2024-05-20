@@ -105,4 +105,14 @@
     <string name="todo">TODO</string>
     <string name="_17_may_2024">17 May 2024</string>
     <string name="_3_hr">3 Hr</string>
+    <string name="my_team_leave">My Team Leaves</string>
+    <string name="total_leaves">Total Leaves</string>
+    <string name="used_leaves">Used Leaves</string>
+    <string name="approved">Approved</string>
+    <string name="rejected">Rejected</string>
+    <string name="remaining">Remaining Leaves</string>
+    <string name="casual">Casual</string>
+    <string name="sick">Sick</string>
+    <string name="annual">Annual</string>
+    <string name="upcoming_leavs">My Upcoming Leaves</string>
 </resources>
