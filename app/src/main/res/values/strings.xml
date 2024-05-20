@@ -80,4 +80,14 @@
     <string name="shift_name">Shift name</string>
     <string name="shift_premiss">Shift premiss</string>
     <string name="working_from">Working From</string>
+    <string name="my_leaves">My Leave</string>
+    <string name="custom">Custom</string>
+    <string name="work_hour">Work Hours</string>
+    <string name="status">Status</string>
+    <string name="shift">Shift</string>
+    <string name="shift_timings">Shift Timings</string>
+    <string name="actual_in">Actual In</string>
+    <string name="expected_in">Expected In</string>
+    <string name="actual_out">Actual Out</string>
+    <string name="expected_out">Expected out</string>
 </resources>
