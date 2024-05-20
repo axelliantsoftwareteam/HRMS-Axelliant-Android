@@ -65,6 +65,7 @@
                 app:layout_constraintStart_toEndOf="@+id/line_divider"
                 app:layout_constraintTop_toTopOf="@+id/line_divider" />
 
+
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_status"
                 style="@style/TEXT_SEMI_BLACK_10"

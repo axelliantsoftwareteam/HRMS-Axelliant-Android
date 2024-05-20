@@ -34,7 +34,7 @@ import com.axelliant.android_erp.databinding.FragmentHomeBinding
 import com.axelliant.android_erp.extention.showSuccessMsg
 import com.axelliant.android_erp.model.Birthday
 import com.axelliant.android_erp.model.Modules
-import com.axelliant.android_erp.utils.Utils.getCurrentDate
+import com.axelliant.android_erp.navigation.AppNavigator
 import java.io.IOException
 import java.util.Locale
 
@@ -170,6 +170,19 @@ class HomeFragment : BaseFragment() {
         dataPopulate()
         birthdayPopulate()
 
+        binding?.ivQr?.setOnClickListener {
+            requireContext().showSuccessMsg()
+        }
+        binding?.ivNotification?.setOnClickListener {
+            requireContext().showSuccessMsg()
+        }
+        binding?.ivNotification?.setOnClickListener {
+            requireContext().showSuccessMsg()
+        }
+        binding?.btnCheckIn?.setOnClickListener{
+            requireContext().showSuccessMsg()
+        }
+
     }
 
     override fun onPause() {
@@ -214,10 +227,19 @@ class HomeFragment : BaseFragment() {
                 ),
             object : AdapterItemClick {
                 override fun onItemClick(customObject: Any, position: Int) {
-                    val currentObject = customObject as Test
-                    requireContext().showSuccessMsg(
-                        currentObject.testString
-                    )
+                    val currentObject = customObject as Modules
+
+                    when (currentObject.name) {
+                        "Attendance" -> {
+
+                            showDialog()
+                            AppNavigator.navigateToAttendanceStats()
+                        }
+
+                        else -> {
+                            requireContext().showSuccessMsg()
+                        }
+                    }
 
                 }
 

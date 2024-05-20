@@ -5,11 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.axelliant.android_erp.base.BaseFragment
-import com.axelliant.android_erp.databinding.FragmentLeavesBinding
-import com.axelliant.android_erp.databinding.FragmentLoginBinding
 import com.axelliant.android_erp.databinding.FragmentProfileBinding
-import com.axelliant.android_erp.viewmodel.LoginViewModel
-import org.koin.android.ext.android.inject
+
 
 class ProfileFragment : BaseFragment() {
 

@@ -65,4 +65,22 @@
 
     </fragment>
 
+
+    <fragment
+        android:id="@+id/attendanceStatsFragment"
+        android:name="com.axelliant.android_erp.screens.AttendanceStatsFragment"
+        android:label="Apply Leaves Fragment"
+        tools:layout="@layout/fragment_attendance_stats" >
+
+    </fragment>
+
+
+ <fragment
+     android:id="@+id/myAttendanceDetailFragment"
+     android:name="com.axelliant.android_erp.screens.MyAttendanceDetailFragment"
+     android:label="Apply Leaves Fragment"
+     tools:layout="@layout/fragment_my_attendance_detail" >
+
+ </fragment>
+
 </navigation>

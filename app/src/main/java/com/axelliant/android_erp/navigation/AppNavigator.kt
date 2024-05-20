@@ -21,6 +21,10 @@ class AppNavigator {
             return getController().currentDestination?.id
         }
 
+        fun moveBackToPreviousFragment() {
+            getController().popBackStack()
+        }
+
         fun navigateToSplash(args: Bundle = Bundle()) {
             Log.i(TAG, "navigateToLogin: $args")
             val navAction = NavAction(R.id.splashFragment)
@@ -69,6 +73,7 @@ class AppNavigator {
                 getController().navigate(R.id.home_fragment_action, args)
             }
         }
+
         fun navigateToLeaves(args: Bundle = Bundle()) {
             Log.i(TAG, "navigateToLeaves: $args")
             val navAction = NavAction(R.id.leavesFragment)
@@ -134,6 +139,39 @@ class AppNavigator {
             }
         }
 
+        fun navigateToAttendanceStats(args: Bundle = Bundle()) {
+            Log.i(TAG, "navigateToAttendanceStats: $args")
+            val navAction = NavAction(R.id.attendanceStatsFragment)
+            val navOptions = NavOptions.Builder()
+                .setPopUpTo(getCurrentDestinationId()!!, false).build()
+            navAction.navOptions = navOptions
+
+            val destination: NavDestination? = getCurrentDestinationId()?.let {
+                getController().graph.findNode(it)
+            }
+            if (destination != null) {
+                destination.putAction(R.id.attendance_stats_fragment_action, navAction)
+                getController().navigate(R.id.attendance_stats_fragment_action, args)
+            }
+        }
+
+        fun navigateToMyAttendanceDetail(args: Bundle = Bundle()) {
+            Log.i(TAG, "navigateToAttendanceStats: $args")
+            val navAction = NavAction(R.id.myAttendanceDetailFragment)
+            val navOptions = NavOptions.Builder()
+                .setPopUpTo(getCurrentDestinationId()!!, false).build()
+            navAction.navOptions = navOptions
+
+            val destination: NavDestination? = getCurrentDestinationId()?.let {
+                getController().graph.findNode(it)
+            }
+            if (destination != null) {
+                destination.putAction(R.id.my_attendance_detail_fragment_action, navAction)
+                getController().navigate(R.id.my_attendance_detail_fragment_action, args)
+            }
+
+
+        }
 
     }
 }
