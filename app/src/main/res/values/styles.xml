@@ -33,6 +33,17 @@
         <item name="android:fontFamily">@font/poppins_regular</item>
         <item name="fontFamily">@font/poppins_regular</item>
     </style>
+
+    <style name="TEXT_REGULAR_WHITE_12" parent="@style/TextAppearance.MaterialComponents.Subtitle1">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/_12ssp</item>
+        <item name="android:letterSpacing">0.01</item>
+        <item name="android:gravity">center</item>
+        <item name="android:fontFamily">@font/poppins_regular</item>
+        <item name="fontFamily">@font/poppins_regular</item>
+    </style>
     <!--Poppins Regular Font-->
 
 
@@ -84,6 +95,20 @@
         <item name="fontFamily">@font/poppins_medium</item>
 
     </style>
+
+
+    <style name="TEXT_MEDIUM_WHITE_12" parent="@style/TextAppearance.MaterialComponents.Subtitle1">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/_12ssp</item>
+        <item name="android:letterSpacing">0.01</item>
+        <item name="android:gravity">center</item>
+        <item name="android:fontFamily">@font/poppins_medium</item>
+        <item name="fontFamily">@font/poppins_medium</item>
+
+    </style>
+
 
     <style name="TEXT_MEDIUM_GREY_10" parent="@style/TextAppearance.MaterialComponents.Subtitle1">
         <item name="android:layout_width">0dp</item>

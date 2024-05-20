@@ -6,7 +6,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.axelliant.android_erp.dialog.LoadingDialog
 
-open class BaseActivity  : AppCompatActivity(){
+open class BaseActivity : AppCompatActivity() {
     lateinit var loadingDialog: LoadingDialog
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -16,5 +16,22 @@ open class BaseActivity  : AppCompatActivity(){
         loadingDialog.setCanceledOnTouchOutside(false)
 
     }
+
+
+    fun showDialog() {
+
+        if (!this.isFinishing) {
+            if (!loadingDialog.isShowing)
+                loadingDialog.show()
+
+        }
+
+    }
+
+    fun hideDialog() {
+        if (loadingDialog.isShowing)
+            loadingDialog.dismiss()
+    }
+
 
 }

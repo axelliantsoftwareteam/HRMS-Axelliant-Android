@@ -68,8 +68,8 @@ dependencies {
     implementation(libs.okhttp)
 
     implementation(libs.circleimageview) // circle image view
-
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.livedata.ktx)
+
 
 }

@@ -18,16 +18,16 @@
     <color name="color_secondry">#2980FD</color>
     <color name="layout_bg">#ffffff</color>
     <color name="approved_bg">#F1FBFB</color>
-    <color name="approved">#1FCDC5</color>
+    <color name="approved">#2B2B2B</color>
     <color name="btn_text_color">#0C0C0C</color>
     <color name="grey">#8D8D8D</color>
-    <color name="light_grey">#AFAFAF</color>
+    <color name="light_grey">#CCCACA</color>
     <color name="red">#BB4F4E</color>
     <color name="green">#159360</color>
     <color name="orange">#E97E5B</color>
     <color name="blue">#03112C</color>
 
-    <color name="divider">#F3F3F4</color>
+    <color name="divider">#EDE8E8</color>
     <color name="bottom_layout">#E8E8E8</color>
 
 

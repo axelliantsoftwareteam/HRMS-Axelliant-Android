@@ -1,10 +1,10 @@
 package com.axelliant.android_erp.screens
 
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.axelliant.android_erp.R
@@ -14,7 +14,7 @@ import com.axelliant.android_erp.navigation.AppNavigator
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
     private lateinit var diComponents: Components
     private var lastBackPressedTime: Long = 0
@@ -33,6 +33,11 @@ class MainActivity : AppCompatActivity() {
         // above will assign it
         diComponents.globalConfig.navController = navHostFragment.navController
         diComponents.globalConfig.navController.addOnDestinationChangedListener { controller, destination, arguments ->
+
+            Handler().postDelayed({
+                // do stuff
+                hideDialog()
+            }, 200)
 
             when (destination.id) {
                 R.id.homeFragment, R.id.leavesFragment, R.id.profileFragment, R.id.expenseFragment -> {
