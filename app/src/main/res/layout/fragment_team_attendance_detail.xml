@@ -224,6 +224,34 @@
 
 
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/ly_team_filter"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_5sdp"
+                    android:gravity="center"
+                    android:background="@drawable/rounded_bgg"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/_8sdp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/ly_day_filter">
+                    <Spinner
+                        android:id="@+id/sp_team_member"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:dropDownVerticalOffset="25dp"
+                        android:padding="2dp"
+                        android:popupBackground="@drawable/ly_spiner_bg"
+                        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck">
+                    </Spinner>
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/ly_myteam_attend"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -231,7 +259,7 @@
                     android:background="@drawable/rounded_attend_row"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/ly_day_filter">
+                    app:layout_constraintTop_toBottomOf="@+id/ly_team_filter">
 
 
                     <androidx.constraintlayout.widget.ConstraintLayout

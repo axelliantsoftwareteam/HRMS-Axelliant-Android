@@ -802,8 +802,6 @@
                     app:layout_constraintTop_toBottomOf="@+id/ly_myteam_attend" />
 
 
-
-
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
 
