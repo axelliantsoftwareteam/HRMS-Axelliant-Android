@@ -29,7 +29,7 @@
         <com.google.android.material.textview.MaterialTextView
             style="@style/TEXT_SEMI_BLACK_15"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:gravity="center"
             android:text="@string/attendance"
             app:layout_constraintBottom_toBottomOf="@+id/iv_back"
@@ -63,10 +63,10 @@
                 android:layout_marginTop="@dimen/_5sdp">
 
                 <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_my_attend"
                     style="@style/TEXT_MEDIUM_BLACK_15"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginStart="@dimen/_5sdp"
                     android:paddingTop="@dimen/_6sdp"
                     android:paddingBottom="@dimen/_6sdp"
                     android:text="@string/my_attendance"
@@ -81,7 +81,9 @@
                     android:text="@string/view"
                     android:textSize="@dimen/_12sdp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="@+id/tv_my_attend"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_my_attend"
+                    />
 
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -413,26 +415,27 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_my_team_stat"
                     style="@style/TEXT_SEMI_BLACK_15"
-                    android:paddingTop="@dimen/_3sdp"
                     android:text="@string/my_team"
+                    android:layout_marginTop="@dimen/_10sdp"
                     android:textAlignment="textStart"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/tv_my_team_view"
-
+                    app:layout_constraintTop_toBottomOf="@+id/ly_attend"
                     />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tv_my_team_view"
                     style="@style/TEXT_MEDIUM_BLACK_10"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:padding="@dimen/_5sdp"
                     android:text="@string/view"
                     android:textAlignment="textStart"
                     android:textColor="@color/colorApp"
                     android:textSize="@dimen/_12sdp"
+                    android:padding="@dimen/_5sdp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/ly_attend" />
+                    app:layout_constraintTop_toTopOf="@+id/tv_my_team_stat"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_my_team_stat"
+                    />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/ly_myteam_attend"
@@ -451,7 +454,7 @@
                         android:background="@drawable/rounded_shifts"
                         android:gravity="center"
                         android:orientation="horizontal"
-                        android:padding="@dimen/_3sdp"
+                        android:padding="@dimen/_5sdp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
@@ -470,13 +473,12 @@
                             tools:ignore="ContentDescription" />
 
                         <com.google.android.material.textview.MaterialTextView
-                            style="@style/TEXT_MEDIUM_WHITE_10"
+                            style="@style/TEXT_MEDIUM_WHITE_12"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_marginStart="@dimen/_5sdp"
-                            android:paddingTop="@dimen/_6sdp"
-                            android:paddingBottom="@dimen/_6sdp"
                             android:text="@string/last_week"
+                            app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/iv_today"
                             app:layout_constraintTop_toTopOf="parent" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -729,21 +731,34 @@
                         android:background="@drawable/rounded_shifts"
                         android:gravity="center"
                         android:orientation="horizontal"
-                        android:padding="@dimen/_3sdp"
+                        android:padding="@dimen/_5sdp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
 
+                        <ImageView
+                            android:id="@+id/iv_shift"
+                            style="@style/TEXT_REGULAR_WHITE_10"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_5sdp"
+                            android:src="@drawable/ic_toggel"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:tint="@color/white"
+                            tools:ignore="ContentDescription" />
+
                         <com.google.android.material.textview.MaterialTextView
-                            style="@style/TEXT_MEDIUM_WHITE_10"
+                            style="@style/TEXT_MEDIUM_WHITE_12"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_marginStart="@dimen/_5sdp"
-                            android:paddingTop="@dimen/_6sdp"
-                            android:paddingBottom="@dimen/_6sdp"
                             android:text="@string/my_shift"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/iv_shift"
+                            />
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout

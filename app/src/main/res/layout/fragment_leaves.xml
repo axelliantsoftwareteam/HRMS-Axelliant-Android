@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -29,7 +29,7 @@
         <com.google.android.material.textview.MaterialTextView
             style="@style/TEXT_SEMI_BLACK_15"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:text="@string/leaves"
             app:layout_constraintBottom_toBottomOf="@+id/iv_back"
             app:layout_constraintEnd_toEndOf="@id/end_guideline"
@@ -49,6 +49,7 @@
         <androidx.core.widget.NestedScrollView
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginTop="@dimen/_10sdp"
             app:layout_constraintBottom_toBottomOf="@id/bottom_guideline"
             app:layout_constraintEnd_toEndOf="@id/end_guideline"
             app:layout_constraintStart_toStartOf="@id/start_guideline"
@@ -57,7 +58,8 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                >
 
 
                 <com.google.android.material.textview.MaterialTextView
@@ -73,13 +75,15 @@
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tv_view"
                     style="@style/TEXT_MEDIUM_WHITE_10"
+                    android:padding="@dimen/_5sdp"
                     android:text="@string/view"
                     android:textAlignment="textStart"
                     android:textColor="@color/colorApp"
                     android:textSize="@dimen/_12sdp"
-                    android:padding="@dimen/_5sdp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/tv_title" />
+                    app:layout_constraintTop_toTopOf="@+id/tv_title"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_title"
+                    />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/ly_attend"
@@ -321,11 +325,11 @@
                         android:id="@+id/ly_used_leaves"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_20sdp"
-
-                        android:layout_marginBottom="@dimen/_5sdp"
                         android:layout_marginStart="@dimen/_5sdp"
+
+                        android:layout_marginTop="@dimen/_20sdp"
                         android:layout_marginEnd="@dimen/_5sdp"
+                        android:layout_marginBottom="@dimen/_5sdp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/ly_leave_status">
@@ -489,30 +493,27 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_my_team"
                     style="@style/TEXT_SEMI_BLACK_15"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginStart="@dimen/_5sdp"
-                    android:paddingTop="@dimen/_6sdp"
-                    android:paddingBottom="@dimen/_6sdp"
-                    android:text="@string/last_week"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:text="@string/my_team"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/ly_attend" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tv_my_team_view"
-                    style="@style/TEXT_MEDIUM_BLACK_10"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:text="@string/view"
+                    style="@style/TEXT_MEDIUM_BLACK_12"
                     android:padding="@dimen/_5sdp"
+                    android:text="@string/view"
                     android:textAlignment="textStart"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_my_team"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/ly_attend"
-               />
+                    app:layout_constraintTop_toTopOf="@+id/tv_my_team" />
 
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -533,7 +534,7 @@
                         android:backgroundTint="@color/orange"
                         android:gravity="center"
                         android:orientation="horizontal"
-                        android:padding="@dimen/_3sdp"
+                        android:padding="@dimen/_5sdp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
@@ -551,16 +552,13 @@
                             app:tint="@color/white" />
 
                         <com.google.android.material.textview.MaterialTextView
-                            style="@style/TEXT_MEDIUM_WHITE_15"
+                            style="@style/TEXT_MEDIUM_WHITE_12"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_marginStart="@dimen/_5sdp"
-                            android:paddingTop="@dimen/_6sdp"
-                            android:paddingBottom="@dimen/_6sdp"
                             android:text="@string/last_week"
                             app:layout_constraintStart_toEndOf="@+id/iv_today"
                             app:layout_constraintTop_toTopOf="parent" />
-
 
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -581,7 +579,7 @@
                             android:layout_height="wrap_content"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                           app:layout_constraintTop_toTopOf="parent">
+                            app:layout_constraintTop_toTopOf="parent">
 
                             <com.google.android.material.textview.MaterialTextView
                                 android:id="@+id/tv_total_member_txt"

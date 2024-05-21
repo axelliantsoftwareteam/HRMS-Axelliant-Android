@@ -56,7 +56,8 @@
                     android:id="@+id/tv_title"
                     style="@style/TEXT_SEMI_BLACK_15"
                     android:text="@string/my_leave"
-                    android:textAlignment="textStart"
+                    android:gravity="center"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/iv_back"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="@+id/iv_back"/>

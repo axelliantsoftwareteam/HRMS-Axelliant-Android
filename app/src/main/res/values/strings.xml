@@ -128,4 +128,9 @@
     <string name="leaves_statistics">Leave Statistics</string>
     <string name="team_attend_statis">Team Attendance Statistics</string>
     <string name="last_week">Last Week Statistics</string>
+    <string name="request">Request</string>
+    <string name="leave_req">Leave Request</string>
+    <string name="attendance_req">Attandance Request</string>
+    <string name="apply">Apply</string>
+    <string name="create_leave_req">Create Leave Request</string>
 </resources>
