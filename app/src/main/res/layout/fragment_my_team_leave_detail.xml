@@ -55,7 +55,7 @@
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tv_title"
                     style="@style/TEXT_SEMI_BLACK_15"
-                    android:text="@string/my_team_leave"
+                    android:text="@string/my_leave"
                     android:textAlignment="textStart"
                     app:layout_constraintStart_toEndOf="@+id/iv_back"
                     app:layout_constraintTop_toTopOf="parent"

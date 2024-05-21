@@ -117,5 +117,6 @@
     <string name="upcoming_leavs">My Upcoming Leaves</string>
 
     <string name="my_leave">My Leave</string>
-
+    <string name="reason">Reason</string>
+    <string name="unable_to_join_the_office_because_i_have_to_go_out_of_station">Unable to join the office because i have to go out of station</string>
 </resources>

@@ -114,6 +114,8 @@
                         app:layout_constraintStart_toEndOf="@+id/tv_month" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
+
+
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/ly_myteam_attend"
                     android:layout_width="0dp"
@@ -141,9 +143,10 @@
                             android:id="@+id/tv_date"
                             style="@style/TEXT_MEDIUM_WHITE_12"
                             android:layout_width="0dp"
+                            android:gravity="start|center"
                             app:layout_constraintHorizontal_weight="3"
                             android:layout_height="match_parent"
-                            android:text="@string/date"
+                            android:text="@string/start_date"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toStartOf="@+id/tv_hour"
                             app:layout_constraintStart_toStartOf="parent"
@@ -153,10 +156,10 @@
                             android:id="@+id/tv_hour"
                             style="@style/TEXT_MEDIUM_WHITE_12"
                             android:layout_width="0dp"
+                            android:gravity="start|center"
                             app:layout_constraintHorizontal_weight="3"
                             android:layout_height="match_parent"
-                            android:layout_marginStart="@dimen/_5sdp"
-                            android:text="@string/work_hour"
+                            android:text="@string/end_date"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toStartOf="@+id/tv_status"
@@ -168,13 +171,14 @@
                             android:layout_width="0dp"
                             app:layout_constraintHorizontal_weight="3"
                             android:layout_height="match_parent"
-                            android:layout_marginStart="@dimen/_5sdp"
+                            android:gravity="start|center"
                             android:background="@drawable/rounded_disabled"
-                            android:text="@string/status"
+                            android:text="@string/leave_type"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toStartOf="@+id/view_expand"
                             app:layout_constraintStart_toEndOf="@+id/tv_hour" />
+
 
                         <View
                             android:id="@+id/view_expand"
@@ -209,7 +213,7 @@
                             app:layout_constraintTop_toTopOf="parent"
                             tools:itemCount="2"
                             tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                            tools:listitem="@layout/my_attendance_detail_row" />
+                            tools:listitem="@layout/my_leave_detail_row" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
