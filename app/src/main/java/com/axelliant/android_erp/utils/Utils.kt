@@ -1,3 +1,4 @@
+
 package com.axelliant.android_erp.utils
 
 import com.axelliant.android_erp.config.AppConst.DATE_FORMAT
@@ -13,6 +14,8 @@ object Utils {
         val dateFormat = SimpleDateFormat(DATE_FORMAT, Locale.getDefault())
         return dateFormat.format(date)
     }
-
+    fun getRandomString():String{
+        return   (0..10).random().toString()
+    }
 
 }

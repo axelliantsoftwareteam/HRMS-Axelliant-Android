@@ -31,17 +31,17 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/leaves"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_back"
             app:layout_constraintEnd_toEndOf="@id/end_guideline"
             app:layout_constraintStart_toStartOf="@id/start_guideline"
             app:layout_constraintTop_toTopOf="@id/top_guideline" />
 
         <ImageView
             android:id="@+id/iv_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/_5sdp"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_30sdp"
             android:src="@drawable/ic_left"
-            app:layout_constraintLeft_toRightOf="@id/start_guideline"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/top_guideline">
 
         </ImageView>
@@ -64,20 +64,20 @@
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tv_title"
                     style="@style/TEXT_SEMI_BLACK_15"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:text="@string/my_leaves"
+                    android:paddingTop="@dimen/_6sdp"
+                    android:paddingBottom="@dimen/_6sdp"                    android:text="@string/leaves_statistics"
                     android:textAlignment="textStart"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tv_view"
-                    style="@style/TEXT_MEDIUM_BLACK_10"
-                    android:layout_marginEnd="@dimen/_10sdp"
+                    style="@style/TEXT_MEDIUM_WHITE_10"
                     android:text="@string/view"
                     android:textAlignment="textStart"
                     android:textColor="@color/colorApp"
                     android:textSize="@dimen/_12sdp"
+                    android:padding="@dimen/_5sdp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/tv_title" />
 
@@ -90,7 +90,7 @@
                     android:padding="@dimen/_5sdp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_title">
+                    app:layout_constraintTop_toBottomOf="@+id/tv_view">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/ly_action_btn"
@@ -493,24 +493,27 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/tv_my_team"
                     style="@style/TEXT_SEMI_BLACK_15"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:text="@string/my_team_leave"
-                    android:textAlignment="textStart"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:paddingTop="@dimen/_6sdp"
+                    android:paddingBottom="@dimen/_6sdp"
+                    android:text="@string/last_week"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/ly_attend" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tv_my_team_view"
                     style="@style/TEXT_MEDIUM_BLACK_10"
-                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
                     android:text="@string/view"
+                    android:padding="@dimen/_5sdp"
                     android:textAlignment="textStart"
-                    android:textColor="@color/colorApp"
-                    android:textSize="@dimen/_12sdp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/tv_my_team" />
+                    app:layout_constraintTop_toBottomOf="@+id/ly_attend"
+               />
+
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/ly_myteam_attend"
@@ -548,15 +551,18 @@
                             app:tint="@color/white" />
 
                         <com.google.android.material.textview.MaterialTextView
-                            style="@style/TEXT_MEDIUM_WHITE_10"
+                            style="@style/TEXT_MEDIUM_WHITE_15"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_marginStart="@dimen/_5sdp"
                             android:paddingTop="@dimen/_6sdp"
                             android:paddingBottom="@dimen/_6sdp"
-                            android:text="Today- 17 May 2024"
+                            android:text="@string/last_week"
                             app:layout_constraintStart_toEndOf="@+id/iv_today"
                             app:layout_constraintTop_toTopOf="parent" />
+
+
+
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -575,7 +581,7 @@
                             android:layout_height="wrap_content"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent">
+                           app:layout_constraintTop_toTopOf="parent">
 
                             <com.google.android.material.textview.MaterialTextView
                                 android:id="@+id/tv_total_member_txt"

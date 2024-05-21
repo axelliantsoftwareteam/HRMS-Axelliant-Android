@@ -25,7 +25,12 @@ class TeamLeaveDetailAdapter(
 
     override fun onBindViewHolder(holder: AccountsVH, position: Int) {
         holder.bind(list[position])
+        holder.binding.lyDropDown.isVisible = false
 
+        holder.binding.tvDropDown.setOnClickListener {
+
+            holder.binding.lyDropDown.isVisible = !holder.binding.lyDropDown.isVisible
+        }
     }
 
     override fun getItemCount(): Int {

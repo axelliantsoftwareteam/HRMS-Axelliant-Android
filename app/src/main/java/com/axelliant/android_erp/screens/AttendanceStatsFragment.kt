@@ -9,6 +9,7 @@ import com.axelliant.android_erp.R
 import com.axelliant.android_erp.base.BaseFragment
 import com.axelliant.android_erp.databinding.FragmentAttendanceStatsBinding
 import com.axelliant.android_erp.navigation.AppNavigator
+import com.axelliant.android_erp.utils.Utils.getRandomString
 
 enum class AttendanceFilter {
     WEEK,
@@ -38,13 +39,12 @@ class AttendanceStatsFragment : BaseFragment() {
 
         eventSelection()
 
-
         binding?.ivBack?.setOnClickListener {
             previousFragmentNavigation()
 
         }
 
-        binding?.tvMyAttendance?.setOnClickListener {
+        binding?.tvMyTeam?.setOnClickListener {
             showDialog()
             AppNavigator.navigateToMyAttendanceDetail()
 
@@ -98,6 +98,7 @@ class AttendanceStatsFragment : BaseFragment() {
         }
     }
 
+
     private fun randomData(){
         binding?.tvAbsentTxt?.text =getRandomString()
         binding?.tvHalfDayTxt?.text =getRandomString()
@@ -108,9 +109,7 @@ class AttendanceStatsFragment : BaseFragment() {
 
     }
 
-    private fun getRandomString():String{
-      return   (0..10).random().toString()
-    }
+
 
 
 

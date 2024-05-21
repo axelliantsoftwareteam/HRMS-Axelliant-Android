@@ -42,7 +42,14 @@ class LeavesFragment : BaseFragment() {
 
         }
 
+        binding?.ivBack?.setOnClickListener{
+            AppNavigator.moveBackToPreviousFragment()
+
+        }
+
     }
+
+
 
     private fun eventSelection() {
         binding?.tvWeek?.background =
@@ -82,6 +89,5 @@ class LeavesFragment : BaseFragment() {
             else -> {}
         }
     }
-
 
 }

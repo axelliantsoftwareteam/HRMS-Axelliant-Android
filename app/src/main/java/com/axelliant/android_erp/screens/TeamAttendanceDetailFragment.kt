@@ -5,10 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.axelliant.android_erp.R
 import com.axelliant.android_erp.Test
 import com.axelliant.android_erp.adapter.MyAttendanceDetailAdapter
+import com.axelliant.android_erp.adapter.SubFilterAdapter
 import com.axelliant.android_erp.adapter.TeamAttendanceDetailAdapter
 import com.axelliant.android_erp.base.BaseFragment
 import com.axelliant.android_erp.callback.AdapterItemClick
@@ -41,9 +44,26 @@ class TeamAttendanceDetailFragment : BaseFragment() {
         }
         dataPopulate()
         eventSelection()
+        subFilterPopulations()
 
     }
 
+    private fun subFilterPopulations() {
+        binding?.rvSubFilter?.layoutManager =
+            LinearLayoutManager(requireActivity(), RecyclerView.HORIZONTAL, false)
+        val weeklyAdapter = SubFilterAdapter(
+            listOf(
+                Test("Pending"),
+                Test("Approved"),
+                Test("Work from home"),
+                Test("In office"),
+                Test("Remote"),
+                Test("Rejected")
+            ), requireContext()
+        )
+        binding?.rvSubFilter?.adapter = weeklyAdapter
+
+    }
 
     private fun dataPopulate() {
         binding?.rvAttend?.layoutManager = LinearLayoutManager(requireActivity())
@@ -55,7 +75,8 @@ class TeamAttendanceDetailFragment : BaseFragment() {
                 Test("item4"),
                 Test("item5"),
                 Test("item6")
-            ))
+            )
+        )
         binding?.rvAttend?.adapter = weeklyAdapter
 
 
@@ -104,6 +125,7 @@ class TeamAttendanceDetailFragment : BaseFragment() {
                     ContextCompat.getDrawable(requireContext(), R.drawable.rounded_enabled)
                 binding?.tvMonth?.setTextColor(requireContext().getColor(R.color.white))
             }
+
             AttendanceFilter.Custom -> {
 
                 binding?.tvCustom?.background =
@@ -114,8 +136,6 @@ class TeamAttendanceDetailFragment : BaseFragment() {
             else -> {}
         }
     }
-
-
 
 
 }

@@ -42,7 +42,7 @@ class TeamLeaveDetailFragment : BaseFragment() {
 
 
     private fun dataPopulate() {
-        binding?.rvAttendanceDetail?.layoutManager = LinearLayoutManager(requireActivity())
+        binding?.rvAttend?.layoutManager = LinearLayoutManager(requireActivity())
         val weeklyAdapter = TeamLeaveDetailAdapter(
             listOf(
                 Test("item1"),
@@ -52,7 +52,7 @@ class TeamLeaveDetailFragment : BaseFragment() {
                 Test("item5"),
                 Test("item6")
             ))
-        binding?.rvAttendanceDetail?.adapter = weeklyAdapter
+        binding?.rvAttend?.adapter = weeklyAdapter
 
 
     }

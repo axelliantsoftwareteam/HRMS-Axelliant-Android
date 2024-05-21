@@ -117,6 +117,15 @@
     <string name="upcoming_leavs">My Upcoming Leaves</string>
 
     <string name="my_leave">My Leave</string>
-    <string name="reason">Reason</string>
     <string name="unable_to_join_the_office_because_i_have_to_go_out_of_station">Unable to join the office because i have to go out of station</string>
+    <string name="all">All</string>
+    <string name="from_date">From Date</string>
+    <string name="reason">Reason</string>
+    <string name="to_date">To Date</string>
+    <string name="leave_approver">Leave Approver</string>
+    <string name="team_statis">Team Statistics</string>
+    <string name="attendance_statics">Attendance Statistics</string>
+    <string name="leaves_statistics">Leave Statistics</string>
+    <string name="team_attend_statis">Team Attendance Statistics</string>
+    <string name="last_week">Last Week Statistics</string>
 </resources>
