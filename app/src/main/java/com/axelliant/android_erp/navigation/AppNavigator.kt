@@ -192,5 +192,43 @@ class AppNavigator {
 
         }
 
+
+        fun navigateToMyLeaveDetail(args: Bundle = Bundle()) {
+            Log.i(TAG, "navigateToMyLeaveDetail: $args")
+            val navAction = NavAction(R.id.myLeaveDetailFragment)
+            val navOptions = NavOptions.Builder()
+                .setPopUpTo(getCurrentDestinationId()!!, false).build()
+            navAction.navOptions = navOptions
+
+            val destination: NavDestination? = getCurrentDestinationId()?.let {
+                getController().graph.findNode(it)
+            }
+            if (destination != null) {
+                destination.putAction(R.id.my_leave_detail_fragment_action, navAction)
+                getController().navigate(R.id.my_leave_detail_fragment_action, args)
+            }
+
+
+        }
+
+        fun navigateToTeamLeaveDetail(args: Bundle = Bundle()) {
+            Log.i(TAG, "navigateToTeamLeaveDetail: $args")
+            val navAction = NavAction(R.id.teamLeaveDetailFragment)
+            val navOptions = NavOptions.Builder()
+                .setPopUpTo(getCurrentDestinationId()!!, false).build()
+            navAction.navOptions = navOptions
+
+            val destination: NavDestination? = getCurrentDestinationId()?.let {
+                getController().graph.findNode(it)
+            }
+            if (destination != null) {
+                destination.putAction(R.id.team_leave_detail_fragment_action, navAction)
+                getController().navigate(R.id.team_leave_detail_fragment_action, args)
+            }
+
+
+        }
+
+
     }
 }

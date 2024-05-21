@@ -91,4 +91,23 @@
 
  </fragment>
 
+ <fragment
+     android:id="@+id/myLeaveDetailFragment"
+     android:name="com.axelliant.android_erp.screens.MyLeaveDetailFragment"
+     android:label="My Leave Detail Fragment"
+     tools:layout="@layout/fragment_my_leave_detail" >
+
+ </fragment>
+
+
+
+ <fragment
+     android:id="@+id/teamLeaveDetailFragment"
+     android:name="com.axelliant.android_erp.screens.TeamLeaveDetailFragment"
+     android:label="Team Leave Detail Fragment"
+     tools:layout="@layout/fragment_my_team_leave_detail" >
+
+ </fragment>
+
+
 </navigation>

@@ -11,6 +11,8 @@
     <item name="attendance_stats_fragment_action" type="id" />
     <item name="my_attendance_detail_fragment_action" type="id" />
     <item name="team_attendance_detail_fragment_action" type="id" />
+    <item name="my_leave_detail_fragment_action" type="id" />
+    <item name="team_leave_detail_fragment_action" type="id" />
 
 
 </resources>

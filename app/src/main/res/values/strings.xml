@@ -115,4 +115,7 @@
     <string name="sick">Sick</string>
     <string name="annual">Annual</string>
     <string name="upcoming_leavs">My Upcoming Leaves</string>
+
+    <string name="my_leave">My Leave</string>
+
 </resources>
