@@ -17,9 +17,12 @@ import com.axelliant.android_erp.utils.Utils
 
 class SubFilterAdapter(
     private val list: List<Test>,
-    private val context: Context
+    private val context: Context,
+    private val itemClick: AdapterItemClick
 ) :
     RecyclerView.Adapter<SubFilterAdapter.AccountsVH>() {
+
+    private var selectedPos = 0
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccountsVH {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -27,8 +30,34 @@ class SubFilterAdapter(
         return AccountsVH(binding)
     }
 
+    private fun setCurrentPosition(currentPos: Int = 0) {
+        selectedPos = currentPos
+    }
+
     override fun onBindViewHolder(holder: AccountsVH, position: Int) {
         holder.bind(list[position], position, context)
+        holder.binding.lyWorkHome.setOnClickListener {
+            setCurrentPosition(position)
+            notifyDataSetChanged()
+            itemClick.onItemClick(list[position], position)
+
+        }
+
+        if (position == selectedPos) {
+            holder.binding.tvWorkFrom.setTextColor(context.getColor(R.color.white))
+            holder.binding.lyWorkHome.background =
+                context.resources.getDrawable(R.drawable.enable_rounded_bgg)
+        } else {
+            holder.binding.tvWorkFrom.setTextColor(context.getColor(R.color.black))
+
+            holder.binding.lyWorkHome.background =
+                context.resources.getDrawable(R.drawable.rounded_bgg)
+        }
+
+        holder.binding.tvWorkFrom.text = list[position].testString
+
+        holder.binding.tvWorkTxt.text = Utils.getRandomString()
+
 
     }
 
@@ -40,20 +69,7 @@ class SubFilterAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Test, position: Int, context: Context) {
-            if (position == 3) {
-                binding.tvWorkFrom.setTextColor(context.getColor(R.color.white))
-                binding.lyWorkHome.background =
-                    context.resources.getDrawable(R.drawable.enable_rounded_bgg)
-            } else {
-                binding.tvWorkFrom.setTextColor(context.getColor(R.color.black))
 
-                binding.lyWorkHome.background =
-                    context.resources.getDrawable(R.drawable.rounded_bgg)
-            }
-
-            binding.tvWorkFrom.text = item.testString
-
-            binding.tvWorkTxt.text = Utils.getRandomString()
 
         }
     }

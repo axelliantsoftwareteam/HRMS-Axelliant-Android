@@ -4,20 +4,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.axelliant.android_erp.R
 import com.axelliant.android_erp.Test
-import com.axelliant.android_erp.adapter.MyAttendanceDetailAdapter
+import com.axelliant.android_erp.adapter.PersonSpinnerAdapter
 import com.axelliant.android_erp.adapter.SubFilterAdapter
 import com.axelliant.android_erp.adapter.TeamAttendanceDetailAdapter
 import com.axelliant.android_erp.base.BaseFragment
 import com.axelliant.android_erp.callback.AdapterItemClick
-import com.axelliant.android_erp.databinding.FragmentMyAttendanceDetailBinding
 import com.axelliant.android_erp.databinding.FragmentTeamAttendanceDetailBinding
 import com.axelliant.android_erp.extention.showSuccessMsg
+
 
 class TeamAttendanceDetailFragment : BaseFragment() {
 
@@ -45,6 +45,24 @@ class TeamAttendanceDetailFragment : BaseFragment() {
         dataPopulate()
         eventSelection()
         subFilterPopulations()
+        spinnerPopulations()
+
+    }
+
+    private fun spinnerPopulations() {
+
+        val adapter = PersonSpinnerAdapter(
+            requireContext(), listOf(
+                Test("All Team"),
+                Test("Adnan Maqbool"),
+                Test("Muhammad Arslan"),
+                Test("Munir Ahmad"),
+                Test("Zeeshan Rasool"),
+                Test("Amjad Ali"),
+                Test("Ali Aslam")
+            )
+        )
+        binding?.spTeamMember?.adapter = adapter
 
     }
 
@@ -59,7 +77,17 @@ class TeamAttendanceDetailFragment : BaseFragment() {
                 Test("In office"),
                 Test("Remote"),
                 Test("Rejected")
-            ), requireContext()
+            ), requireContext(),
+            object : AdapterItemClick {
+                override fun onItemClick(customObject: Any, position: Int) {
+                    val currentObject = customObject as Test
+                    requireContext().showSuccessMsg(
+                        currentObject.testString
+                    )
+
+                }
+
+            }
         )
         binding?.rvSubFilter?.adapter = weeklyAdapter
 

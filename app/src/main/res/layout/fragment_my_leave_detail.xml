@@ -115,6 +115,21 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
 
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_sub_filter"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/ly_action_btn"
+                    tools:itemCount="3"
+                    tools:listitem="@layout/sub_filter_row">
+
+                </androidx.recyclerview.widget.RecyclerView>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/ly_myteam_attend"
@@ -124,7 +139,7 @@
                     android:background="@drawable/rounded_attend_row"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/ly_action_btn">
+                    app:layout_constraintTop_toBottomOf="@+id/rv_sub_filter">
 
 
                     <androidx.constraintlayout.widget.ConstraintLayout

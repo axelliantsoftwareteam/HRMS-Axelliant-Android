@@ -46,7 +46,6 @@
 
         </ImageView>
 
-
         <androidx.core.widget.NestedScrollView
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -65,7 +64,8 @@
                     android:id="@+id/tv_title"
                     style="@style/TEXT_SEMI_BLACK_15"
                     android:paddingTop="@dimen/_6sdp"
-                    android:paddingBottom="@dimen/_6sdp"                    android:text="@string/leaves_statistics"
+                    android:paddingBottom="@dimen/_6sdp"
+                    android:text="@string/leaves_statistics"
                     android:textAlignment="textStart"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />

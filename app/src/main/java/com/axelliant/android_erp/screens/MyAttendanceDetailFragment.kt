@@ -6,9 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.axelliant.android_erp.R
 import com.axelliant.android_erp.Test
 import com.axelliant.android_erp.adapter.MyAttendanceDetailAdapter
+import com.axelliant.android_erp.adapter.SubFilterAdapter
 import com.axelliant.android_erp.base.BaseFragment
 import com.axelliant.android_erp.callback.AdapterItemClick
 import com.axelliant.android_erp.databinding.FragmentMyAttendanceDetailBinding
@@ -39,7 +41,7 @@ class MyAttendanceDetailFragment : BaseFragment() {
         }
         dataPopulate()
         eventSelection()
-
+        subFilterPopulations()
     }
 
 
@@ -56,6 +58,33 @@ class MyAttendanceDetailFragment : BaseFragment() {
             ))
         binding?.rvAttendanceDetail?.adapter = weeklyAdapter
 
+
+    }
+
+    private fun subFilterPopulations() {
+        binding?.rvSubFilter?.layoutManager =
+            LinearLayoutManager(requireActivity(), RecyclerView.HORIZONTAL, false)
+        val weeklyAdapter = SubFilterAdapter(
+            listOf(
+                Test("Pending"),
+                Test("Approved"),
+                Test("Work from home"),
+                Test("In office"),
+                Test("Remote"),
+                Test("Rejected")
+            ), requireContext(),
+            object : AdapterItemClick {
+                override fun onItemClick(customObject: Any, position: Int) {
+                    val currentObject = customObject as Test
+                    requireContext().showSuccessMsg(
+                        currentObject.testString
+                    )
+
+                }
+
+            }
+        )
+        binding?.rvSubFilter?.adapter = weeklyAdapter
 
     }
 
