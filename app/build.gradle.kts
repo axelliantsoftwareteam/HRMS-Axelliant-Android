@@ -71,5 +71,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.livedata.ktx)
 
+    implementation("com.google.android.material:material:1.2.0-alpha03")
+
 
 }

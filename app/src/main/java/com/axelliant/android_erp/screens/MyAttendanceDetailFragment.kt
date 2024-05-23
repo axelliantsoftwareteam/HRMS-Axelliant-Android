@@ -19,6 +19,10 @@ import com.axelliant.android_erp.enums.AttendanceFilter.*
 import com.axelliant.android_erp.event.EventObserver
 import com.axelliant.android_erp.extention.showErrorMsg
 import com.axelliant.android_erp.extention.showSuccessMsg
+import com.google.android.material.datepicker.MaterialDatePicker
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import com.axelliant.android_erp.model.attendance.AttendanceDetail
 import com.axelliant.android_erp.model.attendance.AttendanceInput
 import com.axelliant.android_erp.utils.Utils
@@ -28,6 +32,10 @@ import org.koin.android.ext.android.inject
 
 class MyAttendanceDetailFragment : BaseFragment() {
 
+    private var selectedDateRange: String?=null
+
+    private var startDateString: String?=null
+    private var endDateString: String? = null
     private var _binding: FragmentMyAttendanceDetailBinding? = null
     private val binding get() = _binding
     private var currentFilter = WEEK
@@ -66,8 +74,7 @@ class MyAttendanceDetailFragment : BaseFragment() {
                     requireContext().showErrorMsg(response?.meta?.message.toString())
                 }
 
-            })
-
+    })
 
         binding?.ivBack?.setOnClickListener {
             previousFragmentNavigation()
@@ -139,9 +146,8 @@ class MyAttendanceDetailFragment : BaseFragment() {
         }
 
         binding?.tvCustom?.setOnClickListener {
-            currentFilter = Custom
-            attendanceViewModel.getAttendanceDetail(getCurrentObject())
-            eventSelection()
+
+            datePickerDialog()
         }
 
         when (currentFilter) {
@@ -172,29 +178,29 @@ class MyAttendanceDetailFragment : BaseFragment() {
 
     private fun getCurrentObject(): AttendanceInput {
 
-        var startDateString = ""
-        var endDateString = ""
+        var localStart = ""
+        var localEnd = ""
         when (currentFilter) {
             WEEK -> {
-                startDateString = Utils.getServerFormat(date = Utils.getLastWeek())
-                endDateString = Utils.getServerFormat()
+                localStart = Utils.getServerFormat(date = Utils.getLastWeek())
+                localEnd = Utils.getServerFormat()
 
             }
 
             MONTH -> {
-                startDateString = Utils.getServerFormat(date = Utils.getFirstDayOfMonth())
-                endDateString =
+                localStart = Utils.getServerFormat(date = Utils.getFirstDayOfMonth())
+                localEnd =
                     Utils.getServerFormat(date = Utils.getLastDayOfMonth())
             }
 
             Custom -> {
-                startDateString = Utils.getServerFormat(AppConst.SERVER_DATE_FORMAT)
-                endDateString = Utils.getServerFormat(AppConst.SERVER_DATE_FORMAT)
+                localStart = startDateString!!
+                localEnd = endDateString!!
             }
         }
         return AttendanceInput().apply {
-            this.startDate = startDateString
-            this.endDate = endDateString
+            this.startDate = localStart
+            this.endDate = localEnd
             this.employeeId = listOf("HR-EMP-00744")
             this.filter = currentFilter
 
@@ -202,5 +208,44 @@ class MyAttendanceDetailFragment : BaseFragment() {
 
     }
 
+    private fun datePickerDialog() {
+        // Creating a MaterialDatePicker builder for selecting a date range
+        val builder = MaterialDatePicker.Builder.dateRangePicker()
+        builder.setTitleText("Select a date range")
 
+        // Building the date picker dialog
+        val datePicker = builder.build()
+        datePicker.addOnPositiveButtonClickListener { selection ->
+            // Retrieving the selected start and end dates
+            val startDate = selection.first
+            val endDate = selection.second
+
+            // Formatting the selected dates as strings
+        /*    val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+            startDateString = sdf.format()
+            endDateString = sdf.format(Date(endDate))*/
+
+            startDateString = Utils.getServerFormat(date = Date(startDate))
+            endDateString = Utils.getServerFormat(date = Date(endDate))
+
+            // Creating the date range string
+            selectedDateRange = "$startDateString - $endDateString"
+            setDateView()
+
+            currentFilter = Custom
+            attendanceViewModel.getAttendanceDetail(getCurrentObject())
+            eventSelection()
+        }
+
+        // Showing the date picker dialog
+        datePicker.show(activity?.supportFragmentManager!!, "DATE_PICKER")
+    }
+    private fun setDateView() {
+        if (startDateString!=null && endDateString!=null)
+        {
+            binding?.tvStartDateTxt?.text=startDateString
+            binding?.tvEndDateTxt?.text=endDateString
+        }
+
+    }
 }
