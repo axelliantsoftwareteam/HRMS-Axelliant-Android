@@ -38,13 +38,13 @@
                 android:id="@+id/profile_img"
                 android:layout_width="@dimen/_30sdp"
                 android:layout_height="@dimen/_30sdp"
-                android:src="@drawable/ic_profile_man"
+                android:src="@drawable/ic_place_holder"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tv_title"
+                android:id="@+id/tv_employe_name"
                 style="@style/TEXT_SEMI_BLACK_15"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -53,19 +53,19 @@
                 android:textAlignment="textStart"
                 android:textSize="@dimen/_12sdp"
 
-                app:layout_constraintBottom_toTopOf="@+id/tv_sub_title"
+                app:layout_constraintBottom_toTopOf="@+id/tv_employe_designation"
                 app:layout_constraintStart_toEndOf="@id/profile_img"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tv_sub_title"
+                android:id="@+id/tv_employe_designation"
                 style="@style/TEXT_MEDIUM_BLACK_10"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Software engineer"
                 android:textAlignment="textStart"
-                app:layout_constraintStart_toStartOf="@+id/tv_title"
-                app:layout_constraintTop_toBottomOf="@+id/tv_title" />
+                app:layout_constraintStart_toStartOf="@+id/tv_employe_name"
+                app:layout_constraintTop_toBottomOf="@+id/tv_employe_name" />
 
             <ImageView
 

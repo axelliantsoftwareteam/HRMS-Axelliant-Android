@@ -54,6 +54,8 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.textview.MaterialTextView
+
+                android:id="@+id/status"
                 style="@style/TEXT_SEMI_BLACK_10"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -250,7 +252,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/tv_work_home_txt"
+                    android:id="@+id/tv_expected_in_txt"
                     style="@style/TEXT_MEDIUM_BLACK_10"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

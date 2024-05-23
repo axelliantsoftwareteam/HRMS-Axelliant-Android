@@ -8,9 +8,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.axelliant.android_erp.Test
 import com.axelliant.android_erp.callback.AdapterItemClick
 import com.axelliant.android_erp.databinding.MyAttendanceDetailRowBinding
+import com.axelliant.android_erp.model.attendance.AttendanceDetail
 
 class MyAttendanceDetailAdapter(
-    private val list: List<Test>
+    private val attendanceList: ArrayList<AttendanceDetail>
 ) :
     RecyclerView.Adapter<MyAttendanceDetailAdapter.AccountsVH>() {
 
@@ -23,7 +24,7 @@ class MyAttendanceDetailAdapter(
     }
 
     override fun onBindViewHolder(holder: AccountsVH, position: Int) {
-        holder.bind(list[position])
+        holder.bind(attendanceList[position])
 
         holder.binding.lyDropDown.isVisible = false
 
@@ -36,14 +37,33 @@ class MyAttendanceDetailAdapter(
     }
 
     override fun getItemCount(): Int {
-        return list.size
+        return attendanceList.size
     }
 
     class AccountsVH(val binding: MyAttendanceDetailRowBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: Test) {
+        fun bind(attendanceDetail: AttendanceDetail) {
 //            binding.tvTitle.text = item.title.toString()
+
+            binding.tvDate.text = attendanceDetail.date
+
+            if (attendanceDetail.working_hours.toString() == "0")
+                binding.tvHour.text = attendanceDetail.working_hours.toString().plus(" Hr")
+            else if (attendanceDetail.working_hours.toString() == "1")
+                binding.tvHour.text = attendanceDetail.working_hours.toString().plus(" Hr")
+            else
+                binding.tvHour.text = attendanceDetail.working_hours.toString().plus(" Hrs")
+
+
+            binding.status.text = attendanceDetail.status
+            binding.tvAttendStatus.text = attendanceDetail.requested
+            binding.tvShiftTxt.text = attendanceDetail.shift
+            binding.tvShiftTimeTxt.text = attendanceDetail.shift_timings
+            binding.tvActualInTxt.text = attendanceDetail.in_time
+            binding.tvExpectedInTxt.text = attendanceDetail.expected_in
+            binding.tvActualOutTxt.text = attendanceDetail.out_time
+            binding.tvExpectedOutTxt.text = attendanceDetail.expected_out
 
         }
     }

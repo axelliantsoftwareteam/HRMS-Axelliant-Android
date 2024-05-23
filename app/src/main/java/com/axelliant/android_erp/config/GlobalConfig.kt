@@ -9,6 +9,7 @@ class GlobalConfig  {
 
     companion object{
         private var instance: GlobalConfig? = null
+        var isManager :Boolean =true
 
         fun getInstance(): GlobalConfig {
             if (instance == null) {

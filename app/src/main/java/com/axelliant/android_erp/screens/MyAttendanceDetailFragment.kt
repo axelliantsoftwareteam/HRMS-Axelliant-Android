@@ -13,14 +13,26 @@ import com.axelliant.android_erp.adapter.MyAttendanceDetailAdapter
 import com.axelliant.android_erp.adapter.SubFilterAdapter
 import com.axelliant.android_erp.base.BaseFragment
 import com.axelliant.android_erp.callback.AdapterItemClick
+import com.axelliant.android_erp.config.AppConst
 import com.axelliant.android_erp.databinding.FragmentMyAttendanceDetailBinding
+import com.axelliant.android_erp.enums.AttendanceFilter.*
+import com.axelliant.android_erp.event.EventObserver
+import com.axelliant.android_erp.extention.showErrorMsg
 import com.axelliant.android_erp.extention.showSuccessMsg
+import com.axelliant.android_erp.model.attendance.AttendanceDetail
+import com.axelliant.android_erp.model.attendance.AttendanceInput
+import com.axelliant.android_erp.utils.Utils
+import com.axelliant.android_erp.viewmodel.AttendanceViewModel
+import com.bumptech.glide.util.Util
+import org.koin.android.ext.android.inject
 
 class MyAttendanceDetailFragment : BaseFragment() {
 
     private var _binding: FragmentMyAttendanceDetailBinding? = null
     private val binding get() = _binding
-    private var currentFilter = AttendanceFilter.WEEK
+    private var currentFilter = WEEK
+    private val attendanceViewModel: AttendanceViewModel by inject()
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,26 +48,38 @@ class MyAttendanceDetailFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        attendanceViewModel.getAttendanceDetail(getCurrentObject())
+        eventSelection()
+        subFilterPopulations()
+
+        attendanceViewModel.attendanceDetailResponse.observe(
+            viewLifecycleOwner,
+            EventObserver { response ->
+
+                if (response?.meta?.status == true) {
+                    dataPopulate(response.attendance_data!!)
+
+                    /*        selfAttendanceStats(response.self_attendance_counts!!)
+                            teamAttendanceStats(response.team_attendance_counts!!)*/
+
+                } else {
+                    requireContext().showErrorMsg(response?.meta?.message.toString())
+                }
+
+            })
+
+
         binding?.ivBack?.setOnClickListener {
             previousFragmentNavigation()
         }
-        dataPopulate()
-        eventSelection()
-        subFilterPopulations()
+
+
     }
 
 
-    private fun dataPopulate() {
+    private fun dataPopulate(attendanceData: ArrayList<AttendanceDetail>) {
         binding?.rvAttendanceDetail?.layoutManager = LinearLayoutManager(requireActivity())
-        val weeklyAdapter = MyAttendanceDetailAdapter(
-            listOf(
-                Test("item1"),
-                Test("item2"),
-                Test("item3"),
-                Test("item4"),
-                Test("item5"),
-                Test("item6")
-            ))
+        val weeklyAdapter = MyAttendanceDetailAdapter(attendanceData)
         binding?.rvAttendanceDetail?.adapter = weeklyAdapter
 
 
@@ -104,34 +128,38 @@ class MyAttendanceDetailFragment : BaseFragment() {
         binding?.tvCustom?.setTextColor(requireContext().getColor(R.color.btn_text_color))
 
         binding?.tvWeek?.setOnClickListener {
-            currentFilter = AttendanceFilter.WEEK
+            currentFilter = WEEK
+            attendanceViewModel.getAttendanceDetail(getCurrentObject())
             eventSelection()
         }
         binding?.tvMonth?.setOnClickListener {
-            currentFilter = AttendanceFilter.MONTH
+            currentFilter = MONTH
+            attendanceViewModel.getAttendanceDetail(getCurrentObject())
             eventSelection()
         }
 
         binding?.tvCustom?.setOnClickListener {
-            currentFilter = AttendanceFilter.Custom
+            currentFilter = Custom
+            attendanceViewModel.getAttendanceDetail(getCurrentObject())
             eventSelection()
         }
 
         when (currentFilter) {
-            AttendanceFilter.WEEK -> {
+            WEEK -> {
                 binding?.tvWeek?.background =
                     ContextCompat.getDrawable(requireContext(), R.drawable.rounded_enabled)
                 binding?.tvWeek?.setTextColor(requireContext().getColor(R.color.white))
 
             }
 
-            AttendanceFilter.MONTH -> {
+            MONTH -> {
 
                 binding?.tvMonth?.background =
                     ContextCompat.getDrawable(requireContext(), R.drawable.rounded_enabled)
                 binding?.tvMonth?.setTextColor(requireContext().getColor(R.color.white))
             }
-            AttendanceFilter.Custom -> {
+
+            Custom -> {
 
                 binding?.tvCustom?.background =
                     ContextCompat.getDrawable(requireContext(), R.drawable.rounded_enabled)
@@ -142,7 +170,37 @@ class MyAttendanceDetailFragment : BaseFragment() {
         }
     }
 
+    private fun getCurrentObject(): AttendanceInput {
 
+        var startDateString = ""
+        var endDateString = ""
+        when (currentFilter) {
+            WEEK -> {
+                startDateString = Utils.getServerFormat(date = Utils.getLastWeek())
+                endDateString = Utils.getServerFormat()
+
+            }
+
+            MONTH -> {
+                startDateString = Utils.getServerFormat(date = Utils.getFirstDayOfMonth())
+                endDateString =
+                    Utils.getServerFormat(date = Utils.getLastDayOfMonth())
+            }
+
+            Custom -> {
+                startDateString = Utils.getServerFormat(AppConst.SERVER_DATE_FORMAT)
+                endDateString = Utils.getServerFormat(AppConst.SERVER_DATE_FORMAT)
+            }
+        }
+        return AttendanceInput().apply {
+            this.startDate = startDateString
+            this.endDate = endDateString
+            this.employeeId = listOf("HR-EMP-00744")
+            this.filter = currentFilter
+
+        }
+
+    }
 
 
 }

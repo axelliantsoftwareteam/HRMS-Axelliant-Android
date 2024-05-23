@@ -28,7 +28,6 @@
             app:tint="@color/white"
             app:civ_border_width="@dimen/_1sdp"
             app:civ_border_color="@color/white"
-            android:src="@drawable/ic_photo"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>

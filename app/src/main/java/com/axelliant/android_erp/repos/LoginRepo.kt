@@ -25,8 +25,6 @@ class LoginRepo(private var apiInterface: ApiInterface) {
 
                 Log.e("API success", " " + response.body())
 
-
-
                 /*          val type: Type = object : TypeToken<BaseApiModel<ConversationResponse>?>() {}.type
                           val jsonString = response.body()?.string()
                           val userModel = Gson().fromJson<BaseApiModel<ConversationResponse>?>(jsonString, type)

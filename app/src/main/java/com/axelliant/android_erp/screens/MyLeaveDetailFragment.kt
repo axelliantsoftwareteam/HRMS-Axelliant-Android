@@ -16,6 +16,7 @@ import com.axelliant.android_erp.base.BaseFragment
 import com.axelliant.android_erp.callback.AdapterItemClick
 import com.axelliant.android_erp.databinding.FragmentMyAttendanceDetailBinding
 import com.axelliant.android_erp.databinding.FragmentMyLeaveDetailBinding
+import com.axelliant.android_erp.enums.AttendanceFilter
 import com.axelliant.android_erp.extention.showSuccessMsg
 
 class MyLeaveDetailFragment : BaseFragment() {
