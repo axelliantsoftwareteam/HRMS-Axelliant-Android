@@ -161,7 +161,8 @@
                                 style="@style/TEXT_SEMI_BLACK_15"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="25"
+                                tools:text="@string/_3"
+                                android:text="@string/dash"
                                 android:textColor="@color/colorApp"
                                 android:textSize="@dimen/_20ssp"
                                 app:layout_constraintStart_toStartOf="parent"
@@ -209,7 +210,8 @@
                                 style="@style/TEXT_MEDIUM_BLACK_15"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="5"
+                                tools:text="@string/_3"
+                                android:text="@string/dash"
                                 android:textColor="@color/yellow"
                                 android:textSize="@dimen/_20ssp"
                                 app:layout_constraintStart_toStartOf="parent"
@@ -237,7 +239,7 @@
                                 android:background="#E5E0D9"
                                 app:layout_constraintBottom_toBottomOf="@+id/tv_pending"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toTopOf="@+id/tv_pending_txt"></View>
+                                app:layout_constraintTop_toTopOf="@+id/tv_pending_txt" />
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <androidx.constraintlayout.widget.ConstraintLayout
@@ -254,7 +256,8 @@
                                 style="@style/TEXT_MEDIUM_BLACK_15"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="5"
+                                tools:text="@string/_3"
+                                android:text="@string/dash"
                                 android:textColor="@color/green"
                                 android:textSize="@dimen/_20ssp"
                                 app:layout_constraintStart_toStartOf="parent"
@@ -280,7 +283,7 @@
                                 android:background="#E5E0D9"
                                 app:layout_constraintBottom_toBottomOf="@+id/tv_approved"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toTopOf="@+id/tv_approved_txt"></View>
+                                app:layout_constraintTop_toTopOf="@+id/tv_approved_txt" />
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <androidx.constraintlayout.widget.ConstraintLayout
@@ -298,7 +301,8 @@
                                 style="@style/TEXT_MEDIUM_BLACK_15"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="4"
+                                tools:text="@string/_3"
+                                android:text="@string/dash"
                                 android:textColor="@color/red"
                                 android:textSize="@dimen/_20ssp"
                                 app:layout_constraintStart_toStartOf="parent"
@@ -339,7 +343,8 @@
                             style="@style/TEXT_SEMI_BLACK_15"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="24"
+                            tools:text="@string/_3"
+                            android:text="@string/dash"
                             android:textColor="@color/colorApp"
                             android:textSize="@dimen/_20ssp"
                             app:layout_constraintStart_toStartOf="parent"
@@ -384,7 +389,8 @@
                                 style="@style/TEXT_MEDIUM_BLACK_15"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="5"
+                                tools:text="@string/_3"
+                                android:text="@string/dash"
                                 android:textSize="@dimen/_20ssp"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent"
@@ -427,7 +433,8 @@
                                 style="@style/TEXT_MEDIUM_BLACK_15"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="8"
+                                tools:text="@string/_3"
+                                android:text="@string/dash"
                                 android:textSize="@dimen/_20ssp"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -470,7 +477,8 @@
                                 style="@style/TEXT_MEDIUM_BLACK_15"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="11"
+                                tools:text="@string/_3"
+                                android:text="@string/dash"
                                 android:textSize="@dimen/_20ssp"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -586,7 +594,8 @@
                                 style="@style/TEXT_MEDIUM_BLACK_15"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="13"
+                                tools:text="@string/_3"
+                                android:text="@string/dash"
                                 android:textColor="@color/blue"
                                 android:textSize="@dimen/_20ssp"
                                 app:layout_constraintStart_toStartOf="parent"
@@ -634,7 +643,8 @@
                                 style="@style/TEXT_MEDIUM_BLACK_15"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="6"
+                                tools:text="@string/_3"
+                                android:text="@string/dash"
                                 android:textColor="@color/green"
                                 android:textSize="@dimen/_20ssp"
                                 app:layout_constraintStart_toStartOf="parent"
@@ -660,7 +670,7 @@
                                 android:background="#E5E0D9"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toTopOf="@+id/tv_present_txt"></View>
+                                app:layout_constraintTop_toTopOf="@+id/tv_present_txt" />
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -679,7 +689,8 @@
                                 style="@style/TEXT_MEDIUM_BLACK_15"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="2"
+                                tools:text="@string/_3"
+                                android:text="@string/dash"
                                 android:textColor="@color/colorApp"
                                 android:textSize="@dimen/_20ssp"
                                 app:layout_constraintStart_toStartOf="parent"
@@ -728,7 +739,8 @@
                                 style="@style/TEXT_MEDIUM_BLACK_15"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="3"
+                                tools:text="@string/_3"
+                                android:text="@string/dash"
                                 android:textColor="@color/red"
                                 android:textSize="@dimen/_20ssp"
                                 app:layout_constraintStart_toStartOf="parent"
@@ -754,7 +766,7 @@
                                 android:background="#E5E0D9"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toTopOf="@+id/tv_teams_absent_txt"></View>
+                                app:layout_constraintTop_toTopOf="@+id/tv_teams_absent_txt" />
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -773,7 +785,8 @@
                                 style="@style/TEXT_MEDIUM_BLACK_15"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="2"
+                                tools:text="@string/_3"
+                                android:text="@string/dash"
                                 android:textColor="@color/orange"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />

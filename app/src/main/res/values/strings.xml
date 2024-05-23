@@ -133,4 +133,6 @@
     <string name="attendance_req">Attandance Request</string>
     <string name="apply">Apply</string>
     <string name="create_leave_req">Create Leave Request</string>
+    <string name="present">Present</string>
+    <string name="dash">-</string>
 </resources>

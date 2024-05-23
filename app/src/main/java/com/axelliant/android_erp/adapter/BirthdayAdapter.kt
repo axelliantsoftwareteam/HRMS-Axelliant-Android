@@ -3,13 +3,11 @@ package com.axelliant.android_erp.adapter
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.axelliant.android_erp.R
-import com.axelliant.android_erp.Test
 import com.axelliant.android_erp.callback.AdapterItemClick
 import com.axelliant.android_erp.databinding.BirthdayRowBinding
-import com.axelliant.android_erp.model.Birthday
+import com.axelliant.android_erp.extention.setUrlImage
+import com.axelliant.android_erp.model.dashboard.Birthday
 
 class BirthdayAdapter(
     private val context: Context,
@@ -26,7 +24,7 @@ class BirthdayAdapter(
     }
 
     override fun onBindViewHolder(holder: AccountsVH, position: Int) {
-        holder.bind(list[position],context)
+        holder.bind(list[position], context)
 
         holder.binding.lyDay.setOnClickListener {
             itemClick.onItemClick(list[position], position)
@@ -40,25 +38,10 @@ class BirthdayAdapter(
     class AccountsVH(val binding: BirthdayRowBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Birthday, context: Context) {
-//            binding.tvTitle.text = item.title.toString()
-            binding.ivProfile.setImageDrawable(item.icon)
-            binding.tvName.text = item.name
-            binding.tvDate.text = item.dob
-            if (item.dob == "Today")
-                binding.ivCake.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        context,
-                        R.drawable.ic_celebrations
-                    )
-                )
-            else
-                binding.ivCake.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        context,
-                        R.drawable.ic_cake_tone
-                    )
-                )
 
+            binding.ivProfile.setUrlImage(item.image,context)
+            binding.tvName.text = item.employee_name
+            binding.tvDate.text = item.date_of_birth
 
         }
     }

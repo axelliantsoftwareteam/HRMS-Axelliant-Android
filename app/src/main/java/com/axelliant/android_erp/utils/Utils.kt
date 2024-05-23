@@ -1,8 +1,6 @@
-
 package com.axelliant.android_erp.utils
 
-import com.axelliant.android_erp.config.AppConst.DATE_FORMAT
-import com.google.android.material.datepicker.MaterialDatePicker
+import com.axelliant.android_erp.config.AppConst.SERVER_DATE_FORMAT
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -10,13 +8,42 @@ import java.util.Locale
 
 object Utils {
 
-    fun getCurrentDate(): String {
-        val date: Date = Calendar.getInstance().time
-        val dateFormat = SimpleDateFormat(DATE_FORMAT, Locale.getDefault())
-        return dateFormat.format(date)
+    fun getServerFormat(
+        dateFormat: String = SERVER_DATE_FORMAT,
+        date: Date = getCurrentDate()
+    ): String {
+        val format = SimpleDateFormat(dateFormat, Locale.getDefault())
+        return format.format(date)
     }
-    fun getRandomString():String{
-        return   (0..10).random().toString()
+
+    private fun getCurrentDate(): Date {
+        return Calendar.getInstance().time
     }
+
+
+    fun getLastWeek(): Date {
+        val cal = Calendar.getInstance()
+        cal.add(Calendar.DAY_OF_YEAR, -7)
+        return Date(cal.timeInMillis)
+
+    }
+
+    fun getFirstDayOfMonth(): Date {
+        val cal = Calendar.getInstance() // this takes current date
+        cal[Calendar.DAY_OF_MONTH] = 1
+        return Date(cal.timeInMillis)
+    }
+
+    fun getLastDayOfMonth(): Date {
+        val cal = Calendar.getInstance()
+        cal[Calendar.DAY_OF_MONTH] = cal.getActualMaximum(Calendar.DAY_OF_MONTH)
+        return Date(cal.timeInMillis)
+
+    }
+
+    fun getRandomString(): String {
+        return (0..10).random().toString()
+    }
+
 
 }
