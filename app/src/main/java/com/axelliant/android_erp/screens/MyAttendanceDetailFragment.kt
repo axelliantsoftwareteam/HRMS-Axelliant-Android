@@ -134,6 +134,7 @@ class MyAttendanceDetailFragment : BaseFragment() {
         binding?.tvMonth?.setTextColor(requireContext().getColor(R.color.btn_text_color))
         binding?.tvCustom?.setTextColor(requireContext().getColor(R.color.btn_text_color))
 
+
         binding?.tvWeek?.setOnClickListener {
             currentFilter = WEEK
             attendanceViewModel.getAttendanceDetail(getCurrentObject())
