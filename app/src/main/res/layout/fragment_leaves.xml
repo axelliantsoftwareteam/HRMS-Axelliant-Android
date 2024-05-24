@@ -74,12 +74,10 @@
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tv_view"
-                    style="@style/TEXT_MEDIUM_WHITE_10"
+                    style="@style/TEXT_MEDIUM_BLACK_12"
                     android:padding="@dimen/_5sdp"
                     android:text="@string/view"
                     android:textAlignment="textStart"
-                    android:textColor="@color/colorApp"
-                    android:textSize="@dimen/_12sdp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/tv_title"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_title"
@@ -529,7 +527,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_10sdp"
-                    android:background="@drawable/rounded_leave_approve"
+                    android:background="@drawable/rounded_leave_cancelled"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_my_team_view">
@@ -539,7 +537,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:background="@drawable/rounded_shifts"
-                        android:backgroundTint="@color/orange"
+                        android:backgroundTint="@color/color_third"
                         android:gravity="center"
                         android:orientation="horizontal"
                         android:padding="@dimen/_5sdp"
@@ -645,7 +643,7 @@
                                 android:layout_height="wrap_content"
                                 tools:text="@string/_3"
                                 android:text="@string/dash"
-                                android:textColor="@color/green"
+                                android:textColor="@color/colorApp"
                                 android:textSize="@dimen/_20ssp"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -657,7 +655,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/_5sdp"
                                 android:background="@drawable/rounded_disabled"
-                                android:text="@string/present_on_site"
+                                android:text="@string/all_leaves"
                                 android:textAllCaps="true"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/tv_present_txt" />
@@ -691,7 +689,7 @@
                                 android:layout_height="wrap_content"
                                 tools:text="@string/_3"
                                 android:text="@string/dash"
-                                android:textColor="@color/colorApp"
+                                android:textColor="@color/green"
                                 android:textSize="@dimen/_20ssp"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -703,7 +701,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/_5sdp"
                                 android:background="@drawable/rounded_disabled"
-                                android:text="@string/work_from_home"
+                                android:text="@string/approved"
                                 android:textAllCaps="true"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/tv_work_home_txt" />
@@ -719,6 +717,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/_5sdp"
+                        android:paddingBottom="@dimen/_5sdp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/ly_teams_details">
@@ -753,7 +752,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/_5sdp"
                                 android:background="@drawable/rounded_disabled"
-                                android:text="@string/absent"
+                                android:text="@string/rejected"
                                 android:textAllCaps="true"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/tv_teams_absent_txt" />
@@ -787,7 +786,8 @@
                                 android:layout_height="wrap_content"
                                 tools:text="@string/_3"
                                 android:text="@string/dash"
-                                android:textColor="@color/orange"
+                                android:textSize="@dimen/_20ssp"
+                                android:textColor="@color/yellow"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -798,7 +798,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/_5sdp"
                                 android:background="@drawable/rounded_disabled"
-                                android:text="@string/on_leave"
+                                android:text="@string/pending"
                                 android:textAllCaps="true"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/tv_teams_onleave_txt" />
@@ -821,6 +821,20 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/ly_myteam_attend" />
 
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_upcoming_leaves"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_my_shift"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    tools:itemCount="2"
+                    app:spanCount="2"
+                    tools:orientation="horizontal"
+                    tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/upcoming_leaves_row" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>

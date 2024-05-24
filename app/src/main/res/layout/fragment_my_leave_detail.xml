@@ -150,7 +150,6 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_5sdp"
-                        android:layout_marginTop="@dimen/_3sdp"
                         android:hint="@string/start_date"
                         android:textAlignment="textStart"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -162,7 +161,6 @@
                         android:id="@+id/img_start_cal"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_3sdp"
                         android:layout_marginEnd="@dimen/_5sdp"
                         android:src="@drawable/ic_calendar"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -193,6 +191,7 @@
                     android:layout_marginTop="@dimen/_5sdp"
                     android:text="@string/end_date"
                     android:textAlignment="textStart"
+                    android:layout_marginStart="@dimen/_5sdp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/divider_absent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -217,7 +216,6 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_5sdp"
-                        android:layout_marginTop="@dimen/_3sdp"
                         android:hint="@string/end_date"
                         android:textAlignment="textStart"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -229,10 +227,12 @@
                         android:id="@+id/img_end_cal"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_3sdp"
                         android:src="@drawable/ic_calendar"
+                        app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"></ImageView>
+                        app:layout_constraintStart_toStartOf="parent">
+
+                    </ImageView>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>

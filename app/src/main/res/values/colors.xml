@@ -16,6 +16,7 @@
     <!-- colors!-->
     <color name="colorApp">#09589B</color>
     <color name="color_secondry">#25A8E0</color>
+    <color name="color_third">#D83242</color>
     <color name="layout_bg">#ffffff</color>
     <color name="approved_bg">#F1FBFB</color>
     <color name="approved">#2B2B2B</color>
