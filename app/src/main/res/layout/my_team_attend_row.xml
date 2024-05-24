@@ -41,6 +41,7 @@
                 android:text="Arslan"
                 android:textAlignment="textStart"
                 android:textSize="@dimen/_12sdp"
+                app:layout_constraintEnd_toStartOf="@+id/drop_down"
                 app:layout_constraintBottom_toTopOf="@+id/tv_employe_designation"
                 app:layout_constraintStart_toEndOf="@id/profile_img"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -48,13 +49,24 @@
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_employe_designation"
                 style="@style/TEXT_MEDIUM_BLACK_10"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                app:layout_constraintEnd_toStartOf="@+id/drop_down"
                 android:layout_height="wrap_content"
                 android:text="Software engineer"
                 android:textAlignment="textStart"
                 app:layout_constraintStart_toStartOf="@+id/tv_employe_name"
                 app:layout_constraintTop_toBottomOf="@+id/tv_employe_name" />
 
+
+            <ImageView
+                android:id="@+id/drop_down"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_down"
+                android:padding="@dimen/_5sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/profile_img"
+                app:layout_constraintBottom_toBottomOf="@+id/profile_img" />
             <View
                 android:id="@+id/line_div"
                 android:layout_width="0dp"
@@ -66,133 +78,20 @@
                 app:layout_constraintTop_toBottomOf="@+id/tv_employe_designation" />
 
             <androidx.recyclerview.widget.RecyclerView
+                android:layout_marginTop="@dimen/_5sdp"
                 android:id="@+id/rv_leave_count"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/line_div"
                 tools:spanCount="3"
-                tools:itemCount="3"
-                tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:listitem="@layout/attendance_count_row" />
+                tools:itemCount="6"
 
+                tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                tools:listitem="@layout/attendance_count_row"
+                />
 
-            <ProgressBar
-                android:id="@+id/present_progress"
-                style="@android:style/Widget.ProgressBar.Horizontal"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/_10sdp"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:max="100"
-                android:progress="20"
-                android:visibility="gone"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/rv_leave_count"
-                android:progressDrawable="@drawable/simple_progress" />
-
-            <!--      <View
-                      android:id="@+id/line_divider"
-                      android:layout_width="1dp"
-                      android:layout_height="0dp"
-                      android:background="@color/light_grey"
-                      android:layout_margin="@dimen/_5sdp"
-                      app:layout_constraintStart_toEndOf="@+id/ly_present"
-                      app:layout_constraintTop_toTopOf="@+id/ly_present"
-                      app:layout_constraintBottom_toBottomOf="@+id/ly_present">
-
-                  </View>
-      -->
-            <!--      <androidx.constraintlayout.widget.ConstraintLayout
-                      android:id="@+id/ly_absent"
-                      android:layout_width="0dp"
-                      android:layout_height="wrap_content"
-                      android:background="@drawable/rounded_bgg"
-                      android:padding="@dimen/_5sdp"
-                      app:layout_constraintHorizontal_weight="3"
-                      android:layout_marginStart="@dimen/_5sdp"
-                      app:layout_constraintBottom_toBottomOf="@id/line_divider"
-                      app:layout_constraintStart_toEndOf="@+id/line_divider"
-                      app:layout_constraintTop_toTopOf="@+id/line_divider">
-                      <com.google.android.material.textview.MaterialTextView
-                          android:id="@+id/tv_absent"
-                          style="@style/TEXT_MEDIUM_GREY_10"
-                          android:layout_width="0dp"
-                          android:layout_height="match_parent"
-                          android:text="@string/absent"
-                          android:drawableLeft="@drawable/ic_absent"
-                          android:drawablePadding="@dimen/_5sdp"
-                          app:layout_constraintStart_toStartOf="parent"
-                          app:layout_constraintTop_toTopOf="parent"
-                          app:layout_constraintBottom_toBottomOf="parent"
-                          />
-                      <com.google.android.material.textview.MaterialTextView
-                          android:id="@+id/tv_absent_txt"
-                          style="@style/TEXT_MEDIUM_WHITE_10"
-                          android:layout_width="0dp"
-                          android:layout_height="wrap_content"
-                          android:layout_marginStart="@dimen/_5sdp"
-                          android:background="@drawable/circle_no_bg"
-                          android:padding="@dimen/_5sdp"
-                          android:text="20"
-                          app:layout_constraintBottom_toBottomOf="@+id/tv_absent"
-                          app:layout_constraintStart_toEndOf="@id/tv_absent"
-                          app:layout_constraintTop_toTopOf="@+id/tv_absent" />
-
-                  </androidx.constraintlayout.widget.ConstraintLayout>
-                  <View
-                      android:id="@+id/late_divider"
-                      android:layout_width="1dp"
-                      android:layout_height="0dp"
-                      android:background="@color/light_grey"
-                      android:layout_margin="@dimen/_5sdp"
-                      app:layout_constraintStart_toEndOf="@+id/ly_absent"
-                      app:layout_constraintTop_toTopOf="@+id/ly_absent"
-                      app:layout_constraintBottom_toBottomOf="@+id/ly_absent">
-
-                  </View>
-                  <androidx.constraintlayout.widget.ConstraintLayout
-                      android:id="@+id/ly_late"
-                      android:layout_width="0dp"
-                      android:layout_height="wrap_content"
-                      android:background="@drawable/rounded_bgg"
-                      android:padding="@dimen/_5sdp"
-                      app:layout_constraintHorizontal_weight="3"
-                      android:layout_marginStart="@dimen/_5sdp"
-                      app:layout_constraintBottom_toBottomOf="@id/late_divider"
-                      app:layout_constraintStart_toEndOf="@+id/late_divider"
-                      app:layout_constraintTop_toTopOf="@+id/late_divider">
-                      <com.google.android.material.textview.MaterialTextView
-                          android:id="@+id/tv_late"
-                          style="@style/TEXT_MEDIUM_GREY_10"
-                          android:layout_width="0dp"
-                          android:layout_height="match_parent"
-                          android:text="@string/late"
-                          android:drawableLeft="@drawable/ic_watch_later"
-                          android:drawablePadding="@dimen/_5sdp"
-                          app:layout_constraintStart_toStartOf="parent"
-                          app:layout_constraintTop_toTopOf="parent"
-                          app:layout_constraintBottom_toBottomOf="parent"
-                          />
-                      <com.google.android.material.textview.MaterialTextView
-                          android:id="@+id/tv_late_txt"
-                          style="@style/TEXT_MEDIUM_WHITE_10"
-                          android:layout_width="0dp"
-                          android:layout_height="wrap_content"
-                          android:layout_marginStart="@dimen/_5sdp"
-                          android:background="@drawable/circle_no_bg"
-                          android:backgroundTint="@color/color_third"
-                          android:padding="@dimen/_5sdp"
-                          android:text="20"
-                          app:layout_constraintBottom_toBottomOf="@+id/tv_late"
-                          app:layout_constraintStart_toEndOf="@id/tv_late"
-                          app:layout_constraintTop_toTopOf="@+id/tv_late" />
-
-                  </androidx.constraintlayout.widget.ConstraintLayout>
-
-      -->
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 

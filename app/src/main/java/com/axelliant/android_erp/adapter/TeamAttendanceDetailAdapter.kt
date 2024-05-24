@@ -1,18 +1,24 @@
 package com.axelliant.android_erp.adapter
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.axelliant.android_erp.Test
 import com.axelliant.android_erp.callback.AdapterItemClick
 import com.axelliant.android_erp.databinding.MyAttendanceDetailRowBinding
 import com.axelliant.android_erp.databinding.MyTeamAttendRowBinding
+import com.axelliant.android_erp.extention.setUrlImage
+import com.axelliant.android_erp.model.attendance.AttendanceData
+import com.axelliant.android_erp.model.attendance.AttendanceDetail
 import com.axelliant.android_erp.model.dashboard.EmployProfile
 
 class TeamAttendanceDetailAdapter(
-    private val list: ArrayList<EmployProfile>,
+    private val mContext: Context,
+    private val detailArrayList: ArrayList<AttendanceData>,
     private val itemClick: AdapterItemClick
 ) :
     RecyclerView.Adapter<TeamAttendanceDetailAdapter.AccountsVH>() {
@@ -25,22 +31,41 @@ class TeamAttendanceDetailAdapter(
     }
 
     override fun onBindViewHolder(holder: AccountsVH, position: Int) {
-        holder.bind(list[position])
+        holder.bind(detailArrayList[position], mContext)
+
+        holder.binding.rvLeaveCount.layoutManager = GridLayoutManager(mContext, 3)
+        holder.binding.rvLeaveCount.adapter =
+            ValuesAdapter(detailArrayList[position].values!!, mContext)
+        holder.binding.rvLeaveCount.isNestedScrollingEnabled = false
+
         holder.binding.lyWeekly.setOnClickListener {
-            itemClick.onItemClick(list[position], position)
+
+
+            itemClick.onItemClick(detailArrayList[position], position)
         }
+
+        holder.binding.dropDown.setOnClickListener {
+
+            holder.binding.rvLeaveCount.isVisible = !holder.binding.rvLeaveCount.isVisible
+            holder.binding.lineDiv.isVisible = holder.binding.rvLeaveCount.isVisible
+
+        }
+
 
     }
 
     override fun getItemCount(): Int {
-        return list.size
+        return detailArrayList.size
     }
 
     class AccountsVH(val binding: MyTeamAttendRowBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: EmployProfile) {
-            binding.tvName.text = item.name.toString()
+        fun bind(item: AttendanceData, mContext: Context) {
+            binding.tvEmployeName.text = item.name.toString()
+            binding.tvEmployeDesignation.text = item.designation.toString()
+            binding.profileImg.setUrlImage(item.image, mContext)
+
 
         }
     }

@@ -58,6 +58,12 @@ interface ApiInterface {
 
 
 
+    @Headers("Content-Type: application/json")
+    @GET("hrms.hr.doctype.employee.mobile_api.get_team_attendance")
+    fun callTeamAttendanceDetail(@Query("start_date") start_date: String="2024-01-01",
+                             @Query("end_date") end_date: String = "2024-05-20"
+    ): retrofit2.Call<ResponseBody>
+
 //    "employee_list": ["HR-EMP-00744"]
 
 

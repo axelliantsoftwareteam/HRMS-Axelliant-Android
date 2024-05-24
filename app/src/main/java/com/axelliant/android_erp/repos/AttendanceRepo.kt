@@ -8,6 +8,7 @@ import com.axelliant.android_erp.model.attendance.AttendanceDetail
 import com.axelliant.android_erp.model.attendance.AttendanceInput
 import com.axelliant.android_erp.model.attendance.AttendanceResponse
 import com.axelliant.android_erp.model.attendance.AttendanceStatsResponse
+import com.axelliant.android_erp.model.attendance.TeamAttendanceResponse
 import com.axelliant.android_erp.model.base.BaseApiModel
 import com.axelliant.android_erp.model.base.BaseModel
 import com.axelliant.android_erp.model.base.Meta
@@ -105,6 +106,52 @@ class AttendanceRepo(private var apiInterface: ApiInterface) {
 
                 serverResponse.value =
                     BaseApiModel(BaseModel(AttendanceResponse(meta = Meta("", false))))
+
+            }
+
+        })
+
+        return serverResponse
+    }
+
+
+
+    fun getTeamAttendanceDetail(
+        inputObject: AttendanceInput
+    ): MutableLiveData<BaseApiModel<TeamAttendanceResponse>> {
+        val serverResponse = MutableLiveData<BaseApiModel<TeamAttendanceResponse>>()
+
+        val call = apiInterface.callTeamAttendanceDetail(
+            start_date = inputObject.startDate,
+            end_date = inputObject.endDate
+        )
+
+
+        Log.e("HTTP Request", " " + call.request().toString())
+
+        call.enqueue(object : BaseCallBack<ResponseBody>(call) {
+            override fun onFinalSuccess(
+                call: Call<ResponseBody>,
+                response: Response<ResponseBody>
+            ) {
+
+                Log.e("API success", " " + response.body())
+
+                val type: Type = object : TypeToken<BaseApiModel<TeamAttendanceResponse>>() {}.type
+                val jsonString = response.body()?.string()
+                val userModel = Gson().fromJson<BaseApiModel<TeamAttendanceResponse>>(jsonString, type)
+                serverResponse.value = userModel
+            }
+
+
+            override fun onFinalFailure(
+                errorString: String?
+            ) {
+
+                Log.e("API Failure", " $errorString")
+
+                serverResponse.value =
+                    BaseApiModel(BaseModel(TeamAttendanceResponse(meta = Meta("", false))))
 
             }
 

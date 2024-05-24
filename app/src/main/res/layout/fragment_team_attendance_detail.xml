@@ -268,7 +268,8 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/ly_myteam_attend"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_marginTop="@dimen/_10sdp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -320,16 +321,20 @@
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rv_attend"
                         android:layout_width="0dp"
-                        android:layout_height="match_parent"
+                        android:layout_height="0dp"
                         android:orientation="vertical"
                         android:layout_marginTop="@dimen/_5sdp"
-                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/ly_header"
-                        tools:itemCount="2"
+                        tools:itemCount="1"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        tools:listitem="@layout/my_team_attend_row" />
+                        tools:listitem="@layout/my_team_attend_row"
+                      />
+
+
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
 

@@ -6,11 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.axelliant.android_erp.R
 import com.axelliant.android_erp.Test
 import com.axelliant.android_erp.adapter.PersonSpinnerAdapter
-import com.axelliant.android_erp.adapter.SubFilterAdapter
 import com.axelliant.android_erp.adapter.TeamAttendanceDetailAdapter
 import com.axelliant.android_erp.base.BaseFragment
 import com.axelliant.android_erp.callback.AdapterItemClick
@@ -19,11 +17,13 @@ import com.axelliant.android_erp.databinding.FragmentTeamAttendanceDetailBinding
 import com.axelliant.android_erp.enums.AttendanceFilter
 import com.axelliant.android_erp.event.EventObserver
 import com.axelliant.android_erp.extention.showErrorMsg
-import com.axelliant.android_erp.extention.showSuccessMsg
-import com.axelliant.android_erp.model.Modules
+import com.axelliant.android_erp.model.attendance.AttendanceData
+import com.axelliant.android_erp.model.attendance.AttendanceDetail
+import com.axelliant.android_erp.model.attendance.AttendanceInput
 import com.axelliant.android_erp.model.dashboard.EmployProfile
 import com.axelliant.android_erp.navigation.AppNavigator
-import com.axelliant.android_erp.viewmodel.HomeViewModel
+import com.axelliant.android_erp.utils.Utils
+import com.axelliant.android_erp.viewmodel.AttendanceViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
 import org.koin.android.ext.android.inject
 import java.text.SimpleDateFormat
@@ -40,7 +40,8 @@ class TeamAttendanceDetailFragment : BaseFragment() {
     private var currentFilter = AttendanceFilter.WEEK
     private var selectedDateRange: String? = null
 
-    private val homeViewModel: HomeViewModel by inject()
+
+    private val attendanceViewModel: AttendanceViewModel by inject()
 
 
     override fun onCreateView(
@@ -62,20 +63,18 @@ class TeamAttendanceDetailFragment : BaseFragment() {
         }
 
         eventSelection()
-        subFilterPopulations()
         spinnerPopulations()
 
+        attendanceViewModel.getTeamAttendance(getCurrentObject())
 
-
-        homeViewModel.getDashboardInformation()
-        homeViewModel.dashboardResponse.observe(
+        attendanceViewModel.teamAttendanceResponse.observe(
             viewLifecycleOwner,
             EventObserver { response ->
 
                 if (response?.meta?.status == true) {
                     // success
 
-                    dataPopulate(response.employee_profile!!)
+                    dataPopulate(response.attendance_data!!)
                 } else {
                     requireContext().showErrorMsg(response?.meta?.message.toString())
                 }
@@ -136,42 +135,16 @@ class TeamAttendanceDetailFragment : BaseFragment() {
 
     }
 
-    private fun subFilterPopulations() {
-        binding?.rvSubFilter?.layoutManager =
-            LinearLayoutManager(requireActivity(), RecyclerView.HORIZONTAL, false)
-        val weeklyAdapter = SubFilterAdapter(
-            listOf(
-                Test("Pending"),
-                Test("Approved"),
-                Test("Work from home"),
-                Test("In office"),
-                Test("Remote"),
-                Test("Rejected")
-            ), requireContext(),
-            object : AdapterItemClick {
-                override fun onItemClick(customObject: Any, position: Int) {
-                    val currentObject = customObject as Test
-                    requireContext().showSuccessMsg(
-                        currentObject.testString
-                    )
 
-                }
-
-            }
-        )
-        binding?.rvSubFilter?.adapter = weeklyAdapter
-
-    }
-
-    private fun dataPopulate(employeeProfile: EmployProfile) {
+    private fun dataPopulate(detailArrayList: ArrayList<AttendanceData>) {
         binding?.rvAttend?.layoutManager = LinearLayoutManager(requireActivity())
-        val weeklyAdapter = TeamAttendanceDetailAdapter(
-            employeeProfile.reporting_to_emp!!,
+        val weeklyAdapter = TeamAttendanceDetailAdapter(requireContext(),
+            detailArrayList!!,
             object : AdapterItemClick {
                 override fun onItemClick(customObject: Any, position: Int) {
-                    val currentObject = customObject as EmployProfile
+                    val currentObject = customObject as AttendanceData
                     AppNavigator.navigateToMyAttendanceDetail(Bundle().apply {
-                        this.putString(KEY_ID, currentObject.name)
+                        this.putString(KEY_ID, currentObject.id)
                     })
 
 
@@ -238,6 +211,36 @@ class TeamAttendanceDetailFragment : BaseFragment() {
 
             else -> {}
         }
+    }
+
+
+    private fun getCurrentObject(): AttendanceInput {
+
+        when (currentFilter) {
+            AttendanceFilter.WEEK -> {
+                startDateString = Utils.getServerFormat(date = Utils.getLastWeek())
+                endDateString = Utils.getServerFormat()
+
+                setDateView()
+            }
+
+            AttendanceFilter.MONTH -> {
+                startDateString = Utils.getServerFormat(date = Utils.getFirstDayOfMonth())
+                endDateString =
+                    Utils.getServerFormat(date = Utils.getLastDayOfMonth())
+
+                setDateView()
+            }
+
+            AttendanceFilter.Custom -> {}
+        }
+        return AttendanceInput().apply {
+            this.startDate = startDateString!!
+            this.endDate = endDateString!!
+            this.filter = currentFilter
+
+        }
+
     }
 
 
