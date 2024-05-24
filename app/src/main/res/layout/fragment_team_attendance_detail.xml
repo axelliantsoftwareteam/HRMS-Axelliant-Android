@@ -135,7 +135,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:layout_marginEnd="@dimen/_5sdp"
-                    android:background="@drawable/rounded_leave_filter"
+                    android:background="@drawable/rounded_bgg"
                     android:orientation="vertical"
                     android:padding="@dimen/_10sdp"
                     app:layout_constraintEnd_toStartOf="@+id/divider_absent"
@@ -201,7 +201,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_5sdp"
                     android:layout_marginTop="@dimen/_5sdp"
-                    android:background="@drawable/rounded_leave_filter"
+                    android:background="@drawable/rounded_bgg"
                     android:orientation="vertical"
                     android:padding="@dimen/_10sdp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -237,42 +237,28 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_sub_filter"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_10sdp"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:orientation="horizontal"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/ly_team_filter"
-                app:layout_constraintTop_toBottomOf="@id/ly_range_date"
-                tools:itemCount="3"
-                tools:listitem="@layout/sub_filter_row">
-
-            </androidx.recyclerview.widget.RecyclerView>
-
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/ly_team_filter"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="@dimen/_30sdp"
                 android:background="@drawable/rounded_bgg"
+                android:layout_marginTop="@dimen/_5sdp"
                 android:gravity="center"
                 android:orientation="horizontal"
-                app:layout_constraintBottom_toBottomOf="@+id/rv_sub_filter"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/rv_sub_filter">
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ly_range_date">
 
                 <Spinner
                     android:id="@+id/sp_team_member"
-                    android:layout_width="@dimen/_100sdp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:overlapAnchor="false"
                     android:padding="@dimen/_2sdp"
                     android:popupBackground="@drawable/ly_spiner_bg"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck"
                     tools:listitem="@layout/spinner_item" />
 
@@ -284,17 +270,16 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
-                android:background="@drawable/rounded_attend_row"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/rv_sub_filter">
+                app:layout_constraintTop_toBottomOf="@+id/ly_team_filter">
 
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/ly_header"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/rounded_shifts"
+                    android:background="@drawable/rounded_rectengle"
                     android:gravity="center"
                     android:orientation="horizontal"
                     android:padding="@dimen/_6sdp"
@@ -331,33 +316,21 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/ly_teams_members"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_margin="@dimen/_5sdp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/ly_header">
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rv_attend"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:orientation="vertical"
+                        android:layout_marginTop="@dimen/_5sdp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/ly_header"
                         tools:itemCount="2"
-
                         tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                         tools:listitem="@layout/my_team_attend_row" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
