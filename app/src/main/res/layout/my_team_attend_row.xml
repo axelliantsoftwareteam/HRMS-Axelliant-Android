@@ -19,7 +19,6 @@
             android:id="@+id/ly_action_btn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_5sdp"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -78,6 +77,22 @@
                 tools:itemCount="3"
                 tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/attendance_count_row" />
+
+
+            <ProgressBar
+                android:id="@+id/present_progress"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:max="100"
+                android:progress="20"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/rv_leave_count"
+                android:progressDrawable="@drawable/simple_progress" />
+
             <!--      <View
                       android:id="@+id/line_divider"
                       android:layout_width="1dp"
