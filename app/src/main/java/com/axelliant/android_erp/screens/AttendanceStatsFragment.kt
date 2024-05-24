@@ -8,6 +8,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.axelliant.android_erp.R
 import com.axelliant.android_erp.base.BaseFragment
+import com.axelliant.android_erp.config.AppConst.KEY_ID
 import com.axelliant.android_erp.config.GlobalConfig
 import com.axelliant.android_erp.databinding.FragmentAttendanceStatsBinding
 import com.axelliant.android_erp.enums.AttendanceFilter
@@ -44,9 +45,11 @@ class AttendanceStatsFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding?.tvMyTeamStat?.isVisible = GlobalConfig.isManager
-        binding?.tvMyTeamView?.isVisible = GlobalConfig.isManager
-        binding?.lyMyteamAttend?.isVisible = GlobalConfig.isManager
+        val isManager = GlobalConfig.isCurrentManager()
+
+        binding?.tvMyTeamStat?.isVisible = isManager
+        binding?.tvMyTeamView?.isVisible = isManager
+        binding?.lyMyteamAttend?.isVisible = isManager
 
         attendanceViewModel.getAttendanceStats(currentFilter)
         eventSelection()
@@ -74,7 +77,9 @@ class AttendanceStatsFragment : BaseFragment() {
 
         binding?.tvMyTeam?.setOnClickListener {
             showDialog()
-            AppNavigator.navigateToMyAttendanceDetail()
+            AppNavigator.navigateToMyAttendanceDetail(Bundle().apply {
+                this.putString(KEY_ID,GlobalConfig.currentEmployeeId())
+            })
 
         }
 

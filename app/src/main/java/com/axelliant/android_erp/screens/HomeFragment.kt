@@ -176,13 +176,14 @@ class HomeFragment : BaseFragment() {
         // data population
         dataPopulate()
 
-        homeViewModel.getBirthdayList()
-        homeViewModel.birthdayResponse.observe(
+        homeViewModel.getDashboardInformation()
+        homeViewModel.dashboardResponse.observe(
             viewLifecycleOwner,
             EventObserver { response ->
 
                 if (response?.meta?.status == true) {
                     // success
+                    GlobalConfig.setCurrentEmployee(response.employee_profile!!)
                     birthdayPopulate(response.birthday_data!!)
                     dashBoardPopulate(response.employee_profile!!)
                 } else {
@@ -275,7 +276,7 @@ class HomeFragment : BaseFragment() {
         binding?.tvEmployeName?.text = employProfile.employee_name
         binding?.tvEmployeDesignation?.text = employProfile.designation
         binding?.profileImg?.setUrlImage(employProfile.image, requireContext())
-        GlobalConfig.isManager = employProfile.is_manager
+
 
     }
 

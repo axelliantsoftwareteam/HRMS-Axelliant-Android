@@ -5,16 +5,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.GridLayoutManager
 import com.axelliant.android_erp.R
+import com.axelliant.android_erp.adapter.RemainingLeaveAdapter
 
 import com.axelliant.android_erp.base.BaseFragment
+import com.axelliant.android_erp.callback.AdapterItemClick
 import com.axelliant.android_erp.databinding.FragmentLeavesBinding
 import com.axelliant.android_erp.enums.AttendanceFilter
 import com.axelliant.android_erp.event.EventObserver
 import com.axelliant.android_erp.extention.showErrorMsg
-import com.axelliant.android_erp.model.attendance.SelfAttendanceStats
-import com.axelliant.android_erp.model.attendance.TeamAttendanceStats
+import com.axelliant.android_erp.extention.showSuccessMsg
+import com.axelliant.android_erp.model.Modules
+import com.axelliant.android_erp.model.attendance.AttendanceInput
+import com.axelliant.android_erp.model.leave.LeaveType
+import com.axelliant.android_erp.model.leave.SelfLeaveStats
+import com.axelliant.android_erp.model.leave.TeamLeaveStats
 import com.axelliant.android_erp.navigation.AppNavigator
+import com.axelliant.android_erp.utils.Utils
 import com.axelliant.android_erp.viewmodel.LeaveViewModel
 import org.koin.android.ext.android.inject
 
@@ -39,9 +47,8 @@ class LeavesFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        leaveViewModel.getLeaveStats(currentFilter)
+        leaveViewModel.getLeaveStats(getCurrentObject())
         eventSelection()
-
 
         leaveViewModel.leaveStatResponse.observe(
             viewLifecycleOwner,
@@ -49,8 +56,9 @@ class LeavesFragment : BaseFragment() {
 
                 if (response?.meta?.status == true) {
 
-                    selfAttendanceStats(response.self_attendance_counts!!)
-                    teamAttendanceStats(response.team_attendance_counts!!)
+                    selfAttendanceStats(response.self_count!!)
+                    teamAttendanceStats(response.team_count!!)
+                    remainingLeaveDataPopulate(response.remaining_balance!!)
 
                 } else {
                     requireContext().showErrorMsg(response?.meta?.message.toString())
@@ -62,18 +70,17 @@ class LeavesFragment : BaseFragment() {
             AppNavigator.navigateToMyLeaveDetail()
         }
 
-        binding?.tvMyTeamView?.setOnClickListener{
+        binding?.tvMyTeamView?.setOnClickListener {
             AppNavigator.navigateToTeamLeaveDetail()
 
         }
 
-        binding?.ivBack?.setOnClickListener{
+        binding?.ivBack?.setOnClickListener {
             AppNavigator.moveBackToPreviousFragment()
 
         }
 
     }
-
 
 
     private fun eventSelection() {
@@ -88,13 +95,13 @@ class LeavesFragment : BaseFragment() {
 
         binding?.tvWeek?.setOnClickListener {
             currentFilter = AttendanceFilter.WEEK
-            leaveViewModel.getLeaveStats(currentFilter)
+            leaveViewModel.getLeaveStats(getCurrentObject())
             eventSelection()
         }
 
         binding?.tvMonth?.setOnClickListener {
             currentFilter = AttendanceFilter.MONTH
-            leaveViewModel.getLeaveStats(currentFilter)
+            leaveViewModel.getLeaveStats(getCurrentObject())
             eventSelection()
         }
 
@@ -119,26 +126,69 @@ class LeavesFragment : BaseFragment() {
     }
 
 
+    private fun remainingLeaveDataPopulate(leaves: ArrayList<LeaveType>) {
+        binding?.rvRemaining?.layoutManager = GridLayoutManager(requireContext(), 3)
+        val modulesAdapter = RemainingLeaveAdapter(
+            leaves
+        )
+        binding?.rvRemaining?.adapter = modulesAdapter
+        binding?.rvRemaining?.isNestedScrollingEnabled = false
 
-    private fun selfAttendanceStats(selfAttendanceStats: SelfAttendanceStats){
-        binding?.tvTotalLeaveTxt?.text = selfAttendanceStats.absent_count.toString()
-        binding?.tvPendingTxt?.text =selfAttendanceStats.present.toString()
-        binding?.tvApprovedTxt?.text =selfAttendanceStats.missed_punch_out.toString()
-        binding?.tvRejectedTxt?.text =selfAttendanceStats.leave_count.toString()
-
-
-        binding?.tvUsedLeavesTxt?.text =selfAttendanceStats.holiday_count.toString()
-        binding?.tvCasualTxt?.text =selfAttendanceStats.week_count.toString()
-        binding?.tvSickTxt?.text =selfAttendanceStats.week_count.toString()
-        binding?.tvAnnualTxt?.text =selfAttendanceStats.week_count.toString()
 
     }
-    private fun teamAttendanceStats(teamAttendanceStats: TeamAttendanceStats){
-        binding?.tvTotalMemberTxt?.text = teamAttendanceStats.team_count.toString()
-        binding?.tvPresentTxt?.text = teamAttendanceStats.present.toString()
-        binding?.tvWorkHomeTxt?.text = teamAttendanceStats.work_from_home.toString()
-        binding?.tvTeamsAbsentTxt?.text = teamAttendanceStats.leave_count.toString()
-        binding?.tvTeamsOnleaveTxt?.text = teamAttendanceStats.absent_count.toString()
+
+
+    private fun selfAttendanceStats(selfStats: SelfLeaveStats) {
+
+        binding?.tvTotalLeaveTxt?.text = selfStats.total_leave.toString() //total leaves
+
+        binding?.tvPendingTxt?.text = selfStats.self_pending.toString()
+        binding?.tvApprovedTxt?.text = selfStats.self_approved.toString()
+        binding?.tvRejectedTxt?.text = selfStats.self_reject.toString()
+        binding?.tvUsedLeavesTxt?.text = selfStats.remaining_leave.toString()  // reamining leave
+
+        /*        binding?.tvCasualTxt?.text = selfAttendanceStats.week_count.toString()
+                binding?.tvSickTxt?.text = selfAttendanceStats.week_count.toString()
+                binding?.tvAnnualTxt?.text = selfAttendanceStats.week_count.toString()*/
+
+    }
+
+    private fun teamAttendanceStats(teamLeaveStats: TeamLeaveStats) {
+
+        binding?.tvTotalMemberTxt?.text = teamLeaveStats.total_team_members.toString()
+        binding?.tvPresentTxt?.text = teamLeaveStats.all_leaves.toString()
+        binding?.tvWorkHomeTxt?.text = teamLeaveStats.team_approved.toString()
+        binding?.tvTeamsAbsentTxt?.text = teamLeaveStats.team_reject.toString()
+        binding?.tvTeamsOnleaveTxt?.text = teamLeaveStats.team_pending.toString()
+
+    }
+
+    private fun getCurrentObject(): AttendanceInput {
+
+        var localStart = ""
+        var localEnd = ""
+        when (currentFilter) {
+            AttendanceFilter.WEEK -> {
+                localStart = Utils.getServerFormat(date = Utils.getLastWeek())
+                localEnd = Utils.getServerFormat()
+
+            }
+
+            AttendanceFilter.MONTH -> {
+                localStart = Utils.getServerFormat(date = Utils.getFirstDayOfMonth())
+                localEnd =
+                    Utils.getServerFormat(date = Utils.getLastDayOfMonth())
+            }
+
+            else -> {}
+
+        }
+        return AttendanceInput().apply {
+            this.startDate = localStart
+            this.endDate = localEnd
+            this.filter = currentFilter
+
+        }
 
     }
 

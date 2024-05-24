@@ -9,16 +9,16 @@
         android:id="@+id/splashFragment"
         android:name="com.axelliant.android_erp.screens.SplashFragment"
         android:label="Splash Fragment"
-        tools:layout="@layout/fragment_splash" >
+        tools:layout="@layout/fragment_splash">
 
-   </fragment>
+    </fragment>
 
 
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.axelliant.android_erp.screens.LoginFragment"
         android:label="Login Fragment"
-        tools:layout="@layout/fragment_login" >
+        tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_secondFragment_to_firstFragment"
             app:destination="@id/splashFragment" />
@@ -28,7 +28,7 @@
         android:id="@+id/homeFragment"
         android:name="com.axelliant.android_erp.screens.HomeFragment"
         android:label="Home Fragment"
-        tools:layout="@layout/fragment_home" >
+        tools:layout="@layout/fragment_home">
 
     </fragment>
 
@@ -37,7 +37,7 @@
         android:id="@+id/leavesFragment"
         android:name="com.axelliant.android_erp.screens.LeavesFragment"
         android:label="Leaves Fragment"
-        tools:layout="@layout/fragment_leaves" >
+        tools:layout="@layout/fragment_leaves">
 
     </fragment>
 
@@ -46,14 +46,14 @@
         android:id="@+id/profileFragment"
         android:name="com.axelliant.android_erp.screens.ProfileFragment"
         android:label="Profile Fragment"
-        tools:layout="@layout/fragment_profile" >
+        tools:layout="@layout/fragment_profile">
 
     </fragment>
     <fragment
         android:id="@+id/expenseFragment"
         android:name="com.axelliant.android_erp.screens.ExpenseFragment"
         android:label="Expense Fragment"
-        tools:layout="@layout/fragment_expense" >
+        tools:layout="@layout/fragment_expense">
 
     </fragment>
 
@@ -61,7 +61,7 @@
         android:id="@+id/applyLeavesFragment"
         android:name="com.axelliant.android_erp.screens.ApplyLeavesFragment"
         android:label="Apply Leaves Fragment"
-        tools:layout="@layout/fragment_apply_leaves" >
+        tools:layout="@layout/fragment_apply_leaves">
 
     </fragment>
 
@@ -70,44 +70,43 @@
         android:id="@+id/attendanceStatsFragment"
         android:name="com.axelliant.android_erp.screens.AttendanceStatsFragment"
         android:label="Apply Leaves Fragment"
-        tools:layout="@layout/fragment_attendance_stats" >
+        tools:layout="@layout/fragment_attendance_stats">
 
     </fragment>
 
 
- <fragment
-     android:id="@+id/myAttendanceDetailFragment"
-     android:name="com.axelliant.android_erp.screens.MyAttendanceDetailFragment"
-     android:label="My Attendance Detail Fragment"
-     tools:layout="@layout/fragment_my_attendance_detail" >
+    <fragment
+        android:id="@+id/myAttendanceDetailFragment"
+        android:name="com.axelliant.android_erp.screens.MyAttendanceDetailFragment"
+        android:label="My Attendance Detail Fragment"
+        tools:layout="@layout/fragment_my_attendance_detail">
 
- </fragment>
+    </fragment>
 
- <fragment
-     android:id="@+id/teamAttendanceDetailFragment"
-     android:name="com.axelliant.android_erp.screens.TeamAttendanceDetailFragment"
-     android:label="Team Attendance Detail Fragment"
-     tools:layout="@layout/fragment_team_attendance_detail" >
+    <fragment
+        android:id="@+id/teamAttendanceDetailFragment"
+        android:name="com.axelliant.android_erp.screens.TeamAttendanceDetailFragment"
+        android:label="Team Attendance Detail Fragment"
+        tools:layout="@layout/fragment_team_attendance_detail">
 
- </fragment>
+    </fragment>
 
- <fragment
-     android:id="@+id/myLeaveDetailFragment"
-     android:name="com.axelliant.android_erp.screens.MyLeaveDetailFragment"
-     android:label="My Leave Detail Fragment"
-     tools:layout="@layout/fragment_my_leave_detail" >
+    <fragment
+        android:id="@+id/myLeaveDetailFragment"
+        android:name="com.axelliant.android_erp.screens.MyLeaveDetailFragment"
+        android:label="My Leave Detail Fragment"
+        tools:layout="@layout/fragment_my_leave_detail">
 
- </fragment>
+    </fragment>
 
 
+    <fragment
+        android:id="@+id/teamLeaveDetailFragment"
+        android:name="com.axelliant.android_erp.screens.TeamLeaveDetailFragment"
+        android:label="Team Leave Detail Fragment"
+        tools:layout="@layout/fragment_my_team_leave_detail">
 
- <fragment
-     android:id="@+id/teamLeaveDetailFragment"
-     android:name="com.axelliant.android_erp.screens.TeamLeaveDetailFragment"
-     android:label="Team Leave Detail Fragment"
-     tools:layout="@layout/fragment_my_team_leave_detail" >
-
- </fragment>
+    </fragment>
 
 
 </navigation>

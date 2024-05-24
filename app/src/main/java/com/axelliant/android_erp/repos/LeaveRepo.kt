@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.axelliant.android_erp.enums.AttendanceFilter
 import com.axelliant.android_erp.enums.AttendanceFilter.*
+import com.axelliant.android_erp.model.attendance.AttendanceInput
 import com.axelliant.android_erp.model.leave.LeaveResponse
 import com.axelliant.android_erp.model.base.BaseApiModel
 import com.axelliant.android_erp.model.base.BaseModel
@@ -19,20 +20,14 @@ import java.lang.reflect.Type
 
 class LeaveRepo(private var apiInterface: ApiInterface) {
 
-    fun getLeaveStats(currentFilter: AttendanceFilter): MutableLiveData<BaseApiModel<LeaveResponse>> {
+    fun getLeaveStats(attendanceInput: AttendanceInput): MutableLiveData<BaseApiModel<LeaveResponse>> {
         val serverResponse = MutableLiveData<BaseApiModel<LeaveResponse>>()
 
-        var call: Call<ResponseBody>? = null
-        when (currentFilter) {
-            WEEK -> call = apiInterface.callLeaveWeekStats()
-            MONTH -> call = apiInterface.callLeaveMonthStats()
-            Custom -> null
-        }
-
+        val call: Call<ResponseBody>  = apiInterface.callLeaveWeekStats(start_date = attendanceInput.startDate, end_date = attendanceInput.endDate)
 
         Log.e("HTTP Request", " " + call?.request().toString())
 
-        call?.enqueue(object : BaseCallBack<ResponseBody>(call) {
+        call.enqueue(object : BaseCallBack<ResponseBody>(call) {
             override fun onFinalSuccess(
                 call: Call<ResponseBody>,
                 response: Response<ResponseBody>

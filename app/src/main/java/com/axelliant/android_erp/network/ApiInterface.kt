@@ -38,8 +38,9 @@ interface ApiInterface {
 
     // get attendance stats weekly
     @Headers("Content-Type: application/json")
-    @GET("hrms.hr.doctype.employee.mobile_api.get_week_attendance_stats")
-    fun callLeaveWeekStats(): retrofit2.Call<ResponseBody>
+    @GET("hrms.hr.doctype.employee.leaves_mobile.get_leave_details_self")
+    fun callLeaveWeekStats(@Query("start_date") start_date: String="2024-01-01",
+                           @Query("end_date") end_date: String = "2024-05-20"): retrofit2.Call<ResponseBody>
 
 
     // get attendance stats weekly

@@ -8,9 +8,9 @@ import com.axelliant.android_erp.repos.HomeRepo
 
 class HomeViewModel(private val homeRepo: HomeRepo) : BaseViewModel() {
 
-     val birthdayResponse: MutableLiveData<Event<DashboardResponse?>> by lazy { MutableLiveData<Event<DashboardResponse?>>() }
+     val dashboardResponse: MutableLiveData<Event<DashboardResponse?>> by lazy { MutableLiveData<Event<DashboardResponse?>>() }
 
-    fun getBirthdayList() {
+    fun getDashboardInformation() {
         isLoading.value = Event(true)
         homeRepo.getDashboardData()
             .observeForever { data ->
@@ -18,7 +18,7 @@ class HomeViewModel(private val homeRepo: HomeRepo) : BaseViewModel() {
                 data?.let { baseModel ->
                     isLoading.value = Event(false)
                     // Handle success
-                    birthdayResponse.value = Event(baseModel.message?.data)
+                    dashboardResponse.value = Event(baseModel.message?.data)
 
                 } ?: run {
                     isLoading.value = Event(false)

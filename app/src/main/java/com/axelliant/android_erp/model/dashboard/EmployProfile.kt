@@ -12,6 +12,8 @@ package com.axelliant.android_erp.model.dashboard
      val user_id: String?=null
      val department: String?=null
      val designation: String?=null
+     val reports_to:ReportsTo?=null
+     val reporting_to_emp: ArrayList<EmployProfile>?=null
 
  }
 

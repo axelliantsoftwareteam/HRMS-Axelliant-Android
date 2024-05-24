@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.axelliant.android_erp.enums.AttendanceFilter
 import com.axelliant.android_erp.event.Event
+import com.axelliant.android_erp.model.attendance.AttendanceInput
 import com.axelliant.android_erp.model.leave.LeaveResponse
 import com.axelliant.android_erp.repos.LeaveRepo
 
@@ -11,9 +12,9 @@ class LeaveViewModel(private val leaveRepo: LeaveRepo) : BaseViewModel() {
 
      val leaveStatResponse: MutableLiveData<Event<LeaveResponse?>> by lazy { MutableLiveData<Event<LeaveResponse?>>() }
 
-    fun getLeaveStats(currentFilter: AttendanceFilter) {
+    fun getLeaveStats(attendanceInput: AttendanceInput) {
         isLoading.value = Event(true)
-        leaveRepo.getLeaveStats(currentFilter)
+        leaveRepo.getLeaveStats(attendanceInput)
             .observeForever { data ->
                 // Handle the login response
                 data?.let { baseModel ->

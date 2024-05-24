@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,10 +14,18 @@ import com.axelliant.android_erp.adapter.SubFilterAdapter
 import com.axelliant.android_erp.adapter.TeamAttendanceDetailAdapter
 import com.axelliant.android_erp.base.BaseFragment
 import com.axelliant.android_erp.callback.AdapterItemClick
+import com.axelliant.android_erp.config.AppConst.KEY_ID
 import com.axelliant.android_erp.databinding.FragmentTeamAttendanceDetailBinding
 import com.axelliant.android_erp.enums.AttendanceFilter
+import com.axelliant.android_erp.event.EventObserver
+import com.axelliant.android_erp.extention.showErrorMsg
 import com.axelliant.android_erp.extention.showSuccessMsg
+import com.axelliant.android_erp.model.Modules
+import com.axelliant.android_erp.model.dashboard.EmployProfile
+import com.axelliant.android_erp.navigation.AppNavigator
+import com.axelliant.android_erp.viewmodel.HomeViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
+import org.koin.android.ext.android.inject
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -26,12 +33,16 @@ import java.util.Locale
 
 class TeamAttendanceDetailFragment : BaseFragment() {
 
-    private var startDateString: String?=null
+    private var startDateString: String? = null
     private var endDateString: String? = null
     private var _binding: FragmentTeamAttendanceDetailBinding? = null
     private val binding get() = _binding
     private var currentFilter = AttendanceFilter.WEEK
-    private var selectedDateRange: String?=null
+    private var selectedDateRange: String? = null
+
+    private val homeViewModel: HomeViewModel by inject()
+
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -49,12 +60,31 @@ class TeamAttendanceDetailFragment : BaseFragment() {
         binding?.ivBack?.setOnClickListener {
             previousFragmentNavigation()
         }
-        dataPopulate()
+
         eventSelection()
         subFilterPopulations()
         spinnerPopulations()
 
+
+
+        homeViewModel.getDashboardInformation()
+        homeViewModel.dashboardResponse.observe(
+            viewLifecycleOwner,
+            EventObserver { response ->
+
+                if (response?.meta?.status == true) {
+                    // success
+
+                    dataPopulate(response.employee_profile!!)
+                } else {
+                    requireContext().showErrorMsg(response?.meta?.message.toString())
+                }
+
+            })
+
+
     }
+
     private fun datePickerDialog() {
         // Creating a MaterialDatePicker builder for selecting a date range
         val builder = MaterialDatePicker.Builder.dateRangePicker()
@@ -69,8 +99,8 @@ class TeamAttendanceDetailFragment : BaseFragment() {
 
             // Formatting the selected dates as strings
             val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-             startDateString = sdf.format(Date(startDate))
-             endDateString = sdf.format(Date(endDate))
+            startDateString = sdf.format(Date(startDate))
+            endDateString = sdf.format(Date(endDate))
 
             // Creating the date range string
             selectedDateRange = "$startDateString - $endDateString"
@@ -82,10 +112,9 @@ class TeamAttendanceDetailFragment : BaseFragment() {
     }
 
     private fun setDateView() {
-        if (startDateString!=null && endDateString!=null)
-        {
-            binding?.tvStartDateTxt?.text=startDateString
-            binding?.tvEndDateTxt?.text=endDateString
+        if (startDateString != null && endDateString != null) {
+            binding?.tvStartDateTxt?.text = startDateString
+            binding?.tvEndDateTxt?.text = endDateString
         }
 
     }
@@ -134,17 +163,21 @@ class TeamAttendanceDetailFragment : BaseFragment() {
 
     }
 
-    private fun dataPopulate() {
+    private fun dataPopulate(employeeProfile: EmployProfile) {
         binding?.rvAttend?.layoutManager = LinearLayoutManager(requireActivity())
         val weeklyAdapter = TeamAttendanceDetailAdapter(
-            listOf(
-                Test("item1"),
-                Test("item2"),
-                Test("item3"),
-                Test("item4"),
-                Test("item5"),
-                Test("item6")
-            )
+            employeeProfile.reporting_to_emp!!,
+            object : AdapterItemClick {
+                override fun onItemClick(customObject: Any, position: Int) {
+                    val currentObject = customObject as EmployProfile
+                    AppNavigator.navigateToMyAttendanceDetail(Bundle().apply {
+                        this.putString(KEY_ID, currentObject.name)
+                    })
+
+
+                }
+
+            }
         )
         binding?.rvAttend?.adapter = weeklyAdapter
 

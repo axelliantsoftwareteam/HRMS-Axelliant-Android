@@ -361,143 +361,22 @@
                             app:layout_constraintTop_toBottomOf="@+id/tv_used_leaves_txt" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/ly_remaining_status"
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        android:id="@+id/rv_remaining"
+                        app:layout_constraintTop_toBottomOf="@+id/ly_used_leaves"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/_5sdp"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_height="match_parent"
+                        tools:listitem="@layout/remaning_leave_row"
+                        tools:itemCount="3"
+                        app:spanCount="3"
+                        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/ly_used_leaves">
+                        app:layout_constraintEnd_toEndOf="parent"
+                        >
 
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/ly_casual"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toStartOf="@+id/ly_sick"
-                            app:layout_constraintHorizontal_weight="3.3"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent">
-
-                            <com.google.android.material.textview.MaterialTextView
-                                android:id="@+id/tv_casual_txt"
-                                style="@style/TEXT_MEDIUM_BLACK_15"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                tools:text="@string/_3"
-                                android:text="@string/dash"
-                                android:textSize="@dimen/_20ssp"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent"
-
-                                />
-
-                            <com.google.android.material.textview.MaterialTextView
-                                android:id="@+id/tv_casual"
-                                style="@style/TEXT_MEDIUM_GREY_10"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/_5sdp"
-                                android:background="@drawable/rounded_disabled"
-                                android:text="@string/casual"
-                                android:textAllCaps="true"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/tv_casual_txt" />
-
-                            <View
-                                android:layout_width="2dp"
-                                android:layout_height="0dp"
-                                android:layout_marginEnd="@dimen/_10sdp"
-                                android:background="#E5E0D9"
-                                app:layout_constraintBottom_toBottomOf="@+id/tv_casual"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toTopOf="@+id/tv_casual_txt" />
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/ly_sick"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            app:layout_constraintEnd_toStartOf="@+id/ly_annual"
-                            app:layout_constraintHorizontal_weight="3.3"
-                            app:layout_constraintStart_toEndOf="@+id/ly_casual"
-                            app:layout_constraintTop_toTopOf="@+id/ly_casual">
-
-                            <com.google.android.material.textview.MaterialTextView
-                                android:id="@+id/tv_sick_txt"
-                                style="@style/TEXT_MEDIUM_BLACK_15"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                tools:text="@string/_3"
-                                android:text="@string/dash"
-                                android:textSize="@dimen/_20ssp"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                            <com.google.android.material.textview.MaterialTextView
-                                android:id="@+id/tv_sick"
-                                style="@style/TEXT_MEDIUM_GREY_10"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/_5sdp"
-                                android:background="@drawable/rounded_disabled"
-                                android:text="@string/sick"
-                                android:textAllCaps="true"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/tv_sick_txt" />
-
-                            <View
-                                android:layout_width="2dp"
-                                android:layout_height="0dp"
-                                android:layout_gravity="center_vertical"
-                                android:layout_marginEnd="@dimen/_10sdp"
-                                android:background="#E5E0D9"
-                                app:layout_constraintBottom_toBottomOf="@+id/tv_sick"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toTopOf="@+id/tv_sick_txt" />
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/ly_annual"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_weight="3.3"
-                            app:layout_constraintStart_toEndOf="@+id/ly_sick"
-                            app:layout_constraintTop_toTopOf="@+id/ly_sick">
-
-                            <com.google.android.material.textview.MaterialTextView
-                                android:id="@+id/tv_annual_txt"
-                                style="@style/TEXT_MEDIUM_BLACK_15"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                tools:text="@string/_3"
-                                android:text="@string/dash"
-                                android:textSize="@dimen/_20ssp"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                            <com.google.android.material.textview.MaterialTextView
-                                android:id="@+id/tv_annual"
-                                style="@style/TEXT_MEDIUM_GREY_10"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/_5sdp"
-                                android:background="@drawable/rounded_disabled"
-                                android:text="@string/annual"
-                                android:textAlignment="textStart"
-                                android:textAllCaps="true"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/tv_annual_txt" />
-
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
+                    </androidx.recyclerview.widget.RecyclerView>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
