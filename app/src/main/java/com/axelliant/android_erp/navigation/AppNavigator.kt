@@ -123,9 +123,9 @@ class AppNavigator {
         }
 
 
-        fun navigateToApplyLeaves(args: Bundle = Bundle()) {
-            Log.i(TAG, "navigateToProfile: $args")
-            val navAction = NavAction(R.id.applyLeavesFragment)
+        fun navigateToRequest(args: Bundle = Bundle()) {
+            Log.i(TAG, "navigateToRequest: $args")
+            val navAction = NavAction(R.id.requestFragment)
             val navOptions = NavOptions.Builder()
                 .setPopUpTo(getCurrentDestinationId()!!, false).build()
             navAction.navOptions = navOptions
@@ -134,8 +134,8 @@ class AppNavigator {
                 getController().graph.findNode(it)
             }
             if (destination != null) {
-                destination.putAction(R.id.apply_leaves_fragment_action, navAction)
-                getController().navigate(R.id.apply_leaves_fragment_action, args)
+                destination.putAction(R.id.request_fragment_action, navAction)
+                getController().navigate(R.id.request_fragment_action, args)
             }
         }
 

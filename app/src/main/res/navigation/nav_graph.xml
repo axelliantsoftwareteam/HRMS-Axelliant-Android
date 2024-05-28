@@ -58,10 +58,10 @@
     </fragment>
 
     <fragment
-        android:id="@+id/applyLeavesFragment"
-        android:name="com.axelliant.android_erp.screens.ApplyLeavesFragment"
-        android:label="Apply Leaves Fragment"
-        tools:layout="@layout/fragment_apply_leaves">
+        android:id="@+id/requestFragment"
+        android:name="com.axelliant.android_erp.screens.RequestFragment"
+        android:label="Request Fragment"
+        tools:layout="@layout/fragment_request">
 
     </fragment>
 

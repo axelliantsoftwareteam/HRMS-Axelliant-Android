@@ -240,6 +240,12 @@ class HomeFragment : BaseFragment() {
                     color = requireContext().getColor(R.color.purple),
                     drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_loc_pin)
                 ),
+                Modules(
+                    id = 5,
+                    name = "Request",
+                    color = requireContext().getColor(R.color.red),
+                    drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_loc_pin)
+                ),
 
                 ),
             object : AdapterItemClick {
@@ -256,6 +262,10 @@ class HomeFragment : BaseFragment() {
                         "Leaves" -> {
                             showDialog()
                             AppNavigator.navigateToLeaves()
+                        }
+                        "Request" -> {
+                            showDialog()
+                            AppNavigator.navigateToRequest()
                         }
 
                         else -> {
