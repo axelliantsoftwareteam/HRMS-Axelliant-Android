@@ -47,13 +47,13 @@ object Utils {
     fun getRandomString(): String {
         return (0..10).random().toString()
     }
-    fun ConstraintLayout.hideshow(v: View) {
+
+    fun ConstraintLayout.hideShow(v: View) {
         val show = v.toggleArrow()
         if (show) {
             ViewAnimation.expand(this, object : ViewAnimation.AnimListener {
                 override fun onFinish() {
-                    this@hideshow.isVisible = true
-                    // Toast.makeText(context, "close", Toast.LENGTH_SHORT).show();
+                    this@hideShow.isVisible = true
                 }
             })
         } else {
@@ -61,7 +61,7 @@ object Utils {
         }
     }
 
-    fun View.toggleArrow(): Boolean {
+    private fun View.toggleArrow(): Boolean {
         return if (this.rotation == 0f) {
             this.animate().setDuration(200).rotation(180f)
             true
@@ -70,5 +70,4 @@ object Utils {
             false
         }
     }
-
 }

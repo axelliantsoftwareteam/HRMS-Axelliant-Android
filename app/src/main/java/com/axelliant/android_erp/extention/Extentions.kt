@@ -1,10 +1,14 @@
 package com.axelliant.android_erp.extention
 
 import android.content.Context
+import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.isVisible
 import com.axelliant.android_erp.R
+import com.axelliant.android_erp.utils.ViewAnimation
 import com.bumptech.glide.Glide
 
 fun String?.valueQualifier():String {
