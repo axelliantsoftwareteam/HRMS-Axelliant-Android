@@ -4,6 +4,8 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,6 +17,8 @@ import com.axelliant.android_erp.extention.setUrlImage
 import com.axelliant.android_erp.model.attendance.AttendanceData
 import com.axelliant.android_erp.model.attendance.AttendanceDetail
 import com.axelliant.android_erp.model.dashboard.EmployProfile
+import com.axelliant.android_erp.utils.Utils.hideshow
+import com.axelliant.android_erp.utils.ViewAnimation
 
 class TeamAttendanceDetailAdapter(
     private val mContext: Context,
@@ -38,6 +42,7 @@ class TeamAttendanceDetailAdapter(
             ValuesAdapter(detailArrayList[position].values!!, mContext)
         holder.binding.rvLeaveCount.isNestedScrollingEnabled = false
 
+
         holder.binding.lyWeekly.setOnClickListener {
 
 
@@ -45,8 +50,8 @@ class TeamAttendanceDetailAdapter(
         }
 
         holder.binding.dropDown.setOnClickListener {
-
-            holder.binding.rvLeaveCount.isVisible = !holder.binding.rvLeaveCount.isVisible
+            holder.binding.lyAttendStatus.hideshow(it)
+//            holder.binding.rvLeaveCount.isVisible = !holder.binding.rvLeaveCount.isVisible
             holder.binding.lineDiv.isVisible = holder.binding.rvLeaveCount.isVisible
 
         }

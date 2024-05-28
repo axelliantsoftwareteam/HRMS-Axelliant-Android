@@ -323,5 +323,21 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">@dimen/_15ssp</item> <!-- Adjust the corner size as needed -->
     </style>
+    <style name="CustomDatePickerDialog" parent="Theme.AppCompat.Light.Dialog">
+        <!-- Customize your theme -->
+        <item name="android:datePickerDialogTheme">@style/CustomDatePicker</item>
+    </style>
 
+    <style name="CustomDatePicker" parent="android:Widget.Material.DatePicker">
+        <item name="android:headerBackground">@color/colorApp</item>
+        <item name="android:calendarTextColor">@color/black</item>
+    </style>
+
+    <style name="my_dialog_theme" parent="ThemeOverlay.AppCompat.Dialog">
+        <item name="colorAccent">@color/colorApp</item>                   <!--header background-->
+        <item name="android:windowBackground">@color/white</item>     <!--calendar background-->
+        <item name="android:colorControlActivated">@color/colorApp</item> <!--selected day-->
+        <item name="android:textColorPrimary">@color/black</item> <!--days of the month-->
+        <item name="android:textColorSecondary">@color/colorApp</item>    <!--days of the week-->
+    </style>
 </resources>
