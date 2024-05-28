@@ -435,7 +435,6 @@
                     style="@style/TEXT_MEDIUM_BLACK_10"
                     android:text="@string/view"
                     android:textAlignment="textStart"
-                    android:textColor="@color/colorApp"
                     android:textSize="@dimen/_12sdp"
                     android:padding="@dimen/_5sdp"
                     app:layout_constraintEnd_toEndOf="parent"

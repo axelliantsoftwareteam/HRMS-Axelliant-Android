@@ -1,5 +1,8 @@
 package com.axelliant.android_erp.utils
 
+import android.view.View
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.isVisible
 import com.axelliant.android_erp.config.AppConst.SERVER_DATE_FORMAT
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -44,6 +47,28 @@ object Utils {
     fun getRandomString(): String {
         return (0..10).random().toString()
     }
+    fun ConstraintLayout.hideshow(v: View) {
+        val show = v.toggleArrow()
+        if (show) {
+            ViewAnimation.expand(this, object : ViewAnimation.AnimListener {
+                override fun onFinish() {
+                    this@hideshow.isVisible = true
+                    // Toast.makeText(context, "close", Toast.LENGTH_SHORT).show();
+                }
+            })
+        } else {
+            ViewAnimation.collapse(this)
+        }
+    }
 
+    fun View.toggleArrow(): Boolean {
+        return if (this.rotation == 0f) {
+            this.animate().setDuration(200).rotation(180f)
+            true
+        } else {
+            this.animate().setDuration(200).rotation(0f)
+            false
+        }
+    }
 
 }
