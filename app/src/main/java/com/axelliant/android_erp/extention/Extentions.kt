@@ -1,14 +1,20 @@
 package com.axelliant.android_erp.extention
 
-import android.app.Activity
 import android.content.Context
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.core.content.ContextCompat
 import com.axelliant.android_erp.R
-import com.axelliant.android_erp.network.ApiHandler
 import com.bumptech.glide.Glide
+
+fun String?.valueQualifier():String {
+    if(this==null)
+        return ""
+    else if(this == "")
+        return ""
+    else
+        return ""
+}
 
 fun Context.showSuccessMsg(message: String? = "Feature in progress") {
     Toast.makeText(this, message, Toast.LENGTH_SHORT).show()

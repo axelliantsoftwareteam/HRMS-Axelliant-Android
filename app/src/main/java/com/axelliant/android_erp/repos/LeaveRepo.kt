@@ -9,6 +9,7 @@ import com.axelliant.android_erp.model.leave.LeaveResponse
 import com.axelliant.android_erp.model.base.BaseApiModel
 import com.axelliant.android_erp.model.base.BaseModel
 import com.axelliant.android_erp.model.base.Meta
+import com.axelliant.android_erp.model.leave.MyLeaveDetailResponse
 import com.axelliant.android_erp.network.ApiInterface
 import com.axelliant.android_erp.network.BaseCallBack
 import com.google.gson.Gson
@@ -57,5 +58,47 @@ class LeaveRepo(private var apiInterface: ApiInterface) {
 
         return serverResponse
     }
+
+
+
+    fun getMyLeaveDetail(attendanceInput: AttendanceInput): MutableLiveData<BaseApiModel<MyLeaveDetailResponse>> {
+        val serverResponse = MutableLiveData<BaseApiModel<MyLeaveDetailResponse>>()
+
+        val call: Call<ResponseBody>  = apiInterface.callMyLeaveDetail(start_date = attendanceInput.startDate, end_date = attendanceInput.endDate)
+
+        Log.e("HTTP Request", " " + call?.request().toString())
+
+        call.enqueue(object : BaseCallBack<ResponseBody>(call) {
+            override fun onFinalSuccess(
+                call: Call<ResponseBody>,
+                response: Response<ResponseBody>
+            ) {
+
+                Log.e("API success", " " + response.body())
+
+                val type: Type = object : TypeToken<BaseApiModel<MyLeaveDetailResponse>>() {}.type
+                val jsonString = response.body()?.string()
+                val userModel = Gson().fromJson<BaseApiModel<MyLeaveDetailResponse>>(jsonString, type)
+                serverResponse.value = userModel
+            }
+
+
+            override fun onFinalFailure(
+                errorString: String?
+            ) {
+
+                Log.e("API Failure", " $errorString")
+
+                serverResponse.value =
+                    BaseApiModel(BaseModel(MyLeaveDetailResponse(meta = Meta("", false))))
+
+            }
+
+        })
+
+        return serverResponse
+    }
+
+
 
 }

@@ -18,6 +18,7 @@ import com.axelliant.android_erp.callback.AdapterItemClick
 import com.axelliant.android_erp.config.AppConst.KEY_ID
 import com.axelliant.android_erp.config.GlobalConfig
 import com.axelliant.android_erp.databinding.FragmentMyAttendanceDetailBinding
+import com.axelliant.android_erp.enums.AttendanceFilter
 import com.axelliant.android_erp.enums.AttendanceFilter.Custom
 import com.axelliant.android_erp.enums.AttendanceFilter.MONTH
 import com.axelliant.android_erp.enums.AttendanceFilter.WEEK
@@ -219,6 +220,16 @@ class MyAttendanceDetailFragment : BaseFragment() {
 
     }
 
+
+
+    private fun setDateView() {
+        if (startDateString != null && endDateString != null) {
+            binding?.tvStartDateTxt?.text = startDateString
+            binding?.tvEndDateTxt?.text = endDateString
+        }
+
+    }
+
     private fun datePickerDialog() {
         // Creating a MaterialDatePicker builder for selecting a date range
         val builder = MaterialDatePicker.Builder.dateRangePicker()
@@ -238,20 +249,12 @@ class MyAttendanceDetailFragment : BaseFragment() {
 
             setDateView()
 
-            currentFilter = Custom
+            currentFilter = AttendanceFilter.Custom
             attendanceViewModel.getAttendanceDetail(getCurrentObject())
             eventSelection()
         }
 
         // Showing the date picker dialog
         datePicker.show(activity?.supportFragmentManager!!, "DATE_PICKER")
-    }
-
-    private fun setDateView() {
-        if (startDateString != null && endDateString != null) {
-            binding?.tvStartDateTxt?.text = startDateString
-            binding?.tvEndDateTxt?.text = endDateString
-        }
-
     }
 }

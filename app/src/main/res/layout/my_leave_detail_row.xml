@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv_date"
+            android:id="@+id/from_date"
             style="@style/TEXT_MEDIUM_BLACK_10"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -24,25 +24,25 @@
             android:gravity="start"
             android:paddingStart="@dimen/_5sdp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/tv_hour"
+            app:layout_constraintEnd_toStartOf="@+id/to_date"
             app:layout_constraintHorizontal_weight="3"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv_hour"
+            android:id="@+id/to_date"
             style="@style/TEXT_MEDIUM_BLACK_10"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:text="@string/_17_may_2024"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/tv_end"
+            app:layout_constraintEnd_toStartOf="@+id/tv_type"
             app:layout_constraintHorizontal_weight="3"
-            app:layout_constraintStart_toEndOf="@+id/tv_date"
+            app:layout_constraintStart_toEndOf="@+id/from_date"
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv_end"
+            android:id="@+id/tv_type"
             style="@style/TEXT_MEDIUM_BLACK_10"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -50,7 +50,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/tv_drop_down"
             app:layout_constraintHorizontal_weight="3"
-            app:layout_constraintStart_toEndOf="@+id/tv_hour"
+            app:layout_constraintStart_toEndOf="@+id/to_date"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
@@ -142,13 +142,13 @@
                         style="@style/TEXT_MEDIUM_GREY_10"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/total_hours"
+                        android:text="@string/leaves_days"
                         android:textAllCaps="true"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/tv_actual_in_txt"
+                        android:id="@+id/tv_leave_days"
                         style="@style/TEXT_MEDIUM_BLACK_10"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -180,13 +180,14 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/tv_work_home_txt"
+                        android:id="@+id/tv_paid"
                         style="@style/TEXT_MEDIUM_BLACK_10"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_5sdp"
                         android:background="@drawable/rounded_disabled"
                         android:text="Un Paid"
+
                         android:textColor="@color/red"
                         android:textAllCaps="true"
                         app:layout_constraintStart_toStartOf="parent"
@@ -211,7 +212,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/ly_shift_details" />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tv_shift_txt"
+                android:id="@+id/tv_reason"
                 style="@style/TEXT_MEDIUM_BLACK_10"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

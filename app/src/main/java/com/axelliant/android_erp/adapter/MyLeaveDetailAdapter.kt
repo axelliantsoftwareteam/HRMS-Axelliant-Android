@@ -1,17 +1,22 @@
 package com.axelliant.android_erp.adapter
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import com.axelliant.android_erp.R
 import com.axelliant.android_erp.Test
 import com.axelliant.android_erp.callback.AdapterItemClick
 import com.axelliant.android_erp.databinding.MyAttendanceDetailRowBinding
 import com.axelliant.android_erp.databinding.MyLeaveDetailRowBinding
+import com.axelliant.android_erp.extention.valueQualifier
+import com.axelliant.android_erp.model.leave.LeaveDetail
 
 class MyLeaveDetailAdapter(
-    private val list: List<Test>
+    private val leaves: ArrayList<LeaveDetail>,
+    private val mContext: Context
 ) :
     RecyclerView.Adapter<MyLeaveDetailAdapter.AccountsVH>() {
 
@@ -24,7 +29,7 @@ class MyLeaveDetailAdapter(
     }
 
     override fun onBindViewHolder(holder: AccountsVH, position: Int) {
-        holder.bind(list[position])
+        holder.bind(leaves[position], mContext)
 
         holder.binding.lyDropDown.isVisible = false
 
@@ -37,14 +42,29 @@ class MyLeaveDetailAdapter(
     }
 
     override fun getItemCount(): Int {
-        return list.size
+        return leaves.size
     }
 
     class AccountsVH(val binding: MyLeaveDetailRowBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: Test) {
-//            binding.tvTitle.text = item.title.toString()
+        fun bind(leaveDetail: LeaveDetail, mContext: Context) {
+            binding.fromDate.text = leaveDetail.from_date
+            binding.toDate.text = leaveDetail.to_date
+            binding.tvLeaveDays.text = leaveDetail.total_leave_days.toString()
+            if (leaveDetail.is_paid) {
+                binding.tvPaid.text = "Paid"
+                binding.tvPaid.setTextColor(mContext.getColor(R.color.black))
+
+            } else {
+                binding.tvPaid.text = "Un Paid"
+                binding.tvPaid.setTextColor(mContext.getColor(R.color.red))
+
+            }
+            binding.tvType.text = leaveDetail.leave_type
+
+            binding.tvReason.text = leaveDetail.leave_reason.valueQualifier()
+            binding.tvAttendStatus.text = leaveDetail.status
 
         }
     }

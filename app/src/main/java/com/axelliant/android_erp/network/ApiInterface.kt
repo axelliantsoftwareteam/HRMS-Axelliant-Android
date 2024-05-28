@@ -66,6 +66,11 @@ interface ApiInterface {
 
 //    "employee_list": ["HR-EMP-00744"]
 
+    @Headers("Content-Type: application/json")
+    @GET("hrms.hr.doctype.employee.leaves_mobile.get_leave_application_requests")
+    fun callMyLeaveDetail(@Query("start_date") start_date: String="2024-01-01",
+                           @Query("end_date") end_date: String = "2024-05-20"): retrofit2.Call<ResponseBody>
+
 
 
 }
