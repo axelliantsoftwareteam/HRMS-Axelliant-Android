@@ -62,6 +62,14 @@ class MyAttendanceDetailFragment : BaseFragment() {
         if (bundle != null) {
             emplId = bundle.getString(KEY_ID, GlobalConfig.currentEmployeeId())
         }
+        attendanceViewModel.getIsLoading()
+            .observe(viewLifecycleOwner, EventObserver { isLoading ->
+                if (isLoading) {
+                    showDialog()
+                } else {
+                    hideDialog()
+                }
+            })
 
         attendanceViewModel.getAttendanceDetail(getCurrentObject())
         eventSelection()

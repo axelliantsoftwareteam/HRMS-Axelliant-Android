@@ -18,6 +18,7 @@ import com.axelliant.android_erp.model.attendance.SelfAttendanceStats
 import com.axelliant.android_erp.model.attendance.TeamAttendanceStats
 import com.axelliant.android_erp.navigation.AppNavigator
 import com.axelliant.android_erp.viewmodel.AttendanceViewModel
+import com.axelliant.android_erp.viewmodel.LeaveViewModel
 import org.koin.android.ext.android.inject
 
 
@@ -44,6 +45,16 @@ class AttendanceStatsFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        attendanceViewModel.getIsLoading()
+            .observe(viewLifecycleOwner, EventObserver { isLoading ->
+                if (isLoading) {
+                    showDialog()
+                } else {
+                    hideDialog()
+                }
+            })
+
 
         val isManager = GlobalConfig.isCurrentManager()
 

@@ -11,19 +11,7 @@ import org.koin.android.ext.android.inject
 
 open class BaseFragment : Fragment() {
 
-    private val baseViewModel: BaseViewModel by inject()
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        baseViewModel.getIsLoading()
-            .observe(viewLifecycleOwner, EventObserver { isLoading ->
-                if (isLoading) {
-                    showDialog()
-                } else {
-                    hideDialog()
-                }
-            })
 
-    }
 
     fun previousFragmentNavigation(){
         showDialog()

@@ -16,13 +16,17 @@ import com.axelliant.android_erp.base.BaseFragment
 import com.axelliant.android_erp.callback.AdapterItemClick
 import com.axelliant.android_erp.databinding.FragmentMyTeamLeaveDetailBinding
 import com.axelliant.android_erp.enums.AttendanceFilter
+import com.axelliant.android_erp.event.EventObserver
 import com.axelliant.android_erp.extention.showSuccessMsg
+import com.axelliant.android_erp.viewmodel.LeaveViewModel
+import org.koin.android.ext.android.inject
 
 class TeamLeaveDetailFragment : BaseFragment() {
 
     private var _binding: FragmentMyTeamLeaveDetailBinding? = null
     private val binding get() = _binding
     private var currentFilter = AttendanceFilter.WEEK
+    private val leaveViewModel: LeaveViewModel by inject()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,6 +41,15 @@ class TeamLeaveDetailFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        leaveViewModel.getIsLoading()
+            .observe(viewLifecycleOwner, EventObserver { isLoading ->
+                if (isLoading) {
+                    showDialog()
+                } else {
+                    hideDialog()
+                }
+            })
 
         binding?.ivBack?.setOnClickListener {
             previousFragmentNavigation()
