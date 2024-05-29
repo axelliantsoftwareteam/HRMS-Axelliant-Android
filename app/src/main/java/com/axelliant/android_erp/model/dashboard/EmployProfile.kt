@@ -4,7 +4,7 @@ package com.axelliant.android_erp.model.dashboard
      val company: String?=null
      val date_of_birth: String?=null
      val employee_code: String?=null
-     val employee_name: String?=null
+     var employee_name: String?=null
      val gender: String?=null
      val image: String?=null
      val is_manager: Boolean=false

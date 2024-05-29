@@ -81,9 +81,6 @@ class MyLeaveDetailFragment : BaseFragment() {
 
             })
 
-
-
-
         subFilterPopulations()
     }
 

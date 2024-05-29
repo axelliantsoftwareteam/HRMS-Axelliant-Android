@@ -98,7 +98,7 @@
             android:background="@drawable/rounded_leave_filter"
             android:orientation="vertical"
 
-            app:layout_constraintBottom_toTopOf="@id/btn_mic_login"
+            app:layout_constraintBottom_toTopOf="@id/btn_apply"
             app:layout_constraintStart_toStartOf="@+id/start_guideline"
             app:layout_constraintEnd_toEndOf="@+id/end_guideline"
             app:layout_constraintTop_toBottomOf="@+id/ly_action_btn">
@@ -106,16 +106,19 @@
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
              >
+
+             <!-- leave request!-->
+
              <androidx.constraintlayout.widget.ConstraintLayout
                  android:id="@+id/ly_create_leave"
+                 android:visibility="gone"
                  android:layout_width="match_parent"
                  android:layout_height="wrap_content"
                  app:layout_constraintTop_toTopOf="parent"
                  app:layout_constraintBottom_toBottomOf="parent"
                  app:layout_constraintStart_toStartOf="parent"
                  app:layout_constraintEnd_toEndOf="parent"
-                 android:visibility="gone"
-                 android:layout_marginBottom="@dimen/_5sdp"
+                 android:paddingBottom="@dimen/_10sdp"
                  android:orientation="vertical">
 
                  <androidx.constraintlayout.widget.ConstraintLayout
@@ -185,12 +188,13 @@
                          android:id="@+id/sp_leave_type"
                          android:layout_width="0dp"
                          android:layout_height="match_parent"
-                         android:dropDownVerticalOffset="35dp"
-                         android:padding="2dp"
+                         android:overlapAnchor="false"
+                         android:padding="@dimen/_2sdp"
                          android:popupBackground="@drawable/ly_spiner_bg"
                          app:layout_constraintBottom_toBottomOf="parent"
                          app:layout_constraintEnd_toEndOf="parent"
                          app:layout_constraintStart_toStartOf="parent"
+                         tools:listitem="@layout/spinner_item"
                          tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
                  </androidx.constraintlayout.widget.ConstraintLayout>
@@ -282,7 +286,7 @@
                          android:text="@string/end_date"
                          android:textAlignment="textStart"
                          app:layout_constraintEnd_toEndOf="parent"
-                         app:layout_constraintStart_toEndOf="@id/divider_absent"
+                         app:layout_constraintStart_toStartOf="@+id/ly_end_date"
                          app:layout_constraintTop_toTopOf="parent" />
 
                      <androidx.constraintlayout.widget.ConstraintLayout
@@ -334,49 +338,53 @@
                      android:layout_height="wrap_content"
                      android:layout_margin="@dimen/_5sdp"
                      android:text="@string/reason_for_leave"
-                     app:layout_constraintBottom_toTopOf="@+id/ly_reason"
+                     app:layout_constraintBottom_toTopOf="@+id/til_leave_reason"
                      app:layout_constraintStart_toStartOf="parent"
                      app:layout_constraintTop_toBottomOf="@id/ly_range_date" />
 
-                 <androidx.constraintlayout.widget.ConstraintLayout
-                     android:id="@+id/ly_reason"
+
+                 <com.google.android.material.textfield.TextInputLayout
+                     android:id="@+id/til_leave_reason"
+                     style="@style/OutlinedTextInputLayoutReason"
                      android:layout_width="0dp"
-                     android:layout_height="@dimen/_100sdp"
-                     android:layout_marginTop="@dimen/_5sdp"
-                     android:layout_marginEnd="@dimen/_5sdp"
-                     android:background="@drawable/rounded_leave_filter"
-                     android:orientation="vertical"
-                     android:padding="@dimen/_5sdp"
+                     android:layout_height="wrap_content"
+                     android:layout_marginTop="@dimen/_10sdp"
                      app:layout_constraintEnd_toEndOf="parent"
+                     android:layout_marginEnd="@dimen/_5sdp"
                      app:layout_constraintStart_toStartOf="@+id/tv_reason_header"
                      app:layout_constraintTop_toBottomOf="@+id/tv_reason_header">
 
-                     <com.google.android.material.textview.MaterialTextView
-                         android:id="@+id/tv_reason"
+                     <com.google.android.material.textfield.TextInputEditText
+                         android:id="@+id/et_leave_reason"
                          style="@style/TEXT_MEDIUM_BLACK_10"
-                         android:layout_width="0dp"
-                         android:layout_height="match_parent"
-                         android:gravity="start"
+                         android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+                         android:gravity="start|top"
+                         android:inputType="textMultiLine"
+                         android:minLines="4"
                          android:maxLines="8"
-                         android:text=""
-                         android:textAlignment="textStart"
-                         app:layout_constraintEnd_toEndOf="parent"
-                         app:layout_constraintStart_toStartOf="parent"
-                         app:layout_constraintTop_toTopOf="parent" />
+                         android:singleLine="false"
+                         tools:text="asdjklajsd kklasnkas jljlk askdjaklsdjaklsdjkasl djklasdjklasjdkl asjkld aklsdjilas jdlaisdouasoduio asudoi asioduasioduioasudoasudoads asdabskd bakjsdhakjsdh kjasdhash djk ahsd kjashdkjs asdjklajsd kklasnkas jljlk askdjaklsdjaklsdjkasl djklasdjklasjdkl asjkld aklsdjilas jdlaisdouasoduio asudoi asioduasioduioasudoasudoads asdabskd bakjsdhakjsdh kjasdhash djk ahsd kjashdkjs asdjklajsd kklasnkas jljlk askdjaklsdjaklsdjkasl djklasdjklasjdkl asjkld aklsdjilas jdlaisdouasoduio asudoi asioduasioduioasudoasudoads asdabskd bakjsdhakjsdh kjasdhash djk ahsd kjashdkjs"
+                         android:textColorHint="@color/grey" />
 
-                 </androidx.constraintlayout.widget.ConstraintLayout>
+                 </com.google.android.material.textfield.TextInputLayout>
+
 
 
              </androidx.constraintlayout.widget.ConstraintLayout>
+
+             <!-- attendance request!-->
+
              <androidx.constraintlayout.widget.ConstraintLayout
                  android:id="@+id/ly_create_attend"
+                 android:visibility="visible"
                  android:layout_width="match_parent"
                  android:layout_height="wrap_content"
                  app:layout_constraintTop_toTopOf="parent"
                  app:layout_constraintBottom_toBottomOf="parent"
                  app:layout_constraintStart_toStartOf="parent"
                  app:layout_constraintEnd_toEndOf="parent"
-                 android:visibility="visible"
+                 android:paddingBottom="@dimen/_10sdp"
                  android:orientation="vertical">
 
                  <androidx.constraintlayout.widget.ConstraintLayout
@@ -446,8 +454,9 @@
                          android:id="@+id/sp_attend_type"
                          android:layout_width="0dp"
                          android:layout_height="match_parent"
-                         android:dropDownVerticalOffset="35dp"
-                         android:padding="2dp"
+                         android:overlapAnchor="false"
+                         android:padding="@dimen/_2sdp"
+                         tools:listitem="@layout/spinner_item"
                          android:popupBackground="@drawable/ly_spiner_bg"
                          app:layout_constraintBottom_toBottomOf="parent"
                          app:layout_constraintEnd_toEndOf="parent"
@@ -485,8 +494,9 @@
                          android:id="@+id/sp_loc_type"
                          android:layout_width="0dp"
                          android:layout_height="match_parent"
-                         android:dropDownVerticalOffset="35dp"
-                         android:padding="2dp"
+                         android:overlapAnchor="false"
+                         android:padding="@dimen/_2sdp"
+                         tools:listitem="@layout/spinner_item"
                          android:popupBackground="@drawable/ly_spiner_bg"
                          app:layout_constraintBottom_toBottomOf="parent"
                          app:layout_constraintEnd_toEndOf="parent"
@@ -559,43 +569,45 @@
                      app:layout_constraintStart_toStartOf="parent"
                      app:layout_constraintTop_toBottomOf="@id/ly_date" />
 
-                 <androidx.constraintlayout.widget.ConstraintLayout
-                     android:id="@+id/ly_attend_reason"
+                 <com.google.android.material.textfield.TextInputLayout
+                     android:id="@+id/til_attendance_reason"
+                     style="@style/OutlinedTextInputLayoutReason"
+
                      android:layout_width="0dp"
-                     android:layout_height="@dimen/_100sdp"
-                     android:layout_marginTop="@dimen/_5sdp"
+                     android:gravity="start|top"
+                     android:layout_height="wrap_content"
+                     android:layout_marginTop="@dimen/_2sdp"
                      android:layout_marginEnd="@dimen/_5sdp"
-                     android:background="@drawable/rounded_leave_filter"
-                     android:orientation="vertical"
-                     android:padding="@dimen/_5sdp"
                      app:layout_constraintEnd_toEndOf="parent"
                      app:layout_constraintStart_toStartOf="@+id/tv_attend_reason_header"
                      app:layout_constraintTop_toBottomOf="@+id/tv_attend_reason_header">
 
-                     <com.google.android.material.textview.MaterialTextView
-                         android:id="@+id/tv_attend_reason"
+                     <com.google.android.material.textfield.TextInputEditText
+                         android:id="@+id/et_attendance_reason"
                          style="@style/TEXT_MEDIUM_BLACK_10"
-                         android:layout_width="0dp"
-                         android:layout_height="match_parent"
-                         android:gravity="start"
+                         android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+                         android:gravity="start|top"
+                         android:inputType="textMultiLine"
+                         android:minLines="4"
                          android:maxLines="8"
-                         android:text=""
-                         android:textAlignment="textStart"
-                         app:layout_constraintEnd_toEndOf="parent"
-                         app:layout_constraintStart_toStartOf="parent"
-                         app:layout_constraintTop_toTopOf="parent" />
+                         android:singleLine="false"
+                         tools:text="asdjklajsd kklasnkas jljlk askdjaklsdjaklsdjkasl djklasdjklasjdkl asjkld aklsdjilas jdlaisdouasoduio asudoi asioduasioduioasudoasudoads asdabskd bakjsdhakjsdh kjasdhash djk ahsd kjashdkjs asdjklajsd kklasnkas jljlk askdjaklsdjaklsdjkasl djklasdjklasjdkl asjkld aklsdjilas jdlaisdouasoduio asudoi asioduasioduioasudoasudoads asdabskd bakjsdhakjsdh kjasdhash djk ahsd kjashdkjs asdjklajsd kklasnkas jljlk askdjaklsdjaklsdjkasl djklasdjklasjdkl asjkld aklsdjilas jdlaisdouasoduio asudoi asioduasioduioasudoasudoads asdabskd bakjsdhakjsdh kjasdhash djk ahsd kjashdkjs"
+                         android:textColorHint="@color/grey" />
 
-                 </androidx.constraintlayout.widget.ConstraintLayout>
+                 </com.google.android.material.textfield.TextInputLayout>
 
 
              </androidx.constraintlayout.widget.ConstraintLayout>
+
+
          </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.core.widget.NestedScrollView>
 
 
         <com.axelliant.android_erp.components.RoundedButton
-            android:id="@+id/btn_mic_login"
+            android:id="@+id/btn_apply"
             style="@style/ButtonTextStyle"
             android:layout_width="0dp"
             android:layout_height="@dimen/_40sdp"

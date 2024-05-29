@@ -8,12 +8,22 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import com.axelliant.android_erp.R
 import com.axelliant.android_erp.Test
+import com.axelliant.android_erp.adapter.CustomSpinnerAdapter
 import com.axelliant.android_erp.adapter.PersonSpinnerAdapter
 import com.axelliant.android_erp.base.BaseFragment
 import com.axelliant.android_erp.databinding.FragmentRequestBinding
 import com.axelliant.android_erp.enums.RequestFilter
+import com.axelliant.android_erp.event.EventObserver
+import com.axelliant.android_erp.extention.showErrorMsg
+import com.axelliant.android_erp.extention.showSuccessMsg
+import com.axelliant.android_erp.model.post.AttendanceRequest
+import com.axelliant.android_erp.model.post.LeaveRequest
 import com.axelliant.android_erp.navigation.AppNavigator
+import com.axelliant.android_erp.utils.Utils
+import com.axelliant.android_erp.viewmodel.LeaveViewModel
+import com.axelliant.android_erp.viewmodel.RequestViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
+import org.koin.android.ext.android.inject
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -23,12 +33,16 @@ import java.util.Locale
 class RequestFragment : BaseFragment() {
 
     private var currentFilter = RequestFilter.LEAVE
+    private var currentDateString: String? = null
+
     private var startDateString: String? = null
     private var endDateString: String? = null
     private var selectedDateRange: String? = null
 
     private var _binding: FragmentRequestBinding? = null
     private val binding get() = _binding
+
+    private val requestViewModel: RequestViewModel by inject()
 
 
     override fun onCreateView(
@@ -44,6 +58,41 @@ class RequestFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        requestViewModel.getIsLoading()
+            .observe(viewLifecycleOwner, EventObserver { isLoading ->
+                if (isLoading) {
+                    showDialog()
+                } else {
+                    hideDialog()
+                }
+            })
+
+        requestViewModel.leaveRequestResponse.observe(
+            viewLifecycleOwner,
+            EventObserver { response ->
+
+                if (response?.meta?.status == true) {
+                    requireContext().showSuccessMsg("success")
+                } else {
+                    requireContext().showErrorMsg(response?.meta?.message.toString())
+                }
+
+            })
+
+
+        requestViewModel.attendanceRequestResponse.observe(
+            viewLifecycleOwner,
+            EventObserver { response ->
+
+                if (response?.meta?.status == true) {
+                    requireContext().showSuccessMsg("success")
+                } else {
+                    requireContext().showErrorMsg(response?.meta?.message.toString())
+                }
+
+            })
+
+
         eventSelection()
         spinnerLeavePopulations()
         spinnerAttendTypePopulations()
@@ -53,10 +102,60 @@ class RequestFragment : BaseFragment() {
         }
 
         binding?.lyDate?.setOnClickListener {
-          pickDate()
+            pickDate()
         }
         binding?.lyStartDate?.setOnClickListener {
             datePickerDialog()
+        }
+
+        binding?.btnApply?.setOnClickListener {
+
+            when (currentFilter) {
+                RequestFilter.LEAVE -> {
+
+                    if (binding!!.spLeaveType.selectedItemPosition == 0) {
+                        requireContext().showErrorMsg("Please select leave type")
+                    } else if (startDateString == null) {
+                        requireContext().showErrorMsg("Please select start date")
+                    } else if (endDateString == null) {
+                        requireContext().showErrorMsg("Please select end date")
+                    } else {
+                        requestViewModel.postLeaveQuest(LeaveRequest().apply {
+                            this.start_date = startDateString
+                            this.end_date = endDateString
+                            this.leave_reason = binding!!.etLeaveReason.text.toString()
+                            this.leave_type = binding!!.spLeaveType.selectedItem.toString()
+
+                        })
+
+                    }
+
+                }
+
+                RequestFilter.ATTENDANCE -> {
+
+                    if (binding!!.spAttendType.selectedItemPosition == 0) {
+                        requireContext().showErrorMsg("Please select attendance type")
+                    } else if (binding!!.spLocType.selectedItemPosition == 0) {
+                        requireContext().showErrorMsg("Please select location")
+                    } else if (currentDateString == null) {
+                        requireContext().showErrorMsg("Please select date")
+                    } else {
+
+                        requestViewModel.postAttendanceQuest(AttendanceRequest().apply {
+                            this.date = currentDateString
+                            this.location_type = binding!!.spLocType.selectedItem.toString()
+                            this.attendance_type = binding!!.spAttendType.selectedItem.toString()
+                            this.attendance_reason = binding!!.etLeaveReason.text.toString()
+
+                        })
+
+
+                    }
+
+                }
+            }
+
         }
     }
 
@@ -66,15 +165,14 @@ class RequestFragment : BaseFragment() {
         val month = c.get(Calendar.MONTH)
         val day = c.get(Calendar.DAY_OF_MONTH)
         val datePickerDialog = DatePickerDialog(
-            requireActivity(),R.style.my_dialog_theme, // Apply the theme here
+            requireActivity(), R.style.my_dialog_theme, // Apply the theme here
             { view, year, monthOfYear, dayOfMonth ->
                 val selectedDate = Calendar.getInstance()
                 selectedDate.set(year, monthOfYear, dayOfMonth)
 
                 // Format the date using SimpleDateFormat
-                val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-                val formattedDate = sdf.format(selectedDate.time)
-                binding?.tvDateTxt?.text =formattedDate
+                currentDateString = Utils.getServerFormat(date = selectedDate.time)
+                binding?.tvDateTxt?.text = currentDateString
             },
             year,
             month,
@@ -84,6 +182,7 @@ class RequestFragment : BaseFragment() {
         datePickerDialog.datePicker.maxDate = c.timeInMillis
         datePickerDialog.show()
     }
+
     private fun datePickerDialog() {
         // Creating a MaterialDatePicker builder for selecting a date range
         val builder = MaterialDatePicker.Builder.dateRangePicker()
@@ -97,9 +196,9 @@ class RequestFragment : BaseFragment() {
             val endDate = selection.second
 
             // Formatting the selected dates as strings
-            val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-            startDateString = sdf.format(Date(startDate))
-            endDateString = sdf.format(Date(endDate))
+
+            startDateString = Utils.getServerFormat(date = Date(startDate))
+            endDateString = Utils.getServerFormat(date = Date(endDate))
 
             // Creating the date range string
             selectedDateRange = "$startDateString - $endDateString"
@@ -109,6 +208,7 @@ class RequestFragment : BaseFragment() {
         // Showing the date picker dialog
         datePicker.show(activity?.supportFragmentManager!!, "DATE_PICKER")
     }
+
     private fun setDateView() {
         if (startDateString != null && endDateString != null) {
             binding?.tvStartDateTxt?.text = startDateString
@@ -170,8 +270,8 @@ class RequestFragment : BaseFragment() {
 
     private fun spinnerLeavePopulations() {
 
-        val adapter = PersonSpinnerAdapter(
-            requireContext(), listOf(
+        val adapter = CustomSpinnerAdapter(
+            requireContext(), arrayListOf(
                 Test("Select leave type"),
                 Test("Sick"),
                 Test("Annual"),
@@ -188,8 +288,8 @@ class RequestFragment : BaseFragment() {
 
     private fun spinnerAttendTypePopulations() {
 
-        val adapter = PersonSpinnerAdapter(
-            requireContext(), listOf(
+        val adapter = CustomSpinnerAdapter(
+            requireContext(), arrayListOf(
                 Test("Select Attendance type"),
                 Test("Check-Out"),
                 Test("Check-In")
@@ -201,8 +301,8 @@ class RequestFragment : BaseFragment() {
 
     private fun spinnerLocTypePopulations() {
 
-        val adapter = PersonSpinnerAdapter(
-            requireContext(), listOf(
+        val adapter = CustomSpinnerAdapter(
+            requireContext(), arrayListOf(
                 Test("Select Location"),
                 Test("In office"),
                 Test("Work from home")

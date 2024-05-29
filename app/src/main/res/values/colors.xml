@@ -36,5 +36,6 @@
     <color name="yellow">#FFB532</color>
     <color name="greeny">#8ED17D</color>
     <color name="purple">#6E4BA7</color>
+    <color name="border">#EAEAEA</color>
 
 </resources>

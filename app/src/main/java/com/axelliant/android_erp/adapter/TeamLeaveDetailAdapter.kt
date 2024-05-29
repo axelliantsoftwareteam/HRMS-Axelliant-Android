@@ -10,9 +10,10 @@ import com.axelliant.android_erp.callback.AdapterItemClick
 import com.axelliant.android_erp.databinding.MyAttendanceDetailRowBinding
 import com.axelliant.android_erp.databinding.MyTeamAttendRowBinding
 import com.axelliant.android_erp.databinding.MyTeamLeaveRowBinding
+import com.axelliant.android_erp.model.leave.TeamLeaveDetail
 
 class TeamLeaveDetailAdapter(
-    private val list: List<Test>
+    private val leaves: ArrayList<TeamLeaveDetail>
 ) :
     RecyclerView.Adapter<TeamLeaveDetailAdapter.AccountsVH>() {
 
@@ -24,7 +25,7 @@ class TeamLeaveDetailAdapter(
     }
 
     override fun onBindViewHolder(holder: AccountsVH, position: Int) {
-        holder.bind(list[position])
+        holder.bind(leaves[position])
         holder.binding.lyDropDown.isVisible = false
 
         holder.binding.tvDropDown.setOnClickListener {
@@ -34,14 +35,22 @@ class TeamLeaveDetailAdapter(
     }
 
     override fun getItemCount(): Int {
-        return list.size
+        return leaves.size
     }
 
     class AccountsVH(val binding: MyTeamLeaveRowBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: Test) {
-//            binding.tvTitle.text = item.title.toString()
+        fun bind(teamLeaveDetail: TeamLeaveDetail) {
+            binding.tvName.text = teamLeaveDetail.employee_name
+            binding.tvPostingDate.text = teamLeaveDetail.post_date
+            binding.tvDesignation.text = teamLeaveDetail.designation
+            binding.tvAttendStatus.text = teamLeaveDetail.status
+            binding.tvFromDateTxt.text = teamLeaveDetail.from_date
+            binding.tvToDateTxt.text = teamLeaveDetail.to_date
+            binding.tvLeaveTypeTxt.text = teamLeaveDetail.leave_type
+            binding.tvLeaveApproverTxt.text = teamLeaveDetail.leave_approver
+            binding.tvReasonTxt.text = teamLeaveDetail.leave_approver
 
         }
     }

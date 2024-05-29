@@ -8,10 +8,10 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import com.axelliant.android_erp.R
-import com.axelliant.android_erp.model.dashboard.EmployProfile
+import com.axelliant.android_erp.Test
 
-class PersonSpinnerAdapter(context: Context, private val employsList: ArrayList<EmployProfile>)
-    : ArrayAdapter<EmployProfile>(context, 0, employsList) {
+class CustomSpinnerAdapter(context: Context, private val list: ArrayList<Test>)
+    : ArrayAdapter<Test>(context, 0, list) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         return createViewFromResource(position, convertView, parent, R.layout.spinner_item)
@@ -30,7 +30,7 @@ class PersonSpinnerAdapter(context: Context, private val employsList: ArrayList<
 
         item?.let {
 //            imageView.setImageResource(it.imageResource)
-            textView.text = it.employee_name
+            textView.text = it.testString
         }
 
         return view

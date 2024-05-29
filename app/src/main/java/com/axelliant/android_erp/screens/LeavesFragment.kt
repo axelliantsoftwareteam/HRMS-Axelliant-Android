@@ -5,12 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.axelliant.android_erp.R
+import com.axelliant.android_erp.Test
 import com.axelliant.android_erp.adapter.RemainingLeaveAdapter
+import com.axelliant.android_erp.adapter.UpcomingLeaveAdapter
 
 import com.axelliant.android_erp.base.BaseFragment
 import com.axelliant.android_erp.callback.AdapterItemClick
+import com.axelliant.android_erp.config.GlobalConfig
 import com.axelliant.android_erp.databinding.FragmentLeavesBinding
 import com.axelliant.android_erp.enums.AttendanceFilter
 import com.axelliant.android_erp.event.EventObserver
@@ -56,6 +62,11 @@ class LeavesFragment : BaseFragment() {
                 }
             })
 
+        val isManager = GlobalConfig.isCurrentManager()
+        binding?.tvMyTeam?.isVisible = isManager
+        binding?.tvMyTeamView?.isVisible = isManager
+        binding?.lyMyteamAttend?.isVisible = isManager
+
         leaveViewModel.getLeaveStats(getCurrentObject())
         eventSelection()
 
@@ -88,6 +99,8 @@ class LeavesFragment : BaseFragment() {
             AppNavigator.moveBackToPreviousFragment()
 
         }
+
+        upcomingLeavePopulate()
 
     }
 
@@ -146,6 +159,34 @@ class LeavesFragment : BaseFragment() {
 
     }
 
+
+    private fun upcomingLeavePopulate() {
+
+        val testArray: ArrayList<Test> = arrayListOf(
+            Test(
+                "item1"
+            ), Test(
+                "item1"
+            ), Test(
+                "item1"
+            ), Test(
+                "item1"
+            ), Test(
+                "item1"
+            )
+        )
+
+
+        binding?.rvUpcomingLeaves?.layoutManager =
+            LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+        val modulesAdapter = UpcomingLeaveAdapter(
+            testArray
+        )
+        binding?.rvUpcomingLeaves?.adapter = modulesAdapter
+        binding?.rvUpcomingLeaves?.isNestedScrollingEnabled = false
+
+
+    }
 
     private fun selfAttendanceStats(selfStats: SelfLeaveStats) {
 

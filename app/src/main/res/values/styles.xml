@@ -323,6 +323,29 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">@dimen/_15ssp</item> <!-- Adjust the corner size as needed -->
     </style>
+
+
+
+    <style name="OutlinedTextInputLayoutReason" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/border</item>
+
+        <item name="colorPrimary">@color/border</item>
+        <item name="shapeAppearanceOverlay">@style/RoundCornerShapeAppearanceOverlayReason</item>
+        <item name="hintEnabled">false</item>
+        <item name="boxStrokeWidth">@dimen/_1sdp</item>
+        <item name="boxStrokeWidthFocused">@dimen/_1sdp</item>
+
+
+    </style>
+    <!--    rounded corner-->
+    <style name="RoundCornerShapeAppearanceOverlayReason" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">@dimen/_8sdp</item> <!-- Adjust the corner size as needed -->
+    </style>
+
+
+
+
     <style name="CustomDatePickerDialog" parent="Theme.AppCompat.Light.Dialog">
         <!-- Customize your theme -->
         <item name="android:datePickerDialogTheme">@style/CustomDatePicker</item>

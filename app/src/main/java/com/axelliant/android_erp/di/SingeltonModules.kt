@@ -6,11 +6,13 @@ import com.axelliant.android_erp.repos.AttendanceRepo
 import com.axelliant.android_erp.repos.HomeRepo
 import com.axelliant.android_erp.repos.LeaveRepo
 import com.axelliant.android_erp.repos.LoginRepo
+import com.axelliant.android_erp.repos.RequestRepo
 import com.axelliant.android_erp.viewmodel.AttendanceViewModel
 import com.axelliant.android_erp.viewmodel.BaseViewModel
 import com.axelliant.android_erp.viewmodel.HomeViewModel
 import com.axelliant.android_erp.viewmodel.LeaveViewModel
 import com.axelliant.android_erp.viewmodel.LoginViewModel
+import com.axelliant.android_erp.viewmodel.RequestViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -27,6 +29,7 @@ val viewModelModule = module {
     viewModel { HomeViewModel(get()) }
     viewModel { AttendanceViewModel(get()) }
     viewModel { LeaveViewModel(get()) }
+    viewModel { RequestViewModel(get()) }
     viewModel { BaseViewModel() }
 
 }
@@ -36,5 +39,6 @@ val factoryModule = module {
     factory { HomeRepo(get()) }
     factory { AttendanceRepo(get()) }
     factory { LeaveRepo(get()) }
+    factory { RequestRepo(get()) }
 
 }

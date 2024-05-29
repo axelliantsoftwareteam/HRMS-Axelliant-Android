@@ -13,6 +13,7 @@ import com.axelliant.android_erp.adapter.TeamAttendanceDetailAdapter
 import com.axelliant.android_erp.base.BaseFragment
 import com.axelliant.android_erp.callback.AdapterItemClick
 import com.axelliant.android_erp.config.AppConst.KEY_ID
+import com.axelliant.android_erp.config.GlobalConfig
 import com.axelliant.android_erp.databinding.FragmentTeamAttendanceDetailBinding
 import com.axelliant.android_erp.enums.AttendanceFilter
 import com.axelliant.android_erp.event.EventObserver
@@ -106,9 +107,9 @@ class TeamAttendanceDetailFragment : BaseFragment() {
             val endDate = selection.second
 
             // Formatting the selected dates as strings
-            val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-            startDateString = sdf.format(Date(startDate))
-            endDateString = sdf.format(Date(endDate))
+
+            startDateString = Utils.getServerFormat(date = Date(startDate))
+            endDateString = Utils.getServerFormat(date = Date(endDate))
 
             // Creating the date range string
             selectedDateRange = "$startDateString - $endDateString"
@@ -130,15 +131,7 @@ class TeamAttendanceDetailFragment : BaseFragment() {
     private fun spinnerPopulations() {
 
         val adapter = PersonSpinnerAdapter(
-            requireContext(), listOf(
-                Test("All Team"),
-                Test("Adnan Maqbool"),
-                Test("Muhammad Arslan"),
-                Test("Munir Ahmad"),
-                Test("Zeeshan Rasool"),
-                Test("Amjad Ali"),
-                Test("Ali Aslam")
-            )
+            requireContext(), GlobalConfig.getReportingEmploys()
         )
         binding?.spTeamMember?.adapter = adapter
 

@@ -11,5 +11,4 @@ object AppConst {
     const val DATE_FORMAT =  "dd MMM,yyyy"
     const val SERVER_DATE_FORMAT =  "yyyy-MM-dd"
 
-
 }

@@ -10,7 +10,8 @@ import com.axelliant.android_erp.model.base.BaseApiModel
 import com.axelliant.android_erp.model.base.BaseModel
 import com.axelliant.android_erp.model.base.Meta
 import com.axelliant.android_erp.model.leave.MyLeaveDetailResponse
-import com.axelliant.android_erp.model.leave.TeamLeaveDetailResponse
+import com.axelliant.android_erp.model.post.AttendanceRequest
+import com.axelliant.android_erp.model.post.LeaveRequest
 import com.axelliant.android_erp.network.ApiInterface
 import com.axelliant.android_erp.network.BaseCallBack
 import com.google.gson.Gson
@@ -20,12 +21,49 @@ import retrofit2.Call
 import retrofit2.Response
 import java.lang.reflect.Type
 
-class LeaveRepo(private var apiInterface: ApiInterface) {
+class RequestRepo(private var apiInterface: ApiInterface) {
 
-    fun getLeaveStats(attendanceInput: AttendanceInput): MutableLiveData<BaseApiModel<LeaveResponse>> {
+    fun postLeaveRequest(leaveRequest: LeaveRequest): MutableLiveData<BaseApiModel<LeaveResponse>> {
         val serverResponse = MutableLiveData<BaseApiModel<LeaveResponse>>()
 
-        val call: Call<ResponseBody>  = apiInterface.callLeaveWeekStats(start_date = attendanceInput.startDate, end_date = attendanceInput.endDate)
+        val call: Call<ResponseBody>  = apiInterface.postLeaveRequest(leaveRequest)
+
+        Log.e("HTTP Request", " " + call?.request().toString())
+
+        call.enqueue(object : BaseCallBack<ResponseBody>(call) {
+            override fun onFinalSuccess(
+                call: Call<ResponseBody>,
+                response: Response<ResponseBody>
+            ) {
+
+                Log.e("API success", " " + response.body())
+
+                val type: Type = object : TypeToken<BaseApiModel<LeaveResponse>>() {}.type
+                val jsonString = response.body()?.string()
+                val userModel = Gson().fromJson<BaseApiModel<LeaveResponse>>(jsonString, type)
+                serverResponse.value = userModel
+            }
+
+
+            override fun onFinalFailure(
+                errorString: String?
+            ) {
+
+                Log.e("API Failure", " $errorString")
+
+                serverResponse.value =
+                    BaseApiModel(BaseModel(LeaveResponse(meta = Meta("", false))))
+
+            }
+
+        })
+
+        return serverResponse
+    }
+    fun postAttendanceRequest(attendanceRequest: AttendanceRequest): MutableLiveData<BaseApiModel<LeaveResponse>> {
+        val serverResponse = MutableLiveData<BaseApiModel<LeaveResponse>>()
+
+        val call: Call<ResponseBody>  = apiInterface.postAttendanceRequest(attendanceRequest)
 
         Log.e("HTTP Request", " " + call?.request().toString())
 
@@ -60,83 +98,5 @@ class LeaveRepo(private var apiInterface: ApiInterface) {
         return serverResponse
     }
 
-
-
-    fun getMyLeaveDetail(attendanceInput: AttendanceInput): MutableLiveData<BaseApiModel<MyLeaveDetailResponse>> {
-        val serverResponse = MutableLiveData<BaseApiModel<MyLeaveDetailResponse>>()
-
-        val call: Call<ResponseBody>  = apiInterface.callMyLeaveDetail(start_date = attendanceInput.startDate, end_date = attendanceInput.endDate)
-
-        Log.e("HTTP Request", " " + call?.request().toString())
-
-        call.enqueue(object : BaseCallBack<ResponseBody>(call) {
-            override fun onFinalSuccess(
-                call: Call<ResponseBody>,
-                response: Response<ResponseBody>
-            ) {
-
-                Log.e("API success", " " + response.body())
-
-                val type: Type = object : TypeToken<BaseApiModel<MyLeaveDetailResponse>>() {}.type
-                val jsonString = response.body()?.string()
-                val userModel = Gson().fromJson<BaseApiModel<MyLeaveDetailResponse>>(jsonString, type)
-                serverResponse.value = userModel
-            }
-
-
-            override fun onFinalFailure(
-                errorString: String?
-            ) {
-
-                Log.e("API Failure", " $errorString")
-
-                serverResponse.value =
-                    BaseApiModel(BaseModel(MyLeaveDetailResponse(meta = Meta("", false))))
-
-            }
-
-        })
-
-        return serverResponse
-    }
-
-
-    fun getTeamLeaveDetail(attendanceInput: AttendanceInput): MutableLiveData<BaseApiModel<TeamLeaveDetailResponse>> {
-        val serverResponse = MutableLiveData<BaseApiModel<TeamLeaveDetailResponse>>()
-
-        val call: Call<ResponseBody>  = apiInterface.callTeamLeaveDetail(start_date = attendanceInput.startDate, end_date = attendanceInput.endDate)
-
-        Log.e("HTTP Request", " " + call?.request().toString())
-
-        call.enqueue(object : BaseCallBack<ResponseBody>(call) {
-            override fun onFinalSuccess(
-                call: Call<ResponseBody>,
-                response: Response<ResponseBody>
-            ) {
-
-                Log.e("API success", " " + response.body())
-
-                val type: Type = object : TypeToken<BaseApiModel<TeamLeaveDetailResponse>>() {}.type
-                val jsonString = response.body()?.string()
-                val userModel = Gson().fromJson<BaseApiModel<TeamLeaveDetailResponse>>(jsonString, type)
-                serverResponse.value = userModel
-            }
-
-
-            override fun onFinalFailure(
-                errorString: String?
-            ) {
-
-                Log.e("API Failure", " $errorString")
-
-                serverResponse.value =
-                    BaseApiModel(BaseModel(TeamLeaveDetailResponse(meta = Meta("", false))))
-
-            }
-
-        })
-
-        return serverResponse
-    }
 
 }

@@ -1,6 +1,8 @@
 package com.axelliant.android_erp.network
 
 import com.axelliant.android_erp.di.TestModelInjection
+import com.axelliant.android_erp.model.post.AttendanceRequest
+import com.axelliant.android_erp.model.post.LeaveRequest
 import okhttp3.ResponseBody;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -73,4 +75,21 @@ interface ApiInterface {
 
 
 
+    @Headers("Content-Type: application/json")
+    @GET("hrms.hr.doctype.employee.leaves_mobile.get_leave_application_requests")
+    fun callTeamLeaveDetail(@Query("start_date") start_date: String="2024-01-01",
+                          @Query("end_date") end_date: String = "2024-05-20"): retrofit2.Call<ResponseBody>
+
+
+
+
+
+    @Headers("Content-Type: application/json")
+    @POST("register/")
+    fun postLeaveRequest(@Body leaveRequest: LeaveRequest?): retrofit2.Call<ResponseBody>
+
+
+    @Headers("Content-Type: application/json")
+    @POST("register/")
+    fun postAttendanceRequest(@Body attendanceRequest: AttendanceRequest?): retrofit2.Call<ResponseBody>
 }
