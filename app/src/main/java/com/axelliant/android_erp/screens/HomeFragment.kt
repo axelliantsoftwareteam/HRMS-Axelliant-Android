@@ -9,6 +9,7 @@ import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,6 +38,11 @@ import com.axelliant.android_erp.model.dashboard.Birthday
 import com.axelliant.android_erp.model.dashboard.EmployProfile
 import com.axelliant.android_erp.navigation.AppNavigator
 import com.axelliant.android_erp.viewmodel.HomeViewModel
+import com.microsoft.identity.client.IAccount
+import com.microsoft.identity.client.IPublicClientApplication
+import com.microsoft.identity.client.ISingleAccountPublicClientApplication
+import com.microsoft.identity.client.PublicClientApplication
+import com.microsoft.identity.client.exception.MsalException
 import org.koin.android.ext.android.inject
 import java.io.IOException
 import java.util.Locale
@@ -51,7 +57,10 @@ class HomeFragment : BaseFragment() {
     private lateinit var locationManager: LocationManager
 
     private val homeViewModel: HomeViewModel by inject()
-
+    /* Azure AD Variables */
+    private var mSingleAccountApp: ISingleAccountPublicClientApplication? = null
+    private val scopes = arrayOf("User.Read")
+    private var mAccount: IAccount? = null
 
     private val gpsLocationListener: LocationListener = object : LocationListener {
         override fun onLocationChanged(location: Location) {
@@ -195,13 +204,45 @@ class HomeFragment : BaseFragment() {
         binding?.ivQr?.setOnClickListener {
             requireContext().showSuccessMsg()
         }
-        binding?.ivNotification?.setOnClickListener {
-            requireContext().showSuccessMsg()
-        }
+        binding?.ivNotification?.setOnClickListener(View.OnClickListener {
+                if (mSingleAccountApp == null) {
+                    return@OnClickListener
+                }
+                /*
+                 * Removes the signed-in account and cached tokens from this app (or device, if the device is in shared mode).
+               */
+                mSingleAccountApp!!.signOut(object :
+                    ISingleAccountPublicClientApplication.SignOutCallback {
+                    override fun onSignOut() {
+                        mAccount = null
+                        requireContext().showErrorMsg("Sign Out")
+                        AppNavigator.navigateToLogin()
+                    }
+                    override fun onError(exception: MsalException) {
+                        requireContext().showErrorMsg(exception.toString())
+                    }
+                })
+            })
 
         binding?.btnCheckIn?.setOnClickListener {
             requireContext().showSuccessMsg()
         }
+
+        PublicClientApplication.createSingleAccountPublicClientApplication(
+            requireContext(),
+            R.raw.auth_config_ciam_auth,
+            object : IPublicClientApplication.ISingleAccountApplicationCreatedListener {
+                override fun onCreated(application: ISingleAccountPublicClientApplication) {
+                    mSingleAccountApp = application
+                }
+
+                override fun onError(exception: MsalException) {
+                    // Handle the exception
+                    requireContext().showErrorMsg(exception.toString())
+                    Log.d(HomeFragment.TAG, exception.toString())
+
+                }
+            })
 
     }
 
@@ -312,5 +353,7 @@ class HomeFragment : BaseFragment() {
 
 
     }
-
+    companion object {
+        private val TAG = HomeFragment::class.java.simpleName
+    }
 }

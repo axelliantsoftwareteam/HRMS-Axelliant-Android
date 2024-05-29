@@ -1,7 +1,9 @@
 package com.axelliant.android_erp.network
 
 import com.axelliant.android_erp.di.TestModelInjection
+import com.axelliant.android_erp.model.login.LoginRequest
 import okhttp3.ResponseBody;
+import retrofit2.Call
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
@@ -71,6 +73,8 @@ interface ApiInterface {
     fun callMyLeaveDetail(@Query("start_date") start_date: String="2024-01-01",
                            @Query("end_date") end_date: String = "2024-05-20"): retrofit2.Call<ResponseBody>
 
-
-
+    // User Google Sign-In Registration
+    @Headers("Content-Type: application/json")
+    @POST("register/")
+    fun userLoginCall(@Body loginRequest: LoginRequest?): Call<ResponseBody>
 }

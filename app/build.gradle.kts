@@ -72,6 +72,14 @@ dependencies {
     implementation(libs.androidx.lifecycle.livedata.ktx)
 
     implementation("com.google.android.material:material:1.2.0-alpha03")
+    implementation ("com.microsoft.identity.client:msal:5.+")
+    {
+        exclude(group = "io.opentelemetry")
+        exclude (group="com.microsoft.device.display")
+    }
+
+    // OpenTelemetry API
+    implementation ("io.opentelemetry:opentelemetry-api:1.11.0") // Add this line
 
 
 }

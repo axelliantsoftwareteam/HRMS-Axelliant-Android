@@ -4,6 +4,7 @@ import com.axelliant.android_erp.observable.ObservableCode
 
 object AppConst {
 
+    var TOKEN: String? = null
     const val KEY_PARAM  = "key"
     const val KEY_ID  = "employeeId"
     val observableCode = ObservableCode()
