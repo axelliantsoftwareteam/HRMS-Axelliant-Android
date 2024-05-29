@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "com.axelliant.android_erp"
+    namespace = "com.axelliant.hrms"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.axelliant.android_erp"
+        applicationId = "com.axelliant.hrms"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -26,6 +26,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
     compileOptions {
@@ -72,6 +73,11 @@ dependencies {
     implementation(libs.androidx.lifecycle.livedata.ktx)
 
     implementation("com.google.android.material:material:1.2.0-alpha03")
+    implementation ("com.microsoft.identity.client:msal:5.+")
+    {
+        exclude(group = "io.opentelemetry")
+        exclude (group="com.microsoft.device.display")
+    }
 
 
 }
