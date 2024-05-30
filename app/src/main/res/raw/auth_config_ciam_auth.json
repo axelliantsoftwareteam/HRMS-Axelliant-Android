@@ -1,17 +1,16 @@
 {
-  "client_id" : "21c88d97-2d10-41df-8f34-b1ac4b83b686",
+  "client_id" : "38918633-d068-4166-bf9a-2cc8fd24ca2c",
   "authorization_user_agent" : "DEFAULT",
-  "redirect_uri" : "msauth://com.axelliant.android_erp/mts5f%2F2GsEaaqZozKLzOqnhJJCQ%3D",
+  "redirect_uri" : "msauth://com.axelliant.hrms/mts5f%2F2GsEaaqZozKLzOqnhJJCQ%3D",
   "account_mode": "SINGLE",
   "broker_redirect_uri_registered": false,
   "authorities" : [
     {
       "type": "AAD",
       "audience": {
-        "type": "AzureADMyOrg",
-        "tenant_id": "e1e6032e-b878-435f-bb89-7d2d98c56c10"
-      },
-      "default": true
+        "type": "AzureADMultipleOrgs",
+        "tenant_id": "organizations"
+      }
     }
   ]
 }
