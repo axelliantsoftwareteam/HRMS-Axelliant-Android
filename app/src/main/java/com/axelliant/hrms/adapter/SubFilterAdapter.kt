@@ -3,6 +3,7 @@ package com.axelliant.hrms.adapter
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.axelliant.hrms.R
 import com.axelliant.hrms.callback.AdapterItemClick
@@ -33,6 +34,8 @@ class SubFilterAdapter(
 
         }
 
+        holder.binding.tvWorkTxt.isVisible = list[position].id != ""
+
         if (filterId == list[position].id) {
             holder.binding.tvWorkFrom.setTextColor(context.getColor(R.color.white))
             holder.binding.lyWorkHome.background =
@@ -57,10 +60,7 @@ class SubFilterAdapter(
     class AccountsVH(val binding: SubFilterRowBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: FilterModel, position: Int, context: Context) {
-
-
-        }
+        fun bind(item: FilterModel, position: Int, context: Context) {}
     }
 
 }

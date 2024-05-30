@@ -67,7 +67,8 @@ interface ApiInterface {
     @Headers("Content-Type: application/json")
     @GET("team_leave_detail_fragment") // team leave detail fragment
     fun callTeamLeaveDetail(@Query("start_date") start_date: String="2024-01-01",
-                            @Query("end_date") end_date: String = "2024-05-20"): Call<ResponseBody>
+                            @Query("end_date") end_date: String = "2024-05-20",
+                            @Query("filters") filters:String = ""): Call<ResponseBody>
 
 
     @Headers("Content-Type: application/json")

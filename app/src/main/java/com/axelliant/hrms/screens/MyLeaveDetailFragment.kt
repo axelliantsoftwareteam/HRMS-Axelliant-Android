@@ -114,7 +114,6 @@ class MyLeaveDetailFragment : BaseFragment() {
 
     private fun dataPopulate(leaves: ArrayList<LeaveDetail>?) {
 
-
         binding?.rvAttendanceDetail?.layoutManager = LinearLayoutManager(requireActivity())
         val weeklyAdapter = MyLeaveDetailAdapter(
             leaves!!, requireContext()
