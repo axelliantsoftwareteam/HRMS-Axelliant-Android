@@ -141,4 +141,5 @@
     <string name="attend_type">Attendance Type</string>
     <string name="leaves_days">Leaves Days</string>
     <string name="my_actions">My Actions</string>
+    <string name="remote">Remote</string>
 </resources>

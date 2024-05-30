@@ -7,7 +7,7 @@
 
     <item
         android:id="@+id/leavesFragment"
-        android:icon="@drawable/ic_leaves"
+        android:icon="@drawable/ic_leav"
         android:title="Leaves" />
 
     <item
