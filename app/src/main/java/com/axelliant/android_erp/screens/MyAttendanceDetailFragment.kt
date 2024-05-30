@@ -1,7 +1,5 @@
 package com.axelliant.android_erp.screens
 
-import android.R.attr.defaultValue
-import android.R.attr.key
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -27,6 +25,7 @@ import com.axelliant.android_erp.extention.showErrorMsg
 import com.axelliant.android_erp.extention.showSuccessMsg
 import com.axelliant.android_erp.model.attendance.AttendanceDetail
 import com.axelliant.android_erp.model.attendance.AttendanceInput
+import com.axelliant.android_erp.model.dashboard.AttendanceStatus
 import com.axelliant.android_erp.utils.Utils
 import com.axelliant.android_erp.viewmodel.AttendanceViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -44,6 +43,7 @@ class MyAttendanceDetailFragment : BaseFragment() {
     private val attendanceViewModel: AttendanceViewModel by inject()
 
     private var emplId = ""
+    private var filterId = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -74,7 +74,6 @@ class MyAttendanceDetailFragment : BaseFragment() {
 
         attendanceViewModel.getAttendanceDetail(getCurrentObject())
         eventSelection()
-        subFilterPopulations()
 
         attendanceViewModel.attendanceDetailResponse.observe(
             viewLifecycleOwner,
@@ -82,6 +81,8 @@ class MyAttendanceDetailFragment : BaseFragment() {
 
                 if (response?.meta?.status == true) {
                     dataPopulate(response.attendance_data!!)
+                    subFilterPopulations(response.attendance_status!!)
+
 
                 } else {
                     requireContext().showErrorMsg(response?.meta?.message.toString())
@@ -105,24 +106,22 @@ class MyAttendanceDetailFragment : BaseFragment() {
 
     }
 
-    private fun subFilterPopulations() {
+    private fun subFilterPopulations(attendanceStatusList: ArrayList<AttendanceStatus>) {
+        attendanceStatusList.add(0,AttendanceStatus().apply {
+            this.id = ""
+            this.title = "All"
+            this.count = "0"
+        })
         binding?.rvSubFilter?.layoutManager =
             LinearLayoutManager(requireActivity(), RecyclerView.HORIZONTAL, false)
-        val weeklyAdapter = SubFilterAdapter(
-            listOf(
-                Test("Pending"),
-                Test("Approved"),
-                Test("Work from home"),
-                Test("In office"),
-                Test("Remote"),
-                Test("Rejected")
-            ), requireContext(),
+        val weeklyAdapter = SubFilterAdapter(filterId,
+            attendanceStatusList, requireContext(),
             object : AdapterItemClick {
                 override fun onItemClick(customObject: Any, position: Int) {
-                    val currentObject = customObject as Test
-                    requireContext().showSuccessMsg(
-                        currentObject.testString
-                    )
+                    val filterObject = customObject as AttendanceStatus
+
+                    filterId = filterObject.id.toString()
+                    attendanceViewModel.getAttendanceDetail(getCurrentObject())
 
                 }
 
@@ -215,11 +214,11 @@ class MyAttendanceDetailFragment : BaseFragment() {
             this.endDate = endDateString!!
             this.employeeId = listOf(emplId)
             this.filter = currentFilter
+            this.filters = filterId
 
         }
 
     }
-
 
 
     private fun setDateView() {

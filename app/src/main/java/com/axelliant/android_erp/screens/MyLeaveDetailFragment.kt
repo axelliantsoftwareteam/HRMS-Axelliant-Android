@@ -19,6 +19,7 @@ import com.axelliant.android_erp.event.EventObserver
 import com.axelliant.android_erp.extention.showErrorMsg
 import com.axelliant.android_erp.extention.showSuccessMsg
 import com.axelliant.android_erp.model.attendance.AttendanceInput
+import com.axelliant.android_erp.model.dashboard.AttendanceStatus
 import com.axelliant.android_erp.model.leave.LeaveDetail
 import com.axelliant.android_erp.utils.Utils
 import com.axelliant.android_erp.viewmodel.LeaveViewModel
@@ -35,6 +36,7 @@ class MyLeaveDetailFragment : BaseFragment() {
     private var startDateString: String? = null
     private var endDateString: String? = null
 
+    private var filterId = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -74,6 +76,7 @@ class MyLeaveDetailFragment : BaseFragment() {
                 if (response?.meta?.status == true) {
 
                     dataPopulate(response.leaves)
+                    subFilterPopulations(response.leave_status)
 
                 } else {
                     requireContext().showErrorMsg(response?.meta?.message.toString())
@@ -81,28 +84,28 @@ class MyLeaveDetailFragment : BaseFragment() {
 
             })
 
-        subFilterPopulations()
+
     }
 
-    private fun subFilterPopulations() {
+    private fun subFilterPopulations(leaveStatus: ArrayList<AttendanceStatus>?) {
+
+        leaveStatus?.add(0,AttendanceStatus().apply {
+            this.id = ""
+            this.title = "All"
+            this.count = "0"
+        })
+
         binding?.rvSubFilter?.layoutManager =
             LinearLayoutManager(requireActivity(), RecyclerView.HORIZONTAL, false)
         val weeklyAdapter = SubFilterAdapter(
-            listOf(
-                Test("Pending"),
-                Test("Approved"),
-                Test("Work from home"),
-                Test("In office"),
-                Test("Remote"),
-                Test("Rejected")
-            ), requireContext(),
+            filterId,
+            leaveStatus!!, requireContext(),
             object : AdapterItemClick {
                 override fun onItemClick(customObject: Any, position: Int) {
-                    val currentObject = customObject as Test
-                    requireContext().showSuccessMsg(
-                        currentObject.testString
-                    )
+                    val filterObject = customObject as AttendanceStatus
 
+                    filterId = filterObject.id.toString()
+                    leaveViewModel.getMyLeaveDetail(getCurrentObject())
                 }
 
             }
@@ -209,6 +212,7 @@ class MyLeaveDetailFragment : BaseFragment() {
             this.startDate = startDateString!!
             this.endDate = endDateString!!
             this.filter = currentFilter
+            this.filters= filterId
 
         }
 

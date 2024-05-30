@@ -21,6 +21,7 @@ import com.axelliant.android_erp.event.EventObserver
 import com.axelliant.android_erp.extention.showErrorMsg
 import com.axelliant.android_erp.extention.showSuccessMsg
 import com.axelliant.android_erp.model.attendance.AttendanceInput
+import com.axelliant.android_erp.model.dashboard.AttendanceStatus
 import com.axelliant.android_erp.model.leave.LeaveDetail
 import com.axelliant.android_erp.model.leave.TeamLeaveDetail
 import com.axelliant.android_erp.utils.Utils
@@ -98,13 +99,11 @@ class TeamLeaveDetailFragment : BaseFragment() {
         binding?.rvSubFilter?.layoutManager =
             LinearLayoutManager(requireActivity(), RecyclerView.HORIZONTAL, false)
         val weeklyAdapter = SubFilterAdapter(
+            "",
             listOf(
-                Test("Pending"),
-                Test("Approved"),
-                Test("Work from home"),
-                Test("In office"),
-                Test("Remote"),
-                Test("Rejected")
+                AttendanceStatus(),
+                AttendanceStatus(),
+                AttendanceStatus()
             ), requireContext(),
             object : AdapterItemClick {
                 override fun onItemClick(customObject: Any, position: Int) {

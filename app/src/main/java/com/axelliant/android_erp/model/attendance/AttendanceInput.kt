@@ -7,5 +7,6 @@ class AttendanceInput {
      var endDate:String=""
      var employeeId:List<String> = listOf()
      var filter: AttendanceFilter=AttendanceFilter.WEEK
+     var filters:String=""
 
 }

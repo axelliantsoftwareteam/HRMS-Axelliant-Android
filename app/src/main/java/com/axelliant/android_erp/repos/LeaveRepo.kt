@@ -2,8 +2,6 @@ package com.axelliant.android_erp.repos
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import com.axelliant.android_erp.enums.AttendanceFilter
-import com.axelliant.android_erp.enums.AttendanceFilter.*
 import com.axelliant.android_erp.model.attendance.AttendanceInput
 import com.axelliant.android_erp.model.leave.LeaveResponse
 import com.axelliant.android_erp.model.base.BaseApiModel
@@ -25,7 +23,7 @@ class LeaveRepo(private var apiInterface: ApiInterface) {
     fun getLeaveStats(attendanceInput: AttendanceInput): MutableLiveData<BaseApiModel<LeaveResponse>> {
         val serverResponse = MutableLiveData<BaseApiModel<LeaveResponse>>()
 
-        val call: Call<ResponseBody>  = apiInterface.callLeaveWeekStats(start_date = attendanceInput.startDate, end_date = attendanceInput.endDate)
+        val call: Call<ResponseBody>  = apiInterface.callLeaveStats(start_date = attendanceInput.startDate, end_date = attendanceInput.endDate)
 
         Log.e("HTTP Request", " " + call?.request().toString())
 
@@ -65,7 +63,7 @@ class LeaveRepo(private var apiInterface: ApiInterface) {
     fun getMyLeaveDetail(attendanceInput: AttendanceInput): MutableLiveData<BaseApiModel<MyLeaveDetailResponse>> {
         val serverResponse = MutableLiveData<BaseApiModel<MyLeaveDetailResponse>>()
 
-        val call: Call<ResponseBody>  = apiInterface.callMyLeaveDetail(start_date = attendanceInput.startDate, end_date = attendanceInput.endDate)
+        val call: Call<ResponseBody>  = apiInterface.callMyLeaveDetail(start_date = attendanceInput.startDate, end_date = attendanceInput.endDate, filters = attendanceInput.filters)
 
         Log.e("HTTP Request", " " + call?.request().toString())
 

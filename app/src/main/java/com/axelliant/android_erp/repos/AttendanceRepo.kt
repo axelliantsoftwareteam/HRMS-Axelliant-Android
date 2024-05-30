@@ -77,7 +77,8 @@ class AttendanceRepo(private var apiInterface: ApiInterface) {
         val call = apiInterface.callAttendanceDetail(
             start_date = inputObject.startDate,
             end_date = inputObject.endDate,
-            employee_list = inputObject.employeeId
+            employee_list = inputObject.employeeId,
+            filters = inputObject.filters
         )
 
 
