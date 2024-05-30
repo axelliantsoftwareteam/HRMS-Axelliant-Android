@@ -23,7 +23,7 @@
         tools:targetApi="31">
         <meta-data
             android:name="com.microsoft.identity.client.ClientId"
-            android:value="21c88d97-2d10-41df-8f34-b1ac4b83b686" /> <!-- Replace with your client ID -->
+            android:value="38918633-d068-4166-bf9a-2cc8fd24ca2c" /> <!-- Replace with your client ID -->
         <activity
             android:name=".screens.MainActivity"
             android:exported="true"
@@ -44,7 +44,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data
                     android:scheme="msauth"
-                    android:host="com.axelliant.android_erp"
+                    android:host="com.axelliant.hrms"
                     android:path="/mts5f/2GsEaaqZozKLzOqnhJJCQ=" />
             </intent-filter>
         </activity>

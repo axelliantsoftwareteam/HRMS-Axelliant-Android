@@ -15,7 +15,8 @@
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/end_guideline"
             style="@style/end_gl"
-            android:orientation="vertical" />
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.97" />
 
 
         <androidx.constraintlayout.widget.Guideline
@@ -51,7 +52,7 @@
                 android:layout_marginStart="@dimen/_5sdp"
                 android:text="Arslan"
                 android:textAlignment="textStart"
-                android:textSize="@dimen/_12sdp"
+                android:textSize="@dimen/_12ssp"
 
                 app:layout_constraintBottom_toTopOf="@+id/tv_employe_designation"
                 app:layout_constraintStart_toEndOf="@id/profile_img"
