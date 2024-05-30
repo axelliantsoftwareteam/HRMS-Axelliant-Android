@@ -108,6 +108,7 @@ class TeamAttendanceDetailFragment : BaseFragment() {
 
             // Formatting the selected dates as strings
 
+
             startDateString = Utils.getServerFormat(date = Date(startDate))
             endDateString = Utils.getServerFormat(date = Date(endDate))
 
