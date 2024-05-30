@@ -146,7 +146,7 @@
                     <ImageView
                         android:id="@+id/iv_check_in"
                         android:layout_width="@dimen/_20sdp"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:src="@drawable/ic_check_in_timer_start"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintBottom_toBottomOf="@+id/tv_check_in_txt"
@@ -211,19 +211,49 @@
                         app:layout_constraintStart_toEndOf="@+id/iv_check_out"
                         app:layout_constraintTop_toBottomOf="@+id/tv_check_out" />
 
-                    <LinearLayout
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/btn_check_in"
-                        android:layout_width="wrap_content"
+                        android:layout_width="@dimen/_70sdp"
                         android:layout_height="@dimen/_70sdp"
-                        android:background="@drawable/rounded_bg"
-                        android:gravity="center"
+                        android:background="@drawable/rounded_attend_bg"
                         android:orientation="vertical"
-                        android:padding="@dimen/_10sdp"
-                        android:elevation="2dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
+                        <LinearLayout
+                            android:id="@+id/ly_check_out"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_70sdp"
+                            android:background="@drawable/rounded_bg"
+                            android:orientation="vertical"
+                            android:padding="@dimen/_10sdp"
+                            android:gravity="center">
+                            <ImageView
+                                android:id="@+id/iv_punch_out"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_absent"
+                                app:tint="@color/white" />
 
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/tv_check_out_status"
+                                style="@style/TEXT_MEDIUM_WHITE_10"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/check_out"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:id="@+id/ly_check_in"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_70sdp"
+                            android:background="@drawable/rounded_bg"
+                            android:orientation="vertical"
+                            android:padding="@dimen/_10sdp"
+                            android:gravity="center">
                         <ImageView
+                            android:id="@+id/iv_punch_in"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@drawable/ic_punch_in"
@@ -238,12 +268,13 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
+                        </LinearLayout>
 
-                    </LinearLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 
                     <LinearLayout
-
                         android:id="@+id/current_loc"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -256,7 +287,7 @@
                         <ImageView
                             android:id="@+id/iv_loc"
                             android:layout_width="@dimen/_20sdp"
-                            android:layout_height="@dimen/_20sdp"
+                            android:layout_height="wrap_content"
                             android:src="@drawable/ic_location_tick" />
 
                         <com.google.android.material.textview.MaterialTextView
@@ -265,7 +296,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:paddingStart="@dimen/_5sdp"
-                            tools:text="@string/in_office"
+                            android:text="@string/remote"
                             android:textAlignment="textStart" />
 
                     </LinearLayout>
