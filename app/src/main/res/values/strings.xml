@@ -140,4 +140,5 @@
     <string name="create_attend_req">Create Attendance Request</string>
     <string name="attend_type">Attendance Type</string>
     <string name="leaves_days">Leaves Days</string>
+    <string name="my_actions">My Actions</string>
 </resources>

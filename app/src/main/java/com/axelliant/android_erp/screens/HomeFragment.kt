@@ -3,6 +3,7 @@ package com.axelliant.android_erp.screens
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
@@ -16,6 +17,7 @@ import android.view.ViewGroup
 
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -27,8 +29,11 @@ import com.axelliant.android_erp.adapter.BirthdayAdapter
 import com.axelliant.android_erp.adapter.ModulesAdapter
 import com.axelliant.android_erp.base.BaseFragment
 import com.axelliant.android_erp.callback.AdapterItemClick
+import com.axelliant.android_erp.config.AppConst.ATTENDANCE_DATE_FORMAT
 import com.axelliant.android_erp.config.GlobalConfig
 import com.axelliant.android_erp.databinding.FragmentHomeBinding
+import com.axelliant.android_erp.enums.AttendanceFilter
+import com.axelliant.android_erp.enums.LocationFilter
 import com.axelliant.android_erp.event.EventObserver
 import com.axelliant.android_erp.extention.setUrlImage
 import com.axelliant.android_erp.extention.showErrorMsg
@@ -37,7 +42,11 @@ import com.axelliant.android_erp.model.Modules
 import com.axelliant.android_erp.model.dashboard.Birthday
 import com.axelliant.android_erp.model.dashboard.EmployProfile
 import com.axelliant.android_erp.navigation.AppNavigator
+import com.axelliant.android_erp.utils.Utils
+import com.axelliant.android_erp.utils.Utils.getCurrentTime
 import com.axelliant.android_erp.viewmodel.HomeViewModel
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.microsoft.identity.client.IAccount
 import com.microsoft.identity.client.IPublicClientApplication
 import com.microsoft.identity.client.ISingleAccountPublicClientApplication
@@ -45,11 +54,17 @@ import com.microsoft.identity.client.PublicClientApplication
 import com.microsoft.identity.client.exception.MsalException
 import org.koin.android.ext.android.inject
 import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
 
 class HomeFragment : BaseFragment() {
 
 
+    private var check_in: String?= null
+    private val radiusInMeters: Double=200.0
+    private val targetLongitude: Double=74.389467
+    private val targetLatitude: Double=31.522359
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding
 
@@ -61,6 +76,9 @@ class HomeFragment : BaseFragment() {
     private var mSingleAccountApp: ISingleAccountPublicClientApplication? = null
     private val scopes = arrayOf("User.Read")
     private var mAccount: IAccount? = null
+
+    // In your activity or fragment
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     private val gpsLocationListener: LocationListener = object : LocationListener {
         override fun onLocationChanged(location: Location) {
@@ -87,7 +105,17 @@ class HomeFragment : BaseFragment() {
 
     private fun setCurrentLocationText() {
 //        binding?.tvLocTxt?.text = getLocationAddress(currentLocation)
+        if (currentLocation!=null)
+        {
 
+
+        val isWithinRadius = isLocationWithinRadius(currentLocation!!.latitude, currentLocation!!.longitude, targetLatitude, targetLongitude, radiusInMeters)
+        if (isWithinRadius) {
+            binding?.tvLocation?.text= LocationFilter.HEAD_OFFICE.loc
+        } else {
+            binding?.tvLocation?.text= LocationFilter.REMOTE.loc
+        }
+        }
     }
 
     private fun getLocationAddress(location: Location?): String {
@@ -181,7 +209,6 @@ class HomeFragment : BaseFragment() {
             Manifest.permission.ACCESS_FINE_LOCATION
         )
         activityResultLauncher.launch(appPerms)
-
         // data population
         dataPopulate()
 
@@ -225,7 +252,9 @@ class HomeFragment : BaseFragment() {
             })
 
         binding?.btnCheckIn?.setOnClickListener {
-            requireContext().showSuccessMsg()
+            check_in=getCurrentTime()
+            binding?.tvCheckInTxt?.text=check_in.toString()
+            setCurrentLocationText()
         }
 
         PublicClientApplication.createSingleAccountPublicClientApplication(
@@ -244,7 +273,25 @@ class HomeFragment : BaseFragment() {
                 }
             })
 
+
+
+
     }
+    private fun isLocationWithinRadius(currentLat: Double, currentLng: Double, targetLat: Double, targetLng: Double, radius: Double): Boolean {
+        val currentLocation = Location("").apply {
+            latitude = currentLat
+            longitude = currentLng
+        }
+
+        val targetLocation = Location("").apply {
+            latitude = targetLat
+            longitude = targetLng
+        }
+
+        val distanceInMeters = currentLocation.distanceTo(targetLocation)
+        return distanceInMeters <= radius
+    }
+
 
 
     private fun dataPopulate() {
@@ -260,31 +307,25 @@ class HomeFragment : BaseFragment() {
                 Modules(
                     id = 1,
                     name = "Leaves",
-                    color = requireContext().getColor(R.color.yellow),
+                    color = requireContext().getColor(R.color.color_third),
                     drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_home)
                 ),
                 Modules(
                     id = 2,
                     name = "Expense",
-                    color = requireContext().getColor(R.color.greeny),
+                    color = requireContext().getColor(R.color.colorApp),
                     drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_cake_tone)
                 ),
                 Modules(
                     id = 3,
                     name = "Pay Roll",
-                    color = requireContext().getColor(R.color.colorApp),
+                    color = requireContext().getColor(R.color.greeny),
                     drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_calendar)
                 ),
                 Modules(
                     id = 4,
-                    name = "Employs",
-                    color = requireContext().getColor(R.color.purple),
-                    drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_loc_pin)
-                ),
-                Modules(
-                    id = 5,
                     name = "Request",
-                    color = requireContext().getColor(R.color.red),
+                    color = requireContext().getColor(R.color.yellow),
                     drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_loc_pin)
                 ),
 

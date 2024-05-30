@@ -3,6 +3,7 @@ package com.axelliant.android_erp.utils
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
+import com.axelliant.android_erp.config.AppConst
 import com.axelliant.android_erp.config.AppConst.SERVER_DATE_FORMAT
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -21,6 +22,15 @@ object Utils {
 
     private fun getCurrentDate(): Date {
         return Calendar.getInstance().time
+    }
+
+    fun getCurrentTime():String{
+        val sdf = SimpleDateFormat(AppConst.ATTENDANCE_DATE_FORMAT)
+        return sdf.format(Date())
+
+        /*
+                val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
+                return sdf.format(Date())*/
     }
 
 

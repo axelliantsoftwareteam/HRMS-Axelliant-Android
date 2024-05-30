@@ -1,6 +1,6 @@
 package com.axelliant.android_erp.model.dashboard
 
- class AttendanceStatus{
+ class FilterModel{
      var id: String?=null
      var title: String?=null
      var count: String?=null

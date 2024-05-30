@@ -8,7 +8,6 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.axelliant.android_erp.R
-import com.axelliant.android_erp.Test
 import com.axelliant.android_erp.adapter.MyAttendanceDetailAdapter
 import com.axelliant.android_erp.adapter.SubFilterAdapter
 import com.axelliant.android_erp.base.BaseFragment
@@ -22,10 +21,9 @@ import com.axelliant.android_erp.enums.AttendanceFilter.MONTH
 import com.axelliant.android_erp.enums.AttendanceFilter.WEEK
 import com.axelliant.android_erp.event.EventObserver
 import com.axelliant.android_erp.extention.showErrorMsg
-import com.axelliant.android_erp.extention.showSuccessMsg
 import com.axelliant.android_erp.model.attendance.AttendanceDetail
 import com.axelliant.android_erp.model.attendance.AttendanceInput
-import com.axelliant.android_erp.model.dashboard.AttendanceStatus
+import com.axelliant.android_erp.model.dashboard.FilterModel
 import com.axelliant.android_erp.utils.Utils
 import com.axelliant.android_erp.viewmodel.AttendanceViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -106,8 +104,8 @@ class MyAttendanceDetailFragment : BaseFragment() {
 
     }
 
-    private fun subFilterPopulations(attendanceStatusList: ArrayList<AttendanceStatus>) {
-        attendanceStatusList.add(0,AttendanceStatus().apply {
+    private fun subFilterPopulations(attendanceStatusList: ArrayList<FilterModel>) {
+        attendanceStatusList.add(0,FilterModel().apply {
             this.id = ""
             this.title = "All"
             this.count = "0"
@@ -118,7 +116,7 @@ class MyAttendanceDetailFragment : BaseFragment() {
             attendanceStatusList, requireContext(),
             object : AdapterItemClick {
                 override fun onItemClick(customObject: Any, position: Int) {
-                    val filterObject = customObject as AttendanceStatus
+                    val filterObject = customObject as FilterModel
 
                     filterId = filterObject.id.toString()
                     attendanceViewModel.getAttendanceDetail(getCurrentObject())

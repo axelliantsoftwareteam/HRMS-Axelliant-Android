@@ -1,24 +1,17 @@
 package com.axelliant.android_erp.adapter
 
 import android.content.Context
-import android.content.res.ColorStateList
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.axelliant.android_erp.R
-import com.axelliant.android_erp.Test
 import com.axelliant.android_erp.callback.AdapterItemClick
-import com.axelliant.android_erp.databinding.MyAttendanceDetailRowBinding
-import com.axelliant.android_erp.databinding.MyTeamAttendRowBinding
 import com.axelliant.android_erp.databinding.SubFilterRowBinding
-import com.axelliant.android_erp.model.dashboard.AttendanceStatus
-import com.axelliant.android_erp.utils.Utils
+import com.axelliant.android_erp.model.dashboard.FilterModel
 
 class SubFilterAdapter(
     private var filterId: String = "",
-    private val list: List<AttendanceStatus>,
+    private val list: List<FilterModel>,
     private val context: Context,
     private val itemClick: AdapterItemClick
 ) :
@@ -64,7 +57,7 @@ class SubFilterAdapter(
     class AccountsVH(val binding: SubFilterRowBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: AttendanceStatus, position: Int, context: Context) {
+        fun bind(item: FilterModel, position: Int, context: Context) {
 
 
         }

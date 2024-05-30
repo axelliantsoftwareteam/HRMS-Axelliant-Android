@@ -21,8 +21,7 @@ import com.axelliant.android_erp.event.EventObserver
 import com.axelliant.android_erp.extention.showErrorMsg
 import com.axelliant.android_erp.extention.showSuccessMsg
 import com.axelliant.android_erp.model.attendance.AttendanceInput
-import com.axelliant.android_erp.model.dashboard.AttendanceStatus
-import com.axelliant.android_erp.model.leave.LeaveDetail
+import com.axelliant.android_erp.model.dashboard.FilterModel
 import com.axelliant.android_erp.model.leave.TeamLeaveDetail
 import com.axelliant.android_erp.utils.Utils
 import com.axelliant.android_erp.viewmodel.LeaveViewModel
@@ -101,9 +100,9 @@ class TeamLeaveDetailFragment : BaseFragment() {
         val weeklyAdapter = SubFilterAdapter(
             "",
             listOf(
-                AttendanceStatus(),
-                AttendanceStatus(),
-                AttendanceStatus()
+                FilterModel(),
+                FilterModel(),
+                FilterModel()
             ), requireContext(),
             object : AdapterItemClick {
                 override fun onItemClick(customObject: Any, position: Int) {
