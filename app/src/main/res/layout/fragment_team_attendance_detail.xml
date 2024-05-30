@@ -310,7 +310,7 @@
                         android:background="@drawable/circle_no_bg"
                         android:backgroundTint="@color/colorApp"
                         android:padding="@dimen/_5sdp"
-                        android:text="20"
+                        tools:text="20"
                         android:textSize="@dimen/_8sdp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintHorizontal_weight="3"

@@ -1,6 +1,7 @@
 package com.axelliant.hrms.network
 
 import com.axelliant.hrms.di.TestModelInjection
+import com.axelliant.hrms.model.attendance.AttRequest
 import com.axelliant.hrms.model.login.LoginRequest
 import com.axelliant.hrms.model.post.AttendanceRequest
 import com.axelliant.hrms.model.post.LeaveRequest
@@ -26,49 +27,40 @@ interface ApiInterface {
 
     // get attendance stats monthly
     @Headers("Content-Type: application/json")
-    @GET("hrms.hr.doctype.employee.mobile_api.get_month_attendance_stats")
-    fun callAttendanceMonthStats(): Call<ResponseBody> // month attendance stats
+    @POST("hrms.hr.doctype.employee.mobile_api.get_month_attendance_stats")
+    fun callAttendanceMonthStats(@Body attendanceRequest: AttRequest): Call<ResponseBody> // month attendance stats
 
 
     @Headers("Content-Type: application/json")
-    @GET("hrms.hr.doctype.employee.mobile_api.get_filtered_attendance") // my attendance detail
-    fun callAttendanceDetail(@Query("start_date") start_date: String="2024-01-01",
-                             @Query("end_date") end_date: String = "2024-05-20",
-                             @Query("employee_list") employee_list:List<String> = listOf("HR-EMP-00744"),
-                             @Query("filters") filters:String = ""
+    @POST("hrms.hr.doctype.employee.mobile_api.get_filtered_attendance") // my attendance detail
+    fun callAttendanceDetail(@Body attendanceRequest:AttRequest
 
     ): Call<ResponseBody>
 
 
     @Headers("Content-Type: application/json")
-    @GET("hrms.hr.doctype.employee.mobile_api.get_team_attendance")  // team attendance detail
-    fun callTeamAttendanceDetail(@Query("start_date") start_date: String="2024-01-01",
-                                 @Query("end_date") end_date: String = "2024-05-20"
+    @POST("hrms.hr.doctype.employee.mobile_api.get_team_attendance")  // team attendance detail
+    fun callTeamAttendanceDetail(@Body attendanceRequest:AttRequest
     ): Call<ResponseBody>
 
 
     @Headers("Content-Type: application/json")
-    @GET("hrms.hr.doctype.employee.leaves_mobile.get_leave_details_self") // leave stats weekly and monthly
-    fun callLeaveStats(@Query("start_date") start_date: String="2024-01-01",
-                       @Query("end_date") end_date: String = "2024-05-20"): Call<ResponseBody>
+    @POST("hrms.hr.doctype.employee.leaves_mobile.get_leave_details_self") // leave stats weekly and monthly
+    fun callLeaveStats(@Body attRequest: AttRequest): Call<ResponseBody>
 
 
 
     @Headers("Content-Type: application/json")
-    @GET("hrms.hr.doctype.employee.leaves_mobile.get_leave_application_requests") // my leave detail
-    fun callMyLeaveDetail(@Query("start_date") start_date: String="2024-01-01",
-                          @Query("end_date") end_date: String = "2024-05-20",
-                          @Query("filters") filters:String = ""): Call<ResponseBody>
+    @POST("hrms.hr.doctype.employee.leaves_mobile.get_leave_application_requests") // my leave detail
+    fun callMyLeaveDetail(@Body attRequest: AttRequest): Call<ResponseBody>
 
 
     // required APIS
 
 
     @Headers("Content-Type: application/json")
-    @GET("team_leave_detail_fragment") // team leave detail fragment
-    fun callTeamLeaveDetail(@Query("start_date") start_date: String="2024-01-01",
-                            @Query("end_date") end_date: String = "2024-05-20",
-                            @Query("filters") filters:String = ""): Call<ResponseBody>
+    @POST("hrms.hr.doctype.employee.leaves_mobile.get_leave_application_requests_team") // team leave detail fragment
+    fun callTeamLeaveDetail(@Body attRequest: AttRequest): Call<ResponseBody>
 
 
     @Headers("Content-Type: application/json")

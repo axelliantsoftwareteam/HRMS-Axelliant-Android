@@ -14,9 +14,11 @@ import com.axelliant.hrms.databinding.FragmentAttendanceStatsBinding
 import com.axelliant.hrms.enums.AttendanceFilter
 import com.axelliant.hrms.event.EventObserver
 import com.axelliant.hrms.extention.showErrorMsg
+import com.axelliant.hrms.model.attendance.AttendanceInput
 import com.axelliant.hrms.model.attendance.SelfAttendanceStats
 import com.axelliant.hrms.model.attendance.TeamAttendanceStats
 import com.axelliant.hrms.navigation.AppNavigator
+import com.axelliant.hrms.utils.Utils
 import com.axelliant.hrms.viewmodel.AttendanceViewModel
 import com.axelliant.hrms.viewmodel.LeaveViewModel
 import org.koin.android.ext.android.inject
@@ -62,7 +64,7 @@ class AttendanceStatsFragment : BaseFragment() {
         binding?.tvMyTeamView?.isVisible = isManager
         binding?.lyMyteamAttend?.isVisible = isManager
 
-        attendanceViewModel.getAttendanceStats(currentFilter)
+        attendanceViewModel.getAttendanceStats(getCurrentObject())
         eventSelection()
 
         attendanceViewModel.attendanceResponse.observe(
@@ -116,12 +118,12 @@ class AttendanceStatsFragment : BaseFragment() {
 
         binding?.tvWeek?.setOnClickListener {
             currentFilter = AttendanceFilter.WEEK
-            attendanceViewModel.getAttendanceStats(currentFilter)
+            attendanceViewModel.getAttendanceStats(getCurrentObject())
             eventSelection()
         }
         binding?.tvMonth?.setOnClickListener {
             currentFilter = AttendanceFilter.MONTH
-            attendanceViewModel.getAttendanceStats(currentFilter)
+            attendanceViewModel.getAttendanceStats(getCurrentObject())
             eventSelection()
         }
 
@@ -161,6 +163,34 @@ class AttendanceStatsFragment : BaseFragment() {
         binding?.tvWorkFromTxt?.text = teamAttendanceStats.work_from_home.toString()
         binding?.tvTeamsOnleaveTxt?.text = teamAttendanceStats.leave_count.toString()
         binding?.tvTeamsAbsentTxt?.text = teamAttendanceStats.absent_count.toString()
+
+    }
+    private fun getCurrentObject(): AttendanceInput {
+
+        var startDateString = ""
+        var endDateString = ""
+        when (currentFilter) {
+            AttendanceFilter.WEEK -> {
+                startDateString = ""
+                endDateString = ""
+
+            }
+
+            AttendanceFilter.MONTH -> {
+                startDateString = Utils.getServerFormat(date = Utils.getFirstDayOfMonth())
+                endDateString =
+                    Utils.getServerFormat(date = Utils.getLastDayOfMonth())
+
+            }
+
+            AttendanceFilter.Custom -> {}
+        }
+        return AttendanceInput().apply {
+            this.startDate = startDateString!!
+            this.endDate = endDateString!!
+            this.filter = currentFilter
+
+        }
 
     }
 

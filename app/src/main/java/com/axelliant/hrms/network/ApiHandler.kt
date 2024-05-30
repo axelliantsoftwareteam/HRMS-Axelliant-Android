@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit
 
 object ApiHandler {
 
-  private const val BASE_URL = "http://10.20.28.45:8000/api/method/" // Local testing
+  private const val BASE_URL = "http://10.20.31.38:8000/api/method/" // Local testing
 //    private const val BASE_URL = "https://hris.axelliant.com/api/method/" // Live testing
     private var apiInterface: ApiInterface? = null
     private const val ConnectTimeout = 60L

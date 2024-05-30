@@ -16,9 +16,9 @@ class AttendanceViewModel(private val attendanceRepo: AttendanceRepo) : BaseView
      val attendanceDetailResponse: MutableLiveData<Event<AttendanceResponse?>> by lazy { MutableLiveData<Event<AttendanceResponse?>>() }
      val teamAttendanceResponse: MutableLiveData<Event<TeamAttendanceResponse?>> by lazy { MutableLiveData<Event<TeamAttendanceResponse?>>() }
 
-    fun getAttendanceStats(currentFilter: AttendanceFilter) {
+    fun getAttendanceStats(attendanceInput: AttendanceInput) {
         isLoading.value = Event(true)
-        attendanceRepo.getAttendanceStats(currentFilter)
+        attendanceRepo.getAttendanceStats(attendanceInput)
             .observeForever { data ->
                 // Handle the login response
                 data?.let { baseModel ->

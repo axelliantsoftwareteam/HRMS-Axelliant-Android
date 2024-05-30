@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.axelliant.hrms.enums.AttendanceFilter
 import com.axelliant.hrms.enums.AttendanceFilter.*
+import com.axelliant.hrms.model.attendance.AttRequest
 import com.axelliant.hrms.model.attendance.AttendanceDetail
 import com.axelliant.hrms.model.attendance.AttendanceInput
 import com.axelliant.hrms.model.attendance.AttendanceResponse
@@ -12,6 +13,7 @@ import com.axelliant.hrms.model.attendance.TeamAttendanceResponse
 import com.axelliant.hrms.model.base.BaseApiModel
 import com.axelliant.hrms.model.base.BaseModel
 import com.axelliant.hrms.model.base.Meta
+import com.axelliant.hrms.model.post.AttendanceRequest
 import com.axelliant.hrms.network.ApiInterface
 import com.axelliant.hrms.network.BaseCallBack
 import com.google.gson.Gson
@@ -23,13 +25,21 @@ import java.lang.reflect.Type
 
 class AttendanceRepo(private var apiInterface: ApiInterface) {
 
-    fun getAttendanceStats(currentFilter: AttendanceFilter): MutableLiveData<BaseApiModel<AttendanceStatsResponse>> {
+    fun getAttendanceStats(attendanceInput: AttendanceInput): MutableLiveData<BaseApiModel<AttendanceStatsResponse>> {
         val serverResponse = MutableLiveData<BaseApiModel<AttendanceStatsResponse>>()
 
         var call: Call<ResponseBody>? = null
-        when (currentFilter) {
+        when (attendanceInput.filter) {
             WEEK -> call = apiInterface.callAttendanceWeekStats()
-            MONTH -> call = apiInterface.callAttendanceMonthStats()
+            MONTH -> call = apiInterface.callAttendanceMonthStats(
+
+                AttRequest().apply {
+                    this.start_date = attendanceInput.startDate
+                    this.end_date = attendanceInput.endDate
+                }
+
+            )
+
             Custom -> null
         }
 
@@ -59,7 +69,16 @@ class AttendanceRepo(private var apiInterface: ApiInterface) {
                 Log.e("API Failure", " $errorString")
 
                 serverResponse.value =
-                    BaseApiModel(BaseModel(AttendanceStatsResponse(meta = Meta("", false))))
+                    BaseApiModel(
+                        BaseModel(
+                            AttendanceStatsResponse(
+                                meta = Meta(
+                                    errorString.toString(),
+                                    false
+                                )
+                            )
+                        )
+                    )
 
             }
 
@@ -75,10 +94,12 @@ class AttendanceRepo(private var apiInterface: ApiInterface) {
         val serverResponse = MutableLiveData<BaseApiModel<AttendanceResponse>>()
 
         val call = apiInterface.callAttendanceDetail(
-            start_date = inputObject.startDate,
-            end_date = inputObject.endDate,
-            employee_list = inputObject.employeeId,
-            filters = inputObject.filters
+            AttRequest().apply {
+                this.start_date = inputObject.startDate
+                this.end_date = inputObject.endDate
+                this.employee_list = inputObject.employeeId
+                this.filters = inputObject.filters
+            }
         )
 
 
@@ -106,7 +127,16 @@ class AttendanceRepo(private var apiInterface: ApiInterface) {
                 Log.e("API Failure", " $errorString")
 
                 serverResponse.value =
-                    BaseApiModel(BaseModel(AttendanceResponse(meta = Meta("", false))))
+                    BaseApiModel(
+                        BaseModel(
+                            AttendanceResponse(
+                                meta = Meta(
+                                    errorString.toString(),
+                                    false
+                                )
+                            )
+                        )
+                    )
 
             }
 
@@ -116,16 +146,27 @@ class AttendanceRepo(private var apiInterface: ApiInterface) {
     }
 
 
-
     fun getTeamAttendanceDetail(
         inputObject: AttendanceInput
     ): MutableLiveData<BaseApiModel<TeamAttendanceResponse>> {
         val serverResponse = MutableLiveData<BaseApiModel<TeamAttendanceResponse>>()
 
+
+        /*   val call = apiInterface.callTeamAttendanceDetail(
+
+               start_date = inputObject.startDate,
+               end_date = inputObject.endDate,
+               employee_list = inputObject.employeeId
+           )*/
+
         val call = apiInterface.callTeamAttendanceDetail(
-            start_date = inputObject.startDate,
-            end_date = inputObject.endDate
+            AttRequest().apply {
+                this.start_date = inputObject.startDate
+                this.end_date = inputObject.endDate
+                this.employee_list = inputObject.employeeId
+            }
         )
+
 
 
         Log.e("HTTP Request", " " + call.request().toString())
@@ -140,7 +181,8 @@ class AttendanceRepo(private var apiInterface: ApiInterface) {
 
                 val type: Type = object : TypeToken<BaseApiModel<TeamAttendanceResponse>>() {}.type
                 val jsonString = response.body()?.string()
-                val userModel = Gson().fromJson<BaseApiModel<TeamAttendanceResponse>>(jsonString, type)
+                val userModel =
+                    Gson().fromJson<BaseApiModel<TeamAttendanceResponse>>(jsonString, type)
                 serverResponse.value = userModel
             }
 
@@ -152,7 +194,16 @@ class AttendanceRepo(private var apiInterface: ApiInterface) {
                 Log.e("API Failure", " $errorString")
 
                 serverResponse.value =
-                    BaseApiModel(BaseModel(TeamAttendanceResponse(meta = Meta("", false))))
+                    BaseApiModel(
+                        BaseModel(
+                            TeamAttendanceResponse(
+                                meta = Meta(
+                                    errorString.toString(),
+                                    false
+                                )
+                            )
+                        )
+                    )
 
             }
 

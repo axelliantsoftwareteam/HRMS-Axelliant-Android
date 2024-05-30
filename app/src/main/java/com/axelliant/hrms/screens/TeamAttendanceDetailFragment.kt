@@ -4,10 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.AdapterView.OnItemSelectedListener
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.axelliant.hrms.R
-import com.axelliant.hrms.Test
 import com.axelliant.hrms.adapter.PersonSpinnerAdapter
 import com.axelliant.hrms.adapter.TeamAttendanceDetailAdapter
 import com.axelliant.hrms.base.BaseFragment
@@ -19,7 +21,6 @@ import com.axelliant.hrms.enums.AttendanceFilter
 import com.axelliant.hrms.event.EventObserver
 import com.axelliant.hrms.extention.showErrorMsg
 import com.axelliant.hrms.model.attendance.AttendanceData
-import com.axelliant.hrms.model.attendance.AttendanceDetail
 import com.axelliant.hrms.model.attendance.AttendanceInput
 import com.axelliant.hrms.model.dashboard.EmployProfile
 import com.axelliant.hrms.navigation.AppNavigator
@@ -27,9 +28,7 @@ import com.axelliant.hrms.utils.Utils
 import com.axelliant.hrms.viewmodel.AttendanceViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
 import org.koin.android.ext.android.inject
-import java.text.SimpleDateFormat
 import java.util.Date
-import java.util.Locale
 
 
 class TeamAttendanceDetailFragment : BaseFragment() {
@@ -40,7 +39,7 @@ class TeamAttendanceDetailFragment : BaseFragment() {
     private val binding get() = _binding
     private var currentFilter = AttendanceFilter.WEEK
     private var selectedDateRange: String? = null
-
+    private var emplId = ""
 
     private val attendanceViewModel: AttendanceViewModel by inject()
 
@@ -85,6 +84,7 @@ class TeamAttendanceDetailFragment : BaseFragment() {
                     // success
 
                     dataPopulate(response.attendance_data!!)
+                    binding?.tvTeamMemberTxt?.text = response.team_count.toString()
                 } else {
                     requireContext().showErrorMsg(response?.meta?.message.toString())
                 }
@@ -115,6 +115,10 @@ class TeamAttendanceDetailFragment : BaseFragment() {
             // Creating the date range string
             selectedDateRange = "$startDateString - $endDateString"
             setDateView()
+
+            currentFilter = AttendanceFilter.Custom
+            attendanceViewModel.getTeamAttendance(getCurrentObject())
+            eventSelection()
         }
 
         // Showing the date picker dialog
@@ -135,6 +139,24 @@ class TeamAttendanceDetailFragment : BaseFragment() {
             requireContext(), GlobalConfig.getReportingEmploys()
         )
         binding?.spTeamMember?.adapter = adapter
+
+
+        binding?.spTeamMember?.onItemSelectedListener = object : OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                attendanceViewModel.getTeamAttendance(getCurrentObject())
+
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+
+        }
+
 
     }
 
@@ -177,16 +199,17 @@ class TeamAttendanceDetailFragment : BaseFragment() {
 
         binding?.tvWeek?.setOnClickListener {
             currentFilter = AttendanceFilter.WEEK
+            attendanceViewModel.getTeamAttendance(getCurrentObject())
             eventSelection()
         }
         binding?.tvMonth?.setOnClickListener {
             currentFilter = AttendanceFilter.MONTH
+            attendanceViewModel.getTeamAttendance(getCurrentObject())
             eventSelection()
         }
 
         binding?.tvCustom?.setOnClickListener {
-            currentFilter = AttendanceFilter.Custom
-            eventSelection()
+
             datePickerDialog()
         }
 
@@ -237,10 +260,19 @@ class TeamAttendanceDetailFragment : BaseFragment() {
 
             AttendanceFilter.Custom -> {}
         }
+
+
+        val currentEmploy = binding?.spTeamMember?.selectedItem as EmployProfile
         return AttendanceInput().apply {
             this.startDate = startDateString!!
             this.endDate = endDateString!!
             this.filter = currentFilter
+
+            if (currentEmploy.name == null)
+                this.employeeId = listOf()
+            else
+                this.employeeId = listOf(currentEmploy.name.toString())
+
 
         }
 

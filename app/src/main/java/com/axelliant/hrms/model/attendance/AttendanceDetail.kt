@@ -12,5 +12,5 @@ data class AttendanceDetail(
     val shift: String,
     val shift_timings: String,
     val status: String,
-    val working_hours: Int
+    val working_hours: Double
 )

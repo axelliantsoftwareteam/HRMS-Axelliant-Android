@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -21,6 +22,7 @@ import com.axelliant.hrms.event.EventObserver
 import com.axelliant.hrms.extention.showErrorMsg
 import com.axelliant.hrms.extention.showSuccessMsg
 import com.axelliant.hrms.model.attendance.AttendanceInput
+import com.axelliant.hrms.model.dashboard.EmployProfile
 import com.axelliant.hrms.model.dashboard.FilterModel
 import com.axelliant.hrms.model.leave.TeamLeaveDetail
 import com.axelliant.hrms.utils.Utils
@@ -66,6 +68,7 @@ class TeamLeaveDetailFragment : BaseFragment() {
             previousFragmentNavigation()
         }
 
+        spinnerPopulations()
         leaveViewModel.getTeamLeaveDetail(getCurrentObject())
         eventSelection()
 
@@ -76,6 +79,8 @@ class TeamLeaveDetailFragment : BaseFragment() {
                 if (response?.meta?.status == true) {
 
                     dataPopulate(response.leaves)
+                    subFilterPopulations(response.leave_status!!)
+                    binding?.tvTeamMemberTxt?.text = response.team_count.toString()
 
                 } else {
                     requireContext().showErrorMsg(response?.meta?.message.toString())
@@ -83,8 +88,7 @@ class TeamLeaveDetailFragment : BaseFragment() {
 
             })
 
-        subFilterPopulations()
-        spinnerPopulations()
+
     }
     private fun spinnerPopulations() {
 
@@ -93,18 +97,37 @@ class TeamLeaveDetailFragment : BaseFragment() {
         )
         binding?.spTeamMember?.adapter = adapter
 
+        binding?.spTeamMember?.onItemSelectedListener = object :
+            AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                leaveViewModel.getTeamLeaveDetail(getCurrentObject())
+
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+
+        }
+
     }
 
-    private fun subFilterPopulations() {
+    private fun subFilterPopulations(attendanceStatusList: ArrayList<FilterModel>) {
+
+        attendanceStatusList.add(0,FilterModel().apply {
+            this.id = ""
+            this.title = "All"
+            this.count = "0"
+        })
         binding?.rvSubFilter?.layoutManager =
             LinearLayoutManager(requireActivity(), RecyclerView.HORIZONTAL, false)
         val weeklyAdapter = SubFilterAdapter(
             filterId,
-            listOf(
-                FilterModel(),
-                FilterModel(),
-                FilterModel()
-            ), requireContext(),
+            attendanceStatusList, requireContext(),
             object : AdapterItemClick {
                 override fun onItemClick(customObject: Any, position: Int) {
                     val filterObject = customObject as FilterModel
@@ -213,10 +236,19 @@ class TeamLeaveDetailFragment : BaseFragment() {
 
         }
         return AttendanceInput().apply {
+
+            val currentEmploy = binding?.spTeamMember?.selectedItem as EmployProfile
+
+
             this.startDate = startDateString!!
             this.endDate = endDateString!!
             this.filter = currentFilter
             this.filters= filterId
+
+            if (currentEmploy.name == null)
+                this.employeeId = listOf()
+            else
+                this.employeeId = listOf(currentEmploy.name.toString())
 
         }
 

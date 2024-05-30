@@ -50,7 +50,9 @@ class TeamLeaveDetailAdapter(
             binding.tvToDateTxt.text = teamLeaveDetail.to_date
             binding.tvLeaveTypeTxt.text = teamLeaveDetail.leave_type
             binding.tvLeaveApproverTxt.text = teamLeaveDetail.leave_approver
-            binding.tvReasonTxt.text = teamLeaveDetail.leave_approver
+            binding.tvReasonTxt.text = teamLeaveDetail.leave_reason
+
+
 
         }
     }

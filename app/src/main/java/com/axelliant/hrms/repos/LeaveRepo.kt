@@ -2,6 +2,7 @@ package com.axelliant.hrms.repos
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import com.axelliant.hrms.model.attendance.AttRequest
 import com.axelliant.hrms.model.attendance.AttendanceInput
 import com.axelliant.hrms.model.leave.LeaveResponse
 import com.axelliant.hrms.model.base.BaseApiModel
@@ -23,7 +24,10 @@ class LeaveRepo(private var apiInterface: ApiInterface) {
     fun getLeaveStats(attendanceInput: AttendanceInput): MutableLiveData<BaseApiModel<LeaveResponse>> {
         val serverResponse = MutableLiveData<BaseApiModel<LeaveResponse>>()
 
-        val call: Call<ResponseBody>  = apiInterface.callLeaveStats(start_date = attendanceInput.startDate, end_date = attendanceInput.endDate)
+        val call: Call<ResponseBody> = apiInterface.callLeaveStats(AttRequest().apply {
+            this.start_date = attendanceInput.startDate
+            this.end_date = attendanceInput.endDate
+        })
 
         Log.e("HTTP Request", " " + call?.request().toString())
 
@@ -49,7 +53,16 @@ class LeaveRepo(private var apiInterface: ApiInterface) {
                 Log.e("API Failure", " $errorString")
 
                 serverResponse.value =
-                    BaseApiModel(BaseModel(LeaveResponse(meta = Meta("", false))))
+                    BaseApiModel(
+                        BaseModel(
+                            LeaveResponse(
+                                meta = Meta(
+                                    errorString.toString(),
+                                    false
+                                )
+                            )
+                        )
+                    )
 
             }
 
@@ -59,11 +72,17 @@ class LeaveRepo(private var apiInterface: ApiInterface) {
     }
 
 
-
     fun getMyLeaveDetail(attendanceInput: AttendanceInput): MutableLiveData<BaseApiModel<MyLeaveDetailResponse>> {
         val serverResponse = MutableLiveData<BaseApiModel<MyLeaveDetailResponse>>()
 
-        val call: Call<ResponseBody>  = apiInterface.callMyLeaveDetail(start_date = attendanceInput.startDate, end_date = attendanceInput.endDate, filters = attendanceInput.filters)
+        val call: Call<ResponseBody> = apiInterface.callMyLeaveDetail(
+            AttRequest().apply {
+                this.start_date = attendanceInput.startDate
+                this.end_date = attendanceInput.endDate
+                this.filters = attendanceInput.filters
+            }
+
+        )
 
         Log.e("HTTP Request", " " + call?.request().toString())
 
@@ -77,7 +96,8 @@ class LeaveRepo(private var apiInterface: ApiInterface) {
 
                 val type: Type = object : TypeToken<BaseApiModel<MyLeaveDetailResponse>>() {}.type
                 val jsonString = response.body()?.string()
-                val userModel = Gson().fromJson<BaseApiModel<MyLeaveDetailResponse>>(jsonString, type)
+                val userModel =
+                    Gson().fromJson<BaseApiModel<MyLeaveDetailResponse>>(jsonString, type)
                 serverResponse.value = userModel
             }
 
@@ -89,7 +109,16 @@ class LeaveRepo(private var apiInterface: ApiInterface) {
                 Log.e("API Failure", " $errorString")
 
                 serverResponse.value =
-                    BaseApiModel(BaseModel(MyLeaveDetailResponse(meta = Meta("", false))))
+                    BaseApiModel(
+                        BaseModel(
+                            MyLeaveDetailResponse(
+                                meta = Meta(
+                                    errorString.toString(),
+                                    false
+                                )
+                            )
+                        )
+                    )
 
             }
 
@@ -102,7 +131,15 @@ class LeaveRepo(private var apiInterface: ApiInterface) {
     fun getTeamLeaveDetail(attendanceInput: AttendanceInput): MutableLiveData<BaseApiModel<TeamLeaveDetailResponse>> {
         val serverResponse = MutableLiveData<BaseApiModel<TeamLeaveDetailResponse>>()
 
-        val call: Call<ResponseBody>  = apiInterface.callTeamLeaveDetail(start_date = attendanceInput.startDate, end_date = attendanceInput.endDate, filters = attendanceInput.filters)
+        val call: Call<ResponseBody> = apiInterface.callTeamLeaveDetail(
+            AttRequest().apply {
+                this.start_date = attendanceInput.startDate
+                this.end_date = attendanceInput.endDate
+                this.filters = attendanceInput.filters
+                this.employee_list = attendanceInput.employeeId
+            }
+
+        )
 
         Log.e("HTTP Request", " " + call?.request().toString())
 
@@ -116,7 +153,8 @@ class LeaveRepo(private var apiInterface: ApiInterface) {
 
                 val type: Type = object : TypeToken<BaseApiModel<TeamLeaveDetailResponse>>() {}.type
                 val jsonString = response.body()?.string()
-                val userModel = Gson().fromJson<BaseApiModel<TeamLeaveDetailResponse>>(jsonString, type)
+                val userModel =
+                    Gson().fromJson<BaseApiModel<TeamLeaveDetailResponse>>(jsonString, type)
                 serverResponse.value = userModel
             }
 
@@ -128,7 +166,16 @@ class LeaveRepo(private var apiInterface: ApiInterface) {
                 Log.e("API Failure", " $errorString")
 
                 serverResponse.value =
-                    BaseApiModel(BaseModel(TeamLeaveDetailResponse(meta = Meta("", false))))
+                    BaseApiModel(
+                        BaseModel(
+                            TeamLeaveDetailResponse(
+                                meta = Meta(
+                                    errorString.toString(),
+                                    false
+                                )
+                            )
+                        )
+                    )
 
             }
 

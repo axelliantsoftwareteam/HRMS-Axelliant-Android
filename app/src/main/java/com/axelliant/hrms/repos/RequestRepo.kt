@@ -52,7 +52,7 @@ class RequestRepo(private var apiInterface: ApiInterface) {
                 Log.e("API Failure", " $errorString")
 
                 serverResponse.value =
-                    BaseApiModel(BaseModel(LeaveResponse(meta = Meta("", false))))
+                    BaseApiModel(BaseModel(LeaveResponse(meta = Meta(errorString.toString(), false))))
 
             }
 
@@ -89,7 +89,7 @@ class RequestRepo(private var apiInterface: ApiInterface) {
                 Log.e("API Failure", " $errorString")
 
                 serverResponse.value =
-                    BaseApiModel(BaseModel(LeaveResponse(meta = Meta("", false))))
+                    BaseApiModel(BaseModel(LeaveResponse(meta = Meta(errorString.toString(), false))))
 
             }
 
