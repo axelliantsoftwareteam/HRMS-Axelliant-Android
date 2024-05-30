@@ -11,6 +11,6 @@ object AppConst {
 
     const val DATE_FORMAT =  "dd MMM,yyyy"
     const val SERVER_DATE_FORMAT =  "yyyy-MM-dd"
-
+    const val ATTENDANCE_DATE_FORMAT =  "dd-MM-yyyy HH:mm:ss"
 
 }

@@ -80,6 +80,6 @@ dependencies {
 
     // OpenTelemetry API
     implementation ("io.opentelemetry:opentelemetry-api:1.11.0") // Add this line
-
+    implementation ("com.google.android.gms:play-services-location:21.0.1")
 
 }

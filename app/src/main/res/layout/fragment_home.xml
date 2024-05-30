@@ -73,8 +73,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_marginEnd="@dimen/_10sdp"
-                android:src="@drawable/ic_notification"
+                android:src="@drawable/ic_notification_status"
                 app:tint="@color/black"
+                android:padding="@dimen/_5sdp"
                 app:layout_constraintBottom_toBottomOf="@+id/profile_img"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/profile_img" />
@@ -140,20 +141,27 @@
                     android:paddingBottom="@dimen/_10sdp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-
                     app:layout_constraintTop_toBottomOf="@id/tv_today_title">
+                    <ImageView
+                        android:id="@+id/iv_check_in"
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/ic_check_in_timer_start"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintBottom_toBottomOf="@+id/tv_check_in_txt"
+                        app:layout_constraintTop_toTopOf="@+id/tv_check_in">
+
+                    </ImageView>
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/tv_check_in"
                         style="@style/TEXT_MEDIUM_WHITE_10"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_5sdp"
-
-                        android:layout_marginTop="@dimen/_5sdp"
                         android:text="@string/check_in"
+                        android:layout_marginStart="@dimen/_3sdp"
                         android:textAlignment="textStart"
-                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/iv_check_in"
                         app:layout_constraintTop_toTopOf="@+id/btn_check_in" />
 
                     <com.google.android.material.textview.MaterialTextView
@@ -161,42 +169,56 @@
                         style="@style/TEXT_MEDIUM_WHITE_10"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_5sdp"
-                        android:text="10:00 AM"
-                        android:textAlignment="textStart"
-                        app:layout_constraintStart_toStartOf="parent"
+                        android:text="--:--"
+                        android:layout_marginStart="@dimen/_3sdp"
+                        app:layout_constraintEnd_toEndOf="@+id/tv_check_in"
+                        app:layout_constraintStart_toEndOf="@id/iv_check_in"
                         app:layout_constraintTop_toBottomOf="@+id/tv_check_in" />
 
-                    <com.google.android.material.textview.MaterialTextView
+                    <ImageView
+                        android:id="@+id/iv_check_out"
+                        style="@style/TEXT_MEDIUM_WHITE_10"
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/check_out"
+                        android:src="@drawable/ic_timer_pause"
+                        app:layout_constraintEnd_toStartOf="@+id/btn_check_in"
+                        app:layout_constraintBottom_toBottomOf="@+id/tv_check_out_txt"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/tv_check_out" />
+
+                    <TextView
                         android:id="@+id/tv_check_out"
                         style="@style/TEXT_MEDIUM_WHITE_10"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_5sdp"
                         android:text="@string/check_out"
+                        android:layout_marginStart="@dimen/_3sdp"
+                        android:textAlignment="textStart"
+                        app:layout_constraintTop_toTopOf="@+id/btn_check_in"
+                        app:layout_constraintStart_toEndOf="@+id/iv_check_out"
 
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/btn_check_in" />
-
+                        ></TextView>
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/tv_check_out_txt"
                         style="@style/TEXT_MEDIUM_WHITE_10"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="--:--"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_marginStart="@dimen/_3sdp"
+                        app:layout_constraintEnd_toEndOf="@+id/tv_check_out"
+                        app:layout_constraintStart_toEndOf="@+id/iv_check_out"
                         app:layout_constraintTop_toBottomOf="@+id/tv_check_out" />
 
                     <LinearLayout
                         android:id="@+id/btn_check_in"
                         android:layout_width="wrap_content"
-                        android:layout_height="@dimen/_80sdp"
+                        android:layout_height="@dimen/_70sdp"
                         android:background="@drawable/rounded_bg"
                         android:gravity="center"
                         android:orientation="vertical"
                         android:padding="@dimen/_10sdp"
+                        android:elevation="2dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
 
@@ -224,9 +246,7 @@
                         android:id="@+id/current_loc"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_5sdp"
                         android:layout_marginBottom="@dimen/_5sdp"
-
                         android:gravity="center"
                         android:orientation="horizontal"
                         app:layout_constraintBottom_toBottomOf="@+id/btn_check_in"
@@ -234,10 +254,9 @@
 
                         <ImageView
                             android:id="@+id/iv_loc"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/ic_loc_pin"
-                            app:tint="@color/white" />
+                            android:layout_width="@dimen/_20sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:src="@drawable/ic_location_tick" />
 
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/tv_location"
@@ -245,7 +264,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:paddingStart="@dimen/_5sdp"
-                            android:text="@string/in_office"
+                            tools:text="@string/in_office"
                             android:textAlignment="textStart" />
 
                     </LinearLayout>
@@ -259,7 +278,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_10sdp"
-                    android:text="@string/modules"
+                    android:text="@string/my_actions"
                     android:textAlignment="textStart"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/ly_today" />

@@ -9,7 +9,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/ly_day"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/_150sdp"
         android:layout_height="wrap_content"
         android:background="@drawable/rounded_bgg"
         android:backgroundTint="#F6F6F8"
@@ -39,6 +39,8 @@
             android:text="Arslan Umar"
             android:layout_marginTop="@dimen/_2sdp"
             android:textAlignment="textStart"
+            android:lines="1"
+            android:ellipsize="end"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/iv_profile" />
