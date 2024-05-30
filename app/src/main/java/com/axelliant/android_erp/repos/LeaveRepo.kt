@@ -102,7 +102,7 @@ class LeaveRepo(private var apiInterface: ApiInterface) {
     fun getTeamLeaveDetail(attendanceInput: AttendanceInput): MutableLiveData<BaseApiModel<TeamLeaveDetailResponse>> {
         val serverResponse = MutableLiveData<BaseApiModel<TeamLeaveDetailResponse>>()
 
-        val call: Call<ResponseBody>  = apiInterface.callTeamLeaveDetail(start_date = attendanceInput.startDate, end_date = attendanceInput.endDate)
+        val call: Call<ResponseBody>  = apiInterface.callTeamLeaveDetail(start_date = attendanceInput.startDate, end_date = attendanceInput.endDate, filters = attendanceInput.filters)
 
         Log.e("HTTP Request", " " + call?.request().toString())
 

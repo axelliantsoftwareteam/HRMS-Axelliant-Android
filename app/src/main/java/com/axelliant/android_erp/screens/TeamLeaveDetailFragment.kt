@@ -37,6 +37,7 @@ class TeamLeaveDetailFragment : BaseFragment() {
     private val leaveViewModel: LeaveViewModel by inject()
     private var startDateString: String? = null
     private var endDateString: String? = null
+    private var filterId = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -98,7 +99,7 @@ class TeamLeaveDetailFragment : BaseFragment() {
         binding?.rvSubFilter?.layoutManager =
             LinearLayoutManager(requireActivity(), RecyclerView.HORIZONTAL, false)
         val weeklyAdapter = SubFilterAdapter(
-            "",
+            filterId,
             listOf(
                 FilterModel(),
                 FilterModel(),
@@ -106,10 +107,10 @@ class TeamLeaveDetailFragment : BaseFragment() {
             ), requireContext(),
             object : AdapterItemClick {
                 override fun onItemClick(customObject: Any, position: Int) {
-                    val currentObject = customObject as Test
-                    requireContext().showSuccessMsg(
-                        currentObject.testString
-                    )
+                    val filterObject = customObject as FilterModel
+
+                    filterId = filterObject.id.toString()
+                    leaveViewModel.getTeamLeaveDetail(getCurrentObject())
 
                 }
 
@@ -215,6 +216,7 @@ class TeamLeaveDetailFragment : BaseFragment() {
             this.startDate = startDateString!!
             this.endDate = endDateString!!
             this.filter = currentFilter
+            this.filters= filterId
 
         }
 
