@@ -384,6 +384,7 @@ class HomeFragment : BaseFragment() {
                 override fun onItemClick(customObject: Any, position: Int) {
                     val currentObject = customObject as Modules
 
+
                     when (currentObject.name) {
                         "Attendance" -> {
 
