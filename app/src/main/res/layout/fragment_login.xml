@@ -30,6 +30,8 @@
             android:layout_width="0dp"
             android:layout_height="@dimen/_40sdp"
             android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:padding="@dimen/_5sdp"
             android:src="@drawable/ic_applogo"
             app:layout_constraintEnd_toEndOf="@id/end_guideline"
             app:layout_constraintStart_toStartOf="@id/start_guideline"
@@ -46,17 +48,29 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/iv_logo">
 
-            <ImageView
+            <LinearLayout
                 android:id="@+id/tv_view_detail"
                 android:layout_width="0dp"
-                android:layout_height="@dimen/_70sdp"
+                android:layout_height="@dimen/_100sdp"
+                android:orientation="vertical"
                 android:layout_marginEnd="@dimen/_10sdp"
+                android:gravity="center"
+                android:layout_marginTop="@dimen/_5sdp"
                 android:background="@drawable/rounded_bgg"
+                app:layout_constraintEnd_toStartOf="@+id/tv_delete"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+            <ImageView
+                android:id="@+id/iv_employee"
+                android:layout_width="@dimen/_70sdp"
+                android:layout_height="@dimen/_70sdp"
                 android:padding="@dimen/_5sdp"
                 android:src="@drawable/ic_employee"
                 app:layout_constraintEnd_toStartOf="@+id/tv_delete"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+            </LinearLayout>
+
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_employ"
@@ -69,18 +83,24 @@
                 app:layout_constraintStart_toStartOf="@+id/tv_view_detail"
                 app:layout_constraintTop_toBottomOf="@+id/tv_view_detail" />
 
-
-            <ImageView
+            <LinearLayout
                 android:id="@+id/tv_delete"
                 android:layout_width="0dp"
-                android:layout_height="@dimen/_70sdp"
+                android:layout_height="@dimen/_100sdp"
+                android:orientation="vertical"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:gravity="center"
+                android:layout_marginTop="@dimen/_5sdp"
                 android:background="@drawable/rounded_bgg"
-                android:padding="@dimen/_5sdp"
-                android:src="@drawable/ic_vender"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/tv_view_detail"
-                app:layout_constraintTop_toTopOf="parent" />
-
+                app:layout_constraintTop_toTopOf="parent">
+            <ImageView
+                android:layout_width="@dimen/_70sdp"
+                android:layout_height="@dimen/_70sdp"
+                android:padding="@dimen/_5sdp"
+                android:src="@drawable/ic_vender" />
+            </LinearLayout>
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_vendor"
                 style="@style/TEXT_MEDIUM_BLACK_10"

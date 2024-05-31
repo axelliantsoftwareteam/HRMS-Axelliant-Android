@@ -42,6 +42,7 @@ import com.axelliant.hrms.model.TargetLocResponse
 import com.axelliant.hrms.model.dashboard.Birthday
 import com.axelliant.hrms.model.dashboard.EmployProfile
 import com.axelliant.hrms.navigation.AppNavigator
+import com.axelliant.hrms.utils.SessionManager
 import com.axelliant.hrms.utils.Utils.getCurrentTime
 import com.axelliant.hrms.viewmodel.HomeViewModel
 import com.microsoft.identity.client.IAccount
@@ -74,6 +75,7 @@ class HomeFragment : BaseFragment() {
     private lateinit var locationManager: LocationManager
 
     private val homeViewModel: HomeViewModel by inject()
+    private val sessionManager: SessionManager by inject()
 
     /* Azure AD Variables */
     private var mSingleAccountApp: ISingleAccountPublicClientApplication? = null
@@ -203,11 +205,14 @@ class HomeFragment : BaseFragment() {
                 override fun onSignOut() {
                     mAccount = null
                     requireContext().showErrorMsg("Sign Out")
+                    sessionManager.logoutUser()
                     AppNavigator.navigateToLogin()
                 }
 
                 override fun onError(exception: MsalException) {
                     requireContext().showErrorMsg(exception.toString())
+                    sessionManager.logoutUser()
+                    AppNavigator.navigateToLogin()
                 }
             })
         })
