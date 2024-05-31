@@ -31,6 +31,7 @@ import com.axelliant.hrms.config.AppConst.inputFormat
 import com.axelliant.hrms.config.AppConst.outputFormat
 import com.axelliant.hrms.config.GlobalConfig
 import com.axelliant.hrms.databinding.FragmentHomeBinding
+import com.axelliant.hrms.enums.LeaveStatus
 import com.axelliant.hrms.enums.LocationFilter
 import com.axelliant.hrms.event.EventObserver
 import com.axelliant.hrms.extention.setUrlImage
@@ -41,6 +42,7 @@ import com.axelliant.hrms.model.Modules
 import com.axelliant.hrms.model.TargetLocResponse
 import com.axelliant.hrms.model.dashboard.Birthday
 import com.axelliant.hrms.model.dashboard.EmployProfile
+import com.axelliant.hrms.model.login.CheckInRequest
 import com.axelliant.hrms.navigation.AppNavigator
 import com.axelliant.hrms.utils.SessionManager
 import com.axelliant.hrms.utils.Utils.getCurrentTime
@@ -55,6 +57,7 @@ import java.util.Date
 
 class HomeFragment : BaseFragment() {
 
+    private var loc: String?=null
     private lateinit var frontAnimation: AnimatorSet
     private lateinit var backAnimation: AnimatorSet
     private var isFront = true
@@ -104,9 +107,6 @@ class HomeFragment : BaseFragment() {
         override fun onProviderEnabled(provider: String) {}
         override fun onProviderDisabled(provider: String) {}
     }
-
-
-
 
 
     override fun onCreateView(
@@ -189,6 +189,18 @@ class HomeFragment : BaseFragment() {
                 }
 
             })
+        homeViewModel.checkInResponse.observe(
+            viewLifecycleOwner,
+            EventObserver { response ->
+
+                if (response?.meta?.status == true) {
+                    requireContext().showErrorMsg(response.meta.message.toString())
+                } else {
+                    requireContext().showErrorMsg(response?.meta?.message.toString())
+                }
+
+            })
+
 
         binding?.ivQr?.setOnClickListener {
             requireContext().showSuccessMsg()
@@ -217,12 +229,18 @@ class HomeFragment : BaseFragment() {
             })
         })
 
-        targetLocList.add(TargetLocResponse(LocationFilter.NTC_OFFICE.value,31.5494, 74.3333))
-        targetLocList.add(TargetLocResponse(LocationFilter.NASTP_OFFICE.value,targetLatitude,targetLongitude))
-
+        targetLocList.add(TargetLocResponse(LocationFilter.NTC_OFFICE.value, 31.5494, 74.3333))
+        targetLocList.add(
+            TargetLocResponse(
+                LocationFilter.NASTP_OFFICE.value,
+                targetLatitude,
+                targetLongitude
+            )
+        )
 
 
         setCurrentLocationText()
+
         val scale = requireContext().resources.displayMetrics.density
         binding?.tvCheckInStatus?.cameraDistance = 8000 * scale
         binding?.tvCheckInStatus?.cameraDistance = 8000 * scale
@@ -237,14 +255,18 @@ class HomeFragment : BaseFragment() {
             AnimatorInflater.loadAnimator(requireContext(), R.animator.back_animator) as AnimatorSet
 
         binding?.btnCheckIn?.setOnClickListener {
-            if (isFront)
-            {
+            if (isFront) {
                 checkIn = getCurrentTime()
                 val date: Date? = checkIn?.let { it1 -> inputFormat.parse(it1) }
                 val formattedTime: String = date?.let { outputFormat.format(it) } ?: "Invalid date"
                 binding?.tvCheckInTxt?.text = formattedTime.valueQualifier()
                 binding?.tvCheckInStatus?.text = LocationFilter.CHECK_IN.value
-                binding?.ivPunchIn?.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.ic_punch_in))
+                binding?.ivPunchIn?.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.ic_punch_in
+                    )
+                )
                 setCurrentLocationText()
 
                 frontAnimation.setTarget(binding?.lyCheckIn)
@@ -252,6 +274,14 @@ class HomeFragment : BaseFragment() {
                 frontAnimation.start()
                 backAnimation.start()
                 isFront = false
+                homeViewModel.postCheckIn(CheckInRequest().apply {
+                    this.log_type=checkIn
+                    this.date_time=checkIn
+                    this.location=loc
+                    this.request_status= LeaveStatus.PENDING.value
+                })
+
+
 
             } else {
                 checkOut = getCurrentTime()
@@ -259,7 +289,12 @@ class HomeFragment : BaseFragment() {
                 val formattedTime: String = date?.let { outputFormat.format(it) } ?: "Invalid date"
                 binding?.tvCheckOutTxt?.text = formattedTime.valueQualifier()
                 binding?.tvCheckOutStatus?.text = LocationFilter.CHECK_OUT.value
-                binding?.ivPunchOut?.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.ic_absent))
+                binding?.ivPunchOut?.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.ic_absent
+                    )
+                )
                 setCurrentLocationText()
 
                 frontAnimation.setTarget(binding?.lyCheckOut)
@@ -268,6 +303,12 @@ class HomeFragment : BaseFragment() {
                 frontAnimation.start()
                 isFront = true
 
+                homeViewModel.postCheckIn(CheckInRequest().apply {
+                    this.log_type=checkIn
+                    this.date_time=checkIn
+                    this.location=loc
+                    this.request_status= LeaveStatus.PENDING.value
+                })
 
             }
 
@@ -291,11 +332,13 @@ class HomeFragment : BaseFragment() {
             })
 
     }
+
+
+
     private fun setCurrentLocationText() {
 //        binding?.tvLocTxt?.text = getLocationAddress(currentLocation)
 
-        for (targetloc in targetLocList)
-        {
+        for (targetloc in targetLocList) {
             if (currentLocation != null) {
                 val isWithinRadius = isLocationWithinRadius(
                     currentLocation!!.latitude,
@@ -306,15 +349,16 @@ class HomeFragment : BaseFragment() {
                 )
                 if (isWithinRadius) {
                     binding?.tvLocation?.text = targetloc.name
+                    loc=LocationFilter.REMOTE.value
                     return
-                }
-                else{
-                    binding?.tvLocation?.text=LocationFilter.REMOTE.value
+                } else {
+                    binding?.tvLocation?.text = LocationFilter.REMOTE.value
                 }
             }
         }
 
     }
+
     private fun isLocationWithinRadius(
         currentLat: Double,
         currentLng: Double,
@@ -376,15 +420,15 @@ class HomeFragment : BaseFragment() {
                     color = requireContext().getColor(R.color.yellow),
                     drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_req)
                 ),
-               /* Modules(
-                    id = 4,
-                    name = "Approval",
-                    description = "View all the requests",
-                    color = requireContext().getColor(R.color.purple),
-                    drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_loc_pin)
-                ),*/
+                /* Modules(
+                     id = 4,
+                     name = "Approval",
+                     description = "View all the requests",
+                     color = requireContext().getColor(R.color.purple),
+                     drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_loc_pin)
+                 ),*/
 
-                ),
+            ),
             object : AdapterItemClick {
                 override fun onItemClick(customObject: Any, position: Int) {
                     val currentObject = customObject as Modules

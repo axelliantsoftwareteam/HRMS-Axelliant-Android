@@ -57,10 +57,24 @@ class LoginFragment : BaseFragment() {
                 .build()
             mSingleAccountApp!!.signIn(signInParameters)
         })
+        binding.tvViewDetail.background = ContextCompat.getDrawable(requireContext(), R.drawable.rounded_leave_approve)
+        binding.tvViewDetail.animate()
+            .scaleX(1.1f)
+            .scaleY(1.1f)
+            .setDuration(200)
+            .withEndAction {
+                // Scale down the other view
+                binding.tvDelete.animate()
+                    .scaleX(1.0f)
+                    .scaleY(1.0f)
+                    .setDuration(200)
+                    .start()
+            }
+            .start()
 
         binding.tvViewDetail.setOnClickListener {
             // Change the background drawable for the clicked view
-            binding.tvViewDetail.background = ContextCompat.getDrawable(requireContext(), R.drawable.rounded_attend_bg)
+            binding.tvViewDetail.background = ContextCompat.getDrawable(requireContext(), R.drawable.rounded_leave_approve)
 
             // Scale up the clicked view
             binding.tvViewDetail.animate()
@@ -80,7 +94,7 @@ class LoginFragment : BaseFragment() {
 
         binding.tvDelete.setOnClickListener {
             // Change the background drawable for the clicked view
-            binding.tvDelete.background = ContextCompat.getDrawable(requireContext(), R.drawable.rounded_attend_bg)
+            binding.tvDelete.background = ContextCompat.getDrawable(requireContext(), R.drawable.rounded_leave_approve)
 
             // Scale up the clicked view
             binding.tvDelete.animate()

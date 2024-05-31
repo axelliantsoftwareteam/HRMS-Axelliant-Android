@@ -2,6 +2,7 @@ package com.axelliant.hrms.network
 
 import com.axelliant.hrms.di.TestModelInjection
 import com.axelliant.hrms.model.attendance.AttRequest
+import com.axelliant.hrms.model.login.CheckInRequest
 import com.axelliant.hrms.model.login.LoginRequest
 import com.axelliant.hrms.model.post.AttendanceRequest
 import com.axelliant.hrms.model.post.LeaveRequest
@@ -29,6 +30,13 @@ interface ApiInterface {
     @Headers("Content-Type: application/json")
     @POST("hrms.hr.doctype.employee.mobile_api.get_month_attendance_stats")
     fun callAttendanceMonthStats(@Body attendanceRequest: AttRequest): Call<ResponseBody> // month attendance stats
+
+
+    // Check-In Request
+    @Headers("Content-Type: application/json")
+    @POST("hrms.hr.doctype.employee.checkin.create_checkin")
+    fun callCheckIn(@Body checkInRequest: CheckInRequest?): Call<ResponseBody> // month attendance stats
+
 
 
     @Headers("Content-Type: application/json")
