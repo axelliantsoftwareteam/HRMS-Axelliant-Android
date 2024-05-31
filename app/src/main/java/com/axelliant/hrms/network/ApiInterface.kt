@@ -63,21 +63,32 @@ interface ApiInterface {
     fun callMyLeaveDetail(@Body attRequest: AttRequest): Call<ResponseBody>
 
 
-    // required APIS
-
-
     @Headers("Content-Type: application/json")
     @POST("hrms.hr.doctype.employee.leaves_mobile.get_leave_application_requests_team") // team leave detail fragment
     fun callTeamLeaveDetail(@Body attRequest: AttRequest): Call<ResponseBody>
 
+    // required APIS
+
 
     @Headers("Content-Type: application/json")
-    @POST("leave_request/")                              // post leave request
+    @GET("hrms.hr.doctype.employee.leaves_mobile.get_leave_type")  // Leave types for request section
+    fun getLeaveTypes(): Call<ResponseBody>
+
+
+
+
+    @Headers("Content-Type: application/json")
+    @GET("hrms.hr.doctype.employee.checkin.get_checkin_select_field")  // Attendance types for request section
+    fun getAttendanceRequestInformation(): Call<ResponseBody>
+
+
+    @Headers("Content-Type: application/json")
+    @POST("hrms.hr.doctype.employee.leaves_mobile.create_leave_application")                              // post leave request
     fun postLeaveRequest(@Body leaveRequest: LeaveRequest?): Call<ResponseBody>
 
 
     @Headers("Content-Type: application/json")
-    @POST("attendance_request/")                             // attendance leave request
+    @POST("hrms.hr.doctype.employee.checkin.create_checkin")                             // attendance leave request
     fun postAttendanceRequest(@Body attendanceRequest: AttendanceRequest?): Call<ResponseBody>
 
 

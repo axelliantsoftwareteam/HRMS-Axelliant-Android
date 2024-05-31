@@ -97,9 +97,12 @@ class MyAttendanceDetailFragment : BaseFragment() {
 
 
     private fun dataPopulate(attendanceData: ArrayList<AttendanceDetail>) {
-        binding?.rvAttendanceDetail?.layoutManager = LinearLayoutManager(requireActivity())
+
+        val manager = LinearLayoutManager(requireActivity())
+        binding?.rvAttendanceDetail?.layoutManager = manager
         val weeklyAdapter = MyAttendanceDetailAdapter(attendanceData)
         binding?.rvAttendanceDetail?.adapter = weeklyAdapter
+
 
 
     }

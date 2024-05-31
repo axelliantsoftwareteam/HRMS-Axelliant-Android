@@ -13,6 +13,7 @@ object AppConst {
 
     const val DATE_FORMAT =  "dd MMM,yyyy"
     const val SERVER_DATE_FORMAT =  "yyyy-MM-dd"
+    const val SERVER_DATE_FORMAT_ATTENDANCE =  "yyyy-MM-dd HH:mm:ss"
     const val ATTENDANCE_DATE_FORMAT =  "dd-MM-yyyy HH:mm:ss"
     const val DISPLAY_TIME_FORMAT =  "HH:mm"
     // Define the input format

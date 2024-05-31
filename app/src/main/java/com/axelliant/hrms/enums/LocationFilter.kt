@@ -7,4 +7,5 @@ enum class LocationFilter (val value: String){
     REMOTE("Remote"),
     CHECK_IN("Check In"),
     CHECK_OUT("Check Out")
+
 }
