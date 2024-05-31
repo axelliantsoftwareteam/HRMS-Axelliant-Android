@@ -2,32 +2,31 @@ package com.axelliant.hrms.screens
 
 import android.app.DatePickerDialog
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import androidx.core.content.ContextCompat
 import com.axelliant.hrms.R
-import com.axelliant.hrms.Test
-import com.axelliant.hrms.adapter.CustomSpinnerAdapter
-import com.axelliant.hrms.adapter.PersonSpinnerAdapter
+import com.axelliant.hrms.adapter.LeaveSpinnerAdapter
 import com.axelliant.hrms.base.BaseFragment
+import com.axelliant.hrms.config.AppConst.SERVER_DATE_FORMAT_ATTENDANCE
 import com.axelliant.hrms.databinding.FragmentRequestBinding
 import com.axelliant.hrms.enums.RequestFilter
 import com.axelliant.hrms.event.EventObserver
 import com.axelliant.hrms.extention.showErrorMsg
 import com.axelliant.hrms.extention.showSuccessMsg
+import com.axelliant.hrms.model.leave.SpinnerType
 import com.axelliant.hrms.model.post.AttendanceRequest
 import com.axelliant.hrms.model.post.LeaveRequest
 import com.axelliant.hrms.navigation.AppNavigator
 import com.axelliant.hrms.utils.Utils
-import com.axelliant.hrms.viewmodel.LeaveViewModel
 import com.axelliant.hrms.viewmodel.RequestViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
 import org.koin.android.ext.android.inject
-import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
-import java.util.Locale
 
 
 class RequestFragment : BaseFragment() {
@@ -67,12 +66,13 @@ class RequestFragment : BaseFragment() {
                 }
             })
 
-        requestViewModel.leaveRequestResponse.observe(
+        requestViewModel.postLeaveResponse.observe(
             viewLifecycleOwner,
             EventObserver { response ->
 
                 if (response?.meta?.status == true) {
-                    requireContext().showSuccessMsg("success")
+                    requireActivity().showSuccessMsg(response.status_message)
+                    clearLeaveForm()
                 } else {
                     requireContext().showErrorMsg(response?.meta?.message.toString())
                 }
@@ -85,7 +85,45 @@ class RequestFragment : BaseFragment() {
             EventObserver { response ->
 
                 if (response?.meta?.status == true) {
-                    requireContext().showSuccessMsg("success")
+                    requireActivity().showSuccessMsg(response.status_message)
+                    clearAttendanceForm()
+                } else {
+                    requireContext().showErrorMsg(response?.meta?.message.toString())
+                }
+
+            })
+
+
+        requestViewModel.getLeaves()
+        requestViewModel.leaveTypes.observe(
+            viewLifecycleOwner,
+            EventObserver { response ->
+
+                if (response?.meta?.status == true) {
+                    spinnerLeavePopulations(response.leaves)
+
+                    //parse leave spinner here
+
+
+                } else {
+                    requireContext().showErrorMsg(response?.meta?.message.toString())
+                }
+
+            })
+
+        requestViewModel.getAttendanceRequestInfo()
+        requestViewModel.attendanceRequestInfo.observe(
+            viewLifecycleOwner,
+            EventObserver { response ->
+
+                if (response?.meta?.status == true) {
+//                    spinnerLeavePopulations(response.leaves)
+
+                    spinnerAttendTypePopulations(response.checkin)
+                    spinnerLocTypePopulations(response.location)
+                    //parse leave spinner here
+
+
                 } else {
                     requireContext().showErrorMsg(response?.meta?.message.toString())
                 }
@@ -94,9 +132,7 @@ class RequestFragment : BaseFragment() {
 
 
         eventSelection()
-        spinnerLeavePopulations()
-        spinnerAttendTypePopulations()
-        spinnerLocTypePopulations()
+
         binding?.ivBack?.setOnClickListener {
             AppNavigator.moveBackToPreviousFragment()
         }
@@ -120,11 +156,15 @@ class RequestFragment : BaseFragment() {
                     } else if (endDateString == null) {
                         requireContext().showErrorMsg("Please select end date")
                     } else {
+                        val leaveItem = binding!!.spLeaveType.selectedItem as SpinnerType
+
+
                         requestViewModel.postLeaveQuest(LeaveRequest().apply {
                             this.start_date = startDateString
                             this.end_date = endDateString
                             this.leave_reason = binding!!.etLeaveReason.text.toString()
-                            this.leave_type = binding!!.spLeaveType.selectedItem.toString()
+                            this.leave_type = leaveItem.type
+                            this.post_date = Utils.getServerFormat()
 
                         })
 
@@ -142,11 +182,15 @@ class RequestFragment : BaseFragment() {
                         requireContext().showErrorMsg("Please select date")
                     } else {
 
+                        val attendanceType = binding!!.spAttendType.selectedItem as SpinnerType
+                        val locationType = binding!!.spLocType.selectedItem as SpinnerType
+
                         requestViewModel.postAttendanceQuest(AttendanceRequest().apply {
-                            this.date = currentDateString
-                            this.location_type = binding!!.spLocType.selectedItem.toString()
-                            this.attendance_type = binding!!.spAttendType.selectedItem.toString()
-                            this.attendance_reason = binding!!.etLeaveReason.text.toString()
+                            this.date_time = currentDateString
+                            this.location = locationType.type
+                            this.log_type = attendanceType.type
+                            this.attendance_reason = binding!!.etAttendanceReason.text.toString()
+                            this.request_status="Pending"
 
                         })
 
@@ -158,6 +202,27 @@ class RequestFragment : BaseFragment() {
 
         }
     }
+
+    private fun clearLeaveForm() {
+        startDateString = null
+        endDateString = null
+        binding?.spLeaveType?.setSelection(0)
+        binding?.etLeaveReason?.text?.clear()
+        setDateView()
+
+    }
+
+    private fun clearAttendanceForm() {
+        currentDateString = null
+        binding?.spAttendType?.setSelection(0)
+        binding?.spLocType?.setSelection(0)
+        binding?.etAttendanceReason?.text?.clear()
+        binding?.tvDateTxt?.text = null
+        binding?.tvDateTxt?.hint=requireContext().getString(R.string.date)
+
+
+    }
+
 
     private fun pickDate() {
         val c = Calendar.getInstance()
@@ -171,7 +236,8 @@ class RequestFragment : BaseFragment() {
                 selectedDate.set(year, monthOfYear, dayOfMonth)
 
                 // Format the date using SimpleDateFormat
-                currentDateString = Utils.getServerFormat(date = selectedDate.time)
+                currentDateString = Utils.getServerFormat(
+                    dateFormat = SERVER_DATE_FORMAT_ATTENDANCE,date = selectedDate.time)
                 binding?.tvDateTxt?.text = currentDateString
             },
             year,
@@ -213,6 +279,12 @@ class RequestFragment : BaseFragment() {
         if (startDateString != null && endDateString != null) {
             binding?.tvStartDateTxt?.text = startDateString
             binding?.tvEndDateTxt?.text = endDateString
+        }else{
+            binding?.tvStartDateTxt?.text=null
+            binding?.tvEndDateTxt?.text =null
+            binding?.tvStartDateTxt?.hint = requireContext().getString(R.string.start_date)
+            binding?.tvEndDateTxt?.hint = requireContext().getString(R.string.end_date)
+
         }
 
     }
@@ -230,13 +302,11 @@ class RequestFragment : BaseFragment() {
         binding?.tvWeek?.setOnClickListener {
             currentFilter = RequestFilter.LEAVE
             eventSelection()
-            setLeaveView()
         }
 
         binding?.tvMonth?.setOnClickListener {
             currentFilter = RequestFilter.ATTENDANCE
             eventSelection()
-            setAttendanceView()
         }
 
         when (currentFilter) {
@@ -260,55 +330,101 @@ class RequestFragment : BaseFragment() {
         }
     }
 
-    private fun setLeaveView() {
 
-    }
+    private fun spinnerLeavePopulations(leaves: ArrayList<SpinnerType>?) {
 
-    private fun setAttendanceView() {
+        val finalLeavesArray = arrayListOf<SpinnerType>()
 
-    }
+        finalLeavesArray.add(0, SpinnerType().apply {
+            this.type = "Select leave type"
+        })
+        if (leaves != null) {
+            finalLeavesArray.addAll(leaves)
+        }
 
-    private fun spinnerLeavePopulations() {
-
-        val adapter = CustomSpinnerAdapter(
-            requireContext(), arrayListOf(
-                Test("Select leave type"),
-                Test("Sick"),
-                Test("Annual"),
-                Test("Casual"),
-                Test("Breavement"),
-                Test("Complimentary Leave"),
-                Test("Marriage"),
-                Test("Paternity")
-            )
+        val adapter = LeaveSpinnerAdapter(
+            requireContext(), finalLeavesArray
         )
         binding?.spLeaveType?.adapter = adapter
+        binding?.spLeaveType?.onItemSelectedListener = object :
+            AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+            }
 
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+
+        }
     }
 
-    private fun spinnerAttendTypePopulations() {
+    private fun spinnerAttendTypePopulations(leaves: ArrayList<SpinnerType>?) {
 
-        val adapter = CustomSpinnerAdapter(
-            requireContext(), arrayListOf(
-                Test("Select Attendance type"),
-                Test("Check-Out"),
-                Test("Check-In")
-            )
+
+        val finalLeavesArray = arrayListOf<SpinnerType>()
+
+        finalLeavesArray.add(0, SpinnerType().apply {
+            this.type = "Select attendance type"
+        })
+        if (leaves != null) {
+            finalLeavesArray.addAll(leaves)
+        }
+
+        val adapter = LeaveSpinnerAdapter(
+            requireContext(), finalLeavesArray
         )
         binding?.spAttendType?.adapter = adapter
+        binding?.spAttendType?.onItemSelectedListener = object :
+            AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+
+        }
+
 
     }
 
-    private fun spinnerLocTypePopulations() {
+    private fun spinnerLocTypePopulations(leaves: ArrayList<SpinnerType>?) {
 
-        val adapter = CustomSpinnerAdapter(
-            requireContext(), arrayListOf(
-                Test("Select Location"),
-                Test("In office"),
-                Test("Work from home")
-            )
+
+        val finalLeavesArray = arrayListOf<SpinnerType>()
+
+        finalLeavesArray.add(0, SpinnerType().apply {
+            this.type = "Select location"
+        })
+        if (leaves != null) {
+            finalLeavesArray.addAll(leaves)
+        }
+
+        val adapter = LeaveSpinnerAdapter(
+            requireContext(), finalLeavesArray
         )
         binding?.spLocType?.adapter = adapter
+        binding?.spLocType?.onItemSelectedListener = object :
+            AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+
+        }
+
+
     }
 }
 

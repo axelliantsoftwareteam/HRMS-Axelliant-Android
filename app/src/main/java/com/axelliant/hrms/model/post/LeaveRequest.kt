@@ -5,4 +5,5 @@ class LeaveRequest {
         var end_date: String?=null
         var leave_reason: String?=null
         var leave_type: String?=null
+        var post_date: String?=null
 }

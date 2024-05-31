@@ -24,11 +24,15 @@ fun String?.valueQualifier():String {
 }
 
 fun Context.showSuccessMsg(message: String? = "Feature in progress") {
-    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    if(message==null)
+        Toast.makeText(this, "Feature in progress", Toast.LENGTH_SHORT).show()
+    else
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+
 }
 
 
-fun Context.showErrorMsg(message: String) {
+fun Context.showErrorMsg(message: String?="Error") {
     Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 }
 

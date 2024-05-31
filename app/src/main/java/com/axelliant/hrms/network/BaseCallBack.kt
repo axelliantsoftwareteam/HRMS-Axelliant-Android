@@ -39,6 +39,8 @@ abstract class BaseCallBack<T>(private val call: Call<T>) : Callback<T> {
                 onFinalFailure(ErrorMessages.NotFound404.errorString)
             } else if (response.code() == 401) {
                 onFinalFailure(ErrorMessages.SessionExpired401.errorString)
+            } else if (response.code() == 422) {
+                onFinalFailure(response.message().toString())
             } else {
                 onFinalFailure(response.errorBody().toString())
             }
@@ -54,8 +56,12 @@ abstract class BaseCallBack<T>(private val call: Call<T>) : Callback<T> {
         t: Throwable
     ): String {
         return when (t) {
-            is UnknownHostException, is SocketException-> {
+            is UnknownHostException, is SocketException -> {
                 ErrorMessages.NoInternetError.errorString
+            }
+
+            is UnknownHostException -> {
+                ErrorMessages.SocketException.errorString
             }
 
             is SocketTimeoutException -> {

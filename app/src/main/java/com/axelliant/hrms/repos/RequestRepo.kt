@@ -9,7 +9,10 @@ import com.axelliant.hrms.model.leave.LeaveResponse
 import com.axelliant.hrms.model.base.BaseApiModel
 import com.axelliant.hrms.model.base.BaseModel
 import com.axelliant.hrms.model.base.Meta
+import com.axelliant.hrms.model.leave.GetAttendanceResponse
+import com.axelliant.hrms.model.leave.GetLeavesResponse
 import com.axelliant.hrms.model.leave.MyLeaveDetailResponse
+import com.axelliant.hrms.model.leave.PostResponse
 import com.axelliant.hrms.model.post.AttendanceRequest
 import com.axelliant.hrms.model.post.LeaveRequest
 import com.axelliant.hrms.network.ApiInterface
@@ -23,8 +26,86 @@ import java.lang.reflect.Type
 
 class RequestRepo(private var apiInterface: ApiInterface) {
 
-    fun postLeaveRequest(leaveRequest: LeaveRequest): MutableLiveData<BaseApiModel<LeaveResponse>> {
-        val serverResponse = MutableLiveData<BaseApiModel<LeaveResponse>>()
+
+    fun getLeaves(): MutableLiveData<BaseApiModel<GetLeavesResponse>> {
+        val serverResponse = MutableLiveData<BaseApiModel<GetLeavesResponse>>()
+
+        val call: Call<ResponseBody>  = apiInterface.getLeaveTypes()
+
+        Log.e("HTTP Request", " " + call?.request().toString())
+
+        call.enqueue(object : BaseCallBack<ResponseBody>(call) {
+            override fun onFinalSuccess(
+                call: Call<ResponseBody>,
+                response: Response<ResponseBody>
+            ) {
+
+                Log.e("API success", " " + response.body())
+
+                val type: Type = object : TypeToken<BaseApiModel<GetLeavesResponse>>() {}.type
+                val jsonString = response.body()?.string()
+                val userModel = Gson().fromJson<BaseApiModel<GetLeavesResponse>>(jsonString, type)
+                serverResponse.value = userModel
+            }
+
+
+            override fun onFinalFailure(
+                errorString: String?
+            ) {
+
+                Log.e("API Failure", " $errorString")
+
+                serverResponse.value =
+                    BaseApiModel(BaseModel(GetLeavesResponse(meta = Meta(errorString.toString(), false))))
+
+            }
+
+        })
+
+        return serverResponse
+    }
+
+    fun getAttendanceInfo(): MutableLiveData<BaseApiModel<GetAttendanceResponse>> {
+        val serverResponse = MutableLiveData<BaseApiModel<GetAttendanceResponse>>()
+
+        val call: Call<ResponseBody>  = apiInterface.getAttendanceRequestInformation()
+
+        Log.e("HTTP Request", " " + call?.request().toString())
+
+        call.enqueue(object : BaseCallBack<ResponseBody>(call) {
+            override fun onFinalSuccess(
+                call: Call<ResponseBody>,
+                response: Response<ResponseBody>
+            ) {
+
+                Log.e("API success", " " + response.body())
+
+                val type: Type = object : TypeToken<BaseApiModel<GetAttendanceResponse>>() {}.type
+                val jsonString = response.body()?.string()
+                val userModel = Gson().fromJson<BaseApiModel<GetAttendanceResponse>>(jsonString, type)
+                serverResponse.value = userModel
+            }
+
+
+            override fun onFinalFailure(
+                errorString: String?
+            ) {
+
+                Log.e("API Failure", " $errorString")
+
+                serverResponse.value =
+                    BaseApiModel(BaseModel(GetAttendanceResponse(meta = Meta(errorString.toString(), false))))
+
+            }
+
+        })
+
+        return serverResponse
+    }
+
+
+    fun postLeaveRequest(leaveRequest: LeaveRequest): MutableLiveData<BaseApiModel<PostResponse>> {
+        val serverResponse = MutableLiveData<BaseApiModel<PostResponse>>()
 
         val call: Call<ResponseBody>  = apiInterface.postLeaveRequest(leaveRequest)
 
@@ -38,9 +119,9 @@ class RequestRepo(private var apiInterface: ApiInterface) {
 
                 Log.e("API success", " " + response.body())
 
-                val type: Type = object : TypeToken<BaseApiModel<LeaveResponse>>() {}.type
+                val type: Type = object : TypeToken<BaseApiModel<PostResponse>>() {}.type
                 val jsonString = response.body()?.string()
-                val userModel = Gson().fromJson<BaseApiModel<LeaveResponse>>(jsonString, type)
+                val userModel = Gson().fromJson<BaseApiModel<PostResponse>>(jsonString, type)
                 serverResponse.value = userModel
             }
 
@@ -52,7 +133,7 @@ class RequestRepo(private var apiInterface: ApiInterface) {
                 Log.e("API Failure", " $errorString")
 
                 serverResponse.value =
-                    BaseApiModel(BaseModel(LeaveResponse(meta = Meta(errorString.toString(), false))))
+                    BaseApiModel(BaseModel(PostResponse(meta = Meta(errorString.toString(), false))))
 
             }
 
@@ -60,8 +141,8 @@ class RequestRepo(private var apiInterface: ApiInterface) {
 
         return serverResponse
     }
-    fun postAttendanceRequest(attendanceRequest: AttendanceRequest): MutableLiveData<BaseApiModel<LeaveResponse>> {
-        val serverResponse = MutableLiveData<BaseApiModel<LeaveResponse>>()
+    fun postAttendanceRequest(attendanceRequest: AttendanceRequest): MutableLiveData<BaseApiModel<PostResponse>> {
+        val serverResponse = MutableLiveData<BaseApiModel<PostResponse>>()
 
         val call: Call<ResponseBody>  = apiInterface.postAttendanceRequest(attendanceRequest)
 
@@ -75,9 +156,9 @@ class RequestRepo(private var apiInterface: ApiInterface) {
 
                 Log.e("API success", " " + response.body())
 
-                val type: Type = object : TypeToken<BaseApiModel<LeaveResponse>>() {}.type
+                val type: Type = object : TypeToken<BaseApiModel<PostResponse>>() {}.type
                 val jsonString = response.body()?.string()
-                val userModel = Gson().fromJson<BaseApiModel<LeaveResponse>>(jsonString, type)
+                val userModel = Gson().fromJson<BaseApiModel<PostResponse>>(jsonString, type)
                 serverResponse.value = userModel
             }
 
@@ -89,7 +170,7 @@ class RequestRepo(private var apiInterface: ApiInterface) {
                 Log.e("API Failure", " $errorString")
 
                 serverResponse.value =
-                    BaseApiModel(BaseModel(LeaveResponse(meta = Meta(errorString.toString(), false))))
+                    BaseApiModel(BaseModel(PostResponse(meta = Meta(errorString.toString(), false))))
 
             }
 

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/_5sdp">
+    >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/ly_action_btn"
@@ -89,6 +89,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/_5sdp"
+        android:visibility="visible"
 
         app:layout_constraintTop_toBottomOf="@+id/ly_action_btn" >
 
@@ -359,7 +360,6 @@
         android:layout_width="0dp"
         android:layout_height="@dimen/_1sdp"
         android:layout_marginTop="@dimen/_10sdp"
-        android:layout_marginBottom="@dimen/_15sdp"
         android:background="@color/divider"
         android:layout_marginStart="@dimen/_10sdp"
         android:layout_marginEnd="@dimen/_10sdp"
