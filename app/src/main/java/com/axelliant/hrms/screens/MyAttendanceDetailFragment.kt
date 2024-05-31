@@ -113,6 +113,7 @@ class MyAttendanceDetailFragment : BaseFragment() {
             this.title = "All"
             this.count = "0"
         })
+
         binding?.rvSubFilter?.layoutManager =
             LinearLayoutManager(requireActivity(), RecyclerView.HORIZONTAL, false)
         val weeklyAdapter = SubFilterAdapter(filterId,
