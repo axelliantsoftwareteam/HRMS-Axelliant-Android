@@ -1,10 +1,11 @@
 package com.axelliant.hrms.screens
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.util.Log
+import androidx.core.content.ContextCompat
 import com.axelliant.hrms.R
 import com.axelliant.hrms.base.BaseFragment
 import com.axelliant.hrms.config.AppConst
@@ -56,6 +57,48 @@ class LoginFragment : BaseFragment() {
                 .build()
             mSingleAccountApp!!.signIn(signInParameters)
         })
+
+        binding.tvViewDetail.setOnClickListener {
+            // Change the background drawable for the clicked view
+            binding.tvViewDetail.background = ContextCompat.getDrawable(requireContext(), R.drawable.rounded_attend_bg)
+
+            // Scale up the clicked view
+            binding.tvViewDetail.animate()
+                .scaleX(1.1f)
+                .scaleY(1.1f)
+                .setDuration(200)
+                .withEndAction {
+                    // Scale down the other view
+                    binding.tvDelete.animate()
+                        .scaleX(1.0f)
+                        .scaleY(1.0f)
+                        .setDuration(200)
+                        .start()
+                }
+                .start()
+        }
+
+        binding.tvDelete.setOnClickListener {
+            // Change the background drawable for the clicked view
+            binding.tvDelete.background = ContextCompat.getDrawable(requireContext(), R.drawable.rounded_attend_bg)
+
+            // Scale up the clicked view
+            binding.tvDelete.animate()
+                .scaleX(1.1f)
+                .scaleY(1.1f)
+                .setDuration(200)
+                .withEndAction {
+                    // Scale down the other view
+                    binding.tvViewDetail.animate()
+                        .scaleX(1.0f)
+                        .scaleY(1.0f)
+                        .setDuration(200)
+                        .start()
+                }
+                .start()
+        }
+
+
         binding.btnLogin.setOnClickListener {
             AppNavigator.navigateToHome()
         }
