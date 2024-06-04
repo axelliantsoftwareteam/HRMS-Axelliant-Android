@@ -12,16 +12,22 @@ import com.axelliant.hrms.adapter.MyLeaveDetailAdapter
 import com.axelliant.hrms.adapter.SubFilterAdapter
 import com.axelliant.hrms.base.BaseFragment
 import com.axelliant.hrms.callback.AdapterItemClick
+import com.axelliant.hrms.config.AppConst.LeaveRequestParam
+import com.axelliant.hrms.config.AppConst.RequestType
 import com.axelliant.hrms.databinding.FragmentMyLeaveDetailBinding
 import com.axelliant.hrms.enums.AttendanceFilter
+import com.axelliant.hrms.enums.RequestFilter
 import com.axelliant.hrms.event.EventObserver
 import com.axelliant.hrms.extention.showErrorMsg
+import com.axelliant.hrms.extention.showSuccessMsg
 import com.axelliant.hrms.model.attendance.AttendanceInput
 import com.axelliant.hrms.model.dashboard.FilterModel
 import com.axelliant.hrms.model.leave.LeaveDetail
+import com.axelliant.hrms.navigation.AppNavigator
 import com.axelliant.hrms.utils.Utils
 import com.axelliant.hrms.viewmodel.LeaveViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.gson.Gson
 import org.koin.android.ext.android.inject
 import java.util.Date
 
@@ -116,7 +122,18 @@ class MyLeaveDetailFragment : BaseFragment() {
 
         binding?.rvAttendanceDetail?.layoutManager = LinearLayoutManager(requireActivity())
         val weeklyAdapter = MyLeaveDetailAdapter(
-            leaves!!, requireContext()
+            leaves!!, requireContext(),object:AdapterItemClick{
+                override fun onItemClick(customObject: Any, position: Int) {
+
+                    val leaveDetail = customObject as LeaveDetail
+                    AppNavigator.navigateToRequest(Bundle().apply {
+                        this.putString(RequestType, RequestFilter.LEAVE.name)
+                        this.putString(LeaveRequestParam, Gson().toJson(leaveDetail))
+                    })
+
+                }
+
+            }
         )
         binding?.rvAttendanceDetail?.adapter = weeklyAdapter
 

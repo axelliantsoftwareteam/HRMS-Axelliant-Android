@@ -2,7 +2,6 @@ package com.axelliant.hrms.screens
 
 import android.app.DatePickerDialog
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,12 +10,17 @@ import androidx.core.content.ContextCompat
 import com.axelliant.hrms.R
 import com.axelliant.hrms.adapter.LeaveSpinnerAdapter
 import com.axelliant.hrms.base.BaseFragment
+import com.axelliant.hrms.config.AppConst.AttendanceRequestParam
+import com.axelliant.hrms.config.AppConst.LeaveRequestParam
+import com.axelliant.hrms.config.AppConst.RequestType
 import com.axelliant.hrms.config.AppConst.SERVER_DATE_FORMAT_ATTENDANCE
 import com.axelliant.hrms.databinding.FragmentRequestBinding
 import com.axelliant.hrms.enums.RequestFilter
 import com.axelliant.hrms.event.EventObserver
 import com.axelliant.hrms.extention.showErrorMsg
 import com.axelliant.hrms.extention.showSuccessMsg
+import com.axelliant.hrms.model.attendance.AttendanceDetail
+import com.axelliant.hrms.model.leave.LeaveDetail
 import com.axelliant.hrms.model.leave.SpinnerType
 import com.axelliant.hrms.model.post.AttendanceRequest
 import com.axelliant.hrms.model.post.LeaveRequest
@@ -24,10 +28,15 @@ import com.axelliant.hrms.navigation.AppNavigator
 import com.axelliant.hrms.utils.Utils
 import com.axelliant.hrms.viewmodel.RequestViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.gson.Gson
 import org.koin.android.ext.android.inject
 import java.util.Calendar
 import java.util.Date
 
+
+const val leaveType = "Select leave type"
+const val attendanceType = "Select attendance type"
+const val locationType = "Select location"
 
 class RequestFragment : BaseFragment() {
 
@@ -43,6 +52,12 @@ class RequestFragment : BaseFragment() {
 
     private val requestViewModel: RequestViewModel by inject()
 
+    private var isUpdate: Boolean = false
+
+    private var preLeaveType: String = leaveType
+    private var preAttendanceType: String = attendanceType
+    private var preLocationType: String = locationType
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,12 +65,50 @@ class RequestFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View? {
 
+
         _binding = FragmentRequestBinding.inflate(inflater).also { _binding = it }
         return binding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        if (arguments != null && requireArguments().containsKey(RequestType)) {
+            isUpdate = true
+            val type = arguments?.getString(RequestType, RequestFilter.LEAVE.name)
+            if (type == RequestFilter.LEAVE.name) {
+                currentFilter = RequestFilter.LEAVE
+                val leaveDetail = Gson().fromJson(
+                    arguments?.getString(LeaveRequestParam),
+                    LeaveDetail::class.java
+                )
+                startDateString = leaveDetail.from_date
+                endDateString = leaveDetail.to_date
+                binding!!.etLeaveReason.setText(leaveDetail.leave_reason.toString())
+                preLeaveType = leaveDetail.leave_type
+
+                setDateView()
+                binding?.btnApply?.setText(requireContext().getString(R.string.update))
+
+
+            } else {
+                currentFilter = RequestFilter.ATTENDANCE
+
+
+                val attendanceDetail = Gson().fromJson(
+                    arguments?.getString(AttendanceRequestParam),
+                    AttendanceDetail::class.java
+                )
+                currentDateString = attendanceDetail.date
+                binding!!.etAttendanceReason.setText(attendanceDetail.attendance_reason)
+                preAttendanceType = attendanceDetail.attendance_type
+                preLocationType = attendanceDetail.attendance_location
+                setCurrentDate()
+                binding?.btnApply?.setText(requireContext().getString(R.string.update))
+
+            }
+        }
+
 
         requestViewModel.getIsLoading()
             .observe(viewLifecycleOwner, EventObserver { isLoading ->
@@ -133,17 +186,6 @@ class RequestFragment : BaseFragment() {
 
         eventSelection()
 
-        binding?.ivBack?.setOnClickListener {
-            AppNavigator.moveBackToPreviousFragment()
-        }
-
-        binding?.lyDate?.setOnClickListener {
-            pickDate()
-        }
-        binding?.lyStartDate?.setOnClickListener {
-            datePickerDialog()
-        }
-
         binding?.btnApply?.setOnClickListener {
 
             when (currentFilter) {
@@ -190,7 +232,7 @@ class RequestFragment : BaseFragment() {
                             this.location = locationType.type
                             this.log_type = attendanceType.type
                             this.attendance_reason = binding!!.etAttendanceReason.text.toString()
-                            this.request_status="Pending"
+                            this.request_status = "Pending"
 
                         })
 
@@ -200,6 +242,17 @@ class RequestFragment : BaseFragment() {
                 }
             }
 
+        }
+
+        binding?.ivBack?.setOnClickListener {
+            AppNavigator.moveBackToPreviousFragment()
+        }
+
+        binding?.lyDate?.setOnClickListener {
+            pickDate()
+        }
+        binding?.lyStartDate?.setOnClickListener {
+            datePickerDialog()
         }
     }
 
@@ -218,7 +271,7 @@ class RequestFragment : BaseFragment() {
         binding?.spLocType?.setSelection(0)
         binding?.etAttendanceReason?.text?.clear()
         binding?.tvDateTxt?.text = null
-        binding?.tvDateTxt?.hint=requireContext().getString(R.string.date)
+        binding?.tvDateTxt?.hint = requireContext().getString(R.string.date)
 
 
     }
@@ -237,8 +290,9 @@ class RequestFragment : BaseFragment() {
 
                 // Format the date using SimpleDateFormat
                 currentDateString = Utils.getServerFormat(
-                    dateFormat = SERVER_DATE_FORMAT_ATTENDANCE,date = selectedDate.time)
-                binding?.tvDateTxt?.text = currentDateString
+                    dateFormat = SERVER_DATE_FORMAT_ATTENDANCE, date = selectedDate.time
+                )
+                setCurrentDate()
             },
             year,
             month,
@@ -247,6 +301,11 @@ class RequestFragment : BaseFragment() {
         // Set the maximum date to today
         datePickerDialog.datePicker.maxDate = c.timeInMillis
         datePickerDialog.show()
+    }
+
+    private fun setCurrentDate(){
+        binding?.tvDateTxt?.text = currentDateString
+
     }
 
     private fun datePickerDialog() {
@@ -279,9 +338,9 @@ class RequestFragment : BaseFragment() {
         if (startDateString != null && endDateString != null) {
             binding?.tvStartDateTxt?.text = startDateString
             binding?.tvEndDateTxt?.text = endDateString
-        }else{
-            binding?.tvStartDateTxt?.text=null
-            binding?.tvEndDateTxt?.text =null
+        } else {
+            binding?.tvStartDateTxt?.text = null
+            binding?.tvEndDateTxt?.text = null
             binding?.tvStartDateTxt?.hint = requireContext().getString(R.string.start_date)
             binding?.tvEndDateTxt?.hint = requireContext().getString(R.string.end_date)
 
@@ -336,7 +395,7 @@ class RequestFragment : BaseFragment() {
         val finalLeavesArray = arrayListOf<SpinnerType>()
 
         finalLeavesArray.add(0, SpinnerType().apply {
-            this.type = "Select leave type"
+            this.type = leaveType
         })
         if (leaves != null) {
             finalLeavesArray.addAll(leaves)
@@ -346,6 +405,20 @@ class RequestFragment : BaseFragment() {
             requireContext(), finalLeavesArray
         )
         binding?.spLeaveType?.adapter = adapter
+
+        if (isUpdate) {
+
+            for (index in 0..<finalLeavesArray.size) {
+                if (finalLeavesArray[index].type.equals(preLeaveType)) {
+                    binding?.spLeaveType?.setSelection(index)
+                    break
+                }
+            }
+        }
+
+
+
+
         binding?.spLeaveType?.onItemSelectedListener = object :
             AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
@@ -367,7 +440,7 @@ class RequestFragment : BaseFragment() {
         val finalLeavesArray = arrayListOf<SpinnerType>()
 
         finalLeavesArray.add(0, SpinnerType().apply {
-            this.type = "Select attendance type"
+            this.type = attendanceType
         })
         if (leaves != null) {
             finalLeavesArray.addAll(leaves)
@@ -377,6 +450,19 @@ class RequestFragment : BaseFragment() {
             requireContext(), finalLeavesArray
         )
         binding?.spAttendType?.adapter = adapter
+
+        if (isUpdate) {
+
+            for (index in 0..<finalLeavesArray.size) {
+                if (finalLeavesArray[index].type.equals(preAttendanceType)) {
+                    binding?.spAttendType?.setSelection(index)
+                    break
+                }
+            }
+        }
+
+
+
         binding?.spAttendType?.onItemSelectedListener = object :
             AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
@@ -400,7 +486,7 @@ class RequestFragment : BaseFragment() {
         val finalLeavesArray = arrayListOf<SpinnerType>()
 
         finalLeavesArray.add(0, SpinnerType().apply {
-            this.type = "Select location"
+            this.type = locationType
         })
         if (leaves != null) {
             finalLeavesArray.addAll(leaves)
@@ -410,6 +496,18 @@ class RequestFragment : BaseFragment() {
             requireContext(), finalLeavesArray
         )
         binding?.spLocType?.adapter = adapter
+
+        if (isUpdate) {
+
+            for (index in 0..<finalLeavesArray.size) {
+                if (finalLeavesArray[index].type.equals(preLocationType)) {
+                    binding?.spAttendType?.setSelection(index)
+                    break
+                }
+            }
+        }
+
+
         binding?.spLocType?.onItemSelectedListener = object :
             AdapterView.OnItemSelectedListener {
             override fun onItemSelected(

@@ -12,7 +12,8 @@ import com.axelliant.hrms.databinding.SpinnerItemBinding
 import com.axelliant.hrms.model.attendance.AttendanceDetail
 
 class MyAttendanceDetailAdapter(
-    private val attendanceList: ArrayList<AttendanceDetail>
+    private val attendanceList: ArrayList<AttendanceDetail>,
+    private val adapterItemClick: AdapterItemClick
 ) :
     RecyclerView.Adapter<MyAttendanceDetailAdapter.AccountsVH>() {
 
@@ -27,12 +28,12 @@ class MyAttendanceDetailAdapter(
     override fun onBindViewHolder(holder: AccountsVH, position: Int) {
         holder.bind(attendanceList[position])
 
-//        holder.binding.lyDropDown.isVisible = false
 
+        holder.binding.lyActionBtn.setOnClickListener{
+            adapterItemClick.onItemClick(attendanceList[position],position)
+        }
 
         holder.binding.tvDropDown.setOnClickListener {
-
-//            holder.binding.lyDropDown.isVisible = !holder.binding.lyDropDown.isVisible
 
             attendanceList[position].isDetailVisible = !attendanceList[position].isDetailVisible
             notifyItemChanged(position)

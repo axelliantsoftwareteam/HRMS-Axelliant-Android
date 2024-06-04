@@ -13,5 +13,8 @@ data class AttendanceDetail(
     val shift_timings: String,
     val status: String,
     val working_hours: Double,
-    var isDetailVisible:Boolean=false
+    var isDetailVisible:Boolean=false,
+    val attendance_reason :String = "",
+    val attendance_location :String = "",  // In office , work from home
+    val attendance_type :String = ""   // In, Out
 )

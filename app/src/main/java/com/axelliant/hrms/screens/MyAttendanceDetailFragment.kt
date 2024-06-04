@@ -12,6 +12,7 @@ import com.axelliant.hrms.adapter.MyAttendanceDetailAdapter
 import com.axelliant.hrms.adapter.SubFilterAdapter
 import com.axelliant.hrms.base.BaseFragment
 import com.axelliant.hrms.callback.AdapterItemClick
+import com.axelliant.hrms.config.AppConst
 import com.axelliant.hrms.config.AppConst.KEY_ID
 import com.axelliant.hrms.config.GlobalConfig
 import com.axelliant.hrms.databinding.FragmentMyAttendanceDetailBinding
@@ -19,14 +20,18 @@ import com.axelliant.hrms.enums.AttendanceFilter
 import com.axelliant.hrms.enums.AttendanceFilter.Custom
 import com.axelliant.hrms.enums.AttendanceFilter.MONTH
 import com.axelliant.hrms.enums.AttendanceFilter.WEEK
+import com.axelliant.hrms.enums.RequestFilter
 import com.axelliant.hrms.event.EventObserver
 import com.axelliant.hrms.extention.showErrorMsg
 import com.axelliant.hrms.model.attendance.AttendanceDetail
 import com.axelliant.hrms.model.attendance.AttendanceInput
 import com.axelliant.hrms.model.dashboard.FilterModel
+import com.axelliant.hrms.model.leave.LeaveDetail
+import com.axelliant.hrms.navigation.AppNavigator
 import com.axelliant.hrms.utils.Utils
 import com.axelliant.hrms.viewmodel.AttendanceViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.gson.Gson
 import org.koin.android.ext.android.inject
 import java.util.Date
 
@@ -99,7 +104,18 @@ class MyAttendanceDetailFragment : BaseFragment() {
     private fun dataPopulate(attendanceData: ArrayList<AttendanceDetail>) {
 
         binding?.rvAttendanceDetail?.layoutManager = LinearLayoutManager(requireActivity())
-        val weeklyAdapter = MyAttendanceDetailAdapter(attendanceData)
+        val weeklyAdapter = MyAttendanceDetailAdapter(attendanceData,object :AdapterItemClick{
+            override fun onItemClick(customObject: Any, position: Int) {
+
+                val attendanceDetail = customObject as AttendanceDetail
+                AppNavigator.navigateToRequest(Bundle().apply {
+                    this.putString(AppConst.RequestType, RequestFilter.ATTENDANCE.name)
+                    this.putString(AppConst.AttendanceRequestParam, Gson().toJson(attendanceDetail))
+                })
+
+
+            }
+        })
         binding?.rvAttendanceDetail?.adapter = weeklyAdapter
 
 
