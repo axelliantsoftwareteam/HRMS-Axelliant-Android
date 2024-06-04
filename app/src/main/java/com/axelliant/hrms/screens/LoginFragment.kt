@@ -1,5 +1,6 @@
 package com.axelliant.hrms.screens
 
+import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,6 +16,7 @@ import com.axelliant.hrms.extention.showErrorMsg
 import com.axelliant.hrms.navigation.AppNavigator
 import com.axelliant.hrms.utils.SessionManager
 import com.axelliant.hrms.viewmodel.LoginViewModel
+import com.google.android.material.textview.MaterialTextView
 import com.microsoft.identity.client.*
 import com.microsoft.identity.client.exception.MsalException
 import org.koin.android.ext.android.inject
@@ -57,7 +59,9 @@ class LoginFragment : BaseFragment() {
                 .build()
             mSingleAccountApp!!.signIn(signInParameters)
         })
-        binding.tvViewDetail.background = ContextCompat.getDrawable(requireContext(), R.drawable.rounded_leave_approve)
+        binding.tvViewDetail.background = ContextCompat.getDrawable(requireContext(), R.drawable.rounded_leave_pend)
+        setTextBold(binding.tvEmploy)
+        setTextNormal(binding.tvVendor)
         binding.tvViewDetail.animate()
             .scaleX(1.1f)
             .scaleY(1.1f)
@@ -74,7 +78,11 @@ class LoginFragment : BaseFragment() {
 
         binding.tvViewDetail.setOnClickListener {
             // Change the background drawable for the clicked view
-            binding.tvViewDetail.background = ContextCompat.getDrawable(requireContext(), R.drawable.rounded_leave_approve)
+            binding.tvViewDetail.background = ContextCompat.getDrawable(requireContext(), R.drawable.rounded_leave_pend)
+            binding.tvDelete.background = ContextCompat.getDrawable(requireContext(), R.drawable.rounded_bgg)
+
+            setTextBold(binding.tvEmploy)
+            setTextNormal(binding.tvVendor)
 
             // Scale up the clicked view
             binding.tvViewDetail.animate()
@@ -94,8 +102,10 @@ class LoginFragment : BaseFragment() {
 
         binding.tvDelete.setOnClickListener {
             // Change the background drawable for the clicked view
-            binding.tvDelete.background = ContextCompat.getDrawable(requireContext(), R.drawable.rounded_leave_approve)
-
+            binding.tvDelete.background = ContextCompat.getDrawable(requireContext(), R.drawable.rounded_leave_pend)
+            binding.tvViewDetail.background = ContextCompat.getDrawable(requireContext(), R.drawable.rounded_bgg)
+            setTextBold(binding.tvVendor)
+            setTextNormal(binding.tvEmploy)
             // Scale up the clicked view
             binding.tvDelete.animate()
                 .scaleX(1.1f)
@@ -133,6 +143,18 @@ class LoginFragment : BaseFragment() {
 
                 }
             })
+    }
+
+    private fun setTextNormal(tvEmploy: MaterialTextView) {
+        tvEmploy.apply {
+            setTypeface(null,Typeface.NORMAL)
+        }
+    }
+
+    private fun setTextBold(tvEmploy: MaterialTextView) {
+        tvEmploy.apply {
+            setTypeface(null,Typeface.BOLD)
+        }
     }
 
     private val authInteractiveCallback: AuthenticationCallback

@@ -142,4 +142,6 @@
     <string name="leaves_days">Leaves Days</string>
     <string name="my_actions">My Actions</string>
     <string name="remote">Remote</string>
+    <string name="write_reason">Write a reason</string>
+    <string name="approvals">Approvals</string>
 </resources>

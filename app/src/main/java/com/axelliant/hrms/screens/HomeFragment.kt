@@ -57,7 +57,7 @@ import java.util.Date
 
 class HomeFragment : BaseFragment() {
 
-    private var loc: String?=null
+    private var loc: String? = null
     private lateinit var frontAnimation: AnimatorSet
     private lateinit var backAnimation: AnimatorSet
     private var isFront = true
@@ -275,12 +275,11 @@ class HomeFragment : BaseFragment() {
                 backAnimation.start()
                 isFront = false
                 homeViewModel.postCheckIn(CheckInRequest().apply {
-                    this.log_type=checkIn
-                    this.date_time=checkIn
-                    this.location=loc
-                    this.request_status= LeaveStatus.PENDING.value
+                    this.log_type = checkIn
+                    this.date_time = checkIn
+                    this.location = loc
+                    this.request_status = LeaveStatus.PENDING.value
                 })
-
 
 
             } else {
@@ -304,10 +303,10 @@ class HomeFragment : BaseFragment() {
                 isFront = true
 
                 homeViewModel.postCheckIn(CheckInRequest().apply {
-                    this.log_type=checkIn
-                    this.date_time=checkIn
-                    this.location=loc
-                    this.request_status= LeaveStatus.PENDING.value
+                    this.log_type = checkIn
+                    this.date_time = checkIn
+                    this.location = loc
+                    this.request_status = LeaveStatus.PENDING.value
                 })
 
             }
@@ -334,7 +333,6 @@ class HomeFragment : BaseFragment() {
     }
 
 
-
     private fun setCurrentLocationText() {
 //        binding?.tvLocTxt?.text = getLocationAddress(currentLocation)
 
@@ -349,7 +347,7 @@ class HomeFragment : BaseFragment() {
                 )
                 if (isWithinRadius) {
                     binding?.tvLocation?.text = targetloc.name
-                    loc=LocationFilter.REMOTE.value
+                    loc = LocationFilter.REMOTE.value
                     return
                 } else {
                     binding?.tvLocation?.text = LocationFilter.REMOTE.value
@@ -394,31 +392,34 @@ class HomeFragment : BaseFragment() {
                 ),
                 Modules(
                     id = 1,
-                    name = "Leaves",
-                    description = "Leaves you have",
-                    color = requireContext().getColor(R.color.color_third),
-                    drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_leaves)
-                ),
-                Modules(
-                    id = 2,
-                    name = "Expense",
-                    description = "Claim your expense",
-                    color = requireContext().getColor(R.color.colorApp),
-                    drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_expe)
-                ),
-                Modules(
-                    id = 3,
-                    name = "Payslip",
-                    description = "View your all pay-slip",
-                    color = requireContext().getColor(R.color.greeny),
-                    drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_payslip)
-                ),
-                Modules(
-                    id = 4,
                     name = "Request",
                     description = "Present of this month",
                     color = requireContext().getColor(R.color.yellow),
                     drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_req)
+                ),
+                Modules(
+                    id = 2,
+                    name = "Leaves",
+                    description = "Leaves you have",
+                    color = requireContext().getColor(R.color.color_third),
+                    drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_leaves)
+
+                ),
+                Modules(
+                    id = 3,
+                    name = "Expense",
+                    description = "Claim your expense",
+                    color = requireContext().getColor(R.color.colorApp),
+                    drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_expe)
+
+                ),
+                Modules(
+                    id = 4,
+                    name = "Payslip",
+                    description = "View your all pay-slip",
+                    color = requireContext().getColor(R.color.greeny),
+                    drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_payslip)
+
                 ),
                 /* Modules(
                      id = 4,
