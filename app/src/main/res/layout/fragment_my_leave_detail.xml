@@ -124,6 +124,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/_5sdp"
                     android:text="@string/start_date"
+                    android:visibility="gone"
                     android:textAlignment="textStart"
                     app:layout_constraintEnd_toEndOf="@+id/divider_absent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -139,8 +140,8 @@
                     android:orientation="vertical"
                     android:padding="@dimen/_10sdp"
                     app:layout_constraintEnd_toStartOf="@+id/divider_absent"
-                    app:layout_constraintStart_toStartOf="@+id/tv_start_date"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_start_date">
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
 
                     <com.google.android.material.textview.MaterialTextView
@@ -189,6 +190,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:text="@string/end_date"
+                    android:visibility="gone"
                     android:textAlignment="textStart"
                     android:layout_marginStart="@dimen/_5sdp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -206,7 +208,7 @@
                     android:padding="@dimen/_10sdp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/divider_absent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_end_date">
+                    app:layout_constraintTop_toTopOf="parent">
 
 
                     <com.google.android.material.textview.MaterialTextView
