@@ -144,4 +144,6 @@
     <string name="remote">Remote</string>
     <string name="write_reason">Write a reason</string>
     <string name="approvals">Approvals</string>
+    <string name="request_type">Request Type</string>
+    <string name="reject">Reject</string>
 </resources>
