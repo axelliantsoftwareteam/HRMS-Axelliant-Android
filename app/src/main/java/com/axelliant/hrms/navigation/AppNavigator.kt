@@ -90,6 +90,22 @@ class AppNavigator {
             }
         }
 
+        fun navigateToApprovals(args: Bundle = Bundle()) {
+            Log.i(TAG, "navigateToLeaves: $args")
+            val navAction = NavAction(R.id.approvalFragment)
+            val navOptions = NavOptions.Builder()
+                .setPopUpTo(getCurrentDestinationId()!!, false).build()
+            navAction.navOptions = navOptions
+
+            val destination: NavDestination? = getCurrentDestinationId()?.let {
+                getController().graph.findNode(it)
+            }
+            if (destination != null) {
+                destination.putAction(R.id.approvals_fragment_action, navAction)
+                getController().navigate(R.id.approvals_fragment_action, args)
+            }
+        }
+
         fun navigateToProfile(args: Bundle = Bundle()) {
             Log.i(TAG, "navigateToProfile: $args")
             val navAction = NavAction(R.id.profileFragment)

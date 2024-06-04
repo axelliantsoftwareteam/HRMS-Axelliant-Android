@@ -35,8 +35,18 @@
 
     <color name="yellow">#FFB532</color>
     <color name="greeny">#8ED17D</color>
-    <color name="purple">#6E4BA7</color>
+<!--    <color name="purple">#6E4BA7</color>-->
     <color name="border">#EAEAEA</color>
     <color name="bg_color">#F6F6F8</color>
+
+    <!--combination of grid colors-->
+    <color name="purple">#603F8B</color>
+    <color name="aqua">#B4FEE7</color>
+    <color name="violet">#A16AE8</color>
+    <color name="fuchsia">#FD49A0</color>
+    <color name="rose_quartz">#F6D4D2</color>
+    <color name="blue_iris">#4120A9</color>
+    <color name="periwinkle">#A1A9FE</color>
+
 
 </resources>

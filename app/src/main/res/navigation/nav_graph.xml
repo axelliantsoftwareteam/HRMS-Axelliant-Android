@@ -65,6 +65,13 @@
 
     </fragment>
 
+    <fragment
+        android:id="@+id/approvalFragment"
+        android:name="com.axelliant.hrms.screens.ApprovalsFragment"
+        android:label="Expense Fragment"
+        tools:layout="@layout/fragment_approvals">
+
+    </fragment>
 
     <fragment
         android:id="@+id/attendanceStatsFragment"

@@ -257,7 +257,6 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:overlapAnchor="false"
-                    android:dropDownVerticalOffset="35dp"
                     android:padding="@dimen/_2sdp"
                     android:popupBackground="@drawable/ly_spiner_bg"
                     app:layout_constraintStart_toStartOf="parent"

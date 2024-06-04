@@ -96,6 +96,7 @@
     <string name="status">Status</string>
     <string name="shift">Shift</string>
     <string name="shift_timings">Shift Timings</string>
+    <string name="time">Time</string>
     <string name="actual_in">Actual In</string>
     <string name="expected_in">Expected In</string>
     <string name="actual_out">Actual Out</string>

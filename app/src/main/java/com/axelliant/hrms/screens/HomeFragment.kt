@@ -407,11 +407,10 @@ class HomeFragment : BaseFragment() {
                 ),
                 Modules(
                     id = 3,
-                    name = "Expense",
-                    description = "Claim your expense",
+                    name = "Approval",
+                    description = "View all requests",
                     color = requireContext().getColor(R.color.colorApp),
                     drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_expe)
-
                 ),
                 Modules(
                     id = 4,
@@ -421,13 +420,13 @@ class HomeFragment : BaseFragment() {
                     drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_payslip)
 
                 ),
-                /* Modules(
-                     id = 4,
-                     name = "Approval",
-                     description = "View all the requests",
-                     color = requireContext().getColor(R.color.purple),
-                     drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_loc_pin)
-                 ),*/
+                 Modules(
+                     id = 5,
+                     name = "Expense",
+                     description = "View all the expense requests",
+                     color = requireContext().getColor(R.color.violet),
+                     drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_expe)
+                 ),
 
             ),
             object : AdapterItemClick {
@@ -437,19 +436,20 @@ class HomeFragment : BaseFragment() {
 
                     when (currentObject.name) {
                         "Attendance" -> {
-
-                            showDialog()
                             AppNavigator.navigateToAttendanceStats()
                         }
 
                         "Leaves" -> {
-                            showDialog()
+
                             AppNavigator.navigateToLeaves()
                         }
 
                         "Request" -> {
                             showDialog()
                             AppNavigator.navigateToRequest()
+                        }
+                        "Approval" -> {
+                            AppNavigator.navigateToApprovals()
                         }
 
                         else -> {

@@ -138,18 +138,18 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/rv_sub_filter">
 
-            <Spinner
-                android:id="@+id/sp_team_member"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:overlapAnchor="false"
-                android:padding="@dimen/_2sdp"
-                android:popupBackground="@drawable/ly_spiner_bg"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck"
-                tools:listitem="@layout/spinner_item" />
+                <Spinner
+                    android:id="@+id/sp_team_member"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:overlapAnchor="false"
+                    android:padding="@dimen/_2sdp"
+                    android:popupBackground="@drawable/ly_spiner_bg"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck"
+                    tools:listitem="@layout/spinner_item" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

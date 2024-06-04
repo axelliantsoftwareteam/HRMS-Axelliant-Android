@@ -40,7 +40,7 @@ class MainActivity : BaseActivity() {
             }, 200)
 
             when (destination.id) {
-                R.id.homeFragment, R.id.leavesFragment, R.id.profileFragment, R.id.expenseFragment -> {
+                R.id.homeFragment, R.id.leavesFragment, R.id.profileFragment -> {
                     bottomNavigation.visibility = View.VISIBLE
                 }
 
