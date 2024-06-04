@@ -37,5 +37,6 @@
     <color name="greeny">#8ED17D</color>
     <color name="purple">#6E4BA7</color>
     <color name="border">#EAEAEA</color>
+    <color name="bg_color">#F6F6F8</color>
 
 </resources>
