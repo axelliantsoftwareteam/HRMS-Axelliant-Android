@@ -10,5 +10,6 @@ data class LeaveDetail(
     val status: String,
     val to_date: String,
     val total_leave_days: Double,
-    val leave_reason: String?=null
+    val leave_reason: String?=null,
+    var isDetailVisible:Boolean=false
 )

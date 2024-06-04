@@ -1,57 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    >
+    android:orientation="vertical">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:id="@+id/ly_action_btn"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_40sdp"
         android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:gravity="center"
+        android:weightSum="10">
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_date"
             style="@style/TEXT_MEDIUM_BLACK_10"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:text="@string/_17_may_2024"
-            android:gravity="start"
+            android:layout_weight="3"
+            android:gravity="start|center"
             android:paddingStart="@dimen/_5sdp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/tv_hour"
-            app:layout_constraintHorizontal_weight="4"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:text="@string/_17_may_2024" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_hour"
             style="@style/TEXT_MEDIUM_BLACK_10"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:text="@string/_3_hr"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/tv_custom"
-            app:layout_constraintHorizontal_weight="3"
-            app:layout_constraintStart_toEndOf="@+id/tv_date"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_weight="3"
+
+            android:text="@string/_3_hr" />
 
         <LinearLayout
             android:id="@+id/tv_custom"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/tv_drop_down"
-            app:layout_constraintHorizontal_weight="3"
-            app:layout_constraintStart_toEndOf="@+id/tv_hour"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:gravity="center">
 
             <com.google.android.material.textview.MaterialTextView
 
@@ -62,36 +48,30 @@
                 android:background="@drawable/rounded_time_bg"
                 android:gravity="center"
                 android:paddingStart="@dimen/_10sdp"
-                android:paddingTop="@dimen/_3sdp"
+                android:paddingTop="@dimen/_5sdp"
                 android:paddingEnd="@dimen/_10sdp"
-                android:paddingBottom="@dimen/_3sdp"
+                android:paddingBottom="@dimen/_5sdp"
                 android:text="P"
-                android:textColor="@color/green"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:textColor="@color/green" />
+
         </LinearLayout>
 
 
         <ImageView
             android:id="@+id/tv_drop_down"
             style="@style/TEXT_SEMI_BLACK_10"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:padding="@dimen/_10sdp"
-            android:src="@drawable/ic_down"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_weight="1"
+            android:src="@drawable/ic_down" />
+    </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/ly_drop_down"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/_5sdp"
-        android:visibility="visible"
-
-        app:layout_constraintTop_toBottomOf="@+id/ly_action_btn" >
+        android:visibility="gone"
+        android:padding="@dimen/_5sdp">
 
 
         <com.google.android.material.textview.MaterialTextView
@@ -106,18 +86,17 @@
             android:textColor="@color/green"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-           />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <View
             android:id="@+id/divider"
             android:layout_width="0dp"
             android:layout_height="@dimen/_1sdp"
+            android:layout_marginStart="@dimen/_10sdp"
             android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
             android:layout_marginBottom="@dimen/_15sdp"
             android:background="@color/divider"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginEnd="@dimen/_10sdp"
             app:layout_constraintEnd_toEndOf="@+id/tv_attend_status"
             app:layout_constraintStart_toStartOf="@+id/tv_attend_status"
             app:layout_constraintTop_toBottomOf="@+id/tv_attend_status" />
@@ -355,6 +334,82 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
+</LinearLayout><!--
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/_40sdp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:id="@+id/ly_action_btn"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_40sdp"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:weightSum="10">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_date"
+            style="@style/TEXT_MEDIUM_BLACK_10"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:text="@string/_17_may_2024"
+            android:gravity="start|center"
+            android:paddingStart="@dimen/_5sdp"
+           android:layout_weight="4" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_hour"
+            style="@style/TEXT_MEDIUM_BLACK_10"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:text="@string/_3_hr"
+
+            android:layout_weight="3" />
+
+        <LinearLayout
+            android:id="@+id/tv_custom"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+           android:layout_weight="3">
+
+            <com.google.android.material.textview.MaterialTextView
+
+                android:id="@+id/status"
+                style="@style/TEXT_SEMI_BLACK_10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_time_bg"
+                android:gravity="center"
+              android:paddingStart="@dimen/_10sdp"
+                android:paddingEnd="@dimen/_10sdp"
+                android:paddingTop="@dimen/_5sdp"
+                android:paddingBottom="@dimen/_5sdp"
+                android:text="P"
+                android:textColor="@color/green"
+                />
+
+        </LinearLayout>
+
+
+        <ImageView
+            android:id="@+id/tv_drop_down"
+            style="@style/TEXT_SEMI_BLACK_10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_10sdp"
+            android:src="@drawable/ic_down"
+            />
+    </LinearLayout>
+
+    &lt;!&ndash;
+
+
+
     <View
         android:id="@+id/bottom_divider"
         android:layout_width="0dp"
@@ -365,8 +420,8 @@
         android:layout_marginEnd="@dimen/_10sdp"
         app:layout_constraintEnd_toEndOf="@+id/ly_drop_down"
         app:layout_constraintStart_toStartOf="@+id/ly_drop_down"
-        app:layout_constraintTop_toBottomOf="@+id/ly_drop_down" />
+        app:layout_constraintTop_toBottomOf="@+id/ly_drop_down" />&ndash;&gt;
 
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>-->

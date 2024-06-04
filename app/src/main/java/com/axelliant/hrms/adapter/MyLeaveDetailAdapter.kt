@@ -31,11 +31,14 @@ class MyLeaveDetailAdapter(
     override fun onBindViewHolder(holder: AccountsVH, position: Int) {
         holder.bind(leaves[position], mContext)
 
-        holder.binding.lyDropDown.isVisible = false
+//        holder.binding.lyDropDown.isVisible = false
 
         holder.binding.tvDropDown.setOnClickListener {
 
-            holder.binding.lyDropDown.isVisible = !holder.binding.lyDropDown.isVisible
+//            holder.binding.lyDropDown.isVisible = !holder.binding.lyDropDown.isVisible
+
+            leaves[position].isDetailVisible = !leaves[position].isDetailVisible
+            notifyItemChanged(position)
         }
 
 
@@ -65,6 +68,8 @@ class MyLeaveDetailAdapter(
 
             binding.tvReason.text = leaveDetail.leave_reason.valueQualifier()
             binding.tvAttendStatus.text = leaveDetail.status
+
+            binding.lyDropDown.isVisible = leaveDetail.isDetailVisible
 
         }
     }
