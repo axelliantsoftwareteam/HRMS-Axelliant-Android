@@ -96,6 +96,7 @@
     <string name="status">Status</string>
     <string name="shift">Shift</string>
     <string name="shift_timings">Shift Timings</string>
+    <string name="time">Time</string>
     <string name="actual_in">Actual In</string>
     <string name="expected_in">Expected In</string>
     <string name="actual_out">Actual Out</string>
@@ -142,5 +143,9 @@
     <string name="leaves_days">Leaves Days</string>
     <string name="my_actions">My Actions</string>
     <string name="remote">Remote</string>
+    <string name="write_reason">Write a reason</string>
+    <string name="approvals">Approvals</string>
+    <string name="request_type">Request Type</string>
+    <string name="reject">Reject</string>
     <string name="update">Update</string>
 </resources>

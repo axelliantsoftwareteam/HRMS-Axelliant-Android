@@ -118,6 +118,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/_5sdp"
                     android:text="@string/start_date"
+                    android:visibility="gone"
                     android:textAlignment="textStart"
                     app:layout_constraintEnd_toEndOf="@+id/divider_absent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -127,14 +128,14 @@
                     android:id="@+id/ly_start_date"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_5sdp"
                     android:layout_marginEnd="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
                     android:background="@drawable/rounded_leave_filter"
                     android:orientation="vertical"
                     android:padding="@dimen/_10sdp"
                     app:layout_constraintEnd_toStartOf="@+id/divider_absent"
-                    app:layout_constraintStart_toStartOf="@+id/tv_start_date"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_start_date">
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
 
                     <com.google.android.material.textview.MaterialTextView
@@ -184,6 +185,7 @@
                     android:layout_marginStart="@dimen/_5sdp"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:text="@string/end_date"
+                    android:visibility="gone"
                     android:textAlignment="textStart"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/divider_absent"
@@ -200,7 +202,7 @@
                     android:padding="@dimen/_10sdp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/divider_absent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_end_date">
+                    app:layout_constraintTop_toTopOf="parent">
 
 
                     <com.google.android.material.textview.MaterialTextView
@@ -239,7 +241,8 @@
                 android:orientation="horizontal"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:itemCount="3"
-                tools:listitem="@layout/sub_filter_row">
+                tools:listitem="@layout/sub_filter_row"
+                >
 
             </androidx.recyclerview.widget.RecyclerView>
 

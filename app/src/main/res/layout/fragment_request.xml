@@ -111,7 +111,7 @@
 
              <androidx.constraintlayout.widget.ConstraintLayout
                  android:id="@+id/ly_create_leave"
-                 android:visibility="gone"
+                 android:visibility="visible"
                  android:layout_width="match_parent"
                  android:layout_height="wrap_content"
                  app:layout_constraintTop_toTopOf="parent"
@@ -363,8 +363,9 @@
                          android:inputType="textMultiLine"
                          android:minLines="4"
                          android:maxLines="8"
+                         android:hint="@string/write_reason"
                          android:singleLine="false"
-                         tools:text="asdjklajsd kklasnkas jljlk askdjaklsdjaklsdjkasl djklasdjklasjdkl asjkld aklsdjilas jdlaisdouasoduio asudoi asioduasioduioasudoasudoads asdabskd bakjsdhakjsdh kjasdhash djk ahsd kjashdkjs asdjklajsd kklasnkas jljlk askdjaklsdjaklsdjkasl djklasdjklasjdkl asjkld aklsdjilas jdlaisdouasoduio asudoi asioduasioduioasudoasudoads asdabskd bakjsdhakjsdh kjasdhash djk ahsd kjashdkjs asdjklajsd kklasnkas jljlk askdjaklsdjaklsdjkasl djklasdjklasjdkl asjkld aklsdjilas jdlaisdouasoduio asudoi asioduasioduioasudoasudoads asdabskd bakjsdhakjsdh kjasdhash djk ahsd kjashdkjs"
+                         tools:text="asdjklaahsd kjashdkjs asdjklajsd kklasnkas jljlk askdjaklsdjaklsdjkasl djklasdjklasjdkl asjkld aklsdjilas jdlaisdouasoduio asudoi asioduasioduioasudoasudoads asdabskd bakjsdhakjsdh kjasdhash djk ahsd kjashdkjs asdjklajsd kklasnkas jljlk askdjaklsdjaklsdjkasl djklasdjklasjdkl asjkld aklsdjilas jdlaisdouasoduio asudoi asioduasioduioasudoasudoads asdabskd bakjsdhakjsdh kjasdhash djk ahsd kjashdkjs"
                          android:textColorHint="@color/grey" />
 
                  </com.google.android.material.textfield.TextInputLayout>
@@ -377,7 +378,6 @@
 
              <androidx.constraintlayout.widget.ConstraintLayout
                  android:id="@+id/ly_create_attend"
-                 android:visibility="visible"
                  android:layout_width="match_parent"
                  android:layout_height="wrap_content"
                  app:layout_constraintTop_toTopOf="parent"
@@ -385,6 +385,7 @@
                  app:layout_constraintStart_toStartOf="parent"
                  app:layout_constraintEnd_toEndOf="parent"
                  android:paddingBottom="@dimen/_10sdp"
+                 android:visibility="gone"
                  android:orientation="vertical">
 
                  <androidx.constraintlayout.widget.ConstraintLayout
@@ -592,7 +593,8 @@
                          android:minLines="4"
                          android:maxLines="8"
                          android:singleLine="false"
-                         tools:text="asdjklajsd kklasnkas jljlk askdjaklsdjaklsdjkasl djklasdjklasjdkl asjkld aklsdjilas jdlaisdouasoduio asudoi asioduasioduioasudoasudoads asdabskd bakjsdhakjsdh kjasdhash djk ahsd kjashdkjs asdjklajsd kklasnkas jljlk askdjaklsdjaklsdjkasl djklasdjklasjdkl asjkld aklsdjilas jdlaisdouasoduio asudoi asioduasioduioasudoasudoads asdabskd bakjsdhakjsdh kjasdhash djk ahsd kjashdkjs asdjklajsd kklasnkas jljlk askdjaklsdjaklsdjkasl djklasdjklasjdkl asjkld aklsdjilas jdlaisdouasoduio asudoi asioduasioduioasudoasudoads asdabskd bakjsdhakjsdh kjasdhash djk ahsd kjashdkjs"
+                         tools:text=""
+                         android:hint="@string/write_reason"
                          android:textColorHint="@color/grey" />
 
                  </com.google.android.material.textfield.TextInputLayout>

@@ -30,7 +30,9 @@
                 android:layout_height="@dimen/_30sdp"
                 android:src="@drawable/ic_place_holder"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="@+id/tv_employe_name"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_employe_designation"
+                />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_employe_name"
@@ -65,8 +67,9 @@
                 android:src="@drawable/ic_down"
                 android:padding="@dimen/_5sdp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/profile_img"
-                app:layout_constraintBottom_toBottomOf="@+id/profile_img" />
+                app:layout_constraintTop_toTopOf="@+id/tv_employe_name"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_employe_designation"
+                />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/ly_attend_status"

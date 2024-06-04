@@ -5,6 +5,7 @@
     <item name="login_fragment_action" type="id" />
     <item name="home_fragment_action" type="id" />
     <item name="leaves_fragment_action" type="id" />
+    <item name="approvals_fragment_action" type="id" />
     <item name="profile_fragment_action" type="id" />
     <item name="expense_fragment_action" type="id" />
     <item name="request_fragment_action" type="id" />
