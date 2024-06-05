@@ -13,7 +13,10 @@ import com.axelliant.hrms.databinding.MyTeamLeaveRowBinding
 import com.axelliant.hrms.model.leave.TeamLeaveDetail
 
 class TeamLeaveDetailAdapter(
-    private val leaves: ArrayList<TeamLeaveDetail>
+    private val leaves: ArrayList<TeamLeaveDetail>,
+    private val isForApproval: Boolean = false,
+    private val approvedClick: AdapterItemClick? = null,
+    private val rejectClick: AdapterItemClick? = null
 ) :
     RecyclerView.Adapter<TeamLeaveDetailAdapter.AccountsVH>() {
 
@@ -27,6 +30,24 @@ class TeamLeaveDetailAdapter(
     override fun onBindViewHolder(holder: AccountsVH, position: Int) {
         holder.bind(leaves[position])
         holder.binding.lyDropDown.isVisible = false
+
+        if (isForApproval) {
+            holder.binding.btnDivider.isVisible = true
+            holder.binding.tvApproved.isVisible = true
+            holder.binding.tvReject.isVisible = true
+            holder.binding.tvApproved.setOnClickListener {
+                approvedClick?.onItemClick(leaves[position], position)
+            }
+            holder.binding.tvReject.setOnClickListener {
+                rejectClick?.onItemClick(leaves[position], position)
+            }
+        } else {
+            holder.binding.btnDivider.isVisible = false
+            holder.binding.tvApproved.isVisible = false
+            holder.binding.tvReject.isVisible = false
+        }
+
+
 
         holder.binding.tvDropDown.setOnClickListener {
 
@@ -51,8 +72,6 @@ class TeamLeaveDetailAdapter(
             binding.tvLeaveTypeTxt.text = teamLeaveDetail.leave_type
             binding.tvLeaveApproverTxt.text = teamLeaveDetail.leave_approver
             binding.tvReasonTxt.text = teamLeaveDetail.leave_reason
-
-
 
 
         }

@@ -2,6 +2,7 @@ package com.axelliant.hrms.network
 
 import com.axelliant.hrms.di.TestModelInjection
 import com.axelliant.hrms.model.attendance.AttRequest
+import com.axelliant.hrms.model.leave.LeaveApproval
 import com.axelliant.hrms.model.login.CheckInRequest
 import com.axelliant.hrms.model.login.LoginRequest
 import com.axelliant.hrms.model.post.AttendanceRequest
@@ -99,5 +100,29 @@ interface ApiInterface {
     fun userLoginCall(@Body loginRequest: LoginRequest?): Call<ResponseBody>
 
 
+    @Headers("Content-Type: application/json")
+    @POST("hrms.hr.doctype.employee.leaves_mobile.update_leave_application")                              // update leave request
+    fun updateLeaveRequest(@Body leaveRequest: LeaveRequest?): Call<ResponseBody>
+
+    @Headers("Content-Type: application/json")
+    @POST("hrms.hr.doctype.employee.leaves_mobile.removed_leave_application")                              // update leave request
+    fun deleteLeaveRequest(@Body leaveRequest: LeaveRequest?): Call<ResponseBody>
+
+
+
+    @Headers("Content-Type: application/json")
+    @POST("hrms.hr.doctype.employee.leaves_mobile.update_leave_status") // leave approval
+    fun callLeaveApproval(@Body attRequest: LeaveApproval): Call<ResponseBody>
+
+    @Headers("Content-Type: application/json")
+    @POST("hrms.hr.doctype.employee.checkin.get_checkin_approvals")  // attendance approval
+    fun callAttendanceApproval(@Body attendanceRequest:AttRequest
+    ): Call<ResponseBody>
+
+
+    @Headers("Content-Type: application/json")
+    @POST("hrms.hr.doctype.employee.checkin.update_checkin_approval_status")  // attendance approval rejection
+    fun callAttendanceApprovalStatus(@Body attendanceRequest:LeaveApproval
+    ): Call<ResponseBody>
 
 }

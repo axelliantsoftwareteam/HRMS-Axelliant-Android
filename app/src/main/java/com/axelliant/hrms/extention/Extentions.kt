@@ -23,6 +23,16 @@ fun String?.valueQualifier():String {
         return this
 }
 
+
+fun String?.nullToEmpty():String {
+    if(this==null)
+        return ""
+    else if(this == "")
+        return ""
+    else
+        return this
+}
+
 fun Context.showSuccessMsg(message: String? = "Feature in progress") {
     if(message==null)
         Toast.makeText(this, "Feature in progress", Toast.LENGTH_SHORT).show()

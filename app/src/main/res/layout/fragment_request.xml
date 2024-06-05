@@ -78,6 +78,7 @@
                 android:id="@+id/tv_month"
                 style="@style/TEXT_REGULAR_BLACK_10"
                 android:layout_width="0dp"
+
                 android:layout_height="match_parent"
                 android:layout_marginStart="@dimen/_5sdp"
                 android:background="@drawable/rounded_disabled"
@@ -98,7 +99,7 @@
             android:background="@drawable/rounded_leave_filter"
             android:orientation="vertical"
 
-            app:layout_constraintBottom_toTopOf="@id/btn_apply"
+            app:layout_constraintBottom_toTopOf="@id/cv_container"
             app:layout_constraintStart_toStartOf="@+id/start_guideline"
             app:layout_constraintEnd_toEndOf="@+id/end_guideline"
             app:layout_constraintTop_toBottomOf="@+id/ly_action_btn">
@@ -607,20 +608,69 @@
 
         </androidx.core.widget.NestedScrollView>
 
+        <androidx.constraintlayout.widget.ConstraintLayout
 
-        <com.axelliant.hrms.components.RoundedButton
-            android:id="@+id/btn_apply"
-            style="@style/ButtonTextStyle"
+            android:id="@+id/cv_container"
             android:layout_width="0dp"
-            android:layout_height="@dimen/_40sdp"
-            android:layout_marginStart="@dimen/_15sdp"
-            android:layout_marginEnd="@dimen/_15sdp"
-            app:buttonBg="@drawable/rounded_enabled"
-            app:iconVisibility="false"
+            android:layout_height="wrap_content"
             app:layout_constraintBottom_toTopOf="@id/bottom_guideline"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:text="@string/apply"
-            app:textColor="@color/white" />
+            >
+            <com.axelliant.hrms.components.RoundedButton
+                android:id="@+id/btn_apply"
+                style="@style/ButtonTextStyle"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_40sdp"
+                android:layout_marginStart="@dimen/_15sdp"
+                android:layout_marginEnd="@dimen/_15sdp"
+                app:buttonBg="@drawable/rounded_enabled"
+                app:iconVisibility="false"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:text="@string/apply"
+                android:visibility="visible"
+                app:textColor="@color/white" />
+
+
+            <com.axelliant.hrms.components.RoundedButton
+                android:id="@+id/btn_update"
+                style="@style/ButtonTextStyle"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_40sdp"
+                app:buttonBg="@drawable/rounded_enabled"
+                app:iconVisibility="false"
+                android:layout_marginStart="@dimen/_15sdp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/btn_deleted"
+                app:layout_constraintStart_toStartOf="parent"
+                app:text="@string/update"
+                android:visibility="gone"
+
+                app:textColor="@color/white" />
+
+
+            <com.axelliant.hrms.components.RoundedButton
+                android:id="@+id/btn_deleted"
+                style="@style/ButtonTextStyle"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_40sdp"
+                android:layout_marginStart="@dimen/_15sdp"
+                android:layout_marginEnd="@dimen/_15sdp"
+                app:buttonBg="@drawable/rounded_leave_cancelled"
+                app:iconVisibility="false"
+                android:visibility="gone"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/btn_update"
+                app:text="@string/delete"
+                app:textColor="@color/black" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

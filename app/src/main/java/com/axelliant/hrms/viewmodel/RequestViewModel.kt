@@ -13,6 +13,8 @@ import com.axelliant.hrms.repos.RequestRepo
 
 class RequestViewModel(private val leaveRepo: RequestRepo) : BaseViewModel() {
 
+    val deleteLeaveResponse: MutableLiveData<Event<PostResponse?>> by lazy { MutableLiveData<Event<PostResponse?>>() }
+    val updateLeaveResponse: MutableLiveData<Event<PostResponse?>> by lazy { MutableLiveData<Event<PostResponse?>>() }
     val postLeaveResponse: MutableLiveData<Event<PostResponse?>> by lazy { MutableLiveData<Event<PostResponse?>>() }
     val attendanceRequestResponse: MutableLiveData<Event<PostResponse?>> by lazy { MutableLiveData<Event<PostResponse?>>() }
 
@@ -64,6 +66,48 @@ class RequestViewModel(private val leaveRepo: RequestRepo) : BaseViewModel() {
 
     }
 
+    fun deleteLeaveQuest(leaveRequest: LeaveRequest) {
+        isLoading.value = Event(true)
+        leaveRepo.deleteLeaveRequest(leaveRequest)
+            .observeForever { data ->
+                // Handle the login response
+                data?.let { baseModel ->
+                    isLoading.value = Event(false)
+                    // Handle success
+                    updateLeaveResponse.value = Event(baseModel.message?.data)
+
+                } ?: run {
+                    isLoading.value = Event(false)
+                    // Handle error
+                    Log.d("Success VieModel->", "false")
+
+
+                }
+            }
+
+
+    }
+    fun updateLeaveQuest(leaveRequest: LeaveRequest) {
+        isLoading.value = Event(true)
+        leaveRepo.updateLeaveRequest(leaveRequest)
+            .observeForever { data ->
+                // Handle the login response
+                data?.let { baseModel ->
+                    isLoading.value = Event(false)
+                    // Handle success
+                    updateLeaveResponse.value = Event(baseModel.message?.data)
+
+                } ?: run {
+                    isLoading.value = Event(false)
+                    // Handle error
+                    Log.d("Success VieModel->", "false")
+
+
+                }
+            }
+
+
+    }
     fun postLeaveQuest(leaveRequest: LeaveRequest) {
         isLoading.value = Event(true)
         leaveRepo.postLeaveRequest(leaveRequest)

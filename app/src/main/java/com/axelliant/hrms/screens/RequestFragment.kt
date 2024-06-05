@@ -1,12 +1,16 @@
 package com.axelliant.hrms.screens
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import com.axelliant.hrms.R
 import com.axelliant.hrms.adapter.LeaveSpinnerAdapter
 import com.axelliant.hrms.base.BaseFragment
@@ -17,6 +21,7 @@ import com.axelliant.hrms.config.AppConst.SERVER_DATE_FORMAT_ATTENDANCE
 import com.axelliant.hrms.databinding.FragmentRequestBinding
 import com.axelliant.hrms.enums.RequestFilter
 import com.axelliant.hrms.event.EventObserver
+import com.axelliant.hrms.extention.nullToEmpty
 import com.axelliant.hrms.extention.showErrorMsg
 import com.axelliant.hrms.extention.showSuccessMsg
 import com.axelliant.hrms.model.attendance.AttendanceDetail
@@ -25,6 +30,7 @@ import com.axelliant.hrms.model.leave.SpinnerType
 import com.axelliant.hrms.model.post.AttendanceRequest
 import com.axelliant.hrms.model.post.LeaveRequest
 import com.axelliant.hrms.navigation.AppNavigator
+import com.axelliant.hrms.network.ErrorMessages
 import com.axelliant.hrms.utils.Utils
 import com.axelliant.hrms.viewmodel.RequestViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -53,6 +59,7 @@ class RequestFragment : BaseFragment() {
     private val requestViewModel: RequestViewModel by inject()
 
     private var isUpdate: Boolean = false
+    private var leaveId: String = ""
 
     private var preLeaveType: String = leaveType
     private var preAttendanceType: String = attendanceType
@@ -75,6 +82,7 @@ class RequestFragment : BaseFragment() {
 
         if (arguments != null && requireArguments().containsKey(RequestType)) {
             isUpdate = true
+
             val type = arguments?.getString(RequestType, RequestFilter.LEAVE.name)
             if (type == RequestFilter.LEAVE.name) {
                 currentFilter = RequestFilter.LEAVE
@@ -84,11 +92,16 @@ class RequestFragment : BaseFragment() {
                 )
                 startDateString = leaveDetail.from_date
                 endDateString = leaveDetail.to_date
-                binding!!.etLeaveReason.setText(leaveDetail.leave_reason.toString())
-                preLeaveType = leaveDetail.leave_type
 
+                binding!!.etLeaveReason.setText(leaveDetail.leave_reason.nullToEmpty())
+                preLeaveType = leaveDetail.leave_type
+                leaveId = leaveDetail.name
                 setDateView()
-                binding?.btnApply?.setText(requireContext().getString(R.string.update))
+
+                binding?.btnApply?.isVisible = false
+                binding?.btnUpdate?.isVisible = true
+                binding?.btnDeleted?.isVisible = true
+                binding?.tvMonth?.isVisible =false
 
 
             } else {
@@ -131,6 +144,46 @@ class RequestFragment : BaseFragment() {
                 }
 
             })
+
+        requestViewModel.updateLeaveResponse.observe(
+            viewLifecycleOwner,
+            EventObserver { response ->
+
+                if (response?.meta?.status == true) {
+
+                    requireActivity().showSuccessMsg(response.status_message)
+                    clearLeaveForm()
+                    Handler().postDelayed({
+                        // do stuff
+                        AppNavigator.moveBackToPreviousFragment()
+                    }, 200)
+
+                } else {
+                    requireContext().showErrorMsg(response?.meta?.message.toString())
+                }
+
+            })
+
+        requestViewModel.deleteLeaveResponse.observe(
+            viewLifecycleOwner,
+            EventObserver { response ->
+
+                if (response?.meta?.status == true) {
+
+                    requireActivity().showSuccessMsg(response.status_message)
+                    clearLeaveForm()
+                    Handler().postDelayed({
+                        // do stuff
+                        AppNavigator.moveBackToPreviousFragment()
+                    }, 200)
+
+                } else {
+                    requireContext().showErrorMsg(response?.meta?.message.toString())
+                }
+
+            })
+
+
 
 
         requestViewModel.attendanceRequestResponse.observe(
@@ -245,6 +298,40 @@ class RequestFragment : BaseFragment() {
 
         }
 
+
+        binding?.btnUpdate?.setOnClickListener {
+
+            if (binding!!.spLeaveType.selectedItemPosition == 0) {
+                requireContext().showErrorMsg("Please select leave type")
+            } else if (startDateString == null) {
+                requireContext().showErrorMsg("Please select start date")
+            } else if (endDateString == null) {
+                requireContext().showErrorMsg("Please select end date")
+            } else {
+                val leaveItem = binding!!.spLeaveType.selectedItem as SpinnerType
+
+                requestViewModel.updateLeaveQuest(LeaveRequest().apply {
+                    this.start_date = startDateString
+                    this.end_date = endDateString
+                    this.leave_reason = binding!!.etLeaveReason.text.toString()
+                    this.leave_type = leaveItem.type
+                    this.post_date = Utils.getServerFormat()
+                    this.leave_id = leaveId
+
+                })
+
+            }
+
+        }
+        binding?.btnDeleted?.setOnClickListener {
+
+            requestViewModel.deleteLeaveQuest(LeaveRequest().apply {
+                this.leave_id = leaveId
+
+            })
+
+        }
+
         binding?.ivBack?.setOnClickListener {
             AppNavigator.moveBackToPreviousFragment()
         }
@@ -258,8 +345,10 @@ class RequestFragment : BaseFragment() {
     }
 
     private fun clearLeaveForm() {
+        isUpdate = false
         startDateString = null
         endDateString = null
+        leaveId = ""
         binding?.spLeaveType?.setSelection(0)
         binding?.etLeaveReason?.text?.clear()
         setDateView()
@@ -304,7 +393,7 @@ class RequestFragment : BaseFragment() {
         datePickerDialog.show()
     }
 
-    private fun setCurrentDate(){
+    private fun setCurrentDate() {
         binding?.tvDateTxt?.text = currentDateString
 
     }
@@ -390,7 +479,7 @@ class RequestFragment : BaseFragment() {
         }
     }
 
-
+    @SuppressLint("ClickableViewAccessibility")
     private fun spinnerLeavePopulations(leaves: ArrayList<SpinnerType>?) {
 
         val finalLeavesArray = arrayListOf<SpinnerType>()
@@ -415,9 +504,16 @@ class RequestFragment : BaseFragment() {
                     break
                 }
             }
+
+            binding?.spLeaveType?.isClickable = false
+            binding?.spLeaveType?.setOnTouchListener { _, event ->
+                if (event.action == MotionEvent.ACTION_UP) {
+                    //Your code
+                    requireContext().showErrorMsg(ErrorMessages.UNABLE_TO_EDIT_LEAVE.errorString)
+                }
+                true
+            }
         }
-
-
 
 
         binding?.spLeaveType?.onItemSelectedListener = object :

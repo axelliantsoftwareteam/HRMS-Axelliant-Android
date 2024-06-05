@@ -8,5 +8,6 @@ class AttendanceInput {
      var employeeId:List<String> = listOf()
      var filter: AttendanceFilter=AttendanceFilter.WEEK
      var filters:String=""
+     var for_approvals:Int=0
 
 }

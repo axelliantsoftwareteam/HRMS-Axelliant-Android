@@ -164,6 +164,7 @@ class LoginFragment : BaseFragment() {
                 Log.d(TAG, "Successfully authenticated")
                 Log.d(TAG, "ID Token: " + authenticationResult.account.idToken)
 
+
                 sessionManager.saveToken(authenticationResult.account.idToken)
                 sessionManager.createLoginSession(
                     username = null,

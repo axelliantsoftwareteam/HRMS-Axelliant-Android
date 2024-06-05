@@ -103,6 +103,82 @@ class RequestRepo(private var apiInterface: ApiInterface) {
         return serverResponse
     }
 
+    fun updateLeaveRequest(leaveRequest: LeaveRequest): MutableLiveData<BaseApiModel<PostResponse>> {
+        val serverResponse = MutableLiveData<BaseApiModel<PostResponse>>()
+
+        val call: Call<ResponseBody>  = apiInterface.updateLeaveRequest(leaveRequest)
+
+        Log.e("HTTP Request", " " + call?.request().toString())
+
+        call.enqueue(object : BaseCallBack<ResponseBody>(call) {
+            override fun onFinalSuccess(
+                call: Call<ResponseBody>,
+                response: Response<ResponseBody>
+            ) {
+
+                Log.e("API success", " " + response.body())
+
+                val type: Type = object : TypeToken<BaseApiModel<PostResponse>>() {}.type
+                val jsonString = response.body()?.string()
+                val userModel = Gson().fromJson<BaseApiModel<PostResponse>>(jsonString, type)
+                serverResponse.value = userModel
+            }
+
+
+            override fun onFinalFailure(
+                errorString: String?
+            ) {
+
+                Log.e("API Failure", " $errorString")
+
+                serverResponse.value =
+                    BaseApiModel(BaseModel(PostResponse(meta = Meta(errorString.toString(), false))))
+
+            }
+
+        })
+
+        return serverResponse
+    }
+
+    fun deleteLeaveRequest(leaveRequest: LeaveRequest): MutableLiveData<BaseApiModel<PostResponse>> {
+        val serverResponse = MutableLiveData<BaseApiModel<PostResponse>>()
+
+        val call: Call<ResponseBody>  = apiInterface.deleteLeaveRequest(leaveRequest)
+
+        Log.e("HTTP Request", " " + call?.request().toString())
+
+        call.enqueue(object : BaseCallBack<ResponseBody>(call) {
+            override fun onFinalSuccess(
+                call: Call<ResponseBody>,
+                response: Response<ResponseBody>
+            ) {
+
+                Log.e("API success", " " + response.body())
+
+                val type: Type = object : TypeToken<BaseApiModel<PostResponse>>() {}.type
+                val jsonString = response.body()?.string()
+                val userModel = Gson().fromJson<BaseApiModel<PostResponse>>(jsonString, type)
+                serverResponse.value = userModel
+            }
+
+
+            override fun onFinalFailure(
+                errorString: String?
+            ) {
+
+                Log.e("API Failure", " $errorString")
+
+                serverResponse.value =
+                    BaseApiModel(BaseModel(PostResponse(meta = Meta(errorString.toString(), false))))
+
+            }
+
+        })
+
+        return serverResponse
+    }
+
 
     fun postLeaveRequest(leaveRequest: LeaveRequest): MutableLiveData<BaseApiModel<PostResponse>> {
         val serverResponse = MutableLiveData<BaseApiModel<PostResponse>>()
