@@ -130,8 +130,8 @@
     <string name="team_attend_statis">Team Attendance Statistics</string>
     <string name="last_week">Last Week Statistics</string>
     <string name="request">Request</string>
-    <string name="leave_req">Leave Request</string>
-    <string name="attendance_req">Attandance Request</string>
+    <string name="leave_req">Leave Requests</string>
+    <string name="attendance_req">Attendance Request</string>
     <string name="apply">Apply</string>
     <string name="create_leave_req">Create Leave Request</string>
     <string name="present">Present</string>
@@ -147,4 +147,6 @@
     <string name="approvals">Approvals</string>
     <string name="request_type">Request Type</string>
     <string name="reject">Reject</string>
+    <string name="update">Update</string>
+
 </resources>

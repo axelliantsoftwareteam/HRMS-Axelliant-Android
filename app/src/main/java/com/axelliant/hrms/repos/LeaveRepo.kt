@@ -9,7 +9,9 @@ import com.axelliant.hrms.model.leave.LeaveResponse
 import com.axelliant.hrms.model.base.BaseApiModel
 import com.axelliant.hrms.model.base.BaseModel
 import com.axelliant.hrms.model.base.Meta
+import com.axelliant.hrms.model.leave.LeaveApproval
 import com.axelliant.hrms.model.leave.MyLeaveDetailResponse
+import com.axelliant.hrms.model.leave.PostResponse
 import com.axelliant.hrms.model.leave.TeamLeaveDetailResponse
 import com.axelliant.hrms.network.ApiInterface
 import com.axelliant.hrms.network.BaseCallBack
@@ -138,6 +140,7 @@ class LeaveRepo(private var apiInterface: ApiInterface) {
                 this.end_date = attendanceInput.endDate
                 this.filters = attendanceInput.filters
                 this.employee_list = attendanceInput.employeeId
+                this.for_approvals = attendanceInput.for_approvals
             }
 
         )
@@ -184,5 +187,58 @@ class LeaveRepo(private var apiInterface: ApiInterface) {
 
         return serverResponse
     }
+
+
+    fun leaveApproval(attendanceInput: LeaveApproval): MutableLiveData<BaseApiModel<PostResponse>> {
+        val serverResponse = MutableLiveData<BaseApiModel<PostResponse>>()
+
+        val call: Call<ResponseBody> = apiInterface.callLeaveApproval(
+           attendanceInput
+        )
+
+        Log.e("HTTP Request", " " + call?.request().toString())
+
+        call.enqueue(object : BaseCallBack<ResponseBody>(call) {
+            override fun onFinalSuccess(
+                call: Call<ResponseBody>,
+                response: Response<ResponseBody>
+            ) {
+
+                Log.e("API success", " " + response.body())
+
+                val type: Type = object : TypeToken<BaseApiModel<PostResponse>>() {}.type
+                val jsonString = response.body()?.string()
+                val userModel =
+                    Gson().fromJson<BaseApiModel<PostResponse>>(jsonString, type)
+                serverResponse.value = userModel
+            }
+
+
+            override fun onFinalFailure(
+                errorString: String?
+            ) {
+
+                Log.e("API Failure", " $errorString")
+
+                serverResponse.value =
+                    BaseApiModel(
+                        BaseModel(
+                            PostResponse(
+                                meta = Meta(
+                                    errorString.toString(),
+                                    false
+                                )
+                            )
+                        )
+                    )
+
+            }
+
+        })
+
+        return serverResponse
+    }
+
+
 
 }

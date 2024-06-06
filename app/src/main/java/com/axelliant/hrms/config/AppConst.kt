@@ -1,6 +1,7 @@
 package com.axelliant.hrms.config
 
 import com.axelliant.hrms.observable.ObservableCode
+import java.net.Authenticator.RequestorType
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -9,6 +10,9 @@ object AppConst {
     var TOKEN: String? = null
     const val KEY_PARAM  = "key"
     const val KEY_ID  = "employeeId"
+    const val LeaveRequestParam  = "leaveRequest"
+    const val AttendanceRequestParam  = "attendanceRequest"
+    const val RequestType = "requestType"
     val observableCode = ObservableCode()
 
     const val DATE_FORMAT =  "dd MMM,yyyy"

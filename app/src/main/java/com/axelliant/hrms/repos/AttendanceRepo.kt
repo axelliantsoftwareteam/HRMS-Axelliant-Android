@@ -6,6 +6,7 @@ import com.axelliant.hrms.config.AppConst
 import com.axelliant.hrms.enums.AttendanceFilter
 import com.axelliant.hrms.enums.AttendanceFilter.*
 import com.axelliant.hrms.model.attendance.AttRequest
+import com.axelliant.hrms.model.attendance.AttendanceApproval
 import com.axelliant.hrms.model.attendance.AttendanceDetail
 import com.axelliant.hrms.model.attendance.AttendanceInput
 import com.axelliant.hrms.model.attendance.AttendanceResponse
@@ -14,6 +15,8 @@ import com.axelliant.hrms.model.attendance.TeamAttendanceResponse
 import com.axelliant.hrms.model.base.BaseApiModel
 import com.axelliant.hrms.model.base.BaseModel
 import com.axelliant.hrms.model.base.Meta
+import com.axelliant.hrms.model.leave.LeaveApproval
+import com.axelliant.hrms.model.leave.PostResponse
 import com.axelliant.hrms.model.post.AttendanceRequest
 import com.axelliant.hrms.network.ApiInterface
 import com.axelliant.hrms.network.BaseCallBack
@@ -213,5 +216,115 @@ class AttendanceRepo(private var apiInterface: ApiInterface) {
         return serverResponse
     }
 
+    fun attendanceApproval(
+        inputObject: AttendanceInput
+    ): MutableLiveData<BaseApiModel<AttendanceApproval>> {
+        val serverResponse = MutableLiveData<BaseApiModel<AttendanceApproval>>()
+
+        val call = apiInterface.callAttendanceApproval(
+            AttRequest().apply {
+                this.start_date = inputObject.startDate
+                this.end_date = inputObject.endDate
+                this.employee_list = inputObject.employeeId
+            }
+        )
+
+
+
+        Log.e("HTTP Request", " " + call.request().toString())
+
+        call.enqueue(object : BaseCallBack<ResponseBody>(call) {
+            override fun onFinalSuccess(
+                call: Call<ResponseBody>,
+                response: Response<ResponseBody>
+            ) {
+
+                Log.e("API success", " " + response.body())
+
+                val type: Type = object : TypeToken<BaseApiModel<AttendanceApproval>>() {}.type
+                val jsonString = response.body()?.string()
+                val userModel =
+                    Gson().fromJson<BaseApiModel<AttendanceApproval>>(jsonString, type)
+                serverResponse.value = userModel
+            }
+
+
+            override fun onFinalFailure(
+                errorString: String?
+            ) {
+
+                Log.e("API Failure", " $errorString")
+
+                serverResponse.value =
+                    BaseApiModel(
+                        BaseModel(
+                            AttendanceApproval(
+                                meta = Meta(
+                                    errorString.toString(),
+                                    false
+                                )
+                            )
+                        )
+                    )
+
+            }
+
+        })
+
+        return serverResponse
+    }
+
+
+    fun attendanceApprovalStatus(
+        inputObject: LeaveApproval
+    ): MutableLiveData<BaseApiModel<PostResponse>> {
+        val serverResponse = MutableLiveData<BaseApiModel<PostResponse>>()
+
+        val call = apiInterface.callAttendanceApprovalStatus(
+            inputObject
+        )
+
+        Log.e("HTTP Request", " " + call.request().toString())
+
+        call.enqueue(object : BaseCallBack<ResponseBody>(call) {
+            override fun onFinalSuccess(
+                call: Call<ResponseBody>,
+                response: Response<ResponseBody>
+            ) {
+
+                Log.e("API success", " " + response.body())
+
+                val type: Type = object : TypeToken<BaseApiModel<PostResponse>>() {}.type
+                val jsonString = response.body()?.string()
+                val userModel =
+                    Gson().fromJson<BaseApiModel<PostResponse>>(jsonString, type)
+                serverResponse.value = userModel
+            }
+
+
+            override fun onFinalFailure(
+                errorString: String?
+            ) {
+
+                Log.e("API Failure", " $errorString")
+
+                serverResponse.value =
+                    BaseApiModel(
+                        BaseModel(
+                            PostResponse(
+                                meta = Meta(
+                                    errorString.toString(),
+                                    false
+                                )
+                            )
+                        )
+                    )
+
+            }
+
+        })
+
+        return serverResponse
+    }
 
 }

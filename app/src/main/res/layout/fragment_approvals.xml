@@ -8,159 +8,145 @@
         android:layout_height="match_parent"
         android:background="@color/white">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/start_guideline"
-        style="@style/start_gl"
-        android:orientation="vertical" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/start_guideline"
+            style="@style/start_gl"
+            android:orientation="vertical" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/end_guideline"
-        style="@style/end_gl"
-        android:orientation="vertical" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/end_guideline"
+            style="@style/end_gl"
+            android:orientation="vertical" />
 
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/bottom_guideline"
-        style="@style/bottom_gl" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/bottom_guideline"
+            style="@style/bottom_gl" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/top_guideline"
-        style="@style/top_gl" />
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tv_title"
-        style="@style/TEXT_SEMI_BLACK_15"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:gravity="center"
-        android:text="@string/approvals"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_back"
-        app:layout_constraintEnd_toEndOf="@id/end_guideline"
-        app:layout_constraintStart_toEndOf="@+id/iv_back"
-        app:layout_constraintTop_toTopOf="@+id/iv_back" />
-
-    <ImageView
-        android:id="@+id/iv_back"
-        android:layout_width="@dimen/_30sdp"
-        android:layout_height="@dimen/_30sdp"
-        android:importantForAccessibility="no"
-        android:src="@drawable/ic_left"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/top_guideline" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/ly_action_btn"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_10sdp"
-        android:background="@drawable/rounded_leave_filter"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:padding="@dimen/_3sdp"
-        app:layout_constraintEnd_toEndOf="@+id/end_guideline"
-        app:layout_constraintStart_toStartOf="@id/start_guideline"
-        app:layout_constraintTop_toBottomOf="@+id/iv_back">
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/top_guideline"
+            style="@style/top_gl" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv_week"
-            style="@style/TEXT_REGULAR_WHITE_10"
+            android:id="@+id/tv_title"
+            style="@style/TEXT_SEMI_BLACK_15"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:background="@drawable/rounded_enabled"
-            android:paddingTop="@dimen/_6sdp"
-            android:paddingBottom="@dimen/_6sdp"
-            android:text="@string/leave_req"
-            app:layout_constraintEnd_toStartOf="@+id/tv_month"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:text="@string/approvals"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_back"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintStart_toEndOf="@+id/iv_back"
+            app:layout_constraintTop_toTopOf="@+id/iv_back" />
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_30sdp"
+            android:importantForAccessibility="no"
+            android:src="@drawable/ic_left"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/top_guideline" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv_month"
-            style="@style/TEXT_REGULAR_BLACK_10"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/ly_action_btn"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginStart="@dimen/_5sdp"
-            android:background="@drawable/rounded_disabled"
-            android:paddingTop="@dimen/_6sdp"
-            android:paddingBottom="@dimen/_6sdp"
-            android:text="@string/attendance_req"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tv_week" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:background="@drawable/rounded_leave_filter"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="@dimen/_3sdp"
+            app:layout_constraintEnd_toEndOf="@+id/end_guideline"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintTop_toBottomOf="@+id/iv_back">
 
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_week"
+                style="@style/TEXT_REGULAR_WHITE_10"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/rounded_enabled"
+                android:paddingTop="@dimen/_6sdp"
+                android:paddingBottom="@dimen/_6sdp"
+                android:text="@string/leave_req"
+                app:layout_constraintEnd_toStartOf="@+id/tv_month"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="@dimen/_10sdp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@id/bottom_guideline"
-        app:layout_constraintEnd_toEndOf="@+id/end_guideline"
-        app:layout_constraintStart_toStartOf="@+id/start_guideline"
-        app:layout_constraintTop_toBottomOf="@+id/ly_action_btn">
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_month"
+                style="@style/TEXT_REGULAR_BLACK_10"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:background="@drawable/rounded_disabled"
+                android:paddingTop="@dimen/_6sdp"
+                android:paddingBottom="@dimen/_6sdp"
+                android:text="@string/attendance_req"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tv_week" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/ly_create_leave"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginTop="@dimen/_10sdp"
             android:orientation="vertical"
-            android:paddingBottom="@dimen/_10sdp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            >
+            app:layout_constraintBottom_toTopOf="@id/bottom_guideline"
+            app:layout_constraintEnd_toEndOf="@+id/end_guideline"
+            app:layout_constraintStart_toStartOf="@+id/start_guideline"
+            app:layout_constraintTop_toBottomOf="@+id/ly_action_btn">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_sub_filter"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:itemCount="3"
-                tools:listitem="@layout/sub_filter_row">
 
-            </androidx.recyclerview.widget.RecyclerView>
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/ly_team_filter"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/rounded_bgg"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:padding="@dimen/_5sdp"
-                android:gravity="center"
-                android:orientation="horizontal"
-                app:layout_constraintStart_toStartOf="parent"
+                android:id="@+id/ly_create_leave"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/_10sdp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/rv_sub_filter">
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-                <Spinner
-                    android:id="@+id/sp_team_member"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/ly_team_filter"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:overlapAnchor="false"
-                    android:padding="@dimen/_2sdp"
-                    android:popupBackground="@drawable/ly_spiner_bg"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:background="@drawable/rounded_bgg"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/_5sdp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck"
-                    tools:listitem="@layout/spinner_item" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    <Spinner
+                        android:id="@+id/sp_team_member"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:overlapAnchor="false"
+                        android:padding="@dimen/_2sdp"
+                        android:popupBackground="@drawable/ly_spiner_bg"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck"
+                        tools:listitem="@layout/spinner_item" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/ly_header"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
                     android:background="@drawable/rounded_rectengle"
                     android:gravity="center"
-                    android:layout_marginTop="@dimen/_5sdp"
                     android:orientation="horizontal"
                     android:padding="@dimen/_6sdp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -188,10 +174,12 @@
                         android:backgroundTint="@color/colorApp"
                         android:padding="@dimen/_5sdp"
                         android:textSize="@dimen/_8sdp"
+                        android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintHorizontal_weight="3"
                         app:layout_constraintStart_toEndOf="@id/tv_team_member"
                         app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0"
                         tools:text="20" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -215,6 +203,6 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

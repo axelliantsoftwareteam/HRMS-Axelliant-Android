@@ -16,7 +16,8 @@ import com.axelliant.hrms.model.leave.LeaveDetail
 
 class MyLeaveDetailAdapter(
     private val leaves: ArrayList<LeaveDetail>,
-    private val mContext: Context
+    private val mContext: Context,
+    private val adapterItemClick: AdapterItemClick
 ) :
     RecyclerView.Adapter<MyLeaveDetailAdapter.AccountsVH>() {
 
@@ -31,7 +32,11 @@ class MyLeaveDetailAdapter(
     override fun onBindViewHolder(holder: AccountsVH, position: Int) {
         holder.bind(leaves[position], mContext)
 
-//        holder.binding.lyDropDown.isVisible = false
+
+        holder.binding.lyActionBtn.setOnClickListener{
+            adapterItemClick.onItemClick(leaves[position],position)
+
+        }
 
         holder.binding.tvDropDown.setOnClickListener {
 

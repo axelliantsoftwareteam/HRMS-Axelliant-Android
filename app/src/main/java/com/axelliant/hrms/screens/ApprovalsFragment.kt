@@ -1,6 +1,7 @@
 package com.axelliant.hrms.screens
 
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,7 @@ import com.axelliant.hrms.R
 import com.axelliant.hrms.adapter.ApprovalsDetailAdapter
 import com.axelliant.hrms.adapter.PersonSpinnerAdapter
 import com.axelliant.hrms.adapter.SubFilterAdapter
+import com.axelliant.hrms.adapter.TeamLeaveDetailAdapter
 import com.axelliant.hrms.base.BaseFragment
 import com.axelliant.hrms.callback.AdapterItemClick
 import com.axelliant.hrms.config.AppConst
@@ -21,14 +23,18 @@ import com.axelliant.hrms.enums.AttendanceFilter
 import com.axelliant.hrms.enums.RequestFilter
 import com.axelliant.hrms.event.EventObserver
 import com.axelliant.hrms.extention.showErrorMsg
+import com.axelliant.hrms.model.attendance.AttendanceApprovalObject
 import com.axelliant.hrms.model.attendance.AttendanceData
 import com.axelliant.hrms.model.attendance.AttendanceInput
 import com.axelliant.hrms.model.dashboard.EmployProfile
 import com.axelliant.hrms.model.dashboard.FilterModel
+import com.axelliant.hrms.model.leave.LeaveApproval
+import com.axelliant.hrms.model.leave.TeamLeaveDetail
 import com.axelliant.hrms.navigation.AppNavigator
 import com.axelliant.hrms.utils.Utils
 import com.axelliant.hrms.utils.Utils.getRandomString
 import com.axelliant.hrms.viewmodel.AttendanceViewModel
+import com.axelliant.hrms.viewmodel.LeaveViewModel
 import org.koin.android.ext.android.inject
 import kotlin.random.Random
 
@@ -38,13 +44,11 @@ class ApprovalsFragment : BaseFragment() {
 
     private var _binding: FragmentApprovalsBinding? = null
 
-    private var startDateString: String? = null
-    private var endDateString: String? = null
-    private val binding get() = _binding!!
-    private var currentFilter = AttendanceFilter.WEEK
-    private val attendanceViewModel: AttendanceViewModel by inject()
-    private var filterId = ""
 
+    private val binding get() = _binding!!
+    private var currentFilter = RequestFilter.LEAVE
+    private val attendanceViewModel: AttendanceViewModel by inject()
+    private val leaveViewModel: LeaveViewModel by inject()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -67,48 +71,85 @@ class ApprovalsFragment : BaseFragment() {
                 }
             })
 
+        leaveViewModel.getIsLoading()
+            .observe(viewLifecycleOwner, EventObserver { isLoading ->
+                if (isLoading) {
+                    showDialog()
+                } else {
+                    hideDialog()
+                }
+            })
+
         binding.ivBack.setOnClickListener {
             previousFragmentNavigation()
         }
 
         spinnerPopulations()
         eventSelection()
-        attendanceViewModel.getTeamAttendance(getCurrentObject())
 
-        attendanceViewModel.teamAttendanceResponse.observe(
+        leaveViewModel.getTeamLeaveDetail(getCurrentObject())
+
+        leaveViewModel.teamLeaveDetailResponse.observe(
+            viewLifecycleOwner,
+            EventObserver { response ->
+
+                if (response?.meta?.status == true) {
+
+                    dataPopulate(response.leaves)
+                    binding?.tvTeamMemberTxt?.text = response.team_count.toString()
+
+                } else {
+                    requireContext().showErrorMsg(response?.meta?.message.toString())
+                }
+
+            })
+
+
+
+        leaveViewModel.leaveApprovalResponse.observe(
+            viewLifecycleOwner,
+            EventObserver { response ->
+
+                if (response?.meta?.status == true) {
+                    requireContext().showErrorMsg(response?.status_message)
+                    leaveViewModel.getTeamLeaveDetail(getCurrentObject())
+
+                } else {
+                    requireContext().showErrorMsg(response?.meta?.message.toString())
+                }
+
+            })
+
+        attendanceViewModel.attendanceApprovalResponse.observe(
+            viewLifecycleOwner,
+            EventObserver { response ->
+
+                if (response?.meta?.status == true) {
+                    requireContext().showErrorMsg(response?.status_message)
+                    attendanceViewModel.getAttendanceApproval(getCurrentObject())
+                } else {
+                    requireContext().showErrorMsg(response?.meta?.message.toString())
+                }
+
+            })
+
+
+        attendanceViewModel.attendanceApproval.observe(
             viewLifecycleOwner,
             EventObserver { response ->
 
                 if (response?.meta?.status == true) {
                     // success
 
-                    val array :ArrayList<FilterModel> = arrayListOf()
-                    array.add(FilterModel().apply {
-                        this.title = "Approved"
-                        this.id = "Approved"
-                        this.count= getRandomString()
-                    })
-                    array.add(FilterModel().apply {
-                        this.title = "Pending"
-                        this.id = "Pending"
-                        this.count= getRandomString()
-                    })
-                    array.add(FilterModel().apply {
-                        this.title = "Cancelled"
-                        this.id = "Cancelled"
-                        this.count= getRandomString()
-                    })
-                    subFilterPopulations(
-                     array
-                    )
+                    attendanceDataPopulate(response.checkin!!)
 
-                    dataPopulate(response.attendance_data!!)
-                    binding.tvTeamMemberTxt.text = response.team_count.toString()
+
                 } else {
                     requireContext().showErrorMsg(response?.meta?.message.toString())
                 }
 
             })
+
 
     }
 
@@ -124,26 +165,29 @@ class ApprovalsFragment : BaseFragment() {
         binding.tvMonth.setTextColor(requireContext().getColor(R.color.btn_text_color))
 
         binding.tvWeek.setOnClickListener {
-            currentFilter = AttendanceFilter.WEEK
-            attendanceViewModel.getTeamAttendance(getCurrentObject())
+            currentFilter = RequestFilter.LEAVE
+            leaveViewModel.getTeamLeaveDetail(getCurrentObject())
+            binding.tvTeamMember?.text = "Leave Requests"
             eventSelection()
         }
         binding.tvMonth.setOnClickListener {
-            currentFilter = AttendanceFilter.MONTH
-            attendanceViewModel.getTeamAttendance(getCurrentObject())
+            currentFilter = RequestFilter.ATTENDANCE
+            attendanceViewModel.getAttendanceApproval(getCurrentObject())
+            binding.tvTeamMember?.text = "Attendance Requests"
+
             eventSelection()
         }
 
 
         when (currentFilter) {
-            AttendanceFilter.WEEK -> {
+            RequestFilter.LEAVE -> {
                 binding.tvWeek.background =
                     ContextCompat.getDrawable(requireContext(), R.drawable.rounded_enabled)
                 binding.tvWeek.setTextColor(requireContext().getColor(R.color.white))
 
             }
 
-            AttendanceFilter.MONTH -> {
+            RequestFilter.ATTENDANCE -> {
 
                 binding.tvMonth.background =
                     ContextCompat.getDrawable(requireContext(), R.drawable.rounded_enabled)
@@ -159,33 +203,14 @@ class ApprovalsFragment : BaseFragment() {
 
     private fun getCurrentObject(): AttendanceInput {
 
-        when (currentFilter) {
-            AttendanceFilter.WEEK -> {
-                startDateString = Utils.getServerFormat(date = Utils.getLastWeek())
-                endDateString = Utils.getServerFormat()
-            }
-
-            AttendanceFilter.MONTH -> {
-                startDateString = Utils.getServerFormat(date = Utils.getFirstDayOfMonth())
-                endDateString =
-                    Utils.getServerFormat(date = Utils.getLastDayOfMonth())
-            }
-
-            else -> {}
-        }
-
-
         val currentEmploy = binding.spTeamMember.selectedItem as EmployProfile
         return AttendanceInput().apply {
-            this.startDate = startDateString!!
-            this.endDate = endDateString!!
-            this.filter = currentFilter
             if (currentEmploy.name == null)
                 this.employeeId = listOf()
             else
                 this.employeeId = listOf(currentEmploy.name.toString())
 
-
+            this.for_approvals = 1
         }
 
     }
@@ -196,8 +221,6 @@ class ApprovalsFragment : BaseFragment() {
             requireContext(), GlobalConfig.getReportingEmploys()
         )
         binding.spTeamMember.adapter = adapter
-
-
         binding.spTeamMember.onItemSelectedListener = object :
             AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
@@ -206,57 +229,78 @@ class ApprovalsFragment : BaseFragment() {
                 position: Int,
                 id: Long
             ) {
-                attendanceViewModel.getTeamAttendance(getCurrentObject())
+                when (currentFilter) {
+                    RequestFilter.LEAVE -> leaveViewModel.getTeamLeaveDetail(getCurrentObject())
+                    RequestFilter.ATTENDANCE -> attendanceViewModel.getAttendanceApproval(
+                        getCurrentObject()
+                    )
+
+
+                }
 
             }
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
 
         }
 
 
     }
 
-    private fun subFilterPopulations(attendanceStatusList: ArrayList<FilterModel>) {
-
-        attendanceStatusList.add(0, FilterModel().apply {
-            this.id = ""
-            this.title = "All"
-            this.count = "10"
-        })
-        binding?.rvSubFilter?.layoutManager =
-            LinearLayoutManager(requireActivity(), RecyclerView.HORIZONTAL, false)
-        val weeklyAdapter = SubFilterAdapter(
-            filterId,
-            attendanceStatusList, requireContext(),
-            object : AdapterItemClick {
+    private fun dataPopulate(leaves: ArrayList<TeamLeaveDetail>?) {
+        binding?.rvAttend?.layoutManager = LinearLayoutManager(requireActivity())
+        val weeklyAdapter = TeamLeaveDetailAdapter(
+            leaves!!, true, object : AdapterItemClick {
                 override fun onItemClick(customObject: Any, position: Int) {
-                    val filterObject = customObject as FilterModel
 
-                    filterId = filterObject.id.toString()
-//                    leaveViewModel.getTeamLeaveDetail(getCurrentObject())
+                    val leaveDetail = customObject as TeamLeaveDetail
+                    // call approved APi here
+                    leaveViewModel.leaveApprovalStatus(LeaveApproval().apply {
+                        this.leave_id = leaveDetail.name
+                        this.status = "Approved"
+                    })
+
 
                 }
 
-            }
-        )
-        binding?.rvSubFilter?.adapter = weeklyAdapter
+            }, object : AdapterItemClick {
+                override fun onItemClick(customObject: Any, position: Int) {
+
+                    val leaveDetail = customObject as TeamLeaveDetail
+                    // call approved APi here
+                    leaveViewModel.leaveApprovalStatus(LeaveApproval().apply {
+                        this.leave_id = leaveDetail.name
+                        this.status = "Rejected"
+                    })
+
+                }
+
+            })
+        binding?.rvAttend?.adapter = weeklyAdapter
 
     }
 
-    private fun dataPopulate(detailArrayList: ArrayList<AttendanceData>) {
+    private fun attendanceDataPopulate(detailArrayList: ArrayList<AttendanceApprovalObject>) {
         binding.rvAttend.layoutManager = LinearLayoutManager(requireActivity())
         val weeklyAdapter = ApprovalsDetailAdapter(
             requireContext(), detailArrayList,
             object : AdapterItemClick {
                 override fun onItemClick(customObject: Any, position: Int) {
-                    val currentObject = customObject as AttendanceData
-                    AppNavigator.navigateToMyAttendanceDetail(Bundle().apply {
-                        this.putString(AppConst.KEY_ID, currentObject.id)
+                    val attObject = customObject as AttendanceApprovalObject
+                    attendanceViewModel.attendanceApprovalStatus(LeaveApproval().apply {
+                        this.checkin_id = attObject.name
+                        this.status = "Approved"
                     })
                 }
-            }, RequestFilter.ATTENDANCE.name, true
+            }, object : AdapterItemClick {
+                override fun onItemClick(customObject: Any, position: Int) {
+                    val attObject = customObject as AttendanceApprovalObject
+                    attendanceViewModel.attendanceApprovalStatus(LeaveApproval().apply {
+                        this.checkin_id = attObject.name
+                        this.status = "Rejected"
+                    })
+                }
+            }
         )
         binding.rvAttend.adapter = weeklyAdapter
     }

@@ -13,16 +13,17 @@ import com.axelliant.hrms.R
 import com.axelliant.hrms.callback.AdapterItemClick
 import com.axelliant.hrms.databinding.MyTeamApprovalRowBinding
 import com.axelliant.hrms.enums.RequestFilter
+import com.axelliant.hrms.extention.nullToEmpty
 import com.axelliant.hrms.extention.setUrlImage
+import com.axelliant.hrms.model.attendance.AttendanceApprovalObject
 import com.axelliant.hrms.model.attendance.AttendanceData
 import com.axelliant.hrms.utils.Utils.hideShow
 
 class ApprovalsDetailAdapter(
     private val mContext: Context,
-    private val detailArrayList: ArrayList<AttendanceData>,
-    private val itemClick: AdapterItemClick,
-    private val requestType: String,
-    private val isRequestType: Boolean
+    private val detailArrayList: ArrayList<AttendanceApprovalObject>,
+    private val approvedItemClick: AdapterItemClick,
+    private val rejectItemClick: AdapterItemClick,
 ) :
     RecyclerView.Adapter<ApprovalsDetailAdapter.AccountsVH>() {
 
@@ -41,21 +42,15 @@ class ApprovalsDetailAdapter(
             holder.binding.divider.isVisible = holder.binding.lyAttendStatus.isVisible
         }
 
-        if (requestType == RequestFilter.ATTENDANCE.name)
-        {
-            holder.binding.tvFromDate.text=ContextCompat.getString(mContext,R.string.date)
-            holder.binding.tvToDate.text=ContextCompat.getString(mContext,R.string.time)
-            holder.binding.tvLeaveApprover.text=ContextCompat.getString(mContext,R.string.shift)
+        holder.binding.tvApproved.setOnClickListener{
+            approvedItemClick.onItemClick(detailArrayList[position],position)
         }
-        if (isRequestType)
-        {
-            holder.binding.tvApproved.visibility=View.VISIBLE
-            holder.binding.tvReject.visibility=View.VISIBLE
+
+        holder.binding.tvReject.setOnClickListener{
+            rejectItemClick.onItemClick(detailArrayList[position],position)
+
         }
-        else{
-            holder.binding.tvApproved.visibility=View.GONE
-            holder.binding.tvReject.visibility=View.GONE
-        }
+
     }
 
     override fun getItemCount(): Int {
@@ -65,15 +60,16 @@ class ApprovalsDetailAdapter(
     class AccountsVH(val binding: MyTeamApprovalRowBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: AttendanceData, mContext: Context)
+        fun bind(item: AttendanceApprovalObject, mContext: Context)
         {
+            binding.tvEmployeName.text = item.employee_name
+            binding.tvEmployeDesignation.text = item.designation
+            binding.tvFromDateTxt.text = item.time.toString()
+            binding.tvToDateTxt.text = item.location.toString()
+            binding.tvLeaveTypeTxt.text = item.log_type
+            binding.tvLeaveApproverTxt.text = item.requeststatus.toString()
+            binding.tvReasonTxt.text = item.reason.nullToEmpty()
 
-            binding.tvEmployeName.text = item.name.toString()
-            binding.tvEmployeDesignation.text = item.designation.toString()
-            binding.tvEmployeDesignation.text = item.designation.toString()
-            binding.tvEmployeDesignation.text = item.designation.toString()
-            binding.tvEmployeDesignation.text = item.designation.toString()
-            binding.profileImg.setUrlImage(item.image, mContext)
 
 
         }

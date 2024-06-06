@@ -6,7 +6,6 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="@dimen/_5sdp">
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -90,7 +89,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
                 android:gravity="start"
-                android:text="@string/start_date"
+                android:text="@string/time"
                 android:textAllCaps="true"
                 app:layout_constraintEnd_toStartOf="@+id/tv_to_date"
                 app:layout_constraintStart_toStartOf="@+id/divider"
@@ -116,7 +115,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:gravity="start"
-                android:text="@string/end_date"
+                android:text="@string/location"
                 android:textAllCaps="true"
                 app:layout_constraintEnd_toEndOf="@+id/divider"
                 app:layout_constraintStart_toEndOf="@+id/tv_from_date"
@@ -130,7 +129,7 @@
 
                 android:background="@drawable/rounded_disabled"
                 android:gravity="start"
-                android:text="11-06-2024"
+                android:text="Location"
                 app:layout_constraintEnd_toEndOf="@+id/divider"
                 app:layout_constraintStart_toStartOf="@+id/tv_to_date"
                 app:layout_constraintTop_toBottomOf="@+id/tv_to_date" />
@@ -143,7 +142,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:layout_marginTop="@dimen/_5sdp"
-                android:text="@string/request_type"
+                android:text="@string/attend_type"
                 android:textAllCaps="true"
                 app:layout_constraintEnd_toStartOf="@+id/tv_leave_approver"
                 app:layout_constraintStart_toStartOf="@+id/divider"
@@ -258,6 +257,5 @@
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
