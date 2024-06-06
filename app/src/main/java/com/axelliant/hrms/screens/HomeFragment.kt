@@ -196,6 +196,7 @@ class HomeFragment : BaseFragment() {
                 }
 
             })
+
         homeViewModel.checkInResponse.observe(
             viewLifecycleOwner,
             EventObserver { response ->
