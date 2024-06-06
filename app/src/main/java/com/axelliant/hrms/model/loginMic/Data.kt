@@ -1,8 +1,6 @@
-package com.axelliant.hrms.model.login
+package com.axelliant.hrms.model.loginMic
 
-import com.axelliant.hrms.model.base.Meta
-
-data class UserLoginResponse(
+data class Data(
     val api_key: String?=null,
     val api_sec: String?=null,
     val api_secret: String?=null,

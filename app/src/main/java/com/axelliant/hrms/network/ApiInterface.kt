@@ -1,6 +1,5 @@
 package com.axelliant.hrms.network
 
-import com.axelliant.hrms.di.TestModelInjection
 import com.axelliant.hrms.model.attendance.AttRequest
 import com.axelliant.hrms.model.leave.LeaveApproval
 import com.axelliant.hrms.model.login.CheckInRequest
@@ -11,92 +10,91 @@ import okhttp3.ResponseBody;
 import retrofit2.Call
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Header
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
-import retrofit2.http.Path;
-import retrofit2.http.Query
 
 interface ApiInterface {
 
     @Headers("Content-Type: application/json")
     @GET("hrms.hr.doctype.employee.mobile_api.mobile_dashboard")  // dashboard
-    fun callDashBoard(): Call<ResponseBody>
+    fun callDashBoard(@Header("Authorization") auth: String?): Call<ResponseBody>
 
     // get attendance stats weekly
     @Headers("Content-Type: application/json")
     @GET("hrms.hr.doctype.employee.mobile_api.get_week_attendance_stats")
-    fun callAttendanceWeekStats(): Call<ResponseBody> // week attendance stats
+    fun callAttendanceWeekStats(@Header("Authorization") auth: String?): Call<ResponseBody> // week attendance stats
 
     // get attendance stats monthly
     @Headers("Content-Type: application/json")
     @POST("hrms.hr.doctype.employee.mobile_api.get_month_attendance_stats")
-    fun callAttendanceMonthStats(@Body attendanceRequest: AttRequest): Call<ResponseBody> // month attendance stats
+    fun callAttendanceMonthStats(@Header("Authorization") auth: String?,@Body attendanceRequest: AttRequest): Call<ResponseBody> // month attendance stats
 
 
     // Check-In Request
     @Headers("Content-Type: application/json")
     @POST("hrms.hr.doctype.employee.checkin.create_checkin")
-    fun callCheckIn(@Body checkInRequest: CheckInRequest?): Call<ResponseBody> // month attendance stats
+    fun callCheckIn(@Header("Authorization") auth: String?,@Body checkInRequest: CheckInRequest?): Call<ResponseBody> // month attendance stats
 
 
 
     @Headers("Content-Type: application/json")
     @POST("hrms.hr.doctype.employee.mobile_api.get_filtered_attendance") // my attendance detail
-    fun callAttendanceDetail(@Body attendanceRequest:AttRequest
+    fun callAttendanceDetail(@Header("Authorization") auth: String?,@Body attendanceRequest:AttRequest
 
     ): Call<ResponseBody>
 
 
     @Headers("Content-Type: application/json")
     @POST("hrms.hr.doctype.employee.mobile_api.get_team_attendance")  // team attendance detail
-    fun callTeamAttendanceDetail(@Body attendanceRequest:AttRequest
+    fun callTeamAttendanceDetail(@Header("Authorization") auth: String?,@Body attendanceRequest:AttRequest
     ): Call<ResponseBody>
 
 
     @Headers("Content-Type: application/json")
     @POST("hrms.hr.doctype.employee.leaves_mobile.get_leave_details_self") // leave stats weekly and monthly
-    fun callLeaveStats(@Body attRequest: AttRequest): Call<ResponseBody>
+    fun callLeaveStats(@Header("Authorization") auth: String?,@Body attRequest: AttRequest): Call<ResponseBody>
 
 
 
     @Headers("Content-Type: application/json")
     @POST("hrms.hr.doctype.employee.leaves_mobile.get_leave_application_requests") // my leave detail
-    fun callMyLeaveDetail(@Body attRequest: AttRequest): Call<ResponseBody>
+    fun callMyLeaveDetail(@Header("Authorization") auth: String?,@Body attRequest: AttRequest): Call<ResponseBody>
 
 
     @Headers("Content-Type: application/json")
     @POST("hrms.hr.doctype.employee.leaves_mobile.get_leave_application_requests_team") // team leave detail fragment
-    fun callTeamLeaveDetail(@Body attRequest: AttRequest): Call<ResponseBody>
+    fun callTeamLeaveDetail(@Header("Authorization") auth: String?,@Body attRequest: AttRequest): Call<ResponseBody>
 
     // required APIS
 
 
     @Headers("Content-Type: application/json")
     @GET("hrms.hr.doctype.employee.leaves_mobile.get_leave_type")  // Leave types for request section
-    fun getLeaveTypes(): Call<ResponseBody>
+    fun getLeaveTypes(@Header("Authorization") auth: String?): Call<ResponseBody>
 
 
 
 
     @Headers("Content-Type: application/json")
     @GET("hrms.hr.doctype.employee.checkin.get_checkin_select_field")  // Attendance types for request section
-    fun getAttendanceRequestInformation(): Call<ResponseBody>
+    fun getAttendanceRequestInformation(@Header("Authorization") auth: String?): Call<ResponseBody>
 
 
     @Headers("Content-Type: application/json")
     @POST("hrms.hr.doctype.employee.leaves_mobile.create_leave_application")                              // post leave request
-    fun postLeaveRequest(@Body leaveRequest: LeaveRequest?): Call<ResponseBody>
+    fun postLeaveRequest(@Header("Authorization") auth: String?,@Body leaveRequest: LeaveRequest?): Call<ResponseBody>
 
 
     @Headers("Content-Type: application/json")
     @POST("hrms.hr.doctype.employee.checkin.create_checkin")                             // attendance leave request
-    fun postAttendanceRequest(@Body attendanceRequest: AttendanceRequest?): Call<ResponseBody>
+    fun postAttendanceRequest(@Header("Authorization") auth: String?,@Body attendanceRequest: AttendanceRequest?): Call<ResponseBody>
 
 
 
-    // User Google Sign-In Registration
+    //microsoft login
     @Headers("Content-Type: application/json")
-    @POST("login_microsoft/")                               // microsoft login
+    @POST("hrms.hr.doctype.employee.mobile_api.get_set_user_token")
     fun userLoginCall(@Body loginRequest: LoginRequest?): Call<ResponseBody>
 
 

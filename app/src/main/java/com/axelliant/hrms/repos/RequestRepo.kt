@@ -2,6 +2,7 @@ package com.axelliant.hrms.repos
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import com.axelliant.hrms.config.AppConst
 import com.axelliant.hrms.enums.AttendanceFilter
 import com.axelliant.hrms.enums.AttendanceFilter.*
 import com.axelliant.hrms.model.attendance.AttendanceInput
@@ -30,7 +31,7 @@ class RequestRepo(private var apiInterface: ApiInterface) {
     fun getLeaves(): MutableLiveData<BaseApiModel<GetLeavesResponse>> {
         val serverResponse = MutableLiveData<BaseApiModel<GetLeavesResponse>>()
 
-        val call: Call<ResponseBody>  = apiInterface.getLeaveTypes()
+        val call: Call<ResponseBody>  = apiInterface.getLeaveTypes("token ${AppConst.TOKEN}")
 
         Log.e("HTTP Request", " " + call?.request().toString())
 
@@ -68,7 +69,7 @@ class RequestRepo(private var apiInterface: ApiInterface) {
     fun getAttendanceInfo(): MutableLiveData<BaseApiModel<GetAttendanceResponse>> {
         val serverResponse = MutableLiveData<BaseApiModel<GetAttendanceResponse>>()
 
-        val call: Call<ResponseBody>  = apiInterface.getAttendanceRequestInformation()
+        val call: Call<ResponseBody>  = apiInterface.getAttendanceRequestInformation("token ${AppConst.TOKEN}")
 
         Log.e("HTTP Request", " " + call?.request().toString())
 
@@ -183,7 +184,7 @@ class RequestRepo(private var apiInterface: ApiInterface) {
     fun postLeaveRequest(leaveRequest: LeaveRequest): MutableLiveData<BaseApiModel<PostResponse>> {
         val serverResponse = MutableLiveData<BaseApiModel<PostResponse>>()
 
-        val call: Call<ResponseBody>  = apiInterface.postLeaveRequest(leaveRequest)
+        val call: Call<ResponseBody>  = apiInterface.postLeaveRequest("token ${AppConst.TOKEN}",leaveRequest)
 
         Log.e("HTTP Request", " " + call?.request().toString())
 
@@ -220,7 +221,7 @@ class RequestRepo(private var apiInterface: ApiInterface) {
     fun postAttendanceRequest(attendanceRequest: AttendanceRequest): MutableLiveData<BaseApiModel<PostResponse>> {
         val serverResponse = MutableLiveData<BaseApiModel<PostResponse>>()
 
-        val call: Call<ResponseBody>  = apiInterface.postAttendanceRequest(attendanceRequest)
+        val call: Call<ResponseBody>  = apiInterface.postAttendanceRequest("token ${AppConst.TOKEN}",attendanceRequest)
 
         Log.e("HTTP Request", " " + call?.request().toString())
 

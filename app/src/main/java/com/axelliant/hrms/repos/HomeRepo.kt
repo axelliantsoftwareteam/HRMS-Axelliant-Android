@@ -2,11 +2,7 @@ package com.axelliant.hrms.repos
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import com.axelliant.hrms.enums.AttendanceFilter
-import com.axelliant.hrms.model.EmptyModel
-import com.axelliant.hrms.model.attendance.AttRequest
-import com.axelliant.hrms.model.attendance.AttendanceInput
-import com.axelliant.hrms.model.attendance.AttendanceStatsResponse
+import com.axelliant.hrms.config.AppConst
 import com.axelliant.hrms.model.base.BaseApiModel
 import com.axelliant.hrms.model.base.BaseModel
 import com.axelliant.hrms.model.base.Meta
@@ -27,7 +23,7 @@ class HomeRepo(private var apiInterface: ApiInterface) {
     fun checkInAttendance(checkInRequest: CheckInRequest): MutableLiveData<BaseApiModel<CheckInResponse>> {
         val serverResponse = MutableLiveData<BaseApiModel<CheckInResponse>>()
 
-        val call = apiInterface.callCheckIn(CheckInRequest())
+        val call = apiInterface.callCheckIn("token ${AppConst.TOKEN}",checkInRequest)
         Log.e("HTTP Request", " ${call.request().toString()}")
         call.enqueue(object : BaseCallBack<ResponseBody>(call) {
             override fun onFinalSuccess(
@@ -72,7 +68,7 @@ class HomeRepo(private var apiInterface: ApiInterface) {
 
     fun getDashboardData(): MutableLiveData<BaseApiModel<DashboardResponse>> {
         val serverResponse = MutableLiveData<BaseApiModel<DashboardResponse>>()
-        val call = apiInterface.callDashBoard()
+        val call = apiInterface.callDashBoard("token ${AppConst.TOKEN}")
 
         Log.e("HTTP Request", " " + call.request().toString())
 

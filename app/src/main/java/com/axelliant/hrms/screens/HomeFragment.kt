@@ -27,10 +27,12 @@ import com.axelliant.hrms.adapter.BirthdayAdapter
 import com.axelliant.hrms.adapter.ModulesAdapter
 import com.axelliant.hrms.base.BaseFragment
 import com.axelliant.hrms.callback.AdapterItemClick
+import com.axelliant.hrms.config.AppConst
 import com.axelliant.hrms.config.AppConst.inputFormat
 import com.axelliant.hrms.config.AppConst.outputFormat
 import com.axelliant.hrms.config.GlobalConfig
 import com.axelliant.hrms.databinding.FragmentHomeBinding
+import com.axelliant.hrms.enums.CheckRequestFilter
 import com.axelliant.hrms.enums.LeaveStatus
 import com.axelliant.hrms.enums.LocationFilter
 import com.axelliant.hrms.event.EventObserver
@@ -39,8 +41,9 @@ import com.axelliant.hrms.extention.showErrorMsg
 import com.axelliant.hrms.extention.showSuccessMsg
 import com.axelliant.hrms.extention.valueQualifier
 import com.axelliant.hrms.model.Modules
-import com.axelliant.hrms.model.TargetLocResponse
+import com.axelliant.hrms.model.dashboard.BranchDataResponse
 import com.axelliant.hrms.model.dashboard.Birthday
+import com.axelliant.hrms.model.dashboard.CheckInInfoResponse
 import com.axelliant.hrms.model.dashboard.EmployProfile
 import com.axelliant.hrms.model.login.CheckInRequest
 import com.axelliant.hrms.navigation.AppNavigator
@@ -64,12 +67,10 @@ class HomeFragment : BaseFragment() {
     private var checkIn: String? = null
     private var checkOut: String? = null
     private val radiusInMeters: Double = 200.0
-    private val targetLongitude: Double = 74.389467
-    private val targetLatitude: Double = 31.522359
     private var _binding: FragmentHomeBinding? = null
 
     // Create an ArrayList to store the converted time strings
-    private val targetLocList = ArrayList<TargetLocResponse>()
+    private var targetLocList = ArrayList<BranchDataResponse>()
 
 
     private val binding get() = _binding
@@ -171,16 +172,24 @@ class HomeFragment : BaseFragment() {
             Manifest.permission.ACCESS_FINE_LOCATION
         )
         activityResultLauncher.launch(appPerms)
+        // data population
+        dataPopulate()
+        AppConst.TOKEN=sessionManager.getToken()
 
         homeViewModel.getDashboardInformation()
         homeViewModel.dashboardResponse.observe(
             viewLifecycleOwner,
             EventObserver { response ->
 
-                if (response?.meta?.status == true) {
+                if (response?.meta?.status == true)
+                {
                     // success
                     GlobalConfig.setCurrentEmployee(response.employee_profile!!)
                     birthdayPopulate(response.birthday_data!!)
+                    checkInInfoPopulate(response.checkin_info!!)
+                    if (response.branch_data != null)
+                        targetLocList = response.branch_data
+
                     dashBoardPopulate(response.employee_profile)
                     dataPopulate()
                 } else {
@@ -188,18 +197,26 @@ class HomeFragment : BaseFragment() {
                 }
 
             })
+
         homeViewModel.checkInResponse.observe(
             viewLifecycleOwner,
             EventObserver { response ->
 
                 if (response?.meta?.status == true) {
-                    requireContext().showErrorMsg(response.meta.message.toString())
+                    requireContext().showErrorMsg("Your attendance are marked")
                 } else {
                     requireContext().showErrorMsg(response?.meta?.message.toString())
                 }
 
             })
-
+        homeViewModel.getIsLoading()
+            .observe(viewLifecycleOwner, EventObserver { isLoading ->
+                if (isLoading) {
+                    showDialog()
+                } else {
+                    hideDialog()
+                }
+            })
 
         binding?.ivQr?.setOnClickListener {
             requireContext().showSuccessMsg()
@@ -228,14 +245,14 @@ class HomeFragment : BaseFragment() {
             })
         })
 
-        targetLocList.add(TargetLocResponse(LocationFilter.NTC_OFFICE.value, 31.5494, 74.3333))
-        targetLocList.add(
-            TargetLocResponse(
-                LocationFilter.NASTP_OFFICE.value,
-                targetLatitude,
-                targetLongitude
-            )
-        )
+//        targetLocList.add(BranchDataResponse(LocationFilter.NTC_OFFICE.value, 31.5494, 74.3333))
+//        targetLocList.add(
+//            BranchDataResponse(
+//                LocationFilter.NASTP_OFFICE.value,
+//                targetLatitude,
+//                targetLongitude
+//            )
+//        )
 
 
         setCurrentLocationText()
@@ -254,63 +271,76 @@ class HomeFragment : BaseFragment() {
             AnimatorInflater.loadAnimator(requireContext(), R.animator.back_animator) as AnimatorSet
 
         binding?.btnCheckIn?.setOnClickListener {
-            if (isFront) {
-                checkIn = getCurrentTime()
-                val date: Date? = checkIn?.let { it1 -> inputFormat.parse(it1) }
-                val formattedTime: String = date?.let { outputFormat.format(it) } ?: "Invalid date"
-                binding?.tvCheckInTxt?.text = formattedTime.valueQualifier()
-                binding?.tvCheckInStatus?.text = LocationFilter.CHECK_IN.value
-                binding?.ivPunchIn?.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        requireContext(),
-                        R.drawable.ic_punch_in
+            setCurrentLocationText()
+            if (loc != null)
+            {
+                if (isFront)
+                {
+
+                    checkIn = getCurrentTime()
+                    val date: Date? = checkIn?.let { it1 -> inputFormat.parse(it1) }
+                    val formattedTime: String =
+                        date?.let { outputFormat.format(it) } ?: "Invalid date"
+                    binding?.tvCheckInTxt?.text = formattedTime.valueQualifier()
+                    binding?.tvCheckInStatus?.text = LocationFilter.CHECK_IN.value
+                    binding?.ivPunchIn?.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            requireContext(),
+                            R.drawable.ic_punch_in
+                        )
                     )
-                )
-                setCurrentLocationText()
+                    setCurrentLocationText()
 
-                frontAnimation.setTarget(binding?.lyCheckIn)
-                backAnimation.setTarget(binding?.lyCheckOut)
-                frontAnimation.start()
-                backAnimation.start()
-                isFront = false
-                homeViewModel.postCheckIn(CheckInRequest().apply {
-                    this.log_type = checkIn
-                    this.date_time = checkIn
-                    this.location = loc
-                    this.request_status = LeaveStatus.PENDING.value
-                })
+                    frontAnimation.setTarget(binding?.lyCheckIn)
+                    backAnimation.setTarget(binding?.lyCheckOut)
+                    frontAnimation.start()
+                    backAnimation.start()
+                    isFront = false
+
+                    homeViewModel.postCheckIn(CheckInRequest().apply {
+                        this.log_type = CheckRequestFilter.IN.name
+                        this.date_time = checkIn
+                        this.location = loc
+                        this.request_status = LeaveStatus.PENDING.value
+                        this.attendance_reason = "Punch from application"
+                    })
 
 
-            } else {
-                checkOut = getCurrentTime()
-                val date: Date? = checkOut?.let { it1 -> inputFormat.parse(it1) }
-                val formattedTime: String = date?.let { outputFormat.format(it) } ?: "Invalid date"
-                binding?.tvCheckOutTxt?.text = formattedTime.valueQualifier()
-                binding?.tvCheckOutStatus?.text = LocationFilter.CHECK_OUT.value
-                binding?.ivPunchOut?.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        requireContext(),
-                        R.drawable.ic_absent
+                } else {
+                    checkOut = getCurrentTime()
+                    val date: Date? = checkOut?.let { it1 -> inputFormat.parse(it1) }
+                    val formattedTime: String =
+                        date?.let { outputFormat.format(it) } ?: "Invalid date"
+                    binding?.tvCheckOutTxt?.text = formattedTime.valueQualifier()
+                    binding?.tvCheckOutStatus?.text = LocationFilter.CHECK_OUT.value
+                    binding?.ivPunchOut?.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            requireContext(),
+                            R.drawable.ic_absent
+                        )
                     )
-                )
-                setCurrentLocationText()
+                    setCurrentLocationText()
 
-                frontAnimation.setTarget(binding?.lyCheckOut)
-                backAnimation.setTarget(binding?.lyCheckIn)
-                backAnimation.start()
-                frontAnimation.start()
-                isFront = true
+                    frontAnimation.setTarget(binding?.lyCheckOut)
+                    backAnimation.setTarget(binding?.lyCheckIn)
+                    backAnimation.start()
+                    frontAnimation.start()
+                    isFront = true
 
-                homeViewModel.postCheckIn(CheckInRequest().apply {
-                    this.log_type = checkIn
-                    this.date_time = checkIn
-                    this.location = loc
-                    this.request_status = LeaveStatus.PENDING.value
-                })
+                    homeViewModel.postCheckIn(CheckInRequest().apply {
+                        this.log_type = CheckRequestFilter.OUT.name
+                        this.date_time = checkOut
+                        this.location = loc
+                        this.request_status = LeaveStatus.PENDING.value
+                        this.attendance_reason = "Punch from application"
+                    })
+
+                }
 
             }
-
-
+            else{
+                requireContext().showErrorMsg("Please wait we are fetching your location")
+            }
         }
 
         PublicClientApplication.createSingleAccountPublicClientApplication(
@@ -331,6 +361,25 @@ class HomeFragment : BaseFragment() {
 
     }
 
+    private fun checkInInfoPopulate(checkInInfo: CheckInInfoResponse) {
+        if (checkInInfo != null) {
+            if (checkInInfo.is_check_in_button == true)
+                binding?.lyCheckIn?.isEnabled = checkInInfo.is_check_in_button
+            else {
+                binding?.btnCheckIn?.isEnabled=false
+                binding?.lyCheckIn?.visibility = View.GONE
+                binding?.tvCheckInTxt?.text = checkInInfo.check_in.valueQualifier()
+            }
+            if (checkInInfo.is_check_out_button == true)
+                binding?.lyCheckOut?.isEnabled = checkInInfo.is_check_out_button
+            else {
+                binding?.btnCheckIn?.isEnabled=false
+                binding?.lyCheckIn?.visibility = View.VISIBLE
+                binding?.tvCheckOutTxt?.text = checkInInfo.check_out.valueQualifier()
+                binding?.lyCheckOut?.isEnabled = checkInInfo.is_check_out_button!!
+            }
+        }
+    }
 
     private fun setCurrentLocationText() {
 //        binding?.tvLocTxt?.text = getLocationAddress(currentLocation)
@@ -346,10 +395,11 @@ class HomeFragment : BaseFragment() {
                 )
                 if (isWithinRadius) {
                     binding?.tvLocation?.text = targetloc.name
-                    loc = LocationFilter.REMOTE.value
+                    loc = LocationFilter.OFFICE.value
                     return
                 } else {
-                    binding?.tvLocation?.text = LocationFilter.REMOTE.value
+                    binding?.tvLocation?.text = LocationFilter.WHF.value
+                    loc = LocationFilter.WHF.value
                 }
             }
         }

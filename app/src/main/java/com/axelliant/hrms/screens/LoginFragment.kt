@@ -173,14 +173,10 @@ class LoginFragment : BaseFragment() {
                     lastRemember = true
                 )
                 AppConst.TOKEN = authenticationResult.account.idToken
-
-//                micLogin(authenticationResult.account.idToken)
-
-
+                micLogin(authenticationResult.account.idToken)
                 // Update account
                 mAccount = authenticationResult.account
                 updateUI()
-                AppNavigator.navigateToHome()
             }
 
             override fun onError(exception: MsalException) {
@@ -232,18 +228,20 @@ class LoginFragment : BaseFragment() {
             viewLifecycleOwner,
             EventObserver { response ->
 
-                if (response?.meta?.status == true) {
+                if (response!=null)
+                {
                     // success
-                    sessionManager.saveToken(response.access_token)
+                    sessionManager.saveToken(response.api_key.plus(":").plus(response.api_sec))
                     sessionManager.createLoginSession(
                         username = null,
                         userPass = null,
-                        accessToken = response.access_token,
+                        accessToken = response.api_key.plus(":").plus(response.api_sec),
                         lastRemember = true
                     )
-                    AppConst.TOKEN = response.access_token
+                    AppConst.TOKEN =response.api_key.plus(":").plus(response.api_sec)
+                    AppNavigator.navigateToHome()
                 } else {
-                    requireContext().showErrorMsg(response?.meta?.message.toString())
+                    requireContext().showErrorMsg("InValid")
                 }
 
             })

@@ -2,6 +2,7 @@ package com.axelliant.hrms.repos
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import com.axelliant.hrms.config.AppConst
 import com.axelliant.hrms.enums.AttendanceFilter
 import com.axelliant.hrms.enums.AttendanceFilter.*
 import com.axelliant.hrms.model.attendance.AttRequest
@@ -34,9 +35,9 @@ class AttendanceRepo(private var apiInterface: ApiInterface) {
 
         var call: Call<ResponseBody>? = null
         when (attendanceInput.filter) {
-            WEEK -> call = apiInterface.callAttendanceWeekStats()
+            WEEK -> call = apiInterface.callAttendanceWeekStats("token ${AppConst.TOKEN}")
             MONTH -> call = apiInterface.callAttendanceMonthStats(
-
+                "token ${AppConst.TOKEN}",
                 AttRequest().apply {
                     this.start_date = attendanceInput.startDate
                     this.end_date = attendanceInput.endDate
@@ -97,7 +98,7 @@ class AttendanceRepo(private var apiInterface: ApiInterface) {
     ): MutableLiveData<BaseApiModel<AttendanceResponse>> {
         val serverResponse = MutableLiveData<BaseApiModel<AttendanceResponse>>()
 
-        val call = apiInterface.callAttendanceDetail(
+        val call = apiInterface.callAttendanceDetail("token ${AppConst.TOKEN}",
             AttRequest().apply {
                 this.start_date = inputObject.startDate
                 this.end_date = inputObject.endDate
@@ -163,7 +164,7 @@ class AttendanceRepo(private var apiInterface: ApiInterface) {
                employee_list = inputObject.employeeId
            )*/
 
-        val call = apiInterface.callTeamAttendanceDetail(
+        val call = apiInterface.callTeamAttendanceDetail("token ${AppConst.TOKEN}",
             AttRequest().apply {
                 this.start_date = inputObject.startDate
                 this.end_date = inputObject.endDate
