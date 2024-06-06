@@ -43,7 +43,7 @@ class LoginRepo(private var apiInterface: ApiInterface) {
                 Log.e("API Failure", " $errorString")
 
                 userLoginResponse.value =
-                    BaseApiModel(BaseModel(UserLoginResponse(meta = Meta(errorString.toString(), false))))
+                    BaseApiModel(BaseModel(UserLoginResponse()))
 
             }
 

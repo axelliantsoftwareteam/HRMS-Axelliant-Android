@@ -2,6 +2,7 @@ package com.axelliant.hrms.repos
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import com.axelliant.hrms.config.AppConst
 import com.axelliant.hrms.model.attendance.AttRequest
 import com.axelliant.hrms.model.attendance.AttendanceInput
 import com.axelliant.hrms.model.leave.LeaveResponse
@@ -24,7 +25,7 @@ class LeaveRepo(private var apiInterface: ApiInterface) {
     fun getLeaveStats(attendanceInput: AttendanceInput): MutableLiveData<BaseApiModel<LeaveResponse>> {
         val serverResponse = MutableLiveData<BaseApiModel<LeaveResponse>>()
 
-        val call: Call<ResponseBody> = apiInterface.callLeaveStats(AttRequest().apply {
+        val call: Call<ResponseBody> = apiInterface.callLeaveStats("token ${AppConst.TOKEN}",AttRequest().apply {
             this.start_date = attendanceInput.startDate
             this.end_date = attendanceInput.endDate
         })
@@ -75,7 +76,7 @@ class LeaveRepo(private var apiInterface: ApiInterface) {
     fun getMyLeaveDetail(attendanceInput: AttendanceInput): MutableLiveData<BaseApiModel<MyLeaveDetailResponse>> {
         val serverResponse = MutableLiveData<BaseApiModel<MyLeaveDetailResponse>>()
 
-        val call: Call<ResponseBody> = apiInterface.callMyLeaveDetail(
+        val call: Call<ResponseBody> = apiInterface.callMyLeaveDetail("token ${AppConst.TOKEN}",
             AttRequest().apply {
                 this.start_date = attendanceInput.startDate
                 this.end_date = attendanceInput.endDate
@@ -131,7 +132,7 @@ class LeaveRepo(private var apiInterface: ApiInterface) {
     fun getTeamLeaveDetail(attendanceInput: AttendanceInput): MutableLiveData<BaseApiModel<TeamLeaveDetailResponse>> {
         val serverResponse = MutableLiveData<BaseApiModel<TeamLeaveDetailResponse>>()
 
-        val call: Call<ResponseBody> = apiInterface.callTeamLeaveDetail(
+        val call: Call<ResponseBody> = apiInterface.callTeamLeaveDetail("token ${AppConst.TOKEN}",
             AttRequest().apply {
                 this.start_date = attendanceInput.startDate
                 this.end_date = attendanceInput.endDate

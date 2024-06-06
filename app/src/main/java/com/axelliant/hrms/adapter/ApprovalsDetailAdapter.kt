@@ -15,7 +15,6 @@ import com.axelliant.hrms.databinding.MyTeamApprovalRowBinding
 import com.axelliant.hrms.enums.RequestFilter
 import com.axelliant.hrms.extention.setUrlImage
 import com.axelliant.hrms.model.attendance.AttendanceData
-import com.axelliant.hrms.model.login.CheckInRequest
 import com.axelliant.hrms.utils.Utils.hideShow
 
 class ApprovalsDetailAdapter(

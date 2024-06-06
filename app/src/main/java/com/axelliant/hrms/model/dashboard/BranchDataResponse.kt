@@ -1,7 +1,6 @@
-package com.axelliant.hrms.model
-import com.axelliant.hrms.model.base.Meta
+package com.axelliant.hrms.model.dashboard
 
-data class TargetLocResponse(
+data class BranchDataResponse(
         val name: String?=null,
         val latitude: Double?=null,
         val longitude: Double?=null

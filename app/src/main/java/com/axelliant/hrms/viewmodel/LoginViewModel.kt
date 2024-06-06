@@ -15,7 +15,7 @@ class LoginViewModel(private val loginRepo: LoginRepo) : BaseViewModel() {
 
     fun postMicToken(tokenString: String) {
         val loginRequest = LoginRequest(
-            access_token = tokenString
+            microsoft_token = tokenString
         )
         isLoading.value = Event(true)
         loginRepo.userLoginApiCall(loginRequest)
