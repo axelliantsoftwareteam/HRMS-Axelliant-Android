@@ -13,6 +13,7 @@ import com.axelliant.hrms.config.AppConst
 import com.axelliant.hrms.databinding.FragmentLoginBinding
 import com.axelliant.hrms.event.EventObserver
 import com.axelliant.hrms.extention.showErrorMsg
+import com.axelliant.hrms.extention.showSuccessMsg
 import com.axelliant.hrms.navigation.AppNavigator
 import com.axelliant.hrms.utils.SessionManager
 import com.axelliant.hrms.viewmodel.LoginViewModel
@@ -124,7 +125,8 @@ class LoginFragment : BaseFragment() {
 
 
         binding.btnLogin.setOnClickListener {
-            AppNavigator.navigateToHome()
+//            AppNavigator.navigateToHome()
+            requireContext().showSuccessMsg()
         }
         PublicClientApplication.createSingleAccountPublicClientApplication(
             requireContext(),
@@ -231,14 +233,14 @@ class LoginFragment : BaseFragment() {
                 if (response!=null)
                 {
                     // success
-                    sessionManager.saveToken(response.api_key.plus(":").plus(response.api_sec))
+                    sessionManager.saveToken(response.access_token?.api_key.plus(":").plus(response.access_token?.api_sec))
                     sessionManager.createLoginSession(
                         username = null,
                         userPass = null,
-                        accessToken = response.api_key.plus(":").plus(response.api_sec),
+                        accessToken = response.access_token?.api_key.plus(":").plus(response.access_token?.api_sec),
                         lastRemember = true
                     )
-                    AppConst.TOKEN =response.api_key.plus(":").plus(response.api_sec)
+                    AppConst.TOKEN =response.access_token?.api_key.plus(":").plus(response.access_token?.api_sec)
                     AppNavigator.navigateToHome()
                 } else {
                     requireContext().showErrorMsg("InValid")
