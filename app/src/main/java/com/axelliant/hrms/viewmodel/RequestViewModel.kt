@@ -150,4 +150,50 @@ class RequestViewModel(private val leaveRepo: RequestRepo) : BaseViewModel() {
 
 
     }
+
+
+    fun updateAttendanceQuest(leaveRequest: AttendanceRequest) {
+        isLoading.value = Event(true)
+        leaveRepo.updateAttendanceRequest(leaveRequest)
+            .observeForever { data ->
+                // Handle the login response
+                data?.let { baseModel ->
+                    isLoading.value = Event(false)
+                    // Handle success
+                    updateLeaveResponse.value = Event(baseModel.message?.data)
+
+                } ?: run {
+                    isLoading.value = Event(false)
+                    // Handle error
+                    Log.d("Success VieModel->", "false")
+
+
+                }
+            }
+
+
+    }
+
+
+    fun deleteAttendanceQuest(leaveRequest: LeaveRequest) {
+        isLoading.value = Event(true)
+        leaveRepo.deleteAttendanceRequest(leaveRequest)
+            .observeForever { data ->
+                // Handle the login response
+                data?.let { baseModel ->
+                    isLoading.value = Event(false)
+                    // Handle success
+                    updateLeaveResponse.value = Event(baseModel.message?.data)
+
+                } ?: run {
+                    isLoading.value = Event(false)
+                    // Handle error
+                    Log.d("Success VieModel->", "false")
+
+
+                }
+            }
+
+
+    }
 }

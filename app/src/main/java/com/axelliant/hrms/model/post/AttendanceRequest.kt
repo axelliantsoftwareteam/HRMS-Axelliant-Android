@@ -6,4 +6,5 @@ class AttendanceRequest {
         var location: String?=null
         var attendance_reason: String?=null
         var request_status: String?="Pending"
+        var checkin_id: String?=""
 }

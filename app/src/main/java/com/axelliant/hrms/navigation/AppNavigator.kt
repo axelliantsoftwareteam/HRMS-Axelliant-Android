@@ -246,5 +246,22 @@ class AppNavigator {
         }
 
 
+        fun navigateToCheckInFragment(args: Bundle = Bundle()) {
+            Log.i(TAG, "navigateToCheckInFragment: $args")
+            val navAction = NavAction(R.id.checkInListFragment)
+            val navOptions = NavOptions.Builder()
+                .setPopUpTo(getCurrentDestinationId()!!, false).build()
+            navAction.navOptions = navOptions
+
+            val destination: NavDestination? = getCurrentDestinationId()?.let {
+                getController().graph.findNode(it)
+            }
+            if (destination != null) {
+                destination.putAction(R.id.check_in_list_fragment_action, navAction)
+                getController().navigate(R.id.check_in_list_fragment_action, args)
+            }
+
+        }
+
     }
 }

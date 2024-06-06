@@ -14,6 +14,7 @@ import com.axelliant.hrms.model.attendance.TeamAttendanceResponse
 import com.axelliant.hrms.model.base.BaseApiModel
 import com.axelliant.hrms.model.base.BaseModel
 import com.axelliant.hrms.model.base.Meta
+import com.axelliant.hrms.model.checkin.CheckInListResponse
 import com.axelliant.hrms.model.leave.LeaveApproval
 import com.axelliant.hrms.model.leave.PostResponse
 import com.axelliant.hrms.model.post.AttendanceRequest
@@ -325,5 +326,65 @@ class AttendanceRepo(private var apiInterface: ApiInterface) {
 
         return serverResponse
     }
+
+
+    fun checkInList(
+        inputObject: AttendanceInput
+    ): MutableLiveData<BaseApiModel<CheckInListResponse>> {
+        val serverResponse = MutableLiveData<BaseApiModel<CheckInListResponse>>()
+
+        val call = apiInterface.callCheckInList(
+            AttRequest().apply {
+                this.start_date = inputObject.startDate
+                this.end_date = inputObject.endDate
+                this.employee_list = inputObject.employeeId
+                this.filters = inputObject.filters
+            }
+        )
+
+
+        Log.e("HTTP Request", " " + call.request().toString())
+
+        call.enqueue(object : BaseCallBack<ResponseBody>(call) {
+            override fun onFinalSuccess(
+                call: Call<ResponseBody>,
+                response: Response<ResponseBody>
+            ) {
+
+                Log.e("API success", " " + response.body())
+
+                val type: Type = object : TypeToken<BaseApiModel<CheckInListResponse>>() {}.type
+                val jsonString = response.body()?.string()
+                val userModel = Gson().fromJson<BaseApiModel<CheckInListResponse>>(jsonString, type)
+                serverResponse.value = userModel
+            }
+
+
+            override fun onFinalFailure(
+                errorString: String?
+            ) {
+
+                Log.e("API Failure", " $errorString")
+
+                serverResponse.value =
+                    BaseApiModel(
+                        BaseModel(
+                            CheckInListResponse(
+                                meta = Meta(
+                                    errorString.toString(),
+                                    false
+                                )
+                            )
+                        )
+                    )
+
+            }
+
+        })
+
+        return serverResponse
+    }
+
+
 
 }

@@ -18,3 +18,4 @@ data class AttendanceDetail(
     val attendance_location :String = "",  // In office , work from home
     val attendance_type :String = ""   // In, Out
 )
+

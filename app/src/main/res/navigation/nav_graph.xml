@@ -116,4 +116,12 @@
     </fragment>
 
 
+    <fragment
+        android:id="@+id/checkInListFragment"
+        android:name="com.axelliant.hrms.screens.CheckInListFragment"
+        android:label="Check-In List Fragment"
+        tools:layout="@layout/fragment_check_in_list">
+
+    </fragment>
+
 </navigation>

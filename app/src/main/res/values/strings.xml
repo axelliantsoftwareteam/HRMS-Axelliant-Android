@@ -148,5 +148,6 @@
     <string name="request_type">Request Type</string>
     <string name="reject">Reject</string>
     <string name="update">Update</string>
-
+    <string name="check_in_requests">Check In Requests</string>
+    <string name="attendance_type">Log type</string>
 </resources>

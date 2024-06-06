@@ -2,6 +2,8 @@ package com.axelliant.hrms.screens
 
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
+import android.app.TimePickerDialog
+import android.app.TimePickerDialog.OnTimeSetListener
 import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
@@ -9,6 +11,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import android.widget.TimePicker
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.axelliant.hrms.R
@@ -24,7 +27,7 @@ import com.axelliant.hrms.event.EventObserver
 import com.axelliant.hrms.extention.nullToEmpty
 import com.axelliant.hrms.extention.showErrorMsg
 import com.axelliant.hrms.extention.showSuccessMsg
-import com.axelliant.hrms.model.attendance.AttendanceDetail
+import com.axelliant.hrms.model.checkin.CheckInDetail
 import com.axelliant.hrms.model.leave.LeaveDetail
 import com.axelliant.hrms.model.leave.SpinnerType
 import com.axelliant.hrms.model.post.AttendanceRequest
@@ -48,6 +51,7 @@ class RequestFragment : BaseFragment() {
 
     private var currentFilter = RequestFilter.LEAVE
     private var currentDateString: String? = null
+    private var currentTimeString: String? = null
 
     private var startDateString: String? = null
     private var endDateString: String? = null
@@ -60,6 +64,7 @@ class RequestFragment : BaseFragment() {
 
     private var isUpdate: Boolean = false
     private var leaveId: String = ""
+    private var checkInId: String = ""
 
     private var preLeaveType: String = leaveType
     private var preAttendanceType: String = attendanceType
@@ -101,23 +106,32 @@ class RequestFragment : BaseFragment() {
                 binding?.btnApply?.isVisible = false
                 binding?.btnUpdate?.isVisible = true
                 binding?.btnDeleted?.isVisible = true
-                binding?.tvMonth?.isVisible =false
+                binding?.tvMonth?.isVisible = false
 
 
             } else {
                 currentFilter = RequestFilter.ATTENDANCE
 
 
-                val attendanceDetail = Gson().fromJson(
+                val checkInDetail = Gson().fromJson(
                     arguments?.getString(AttendanceRequestParam),
-                    AttendanceDetail::class.java
+                    CheckInDetail::class.java
                 )
-                currentDateString = attendanceDetail.date
-                binding!!.etAttendanceReason.setText(attendanceDetail.attendance_reason)
-                preAttendanceType = attendanceDetail.attendance_type
-                preLocationType = attendanceDetail.attendance_location
+                checkInId = checkInDetail.name
+                val array = checkInDetail.time.split(" ")
+                currentDateString = array[0]
+                currentTimeString = array[1]
+
+                binding!!.etAttendanceReason.setText(checkInDetail.reason)
+                preAttendanceType = checkInDetail.log_type
+                preLocationType = checkInDetail.location
                 setCurrentDate()
-                binding?.btnApply?.setText(requireContext().getString(R.string.update))
+                setCurrentTime()
+
+                binding?.btnApply?.isVisible = false
+                binding?.btnUpdate?.isVisible = true
+                binding?.btnDeleted?.isVisible = true
+                binding?.tvWeek?.isVisible = false
 
             }
         }
@@ -152,7 +166,11 @@ class RequestFragment : BaseFragment() {
                 if (response?.meta?.status == true) {
 
                     requireActivity().showSuccessMsg(response.status_message)
-                    clearLeaveForm()
+                    if (currentFilter == RequestFilter.LEAVE)
+                        clearLeaveForm()
+                    else
+                        clearAttendanceForm()
+
                     Handler().postDelayed({
                         // do stuff
                         AppNavigator.moveBackToPreviousFragment()
@@ -171,7 +189,12 @@ class RequestFragment : BaseFragment() {
                 if (response?.meta?.status == true) {
 
                     requireActivity().showSuccessMsg(response.status_message)
-                    clearLeaveForm()
+                    if (currentFilter == RequestFilter.LEAVE)
+                        clearLeaveForm()
+                    else
+                        clearAttendanceForm()
+
+
                     Handler().postDelayed({
                         // do stuff
                         AppNavigator.moveBackToPreviousFragment()
@@ -182,9 +205,6 @@ class RequestFragment : BaseFragment() {
                 }
 
             })
-
-
-
 
         requestViewModel.attendanceRequestResponse.observe(
             viewLifecycleOwner,
@@ -205,20 +225,16 @@ class RequestFragment : BaseFragment() {
             viewLifecycleOwner,
             EventObserver { response ->
 
-
+                requestViewModel.getAttendanceRequestInfo()
                 if (response?.meta?.status == true) {
                     spinnerLeavePopulations(response.leaves)
-
-                    //parse leave spinner here
-
-
                 } else {
                     requireContext().showErrorMsg(response?.meta?.message.toString())
                 }
 
             })
 
-        requestViewModel.getAttendanceRequestInfo()
+
         requestViewModel.attendanceRequestInfo.observe(
             viewLifecycleOwner,
             EventObserver { response ->
@@ -242,93 +258,29 @@ class RequestFragment : BaseFragment() {
 
         binding?.btnApply?.setOnClickListener {
 
-            when (currentFilter) {
-                RequestFilter.LEAVE -> {
-
-                    if (binding!!.spLeaveType.selectedItemPosition == 0) {
-                        requireContext().showErrorMsg("Please select leave type")
-                    } else if (startDateString == null) {
-                        requireContext().showErrorMsg("Please select start date")
-                    } else if (endDateString == null) {
-                        requireContext().showErrorMsg("Please select end date")
-                    } else {
-                        val leaveItem = binding!!.spLeaveType.selectedItem as SpinnerType
-
-
-                        requestViewModel.postLeaveQuest(LeaveRequest().apply {
-                            this.start_date = startDateString
-                            this.end_date = endDateString
-                            this.leave_reason = binding!!.etLeaveReason.text.toString()
-                            this.leave_type = leaveItem.type
-                            this.post_date = Utils.getServerFormat()
-
-                        })
-
-                    }
-
-                }
-
-                RequestFilter.ATTENDANCE -> {
-
-                    if (binding!!.spAttendType.selectedItemPosition == 0) {
-                        requireContext().showErrorMsg("Please select attendance type")
-                    } else if (binding!!.spLocType.selectedItemPosition == 0) {
-                        requireContext().showErrorMsg("Please select location")
-                    } else if (currentDateString == null) {
-                        requireContext().showErrorMsg("Please select date")
-                    } else {
-
-                        val attendanceType = binding!!.spAttendType.selectedItem as SpinnerType
-                        val locationType = binding!!.spLocType.selectedItem as SpinnerType
-
-                        requestViewModel.postAttendanceQuest(AttendanceRequest().apply {
-                            this.date_time = currentDateString
-                            this.location = locationType.type
-                            this.log_type = attendanceType.type
-                            this.attendance_reason = binding!!.etAttendanceReason.text.toString()
-                            this.request_status = "Pending"
-
-                        })
-
-
-                    }
-
-                }
-            }
+            addUpdateCall()
 
         }
 
-
         binding?.btnUpdate?.setOnClickListener {
+            addUpdateCall()
+        }
 
-            if (binding!!.spLeaveType.selectedItemPosition == 0) {
-                requireContext().showErrorMsg("Please select leave type")
-            } else if (startDateString == null) {
-                requireContext().showErrorMsg("Please select start date")
-            } else if (endDateString == null) {
-                requireContext().showErrorMsg("Please select end date")
-            } else {
-                val leaveItem = binding!!.spLeaveType.selectedItem as SpinnerType
+        binding?.btnDeleted?.setOnClickListener {
 
-                requestViewModel.updateLeaveQuest(LeaveRequest().apply {
-                    this.start_date = startDateString
-                    this.end_date = endDateString
-                    this.leave_reason = binding!!.etLeaveReason.text.toString()
-                    this.leave_type = leaveItem.type
-                    this.post_date = Utils.getServerFormat()
+            if (currentFilter == RequestFilter.LEAVE) {
+                requestViewModel.deleteLeaveQuest(LeaveRequest().apply {
                     this.leave_id = leaveId
 
                 })
 
+            } else {
+                requestViewModel.deleteAttendanceQuest(LeaveRequest().apply {
+                    this.checkin_id = checkInId
+
+                })
+
             }
-
-        }
-        binding?.btnDeleted?.setOnClickListener {
-
-            requestViewModel.deleteLeaveQuest(LeaveRequest().apply {
-                this.leave_id = leaveId
-
-            })
 
         }
 
@@ -339,8 +291,100 @@ class RequestFragment : BaseFragment() {
         binding?.lyDate?.setOnClickListener {
             pickDate()
         }
+
+        binding?.lyTime?.setOnClickListener{
+            pickTime()
+        }
         binding?.lyStartDate?.setOnClickListener {
             datePickerDialog()
+        }
+    }
+
+    private fun addUpdateCall() {
+        when (currentFilter) {
+            RequestFilter.LEAVE -> {
+
+                if (binding!!.spLeaveType.selectedItemPosition == 0) {
+                    requireContext().showErrorMsg("Please select leave type")
+                } else if (startDateString == null) {
+                    requireContext().showErrorMsg("Please select start date")
+                } else if (endDateString == null) {
+                    requireContext().showErrorMsg("Please select end date")
+                } else if (binding?.etLeaveReason?.text?.isEmpty() == true) {
+                    requireContext().showErrorMsg("Please add reason for leave")
+                }
+                else {
+                    val leaveItem = binding!!.spLeaveType.selectedItem as SpinnerType
+
+                    if (isUpdate) {
+                        requestViewModel.updateLeaveQuest(LeaveRequest().apply {
+                            this.start_date = startDateString
+                            this.end_date = endDateString
+                            this.leave_reason = binding!!.etLeaveReason.text.toString()
+                            this.leave_type = leaveItem.type
+                            this.post_date = Utils.getServerFormat()
+                            this.leave_id = leaveId
+
+                        })
+                    } else {
+                        requestViewModel.postLeaveQuest(LeaveRequest().apply {
+                            this.start_date = startDateString
+                            this.end_date = endDateString
+                            this.leave_reason = binding!!.etLeaveReason.text.toString()
+                            this.leave_type = leaveItem.type
+                            this.post_date = Utils.getServerFormat()
+
+                        })
+                    }
+
+
+                }
+
+            }
+
+            RequestFilter.ATTENDANCE -> {
+
+                if (binding!!.spAttendType.selectedItemPosition == 0) {
+                    requireContext().showErrorMsg("Please select attendance type")
+                } else if (binding!!.spLocType.selectedItemPosition == 0) {
+                    requireContext().showErrorMsg("Please select location")
+                } else if (currentDateString == null) {
+                    requireContext().showErrorMsg("Please select date")
+                }else if (currentTimeString == null) {
+                    requireContext().showErrorMsg("Please select time")
+                } else if (binding?.etAttendanceReason?.text?.isEmpty() == true) {
+                    requireContext().showErrorMsg("Please add reason for attendance")
+                }else {
+
+                    val attendanceType = binding!!.spAttendType.selectedItem as SpinnerType
+                    val locationType = binding!!.spLocType.selectedItem as SpinnerType
+                    if (isUpdate) {
+
+                        requestViewModel.updateAttendanceQuest(AttendanceRequest().apply {
+                            this.date_time = currentDateString.plus(" ").plus(currentTimeString)
+                            this.location = locationType.type
+                            this.log_type = attendanceType.type
+                            this.attendance_reason = binding!!.etAttendanceReason.text.toString()
+                            this.request_status = "Pending"
+                            this.checkin_id = checkInId
+
+                        })
+
+                    } else {
+                        requestViewModel.postAttendanceQuest(AttendanceRequest().apply {
+                            this.date_time = currentDateString.plus(" ").plus(currentTimeString)
+                            this.location = locationType.type
+                            this.log_type = attendanceType.type
+                            this.attendance_reason = binding!!.etAttendanceReason.text.toString()
+                            this.request_status = "Pending"
+
+                        })
+                    }
+
+
+                }
+
+            }
         }
     }
 
@@ -357,11 +401,15 @@ class RequestFragment : BaseFragment() {
 
     private fun clearAttendanceForm() {
         currentDateString = null
+        currentTimeString = null
         binding?.spAttendType?.setSelection(0)
         binding?.spLocType?.setSelection(0)
         binding?.etAttendanceReason?.text?.clear()
         binding?.tvDateTxt?.text = null
         binding?.tvDateTxt?.hint = requireContext().getString(R.string.date)
+
+        binding?.tvTimeTxt?.text = null
+        binding?.tvTimeTxt?.hint = requireContext().getString(R.string.time)
 
 
     }
@@ -391,6 +439,35 @@ class RequestFragment : BaseFragment() {
         // Set the maximum date to today
         datePickerDialog.datePicker.maxDate = c.timeInMillis
         datePickerDialog.show()
+    }
+
+    private fun pickTime() {
+        val c = Calendar.getInstance()
+
+        val hour = c[Calendar.HOUR_OF_DAY]
+        val minutes = c[Calendar.MINUTE]
+        val timePickerDialog = TimePickerDialog(
+            requireActivity(), R.style.my_dialog_theme,
+            { view, hourOfDay, minute ->
+
+                currentTimeString =
+                    hourOfDay.toString().plus(":").plus(minute)
+
+                setCurrentTime()
+
+            }, hour, minutes, false
+
+        )
+
+        timePickerDialog.show()
+    }
+
+
+    private fun setCurrentTime(){
+        if(currentTimeString!=null)
+             binding?.tvTimeTxt?.text = currentTimeString
+        else
+            binding?.tvTimeTxt?.text =""
     }
 
     private fun setCurrentDate() {
@@ -598,7 +675,7 @@ class RequestFragment : BaseFragment() {
 
             for (index in 0..<finalLeavesArray.size) {
                 if (finalLeavesArray[index].type.equals(preLocationType)) {
-                    binding?.spAttendType?.setSelection(index)
+                    binding?.spLocType?.setSelection(index)
                     break
                 }
             }

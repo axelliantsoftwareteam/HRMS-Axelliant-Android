@@ -125,4 +125,23 @@ interface ApiInterface {
     fun callAttendanceApprovalStatus(@Body attendanceRequest:LeaveApproval
     ): Call<ResponseBody>
 
+
+
+    @Headers("Content-Type: application/json")
+    @POST("hrms.hr.doctype.employee.checkin.get_checkin_request") // get check in list
+    fun callCheckInList(@Body attendanceRequest:AttRequest
+
+    ): Call<ResponseBody>
+
+
+
+    @Headers("Content-Type: application/json")
+    @POST("hrms.hr.doctype.employee.checkin.update_checkin_request")                              // update attendance request
+    fun updateAttendanceRequest(@Body leaveRequest: AttendanceRequest?): Call<ResponseBody>
+
+
+    @Headers("Content-Type: application/json")
+    @POST("hrms.hr.doctype.employee.checkin.removed_checkin")                              // delete attendance request
+    fun deleteAttendanceRequest(@Body leaveRequest: LeaveRequest?): Call<ResponseBody>
+
 }

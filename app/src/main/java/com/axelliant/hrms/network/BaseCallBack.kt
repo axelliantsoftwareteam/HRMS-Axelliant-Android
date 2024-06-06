@@ -42,7 +42,7 @@ abstract class BaseCallBack<T>(private val call: Call<T>) : Callback<T> {
             } else if (response.code() == 422) {
                 onFinalFailure(response.message().toString())
             } else {
-                onFinalFailure(response.errorBody().toString())
+                onFinalFailure(response.message().toString())
             }
 
         } else {

@@ -9,5 +9,6 @@ enum class ErrorMessages(val errorString: String) {
     SessionExpired401("Session expired, please login again not found"),
     BadRequest400("Bad request"),
     InternalServerError500("Internal server error"),
-    UNABLE_TO_EDIT_LEAVE("You cannot edit leave type, but you can still delete this pending leave")
+    UNABLE_TO_EDIT_LEAVE("You cannot update leave type, but you can still delete this pending leave"),
+    OPEN_LEAVES_ONLY("You cannot update leave with status ")
 }

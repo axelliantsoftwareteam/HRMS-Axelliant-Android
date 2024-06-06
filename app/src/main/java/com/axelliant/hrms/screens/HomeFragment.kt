@@ -171,8 +171,6 @@ class HomeFragment : BaseFragment() {
             Manifest.permission.ACCESS_FINE_LOCATION
         )
         activityResultLauncher.launch(appPerms)
-        // data population
-        dataPopulate()
 
         homeViewModel.getDashboardInformation()
         homeViewModel.dashboardResponse.observe(
@@ -184,6 +182,7 @@ class HomeFragment : BaseFragment() {
                     GlobalConfig.setCurrentEmployee(response.employee_profile!!)
                     birthdayPopulate(response.birthday_data!!)
                     dashBoardPopulate(response.employee_profile)
+                    dataPopulate()
                 } else {
                     requireContext().showErrorMsg(response?.meta?.message.toString())
                 }
@@ -380,55 +379,68 @@ class HomeFragment : BaseFragment() {
 
 
     private fun dataPopulate() {
-        binding?.rvModule?.layoutManager = GridLayoutManager(requireContext(), 2)
-        val modulesAdapter = ModulesAdapter(
-            listOf(
-                Modules(
-                    id = 0,
-                    name = "Attendance",
-                    description = "Present of this month",
-                    color = requireContext().getColor(R.color.color_secondry),
-                    drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_atten)
-                ),
-                Modules(
-                    id = 1,
-                    name = "Request",
-                    description = "Present of this month",
-                    color = requireContext().getColor(R.color.yellow),
-                    drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_req)
-                ),
-                Modules(
-                    id = 2,
-                    name = "Leaves",
-                    description = "Leaves you have",
-                    color = requireContext().getColor(R.color.color_third),
-                    drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_leaves)
 
-                ),
-                Modules(
-                    id = 3,
-                    name = "Approval",
-                    description = "View all requests",
-                    color = requireContext().getColor(R.color.colorApp),
-                    drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_expe)
-                ),
-                Modules(
-                    id = 4,
-                    name = "Payslip",
-                    description = "View your all pay-slip",
-                    color = requireContext().getColor(R.color.greeny),
-                    drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_payslip)
-
-                ),
-                 Modules(
-                     id = 5,
-                     name = "Expense",
-                     description = "View all the expense requests",
-                     color = requireContext().getColor(R.color.violet),
-                     drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_expe)
-                 ),
+        val gridList = arrayListOf(
+            Modules(
+                id = 0,
+                name = "Attendance",
+                description = "Present of this month",
+                color = requireContext().getColor(R.color.color_secondry),
+                drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_atten)
+            ),
+            Modules(
+                id = 1,
+                name = "Request",
+                description = "Present of this month",
+                color = requireContext().getColor(R.color.yellow),
+                drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_req)
+            ),
+            Modules(
+                id = 2,
+                name = "Leaves",
+                description = "Leaves you have",
+                color = requireContext().getColor(R.color.color_third),
+                drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_leaves)
 
             ),
+            Modules(
+                id = 3,
+                name = "Approval",
+                description = "View all requests",
+                color = requireContext().getColor(R.color.colorApp),
+                drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_expe)
+            ),
+            Modules(
+                id = 4,
+                name = "Payslip",
+                description = "View your all pay-slip",
+                color = requireContext().getColor(R.color.greeny),
+                drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_payslip)
+
+            ),
+            Modules(
+                id = 5,
+                name = "Expense",
+                description = "View all the expense requests",
+                color = requireContext().getColor(R.color.violet),
+                drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_expe)
+            ),Modules(
+                id = 6,
+                name = "Check IN",
+                description = "View all the check-in requests",
+                color = requireContext().getColor(R.color.aqua),
+                drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_expe)
+            )
+        )
+
+        val isManager = GlobalConfig.isCurrentManager()
+
+        if (!isManager)
+            gridList.removeAt(3)
+
+        binding?.rvModule?.layoutManager = GridLayoutManager(requireContext(), 2)
+        val modulesAdapter = ModulesAdapter(
+            gridList,
             object : AdapterItemClick {
                 override fun onItemClick(customObject: Any, position: Int) {
                     val currentObject = customObject as Modules
@@ -448,8 +460,12 @@ class HomeFragment : BaseFragment() {
                             showDialog()
                             AppNavigator.navigateToRequest()
                         }
+
                         "Approval" -> {
                             AppNavigator.navigateToApprovals()
+                        }
+                        "Check IN" ->{
+                            AppNavigator.navigateToCheckInFragment()
                         }
 
                         else -> {

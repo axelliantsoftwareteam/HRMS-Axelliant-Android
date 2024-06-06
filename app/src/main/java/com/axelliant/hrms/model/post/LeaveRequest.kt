@@ -7,4 +7,5 @@ class LeaveRequest {
         var leave_type: String?=null
         var post_date: String?=null
         var leave_id: String?=null
+        var checkin_id: String?=null
 }

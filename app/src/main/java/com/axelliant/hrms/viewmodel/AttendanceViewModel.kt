@@ -9,6 +9,7 @@ import com.axelliant.hrms.model.attendance.AttendanceInput
 import com.axelliant.hrms.model.attendance.AttendanceResponse
 import com.axelliant.hrms.model.attendance.AttendanceStatsResponse
 import com.axelliant.hrms.model.attendance.TeamAttendanceResponse
+import com.axelliant.hrms.model.checkin.CheckInListResponse
 import com.axelliant.hrms.model.leave.LeaveApproval
 import com.axelliant.hrms.model.leave.PostResponse
 import com.axelliant.hrms.repos.AttendanceRepo
@@ -20,6 +21,7 @@ class AttendanceViewModel(private val attendanceRepo: AttendanceRepo) : BaseView
      val teamAttendanceResponse: MutableLiveData<Event<TeamAttendanceResponse?>> by lazy { MutableLiveData<Event<TeamAttendanceResponse?>>() }
      val attendanceApproval: MutableLiveData<Event<AttendanceApproval?>> by lazy { MutableLiveData<Event<AttendanceApproval?>>() }
     val attendanceApprovalResponse: MutableLiveData<Event<PostResponse?>> by lazy { MutableLiveData<Event<PostResponse?>>() }
+    val checkInListResponse: MutableLiveData<Event<CheckInListResponse?>> by lazy { MutableLiveData<Event<CheckInListResponse?>>() }
 
     fun getAttendanceStats(attendanceInput: AttendanceInput) {
         isLoading.value = Event(true)
@@ -137,6 +139,27 @@ class AttendanceViewModel(private val attendanceRepo: AttendanceRepo) : BaseView
 
     }
 
+    fun getCheckInList(inputObject: AttendanceInput) {
+        isLoading.value = Event(true)
+        attendanceRepo.checkInList(inputObject)
+            .observeForever { data ->
+                // Handle the login response
+                data?.let { baseModel ->
+                    isLoading.value = Event(false)
+                    // Handle success
+                    checkInListResponse.value = Event(baseModel.message?.data)
+
+                } ?: run {
+                    isLoading.value = Event(false)
+                    // Handle error
+                    Log.d("Success VieModel->", "false")
+
+
+                }
+            }
+
+
+    }
 
 
 

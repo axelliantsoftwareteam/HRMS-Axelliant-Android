@@ -14,6 +14,7 @@
     <item name="team_attendance_detail_fragment_action" type="id" />
     <item name="my_leave_detail_fragment_action" type="id" />
     <item name="team_leave_detail_fragment_action" type="id" />
+    <item name="check_in_list_fragment_action" type="id" />
 
 
 </resources>
