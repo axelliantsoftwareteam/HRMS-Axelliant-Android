@@ -100,34 +100,34 @@ interface ApiInterface {
 
     @Headers("Content-Type: application/json")
     @POST("hrms.hr.doctype.employee.leaves_mobile.update_leave_application")                              // update leave request
-    fun updateLeaveRequest(@Body leaveRequest: LeaveRequest?): Call<ResponseBody>
+    fun updateLeaveRequest(@Header("Authorization") auth: String?,@Body leaveRequest: LeaveRequest?): Call<ResponseBody>
 
     @Headers("Content-Type: application/json")
     @POST("hrms.hr.doctype.employee.leaves_mobile.removed_leave_application")                              // update leave request
-    fun deleteLeaveRequest(@Body leaveRequest: LeaveRequest?): Call<ResponseBody>
+    fun deleteLeaveRequest(@Header("Authorization") auth: String?,@Body leaveRequest: LeaveRequest?): Call<ResponseBody>
 
 
 
     @Headers("Content-Type: application/json")
     @POST("hrms.hr.doctype.employee.leaves_mobile.update_leave_status") // leave approval
-    fun callLeaveApproval(@Body attRequest: LeaveApproval): Call<ResponseBody>
+    fun callLeaveApproval(@Header("Authorization") auth: String?,@Body attRequest: LeaveApproval): Call<ResponseBody>
 
     @Headers("Content-Type: application/json")
     @POST("hrms.hr.doctype.employee.checkin.get_checkin_approvals")  // attendance approval
-    fun callAttendanceApproval(@Body attendanceRequest:AttRequest
+    fun callAttendanceApproval(@Header("Authorization") auth: String?,@Body attendanceRequest:AttRequest
     ): Call<ResponseBody>
 
 
     @Headers("Content-Type: application/json")
     @POST("hrms.hr.doctype.employee.checkin.update_checkin_approval_status")  // attendance approval rejection
-    fun callAttendanceApprovalStatus(@Body attendanceRequest:LeaveApproval
+    fun callAttendanceApprovalStatus(@Header("Authorization") auth: String?,@Body attendanceRequest:LeaveApproval
     ): Call<ResponseBody>
 
 
 
     @Headers("Content-Type: application/json")
     @POST("hrms.hr.doctype.employee.checkin.get_checkin_request") // get check in list
-    fun callCheckInList(@Body attendanceRequest:AttRequest
+    fun callCheckInList(@Header("Authorization") auth: String?,@Body attendanceRequest:AttRequest
 
     ): Call<ResponseBody>
 
@@ -135,11 +135,11 @@ interface ApiInterface {
 
     @Headers("Content-Type: application/json")
     @POST("hrms.hr.doctype.employee.checkin.update_checkin_request")                              // update attendance request
-    fun updateAttendanceRequest(@Body leaveRequest: AttendanceRequest?): Call<ResponseBody>
+    fun updateAttendanceRequest(@Header("Authorization") auth: String?,@Body leaveRequest: AttendanceRequest?): Call<ResponseBody>
 
 
     @Headers("Content-Type: application/json")
     @POST("hrms.hr.doctype.employee.checkin.removed_checkin")                              // delete attendance request
-    fun deleteAttendanceRequest(@Body leaveRequest: LeaveRequest?): Call<ResponseBody>
+    fun deleteAttendanceRequest(@Header("Authorization") auth: String?,@Body leaveRequest: LeaveRequest?): Call<ResponseBody>
 
 }

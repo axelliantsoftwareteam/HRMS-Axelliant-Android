@@ -107,7 +107,7 @@ class RequestRepo(private var apiInterface: ApiInterface) {
     fun updateLeaveRequest(leaveRequest: LeaveRequest): MutableLiveData<BaseApiModel<PostResponse>> {
         val serverResponse = MutableLiveData<BaseApiModel<PostResponse>>()
 
-        val call: Call<ResponseBody>  = apiInterface.updateLeaveRequest(leaveRequest)
+        val call: Call<ResponseBody>  = apiInterface.updateLeaveRequest("token ${AppConst.TOKEN}",leaveRequest)
 
         Log.e("HTTP Request", " " + call?.request().toString())
 
@@ -145,7 +145,7 @@ class RequestRepo(private var apiInterface: ApiInterface) {
     fun deleteLeaveRequest(leaveRequest: LeaveRequest): MutableLiveData<BaseApiModel<PostResponse>> {
         val serverResponse = MutableLiveData<BaseApiModel<PostResponse>>()
 
-        val call: Call<ResponseBody>  = apiInterface.deleteLeaveRequest(leaveRequest)
+        val call: Call<ResponseBody>  = apiInterface.deleteLeaveRequest("token ${AppConst.TOKEN}",leaveRequest)
 
         Log.e("HTTP Request", " " + call?.request().toString())
 
@@ -261,7 +261,7 @@ class RequestRepo(private var apiInterface: ApiInterface) {
     fun updateAttendanceRequest(leaveRequest: AttendanceRequest): MutableLiveData<BaseApiModel<PostResponse>> {
         val serverResponse = MutableLiveData<BaseApiModel<PostResponse>>()
 
-        val call: Call<ResponseBody>  = apiInterface.updateAttendanceRequest(leaveRequest)
+        val call: Call<ResponseBody>  = apiInterface.updateAttendanceRequest("token ${AppConst.TOKEN}",leaveRequest)
 
         Log.e("HTTP Request", " " + call?.request().toString())
 
@@ -299,7 +299,7 @@ class RequestRepo(private var apiInterface: ApiInterface) {
     fun deleteAttendanceRequest(leaveRequest: LeaveRequest): MutableLiveData<BaseApiModel<PostResponse>> {
         val serverResponse = MutableLiveData<BaseApiModel<PostResponse>>()
 
-        val call: Call<ResponseBody>  = apiInterface.deleteAttendanceRequest(leaveRequest)
+        val call: Call<ResponseBody>  = apiInterface.deleteAttendanceRequest("token ${AppConst.TOKEN}",leaveRequest)
 
         Log.e("HTTP Request", " " + call?.request().toString())
 

@@ -193,7 +193,7 @@ class LeaveRepo(private var apiInterface: ApiInterface) {
         val serverResponse = MutableLiveData<BaseApiModel<PostResponse>>()
 
         val call: Call<ResponseBody> = apiInterface.callLeaveApproval(
-           attendanceInput
+            "token ${AppConst.TOKEN}",attendanceInput
         )
 
         Log.e("HTTP Request", " " + call?.request().toString())

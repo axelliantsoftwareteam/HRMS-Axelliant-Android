@@ -48,10 +48,12 @@ class LoginFragment : BaseFragment() {
 
 
         binding.btnMicLogin.setOnClickListener(View.OnClickListener {
+
             if (mSingleAccountApp == null) {
                 requireContext().showErrorMsg("SDK initialise error")
                 return@OnClickListener
             }
+            showDialog()
             val signInParameters: SignInParameters = SignInParameters.builder()
                 .withActivity(requireActivity())
                 .withLoginHint(null)
@@ -60,6 +62,17 @@ class LoginFragment : BaseFragment() {
                 .build()
             mSingleAccountApp!!.signIn(signInParameters)
         })
+
+
+        loginViewModel.getIsLoading()
+            .observe(viewLifecycleOwner, EventObserver { isLoading ->
+                if (isLoading) {
+                    showDialog()
+                } else {
+                    hideDialog()
+                }
+            })
+
         binding.tvViewDetail.background = ContextCompat.getDrawable(requireContext(), R.drawable.rounded_leave_pend)
         setTextBold(binding.tvEmploy)
         setTextNormal(binding.tvVendor)
@@ -125,8 +138,8 @@ class LoginFragment : BaseFragment() {
 
 
         binding.btnLogin.setOnClickListener {
-//            AppNavigator.navigateToHome()
-            requireContext().showSuccessMsg()
+            AppNavigator.navigateToHome()
+//            requireContext().showSuccessMsg()
         }
         PublicClientApplication.createSingleAccountPublicClientApplication(
             requireContext(),
@@ -182,12 +195,15 @@ class LoginFragment : BaseFragment() {
             }
 
             override fun onError(exception: MsalException) {
+                hideDialog()
                 // Failed to acquireToken
                 Log.d(TAG, "Authentication failed: $exception")
                 displayError(exception)
+
             }
 
             override fun onCancel() {
+                hideDialog()
                 // User canceled the authentication
                 Log.d(TAG, "User cancelled login.")
             }

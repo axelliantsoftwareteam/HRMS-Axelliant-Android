@@ -286,7 +286,7 @@ class HomeFragment : BaseFragment() {
                     binding?.ivPunchIn?.setImageDrawable(
                         ContextCompat.getDrawable(
                             requireContext(),
-                            R.drawable.ic_punch_in
+                            R.drawable.ic_check_in
                         )
                     )
                     setCurrentLocationText()
@@ -316,7 +316,7 @@ class HomeFragment : BaseFragment() {
                     binding?.ivPunchOut?.setImageDrawable(
                         ContextCompat.getDrawable(
                             requireContext(),
-                            R.drawable.ic_absent
+                            R.drawable.ic_check_out
                         )
                     )
                     setCurrentLocationText()
@@ -462,10 +462,11 @@ class HomeFragment : BaseFragment() {
             ),
             Modules(
                 id = 4,
-                name = "Payslip",
-                description = "View your all pay-slip",
-                color = requireContext().getColor(R.color.greeny),
-                drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_payslip)
+                name = "Check IN",
+                description = "View all the check-in requests",
+                color = requireContext().getColor(R.color.blue_iris),
+                drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_expe)
+
 
             ),
             Modules(
@@ -476,10 +477,10 @@ class HomeFragment : BaseFragment() {
                 drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_expe)
             ),Modules(
                 id = 6,
-                name = "Check IN",
-                description = "View all the check-in requests",
-                color = requireContext().getColor(R.color.aqua),
-                drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_expe)
+                name = "Payslip",
+                description = "View your all pay-slip",
+                color = requireContext().getColor(R.color.greeny),
+                drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_payslip)
             )
         )
 

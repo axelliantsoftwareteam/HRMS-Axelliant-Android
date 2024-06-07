@@ -223,7 +223,7 @@ class AttendanceRepo(private var apiInterface: ApiInterface) {
         val serverResponse = MutableLiveData<BaseApiModel<AttendanceApproval>>()
 
         val call = apiInterface.callAttendanceApproval(
-            AttRequest().apply {
+            "token ${AppConst.TOKEN}",AttRequest().apply {
                 this.start_date = inputObject.startDate
                 this.end_date = inputObject.endDate
                 this.employee_list = inputObject.employeeId
@@ -282,7 +282,7 @@ class AttendanceRepo(private var apiInterface: ApiInterface) {
         val serverResponse = MutableLiveData<BaseApiModel<PostResponse>>()
 
         val call = apiInterface.callAttendanceApprovalStatus(
-            inputObject
+            "token ${AppConst.TOKEN}",inputObject
         )
 
         Log.e("HTTP Request", " " + call.request().toString())
@@ -335,7 +335,7 @@ class AttendanceRepo(private var apiInterface: ApiInterface) {
         val serverResponse = MutableLiveData<BaseApiModel<CheckInListResponse>>()
 
         val call = apiInterface.callCheckInList(
-            AttRequest().apply {
+            "token ${AppConst.TOKEN}",AttRequest().apply {
                 this.start_date = inputObject.startDate
                 this.end_date = inputObject.endDate
                 this.employee_list = inputObject.employeeId
