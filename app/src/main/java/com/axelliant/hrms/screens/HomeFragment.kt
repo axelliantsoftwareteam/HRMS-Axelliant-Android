@@ -71,7 +71,7 @@ class HomeFragment : BaseFragment() {
     private var _binding: FragmentHomeBinding? = null
 
 
-    private var isCheckIn:Boolean =true
+    private var isCheckIn: Boolean = true
 
     // Create an ArrayList to store the converted time strings
     private var targetLocList = ArrayList<BranchDataResponse>()
@@ -178,15 +178,14 @@ class HomeFragment : BaseFragment() {
         activityResultLauncher.launch(appPerms)
         // data population
         dataPopulate()
-        AppConst.TOKEN=sessionManager.getToken()
+        AppConst.TOKEN = sessionManager.getToken()
 
         homeViewModel.getDashboardInformation()
         homeViewModel.dashboardResponse.observe(
             viewLifecycleOwner,
             EventObserver { response ->
 
-                if (response?.meta?.status == true)
-                {
+                if (response?.meta?.status == true) {
                     // success
                     GlobalConfig.setCurrentEmployee(response.employee_profile!!)
                     birthdayPopulate(response.birthday_data!!)
@@ -279,11 +278,10 @@ class HomeFragment : BaseFragment() {
         binding?.btnCheckIn?.setOnClickListener {
             setCurrentLocationText()
 
-            if (loc != null)
-            {
+            if (loc != null) {
                 setCurrentLocationText()
 
-                if(isCheckIn){
+                if (isCheckIn) {
 
                     frontAnimation.setTarget(binding?.lyCheckIn)
                     backAnimation.setTarget(binding?.lyCheckOut)
@@ -291,9 +289,7 @@ class HomeFragment : BaseFragment() {
                     backAnimation.start()
 
 
-
-                }
-                else{
+                } else {
                     frontAnimation.setTarget(binding?.lyCheckOut)
                     backAnimation.setTarget(binding?.lyCheckIn)
                     backAnimation.start()
@@ -303,7 +299,7 @@ class HomeFragment : BaseFragment() {
 
                 var type = CheckRequestFilter.OUT.name
 
-                if(isCheckIn)
+                if (isCheckIn)
                     type = CheckRequestFilter.IN.name
 
                 homeViewModel.postCheckIn(CheckInRequest().apply {
@@ -314,8 +310,7 @@ class HomeFragment : BaseFragment() {
                     this.attendance_reason = "Punch from application"
                 })
 
-            }
-            else{
+            } else {
                 requireContext().showErrorMsg("Please wait we are fetching your location")
             }
 
@@ -340,43 +335,39 @@ class HomeFragment : BaseFragment() {
     }
 
     private fun checkInInfoPopulate(checkInInfo: CheckInInfoResponse) {
-        if (checkInInfo.is_check_in_button ==false && checkInInfo.is_check_out_button ==false)
-        {
-            binding?.btnCheckIn?.isEnabled=false
+        if (checkInInfo.is_check_in_button == false && checkInInfo.is_check_out_button == false) {
+            binding?.btnCheckIn?.isEnabled = false
 
-            binding?.lyCheckIn?.visibility =View.VISIBLE
+            binding?.lyCheckIn?.visibility = View.VISIBLE
             binding?.lyCheckOut?.visibility = View.GONE
 
             binding?.tvCheckInTxt?.text = checkInInfo.check_in.valueQualifier()
             binding?.tvCheckOutTxt?.text = checkInInfo.check_out.valueQualifier()
 
 
-        }
-        else{
-            binding?.btnCheckIn?.isEnabled=true
+        } else {
+            binding?.btnCheckIn?.isEnabled = true
 
-            if(checkInInfo.is_check_in_button == true && checkInInfo.is_check_out_button ==true){
+            if (checkInInfo.is_check_in_button == true && checkInInfo.is_check_out_button == true) {
 
-                binding?.lyCheckIn?.visibility =View.VISIBLE
+                binding?.lyCheckIn?.visibility = View.VISIBLE
                 binding?.lyCheckOut?.visibility = View.GONE
 
-                isCheckIn =true
-            }
-            else{
+                isCheckIn = true
+            } else {
                 if (checkInInfo.is_check_in_button == true) {
 
-                    isCheckIn =true
-                    binding?.lyCheckIn?.visibility =View.VISIBLE
+                    isCheckIn = true
+                    binding?.lyCheckIn?.visibility = View.VISIBLE
                     binding?.lyCheckOut?.visibility = View.GONE
 
                     binding?.tvCheckInTxt?.text = checkInInfo.check_in.valueQualifier()
 
-                }else if (checkInInfo.is_check_out_button == true)
-                {
+                } else if (checkInInfo.is_check_out_button == true) {
 
                     binding?.tvCheckInTxt?.text = checkInInfo.check_in.valueQualifier()
-                    isCheckIn =false
-                    binding?.lyCheckIn?.visibility =View.GONE
+                    isCheckIn = false
+                    binding?.lyCheckIn?.visibility = View.GONE
                     binding?.lyCheckOut?.visibility = View.VISIBLE
                     binding?.tvCheckOutTxt?.text = checkInInfo.check_out.valueQualifier()
 
@@ -481,7 +472,7 @@ class HomeFragment : BaseFragment() {
                 description = "View all the expense requests",
                 color = requireContext().getColor(R.color.violet),
                 drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_expe)
-            ),Modules(
+            ), Modules(
                 id = 6,
                 name = "Payslip",
                 description = "View your all pay-slip",
@@ -523,7 +514,8 @@ class HomeFragment : BaseFragment() {
                             showDialog()
                             AppNavigator.navigateToApprovals()
                         }
-                        "Check IN" ->{
+
+                        "Check IN" -> {
                             showDialog()
                             AppNavigator.navigateToCheckInFragment()
                         }
@@ -551,6 +543,18 @@ class HomeFragment : BaseFragment() {
     }
 
     private fun birthdayPopulate(birthdayList: List<Birthday>) {
+
+        val manager = GlobalConfig.isCurrentManager()
+        binding?.rvBirthdays?.isVisible = manager
+        binding?.tvBirthdays?.isVisible = manager
+
+        if (birthdayList.isEmpty()) {
+            binding?.rvBirthdays?.visibility = View.GONE
+            binding?.tvBirthdays?.visibility = View.GONE
+        }
+
+
+
         binding?.rvBirthdays?.layoutManager =
             LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
         val birthdayAdapter = BirthdayAdapter(
