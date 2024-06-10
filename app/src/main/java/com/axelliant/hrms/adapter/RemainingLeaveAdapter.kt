@@ -21,6 +21,10 @@ class RemainingLeaveAdapter(
 
     override fun onBindViewHolder(holder: AccountsVH, position: Int) {
         holder.bind(leaves[position])
+        if((position+1)%3==0)
+        {
+            holder.binding.lyCasual
+        }
     }
 
     override fun getItemCount(): Int {
@@ -32,6 +36,7 @@ class RemainingLeaveAdapter(
         fun bind(item: LeaveType) {
             binding.tvTitle.text = item.title
             binding.tvValue.text = item.value.toString()
+
         }
     }
 

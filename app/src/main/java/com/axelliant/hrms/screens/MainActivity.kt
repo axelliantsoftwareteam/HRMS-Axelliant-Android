@@ -39,7 +39,8 @@ class MainActivity : BaseActivity() {
                 hideDialog()
             }, 200)
 
-            when (destination.id) {
+            when (destination.id)
+            {
                 R.id.homeFragment, R.id.leavesFragment, R.id.profileFragment -> {
                     bottomNavigation.visibility = View.VISIBLE
                 }

@@ -138,8 +138,8 @@ class LoginFragment : BaseFragment() {
 
 
         binding.btnLogin.setOnClickListener {
-            AppNavigator.navigateToHome()
-//            requireContext().showSuccessMsg()
+//            AppNavigator.navigateToHome()
+            requireContext().showSuccessMsg()
         }
         PublicClientApplication.createSingleAccountPublicClientApplication(
             requireContext(),
@@ -179,15 +179,6 @@ class LoginFragment : BaseFragment() {
                 Log.d(TAG, "Successfully authenticated")
                 Log.d(TAG, "ID Token: " + authenticationResult.account.idToken)
 
-
-                sessionManager.saveToken(authenticationResult.account.idToken)
-                sessionManager.createLoginSession(
-                    username = null,
-                    userPass = null,
-                    accessToken = authenticationResult.account.idToken,
-                    lastRemember = true
-                )
-                AppConst.TOKEN = authenticationResult.account.idToken
                 micLogin(authenticationResult.account.idToken)
                 // Update account
                 mAccount = authenticationResult.account
@@ -273,7 +264,7 @@ class LoginFragment : BaseFragment() {
     }
 
     companion object {
-        private val TAG = LoginFragment::class.java.simpleName
+        val TAG = LoginFragment::class.java.simpleName
     }
 }
 

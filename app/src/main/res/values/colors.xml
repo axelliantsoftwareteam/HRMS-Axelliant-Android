@@ -29,6 +29,8 @@
     <color name="blue">#03112C</color>
 
     <color name="divider">#EDE8E8</color>
+    <color name="line_divider">#E5E0D9</color>
+    <color name="birthday_card_bg">#F6F6F8</color>
     <color name="bottom_layout">#E8E8E8</color>
 
 
@@ -47,6 +49,13 @@
     <color name="rose_quartz">#F6D4D2</color>
     <color name="blue_iris">#4120A9</color>
     <color name="periwinkle">#A1A9FE</color>
+
+
+    <color name="pendingColor">#FAF5CE</color> <!-- Yellow for Pending -->
+    <color name="pendingTextColor">#7C5D01</color> <!-- Yellow for Pending -->
+    <color name="approvedColor">#CAE6DE</color> <!-- Green for Approved -->
+    <color name="approvedTextColor">#CAE6DE</color> <!-- Green for Approved -->
+    <color name="rejectedColor">#05D83242</color> <!-- Red for Rejected -->
 
 
 

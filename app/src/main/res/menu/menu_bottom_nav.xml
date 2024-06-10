@@ -5,13 +5,14 @@
         android:icon="@drawable/ic_home"
         android:title="Home" />
 
-    <item
-        android:id="@+id/leavesFragment"
-        android:icon="@drawable/ic_leav"
-        android:title="Leaves" />
+
 
     <item
         android:id="@+id/profileFragment"
         android:icon="@drawable/ic_profile"
         android:title="Profile" />
+    <item
+        android:id="@+id/leavesFragment"
+        android:icon="@drawable/ic_leav"
+        android:title="Leaves" />
 </menu>

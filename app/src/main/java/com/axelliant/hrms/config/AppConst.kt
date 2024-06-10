@@ -15,16 +15,22 @@ object AppConst {
     const val RequestType = "requestType"
     val observableCode = ObservableCode()
 
-    const val DATE_FORMAT =  "dd MMM,yyyy"
+    const val DATE_FORMAT =  "dd MMM"
+    const val DATE_END_FORMAT =  "dd MMM,yyyy"
     const val SERVER_DATE_FORMAT =  "yyyy-MM-dd"
     const val SERVER_DATE_FORMAT_ATTENDANCE =  "yyyy-MM-dd"
-    const val ATTENDANCE_DATE_FORMAT =  "dd-MM-yyyy HH:mm:ss"
+    const val ATTENDANCE_DATE_FORMAT =  "yyyy-MM-dd HH:mm:ss"
     const val DISPLAY_TIME_FORMAT =  "HH:mm"
     // Define the input format
     val inputFormat = SimpleDateFormat(AppConst.ATTENDANCE_DATE_FORMAT, Locale.getDefault())
 
     // Define the output format
     val outputFormat = SimpleDateFormat(AppConst.DISPLAY_TIME_FORMAT, Locale.getDefault())
+
+
+    val upComingLeavesinputFormat = SimpleDateFormat(AppConst.SERVER_DATE_FORMAT, Locale.getDefault())
+    val upComingLeavesoutputFormat = SimpleDateFormat(AppConst.DATE_FORMAT, Locale.getDefault())
+    val upComingLeavesoutputEndFormat = SimpleDateFormat(AppConst.DATE_END_FORMAT, Locale.getDefault())
 
 
 

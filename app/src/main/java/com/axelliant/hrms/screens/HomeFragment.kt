@@ -17,6 +17,7 @@ import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -68,6 +69,9 @@ class HomeFragment : BaseFragment() {
     private var checkOut: String? = null
     private val radiusInMeters: Double = 200.0
     private var _binding: FragmentHomeBinding? = null
+
+
+    private var isCheckIn:Boolean =true
 
     // Create an ArrayList to store the converted time strings
     private var targetLocList = ArrayList<BranchDataResponse>()
@@ -203,7 +207,9 @@ class HomeFragment : BaseFragment() {
             EventObserver { response ->
 
                 if (response?.meta?.status == true) {
-                    requireContext().showErrorMsg("Your attendance are marked")
+                    requireContext().showSuccessMsg("Attendance marked successfully")
+                    homeViewModel.getDashboardInformation()
+
                 } else {
                     requireContext().showErrorMsg(response?.meta?.message.toString())
                 }
@@ -272,75 +278,47 @@ class HomeFragment : BaseFragment() {
 
         binding?.btnCheckIn?.setOnClickListener {
             setCurrentLocationText()
+
             if (loc != null)
             {
-                if (isFront)
-                {
+                setCurrentLocationText()
 
-                    checkIn = getCurrentTime()
-                    val date: Date? = checkIn?.let { it1 -> inputFormat.parse(it1) }
-                    val formattedTime: String =
-                        date?.let { outputFormat.format(it) } ?: "Invalid date"
-                    binding?.tvCheckInTxt?.text = formattedTime.valueQualifier()
-                    binding?.tvCheckInStatus?.text = LocationFilter.CHECK_IN.value
-                    binding?.ivPunchIn?.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            requireContext(),
-                            R.drawable.ic_check_in
-                        )
-                    )
-                    setCurrentLocationText()
+                if(isCheckIn){
 
                     frontAnimation.setTarget(binding?.lyCheckIn)
                     backAnimation.setTarget(binding?.lyCheckOut)
                     frontAnimation.start()
                     backAnimation.start()
-                    isFront = false
-
-                    homeViewModel.postCheckIn(CheckInRequest().apply {
-                        this.log_type = CheckRequestFilter.IN.name
-                        this.date_time = checkIn
-                        this.location = loc
-                        this.request_status = LeaveStatus.PENDING.value
-                        this.attendance_reason = "Punch from application"
-                    })
 
 
-                } else {
-                    checkOut = getCurrentTime()
-                    val date: Date? = checkOut?.let { it1 -> inputFormat.parse(it1) }
-                    val formattedTime: String =
-                        date?.let { outputFormat.format(it) } ?: "Invalid date"
-                    binding?.tvCheckOutTxt?.text = formattedTime.valueQualifier()
-                    binding?.tvCheckOutStatus?.text = LocationFilter.CHECK_OUT.value
-                    binding?.ivPunchOut?.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            requireContext(),
-                            R.drawable.ic_check_out
-                        )
-                    )
-                    setCurrentLocationText()
 
+                }
+                else{
                     frontAnimation.setTarget(binding?.lyCheckOut)
                     backAnimation.setTarget(binding?.lyCheckIn)
                     backAnimation.start()
                     frontAnimation.start()
-                    isFront = true
-
-                    homeViewModel.postCheckIn(CheckInRequest().apply {
-                        this.log_type = CheckRequestFilter.OUT.name
-                        this.date_time = checkOut
-                        this.location = loc
-                        this.request_status = LeaveStatus.PENDING.value
-                        this.attendance_reason = "Punch from application"
-                    })
 
                 }
+
+                var type = CheckRequestFilter.OUT.name
+
+                if(isCheckIn)
+                    type = CheckRequestFilter.IN.name
+
+                homeViewModel.postCheckIn(CheckInRequest().apply {
+                    this.log_type = type
+                    this.date_time = getCurrentTime()
+                    this.location = loc
+                    this.request_status = LeaveStatus.APPROVED.value
+                    this.attendance_reason = "Punch from application"
+                })
 
             }
             else{
                 requireContext().showErrorMsg("Please wait we are fetching your location")
             }
+
         }
 
         PublicClientApplication.createSingleAccountPublicClientApplication(
@@ -362,22 +340,50 @@ class HomeFragment : BaseFragment() {
     }
 
     private fun checkInInfoPopulate(checkInInfo: CheckInInfoResponse) {
-        if (checkInInfo != null) {
-            if (checkInInfo.is_check_in_button == true)
-                binding?.lyCheckIn?.isEnabled = checkInInfo.is_check_in_button
-            else {
-                binding?.btnCheckIn?.isEnabled=false
-                binding?.lyCheckIn?.visibility = View.GONE
-                binding?.tvCheckInTxt?.text = checkInInfo.check_in.valueQualifier()
+        if (checkInInfo.is_check_in_button ==false && checkInInfo.is_check_out_button ==false)
+        {
+            binding?.btnCheckIn?.isEnabled=false
+
+            binding?.lyCheckIn?.visibility =View.VISIBLE
+            binding?.lyCheckOut?.visibility = View.GONE
+
+            binding?.tvCheckInTxt?.text = checkInInfo.check_in.valueQualifier()
+            binding?.tvCheckOutTxt?.text = checkInInfo.check_out.valueQualifier()
+
+
+        }
+        else{
+            binding?.btnCheckIn?.isEnabled=true
+
+            if(checkInInfo.is_check_in_button == true && checkInInfo.is_check_out_button ==true){
+
+                binding?.lyCheckIn?.visibility =View.VISIBLE
+                binding?.lyCheckOut?.visibility = View.GONE
+
+                isCheckIn =true
             }
-            if (checkInInfo.is_check_out_button == true)
-                binding?.lyCheckOut?.isEnabled = checkInInfo.is_check_out_button
-            else {
-                binding?.btnCheckIn?.isEnabled=false
-                binding?.lyCheckIn?.visibility = View.VISIBLE
-                binding?.tvCheckOutTxt?.text = checkInInfo.check_out.valueQualifier()
-                binding?.lyCheckOut?.isEnabled = checkInInfo.is_check_out_button!!
+            else{
+                if (checkInInfo.is_check_in_button == true) {
+
+                    isCheckIn =true
+                    binding?.lyCheckIn?.visibility =View.VISIBLE
+                    binding?.lyCheckOut?.visibility = View.GONE
+
+                    binding?.tvCheckInTxt?.text = checkInInfo.check_in.valueQualifier()
+
+                }else if (checkInInfo.is_check_out_button == true)
+                {
+
+                    binding?.tvCheckInTxt?.text = checkInInfo.check_in.valueQualifier()
+                    isCheckIn =false
+                    binding?.lyCheckIn?.visibility =View.GONE
+                    binding?.lyCheckOut?.visibility = View.VISIBLE
+                    binding?.tvCheckOutTxt?.text = checkInInfo.check_out.valueQualifier()
+
+
+                }
             }
+
         }
     }
 
@@ -458,14 +464,14 @@ class HomeFragment : BaseFragment() {
                 name = "Approval",
                 description = "View all requests",
                 color = requireContext().getColor(R.color.colorApp),
-                drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_expe)
+                drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_approv)
             ),
             Modules(
                 id = 4,
                 name = "Check IN",
                 description = "View all the check-in requests",
                 color = requireContext().getColor(R.color.blue_iris),
-                drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_expe)
+                drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_checkin)
 
 
             ),

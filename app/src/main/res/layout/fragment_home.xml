@@ -235,7 +235,7 @@
                                 android:id="@+id/iv_punch_out"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:src="@drawable/ic_absent"
+                                android:src="@drawable/ic_check_out"
                                 app:tint="@color/white" />
 
                             <com.google.android.material.textview.MaterialTextView
@@ -249,6 +249,7 @@
                                 app:layout_constraintTop_toTopOf="parent" />
                         </LinearLayout>
                         <LinearLayout
+
                             android:id="@+id/ly_check_in"
                             android:layout_width="0dp"
                             android:layout_height="@dimen/_70sdp"
@@ -264,7 +265,7 @@
                             android:id="@+id/iv_punch_in"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/ic_punch_in"
+                            android:src="@drawable/ic_check_in"
                             app:tint="@color/white" />
 
                         <com.google.android.material.textview.MaterialTextView
@@ -304,7 +305,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:paddingStart="@dimen/_5sdp"
-                            tools:text="@string/remote"
+                            android:text="--:--"
                             android:textAlignment="textStart" />
 
                     </LinearLayout>

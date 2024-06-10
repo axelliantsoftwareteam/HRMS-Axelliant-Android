@@ -11,8 +11,10 @@ import com.axelliant.hrms.model.base.BaseModel
 import com.axelliant.hrms.model.base.Meta
 import com.axelliant.hrms.model.leave.LeaveApproval
 import com.axelliant.hrms.model.leave.MyLeaveDetailResponse
+import com.axelliant.hrms.model.leave.MyUpcomingLeaveDetailResponse
 import com.axelliant.hrms.model.leave.PostResponse
 import com.axelliant.hrms.model.leave.TeamLeaveDetailResponse
+import com.axelliant.hrms.model.leave.UpcomingLeaveInput
 import com.axelliant.hrms.network.ApiInterface
 import com.axelliant.hrms.network.BaseCallBack
 import com.google.gson.Gson
@@ -173,6 +175,55 @@ class LeaveRepo(private var apiInterface: ApiInterface) {
                     BaseApiModel(
                         BaseModel(
                             TeamLeaveDetailResponse(
+                                meta = Meta(
+                                    errorString.toString(),
+                                    false
+                                )
+                            )
+                        )
+                    )
+
+            }
+
+        })
+
+        return serverResponse
+    }
+    fun getUpcomingLeaveDetail(upcomingLeaveInput: UpcomingLeaveInput): MutableLiveData<BaseApiModel<MyUpcomingLeaveDetailResponse>> {
+        val serverResponse = MutableLiveData<BaseApiModel<MyUpcomingLeaveDetailResponse>>()
+
+        val call: Call<ResponseBody> = apiInterface.callUpcomingLeaveDetail("token ${AppConst.TOKEN}",
+            upcomingLeaveInput
+        )
+
+        Log.e("HTTP Request", " " + call?.request().toString())
+
+        call.enqueue(object : BaseCallBack<ResponseBody>(call) {
+            override fun onFinalSuccess(
+                call: Call<ResponseBody>,
+                response: Response<ResponseBody>
+            ) {
+
+                Log.e("API success", " " + response.body())
+
+                val type: Type = object : TypeToken<BaseApiModel<MyUpcomingLeaveDetailResponse>>() {}.type
+                val jsonString = response.body()?.string()
+                val userModel =
+                    Gson().fromJson<BaseApiModel<MyUpcomingLeaveDetailResponse>>(jsonString, type)
+                serverResponse.value = userModel
+            }
+
+
+            override fun onFinalFailure(
+                errorString: String?
+            ) {
+
+                Log.e("API Failure", " $errorString")
+
+                serverResponse.value =
+                    BaseApiModel(
+                        BaseModel(
+                            MyUpcomingLeaveDetailResponse(
                                 meta = Meta(
                                     errorString.toString(),
                                     false
