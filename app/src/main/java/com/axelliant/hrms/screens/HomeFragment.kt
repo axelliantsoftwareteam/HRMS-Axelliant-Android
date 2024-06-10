@@ -505,11 +505,12 @@ class HomeFragment : BaseFragment() {
 
                     when (currentObject.name) {
                         "Attendance" -> {
+                            showDialog()
                             AppNavigator.navigateToAttendanceStats()
                         }
 
                         "Leaves" -> {
-
+                            showDialog()
                             AppNavigator.navigateToLeaves()
                         }
 
@@ -519,9 +520,11 @@ class HomeFragment : BaseFragment() {
                         }
 
                         "Approval" -> {
+                            showDialog()
                             AppNavigator.navigateToApprovals()
                         }
                         "Check IN" ->{
+                            showDialog()
                             AppNavigator.navigateToCheckInFragment()
                         }
 

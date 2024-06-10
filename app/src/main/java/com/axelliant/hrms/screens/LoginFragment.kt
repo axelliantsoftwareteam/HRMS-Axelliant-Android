@@ -237,7 +237,7 @@ class LoginFragment : BaseFragment() {
             viewLifecycleOwner,
             EventObserver { response ->
 
-                if (response!=null)
+                if (response!=null && response.meta.status==true)
                 {
                     // success
                     sessionManager.saveToken(response.access_token?.api_key.plus(":").plus(response.access_token?.api_sec))
@@ -250,7 +250,20 @@ class LoginFragment : BaseFragment() {
                     AppConst.TOKEN =response.access_token?.api_key.plus(":").plus(response.access_token?.api_sec)
                     AppNavigator.navigateToHome()
                 } else {
-                    requireContext().showErrorMsg("InValid")
+                    requireContext().showErrorMsg(response?.meta?.message.toString())
+                    /*
+                     * Removes the signed-in account and cached tokens from this app (or device, if the device is in shared mode).
+                   */
+                    mSingleAccountApp!!.signOut(object :
+                        ISingleAccountPublicClientApplication.SignOutCallback {
+                        override fun onSignOut() {
+                            mAccount = null
+                        }
+                        override fun onError(exception: MsalException) {
+                            requireContext().showErrorMsg(exception.toString())
+                        }
+                    })
+
                 }
 
             })

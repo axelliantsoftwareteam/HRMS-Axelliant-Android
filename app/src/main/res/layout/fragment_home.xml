@@ -199,7 +199,7 @@
                         app:layout_constraintTop_toTopOf="@+id/btn_check_in"
                         app:layout_constraintStart_toEndOf="@+id/iv_check_out"
 
-                        ></TextView>
+                        />
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/tv_check_out_txt"
                         style="@style/TEXT_MEDIUM_WHITE_10"
