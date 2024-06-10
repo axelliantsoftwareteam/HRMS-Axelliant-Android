@@ -1,9 +1,12 @@
 package com.axelliant.hrms.screens
 
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.GridLayoutManager
@@ -15,22 +18,28 @@ import com.axelliant.hrms.adapter.RemainingLeaveAdapter
 import com.axelliant.hrms.adapter.UpcomingLeaveAdapter
 
 import com.axelliant.hrms.base.BaseFragment
-import com.axelliant.hrms.callback.AdapterItemClick
+import com.axelliant.hrms.config.AppConst.SERVER_DATE_FORMAT
 import com.axelliant.hrms.config.GlobalConfig
 import com.axelliant.hrms.databinding.FragmentLeavesBinding
 import com.axelliant.hrms.enums.AttendanceFilter
 import com.axelliant.hrms.event.EventObserver
 import com.axelliant.hrms.extention.showErrorMsg
 import com.axelliant.hrms.extention.showSuccessMsg
-import com.axelliant.hrms.model.Modules
+import com.axelliant.hrms.extention.valueQualifier
 import com.axelliant.hrms.model.attendance.AttendanceInput
 import com.axelliant.hrms.model.leave.LeaveType
 import com.axelliant.hrms.model.leave.SelfLeaveStats
 import com.axelliant.hrms.model.leave.TeamLeaveStats
+import com.axelliant.hrms.model.leave.UpcomingLeaveInput
+import com.axelliant.hrms.model.leave.UpcomingLeaves
 import com.axelliant.hrms.navigation.AppNavigator
 import com.axelliant.hrms.utils.Utils
 import com.axelliant.hrms.viewmodel.LeaveViewModel
 import org.koin.android.ext.android.inject
+import java.time.LocalDate
+import java.time.Year
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 
 
 class LeavesFragment : BaseFragment() {
@@ -50,6 +59,7 @@ class LeavesFragment : BaseFragment() {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -100,10 +110,33 @@ class LeavesFragment : BaseFragment() {
 
         }
 
-        upcomingLeavePopulate()
 
+        leaveViewModel.getUpcomingLeaveDetail(UpcomingLeaveInput().apply {
+            val formatter = DateTimeFormatter.ofPattern(SERVER_DATE_FORMAT)
+            val tomorrow = LocalDate.now().plus(1, ChronoUnit.DAYS)
+            val formattedTomorrow = tomorrow.format(formatter)
+
+            // Get the last day of the current year
+            val lastDayOfYear = Year.now().atMonth(12).atEndOfMonth()
+            val formattedLastDayOfYear = lastDayOfYear.format(formatter)
+
+            Log.d("Upcoming Leaves date", "dates:" + formattedLastDayOfYear+formattedTomorrow)
+            if (formattedTomorrow!=null && formattedLastDayOfYear!=null)
+            {
+                this.start_date = formattedTomorrow
+                this.end_date = formattedLastDayOfYear
+            }
+        })
+        leaveViewModel.upcomingLeavesResponse.observe(
+            viewLifecycleOwner,
+            EventObserver { response ->
+                if (response?.meta?.status == true) {
+                    upcomingLeavePopulate(response.upcoming_leaves)
+                } else {
+                    requireContext().showErrorMsg(response?.meta?.message.toString())
+                }
+            })
     }
-
 
     private fun eventSelection() {
         binding?.tvWeek?.background =
@@ -160,32 +193,17 @@ class LeavesFragment : BaseFragment() {
     }
 
 
-    private fun upcomingLeavePopulate() {
-
-        val testArray: ArrayList<Test> = arrayListOf(
-            Test(
-                "item1"
-            ), Test(
-                "item1"
-            ), Test(
-                "item1"
-            ), Test(
-                "item1"
-            ), Test(
-                "item1"
+    private fun upcomingLeavePopulate(upcomingLeaves: ArrayList<UpcomingLeaves>?) {
+        Log.d("upcomingLeaves", ""+upcomingLeaves)
+        if (upcomingLeaves != null) {
+            binding?.rvUpcomingLeaves?.layoutManager =
+                LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+            val modulesAdapter = UpcomingLeaveAdapter(
+                upcomingLeaves
             )
-        )
-
-
-        binding?.rvUpcomingLeaves?.layoutManager =
-            LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
-        val modulesAdapter = UpcomingLeaveAdapter(
-            testArray
-        )
-        binding?.rvUpcomingLeaves?.adapter = modulesAdapter
-        binding?.rvUpcomingLeaves?.isNestedScrollingEnabled = false
-
-
+            binding?.rvUpcomingLeaves?.adapter = modulesAdapter
+            binding?.rvUpcomingLeaves?.isNestedScrollingEnabled = false
+        }
     }
 
     private fun selfAttendanceStats(selfStats: SelfLeaveStats) {
@@ -241,6 +259,5 @@ class LeavesFragment : BaseFragment() {
         }
 
     }
-
 
 }

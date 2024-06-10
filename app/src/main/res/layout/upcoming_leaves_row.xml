@@ -30,11 +30,12 @@
 
 
             <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_start_end"
                 style="@style/TEXT_MEDIUM_WHITE_12"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginStart="@dimen/_5sdp"
-                android:text="29 May -30 May"
+                tools:text="29 May -30 May"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -46,7 +47,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_10sdp"
             android:layout_marginTop="@dimen/_5sdp"
-            android:text="Bank Holiday"
+            tools:text="Bank Holiday"
             android:textAlignment="textStart"
             android:textColor="@color/blue"
             app:layout_constraintStart_toStartOf="parent"
@@ -59,7 +60,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_10sdp"
             android:layout_marginTop="@dimen/_5sdp"
-            android:text="Out of City"
+            tools:text="Out of City"
             android:textAlignment="textStart"
             android:textAllCaps="true"
             app:layout_constraintStart_toStartOf="parent"
@@ -74,10 +75,10 @@
             android:layout_marginStart="@dimen/_10sdp"
             android:layout_marginTop="@dimen/_5sdp"
             android:paddingBottom="@dimen/_5sdp"
-            android:text="Its a public holiday"
+            tools:text="Its a public holiday"
             android:textAlignment="textStart"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_day" />
+            app:layout_constraintTop_toBottomOf="@id/tv_status" />
 
 
         <com.google.android.material.textview.MaterialTextView
@@ -92,9 +93,9 @@
             android:paddingTop="@dimen/_3sdp"
             android:paddingEnd="@dimen/_10sdp"
             android:paddingBottom="@dimen/_3sdp"
-            android:text="Approved"
+            tools:text="Approved"
             android:textColor="@color/green"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_day"
             app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
