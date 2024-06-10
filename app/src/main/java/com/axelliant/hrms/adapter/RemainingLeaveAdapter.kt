@@ -1,6 +1,7 @@
 package com.axelliant.hrms.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
@@ -23,7 +24,10 @@ class RemainingLeaveAdapter(
         holder.bind(leaves[position])
         if((position+1)%3==0)
         {
-            holder.binding.lyCasual
+            holder.binding.viewDivider.visibility=View.GONE
+        }
+        else{
+            holder.binding.viewDivider.visibility=View.VISIBLE
         }
     }
 
