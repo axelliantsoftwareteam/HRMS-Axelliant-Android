@@ -14,13 +14,14 @@ import com.axelliant.hrms.databinding.FragmentAttendanceStatsBinding
 import com.axelliant.hrms.enums.AttendanceFilter
 import com.axelliant.hrms.event.EventObserver
 import com.axelliant.hrms.extention.showErrorMsg
+import com.axelliant.hrms.extention.valueQualifier
 import com.axelliant.hrms.model.attendance.AttendanceInput
 import com.axelliant.hrms.model.attendance.SelfAttendanceStats
+import com.axelliant.hrms.model.attendance.ShiftData
 import com.axelliant.hrms.model.attendance.TeamAttendanceStats
 import com.axelliant.hrms.navigation.AppNavigator
 import com.axelliant.hrms.utils.Utils
 import com.axelliant.hrms.viewmodel.AttendanceViewModel
-import com.axelliant.hrms.viewmodel.LeaveViewModel
 import org.koin.android.ext.android.inject
 
 
@@ -75,14 +76,13 @@ class AttendanceStatsFragment : BaseFragment() {
 
                     selfAttendanceStats(response.self_attendance_counts!!)
                     teamAttendanceStats(response.team_attendance_counts!!)
+                    setShiftTimings(response.shift_detail!!)
 
                 } else {
                     requireContext().showErrorMsg(response?.meta?.message.toString())
                 }
 
             })
-
-
         binding?.ivBack?.setOnClickListener {
             previousFragmentNavigation()
 
@@ -100,6 +100,16 @@ class AttendanceStatsFragment : BaseFragment() {
             showDialog()
             AppNavigator.navigateToTeamAttendanceDetail()
 
+        }
+
+    }
+
+    private fun setShiftTimings(shiftDetails: ShiftData) {
+        if (shiftDetails!=null)
+        {
+            binding?.tvShiftNameTxt?.text=shiftDetails.name.valueQualifier()
+            binding?.tvWorkFrom?.text=shiftDetails.location.valueQualifier()
+            binding?.tvShiftPremiss?.text=shiftDetails.actual_start.plus(" - ").plus(shiftDetails.actual_end).valueQualifier()
         }
 
     }
@@ -160,7 +170,7 @@ class AttendanceStatsFragment : BaseFragment() {
     private fun teamAttendanceStats(teamAttendanceStats: TeamAttendanceStats){
         binding?.tvTotalMemberTxt?.text = teamAttendanceStats.team_count.toString()
         binding?.tvPresentTxt?.text = teamAttendanceStats.present.toString()
-        binding?.tvWorkFromTxt?.text = teamAttendanceStats.work_from_home.toString()
+        binding?.tvWorkHomeTxt?.text = teamAttendanceStats.work_from_home.toString()
         binding?.tvTeamsOnleaveTxt?.text = teamAttendanceStats.leave_count.toString()
         binding?.tvTeamsAbsentTxt?.text = teamAttendanceStats.absent_count.toString()
 
@@ -186,8 +196,8 @@ class AttendanceStatsFragment : BaseFragment() {
             AttendanceFilter.Custom -> {}
         }
         return AttendanceInput().apply {
-            this.startDate = startDateString!!
-            this.endDate = endDateString!!
+            this.startDate = startDateString
+            this.endDate = endDateString
             this.filter = currentFilter
 
         }
