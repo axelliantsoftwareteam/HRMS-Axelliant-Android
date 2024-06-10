@@ -234,7 +234,7 @@
                                 android:layout_width="2dp"
                                 android:layout_height="0dp"
                                 android:layout_marginEnd="@dimen/_10sdp"
-                                android:background="#E5E0D9"
+                                android:background="@color/line_divider"
                                 app:layout_constraintBottom_toBottomOf="@+id/tv_pending"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toTopOf="@+id/tv_pending_txt" />
@@ -278,7 +278,7 @@
                                 android:layout_height="0dp"
                                 android:layout_gravity="center_vertical"
                                 android:layout_marginEnd="@dimen/_10sdp"
-                                android:background="#E5E0D9"
+                                android:background="@color/line_divider"
                                 app:layout_constraintBottom_toBottomOf="@+id/tv_approved"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toTopOf="@+id/tv_approved_txt" />
@@ -544,7 +544,7 @@
                                 android:layout_height="0dp"
                                 android:layout_gravity="center_vertical"
                                 android:layout_marginEnd="@dimen/_10sdp"
-                                android:background="#E5E0D9"
+                                android:background="@color/line_divider"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toTopOf="@+id/tv_present_txt" />
@@ -641,7 +641,7 @@
                                 android:layout_height="0dp"
                                 android:layout_gravity="center_vertical"
                                 android:layout_marginEnd="@dimen/_10sdp"
-                                android:background="#E5E0D9"
+                                android:background="@color/line_divider"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toTopOf="@+id/tv_teams_absent_txt" />
@@ -705,15 +705,17 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_my_shift"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    tools:itemCount="2"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_my_shift"
+                    app:layout_constraintVertical_bias="0.0"
                     app:spanCount="2"
-                    tools:orientation="horizontal"
+                    tools:itemCount="2"
                     tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    tools:listitem="@layout/upcoming_leaves_row" />
+                    tools:listitem="@layout/upcoming_leaves_row"
+                    tools:orientation="horizontal" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>

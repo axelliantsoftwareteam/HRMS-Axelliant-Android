@@ -176,7 +176,7 @@
                     android:layout_height="0dp"
                     android:layout_gravity="center_vertical"
                     android:layout_margin="@dimen/_5sdp"
-                    android:background="#E5E0D9"
+                    android:background="@color/line_divider"
                     app:layout_constraintBottom_toBottomOf="@+id/ly_end_date"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

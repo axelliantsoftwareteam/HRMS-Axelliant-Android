@@ -184,7 +184,7 @@
                                 android:layout_height="0dp"
                                 android:layout_gravity="center_vertical"
                                 android:layout_marginEnd="@dimen/_10sdp"
-                                android:background="#E5E0D9"
+                                android:background="@color/line_divider"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toTopOf="@+id/tv_absent_txt" />
@@ -230,7 +230,7 @@
                                 android:layout_height="0dp"
                                 android:layout_gravity="center_vertical"
                                 android:layout_marginEnd="@dimen/_10sdp"
-                                android:background="#E5E0D9"
+                                android:background="@color/line_divider"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toTopOf="@+id/tv_half_day_txt" />
@@ -328,7 +328,7 @@
                                 android:layout_width="2dp"
                                 android:layout_height="0dp"
                                 android:layout_marginEnd="@dimen/_10sdp"
-                                android:background="#E5E0D9"
+                                android:background="@color/line_divider"
                                 app:layout_constraintBottom_toBottomOf="@+id/tv_leaves"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toTopOf="@+id/tv_leaves_txt" />
@@ -372,7 +372,7 @@
                                 android:layout_height="0dp"
                                 android:layout_gravity="center_vertical"
                                 android:layout_marginEnd="@dimen/_10sdp"
-                                android:background="#E5E0D9"
+                                android:background="@color/line_divider"
                                 app:layout_constraintBottom_toBottomOf="@+id/tv_holiday"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toTopOf="@+id/tv_holiday_txt" />
@@ -581,7 +581,7 @@
                                 android:layout_height="0dp"
                                 android:layout_gravity="center_vertical"
                                 android:layout_marginEnd="@dimen/_10sdp"
-                                android:background="#E5E0D9"
+                                android:background="@color/line_divider"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toTopOf="@+id/tv_present_txt" />
@@ -676,7 +676,7 @@
                                 android:layout_height="0dp"
                                 android:layout_gravity="center_vertical"
                                 android:layout_marginEnd="@dimen/_10sdp"
-                                android:background="#E5E0D9"
+                                android:background="@color/line_divider"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toTopOf="@+id/tv_teams_absent_txt" />
@@ -837,7 +837,7 @@
                                     style="@style/TEXT_MEDIUM_GREY_10"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="@string/shift_premiss"
+                                    android:text="@string/shift_timings"
                                     android:textAllCaps="true"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="parent" />
