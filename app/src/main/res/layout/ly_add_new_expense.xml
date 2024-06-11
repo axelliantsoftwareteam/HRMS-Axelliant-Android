@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white">
+
+
+        <LinearLayout
+            android:id="@+id/ll_date"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:weightSum="1"
+            android:layout_marginTop="@dimen/_5sdp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_attend_type"
+                style="@style/TEXT_MEDIUM_BLACK_10"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_5sdp"
+                android:layout_weight=".34"
+                android:text="@string/expense_type"
+                android:textAlignment="textStart"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ly_attend_header" />
+
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_date"
+                style="@style/TEXT_MEDIUM_BLACK_10"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_5sdp"
+                android:layout_weight=".33"
+                android:text="@string/due_date"
+                android:textAlignment="textStart" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_time"
+                style="@style/TEXT_MEDIUM_BLACK_10"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_5sdp"
+                android:layout_weight=".33"
+                android:text="@string/amount"
+                android:textAlignment="textStart" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/ll_dd"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_40sdp"
+            android:baselineAligned="false"
+            android:orientation="horizontal"
+
+            android:weightSum="1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/ll_date"
+            app:layout_constraintTop_toBottomOf="@+id/ll_date">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/ly_attend_type"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight=".34"
+                android:background="@drawable/rounded_leave_filter"
+                android:orientation="vertical"
+                android:padding="@dimen/_5sdp">
+
+
+                <Spinner
+                    android:id="@+id/sp_attend_type"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:overlapAnchor="false"
+                    android:padding="@dimen/_2sdp"
+                    android:popupBackground="@drawable/ly_spiner_bg"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck"
+                    tools:listitem="@layout/spinner_item" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/ly_date"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="@dimen/_5sdp"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_weight=".33"
+                android:background="@drawable/rounded_leave_filter"
+                android:orientation="vertical"
+                android:padding="@dimen/_8sdp">
+
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_date_txt"
+                    style="@style/TEXT_MEDIUM_BLACK_10"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:hint="@string/date"
+                    android:textAlignment="textStart"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/img_date_cal"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/img_date_cal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:layout_marginEnd="@dimen/_5sdp"
+                    android:src="@drawable/ic_calendar"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                </ImageView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/ly_time"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="@dimen/_5sdp"
+                android:layout_weight=".33"
+                android:background="@drawable/rounded_leave_filter"
+                android:orientation="vertical"
+                android:padding="@dimen/_8sdp">
+
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_time_txt"
+                    style="@style/TEXT_MEDIUM_BLACK_10"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:hint="0.0000"
+                    android:textAlignment="textStart"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ly_header"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ll_dd">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_attend_reason_header"
+                style="@style/TEXT_MEDIUM_BLACK_10"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_5sdp"
+                android:layout_weight=".5"
+                android:gravity="start|center"
+                android:text="@string/description" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ly_descrpt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ly_header">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_attendance_reason"
+                style="@style/OutlinedTextInputLayoutReason"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:layout_marginEnd="@dimen/_5sdp"
+                android:layout_weight="1"
+                android:gravity="start|top"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/tv_attend_reason_header"
+                app:layout_constraintTop_toBottomOf="@+id/tv_attend_reason_header">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_attendance_reason"
+                    style="@style/TEXT_MEDIUM_BLACK_10"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start|top"
+                    android:hint="@string/write_reason"
+                    android:inputType="textMultiLine"
+                    android:maxLines="3"
+                    android:minLines="1"
+                    android:singleLine="false"
+                    android:textColorHint="@color/grey"
+                    tools:text="" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+        </LinearLayout>
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_delete"
+            style="@style/TEXT_SEMI_BLACK_10"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_time_bg"
+            android:backgroundTint="@color/color_third"
+            android:gravity="start|center"
+            android:padding="@dimen/_3sdp"
+            android:paddingEnd="@dimen/_5sdp"
+            android:layout_marginEnd="@dimen/_5sdp"
+            android:drawablePadding="@dimen/_3sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:drawableStart="@drawable/icon_delete"
+            android:drawableTint="@color/white"
+            android:text="@string/remove"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ly_descrpt"
+            />
+
+        <View
+            android:id="@+id/bottom_divider"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_1sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_15sdp"
+            android:background="@color/divider"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            app:top="@+id/ly_descrpt"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_delete" />
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

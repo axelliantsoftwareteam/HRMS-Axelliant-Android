@@ -159,4 +159,13 @@
     <string name="name">Name</string>
     <string name="posting_date">Posting Date</string>
     <string name="description">Description</string>
+    <string name="create_expense_claim">Create Expense Claim</string>
+    <string name="select_one">Select One</string>
+    <string name="due_date">Due Date</string>
+    <string name="create">Create</string>
+    <string name="new_row">New Row</string>
+    <string name="add_expense">Add expense</string>
+    <string name="attachment">Attachments:</string>
+    <string name="remove">Remove</string>
+    <string name="add_attach">Attachment</string>
 </resources>

@@ -8,7 +8,7 @@
         style="@style/TEXT_MEDIUM_BLACK_10"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/select_employee"
+        android:text="@string/select_one"
         android:textColor="@color/black"
         android:gravity="start|center"
         android:padding="@dimen/_5sdp"
