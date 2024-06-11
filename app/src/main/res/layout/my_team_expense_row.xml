@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/_5sdp">
+    <LinearLayout
+        android:id="@+id/ly_action_btn"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_40sdp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:weightSum="10">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_date"
+            style="@style/TEXT_MEDIUM_BLACK_10"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3.5"
+            android:gravity="center"
+            android:text="HR" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_hour"
+            style="@style/TEXT_MEDIUM_BLACK_10"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:text="2024-06-11" />
+
+        <LinearLayout
+            android:id="@+id/tv_custom"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2.5"
+            android:gravity="center">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/status"
+                style="@style/TEXT_SEMI_BLACK_10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingStart="@dimen/_10sdp"
+                android:paddingTop="@dimen/_5sdp"
+                android:paddingEnd="@dimen/_10sdp"
+                android:paddingBottom="@dimen/_5sdp"
+                android:text="100000"
+                android:textColor="@color/colorApp" />
+
+        </LinearLayout>
+
+
+        <ImageView
+            android:id="@+id/tv_drop_down"
+            style="@style/TEXT_SEMI_BLACK_10"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/ic_down" />
+    </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/ly_drop_down"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/_5sdp"
+        app:layout_constraintTop_toBottomOf="@+id/ly_action_btn" >
+
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_attend_status"
+            style="@style/TEXT_SEMI_BLACK_10"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_time_bg"
+            android:gravity="start"
+            android:padding="@dimen/_5sdp"
+            android:text="Approved"
+            android:textColor="@color/green"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+
+        <View
+            android:id="@+id/bottom_divider"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_1sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_15sdp"
+            android:background="@color/divider"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            app:layout_constraintEnd_toEndOf="@+id/ly_drop_down"
+            app:layout_constraintStart_toStartOf="@+id/ly_drop_down"
+            app:layout_constraintTop_toBottomOf="@+id/tv_attend_status" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_leave_count"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bottom_divider"
+            tools:itemCount="2"
+            tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            tools:listitem="@layout/my_team_expense_sub_row"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -31,6 +31,7 @@
     <string name="apply_day">Apply Days</string>
     <string name="approved_by">Approved By</string>
     <string name="expense">Expense</string>
+    <string name="expense_claim">Expense Claim</string>
     <string name="pending_expense">Pending\nExpense</string>
     <string name="approved_expense">Approved\nExpense</string>
     <string name="pending">Pending</string>
@@ -150,4 +151,12 @@
     <string name="update">Update</string>
     <string name="check_in_requests">Check In Requests</string>
     <string name="attendance_type">Log type</string>
+    <string name="total_no_expense">Total no Expense</string>
+    <string name="expense_date">Expense Date</string>
+    <string name="expense_type">Expense Type</string>
+    <string name="expense_approver">Expense Approver</string>
+    <string name="amount">Amount</string>
+    <string name="name">Name</string>
+    <string name="posting_date">Posting Date</string>
+    <string name="description">Description</string>
 </resources>
