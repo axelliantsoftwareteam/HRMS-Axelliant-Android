@@ -75,7 +75,10 @@ class AttendanceStatsFragment : BaseFragment() {
                 if (response?.meta?.status == true) {
 
                     selfAttendanceStats(response.self_attendance_counts!!)
-                    teamAttendanceStats(response.team_attendance_counts!!)
+
+                    if(currentFilter == AttendanceFilter.WEEK)
+                        teamAttendanceStats(response.team_attendance_counts!!)
+
                     setShiftTimings(response.shift_detail!!)
 
                 } else {

@@ -87,7 +87,10 @@ class LeavesFragment : BaseFragment() {
                 if (response?.meta?.status == true) {
 
                     selfAttendanceStats(response.self_count!!)
-                    teamAttendanceStats(response.team_count!!)
+
+                    if(currentFilter == AttendanceFilter.WEEK)
+                        teamAttendanceStats(response.team_count!!)
+
                     remainingLeaveDataPopulate(response.remaining_balance!!)
 
                 } else {

@@ -31,6 +31,7 @@ import com.axelliant.hrms.model.checkin.CheckInDetail
 import com.axelliant.hrms.model.dashboard.FilterModel
 import com.axelliant.hrms.model.leave.LeaveDetail
 import com.axelliant.hrms.navigation.AppNavigator
+import com.axelliant.hrms.network.ErrorMessages
 import com.axelliant.hrms.utils.Utils
 import com.axelliant.hrms.viewmodel.AttendanceViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -103,26 +104,34 @@ class CheckInListFragment : BaseFragment() {
     private fun dataPopulate(attendanceData: ArrayList<CheckInDetail>) {
 
         binding?.rvAttendanceDetail?.layoutManager = LinearLayoutManager(requireActivity())
-        val weeklyAdapter = CheckInListAdapter(attendanceData,object :AdapterItemClick{
+        val weeklyAdapter = CheckInListAdapter(attendanceData, object : AdapterItemClick {
             override fun onItemClick(customObject: Any, position: Int) {
 
                 val attendanceDetail = customObject as CheckInDetail
-                AppNavigator.navigateToRequest(Bundle().apply {
-                    this.putString(AppConst.RequestType, RequestFilter.ATTENDANCE.name)
-                    this.putString(AppConst.AttendanceRequestParam, Gson().toJson(attendanceDetail))
-                })
 
+                if (attendanceDetail.requeststatus == "Pending") {
+                    AppNavigator.navigateToRequest(Bundle().apply {
+                        this.putString(AppConst.RequestType, RequestFilter.ATTENDANCE.name)
+                        this.putString(
+                            AppConst.AttendanceRequestParam,
+                            Gson().toJson(attendanceDetail)
+                        )
+                    })
+                } else
+                    requireContext().showErrorMsg(
+                        ErrorMessages.CHECK_IN_PENDING_ONLY.toString().plus(" ")
+                            .plus(attendanceDetail.requeststatus)
+                    )
 
             }
         })
         binding?.rvAttendanceDetail?.adapter = weeklyAdapter
 
 
-
     }
 
     private fun subFilterPopulations(attendanceStatusList: ArrayList<FilterModel>) {
-        attendanceStatusList.add(0,FilterModel().apply {
+        attendanceStatusList.add(0, FilterModel().apply {
             this.id = ""
             this.title = "All"
             this.count = "0"
