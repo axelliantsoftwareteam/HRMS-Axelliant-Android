@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/_5sdp">
+    android:layout_marginTop="@dimen/_5sdp"
+    android:id="@+id/ly_weekly"
+    >
     <LinearLayout
         android:id="@+id/ly_action_btn"
         android:layout_width="match_parent"
@@ -22,6 +24,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="3.5"
+            android:layout_marginStart="@dimen/_5sdp"
             android:gravity="center"
             android:text="HR" />
 
@@ -57,7 +60,7 @@
 
 
         <ImageView
-            android:id="@+id/tv_drop_down"
+            android:id="@+id/ic_drop_down"
             style="@style/TEXT_SEMI_BLACK_10"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -72,7 +75,15 @@
         android:padding="@dimen/_5sdp"
         app:layout_constraintTop_toBottomOf="@+id/ly_action_btn" >
 
-
+        <View
+            android:id="@+id/line_div"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_1sdp"
+            android:layout_margin="@dimen/_5sdp"
+            android:background="@color/divider"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_attend_status"
             style="@style/TEXT_SEMI_BLACK_10"
@@ -81,11 +92,12 @@
             android:background="@drawable/rounded_time_bg"
             android:gravity="start"
             android:padding="@dimen/_5sdp"
+            android:layout_marginTop="@dimen/_5sdp"
             android:text="Approved"
             android:textColor="@color/green"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/line_div"
             />
 
 

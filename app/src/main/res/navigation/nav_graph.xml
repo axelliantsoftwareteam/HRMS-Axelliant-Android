@@ -119,8 +119,17 @@
     <fragment
         android:id="@+id/checkInListFragment"
         android:name="com.axelliant.hrms.screens.CheckInListFragment"
-        android:label="Check-In List Fragment"
+        android:label="Expense List Fragment"
         tools:layout="@layout/fragment_check_in_list">
+
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/addExpenseFragment"
+        android:name="com.axelliant.hrms.screens.AddExpenseFragment"
+        android:label="Add Expense Fragment"
+        tools:layout="@layout/fragment_add_expense">
 
     </fragment>
 

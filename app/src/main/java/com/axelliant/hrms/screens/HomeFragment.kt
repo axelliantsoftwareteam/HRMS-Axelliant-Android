@@ -281,7 +281,8 @@ class HomeFragment : BaseFragment() {
             if (loc != null) {
                 setCurrentLocationText()
 
-                if (isCheckIn) {
+                if (isCheckIn)
+                {
 
                     frontAnimation.setTarget(binding?.lyCheckIn)
                     backAnimation.setTarget(binding?.lyCheckOut)
@@ -518,6 +519,10 @@ class HomeFragment : BaseFragment() {
                         "Check IN" -> {
                             showDialog()
                             AppNavigator.navigateToCheckInFragment()
+                        }
+                        "Expense" -> {
+                            showDialog()
+                            AppNavigator.navigateToExpenseFragment()
                         }
 
                         else -> {

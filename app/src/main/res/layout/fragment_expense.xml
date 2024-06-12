@@ -328,6 +328,7 @@
         </LinearLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/add_expense"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="@id/end_guideline"
@@ -337,8 +338,7 @@
             app:backgroundTint="@color/colorApp"
             app:borderWidth="0dp"
             app:elevation="6dp"
-            app:fabSize="normal"
-            >
+            app:fabSize="normal">
 
         </com.google.android.material.floatingactionbutton.FloatingActionButton>
 

@@ -76,6 +76,16 @@ interface ApiInterface {
     ): Call<ResponseBody>
 
 
+
+    @Headers("Content-Type: application/json")
+    @POST("hrms.hr.doctype.employee.expense.get_expense_claim_requests") // my leave detail
+    fun callMyExpenseDetail(
+        @Header("Authorization") auth: String?,
+        @Body attRequest: AttRequest
+    ): Call<ResponseBody>
+
+
+
     @Headers("Content-Type: application/json")
     @POST("hrms.hr.doctype.employee.leaves_mobile.get_leave_application_requests_team") // team leave detail fragment
     fun callTeamLeaveDetail(

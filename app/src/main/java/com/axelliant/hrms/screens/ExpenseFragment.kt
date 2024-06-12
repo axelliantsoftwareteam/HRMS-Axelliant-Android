@@ -8,9 +8,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.axelliant.hrms.R
-import com.axelliant.hrms.Test
 import com.axelliant.hrms.adapter.ExpenseAdapter
-import com.axelliant.hrms.adapter.MyLeaveDetailAdapter
 import com.axelliant.hrms.adapter.SubFilterAdapter
 import com.axelliant.hrms.base.BaseFragment
 import com.axelliant.hrms.callback.AdapterItemClick
@@ -23,11 +21,12 @@ import com.axelliant.hrms.extention.showErrorMsg
 import com.axelliant.hrms.extention.showSuccessMsg
 import com.axelliant.hrms.model.attendance.AttendanceInput
 import com.axelliant.hrms.model.dashboard.FilterModel
+import com.axelliant.hrms.model.expense.Expense
 import com.axelliant.hrms.model.leave.LeaveDetail
 import com.axelliant.hrms.navigation.AppNavigator
 import com.axelliant.hrms.network.ErrorMessages
 import com.axelliant.hrms.utils.Utils
-import com.axelliant.hrms.viewmodel.LeaveViewModel
+import com.axelliant.hrms.viewmodel.ExpenseViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.gson.Gson
 import org.koin.android.ext.android.inject
@@ -47,7 +46,7 @@ class ExpenseFragment : BaseFragment() {
 
 
     private var currentFilter = AttendanceFilter.WEEK
-    private val leaveViewModel: LeaveViewModel by inject()
+    private val expenseViewModel: ExpenseViewModel by inject()
     private var startDateString: String? = null
     private var endDateString: String? = null
     private var filterId = ""
@@ -69,60 +68,59 @@ class ExpenseFragment : BaseFragment() {
         binding?.ivBack?.setOnClickListener {
             previousFragmentNavigation()
         }
-
-        leaveViewModel.getMyLeaveDetail(getCurrentObject())
         eventSelection()
+        expenseViewModel.getMyExpenseDetail(getCurrentObject())
 
-
-        leaveViewModel.myLeaveDetailResponse.observe(
+        expenseViewModel.expenseResponse.observe(
             viewLifecycleOwner,
             EventObserver { response ->
 
-                if (response?.meta?.status == true) {
+                if (response?.meta?.status == true && response.expenses!=null) {
 
-                    dataPopulate(response.leaves)
-                    subFilterPopulations(response.leave_status)
+                    dataPopulate(response.expenses)
+                    subFilterPopulations(response.expense_status)
 
                 } else {
                     requireContext().showErrorMsg(response?.meta?.message.toString())
                 }
 
             })
-
+        binding?.addExpense?.setOnClickListener {
+            AppNavigator.navigateToAddExpenseFragment()
+        }
     }
 
 
-    private fun dataPopulate(leaves: ArrayList<LeaveDetail>?) {
+    private fun dataPopulate(expenseList: ArrayList<Expense>?) {
 
         binding?.rvExpense?.layoutManager = LinearLayoutManager(requireActivity())
-        val weeklyAdapter = MyLeaveDetailAdapter(
-            leaves!!, requireContext(), object : AdapterItemClick {
+        val expenseAdapter = ExpenseAdapter(
+            expenseList!!, requireContext(), object : AdapterItemClick {
                 override fun onItemClick(customObject: Any, position: Int) {
 
-                    val leaveDetail = customObject as LeaveDetail
-                    requireContext().showSuccessMsg(
-                        leaveDetail.leave_reason
-                    )
-                    if (leaveDetail.status == "Open") {
-                        AppNavigator.navigateToRequest(Bundle().apply {
-                            this.putString(AppConst.RequestType, RequestFilter.LEAVE.name)
-                            this.putString(AppConst.LeaveRequestParam, Gson().toJson(leaveDetail))
-                        })
-                    } else {
-                        requireContext().showErrorMsg(
-                            ErrorMessages.OPEN_LEAVES_ONLY.errorString.plus(
-                                leaveDetail.status
-                            )
-                        )
-                    }
+//                    val leaveDetail = customObject as LeaveDetail
+//                    requireContext().showSuccessMsg(
+//                        leaveDetail.leave_reason
+//                    )
+//                    if (leaveDetail.status == "Open") {
+//                        AppNavigator.navigateToRequest(Bundle().apply {
+//                            this.putString(AppConst.RequestType, RequestFilter.LEAVE.name)
+//                            this.putString(AppConst.LeaveRequestParam, Gson().toJson(leaveDetail))
+//                        })
+//                    } else {
+//                        requireContext().showErrorMsg(
+//                            ErrorMessages.OPEN_LEAVES_ONLY.errorString.plus(
+//                                leaveDetail.status
+//                            )
+//                        )
+//                    }
 
 
                 }
 
             }
         )
-        binding?.rvExpense?.adapter = weeklyAdapter
-
+        binding?.rvExpense?.adapter = expenseAdapter
     }
 
     private fun eventSelection() {
@@ -142,19 +140,19 @@ class ExpenseFragment : BaseFragment() {
 
         binding?.tvWeek?.setOnClickListener {
             currentFilter = AttendanceFilter.WEEK
-            leaveViewModel.getMyLeaveDetail(getCurrentObject())
+            expenseViewModel.getMyExpenseDetail(getCurrentObject())
             eventSelection()
         }
         binding?.tvMonth?.setOnClickListener {
             currentFilter = AttendanceFilter.MONTH
-            leaveViewModel.getMyLeaveDetail(getCurrentObject())
+            expenseViewModel.getMyExpenseDetail(getCurrentObject())
             eventSelection()
         }
 
         binding?.tvCustom?.setOnClickListener {
             datePickerDialog()
             currentFilter = AttendanceFilter.Custom
-            leaveViewModel.getMyLeaveDetail(getCurrentObject())
+            expenseViewModel.getMyExpenseDetail(getCurrentObject())
             eventSelection()
         }
 
@@ -246,7 +244,7 @@ class ExpenseFragment : BaseFragment() {
             setDateView()
 
             currentFilter = AttendanceFilter.Custom
-            leaveViewModel.getMyLeaveDetail(getCurrentObject())
+            expenseViewModel.getMyExpenseDetail(getCurrentObject())
             eventSelection()
         }
 
@@ -271,7 +269,7 @@ class ExpenseFragment : BaseFragment() {
                     val filterObject = customObject as FilterModel
 
                     filterId = filterObject.id.toString()
-                    leaveViewModel.getMyLeaveDetail(getCurrentObject())
+                    expenseViewModel.getMyExpenseDetail(getCurrentObject())
                 }
 
             }

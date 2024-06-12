@@ -3,6 +3,7 @@ package com.axelliant.hrms.di
 import com.axelliant.hrms.config.GlobalConfig
 import com.axelliant.hrms.network.ApiHandler
 import com.axelliant.hrms.repos.AttendanceRepo
+import com.axelliant.hrms.repos.ExpenseRepo
 import com.axelliant.hrms.repos.HomeRepo
 import com.axelliant.hrms.repos.LeaveRepo
 import com.axelliant.hrms.repos.LoginRepo
@@ -10,6 +11,7 @@ import com.axelliant.hrms.repos.RequestRepo
 import com.axelliant.hrms.utils.SessionManager
 import com.axelliant.hrms.viewmodel.AttendanceViewModel
 import com.axelliant.hrms.viewmodel.BaseViewModel
+import com.axelliant.hrms.viewmodel.ExpenseViewModel
 import com.axelliant.hrms.viewmodel.HomeViewModel
 import com.axelliant.hrms.viewmodel.LeaveViewModel
 import com.axelliant.hrms.viewmodel.LoginViewModel
@@ -31,6 +33,7 @@ val viewModelModule = module {
     viewModel { HomeViewModel(get()) }
     viewModel { AttendanceViewModel(get()) }
     viewModel { LeaveViewModel(get()) }
+    viewModel { ExpenseViewModel(get()) }
     viewModel { RequestViewModel(get()) }
     viewModel { BaseViewModel() }
 
@@ -41,6 +44,7 @@ val factoryModule = module {
     factory { HomeRepo(get()) }
     factory { AttendanceRepo(get()) }
     factory { LeaveRepo(get()) }
+    factory { ExpenseRepo(get()) }
     factory { RequestRepo(get()) }
 
 }

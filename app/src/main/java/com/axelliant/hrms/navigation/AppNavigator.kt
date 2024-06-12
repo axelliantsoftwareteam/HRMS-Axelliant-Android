@@ -262,6 +262,39 @@ class AppNavigator {
             }
 
         }
+        fun navigateToExpenseFragment(args: Bundle = Bundle()) {
+            Log.i(TAG, "navigateToExpenseFragment: $args")
+            val navAction = NavAction(R.id.expenseFragment)
+            val navOptions = NavOptions.Builder()
+                .setPopUpTo(getCurrentDestinationId()!!, false).build()
+            navAction.navOptions = navOptions
+
+            val destination: NavDestination? = getCurrentDestinationId()?.let {
+                getController().graph.findNode(it)
+            }
+            if (destination != null) {
+                destination.putAction(R.id.expense_fragment_action, navAction)
+                getController().navigate(R.id.expense_fragment_action, args)
+            }
+
+        }
+
+        fun navigateToAddExpenseFragment(args: Bundle = Bundle()) {
+            Log.i(TAG, "navigateToAddExpenseFragment: $args")
+            val navAction = NavAction(R.id.addExpenseFragment)
+            val navOptions = NavOptions.Builder()
+                .setPopUpTo(getCurrentDestinationId()!!, false).build()
+            navAction.navOptions = navOptions
+
+            val destination: NavDestination? = getCurrentDestinationId()?.let {
+                getController().graph.findNode(it)
+            }
+            if (destination != null) {
+                destination.putAction(R.id.add_expense_fragment_action, navAction)
+                getController().navigate(R.id.add_expense_fragment_action, args)
+            }
+
+        }
 
     }
 }
