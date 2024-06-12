@@ -279,7 +279,7 @@
                     style="@style/TEXT_MEDIUM_WHITE_12"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_marginStart="@dimen/_3sdp"
                     android:layout_weight="3.5"
                     android:gravity="start|center"
                     android:text="@string/employe" />

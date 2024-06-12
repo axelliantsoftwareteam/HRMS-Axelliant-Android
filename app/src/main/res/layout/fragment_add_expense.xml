@@ -67,6 +67,7 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:paddingBottom="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_5sdp"
                 android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -81,7 +82,6 @@
                     android:backgroundTint="#DFEBF5"
                     android:gravity="center"
                     android:padding="@dimen/_8sdp"
-                    android:layout_marginTop="@dimen/_5sdp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
@@ -217,6 +217,7 @@
                     android:paddingTop="@dimen/_12sdp"
                     android:paddingBottom="@dimen/_12sdp"
                     android:text="Grand total:"
+                    android:layout_marginStart="@dimen/_5sdp"
                     app:layout_constraintTop_toBottomOf="@+id/rv_attachment_count"
                     app:layout_constraintStart_toStartOf="parent" />
 

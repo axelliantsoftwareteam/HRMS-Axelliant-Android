@@ -24,9 +24,9 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="3.5"
-            android:layout_marginStart="@dimen/_5sdp"
+            android:layout_marginStart="@dimen/_3sdp"
             android:gravity="center"
-            android:text="HR" />
+            tools:text="HR" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_hour"
@@ -34,7 +34,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="3"
-            android:text="2024-06-11" />
+            tools:text="2024-06-11" />
 
         <LinearLayout
             android:id="@+id/tv_custom"
@@ -46,14 +46,14 @@
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/status"
                 style="@style/TEXT_SEMI_BLACK_10"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:gravity="center"
                 android:paddingStart="@dimen/_10sdp"
                 android:paddingTop="@dimen/_5sdp"
                 android:paddingEnd="@dimen/_10sdp"
                 android:paddingBottom="@dimen/_5sdp"
-                android:text="100000"
+                tools:text="100000"
                 android:textColor="@color/colorApp" />
 
         </LinearLayout>
@@ -67,23 +67,24 @@
             android:layout_weight="1"
             android:src="@drawable/ic_down" />
     </LinearLayout>
-
+    <View
+        android:id="@+id/line_div"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_1sdp"
+        android:layout_margin="@dimen/_5sdp"
+        android:background="@color/divider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ly_action_btn" />
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/ly_drop_down"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/_5sdp"
-        app:layout_constraintTop_toBottomOf="@+id/ly_action_btn" >
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/line_div" >
 
-        <View
-            android:id="@+id/line_div"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/_1sdp"
-            android:layout_margin="@dimen/_5sdp"
-            android:background="@color/divider"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_attend_status"
             style="@style/TEXT_SEMI_BLACK_10"
@@ -99,29 +100,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/line_div"
             />
-
-
-        <View
-            android:id="@+id/bottom_divider"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/_1sdp"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:layout_marginBottom="@dimen/_15sdp"
-            android:background="@color/divider"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginEnd="@dimen/_10sdp"
-            app:layout_constraintEnd_toEndOf="@+id/ly_drop_down"
-            app:layout_constraintStart_toStartOf="@+id/ly_drop_down"
-            app:layout_constraintTop_toBottomOf="@+id/tv_attend_status" />
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_leave_count"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/bottom_divider"
+            app:layout_constraintTop_toBottomOf="@+id/tv_attend_status"
             tools:itemCount="2"
+            android:layout_marginTop="@dimen/_5sdp"
             tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             tools:listitem="@layout/my_team_expense_sub_row"
             />

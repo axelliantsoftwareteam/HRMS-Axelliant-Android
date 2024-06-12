@@ -168,4 +168,5 @@
     <string name="attachment">Attachments:</string>
     <string name="remove">Remove</string>
     <string name="add_attach">Attachment</string>
+    <string name="write_descrpt">Write a description</string>
 </resources>

@@ -132,6 +132,7 @@
                     android:layout_marginStart="@dimen/_5sdp"
                     android:layout_marginTop="@dimen/_3sdp"
                     android:hint="@string/date"
+                    android:textSize="@dimen/_8ssp"
                     android:textAlignment="textStart"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -153,32 +154,38 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/ly_time"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="@dimen/_5sdp"
-                android:layout_weight=".33"
-                android:background="@drawable/rounded_leave_filter"
-                android:orientation="vertical"
-                android:padding="@dimen/_8sdp">
 
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/tv_time_txt"
-                    style="@style/TEXT_MEDIUM_BLACK_10"
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_amount"
+                    style="@style/OutlinedTextInputLayoutReason"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_5sdp"
-                    android:layout_marginTop="@dimen/_3sdp"
-                    android:hint="0.0000"
-                    android:textAlignment="textStart"
+                    android:layout_weight=".33"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="@dimen/_5sdp"
+                    android:gravity="start|top"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    >
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_amount"
+                        style="@style/TEXT_MEDIUM_BLACK_10"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="start"
+                        android:textSize="@dimen/_8ssp"
+                        android:inputType="number"
+                        android:maxLines="1"
+                        android:minLines="1"
+                        android:textColorHint="@color/grey"
+                        tools:text="" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
 
 
         </LinearLayout>
@@ -235,7 +242,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start|top"
-                    android:hint="@string/write_reason"
+                    android:hint="@string/write_descrpt"
                     android:inputType="textMultiLine"
                     android:maxLines="3"
                     android:minLines="1"
