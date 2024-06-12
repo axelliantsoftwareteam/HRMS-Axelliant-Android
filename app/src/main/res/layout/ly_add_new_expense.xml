@@ -258,7 +258,6 @@
             android:background="@color/divider"
             android:layout_marginStart="@dimen/_10sdp"
             android:layout_marginEnd="@dimen/_10sdp"
-            app:top="@+id/ly_descrpt"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ly_descrpt" />
 
