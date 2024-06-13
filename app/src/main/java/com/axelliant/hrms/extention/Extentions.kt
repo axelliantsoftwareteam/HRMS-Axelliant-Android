@@ -19,6 +19,8 @@ fun String?.valueQualifier():String {
         return "--"
     else if(this == "")
         return "--"
+    else if(this == "null")
+        return "--"
     else
         return this
 }

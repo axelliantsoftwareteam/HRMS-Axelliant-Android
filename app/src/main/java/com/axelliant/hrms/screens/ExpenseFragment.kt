@@ -32,19 +32,11 @@ import com.google.gson.Gson
 import org.koin.android.ext.android.inject
 import java.util.Date
 
-enum class ExpenseEvents {
-    Pending,
-    Approved
-}
-
 
 class ExpenseFragment : BaseFragment() {
-    private var expenseEvent = ExpenseEvents.Pending
 
     private var _binding: FragmentExpenseBinding? = null
     private val binding get() = _binding
-
-
     private var currentFilter = AttendanceFilter.WEEK
     private val expenseViewModel: ExpenseViewModel by inject()
     private var startDateString: String? = null

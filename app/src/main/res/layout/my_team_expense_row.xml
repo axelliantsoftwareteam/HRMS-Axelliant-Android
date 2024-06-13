@@ -19,45 +19,37 @@
         android:weightSum="10">
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv_date"
-            style="@style/TEXT_MEDIUM_BLACK_10"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="3.5"
-            android:layout_marginStart="@dimen/_3sdp"
-            android:gravity="center"
-            tools:text="HR" />
-
-        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_hour"
             style="@style/TEXT_MEDIUM_BLACK_10"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="3"
+            android:layout_weight="3.5"
+            android:paddingStart="@dimen/_3sdp"
+            android:textAlignment="textStart"
             tools:text="2024-06-11" />
 
-        <LinearLayout
-            android:id="@+id/tv_custom"
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/status"
+            style="@style/TEXT_SEMI_BLACK_10"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:paddingStart="@dimen/_1sdp"
+
             android:layout_weight="2.5"
-            android:gravity="center">
+            android:gravity="center"
+            tools:text="100000"
+            android:textColor="@color/colorApp" />
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/status"
-                style="@style/TEXT_SEMI_BLACK_10"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:paddingStart="@dimen/_10sdp"
-                android:paddingTop="@dimen/_5sdp"
-                android:paddingEnd="@dimen/_10sdp"
-                android:paddingBottom="@dimen/_5sdp"
-                tools:text="100000"
-                android:textColor="@color/colorApp" />
-
-        </LinearLayout>
-
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_date"
+            style="@style/TEXT_MEDIUM_BLACK_10"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:paddingStart="@dimen/_1sdp"
+            android:gravity="center"
+            android:textColor="@color/green"
+            tools:text="200" />
 
         <ImageView
             android:id="@+id/ic_drop_down"
@@ -95,10 +87,10 @@
             android:padding="@dimen/_5sdp"
             android:layout_marginTop="@dimen/_5sdp"
             android:text="Approved"
+            app:layout_constraintTop_toTopOf="parent"
             android:textColor="@color/green"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/line_div"
             />
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_leave_count"

@@ -60,7 +60,7 @@
             android:gravity="start"
             android:text="@string/expense_date"
             android:textAllCaps="true"
-            app:layout_constraintEnd_toEndOf="@+id/divider"
+            app:layout_constraintEnd_toStartOf="@+id/tv_amount"
             app:layout_constraintStart_toEndOf="@+id/tv_from_date"
             app:layout_constraintTop_toTopOf="@+id/tv_from_date" />
 
@@ -73,31 +73,33 @@
             android:background="@drawable/rounded_disabled"
             android:gravity="start"
             android:text="2024-06-11"
-            app:layout_constraintEnd_toEndOf="@+id/divider"
-            app:layout_constraintStart_toStartOf="@+id/tv_to_date"
+            app:layout_constraintEnd_toStartOf="@+id/tv_amount_txt"
+            app:layout_constraintStart_toEndOf="@+id/tv_from_date_txt"
             app:layout_constraintTop_toBottomOf="@+id/tv_to_date" />
+
+
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_amount"
             style="@style/TEXT_MEDIUM_GREY_10"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_5sdp"
             android:text="@string/amount"
             android:gravity="start"
             android:textAllCaps="true"
             app:layout_constraintEnd_toEndOf="@+id/divider"
-            app:layout_constraintStart_toStartOf="@+id/divider"
-            app:layout_constraintTop_toBottomOf="@id/tv_to_date_txt" />
+            app:layout_constraintStart_toEndOf="@+id/tv_to_date"
+            app:layout_constraintTop_toTopOf="@+id/tv_from_date"  />
+
+
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_amount_txt"
             style="@style/TEXT_MEDIUM_BLACK_10"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_5sdp"
             android:background="@drawable/rounded_disabled"
             android:gravity="start|center"
             app:layout_constraintEnd_toEndOf="@+id/divider"
-            app:layout_constraintStart_toStartOf="@+id/tv_amount"
+            app:layout_constraintStart_toEndOf="@+id/tv_to_date_txt"
             app:layout_constraintTop_toBottomOf="@+id/tv_amount"
             tools:text="10000" />
 
@@ -127,6 +129,9 @@
             app:layout_constraintStart_toStartOf="@+id/tv_reason"
             app:layout_constraintTop_toBottomOf="@+id/tv_reason"
             tools:text="I am not feeling well because i am having fever and stomach issues" />
+
+
+
         <View
             android:id="@+id/btn_divider"
             android:layout_width="0dp"

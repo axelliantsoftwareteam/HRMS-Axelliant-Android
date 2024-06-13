@@ -70,9 +70,13 @@ class ExpenseAdapter(
 //                    binding.tvDelete.visibility = View.GONE
 //                }
 //            }
-            binding.tvDate.text = item.name.valueQualifier()
+            binding.tvDate.text = item.total_amount_reimbursed.toString()
             binding.status.text = item.grand_total.toString().valueQualifier()
             binding.tvHour.text = item.posting_date.valueQualifier()
+            if (item.approval_status == "Draft")
+                binding.tvAttendStatus.text = "Pending"
+            else
+                binding.tvAttendStatus.text = item.approval_status.valueQualifier()
 //            binding.profileImg.setUrlImage(item.image, mContext)
 
         }
