@@ -7,47 +7,25 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_5sdp"
-        android:padding="@dimen/_5sdp"
-        android:background="@drawable/rounded_leave_filter">
+        android:background="@drawable/rounded_leave_filter"
+        android:padding="@dimen/_5sdp">
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv_delete"
-            style="@style/TEXT_SEMI_BLACK_10"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/rounded_time_bg"
-            android:backgroundTint="@color/color_third"
-            android:gravity="start|center"
-            android:padding="@dimen/_3sdp"
-            android:paddingEnd="@dimen/_5sdp"
-            android:layout_marginEnd="@dimen/_5sdp"
-            android:drawablePadding="@dimen/_3sdp"
-            android:layout_marginTop="@dimen/_5sdp"
-            android:drawableStart="@drawable/icon_delete"
-            android:drawableTint="@color/white"
-            android:text="@string/remove"
-            android:textColor="@color/white"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-
-            />
         <LinearLayout
             android:id="@+id/ll_date"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:orientation="horizontal"
-            android:weightSum="1"
             android:layout_marginTop="@dimen/_5sdp"
-            app:layout_constraintTop_toBottomOf="@id/tv_delete"
-            app:layout_constraintStart_toStartOf="parent">
+            android:orientation="horizontal"
+            android:weightSum="10"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_attend_type"
                 style="@style/TEXT_MEDIUM_BLACK_10"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_5sdp"
-                android:layout_weight=".34"
+                android:layout_weight="3"
                 android:text="@string/expense_type"
                 android:textAlignment="textStart"
                 app:layout_constraintStart_toStartOf="parent"
@@ -59,8 +37,8 @@
                 style="@style/TEXT_MEDIUM_BLACK_10"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_5sdp"
-                android:layout_weight=".33"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_weight="3"
                 android:text="@string/due_date"
                 android:textAlignment="textStart" />
 
@@ -69,10 +47,32 @@
                 style="@style/TEXT_MEDIUM_BLACK_10"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_5sdp"
-                android:layout_weight=".33"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_weight="3"
                 android:text="@string/amount"
                 android:textAlignment="textStart" />
+
+
+            <LinearLayout
+                android:id="@+id/tv_delete"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <ImageView
+
+                    android:id="@+id/iv_delete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icon_delete"
+                    app:tint="@color/color_third"
+
+                    >
+
+                </ImageView>
+            </LinearLayout>
+
 
         </LinearLayout>
 
@@ -80,11 +80,10 @@
         <LinearLayout
             android:id="@+id/ll_dd"
             android:layout_width="0dp"
-            android:layout_height="@dimen/_40sdp"
-            android:baselineAligned="false"
+            android:layout_height="@dimen/_35sdp"
             android:orientation="horizontal"
 
-            android:weightSum="1"
+            android:weightSum="10"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/ll_date"
             app:layout_constraintTop_toBottomOf="@+id/ll_date">
@@ -92,11 +91,10 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/ly_attend_type"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight=".34"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
                 android:background="@drawable/rounded_leave_filter"
-                android:orientation="vertical"
-                android:padding="@dimen/_5sdp">
+                android:orientation="vertical">
 
 
                 <Spinner
@@ -118,12 +116,11 @@
                 android:id="@+id/ly_date"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginEnd="@dimen/_5sdp"
                 android:layout_marginStart="@dimen/_5sdp"
-                android:layout_weight=".33"
+                android:layout_weight="3"
                 android:background="@drawable/rounded_leave_filter"
                 android:orientation="vertical"
-                android:padding="@dimen/_8sdp">
+                android:paddingStart="@dimen/_2sdp">
 
 
                 <com.google.android.material.textview.MaterialTextView
@@ -131,13 +128,11 @@
                     style="@style/TEXT_MEDIUM_BLACK_10"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_5sdp"
-                    android:layout_marginTop="@dimen/_3sdp"
                     android:hint="@string/date"
-                    android:textSize="@dimen/_8ssp"
+                    android:paddingStart="@dimen/_2sdp"
                     android:textAlignment="textStart"
+                    android:textSize="@dimen/_7ssp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/img_date_cal"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -145,8 +140,7 @@
                     android:id="@+id/img_date_cal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_3sdp"
-                    android:layout_marginEnd="@dimen/_5sdp"
+                    android:paddingStart="@dimen/_3sdp"
                     android:src="@drawable/ic_calendar"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -156,83 +150,66 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_amount"
+                style="@style/OutlinedTextInputLayoutReason"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_weight="3"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/til_amount"
-                    style="@style/OutlinedTextInputLayoutReason"
-                    android:layout_width="0dp"
-                    android:layout_weight=".33"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_amount"
+                    style="@style/TEXT_MEDIUM_BLACK_10"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginEnd="@dimen/_5sdp"
-                    android:gravity="start|top"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    >
+                    android:hint="@string/amount"
+                    android:inputType="numberDecimal"
+                    android:maxLines="1"
+                    android:minLines="1"
+                    android:singleLine="true"
+                    android:textColorHint="@color/grey"
+                    android:textSize="@dimen/_7ssp"
+                    tools:text="" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/et_amount"
-                        style="@style/TEXT_MEDIUM_BLACK_10"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="start"
-                        android:textSize="@dimen/_8ssp"
-                        android:inputType="number"
-                        android:maxLines="1"
-                        android:minLines="1"
-                        android:textColorHint="@color/grey"
-                        tools:text="" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
+            </com.google.android.material.textfield.TextInputLayout>
 
 
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/ly_header"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="1"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/_10sdp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ll_dd">
 
+
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_attend_reason_header"
                 style="@style/TEXT_MEDIUM_BLACK_10"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_5sdp"
-                android:layout_weight=".5"
                 android:gravity="start|center"
                 android:text="@string/description" />
-
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/ly_descrpt"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ly_header">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_attendance_reason"
                 style="@style/OutlinedTextInputLayoutReason"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
                 android:layout_marginTop="@dimen/_2sdp"
                 android:layout_marginEnd="@dimen/_5sdp"
                 android:layout_weight="1"
+
                 android:gravity="start|top"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/tv_attend_reason_header"
@@ -247,7 +224,7 @@
                     android:hint="@string/write_descrpt"
                     android:inputType="textMultiLine"
                     android:maxLines="3"
-                    android:minLines="1"
+                    android:minLines="2"
                     android:singleLine="false"
                     android:textColorHint="@color/grey"
                     tools:text="" />
@@ -256,21 +233,6 @@
 
 
         </LinearLayout>
-
-
-        <View
-            android:id="@+id/bottom_divider"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/_1sdp"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:layout_marginBottom="@dimen/_15sdp"
-            android:background="@color/divider"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginEnd="@dimen/_10sdp"
-            android:visibility="gone"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ly_descrpt" />
-
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

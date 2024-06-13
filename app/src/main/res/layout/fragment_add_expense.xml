@@ -48,187 +48,182 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/top_guideline" />
 
-        <androidx.core.widget.NestedScrollView
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/ly_attend_header"
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginBottom="@dimen/_5sdp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_rectengle"
+            android:backgroundTint="#DFEBF5"
+            android:gravity="center"
+            android:padding="@dimen/_8sdp"
+            app:layout_constraintEnd_toStartOf="@+id/end_guideline"
+            app:layout_constraintStart_toEndOf="@+id/start_guideline"
+            app:layout_constraintTop_toBottomOf="@+id/iv_back"
+            >
+
+            <ImageView
+                android:id="@+id/iv_attend_today"
+                style="@style/TEXT_REGULAR_WHITE_10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_3sdp"
+                android:background="@drawable/circle_no_bg"
+                android:backgroundTint="@color/white"
+                android:padding="@dimen/_5sdp"
+                android:src="@drawable/ic_create_expense"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription" />
+
+            <com.google.android.material.textview.MaterialTextView
+                style="@style/TEXT_MEDIUM_BLACK_10"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:gravity="start|center"
+                android:text="@string/create_expense_claim"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/iv_attend_today"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/ly_actual_out_details"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_5sdp"
-
-            android:orientation="vertical"
-            app:layout_constraintBottom_toTopOf="@id/btn_apply"
-            app:layout_constraintEnd_toEndOf="@+id/end_guideline"
-            app:layout_constraintStart_toStartOf="@+id/start_guideline"
-            app:layout_constraintTop_toBottomOf="@+id/iv_back">
-
+            app:layout_constraintEnd_toStartOf="@+id/end_guideline"
+            app:layout_constraintStart_toEndOf="@+id/start_guideline"
+            app:layout_constraintTop_toBottomOf="@id/ly_attend_header">
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/ly_create_attend"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:paddingBottom="@dimen/_10sdp"
-
-                android:visibility="visible"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:id="@+id/ly_actual_out"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/_5sdp"
+                android:layout_margin="@dimen/_5sdp"
+                android:background="@drawable/rounded_leave_filter"
+                app:layout_constraintEnd_toStartOf="@+id/ly_expected_out"
+                app:layout_constraintHorizontal_weight="5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/ly_attend_header"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/rounded_rectengle"
-                    android:backgroundTint="#DFEBF5"
-                    android:gravity="center"
-                    android:padding="@dimen/_8sdp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <ImageView
-                        android:id="@+id/iv_attend_today"
-                        style="@style/TEXT_REGULAR_WHITE_10"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_3sdp"
-                        android:background="@drawable/circle_no_bg"
-                        android:backgroundTint="@color/white"
-                        android:padding="@dimen/_5sdp"
-                        android:src="@drawable/ic_create_expense"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:ignore="ContentDescription" />
-
-                    <com.google.android.material.textview.MaterialTextView
-                        style="@style/TEXT_MEDIUM_BLACK_10"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="@dimen/_5sdp"
-                        android:gravity="start|center"
-                        android:text="@string/create_expense_claim"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/tv_add_new"
-                        app:layout_constraintStart_toEndOf="@+id/iv_attend_today"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/tv_add_new"
-                        style="@style/TEXT_SEMI_BLACK_10"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/rounded_time_bg"
-                        android:backgroundTint="@color/colorApp"
-                        android:gravity="start|center"
-                        android:padding="@dimen/_3sdp"
-                        android:paddingEnd="@dimen/_5sdp"
-                        android:drawableStart="@drawable/plus"
-                        android:text="@string/add_expense"
-                        android:textColor="@color/white"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_leave_count"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/ly_attend_header"
-                    tools:itemCount="2"
-                    tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                    tools:listitem="@layout/ly_add_new_expense"
-                    />
-
-
-
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/tv_attach"
-                    style="@style/TEXT_MEDIUM_BLACK_10"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="@dimen/_5sdp"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:gravity="start|center"
-                    android:text="@string/attachment"
-                    app:layout_constraintTop_toBottomOf="@+id/rv_leave_count"
-                    app:layout_constraintTop_toTopOf="@+id/tv_delete"
-                    app:layout_constraintBottom_toBottomOf="@+id/tv_delete"
-                    app:layout_constraintStart_toStartOf="parent" />
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/tv_delete"
+                    android:id="@+id/tv_actual_out"
                     style="@style/TEXT_SEMI_BLACK_10"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/rounded_time_bg"
-                    android:backgroundTint="@color/colorApp"
-                    android:gravity="start|center"
-                    android:padding="@dimen/_3sdp"
-                    android:layout_marginStart="@dimen/_3sdp"
-                    android:layout_marginEnd="@dimen/_5sdp"
-                    android:drawablePadding="@dimen/_3sdp"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:paddingEnd="@dimen/_5sdp"
-                    android:drawableStart="@drawable/plus"
-                    android:drawableTint="@color/white"
-                    android:text="@string/add_attach"
-                    android:textColor="@color/white"
-                    app:layout_constraintStart_toEndOf="@+id/tv_attach"
-                    app:layout_constraintTop_toBottomOf="@+id/rv_leave_count"
+                    android:text="@string/grand_total"
 
-                    />
-
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_attachment_count"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_5sdp"
+                    android:textAllCaps="true"
+                    android:gravity="center"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_delete"
-                    tools:spanCount="3"
-                    tools:itemCount="6"
-                    tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                    tools:listitem="@layout/attachment_count_row"
-                    />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tv_amount"
-                    style="@style/TEXT_SEMI_BLACK_12"
+                    style="@style/TEXT_MEDIUM_BLACK_10"
                     android:layout_width="wrap_content"
-                    android:paddingTop="@dimen/_12sdp"
-                    android:paddingBottom="@dimen/_12sdp"
-                    tools:text="1200.00"
-                    android:layout_marginStart="@dimen/_5sdp"
-                    app:layout_constraintTop_toTopOf="@+id/tv_amount_title"
-                    app:layout_constraintBottom_toBottomOf="@+id/tv_amount_title"
-                    app:layout_constraintStart_toEndOf="@+id/tv_amount_title"
-                    />
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:background="@drawable/rounded_disabled"
+                    android:text="00"
+                    android:textAllCaps="true"
+
+                    android:gravity="center"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_actual_out" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/ly_expected_out"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_leave_filter"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:padding="@dimen/_5sdp"
+                android:layout_margin="@dimen/_5sdp"
+                app:layout_constraintHorizontal_weight="5"
+                app:layout_constraintStart_toEndOf="@+id/ly_actual_out"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/tv_amount_title"
-                    style="@style/TEXT_SEMI_BLACK_12"
+                    android:id="@+id/tv_expected_out"
+                    style="@style/TEXT_SEMI_BLACK_10"
                     android:layout_width="wrap_content"
-                    android:paddingTop="@dimen/_12sdp"
-                    android:paddingBottom="@dimen/_12sdp"
-                    android:text="Grand total:"
-                    android:layout_marginStart="@dimen/_5sdp"
-                    app:layout_constraintTop_toBottomOf="@+id/rv_attachment_count"
-                    app:layout_constraintStart_toStartOf="parent" />
+                    android:layout_height="wrap_content"
+                    android:text="@string/posting_date"
+                    android:textAllCaps="true"
+
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_date"
+                    style="@style/TEXT_MEDIUM_BLACK_10"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:background="@drawable/rounded_disabled"
+                    tools:text="12-11-2023"
+                    android:textAllCaps="true"
+
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_expected_out" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-        </androidx.core.widget.NestedScrollView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <com.axelliant.hrms.components.RoundedButton
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_leave_count"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/_10sdp"
+            app:layout_constraintEnd_toStartOf="@+id/end_guideline"
+            app:layout_constraintStart_toEndOf="@+id/start_guideline"
+            app:layout_constraintTop_toBottomOf="@+id/ly_actual_out_details"
+            app:layout_constraintBottom_toTopOf="@+id/btn_apply"
+            tools:itemCount="2"
+            tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            tools:listitem="@layout/ly_add_new_expense"
+            />
+
+
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/tv_add_new"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintBottom_toTopOf="@+id/btn_apply"
+            android:layout_marginBottom="@dimen/_20sdp"
+            app:layout_constraintEnd_toStartOf="@+id/end_guideline"
+            android:src="@drawable/plus"
+            android:tint="@color/white"
+            app:backgroundTint="@color/colorApp"
+            app:borderWidth="0dp"
+            app:elevation="6dp"
+            app:fabSize="normal">
+
+        </com.google.android.material.floatingactionbutton.FloatingActionButton>
+
+        <com.axelliant.hrms.components.RoundedButton
                 android:id="@+id/btn_apply"
                 style="@style/ButtonTextStyle"
                 android:layout_width="0dp"

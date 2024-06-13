@@ -385,6 +385,8 @@ class RequestFragment : BaseFragment() {
                 }
 
             }
+
+            else -> {}
         }
     }
 
@@ -553,6 +555,8 @@ class RequestFragment : BaseFragment() {
                 binding?.lyCreateAttend!!.visibility = View.VISIBLE
                 binding?.lyCreateLeave!!.visibility = View.GONE
             }
+
+            else -> {}
         }
     }
 

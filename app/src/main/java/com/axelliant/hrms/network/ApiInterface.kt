@@ -158,12 +158,15 @@ interface ApiInterface {
         @Body attRequest: LeaveApproval
     ): Call<ResponseBody>
 
+
     @Headers("Content-Type: application/json")
-    @POST("hrms.hr.doctype.employee.leaves_mobile.create_expenses") // leave approval
+    @POST("hrms.hr.doctype.employee.expense.create_expenses") // leave approval
     fun callCreateExp(
         @Header("Authorization") auth: String?,
         @Body createExpense: CreateExpense
     ): Call<ResponseBody>
+
+
 
 
     @Headers("Content-Type: application/json")
@@ -202,5 +205,12 @@ interface ApiInterface {
         @Header("Authorization") auth: String?,
         @Body leaveRequest: LeaveRequest?
     ): Call<ResponseBody>
+
+
+    @Headers("Content-Type: application/json")
+    @GET("hrms.hr.doctype.employee.expense.get_expense_type")  // Leave types for request section
+    fun getExpenseType(@Header("Authorization") auth: String?): Call<ResponseBody>
+
+
 
 }

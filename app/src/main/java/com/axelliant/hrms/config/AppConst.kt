@@ -21,6 +21,11 @@ object AppConst {
     const val SERVER_DATE_FORMAT_ATTENDANCE =  "yyyy-MM-dd"
     const val ATTENDANCE_DATE_FORMAT =  "yyyy-MM-dd HH:mm:ss"
     const val DISPLAY_TIME_FORMAT =  "HH:mm"
+
+    const val ExpenseRequestParam  = "expenseRequest"
+
+
+
     // Define the input format
     val inputFormat = SimpleDateFormat(AppConst.ATTENDANCE_DATE_FORMAT, Locale.getDefault())
 

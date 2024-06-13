@@ -13,7 +13,7 @@ data class Expense(
     val employee: String?=null,
     val employee_name: String?=null,
     val expense_approver: String?=null,
-    val expenses_detail: List<ExpenseX>?=null,
+    val expenses_detail: List<AddExpense>?=null,
     val grand_total: Int?=null,
     val idx: Int?=null,
     val is_paid: Int?=null,

@@ -5,12 +5,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.axelliant.hrms.databinding.MyTeamExpenseSubRowBinding
-import com.axelliant.hrms.extention.setUrlImage
 import com.axelliant.hrms.extention.valueQualifier
-import com.axelliant.hrms.model.expense.ExpenseX
+import com.axelliant.hrms.model.expense.AddExpense
 
 class ExpenseRowAdapter(
-    private val list: List<ExpenseX>,
+    private val list: List<AddExpense>,
     private val mContext: Context
 ) :
     RecyclerView.Adapter<ExpenseRowAdapter.AccountsVH>() {
@@ -37,11 +36,13 @@ class ExpenseRowAdapter(
     class AccountsVH(val binding: MyTeamExpenseSubRowBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: ExpenseX, position: Int, mContext: Context) {
+        fun bind(item: AddExpense, position: Int, mContext: Context) {
 
             binding.tvReasonTxt.text = item.description.toString().valueQualifier()
             binding.tvFromDateTxt.text = item.expense_type.toString()
             binding.tvAmountTxt.text = item.amount.toString()
+            binding.tvToDateTxt.text = item.expense_date.toString()
+
         }
     }
 

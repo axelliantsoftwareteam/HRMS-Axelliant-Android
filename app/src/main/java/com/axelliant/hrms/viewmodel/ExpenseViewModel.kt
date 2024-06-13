@@ -6,7 +6,9 @@ import com.axelliant.hrms.event.Event
 import com.axelliant.hrms.model.attendance.AttendanceInput
 import com.axelliant.hrms.model.expense.AddExpense
 import com.axelliant.hrms.model.expense.CreateExpense
+import com.axelliant.hrms.model.expense.GetExpenseResponse
 import com.axelliant.hrms.model.expense.MyExpenseDetailResponse
+import com.axelliant.hrms.model.leave.GetLeavesResponse
 import com.axelliant.hrms.model.leave.LeaveResponse
 import com.axelliant.hrms.model.leave.MyUpcomingLeaveDetailResponse
 import com.axelliant.hrms.model.leave.PostResponse
@@ -19,6 +21,7 @@ class ExpenseViewModel(private val expenseRepo: ExpenseRepo) : BaseViewModel() {
 
     val postExpenseResponse: MutableLiveData<Event<PostResponse?>> by lazy { MutableLiveData<Event<PostResponse?>>() }
 
+    val expenseTypeResponse: MutableLiveData<Event<GetExpenseResponse?>> by lazy { MutableLiveData<Event<GetExpenseResponse?>>() }
 
     fun getMyExpenseDetail(attendanceInput: AttendanceInput) {
         isLoading.value = Event(true)
@@ -61,4 +64,28 @@ class ExpenseViewModel(private val expenseRepo: ExpenseRepo) : BaseViewModel() {
 
 
     }
+
+    fun getExpenseTypeList() {
+        isLoading.value = Event(true)
+        expenseRepo.getExpenseTypes()
+            .observeForever { data ->
+                // Handle the login response
+                data?.let { baseModel ->
+                    isLoading.value = Event(false)
+                    // Handle success
+                    expenseTypeResponse.value = Event(baseModel.message?.data)
+
+                } ?: run {
+                    isLoading.value = Event(false)
+                    // Handle error
+                    Log.d("Success VieModel->", "false")
+
+
+                }
+            }
+
+
+    }
+
+
 }

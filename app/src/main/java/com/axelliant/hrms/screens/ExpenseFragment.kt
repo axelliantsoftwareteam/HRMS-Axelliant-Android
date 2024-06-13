@@ -21,6 +21,7 @@ import com.axelliant.hrms.extention.showErrorMsg
 import com.axelliant.hrms.extention.showSuccessMsg
 import com.axelliant.hrms.model.attendance.AttendanceInput
 import com.axelliant.hrms.model.dashboard.FilterModel
+import com.axelliant.hrms.model.expense.AddExpense
 import com.axelliant.hrms.model.expense.Expense
 import com.axelliant.hrms.model.leave.LeaveDetail
 import com.axelliant.hrms.navigation.AppNavigator
@@ -57,11 +58,24 @@ class ExpenseFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+        expenseViewModel.getIsLoading()
+            .observe(viewLifecycleOwner, EventObserver { isLoading ->
+                if (isLoading) {
+                    showDialog()
+                } else {
+                    hideDialog()
+                }
+            })
+
+
+
         binding?.ivBack?.setOnClickListener {
             previousFragmentNavigation()
         }
         eventSelection()
         expenseViewModel.getMyExpenseDetail(getCurrentObject())
+
 
         expenseViewModel.expenseResponse.observe(
             viewLifecycleOwner,
@@ -77,6 +91,8 @@ class ExpenseFragment : BaseFragment() {
                 }
 
             })
+
+
         binding?.addExpense?.setOnClickListener {
             AppNavigator.navigateToAddExpenseFragment()
         }
@@ -90,22 +106,18 @@ class ExpenseFragment : BaseFragment() {
             expenseList!!, requireContext(), object : AdapterItemClick {
                 override fun onItemClick(customObject: Any, position: Int) {
 
-//                    val leaveDetail = customObject as LeaveDetail
-//                    requireContext().showSuccessMsg(
-//                        leaveDetail.leave_reason
-//                    )
-//                    if (leaveDetail.status == "Open") {
-//                        AppNavigator.navigateToRequest(Bundle().apply {
-//                            this.putString(AppConst.RequestType, RequestFilter.LEAVE.name)
-//                            this.putString(AppConst.LeaveRequestParam, Gson().toJson(leaveDetail))
-//                        })
-//                    } else {
-//                        requireContext().showErrorMsg(
-//                            ErrorMessages.OPEN_LEAVES_ONLY.errorString.plus(
-//                                leaveDetail.status
-//                            )
-//                        )
-//                    }
+                    val expense = customObject as Expense
+                    if (expense.status == "Draft") {
+                        AppNavigator.navigateToAddExpenseFragment(Bundle().apply {
+                            this.putString(AppConst.ExpenseRequestParam, Gson().toJson(expense.expenses_detail))
+                        })
+                    } else {
+                        requireContext().showErrorMsg(
+                            ErrorMessages.DRAFT_EXPENSE_ONLY.errorString.plus(
+                                expense.approval_status
+                            )
+                        )
+                    }
 
 
                 }

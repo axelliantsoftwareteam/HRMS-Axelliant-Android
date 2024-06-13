@@ -10,7 +10,9 @@ import com.axelliant.hrms.model.base.BaseApiModel
 import com.axelliant.hrms.model.base.BaseModel
 import com.axelliant.hrms.model.base.Meta
 import com.axelliant.hrms.model.expense.CreateExpense
+import com.axelliant.hrms.model.expense.GetExpenseResponse
 import com.axelliant.hrms.model.expense.MyExpenseDetailResponse
+import com.axelliant.hrms.model.leave.GetLeavesResponse
 import com.axelliant.hrms.model.leave.LeaveApproval
 import com.axelliant.hrms.model.leave.MyUpcomingLeaveDetailResponse
 import com.axelliant.hrms.model.leave.PostResponse
@@ -133,5 +135,42 @@ class ExpenseRepo(private var apiInterface: ApiInterface) {
     }
 
 
+    fun getExpenseTypes(): MutableLiveData<BaseApiModel<GetExpenseResponse>> {
+        val serverResponse = MutableLiveData<BaseApiModel<GetExpenseResponse>>()
+
+        val call: Call<ResponseBody>  = apiInterface.getExpenseType("token ${AppConst.TOKEN}")
+
+        Log.e("HTTP Request", " " + call?.request().toString())
+
+        call.enqueue(object : BaseCallBack<ResponseBody>(call) {
+            override fun onFinalSuccess(
+                call: Call<ResponseBody>,
+                response: Response<ResponseBody>
+            ) {
+
+                Log.e("API success", " " + response.body())
+
+                val type: Type = object : TypeToken<BaseApiModel<GetExpenseResponse>>() {}.type
+                val jsonString = response.body()?.string()
+                val userModel = Gson().fromJson<BaseApiModel<GetExpenseResponse>>(jsonString, type)
+                serverResponse.value = userModel
+            }
+
+
+            override fun onFinalFailure(
+                errorString: String?
+            ) {
+
+                Log.e("API Failure", " $errorString")
+
+                serverResponse.value =
+                    BaseApiModel(BaseModel(GetExpenseResponse(meta = Meta(errorString.toString(), false))))
+
+            }
+
+        })
+
+        return serverResponse
+    }
 
 }
