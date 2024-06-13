@@ -34,6 +34,7 @@ import com.axelliant.hrms.navigation.AppNavigator
 import com.axelliant.hrms.utils.Utils
 import com.axelliant.hrms.utils.Utils.getRandomString
 import com.axelliant.hrms.viewmodel.AttendanceViewModel
+import com.axelliant.hrms.viewmodel.ExpenseViewModel
 import com.axelliant.hrms.viewmodel.LeaveViewModel
 import org.koin.android.ext.android.inject
 import kotlin.random.Random
@@ -49,6 +50,7 @@ class ApprovalsFragment : BaseFragment() {
     private var currentFilter = RequestFilter.LEAVE
     private val attendanceViewModel: AttendanceViewModel by inject()
     private val leaveViewModel: LeaveViewModel by inject()
+    private val expenseViewModel: ExpenseViewModel by inject()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -72,6 +74,14 @@ class ApprovalsFragment : BaseFragment() {
             })
 
         leaveViewModel.getIsLoading()
+            .observe(viewLifecycleOwner, EventObserver { isLoading ->
+                if (isLoading) {
+                    showDialog()
+                } else {
+                    hideDialog()
+                }
+            })
+        expenseViewModel.getIsLoading()
             .observe(viewLifecycleOwner, EventObserver { isLoading ->
                 if (isLoading) {
                     showDialog()
@@ -178,6 +188,14 @@ class ApprovalsFragment : BaseFragment() {
             eventSelection()
         }
 
+        binding.tvExpense.setOnClickListener {
+            currentFilter = RequestFilter.APPROVAL
+            attendanceViewModel.getAttendanceApproval(getCurrentObject())
+            binding.tvTeamMember?.text = "Attendance Requests"
+
+            eventSelection()
+        }
+
 
         when (currentFilter) {
             RequestFilter.LEAVE -> {
@@ -192,6 +210,12 @@ class ApprovalsFragment : BaseFragment() {
                 binding.tvMonth.background =
                     ContextCompat.getDrawable(requireContext(), R.drawable.rounded_enabled)
                 binding.tvMonth.setTextColor(requireContext().getColor(R.color.white))
+            }
+            RequestFilter.APPROVAL -> {
+
+                binding.tvExpense.background =
+                    ContextCompat.getDrawable(requireContext(), R.drawable.rounded_enabled)
+                binding.tvExpense.setTextColor(requireContext().getColor(R.color.white))
             }
 
 
@@ -234,8 +258,9 @@ class ApprovalsFragment : BaseFragment() {
                     RequestFilter.ATTENDANCE -> attendanceViewModel.getAttendanceApproval(
                         getCurrentObject()
                     )
-
-
+                    RequestFilter.APPROVAL -> attendanceViewModel.getAttendanceApproval(
+                        getCurrentObject()
+                    )
                 }
 
             }

@@ -84,8 +84,22 @@
                 android:paddingTop="@dimen/_6sdp"
                 android:paddingBottom="@dimen/_6sdp"
                 android:text="@string/attendance_req"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/tv_expense"
+                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/tv_week" />
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_expense"
+                style="@style/TEXT_REGULAR_BLACK_10"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:background="@drawable/rounded_disabled"
+                android:paddingTop="@dimen/_6sdp"
+                android:paddingBottom="@dimen/_6sdp"
+                android:text="@string/expense_req"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tv_month" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 

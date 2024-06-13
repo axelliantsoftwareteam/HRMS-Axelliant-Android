@@ -46,6 +46,7 @@ class AddExpenseFragment : Fragment(), AddExpenseAdapter.OnUpdateList {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         binding?.btnApply?.setOnClickListener {
             grandTotal=0
             for (addExpense in addExpenseList) {
