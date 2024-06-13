@@ -60,6 +60,13 @@ class AddExpenseAdapter(
         holder.binding.lyDate.setOnClickListener {
             pickDate(position)
         }
+
+        holder.binding.tvDelete.setOnClickListener {
+            list.removeAt(position)
+            notifyItemRemoved(position)
+            notifyItemRangeChanged(position, list.size)
+            onUpdateList.onListUpdated(list) // Notify the fragment
+        }
     }
 
     override fun getItemCount(): Int {

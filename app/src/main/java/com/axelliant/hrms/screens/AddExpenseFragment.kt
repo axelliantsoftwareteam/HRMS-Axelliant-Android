@@ -53,7 +53,6 @@ class AddExpenseFragment : Fragment(), AddExpenseAdapter.OnUpdateList {
                 grandTotal = grandTotal?.plus(addExpense.amount!!)!!
             }
             binding?.tvAmount?.text = grandTotal.toString()
-//            requireContext().showSuccessMsg(addExpenseList[0].expense_date.plus(addExpenseList[0].amount))
         }
 
         binding?.ivBack?.setOnClickListener {

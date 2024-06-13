@@ -1,6 +1,7 @@
 package com.axelliant.hrms.network
 
 import com.axelliant.hrms.model.attendance.AttRequest
+import com.axelliant.hrms.model.expense.CreateExpense
 import com.axelliant.hrms.model.leave.LeaveApproval
 import com.axelliant.hrms.model.leave.UpcomingLeaveInput
 import com.axelliant.hrms.model.leave.UpcomingLeaves
@@ -156,6 +157,14 @@ interface ApiInterface {
         @Header("Authorization") auth: String?,
         @Body attRequest: LeaveApproval
     ): Call<ResponseBody>
+
+    @Headers("Content-Type: application/json")
+    @POST("hrms.hr.doctype.employee.leaves_mobile.create_expenses") // leave approval
+    fun callCreateExp(
+        @Header("Authorization") auth: String?,
+        @Body createExpense: CreateExpense
+    ): Call<ResponseBody>
+
 
     @Headers("Content-Type: application/json")
     @POST("hrms.hr.doctype.employee.checkin.get_checkin_approvals")  // attendance approval
