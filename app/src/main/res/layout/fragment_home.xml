@@ -88,6 +88,7 @@
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:src="@drawable/ic_qr_code"
                 app:tint="@color/black"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@+id/profile_img"
                 app:layout_constraintEnd_toStartOf="@+id/iv_notification"
                 app:layout_constraintTop_toTopOf="@+id/profile_img" />

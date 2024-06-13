@@ -48,7 +48,7 @@ class MainActivity : BaseActivity() {
 
             when (destination.id) {
                 R.id.homeFragment, R.id.profileFragment -> {
-                    bottomNavigation.visibility = View.VISIBLE
+                    bottomNavigation.visibility = View.GONE
                 }
 
                 else -> {
