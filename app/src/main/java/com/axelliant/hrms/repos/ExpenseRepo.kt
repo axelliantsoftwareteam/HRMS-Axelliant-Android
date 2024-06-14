@@ -5,19 +5,16 @@ import androidx.lifecycle.MutableLiveData
 import com.axelliant.hrms.config.AppConst
 import com.axelliant.hrms.model.attendance.AttRequest
 import com.axelliant.hrms.model.attendance.AttendanceInput
-import com.axelliant.hrms.model.leave.LeaveResponse
+import com.axelliant.hrms.model.attendance.expenseApprovalList
 import com.axelliant.hrms.model.base.BaseApiModel
 import com.axelliant.hrms.model.base.BaseModel
 import com.axelliant.hrms.model.base.Meta
 import com.axelliant.hrms.model.expense.CreateExpense
 import com.axelliant.hrms.model.expense.GetExpenseResponse
 import com.axelliant.hrms.model.expense.MyExpenseDetailResponse
-import com.axelliant.hrms.model.leave.GetLeavesResponse
+import com.axelliant.hrms.model.leave.ExpenseApprovalStatus
 import com.axelliant.hrms.model.leave.LeaveApproval
-import com.axelliant.hrms.model.leave.MyUpcomingLeaveDetailResponse
 import com.axelliant.hrms.model.leave.PostResponse
-import com.axelliant.hrms.model.leave.TeamLeaveDetailResponse
-import com.axelliant.hrms.model.leave.UpcomingLeaveInput
 import com.axelliant.hrms.network.ApiInterface
 import com.axelliant.hrms.network.BaseCallBack
 import com.google.gson.Gson
@@ -172,5 +169,117 @@ class ExpenseRepo(private var apiInterface: ApiInterface) {
 
         return serverResponse
     }
+
+    fun expenseListApproval(
+        inputObject: AttendanceInput
+    ): MutableLiveData<BaseApiModel<expenseApprovalList>> {
+        val serverResponse = MutableLiveData<BaseApiModel<expenseApprovalList>>()
+
+        val call = apiInterface.callExpenseApproval(
+            "token ${AppConst.TOKEN}",AttRequest().apply {
+                this.start_date = inputObject.startDate
+                this.end_date = inputObject.endDate
+                this.employee_list = inputObject.employeeId
+            }
+        )
+
+
+
+        Log.e("HTTP Request", " " + call.request().toString())
+
+        call.enqueue(object : BaseCallBack<ResponseBody>(call) {
+            override fun onFinalSuccess(
+                call: Call<ResponseBody>,
+                response: Response<ResponseBody>
+            ) {
+
+                Log.e("API success", " " + response.body())
+
+                val type: Type = object : TypeToken<BaseApiModel<expenseApprovalList>>() {}.type
+                val jsonString = response.body()?.string()
+                val userModel =
+                    Gson().fromJson<BaseApiModel<expenseApprovalList>>(jsonString, type)
+                serverResponse.value = userModel
+            }
+
+
+            override fun onFinalFailure(
+                errorString: String?
+            ) {
+
+                Log.e("API Failure", " $errorString")
+
+                serverResponse.value =
+                    BaseApiModel(
+                        BaseModel(
+                            expenseApprovalList(
+                                meta = Meta(
+                                    errorString.toString(),
+                                    false
+                                )
+                            )
+                        )
+                    )
+
+            }
+
+        })
+
+        return serverResponse
+    }
+
+
+    fun expenseApprovalStatus(
+        inputObject: ExpenseApprovalStatus
+    ): MutableLiveData<BaseApiModel<PostResponse>> {
+        val serverResponse = MutableLiveData<BaseApiModel<PostResponse>>()
+
+        val call = apiInterface.callExpenseApprovalStatus(
+            "token ${AppConst.TOKEN}",inputObject
+        )
+
+        Log.e("HTTP Request", " " + call.request().toString())
+
+        call.enqueue(object : BaseCallBack<ResponseBody>(call) {
+            override fun onFinalSuccess(
+                call: Call<ResponseBody>,
+                response: Response<ResponseBody>
+            ) {
+
+                Log.e("API success", " " + response.body())
+
+                val type: Type = object : TypeToken<BaseApiModel<PostResponse>>() {}.type
+                val jsonString = response.body()?.string()
+                val userModel =
+                    Gson().fromJson<BaseApiModel<PostResponse>>(jsonString, type)
+                serverResponse.value = userModel
+            }
+
+
+            override fun onFinalFailure(
+                errorString: String?
+            ) {
+
+                Log.e("API Failure", " $errorString")
+
+                serverResponse.value =
+                    BaseApiModel(
+                        BaseModel(
+                            PostResponse(
+                                meta = Meta(
+                                    errorString.toString(),
+                                    false
+                                )
+                            )
+                        )
+                    )
+
+            }
+
+        })
+
+        return serverResponse
+    }
+
 
 }

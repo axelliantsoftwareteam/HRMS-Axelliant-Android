@@ -1,0 +1,6 @@
+package com.axelliant.hrms.model.leave
+
+class ExpenseApprovalStatus {
+    var expense_id:String=""
+    var status:String=""
+}

@@ -2,6 +2,7 @@ package com.axelliant.hrms.network
 
 import com.axelliant.hrms.model.attendance.AttRequest
 import com.axelliant.hrms.model.expense.CreateExpense
+import com.axelliant.hrms.model.leave.ExpenseApprovalStatus
 import com.axelliant.hrms.model.leave.LeaveApproval
 import com.axelliant.hrms.model.leave.UpcomingLeaveInput
 import com.axelliant.hrms.model.leave.UpcomingLeaves
@@ -175,11 +176,25 @@ interface ApiInterface {
         @Header("Authorization") auth: String?, @Body attendanceRequest: AttRequest
     ): Call<ResponseBody>
 
+    @Headers("Content-Type: application/json")
+    @POST("hrms.hr.doctype.employee.expense.get_expense_approvals")  // attendance approval
+    fun callExpenseApproval(
+        @Header("Authorization") auth: String?, @Body attendanceRequest: AttRequest
+    ): Call<ResponseBody>
+
+
 
     @Headers("Content-Type: application/json")
     @POST("hrms.hr.doctype.employee.checkin.update_checkin_approval_status")  // attendance approval rejection
     fun callAttendanceApprovalStatus(
         @Header("Authorization") auth: String?, @Body attendanceRequest: LeaveApproval
+    ): Call<ResponseBody>
+
+
+    @Headers("Content-Type: application/json")
+    @POST("hrms.hr.doctype.employee.expense.change_status_of_expense")  // attendance approval rejection
+    fun callExpenseApprovalStatus(
+        @Header("Authorization") auth: String?, @Body attendanceRequest: ExpenseApprovalStatus
     ): Call<ResponseBody>
 
 

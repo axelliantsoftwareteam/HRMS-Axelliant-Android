@@ -1,43 +1,35 @@
 package com.axelliant.hrms.screens
 
 import android.os.Bundle
-import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.axelliant.hrms.R
 import com.axelliant.hrms.adapter.ApprovalsDetailAdapter
+import com.axelliant.hrms.adapter.ExpenseApprovalsDetailAdapter
 import com.axelliant.hrms.adapter.PersonSpinnerAdapter
-import com.axelliant.hrms.adapter.SubFilterAdapter
 import com.axelliant.hrms.adapter.TeamLeaveDetailAdapter
 import com.axelliant.hrms.base.BaseFragment
 import com.axelliant.hrms.callback.AdapterItemClick
-import com.axelliant.hrms.config.AppConst
 import com.axelliant.hrms.config.GlobalConfig
 import com.axelliant.hrms.databinding.FragmentApprovalsBinding
-import com.axelliant.hrms.enums.AttendanceFilter
 import com.axelliant.hrms.enums.RequestFilter
 import com.axelliant.hrms.event.EventObserver
 import com.axelliant.hrms.extention.showErrorMsg
 import com.axelliant.hrms.model.attendance.AttendanceApprovalObject
-import com.axelliant.hrms.model.attendance.AttendanceData
 import com.axelliant.hrms.model.attendance.AttendanceInput
 import com.axelliant.hrms.model.dashboard.EmployProfile
-import com.axelliant.hrms.model.dashboard.FilterModel
+import com.axelliant.hrms.model.expense.Expense
+import com.axelliant.hrms.model.leave.ExpenseApprovalStatus
 import com.axelliant.hrms.model.leave.LeaveApproval
 import com.axelliant.hrms.model.leave.TeamLeaveDetail
-import com.axelliant.hrms.navigation.AppNavigator
-import com.axelliant.hrms.utils.Utils
-import com.axelliant.hrms.utils.Utils.getRandomString
 import com.axelliant.hrms.viewmodel.AttendanceViewModel
 import com.axelliant.hrms.viewmodel.ExpenseViewModel
 import com.axelliant.hrms.viewmodel.LeaveViewModel
 import org.koin.android.ext.android.inject
-import kotlin.random.Random
 
 
 class ApprovalsFragment : BaseFragment() {
@@ -95,6 +87,7 @@ class ApprovalsFragment : BaseFragment() {
         }
 
         spinnerPopulations()
+        binding.rvAttend.visibility=View.VISIBLE
         eventSelection()
 
         leaveViewModel.getTeamLeaveDetail(getCurrentObject())
@@ -160,6 +153,33 @@ class ApprovalsFragment : BaseFragment() {
 
             })
 
+        expenseViewModel.expenseApproval.observe(
+            viewLifecycleOwner,
+            EventObserver { response ->
+
+                if (response?.meta?.status == true) {
+                    // success
+
+                    expenseDataPopulate(response.expenses!!)
+
+
+                } else {
+                    requireContext().showErrorMsg(response?.meta?.message.toString())
+                }
+
+            })
+        expenseViewModel.expenseApprovalResponse.observe(
+            viewLifecycleOwner,
+            EventObserver { response ->
+
+                if (response?.meta?.status == true) {
+                    requireContext().showErrorMsg(response?.status_message)
+                    expenseViewModel.getExpenseApproval(getCurrentObject())
+                } else {
+                    requireContext().showErrorMsg(response?.meta?.message.toString())
+                }
+
+            })
 
     }
 
@@ -169,31 +189,39 @@ class ApprovalsFragment : BaseFragment() {
 
         binding.tvMonth.background =
             ContextCompat.getDrawable(requireContext(), R.drawable.rounded_disabled)
+        binding.tvExpense.background =
+            ContextCompat.getDrawable(requireContext(), R.drawable.rounded_disabled)
 
 
         binding.tvWeek.setTextColor(requireContext().getColor(R.color.btn_text_color))
         binding.tvMonth.setTextColor(requireContext().getColor(R.color.btn_text_color))
+        binding.tvExpense.setTextColor(requireContext().getColor(R.color.btn_text_color))
 
         binding.tvWeek.setOnClickListener {
             currentFilter = RequestFilter.LEAVE
             leaveViewModel.getTeamLeaveDetail(getCurrentObject())
             binding.tvTeamMember?.text = "Leave Requests"
+            binding.rvAttend.visibility=View.VISIBLE
+            binding.rvExpense.visibility=View.GONE
             eventSelection()
         }
         binding.tvMonth.setOnClickListener {
             currentFilter = RequestFilter.ATTENDANCE
             attendanceViewModel.getAttendanceApproval(getCurrentObject())
-            binding.tvTeamMember?.text = "Attendance Requests"
-
+            binding.tvTeamMember?.text = "Check In Requests"
+            binding.rvAttend.visibility=View.VISIBLE
+            binding.rvExpense.visibility=View.GONE
             eventSelection()
         }
 
         binding.tvExpense.setOnClickListener {
             currentFilter = RequestFilter.APPROVAL
-            attendanceViewModel.getAttendanceApproval(getCurrentObject())
-            binding.tvTeamMember?.text = "Attendance Requests"
-
+            expenseViewModel.getExpenseApproval(getCurrentObject())
+            binding.tvTeamMember?.text = "Approval Requests"
+            binding.rvAttend.visibility=View.GONE
+            binding.rvExpense.visibility=View.VISIBLE
             eventSelection()
+
         }
 
 
@@ -328,6 +356,31 @@ class ApprovalsFragment : BaseFragment() {
             }
         )
         binding.rvAttend.adapter = weeklyAdapter
+    }
+
+    private fun expenseDataPopulate(detailArrayList: ArrayList<Expense>) {
+        binding.rvExpense.layoutManager = LinearLayoutManager(requireActivity())
+        val weeklyAdapter = ExpenseApprovalsDetailAdapter(
+            requireContext(), detailArrayList,
+            object : AdapterItemClick {
+                override fun onItemClick(customObject: Any, position: Int) {
+                    val attObject = customObject as Expense
+                    expenseViewModel.expenseApprovalStatus(ExpenseApprovalStatus().apply {
+                        this.expense_id = attObject.name.toString()
+                        this.status = "Approved"
+                    })
+                }
+            }, object : AdapterItemClick {
+                override fun onItemClick(customObject: Any, position: Int) {
+                    val attObject = customObject as Expense
+                    expenseViewModel.expenseApprovalStatus(ExpenseApprovalStatus().apply {
+                        this.expense_id = attObject.name.toString()
+                        this.status = "Rejected"
+                    })
+                }
+            }
+        )
+        binding.rvExpense.adapter = weeklyAdapter
     }
 
 }

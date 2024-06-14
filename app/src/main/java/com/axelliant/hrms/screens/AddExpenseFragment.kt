@@ -68,6 +68,13 @@ class AddExpenseFragment : BaseFragment(), AddExpenseAdapter.OnUpdateList {
 
 
         }
+        if (isUpdate)
+        {
+            binding?.btnApply?.setText("Update")
+        }
+        else{
+            binding?.btnApply?.setText("Create")
+        }
 
         binding?.tvDate?.text = getServerFormat()
 

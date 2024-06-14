@@ -279,8 +279,6 @@ class HomeFragment : BaseFragment() {
             setCurrentLocationText()
 
             if (loc != null) {
-                setCurrentLocationText()
-
                 if (isCheckIn)
                 {
 

@@ -83,7 +83,7 @@
                 android:background="@drawable/rounded_disabled"
                 android:paddingTop="@dimen/_6sdp"
                 android:paddingBottom="@dimen/_6sdp"
-                android:text="@string/attendance_req"
+                android:text="@string/check_in_requests"
                 app:layout_constraintEnd_toStartOf="@+id/tv_expense"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/tv_week" />
@@ -210,9 +210,25 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/ly_header"
                     tools:itemCount="2"
+                    android:visibility="gone"
                     tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:listitem="@layout/my_team_approval_row" />
 
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_expense"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/ly_header"
+                    app:layout_constraintVertical_bias="0.0"
+                    tools:itemCount="2"
+                    tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/my_team_expense_approval_row" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

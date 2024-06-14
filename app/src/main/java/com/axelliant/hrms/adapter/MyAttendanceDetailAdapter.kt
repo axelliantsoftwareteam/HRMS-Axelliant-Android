@@ -9,6 +9,7 @@ import com.axelliant.hrms.Test
 import com.axelliant.hrms.callback.AdapterItemClick
 import com.axelliant.hrms.databinding.MyAttendanceDetailRowBinding
 import com.axelliant.hrms.databinding.SpinnerItemBinding
+import com.axelliant.hrms.enums.LocationFilter
 import com.axelliant.hrms.model.attendance.AttendanceDetail
 
 class MyAttendanceDetailAdapter(
@@ -53,7 +54,6 @@ class MyAttendanceDetailAdapter(
 //            binding.tvTitle.text = item.title.toString()
 
 
-
             if (attendanceDetail.working_hours.toString() == "0")
                 binding.tvHour.text = attendanceDetail.working_hours.toString().plus(" Hr")
             else if (attendanceDetail.working_hours.toString() == "1")
@@ -63,7 +63,7 @@ class MyAttendanceDetailAdapter(
 
              binding.tvDate.text = attendanceDetail.date
                        binding.status.text = attendanceDetail.status
-            binding.tvAttendStatus.text = attendanceDetail.requested
+            binding.tvAttendStatus.text = LocationFilter.OFFICE.value
             binding.tvShiftTxt.text = attendanceDetail.shift
             binding.tvShiftTimeTxt.text = attendanceDetail.shift_timings
             binding.tvActualInTxt.text = attendanceDetail.in_time

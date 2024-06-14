@@ -10,3 +10,4 @@ data class AddExpense(
     var expenseTypeList: ArrayList<SpinnerType> = arrayListOf()
 
 )
+
