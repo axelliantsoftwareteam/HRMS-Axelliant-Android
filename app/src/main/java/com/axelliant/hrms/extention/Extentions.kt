@@ -56,8 +56,8 @@ fun Context.showErrorMsg(message: String?="Error") {
     if (context != null) {
             Glide.with(context)
                 .load(uri) // image url
-                .placeholder(R.drawable.ic_place_holder) // any placeholder to load at start
-                .error(R.drawable.ic_place_holder)  // any image in case of error
+                .placeholder(R.drawable.ic_page) // any placeholder to load at start
+                .error(R.drawable.ic_page)  // any image in case of error
                 .centerCrop()
                 .into(this)
         }
@@ -72,7 +72,7 @@ fun ImageView.setUrlImage(url: String?, context: Context? = null) {
             this.setImageDrawable(
                 AppCompatResources.getDrawable(
                     context,
-                    R.drawable.ic_place_holder
+                    R.drawable.ic_page
                 )
             )
 //            this.setImageDrawable(context?.getDrawable(R.drawable.ic_place_holder))
@@ -85,15 +85,15 @@ fun ImageView.setUrlImage(url: String?, context: Context? = null) {
     if (context != null) {
         Glide.with(context)
             .load(url) // image url
-            .placeholder(R.drawable.ic_place_holder) // any placeholder to load at start
-            .error(R.drawable.ic_place_holder)  // any image in case of error
+            .placeholder(R.drawable.ic_page) // any placeholder to load at start
+            .error(R.drawable.ic_page)  // any image in case of error
             .centerCrop()
             .into(this)
     } else {
         Glide.with(this)
             .load(url) // image url
-            .placeholder(R.drawable.ic_place_holder) // any placeholder to load at start
-            .error(R.drawable.ic_place_holder)  // any image in case of error
+            .placeholder(R.drawable.ic_page) // any placeholder to load at start
+            .error(R.drawable.ic_page)  // any image in case of error
             .centerCrop()
             .into(this)
     }
