@@ -1,6 +1,8 @@
 package com.axelliant.hrms.extention
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.net.Uri
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
@@ -46,6 +48,19 @@ fun Context.showSuccessMsg(message: String? = "Feature in progress") {
 
 fun Context.showErrorMsg(message: String?="Error") {
     Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+}
+
+@SuppressLint("CheckResult")
+ fun ImageView.setLocalImage(uri: Uri,context: Context?) {
+
+    if (context != null) {
+            Glide.with(context)
+                .load(uri) // image url
+                .placeholder(R.drawable.ic_place_holder) // any placeholder to load at start
+                .error(R.drawable.ic_place_holder)  // any image in case of error
+                .centerCrop()
+                .into(this)
+        }
 }
 
 fun ImageView.setUrlImage(url: String?, context: Context? = null) {

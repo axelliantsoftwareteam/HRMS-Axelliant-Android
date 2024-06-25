@@ -90,8 +90,40 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
 
+            <ImageView
+                android:id="@+id/iv_attachments"
+                style="@style/TEXT_REGULAR_WHITE_10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/_3sdp"
+                android:background="@drawable/circle_no_bg"
+                android:backgroundTint="@color/white"
+                android:padding="@dimen/_5sdp"
+                android:src="@drawable/iv_attach_file"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription" />
+
+
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+
+        <androidx.recyclerview.widget.RecyclerView
+            app:layout_constraintTop_toBottomOf="@+id/ly_attend_header"
+            android:id="@+id/rv_attachments"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:spanCount="3"
+            tools:itemCount="6"
+            app:layout_constraintStart_toStartOf="@+id/start_guideline"
+            app:layout_constraintEnd_toEndOf="@+id/end_guideline"
+            tools:listitem="@layout/attachment_row"
+            >
+
+        </androidx.recyclerview.widget.RecyclerView>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/ly_actual_out_details"
@@ -100,7 +132,7 @@
             android:layout_marginTop="@dimen/_5sdp"
             app:layout_constraintEnd_toStartOf="@+id/end_guideline"
             app:layout_constraintStart_toEndOf="@+id/start_guideline"
-            app:layout_constraintTop_toBottomOf="@id/ly_attend_header">
+            app:layout_constraintTop_toBottomOf="@id/rv_attachments">
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -198,10 +230,20 @@
             app:layout_constraintEnd_toStartOf="@+id/end_guideline"
             app:layout_constraintStart_toEndOf="@+id/start_guideline"
             app:layout_constraintTop_toBottomOf="@+id/ly_actual_out_details"
-            app:layout_constraintBottom_toTopOf="@+id/btn_apply"
+            app:layout_constraintBottom_toTopOf="@+id/spacer"
             tools:itemCount="2"
             tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             tools:listitem="@layout/ly_add_new_expense"
+
+            />
+
+        <View
+            app:layout_constraintTop_toBottomOf="@+id/rv_leave_count"
+            android:id="@+id/spacer"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_20sdp"
+            app:layout_constraintBottom_toTopOf="@+id/btn_apply"
+
             />
 
 

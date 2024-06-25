@@ -14,6 +14,7 @@ data class Expense(
     val employee_name: String?=null,
     val expense_approver: String?=null,
     val expenses_detail: List<AddExpense>?=null,
+    val attachments: List<Attachments>?=null,
     val grand_total: Int?=null,
     val idx: Int?=null,
     val is_paid: Int?=null,

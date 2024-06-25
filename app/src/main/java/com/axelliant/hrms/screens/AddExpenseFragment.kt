@@ -1,13 +1,26 @@
 package com.axelliant.hrms.screens
 
-import android.R.attr.data
+import android.Manifest
+import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
+import android.database.Cursor
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.provider.DocumentsContract
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.axelliant.hrms.adapter.AddExpenseAdapter
+import com.axelliant.hrms.adapter.AttachmentsAdapter
 import com.axelliant.hrms.adapter.expenseType
 import com.axelliant.hrms.base.BaseFragment
 import com.axelliant.hrms.callback.AdapterItemClick
@@ -16,21 +29,41 @@ import com.axelliant.hrms.databinding.FragmentAddExpenseBinding
 import com.axelliant.hrms.event.EventObserver
 import com.axelliant.hrms.extention.showErrorMsg
 import com.axelliant.hrms.extention.showSuccessMsg
+import com.axelliant.hrms.model.ImagePath
 import com.axelliant.hrms.model.expense.AddExpense
+import com.axelliant.hrms.model.expense.Attachments
 import com.axelliant.hrms.model.expense.CreateExpense
+import com.axelliant.hrms.model.expense.DeleteAttachment
+import com.axelliant.hrms.model.expense.ImageType
 import com.axelliant.hrms.model.leave.SpinnerType
 import com.axelliant.hrms.navigation.AppNavigator
 import com.axelliant.hrms.utils.Utils.getServerFormat
 import com.axelliant.hrms.viewmodel.ExpenseViewModel
+import com.github.dhaval2404.imagepicker.ImagePicker
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import org.koin.android.ext.android.inject
+import java.io.File
 
 
 class AddExpenseFragment : BaseFragment(), AddExpenseAdapter.OnUpdateList {
 
+    private var pickMultipleImages = 103
+    private val cameraPermissionRequest = 101
+    private var galleryPermissionRequest = 102
+    private val multiPartArray = ArrayList<ImageType>()
+    private var photosJsonArray = arrayListOf<String>()
+    private var currentIndex = 0
+
+    private var attachmentsAdapter: AttachmentsAdapter? = null
+
 
     private var isUpdate = false
+    private var expenseId = ""
     private var _binding: FragmentAddExpenseBinding? = null
     private val binding get() = _binding
     private lateinit var addExpenseList: ArrayList<AddExpense>
@@ -55,24 +88,88 @@ class AddExpenseFragment : BaseFragment(), AddExpenseAdapter.OnUpdateList {
         super.onViewCreated(view, savedInstanceState)
 
 
+        val activityResultLauncher: ActivityResultLauncher<Array<String>> =
+            registerForActivityResult(
+                ActivityResultContracts.RequestMultiplePermissions()
+            ) { result ->
+                var allAreGranted = true
+                for (b in result.values) {
+                    allAreGranted = allAreGranted && b
+                }
+
+            }
+
+        val appPerms = arrayOf(
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.CAMERA
+        )
+        activityResultLauncher.launch(appPerms)
+
+
+
         if (arguments != null && requireArguments().containsKey(AppConst.ExpenseRequestParam)) {
             val parsedData = arguments?.getString(AppConst.ExpenseRequestParam, "")
+            val expenseID = arguments?.getString(AppConst.ExpenseRequestIDParam, "")
+            val attachments = arguments?.getString(AppConst.ExpenseRequestAttachments, "")
 
             if (parsedData != null) {
                 forUpdateList =
-                    Gson().fromJson(parsedData!!, object : TypeToken<List<AddExpense>>() {}.type)
+                    Gson().fromJson(parsedData, object : TypeToken<List<AddExpense>>() {}.type)
+                var attachments: List<Attachments> =
+                    Gson().fromJson(attachments, object : TypeToken<List<Attachments>>() {}.type)
+
+
+                if (attachments.isNotEmpty()) {
+
+                    for (item in attachments) {
+                        multiPartArray.add(ImageType().apply {
+                            this.isUploaded = true
+                            this.isMediaQuery = false
+                            this.uri = null
+                            this.imageUrl = item.file_url
+                            this.file_id = item.name
+
+                        })
+                    }
+
+                }
 
                 isUpdate = true
+                expenseId = expenseID.toString()
 
             }
 
 
         }
-        if (isUpdate)
-        {
+
+
+        binding?.rvAttachments?.layoutManager = LinearLayoutManager(requireContext(),RecyclerView.HORIZONTAL,false)
+
+        attachmentsAdapter =
+            AttachmentsAdapter(requireContext(), multiPartArray, object : AdapterItemClick {
+                override fun onItemClick(customObject: Any, position: Int) {
+
+                    val expenseObject = customObject as ImageType
+                    // here call the delete expense photo API
+
+                    if (customObject.file_id != null) {
+                        expenseViewModel.deleteAttachment(DeleteAttachment().apply {
+                            this.file_id = expenseObject.file_id
+                        })
+                    }
+
+                    multiPartArray.removeAt(position)
+                    attachmentsAdapter?.notifyDataSetChanged()
+
+                }
+
+            })
+
+        binding?.rvAttachments?.adapter = attachmentsAdapter
+
+        if (isUpdate) {
             binding?.btnApply?.setText("Update")
-        }
-        else{
+        } else {
             binding?.btnApply?.setText("Create")
         }
 
@@ -87,22 +184,41 @@ class AddExpenseFragment : BaseFragment(), AddExpenseAdapter.OnUpdateList {
                 }
             })
 
+        expenseViewModel.postExpenseResponse.observe(viewLifecycleOwner,
+            EventObserver { response ->
+                for (multiPart in multiPartArray) {
+                    if (multiPart.isUploaded && multiPart.imageUrl == null && !multiPart.isMediaQuery) {
+                        multiPart.imageUrl = response?.url
+                    }
+                }
+                uploadImages(response?.meta?.message.toString())
 
-        expenseViewModel.postExpenseResponse.observe(
+            })
+
+        expenseViewModel.myPostExpenseResponse.observe(
             viewLifecycleOwner,
             EventObserver { response ->
 
-
                 if (response?.meta?.status == true) {
-                    requireActivity().showSuccessMsg(response.status_message)
-                    Handler().postDelayed({
-                        // do stuff
-                        AppNavigator.moveBackToPreviousFragment()
-                    }, 200)
+                    if (!isUpdate)
+                        expenseId = response.expense_detail?.name.toString()
+
+                    uploadImages(response.status_message.toString())
+
                 } else {
                     requireContext().showErrorMsg(response?.meta?.message.toString())
                 }
 
+            })
+
+
+        expenseViewModel.deleteAttachmentResponse.observe(viewLifecycleOwner,
+            EventObserver { response ->
+                if (response?.meta?.status == true) {
+                    requireContext().showSuccessMsg(response.meta.message)
+
+                } else
+                    requireContext().showErrorMsg(response?.meta?.message)
             })
 
 
@@ -161,7 +277,10 @@ class AddExpenseFragment : BaseFragment(), AddExpenseAdapter.OnUpdateList {
             })
 
 
+
+
         binding?.btnApply?.setOnClickListener {
+
 
             for (expenseItem in addExpenseList) {
 
@@ -182,12 +301,21 @@ class AddExpenseFragment : BaseFragment(), AddExpenseAdapter.OnUpdateList {
             }
 
             // assume all good
+            if (isUpdate) {
+                expenseViewModel.postExpense(isUpdate, CreateExpense().apply {
+                    this.expense_id = expenseId
+                    this.expense_details = addExpenseList
+                    this.posting_date = getServerFormat()
+                    this.total_amount = grandTotalCalculation().toString()
+                })
+            } else {
+                expenseViewModel.postExpense(isUpdate, CreateExpense().apply {
+                    this.expense_details = addExpenseList
+                    this.posting_date = getServerFormat()
+                    this.total_amount = grandTotalCalculation().toString()
+                })
+            }
 
-            expenseViewModel.postExpense(CreateExpense().apply {
-                this.expense_details = addExpenseList
-                this.posting_date = getServerFormat()
-                this.total_amount = grandTotalCalculation().toString()
-            })
 
         }
 
@@ -210,8 +338,65 @@ class AddExpenseFragment : BaseFragment(), AddExpenseAdapter.OnUpdateList {
             binding?.rvLeaveCount?.scrollToPosition(addExpenseList.size - 1)
         }
 
+        binding?.ivAttachments?.setOnClickListener {
+            selectImage()
+        }
+
+
     }
 
+
+    private fun uploadImages(statusMessage: String) {
+
+        if (multiPartArray.size > 0) {
+            var isAnyFound = false
+            for (multiPart in multiPartArray) {
+                if (!multiPart.isUploaded && multiPart.isMediaQuery && multiPart.uri != null) {
+                    multiPart.isUploaded = true
+                    multiPart.isMediaQuery = false
+                    expenseViewModel.getMyExpenseFile(ImagePath().apply {
+                        this.file = uriToMultiPart(multiPart.uri)
+                        this.docname = expenseId
+                        this.is_private = 1
+                        this.folder = "Home/Attachments"
+                        this.doctype = "Expense Claim"
+                    })
+                    isAnyFound = true
+                    break
+                }
+
+            }
+            if (!isAnyFound) {
+                requireActivity().showSuccessMsg(statusMessage)
+                Handler().postDelayed({
+                    // do stuff
+                    AppNavigator.moveBackToPreviousFragment()
+                }, 200)
+            }
+
+        } else {
+            requireActivity().showSuccessMsg(statusMessage)
+            Handler().postDelayed({
+                // do stuff
+                AppNavigator.moveBackToPreviousFragment()
+            }, 200)
+        }
+    }
+
+    private fun selectImage() {
+
+        val options = arrayOf("Camera", "Gallery")
+        val builder = androidx.appcompat.app.AlertDialog.Builder(requireActivity())
+        builder.setTitle("Select File Source")
+        builder.setItems(options) { _, which ->
+            when (which) {
+                0 -> pickCameraImage()
+                1 -> pickGalleryImage()
+
+            }
+        }
+        builder.show()
+    }
 
     override fun onListUpdated(updatedList: ArrayList<AddExpense>) {
         // Handle the updated list here
@@ -232,4 +417,200 @@ class AddExpenseFragment : BaseFragment(), AddExpenseAdapter.OnUpdateList {
 
         return total
     }
+
+
+    ////////////////////// image working //////////////////////
+
+
+    private fun pickCameraImage() {
+        ImagePicker.with(this)
+            // User can only capture image from Camera
+            .cameraOnly()
+//            .crop(8f, 5f)
+            .cropSquare()
+            // Image size will be less than 1024 KB
+            .compress(1024)
+            //  Path: /storage/sdcard0/Android/data/package/files
+            .saveDir(requireActivity().getExternalFilesDir(null)!!)
+            //  Path: /storage/sdcard0/Android/data/package/files/ImagePicker
+            .saveDir(requireActivity().getExternalFilesDir("ImagesDirectory")!!)
+            .start(cameraPermissionRequest)
+    }
+
+    private fun pickGalleryImage() {
+        ImagePicker.with(this)
+            // Crop Image(User can choose Aspect Ratio)
+            .cropSquare()
+            // User can only select image from Gallery
+            .galleryOnly()
+            .galleryMimeTypes( // no gif images at all
+                mimeTypes = arrayOf(
+                    "image/png",
+                    "image/jpg",
+                    "image/jpeg"
+                )
+            )
+            .compress(1024)
+            // Image resolution will be less than 1080 x 1920
+            .maxResultSize(1080, 1920)
+            // .saveDir(getExternalFilesDir(null)!!)
+            .start(galleryPermissionRequest)
+    }
+
+    private fun uriToMultiPart(uri: Uri?): MultipartBody.Part? {
+
+        if (uri == null)
+            return null
+
+        val path = getPathFromUR(requireActivity(), uri) ?: return null
+
+        return getMultiPart(path)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        photosJsonArray.clear()
+
+        super.onActivityResult(requestCode, resultCode, data)
+        when (resultCode) {
+            Activity.RESULT_OK -> {
+                multiPartArray.add(ImageType().apply {
+                    this.imageUrl = null
+                    this.uri = data?.data
+                    this.isUploaded = false
+                    this.isMediaQuery = true
+
+                })
+                attachmentsAdapter?.notifyDataSetChanged()
+
+            }
+
+            ImagePicker.RESULT_ERROR -> {
+                requireContext().showErrorMsg(ImagePicker.getError(data))
+            }
+
+            else -> {
+                requireContext().showErrorMsg("You haven't picked Image")
+            }
+        }
+
+    }
+
+
+    private fun getMultiPart(filePath: String): MultipartBody.Part? {
+        val pFile = File(filePath)
+        if (pFile.exists()) {
+            val requestBody: RequestBody =
+                pFile.asRequestBody("*/*".toMediaTypeOrNull())
+            return MultipartBody.Part.createFormData(
+                "file",
+                pFile.name,
+                requestBody
+            )
+        }
+        return null
+    }
+
+
+    @SuppressLint("NewApi")
+    fun getPathFromUR(context: Context, uri: Uri): String? {
+        var filePath: String? = null
+
+        if (DocumentsContract.isDocumentUri(
+                context,
+                uri
+            )
+        ) {
+            when {
+                isExternalStorageDocument(uri) -> {
+                    val docId = DocumentsContract.getDocumentId(uri)
+                    val split = docId.split(":").toTypedArray()
+                    val type = split[0]
+
+                    if ("primary".equals(type, ignoreCase = true)) {
+                        filePath = "${context.getExternalFilesDir(null)}/${split[1]}"
+                    }
+                }
+
+                isDownloadsDocument(uri) -> {
+                    val fileName = getFilePath(context, uri)
+                    if (fileName != null) {
+                        filePath = "${context.getExternalFilesDir(null)}/$fileName"
+                    }
+                }
+
+                isMediaDocument(uri) -> {
+                    val docId = DocumentsContract.getDocumentId(uri)
+                    val split = docId.split(":").toTypedArray()
+
+                    val contentUri: Uri = when (split[0]) {
+                        "image" -> MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                        "video" -> MediaStore.Video.Media.EXTERNAL_CONTENT_URI
+                        "audio" -> MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+                        else -> return null
+                    }
+
+                    val selection = "_id=?"
+                    val selectionArgs = arrayOf(split[1])
+
+                    filePath = getDataColumn(context, contentUri, selection, selectionArgs)
+                }
+            }
+        } else if ("content".equals(uri.scheme, ignoreCase = true)) {
+            filePath = getDataColumn(context, uri, null, null)
+        } else if ("file".equals(uri.scheme, ignoreCase = true)) {
+            filePath = uri.path
+        }
+
+        return filePath
+    }
+
+    private fun getDataColumn(
+        context: Context, uri: Uri, selection: String?,
+        selectionArgs: Array<String>?
+    ): String? {
+        var cursor: Cursor? = null
+        val column = "_data"
+        val projection = arrayOf(column)
+
+        try {
+            cursor = context.contentResolver.query(uri, projection, selection, selectionArgs, null)
+            if (cursor != null && cursor.moveToFirst()) {
+                val columnIndex = cursor.getColumnIndexOrThrow(column)
+                return cursor.getString(columnIndex)
+            }
+        } finally {
+            cursor?.close()
+        }
+        return null
+    }
+
+    private fun getFilePath(context: Context, uri: Uri): String? {
+        var cursor: Cursor? = null
+        val column = "_display_name"
+        val projection = arrayOf(column)
+
+        try {
+            cursor = context.contentResolver.query(uri, projection, null, null, null)
+            if (cursor != null && cursor.moveToFirst()) {
+                val columnIndex = cursor.getColumnIndexOrThrow(column)
+                return cursor.getString(columnIndex)
+            }
+        } finally {
+            cursor?.close()
+        }
+        return null
+    }
+
+    private fun isExternalStorageDocument(uri: Uri): Boolean {
+        return "com.android.externalstorage.documents" == uri.authority
+    }
+
+    private fun isDownloadsDocument(uri: Uri): Boolean {
+        return "com.android.providers.downloads.documents" == uri.authority
+    }
+
+    private fun isMediaDocument(uri: Uri): Boolean {
+        return "com.android.providers.media.documents" == uri.authority
+    }
+
 }

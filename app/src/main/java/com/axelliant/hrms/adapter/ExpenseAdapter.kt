@@ -70,8 +70,12 @@ class ExpenseAdapter(
 //                    binding.tvDelete.visibility = View.GONE
 //                }
 //            }
-            binding.tvDate.text = item.total_amount_reimbursed.toString()
-            binding.status.text = item.grand_total.toString().valueQualifier()
+            if(item.approval_status.toString() == "Draft")
+                binding.tvDate.text =  "Pending"
+            else
+                binding.tvDate.text =   item.approval_status.toString()
+
+            binding.status.text = item.total_claimed_amount.toString().valueQualifier()
             binding.tvHour.text = item.posting_date.valueQualifier()
             if (item.approval_status == "Draft")
                 binding.tvAttendStatus.text = "Pending"

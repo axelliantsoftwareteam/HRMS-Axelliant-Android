@@ -303,8 +303,8 @@
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/_1sdp"
                     android:layout_weight="3"
-                    android:gravity="start|center"
-                    android:text="@string/reimbursed" />
+                    android:gravity="center"
+                    android:text="@string/status" />
 
 
 

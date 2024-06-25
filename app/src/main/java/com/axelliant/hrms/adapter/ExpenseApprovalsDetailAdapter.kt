@@ -62,7 +62,8 @@ class ExpenseApprovalsDetailAdapter(
         fun bind(item: Expense, mContext: Context)
         {
             binding.tvEmployeName.text = item.employee_name
-            binding.tvEmployeDesignation.text = item.department
+            binding.tvEmployeDesignation.text = item.posting_date
+            binding.tvPosting.text = item.department
 
         }
     }

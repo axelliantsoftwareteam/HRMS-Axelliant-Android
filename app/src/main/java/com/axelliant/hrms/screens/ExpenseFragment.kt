@@ -109,7 +109,9 @@ class ExpenseFragment : BaseFragment() {
                     val expense = customObject as Expense
                     if (expense.status == "Draft") {
                         AppNavigator.navigateToAddExpenseFragment(Bundle().apply {
+                            this.putString(AppConst.ExpenseRequestIDParam, expense.name)
                             this.putString(AppConst.ExpenseRequestParam, Gson().toJson(expense.expenses_detail))
+                            this.putString(AppConst.ExpenseRequestAttachments, Gson().toJson(expense.attachments))
                         })
                     } else {
                         requireContext().showErrorMsg(

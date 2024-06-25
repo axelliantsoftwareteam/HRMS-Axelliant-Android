@@ -23,6 +23,8 @@ object AppConst {
     const val DISPLAY_TIME_FORMAT =  "HH:mm"
 
     const val ExpenseRequestParam  = "expenseRequest"
+    const val ExpenseRequestIDParam  = "expenseId"
+    const val ExpenseRequestAttachments  = "expenseAttachments"
 
 
 

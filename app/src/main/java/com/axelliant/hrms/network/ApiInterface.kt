@@ -1,7 +1,10 @@
 package com.axelliant.hrms.network
 
+import com.axelliant.hrms.model.ImagePath
 import com.axelliant.hrms.model.attendance.AttRequest
+import com.axelliant.hrms.model.base.BaseApiModel
 import com.axelliant.hrms.model.expense.CreateExpense
+import com.axelliant.hrms.model.expense.DeleteAttachment
 import com.axelliant.hrms.model.leave.ExpenseApprovalStatus
 import com.axelliant.hrms.model.leave.LeaveApproval
 import com.axelliant.hrms.model.leave.UpcomingLeaveInput
@@ -10,13 +13,16 @@ import com.axelliant.hrms.model.login.CheckInRequest
 import com.axelliant.hrms.model.login.LoginRequest
 import com.axelliant.hrms.model.post.AttendanceRequest
 import com.axelliant.hrms.model.post.LeaveRequest
+import okhttp3.MultipartBody
 import okhttp3.ResponseBody;
 import retrofit2.Call
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header
 import retrofit2.http.Headers;
+import retrofit2.http.Multipart
 import retrofit2.http.POST;
+import retrofit2.http.Part
 
 interface ApiInterface {
 
@@ -78,7 +84,6 @@ interface ApiInterface {
     ): Call<ResponseBody>
 
 
-
     @Headers("Content-Type: application/json")
     @POST("hrms.hr.doctype.employee.expense.get_expense_claim_requests") // my leave detail
     fun callMyExpenseDetail(
@@ -86,6 +91,17 @@ interface ApiInterface {
         @Body attRequest: AttRequest
     ): Call<ResponseBody>
 
+
+    @Multipart
+    @POST("hrms.hr.doctype.employee.expense.upload_file_attachment")
+    fun callMyExpensefile(
+        @Header("Authorization") auth: String?,
+        @Part file: MultipartBody.Part,
+        @Part docname: MultipartBody.Part,
+        @Part is_private: MultipartBody.Part,
+        @Part folder: MultipartBody.Part,
+        @Part doctype: MultipartBody.Part
+    ): Call<ResponseBody>
 
 
     @Headers("Content-Type: application/json")
@@ -161,13 +177,26 @@ interface ApiInterface {
 
 
     @Headers("Content-Type: application/json")
-    @POST("hrms.hr.doctype.employee.expense.create_expenses") // leave approval
+    @POST("hrms.hr.doctype.employee.expense.create_expenses") // create expense
     fun callCreateExp(
         @Header("Authorization") auth: String?,
         @Body createExpense: CreateExpense
     ): Call<ResponseBody>
 
+    @Headers("Content-Type: application/json")
+    @POST("hrms.hr.doctype.employee.expense.update_expense") // update expense
+    fun callUpdateExp(
+        @Header("Authorization") auth: String?,
+        @Body createExpense: CreateExpense
+    ): Call<ResponseBody>
 
+
+    @Headers("Content-Type: application/json")
+    @POST("hrms.hr.doctype.employee.expense.delete_attachment") // update expense
+    fun deleteExpenseAttachmentCall(
+        @Header("Authorization") auth: String?,
+        @Body createExpense: DeleteAttachment
+    ): Call<ResponseBody>
 
 
     @Headers("Content-Type: application/json")
@@ -181,7 +210,6 @@ interface ApiInterface {
     fun callExpenseApproval(
         @Header("Authorization") auth: String?, @Body attendanceRequest: AttRequest
     ): Call<ResponseBody>
-
 
 
     @Headers("Content-Type: application/json")
@@ -225,7 +253,6 @@ interface ApiInterface {
     @Headers("Content-Type: application/json")
     @GET("hrms.hr.doctype.employee.expense.get_expense_type")  // Leave types for request section
     fun getExpenseType(@Header("Authorization") auth: String?): Call<ResponseBody>
-
 
 
 }

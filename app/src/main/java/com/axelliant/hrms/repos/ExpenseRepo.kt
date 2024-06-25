@@ -3,6 +3,7 @@ package com.axelliant.hrms.repos
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.axelliant.hrms.config.AppConst
+import com.axelliant.hrms.model.ImagePath
 import com.axelliant.hrms.model.attendance.AttRequest
 import com.axelliant.hrms.model.attendance.AttendanceInput
 import com.axelliant.hrms.model.attendance.expenseApprovalList
@@ -10,15 +11,19 @@ import com.axelliant.hrms.model.base.BaseApiModel
 import com.axelliant.hrms.model.base.BaseModel
 import com.axelliant.hrms.model.base.Meta
 import com.axelliant.hrms.model.expense.CreateExpense
+import com.axelliant.hrms.model.expense.DeleteAttachment
 import com.axelliant.hrms.model.expense.GetExpenseResponse
 import com.axelliant.hrms.model.expense.MyExpenseDetailResponse
+import com.axelliant.hrms.model.expense.MyExpensePostResponse
 import com.axelliant.hrms.model.leave.ExpenseApprovalStatus
 import com.axelliant.hrms.model.leave.LeaveApproval
+import com.axelliant.hrms.model.leave.PostExpenseImageResponse
 import com.axelliant.hrms.model.leave.PostResponse
 import com.axelliant.hrms.network.ApiInterface
 import com.axelliant.hrms.network.BaseCallBack
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
@@ -80,13 +85,14 @@ class ExpenseRepo(private var apiInterface: ApiInterface) {
 
         return serverResponse
     }
-
-    fun createExpense(createExpense: CreateExpense): MutableLiveData<BaseApiModel<PostResponse>> {
-        val serverResponse = MutableLiveData<BaseApiModel<PostResponse>>()
-
-        val call: Call<ResponseBody> = apiInterface.callCreateExp(
-            "token ${AppConst.TOKEN}",createExpense
-        )
+    fun createMyExpenseImage(imagePath: ImagePath): MutableLiveData<BaseApiModel<PostExpenseImageResponse>> {
+        val serverResponse = MutableLiveData<BaseApiModel<PostExpenseImageResponse>>()
+        val docName: MultipartBody.Part = MultipartBody.Part.createFormData("docname", imagePath.docname!!)
+        val isPrivate: MultipartBody.Part = MultipartBody.Part.createFormData("is_private", imagePath.is_private!!.toString())
+        val folder: MultipartBody.Part = MultipartBody.Part.createFormData("docname", imagePath.folder!!)
+        val doctype: MultipartBody.Part = MultipartBody.Part.createFormData("doctype", imagePath.doctype!!)
+        val call: Call<ResponseBody> = apiInterface.callMyExpensefile("token ${AppConst.TOKEN}",
+            imagePath.file!!,docName,isPrivate,folder,doctype)
 
         Log.e("HTTP Request", " " + call?.request().toString())
 
@@ -98,10 +104,10 @@ class ExpenseRepo(private var apiInterface: ApiInterface) {
 
                 Log.e("API success", " " + response.body())
 
-                val type: Type = object : TypeToken<BaseApiModel<PostResponse>>() {}.type
+                val type: Type = object : TypeToken<BaseApiModel<PostExpenseImageResponse>>() {}.type
                 val jsonString = response.body()?.string()
                 val userModel =
-                    Gson().fromJson<BaseApiModel<PostResponse>>(jsonString, type)
+                    Gson().fromJson<BaseApiModel<PostExpenseImageResponse>>(jsonString, type)
                 serverResponse.value = userModel
             }
 
@@ -115,7 +121,123 @@ class ExpenseRepo(private var apiInterface: ApiInterface) {
                 serverResponse.value =
                     BaseApiModel(
                         BaseModel(
-                            PostResponse(
+                            PostExpenseImageResponse(
+                                meta = Meta(
+                                    errorString.toString(),
+                                    false
+                                )
+                            )
+                        )
+                    )
+
+            }
+
+        })
+
+        return serverResponse
+    }
+
+    fun createExpense(
+        isUpdate: Boolean,
+        createExpense: CreateExpense
+    ): MutableLiveData<BaseApiModel<MyExpensePostResponse>> {
+        val serverResponse = MutableLiveData<BaseApiModel<MyExpensePostResponse>>()
+
+        val call: Call<ResponseBody>?
+
+        if (isUpdate) {
+            call = apiInterface.callUpdateExp(
+                "token ${AppConst.TOKEN}", createExpense
+            )
+        } else {
+            call = apiInterface.callCreateExp(
+                "token ${AppConst.TOKEN}", createExpense
+            )
+        }
+
+
+        Log.e("HTTP Request", " " + call?.request().toString())
+
+        call.enqueue(object : BaseCallBack<ResponseBody>(call) {
+            override fun onFinalSuccess(
+                call: Call<ResponseBody>,
+                response: Response<ResponseBody>
+            ) {
+
+                Log.e("API success", " " + response.body())
+
+                val type: Type = object : TypeToken<BaseApiModel<MyExpensePostResponse>>() {}.type
+                val jsonString = response.body()?.string()
+                val userModel =
+                    Gson().fromJson<BaseApiModel<MyExpensePostResponse>>(jsonString, type)
+                serverResponse.value = userModel
+            }
+
+
+            override fun onFinalFailure(
+                errorString: String?
+            ) {
+
+                Log.e("API Failure", " $errorString")
+
+                serverResponse.value =
+                    BaseApiModel(
+                        BaseModel(
+                            MyExpensePostResponse(
+                                meta = Meta(
+                                    errorString.toString(),
+                                    false
+                                )
+                            )
+                        )
+                    )
+
+            }
+
+        })
+
+        return serverResponse
+    }
+
+
+    fun deleteAttachment(
+        deleteAttachment: DeleteAttachment
+    ): MutableLiveData<BaseApiModel<MyExpensePostResponse>> {
+        val serverResponse = MutableLiveData<BaseApiModel<MyExpensePostResponse>>()
+
+        val call: Call<ResponseBody> = apiInterface.deleteExpenseAttachmentCall(
+            "token ${AppConst.TOKEN}", deleteAttachment
+        )
+
+
+        Log.e("HTTP Request", " " + call?.request().toString())
+
+        call.enqueue(object : BaseCallBack<ResponseBody>(call) {
+            override fun onFinalSuccess(
+                call: Call<ResponseBody>,
+                response: Response<ResponseBody>
+            ) {
+
+                Log.e("API success", " " + response.body())
+
+                val type: Type = object : TypeToken<BaseApiModel<MyExpensePostResponse>>() {}.type
+                val jsonString = response.body()?.string()
+                val userModel =
+                    Gson().fromJson<BaseApiModel<MyExpensePostResponse>>(jsonString, type)
+                serverResponse.value = userModel
+            }
+
+
+            override fun onFinalFailure(
+                errorString: String?
+            ) {
+
+                Log.e("API Failure", " $errorString")
+
+                serverResponse.value =
+                    BaseApiModel(
+                        BaseModel(
+                            MyExpensePostResponse(
                                 meta = Meta(
                                     errorString.toString(),
                                     false
@@ -135,7 +257,7 @@ class ExpenseRepo(private var apiInterface: ApiInterface) {
     fun getExpenseTypes(): MutableLiveData<BaseApiModel<GetExpenseResponse>> {
         val serverResponse = MutableLiveData<BaseApiModel<GetExpenseResponse>>()
 
-        val call: Call<ResponseBody>  = apiInterface.getExpenseType("token ${AppConst.TOKEN}")
+        val call: Call<ResponseBody> = apiInterface.getExpenseType("token ${AppConst.TOKEN}")
 
         Log.e("HTTP Request", " " + call?.request().toString())
 
@@ -161,7 +283,16 @@ class ExpenseRepo(private var apiInterface: ApiInterface) {
                 Log.e("API Failure", " $errorString")
 
                 serverResponse.value =
-                    BaseApiModel(BaseModel(GetExpenseResponse(meta = Meta(errorString.toString(), false))))
+                    BaseApiModel(
+                        BaseModel(
+                            GetExpenseResponse(
+                                meta = Meta(
+                                    errorString.toString(),
+                                    false
+                                )
+                            )
+                        )
+                    )
 
             }
 
@@ -176,7 +307,7 @@ class ExpenseRepo(private var apiInterface: ApiInterface) {
         val serverResponse = MutableLiveData<BaseApiModel<expenseApprovalList>>()
 
         val call = apiInterface.callExpenseApproval(
-            "token ${AppConst.TOKEN}",AttRequest().apply {
+            "token ${AppConst.TOKEN}", AttRequest().apply {
                 this.start_date = inputObject.startDate
                 this.end_date = inputObject.endDate
                 this.employee_list = inputObject.employeeId
@@ -235,7 +366,7 @@ class ExpenseRepo(private var apiInterface: ApiInterface) {
         val serverResponse = MutableLiveData<BaseApiModel<PostResponse>>()
 
         val call = apiInterface.callExpenseApprovalStatus(
-            "token ${AppConst.TOKEN}",inputObject
+            "token ${AppConst.TOKEN}", inputObject
         )
 
         Log.e("HTTP Request", " " + call.request().toString())

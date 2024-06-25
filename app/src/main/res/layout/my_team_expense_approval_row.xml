@@ -40,14 +40,40 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_employe_designation"
-            style="@style/TEXT_MEDIUM_BLACK_10"
+            style="@style/TEXT_MEDIUM_GREY_10"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textAlignment="textStart"
-            app:layout_constraintEnd_toStartOf="@+id/drop_down"
             app:layout_constraintStart_toStartOf="@+id/tv_employe_name"
             app:layout_constraintTop_toBottomOf="@+id/tv_employe_name"
             tools:text="Software engineer" />
+
+        <View
+            android:id="@+id/line_divider"
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:background="@color/grey"
+            android:layout_marginStart="@dimen/_5sdp"
+            app:layout_constraintTop_toTopOf="@+id/tv_employe_designation"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_employe_designation"
+            app:layout_constraintStart_toEndOf="@+id/tv_employe_designation">
+
+        </View>
+
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_posting"
+            style="@style/TEXT_MEDIUM_GREY_10"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textAlignment="textStart"
+            android:layout_marginStart="@dimen/_5sdp"
+            app:layout_constraintStart_toEndOf="@+id/line_divider"
+            app:layout_constraintEnd_toStartOf="@+id/drop_down"
+            app:layout_constraintTop_toBottomOf="@+id/tv_employe_name"
+            tools:text="Software engineer"
+            android:lines="1"
+            android:ellipsize="end"/>
 
 
         <ImageView
