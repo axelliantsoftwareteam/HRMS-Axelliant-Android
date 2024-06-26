@@ -54,6 +54,8 @@ class SplashFragment : BaseFragment() {
         getSignatureHash()
     }
 
+
+
     @RequiresApi(Build.VERSION_CODES.P)
     private fun getSignatureHash() {
         try {
