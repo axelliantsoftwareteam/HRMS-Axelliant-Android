@@ -4,6 +4,7 @@ import android.Manifest
 import android.animation.AnimatorInflater
 import android.animation.AnimatorSet
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Context
 import android.location.Location
 import android.location.LocationListener
@@ -227,27 +228,39 @@ class HomeFragment : BaseFragment() {
             requireContext().showSuccessMsg()
         }
         binding?.ivNotification?.setOnClickListener(View.OnClickListener {
-            if (mSingleAccountApp == null) {
-                return@OnClickListener
-            }
-            /*
-             * Removes the signed-in account and cached tokens from this app (or device, if the device is in shared mode).
-           */
-            mSingleAccountApp!!.signOut(object :
-                ISingleAccountPublicClientApplication.SignOutCallback {
-                override fun onSignOut() {
-                    mAccount = null
-                    requireContext().showErrorMsg("Sign Out")
-                    sessionManager.logoutUser()
-                    AppNavigator.navigateToLogin()
-                }
 
-                override fun onError(exception: MsalException) {
-                    requireContext().showErrorMsg(exception.toString())
-                    sessionManager.logoutUser()
-                    AppNavigator.navigateToLogin()
+            AlertDialog.Builder(requireContext())
+                .setMessage(getString(R.string.logout_message))
+                .setTitle(getString(R.string.info))
+                .setPositiveButton(getString(R.string.yes)) { dialog, which ->
+                    if (mSingleAccountApp == null) {
+                        return@setPositiveButton
+                    }
+                    /*
+                     * Removes the signed-in account and cached tokens from this app (or device, if the device is in shared mode).
+                   */
+                    mSingleAccountApp!!.signOut(object :
+                        ISingleAccountPublicClientApplication.SignOutCallback {
+                        override fun onSignOut() {
+                            mAccount = null
+                            requireContext().showErrorMsg("Sign Out")
+                            sessionManager.logoutUser()
+                            AppNavigator.navigateToLogin()
+                        }
+
+                        override fun onError(exception: MsalException) {
+                            requireContext().showErrorMsg(exception.toString())
+                            sessionManager.logoutUser()
+                            AppNavigator.navigateToLogin()
+                        }
+                    })
                 }
-            })
+                .setNegativeButton(getString(R.string.no)) { dialog, which ->
+                    // Do nothing
+                }
+                .show()
+
+
         })
 
 //        targetLocList.add(BranchDataResponse(LocationFilter.NTC_OFFICE.value, 31.5494, 74.3333))

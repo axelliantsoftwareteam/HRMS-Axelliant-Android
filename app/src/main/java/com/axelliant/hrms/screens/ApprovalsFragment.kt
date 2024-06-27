@@ -286,8 +286,7 @@ class ApprovalsFragment : BaseFragment() {
                     RequestFilter.ATTENDANCE -> attendanceViewModel.getAttendanceApproval(
                         getCurrentObject()
                     )
-                    RequestFilter.APPROVAL -> attendanceViewModel.getAttendanceApproval(
-                        getCurrentObject()
+                    RequestFilter.APPROVAL ->expenseViewModel.getExpenseApproval(getCurrentObject()
                     )
                 }
 

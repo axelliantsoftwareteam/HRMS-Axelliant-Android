@@ -39,6 +39,8 @@
                 android:id="@+id/profile_img"
                 android:layout_width="@dimen/_30sdp"
                 android:layout_height="@dimen/_30sdp"
+                app:civ_border_width="@dimen/_1sdp"
+                app:civ_border_color="@color/black"
                 android:src="@drawable/ic_place_holder"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

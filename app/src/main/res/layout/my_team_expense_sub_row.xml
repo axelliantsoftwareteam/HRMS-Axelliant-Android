@@ -24,7 +24,16 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_no"
+            style="@style/TEXT_MEDIUM_BLACK_10"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:text="1_"
+            android:textAllCaps="true"
+            app:layout_constraintStart_toStartOf="@+id/divider"
+            app:layout_constraintTop_toBottomOf="@+id/divider" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_from_date"
@@ -33,9 +42,10 @@
             android:layout_height="wrap_content"
             android:gravity="start"
             android:text="@string/expense_type"
+            android:layout_marginStart="@dimen/_5sdp"
             android:textAllCaps="true"
             app:layout_constraintEnd_toStartOf="@+id/tv_to_date"
-            app:layout_constraintStart_toStartOf="@+id/divider"
+            app:layout_constraintStart_toEndOf="@+id/tv_no"
             app:layout_constraintTop_toBottomOf="@+id/divider" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -110,11 +120,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginStart="@dimen/_5sdp"
             android:text="@string/description"
             android:gravity="start"
             android:textAllCaps="true"
             app:layout_constraintEnd_toEndOf="@+id/divider"
-            app:layout_constraintStart_toStartOf="@+id/divider"
+            app:layout_constraintStart_toEndOf="@+id/tv_no"
             app:layout_constraintTop_toBottomOf="@id/tv_amount_txt" />
 
         <com.google.android.material.textview.MaterialTextView

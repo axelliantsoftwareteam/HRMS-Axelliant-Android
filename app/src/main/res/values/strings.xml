@@ -171,4 +171,8 @@
     <string name="write_descrpt">Write a description</string>
     <string name="expense_req">Expense Request</string>
     <string name="reimbursed">Reimbursed</string>
+    <string name="logout_message">Are you sure want to logout?</string>
+    <string name="info">Logout</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>
