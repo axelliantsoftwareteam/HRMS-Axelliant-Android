@@ -28,14 +28,7 @@
             android:tag="2"
             android:translationZ="90dp"
             android:src="@drawable/img_close_circle" />
-<!--
-            <ImageView
-                android:id="@+id/iv_img"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_centerInParent="true"
-                android:contentDescription="@string/todo"
-                android:src="@drawable/ic_page" />-->
+
 
 
         <com.google.android.material.imageview.ShapeableImageView

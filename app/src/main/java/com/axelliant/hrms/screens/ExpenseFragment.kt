@@ -274,6 +274,7 @@ class ExpenseFragment : BaseFragment() {
                 override fun onItemClick(customObject: Any, position: Int) {
                     val filterObject = customObject as FilterModel
 
+
                     filterId = filterObject.id.toString()
                     expenseViewModel.getMyExpenseDetail(getCurrentObject())
                 }

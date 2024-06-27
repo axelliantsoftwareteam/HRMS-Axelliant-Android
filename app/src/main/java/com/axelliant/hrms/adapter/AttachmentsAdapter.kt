@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.axelliant.hrms.callback.AdapterItemClick
 import com.axelliant.hrms.databinding.AttachmentRowBinding
@@ -14,6 +15,7 @@ import com.axelliant.hrms.model.dashboard.Birthday
 import com.axelliant.hrms.model.expense.ImageType
 
 class AttachmentsAdapter(
+    private val isDeleteShow:Boolean =true,
     private val context: Context,
     private val list: List<ImageType>,
     private val itemClick: AdapterItemClick
@@ -30,9 +32,20 @@ class AttachmentsAdapter(
     override fun onBindViewHolder(holder: AccountsVH, position: Int) {
         holder.bind(list[position], context)
 
-        holder.binding.imgClose.setOnClickListener {
-            itemClick.onItemClick(list[position], position)
+        holder.binding.imgClose.isVisible = isDeleteShow
+
+        if(isDeleteShow){
+            holder.binding.imgClose.setOnClickListener {
+                itemClick.onItemClick(list[position], position)
+            }
+        }else{
+            holder.binding.ivImg.setOnClickListener{
+                itemClick.onItemClick(list[position],position)
+            }
         }
+
+
+
     }
 
     override fun getItemCount(): Int {

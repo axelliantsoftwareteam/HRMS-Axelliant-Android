@@ -16,6 +16,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -133,6 +134,8 @@ class AddExpenseFragment : BaseFragment(), AddExpenseAdapter.OnUpdateList {
                     }
 
                 }
+                attachmentVisibility()
+
 
                 isUpdate = true
                 expenseId = expenseID.toString()
@@ -143,10 +146,11 @@ class AddExpenseFragment : BaseFragment(), AddExpenseAdapter.OnUpdateList {
         }
 
 
-        binding?.rvAttachments?.layoutManager = LinearLayoutManager(requireContext(),RecyclerView.HORIZONTAL,false)
+        binding?.rvAttachments?.layoutManager =
+            LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
 
         attachmentsAdapter =
-            AttachmentsAdapter(requireContext(), multiPartArray, object : AdapterItemClick {
+            AttachmentsAdapter(true, requireContext(), multiPartArray, object : AdapterItemClick {
                 override fun onItemClick(customObject: Any, position: Int) {
 
                     val expenseObject = customObject as ImageType
@@ -159,6 +163,7 @@ class AddExpenseFragment : BaseFragment(), AddExpenseAdapter.OnUpdateList {
                     }
 
                     multiPartArray.removeAt(position)
+                    attachmentVisibility()
                     attachmentsAdapter?.notifyDataSetChanged()
 
                 }
@@ -194,6 +199,21 @@ class AddExpenseFragment : BaseFragment(), AddExpenseAdapter.OnUpdateList {
                 uploadImages(response?.meta?.message.toString())
 
             })
+
+        expenseViewModel.deleteExpenseResponse.observe(viewLifecycleOwner,
+            EventObserver { response ->
+                if (response?.meta?.status == true) {
+                    requireContext().showSuccessMsg(response.status_message)
+
+                    Handler().postDelayed({
+                        // do stuff
+                        AppNavigator.moveBackToPreviousFragment()
+                    }, 200)
+                } else
+                    requireContext().showErrorMsg(response?.meta?.message)
+
+            })
+
 
         expenseViewModel.myPostExpenseResponse.observe(
             viewLifecycleOwner,
@@ -324,7 +344,11 @@ class AddExpenseFragment : BaseFragment(), AddExpenseAdapter.OnUpdateList {
         }
 
         binding?.tvReject?.setOnClickListener {
-            requireContext().showSuccessMsg()
+
+            expenseViewModel.deleteExpense(CreateExpense().apply {
+                this.expense_id = expenseId
+            })
+
         }
 
 
@@ -349,6 +373,9 @@ class AddExpenseFragment : BaseFragment(), AddExpenseAdapter.OnUpdateList {
 
     }
 
+    private fun attachmentVisibility() {
+        binding?.tvAttachments?.isVisible = multiPartArray.size > 0
+    }
 
     private fun uploadImages(statusMessage: String) {
 
@@ -484,6 +511,7 @@ class AddExpenseFragment : BaseFragment(), AddExpenseAdapter.OnUpdateList {
                     this.isMediaQuery = true
 
                 })
+                attachmentVisibility()
                 attachmentsAdapter?.notifyDataSetChanged()
 
             }

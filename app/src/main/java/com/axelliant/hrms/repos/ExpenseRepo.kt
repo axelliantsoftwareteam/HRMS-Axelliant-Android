@@ -199,6 +199,59 @@ class ExpenseRepo(private var apiInterface: ApiInterface) {
         return serverResponse
     }
 
+    fun deleteExpense(
+        createExpense: CreateExpense
+    ): MutableLiveData<BaseApiModel<MyExpensePostResponse>> {
+        val serverResponse = MutableLiveData<BaseApiModel<MyExpensePostResponse>>()
+
+        val call: Call<ResponseBody> = apiInterface.deleteExpenseCall(
+            "token ${AppConst.TOKEN}", createExpense
+        )
+
+
+        Log.e("HTTP Request", " " + call?.request().toString())
+
+        call.enqueue(object : BaseCallBack<ResponseBody>(call) {
+            override fun onFinalSuccess(
+                call: Call<ResponseBody>,
+                response: Response<ResponseBody>
+            ) {
+
+                Log.e("API success", " " + response.body())
+
+                val type: Type = object : TypeToken<BaseApiModel<MyExpensePostResponse>>() {}.type
+                val jsonString = response.body()?.string()
+                val userModel =
+                    Gson().fromJson<BaseApiModel<MyExpensePostResponse>>(jsonString, type)
+                serverResponse.value = userModel
+            }
+
+
+            override fun onFinalFailure(
+                errorString: String?
+            ) {
+
+                Log.e("API Failure", " $errorString")
+
+                serverResponse.value =
+                    BaseApiModel(
+                        BaseModel(
+                            MyExpensePostResponse(
+                                meta = Meta(
+                                    errorString.toString(),
+                                    false
+                                )
+                            )
+                        )
+                    )
+
+            }
+
+        })
+
+        return serverResponse
+    }
+
 
     fun deleteAttachment(
         deleteAttachment: DeleteAttachment

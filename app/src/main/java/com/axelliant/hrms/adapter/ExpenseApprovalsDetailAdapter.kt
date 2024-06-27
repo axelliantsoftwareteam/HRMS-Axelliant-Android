@@ -6,11 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.axelliant.hrms.callback.AdapterItemClick
 import com.axelliant.hrms.databinding.MyTeamExpenseApprovalRowBinding
 import com.axelliant.hrms.extention.nullToEmpty
+import com.axelliant.hrms.extention.showSuccessMsg
+import com.axelliant.hrms.model.expense.Attachments
 import com.axelliant.hrms.model.expense.Expense
+import com.axelliant.hrms.model.expense.ImageType
 import com.axelliant.hrms.utils.Utils.hideShow
 
 class ExpenseApprovalsDetailAdapter(
@@ -50,6 +54,43 @@ class ExpenseApprovalsDetailAdapter(
 
         }
 
+        holder.binding.rvAttachments.layoutManager =
+            LinearLayoutManager(mContext, RecyclerView.HORIZONTAL, false)
+        holder.binding.rvAttachments.adapter =
+            AttachmentsAdapter(
+                false,
+                mContext,
+                attachmentTypeMapping(detailArrayList[position].attachments),
+                object : AdapterItemClick {
+                    override fun onItemClick(customObject: Any, position: Int) {
+                        mContext.showSuccessMsg("clicked")
+                    }
+
+                })
+
+
+    }
+    private fun attachmentTypeMapping(attachmentArray: List<Attachments>?): ArrayList<ImageType> {
+
+        val localItems: ArrayList<ImageType> = arrayListOf()
+
+        if (attachmentArray != null) {
+            for (serverItem in attachmentArray) {
+
+                localItems.add(ImageType().apply {
+                    this.isUploaded = true
+                    this.isMediaQuery = false
+                    this.uri = null
+                    this.imageUrl = serverItem.file_url
+                    this.file_id = serverItem.name
+
+                })
+
+            }
+        }
+
+
+        return localItems
     }
 
     override fun getItemCount(): Int {

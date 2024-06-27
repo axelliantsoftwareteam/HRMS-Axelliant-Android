@@ -190,6 +190,12 @@ interface ApiInterface {
         @Body createExpense: CreateExpense
     ): Call<ResponseBody>
 
+    @Headers("Content-Type: application/json")
+    @POST("hrms.hr.doctype.employee.expense.delete_expense_claim") // update expense
+    fun deleteExpenseCall(
+        @Header("Authorization") auth: String?,
+        @Body createExpense: CreateExpense
+    ): Call<ResponseBody>
 
     @Headers("Content-Type: application/json")
     @POST("hrms.hr.doctype.employee.expense.delete_attachment") // update expense

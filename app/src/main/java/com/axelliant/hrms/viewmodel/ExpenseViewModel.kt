@@ -22,6 +22,7 @@ class ExpenseViewModel(private val expenseRepo: ExpenseRepo) : BaseViewModel() {
 
     val postExpenseResponse: MutableLiveData<Event<PostExpenseImageResponse?>> by lazy { MutableLiveData<Event<PostExpenseImageResponse?>>() }
     val myPostExpenseResponse: MutableLiveData<Event<MyExpensePostResponse?>> by lazy { MutableLiveData<Event<MyExpensePostResponse?>>() }
+    val deleteExpenseResponse: MutableLiveData<Event<MyExpensePostResponse?>> by lazy { MutableLiveData<Event<MyExpensePostResponse?>>() }
     val deleteAttachmentResponse: MutableLiveData<Event<MyExpensePostResponse?>> by lazy { MutableLiveData<Event<MyExpensePostResponse?>>() }
 
     val expenseTypeResponse: MutableLiveData<Event<GetExpenseResponse?>> by lazy { MutableLiveData<Event<GetExpenseResponse?>>() }
@@ -77,6 +78,27 @@ class ExpenseViewModel(private val expenseRepo: ExpenseRepo) : BaseViewModel() {
                     isLoading.value = Event(false)
                     // Handle success
                     myPostExpenseResponse.value = Event(baseModel.message?.data)
+
+                } ?: run {
+                    isLoading.value = Event(false)
+                    // Handle error
+                    Log.d("Success VieModel->", "false")
+
+
+                }
+            }
+
+
+    }
+    fun deleteExpense(createExpense: CreateExpense) {
+        isLoading.value = Event(true)
+        expenseRepo.deleteExpense(createExpense)
+            .observeForever { data ->
+                // Handle the login response
+                data?.let { baseModel ->
+                    isLoading.value = Event(false)
+                    // Handle success
+                    deleteExpenseResponse.value = Event(baseModel.message?.data)
 
                 } ?: run {
                     isLoading.value = Event(false)

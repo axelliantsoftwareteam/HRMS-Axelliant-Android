@@ -105,6 +105,21 @@
             tools:listitem="@layout/my_team_expense_sub_row"
             />
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_attachments"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:spanCount="3"
+            tools:itemCount="3"
+            tools:listitem="@layout/attachment_row"
+            app:layout_constraintTop_toBottomOf="@+id/rv_leave_count"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            >
+
+        </androidx.recyclerview.widget.RecyclerView>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
