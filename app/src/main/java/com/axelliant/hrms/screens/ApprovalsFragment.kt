@@ -301,7 +301,7 @@ class ApprovalsFragment : BaseFragment() {
 
     private fun dataPopulate(leaves: ArrayList<TeamLeaveDetail>?) {
         binding?.rvAttend?.layoutManager = LinearLayoutManager(requireActivity())
-        val weeklyAdapter = TeamLeaveDetailAdapter(
+        val weeklyAdapter = TeamLeaveDetailAdapter(requireContext(),
             leaves!!, true, object : AdapterItemClick {
                 override fun onItemClick(customObject: Any, position: Int) {
 

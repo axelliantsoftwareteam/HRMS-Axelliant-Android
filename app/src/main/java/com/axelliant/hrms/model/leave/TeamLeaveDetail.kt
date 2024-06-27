@@ -9,6 +9,7 @@ data class TeamLeaveDetail(
     val leave_reason: String? = null,
     val leave_approver: String? = null,
     val designation: String,
+    val image: String,
     val post_date: String,
     val status: String,
     val total_leave_days: Double = 0.0,

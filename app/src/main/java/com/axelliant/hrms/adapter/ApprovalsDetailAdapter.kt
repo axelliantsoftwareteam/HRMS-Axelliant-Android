@@ -69,7 +69,7 @@ class ApprovalsDetailAdapter(
             binding.tvLeaveTypeTxt.text = item.log_type
             binding.tvLeaveApproverTxt.text = item.requeststatus.toString()
             binding.tvReasonTxt.text = item.reason.nullToEmpty()
-
+            binding.profileImg.setUrlImage(item.image, mContext)
 
 
         }

@@ -7,6 +7,7 @@ class AttendanceApprovalObject {
     val employee: String?=null
     val employee_name: String?=null
     val time: String?=null
+    val image: String?=null
     val log_type: String?=null
     val location: String?=null
     val reason: String?=null
