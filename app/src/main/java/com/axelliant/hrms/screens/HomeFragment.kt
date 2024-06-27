@@ -207,7 +207,7 @@ class HomeFragment : BaseFragment() {
             EventObserver { response ->
 
                 if (response?.meta?.status == true) {
-                    requireContext().showSuccessMsg("Attendance marked successfully")
+                    requireContext().showSuccessMsg(response.status_message)
                     homeViewModel.getDashboardInformation()
 
                 } else {
@@ -292,21 +292,10 @@ class HomeFragment : BaseFragment() {
             setCurrentLocationText()
 
             if (loc != null) {
-                if (isCheckIn)
-                {
-
-                    frontAnimation.setTarget(binding?.lyCheckIn)
-                    backAnimation.setTarget(binding?.lyCheckOut)
-                    frontAnimation.start()
-                    backAnimation.start()
-
-
+                if (isCheckIn) {
+                    checkInAnimate()
                 } else {
-                    frontAnimation.setTarget(binding?.lyCheckOut)
-                    backAnimation.setTarget(binding?.lyCheckIn)
-                    backAnimation.start()
-                    frontAnimation.start()
-
+                    checkOutAnimate()
                 }
 
                 var type = CheckRequestFilter.OUT.name
@@ -346,6 +335,20 @@ class HomeFragment : BaseFragment() {
 
     }
 
+    private fun checkOutAnimate() {
+        frontAnimation.setTarget(binding?.lyCheckOut)
+        backAnimation.setTarget(binding?.lyCheckIn)
+        backAnimation.start()
+        frontAnimation.start()
+    }
+
+    private fun checkInAnimate() {
+        frontAnimation.setTarget(binding?.lyCheckIn)
+        backAnimation.setTarget(binding?.lyCheckOut)
+        frontAnimation.start()
+        backAnimation.start()
+    }
+
     private fun checkInInfoPopulate(checkInInfo: CheckInInfoResponse) {
         if (checkInInfo.is_check_in_button == false && checkInInfo.is_check_out_button == false) {
             binding?.btnCheckIn?.isEnabled = false
@@ -361,14 +364,14 @@ class HomeFragment : BaseFragment() {
             binding?.btnCheckIn?.isEnabled = true
 
             if (checkInInfo.is_check_in_button == true && checkInInfo.is_check_out_button == true) {
-
+                checkOutAnimate()
                 binding?.lyCheckIn?.visibility = View.VISIBLE
                 binding?.lyCheckOut?.visibility = View.GONE
 
                 isCheckIn = true
             } else {
                 if (checkInInfo.is_check_in_button == true) {
-
+                    checkOutAnimate()
                     isCheckIn = true
                     binding?.lyCheckIn?.visibility = View.VISIBLE
                     binding?.lyCheckOut?.visibility = View.GONE
@@ -376,7 +379,7 @@ class HomeFragment : BaseFragment() {
                     binding?.tvCheckInTxt?.text = checkInInfo.check_in.valueQualifier()
 
                 } else if (checkInInfo.is_check_out_button == true) {
-
+                    checkInAnimate()
                     binding?.tvCheckInTxt?.text = checkInInfo.check_in.valueQualifier()
                     isCheckIn = false
                     binding?.lyCheckIn?.visibility = View.GONE
@@ -531,6 +534,7 @@ class HomeFragment : BaseFragment() {
                             showDialog()
                             AppNavigator.navigateToCheckInFragment()
                         }
+
                         "Expense" -> {
                             showDialog()
                             AppNavigator.navigateToExpenseFragment()
