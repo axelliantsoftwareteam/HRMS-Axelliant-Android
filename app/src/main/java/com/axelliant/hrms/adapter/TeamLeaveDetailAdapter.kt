@@ -1,5 +1,6 @@
 package com.axelliant.hrms.adapter
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,9 +11,11 @@ import com.axelliant.hrms.callback.AdapterItemClick
 import com.axelliant.hrms.databinding.MyAttendanceDetailRowBinding
 import com.axelliant.hrms.databinding.MyTeamAttendRowBinding
 import com.axelliant.hrms.databinding.MyTeamLeaveRowBinding
+import com.axelliant.hrms.extention.setUrlImage
 import com.axelliant.hrms.model.leave.TeamLeaveDetail
 
 class TeamLeaveDetailAdapter(
+    private val mContext: Context,
     private val leaves: ArrayList<TeamLeaveDetail>,
     private val isForApproval: Boolean = false,
     private val approvedClick: AdapterItemClick? = null,
@@ -28,7 +31,7 @@ class TeamLeaveDetailAdapter(
     }
 
     override fun onBindViewHolder(holder: AccountsVH, position: Int) {
-        holder.bind(leaves[position])
+        holder.bind(leaves[position], mContext)
         holder.binding.lyDropDown.isVisible = false
 
         if (isForApproval) {
@@ -49,7 +52,7 @@ class TeamLeaveDetailAdapter(
 
 
 
-        holder.binding.tvDropDown.setOnClickListener {
+        holder.binding.dropDown.setOnClickListener {
 
             holder.binding.lyDropDown.isVisible = !holder.binding.lyDropDown.isVisible
         }
@@ -62,16 +65,17 @@ class TeamLeaveDetailAdapter(
     class AccountsVH(val binding: MyTeamLeaveRowBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(teamLeaveDetail: TeamLeaveDetail) {
-            binding.tvName.text = teamLeaveDetail.employee_name
-            binding.tvPostingDate.text = teamLeaveDetail.post_date
-            binding.tvDesignation.text = teamLeaveDetail.designation
+        fun bind(teamLeaveDetail: TeamLeaveDetail,mContext: Context) {
+            binding.tvEmployeName.text = teamLeaveDetail.employee_name
+            binding.tvEmployeDesignation.text = teamLeaveDetail.post_date
+            binding.tvPosting.text = teamLeaveDetail.designation
             binding.tvAttendStatus.text = teamLeaveDetail.status
             binding.tvFromDateTxt.text = teamLeaveDetail.from_date
             binding.tvToDateTxt.text = teamLeaveDetail.to_date
             binding.tvLeaveTypeTxt.text = teamLeaveDetail.leave_type
             binding.tvLeaveApproverTxt.text = teamLeaveDetail.leave_approver
             binding.tvReasonTxt.text = teamLeaveDetail.leave_reason
+            binding.profileImg.setUrlImage(teamLeaveDetail.image, mContext)
 
 
         }

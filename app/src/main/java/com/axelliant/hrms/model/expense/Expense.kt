@@ -17,6 +17,7 @@ data class Expense(
     val attachments: List<Attachments>?=null,
     val grand_total: Int?=null,
     val idx: Int?=null,
+    val image: String?=null,
     val is_paid: Int?=null,
     val mode_of_payment: Any?=null,
     val modified: String?=null,

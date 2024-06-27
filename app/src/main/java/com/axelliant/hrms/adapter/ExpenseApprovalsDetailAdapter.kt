@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.axelliant.hrms.callback.AdapterItemClick
 import com.axelliant.hrms.databinding.MyTeamExpenseApprovalRowBinding
 import com.axelliant.hrms.extention.nullToEmpty
+import com.axelliant.hrms.extention.setUrlImage
 import com.axelliant.hrms.extention.showSuccessMsg
 import com.axelliant.hrms.model.expense.Attachments
 import com.axelliant.hrms.model.expense.Expense
@@ -105,6 +106,7 @@ class ExpenseApprovalsDetailAdapter(
             binding.tvEmployeName.text = item.employee_name
             binding.tvEmployeDesignation.text = item.posting_date
             binding.tvPosting.text = item.department
+            binding.profileImg.setUrlImage(item.image, mContext)
 
         }
     }

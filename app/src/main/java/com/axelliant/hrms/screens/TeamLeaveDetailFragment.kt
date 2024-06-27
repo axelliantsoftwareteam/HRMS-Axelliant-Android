@@ -145,7 +145,7 @@ class TeamLeaveDetailFragment : BaseFragment() {
 
     private fun dataPopulate(leaves: ArrayList<TeamLeaveDetail>?) {
         binding?.rvAttend?.layoutManager = LinearLayoutManager(requireActivity())
-        val weeklyAdapter = TeamLeaveDetailAdapter(
+        val weeklyAdapter = TeamLeaveDetailAdapter(requireContext(),
             leaves!!)
         binding?.rvAttend?.adapter = weeklyAdapter
 
