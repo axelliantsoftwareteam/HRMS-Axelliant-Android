@@ -37,7 +37,7 @@ class ExpenseRowAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: AddExpense, position: Int, mContext: Context) {
-
+            binding.tvNo.text=((position+1).toString().plus("_"))
             binding.tvReasonTxt.text = item.description.toString().valueQualifier()
             binding.tvFromDateTxt.text = item.expense_type.toString()
             binding.tvAmountTxt.text = item.amount.toString()

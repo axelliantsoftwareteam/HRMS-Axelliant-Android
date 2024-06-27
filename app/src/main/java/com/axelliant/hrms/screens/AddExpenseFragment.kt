@@ -323,6 +323,10 @@ class AddExpenseFragment : BaseFragment(), AddExpenseAdapter.OnUpdateList {
             AppNavigator.moveBackToPreviousFragment()
         }
 
+        binding?.tvReject?.setOnClickListener {
+            requireContext().showSuccessMsg()
+        }
+
 
         // Initial item list with one item
 
@@ -357,7 +361,7 @@ class AddExpenseFragment : BaseFragment(), AddExpenseAdapter.OnUpdateList {
                     expenseViewModel.getMyExpenseFile(ImagePath().apply {
                         this.file = uriToMultiPart(multiPart.uri)
                         this.docname = expenseId
-                        this.is_private = 1
+                        this.is_private = 0
                         this.folder = "Home/Attachments"
                         this.doctype = "Expense Claim"
                     })

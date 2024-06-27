@@ -27,7 +27,7 @@
             android:contentDescription="@string/todo"
             android:tag="2"
             android:translationZ="90dp"
-            android:src="@drawable/icon_delete" />
+            android:src="@drawable/img_close_circle" />
 <!--
             <ImageView
                 android:id="@+id/iv_img"
@@ -43,7 +43,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:contentDescription="@string/todo"
-            android:src="@drawable/ic_page"
+            android:src="@drawable/photo_ai"
             android:tag="1"
             android:layout_centerInParent="true"
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize10Percent">
