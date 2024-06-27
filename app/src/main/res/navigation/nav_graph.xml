@@ -133,4 +133,14 @@
 
     </fragment>
 
+
+    <fragment
+        android:id="@+id/imageDetailFragment"
+        android:name="com.axelliant.hrms.screens.ImageDetailFragment"
+        android:label="Image Detail Fragment"
+        tools:layout="@layout/fragment_image_detail">
+
+    </fragment>
+
+
 </navigation>

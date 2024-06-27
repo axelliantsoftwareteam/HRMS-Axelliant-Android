@@ -1,6 +1,7 @@
 package com.axelliant.hrms.adapter
 
 import android.content.Context
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
@@ -17,7 +18,9 @@ import com.axelliant.hrms.model.expense.DeleteAttachment
 import com.axelliant.hrms.model.expense.Expense
 import com.axelliant.hrms.model.expense.ExpenseStatu
 import com.axelliant.hrms.model.expense.ImageType
+import com.axelliant.hrms.navigation.AppNavigator
 import com.axelliant.hrms.utils.Utils.hideShow
+import com.google.gson.Gson
 
 class ExpenseAdapter(
     private val list: ArrayList<Expense>,
@@ -98,7 +101,12 @@ class ExpenseAdapter(
                     attachmentTypeMapping(item.attachments),
                     object : AdapterItemClick {
                         override fun onItemClick(customObject: Any, position: Int) {
-                            mContext.showSuccessMsg("clicked")
+
+                            AppNavigator.navigateToImageDetailFragment(Bundle().apply {
+                                this.putString("images",Gson().toJson(item.attachments))
+
+                            })
+
                         }
 
                     })

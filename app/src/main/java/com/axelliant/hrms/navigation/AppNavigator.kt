@@ -295,6 +295,22 @@ class AppNavigator {
             }
 
         }
+        fun navigateToImageDetailFragment(args: Bundle = Bundle()) {
+            Log.i(TAG, "navigateToImageDetailFragment: $args")
+            val navAction = NavAction(R.id.imageDetailFragment)
+            val navOptions = NavOptions.Builder()
+                .setPopUpTo(getCurrentDestinationId()!!, false).build()
+            navAction.navOptions = navOptions
+
+            val destination: NavDestination? = getCurrentDestinationId()?.let {
+                getController().graph.findNode(it)
+            }
+            if (destination != null) {
+                destination.putAction(R.id.image_detail_fragment_action, navAction)
+                getController().navigate(R.id.image_detail_fragment_action, args)
+            }
+
+        }
 
     }
 }

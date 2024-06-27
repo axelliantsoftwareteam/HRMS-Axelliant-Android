@@ -1,6 +1,7 @@
 package com.axelliant.hrms.adapter
 
 import android.content.Context
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +16,9 @@ import com.axelliant.hrms.extention.showSuccessMsg
 import com.axelliant.hrms.model.expense.Attachments
 import com.axelliant.hrms.model.expense.Expense
 import com.axelliant.hrms.model.expense.ImageType
+import com.axelliant.hrms.navigation.AppNavigator
 import com.axelliant.hrms.utils.Utils.hideShow
+import com.google.gson.Gson
 
 class ExpenseApprovalsDetailAdapter(
     private val mContext: Context,
@@ -62,8 +65,13 @@ class ExpenseApprovalsDetailAdapter(
                 mContext,
                 attachmentTypeMapping(detailArrayList[position].attachments),
                 object : AdapterItemClick {
-                    override fun onItemClick(customObject: Any, position: Int) {
-                        mContext.showSuccessMsg("clicked")
+                    override fun onItemClick(customObject: Any, pos: Int) {
+
+                        AppNavigator.navigateToImageDetailFragment(Bundle().apply {
+                            this.putString("images", Gson().toJson(detailArrayList[position].attachments))
+
+                        })
+
                     }
 
                 })

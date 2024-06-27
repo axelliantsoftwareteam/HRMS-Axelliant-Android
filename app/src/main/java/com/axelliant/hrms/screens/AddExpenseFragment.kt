@@ -172,6 +172,8 @@ class AddExpenseFragment : BaseFragment(), AddExpenseAdapter.OnUpdateList {
 
         binding?.rvAttachments?.adapter = attachmentsAdapter
 
+        binding?.tvReject?.isVisible = isUpdate
+
         if (isUpdate) {
             binding?.btnApply?.setText("Update")
         } else {
