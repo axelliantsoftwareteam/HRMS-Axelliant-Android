@@ -489,8 +489,8 @@ class HomeFragment : BaseFragment() {
                 drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_expe)
             ), Modules(
                 id = 6,
-                name = "Payslip",
-                description = "View your all pay-slip",
+                name = "Shift Management",
+                description = "View your all shifts",
                 color = requireContext().getColor(R.color.greeny),
                 drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_payslip)
             )
