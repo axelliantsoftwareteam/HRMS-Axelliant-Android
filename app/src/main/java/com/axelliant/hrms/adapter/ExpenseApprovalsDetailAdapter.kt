@@ -58,6 +58,7 @@ class ExpenseApprovalsDetailAdapter(
 
         }
 
+
         holder.binding.rvAttachments.layoutManager =
             LinearLayoutManager(mContext, RecyclerView.HORIZONTAL, false)
         holder.binding.rvAttachments.adapter =
