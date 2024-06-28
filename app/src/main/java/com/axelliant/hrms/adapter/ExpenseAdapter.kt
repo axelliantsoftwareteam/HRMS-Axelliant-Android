@@ -34,6 +34,7 @@ class ExpenseAdapter(
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = MyTeamExpenseRowBinding.inflate(layoutInflater, parent, false)
         return AccountsVH(binding)
+
     }
 
     override fun onBindViewHolder(holder: AccountsVH, position: Int) {
