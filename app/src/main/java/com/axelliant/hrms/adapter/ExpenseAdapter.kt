@@ -66,6 +66,7 @@ class ExpenseAdapter(
         return list.size
     }
 
+
     class AccountsVH(val binding: MyTeamExpenseRowBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Expense, mContext: Context) {
