@@ -29,6 +29,10 @@
         <item name="android:height">@dimen/_25sdp</item>
         <item name="fabCradleRoundedCornerRadius">@dimen/_10sdp</item>
     </style>
-
+<!--    <style name="Theme.Fab_Bottom_app_bar" parent="Theme.MaterialComponents.DayNight.NoActionBar">-->
+<!--        <item name="colorPrimary">#0F9D58</item>-->
+<!--        <item name="colorPrimaryVariant">#0F9D58</item>-->
+<!--        <item name="colorOnPrimary">#000</item>-->
+<!--    </style>-->
 
 </resources>
