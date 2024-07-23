@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/splashFragment"
-        android:name="com.axelliant.hrms.screens.SplashFragment"
+        android:name="com.axelliant.hris.screens.SplashFragment"
         android:label="Splash Fragment"
         tools:layout="@layout/fragment_splash">
 
@@ -16,7 +16,7 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.axelliant.hrms.screens.LoginFragment"
+        android:name="com.axelliant.hris.screens.LoginFragment"
         android:label="Login Fragment"
         tools:layout="@layout/fragment_login">
         <action
@@ -26,7 +26,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.axelliant.hrms.screens.HomeFragment"
+        android:name="com.axelliant.hris.screens.HomeFragment"
         android:label="Home Fragment"
         tools:layout="@layout/fragment_home">
 
@@ -35,7 +35,7 @@
 
     <fragment
         android:id="@+id/leavesFragment"
-        android:name="com.axelliant.hrms.screens.LeavesFragment"
+        android:name="com.axelliant.hris.screens.LeavesFragment"
         android:label="Leaves Fragment"
         tools:layout="@layout/fragment_leaves">
 
@@ -44,14 +44,14 @@
 
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.axelliant.hrms.screens.ProfileFragment"
+        android:name="com.axelliant.hris.screens.ProfileFragment"
         android:label="Profile Fragment"
         tools:layout="@layout/fragment_profile">
 
     </fragment>
     <fragment
         android:id="@+id/expenseFragment"
-        android:name="com.axelliant.hrms.screens.ExpenseFragment"
+        android:name="com.axelliant.hris.screens.ExpenseFragment"
         android:label="Expense Fragment"
         tools:layout="@layout/fragment_expense">
 
@@ -59,7 +59,7 @@
 
     <fragment
         android:id="@+id/requestFragment"
-        android:name="com.axelliant.hrms.screens.RequestFragment"
+        android:name="com.axelliant.hris.screens.RequestFragment"
         android:label="Request Fragment"
         tools:layout="@layout/fragment_request">
 
@@ -67,7 +67,7 @@
 
     <fragment
         android:id="@+id/approvalFragment"
-        android:name="com.axelliant.hrms.screens.ApprovalsFragment"
+        android:name="com.axelliant.hris.screens.ApprovalsFragment"
         android:label="Expense Fragment"
         tools:layout="@layout/fragment_approvals">
 
@@ -75,7 +75,7 @@
 
     <fragment
         android:id="@+id/attendanceStatsFragment"
-        android:name="com.axelliant.hrms.screens.AttendanceStatsFragment"
+        android:name="com.axelliant.hris.screens.AttendanceStatsFragment"
         android:label="Apply Leaves Fragment"
         tools:layout="@layout/fragment_attendance_stats">
 
@@ -84,7 +84,7 @@
 
     <fragment
         android:id="@+id/myAttendanceDetailFragment"
-        android:name="com.axelliant.hrms.screens.MyAttendanceDetailFragment"
+        android:name="com.axelliant.hris.screens.MyAttendanceDetailFragment"
         android:label="My Attendance Detail Fragment"
         tools:layout="@layout/fragment_my_attendance_detail">
 
@@ -92,7 +92,7 @@
 
     <fragment
         android:id="@+id/teamAttendanceDetailFragment"
-        android:name="com.axelliant.hrms.screens.TeamAttendanceDetailFragment"
+        android:name="com.axelliant.hris.screens.TeamAttendanceDetailFragment"
         android:label="Team Attendance Detail Fragment"
         tools:layout="@layout/fragment_team_attendance_detail">
 
@@ -100,7 +100,7 @@
 
     <fragment
         android:id="@+id/myLeaveDetailFragment"
-        android:name="com.axelliant.hrms.screens.MyLeaveDetailFragment"
+        android:name="com.axelliant.hris.screens.MyLeaveDetailFragment"
         android:label="My Leave Detail Fragment"
         tools:layout="@layout/fragment_my_leave_detail">
 
@@ -109,7 +109,7 @@
 
     <fragment
         android:id="@+id/teamLeaveDetailFragment"
-        android:name="com.axelliant.hrms.screens.TeamLeaveDetailFragment"
+        android:name="com.axelliant.hris.screens.TeamLeaveDetailFragment"
         android:label="Team Leave Detail Fragment"
         tools:layout="@layout/fragment_my_team_leave_detail">
 
@@ -118,7 +118,7 @@
 
     <fragment
         android:id="@+id/checkInListFragment"
-        android:name="com.axelliant.hrms.screens.CheckInListFragment"
+        android:name="com.axelliant.hris.screens.CheckInListFragment"
         android:label="Expense List Fragment"
         tools:layout="@layout/fragment_check_in_list">
 
@@ -127,7 +127,7 @@
 
     <fragment
         android:id="@+id/addExpenseFragment"
-        android:name="com.axelliant.hrms.screens.AddExpenseFragment"
+        android:name="com.axelliant.hris.screens.AddExpenseFragment"
         android:label="Add Expense Fragment"
         tools:layout="@layout/fragment_add_expense">
 
@@ -136,7 +136,7 @@
 
     <fragment
         android:id="@+id/imageDetailFragment"
-        android:name="com.axelliant.hrms.screens.ImageDetailFragment"
+        android:name="com.axelliant.hris.screens.ImageDetailFragment"
         android:label="Image Detail Fragment"
         tools:layout="@layout/fragment_image_detail">
 

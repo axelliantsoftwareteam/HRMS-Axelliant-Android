@@ -693,7 +693,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             >
-            <com.axelliant.hrms.components.RoundedButton
+            <com.axelliant.hris.components.RoundedButton
                 android:id="@+id/btn_apply"
                 style="@style/ButtonTextStyle"
                 android:layout_width="0dp"
@@ -710,7 +710,7 @@
                 app:textColor="@color/white" />
 
 
-            <com.axelliant.hrms.components.RoundedButton
+            <com.axelliant.hris.components.RoundedButton
                 android:id="@+id/btn_update"
                 style="@style/ButtonTextStyle"
                 android:layout_width="0dp"
@@ -727,7 +727,7 @@
                 app:textColor="@color/white" />
 
 
-            <com.axelliant.hrms.components.RoundedButton
+            <com.axelliant.hris.components.RoundedButton
                 android:id="@+id/btn_deleted"
                 style="@style/ButtonTextStyle"
                 android:layout_width="0dp"

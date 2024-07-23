@@ -321,7 +321,7 @@
             app:layout_constraintStart_toStartOf="@id/start_guideline"
             app:layout_constraintBottom_toTopOf="@id/bottom_guideline"
             />
-        <com.axelliant.hrms.components.RoundedButton
+        <com.axelliant.hris.components.RoundedButton
                 android:id="@+id/btn_apply"
                 style="@style/ButtonTextStyle"
                 android:layout_width="0dp"

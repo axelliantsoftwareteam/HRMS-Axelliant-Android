@@ -52,7 +52,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="com.axelliant.hrms"
+                    android:host="com.axelliant.hris"
                     android:path="/mts5f/2GsEaaqZozKLzOqnhJJCQ="
                     android:scheme="msauth" />
             </intent-filter>

@@ -207,7 +207,7 @@
         </com.google.android.material.textview.MaterialTextView>
 
 
-        <com.axelliant.hrms.components.RoundedButton
+        <com.axelliant.hris.components.RoundedButton
             android:id="@+id/btn_login"
             style="@style/ButtonTextStyle"
             android:layout_width="0dp"
@@ -223,9 +223,9 @@
             app:text="@string/login"
             app:textColor="@color/white">
 
-        </com.axelliant.hrms.components.RoundedButton>
+        </com.axelliant.hris.components.RoundedButton>
 
-        <com.axelliant.hrms.components.RoundedButton
+        <com.axelliant.hris.components.RoundedButton
             android:id="@+id/btn_mic_login"
             style="@style/ButtonTextStyle"
             android:layout_width="0dp"

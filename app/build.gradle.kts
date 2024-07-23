@@ -6,15 +6,15 @@ plugins {
 }
 
 android {
-    namespace = "com.axelliant.hrms"
+    namespace = "com.axelliant.hris"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.axelliant.hrms"
+        applicationId = "com.axelliant.hris"
         minSdk = 24
         targetSdk = 34
-        versionCode = 2
-        versionName = "1.1"
+        versionCode = 1
+        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
