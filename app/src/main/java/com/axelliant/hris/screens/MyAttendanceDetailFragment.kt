@@ -107,10 +107,10 @@ class MyAttendanceDetailFragment : BaseFragment() {
             override fun onItemClick(customObject: Any, position: Int) {
 
                 val attendanceDetail = customObject as AttendanceDetail
-                AppNavigator.navigateToRequest(Bundle().apply {
-                    this.putString(AppConst.RequestType, RequestFilter.ATTENDANCE.name)
-                    this.putString(AppConst.AttendanceRequestParam, Gson().toJson(attendanceDetail))
-                })
+//                AppNavigator.navigateToRequest(Bundle().apply {
+//                    this.putString(AppConst.RequestType, RequestFilter.ATTENDANCE.name)
+//                    this.putString(AppConst.AttendanceRequestParam, Gson().toJson(attendanceDetail))
+//                })
 
 
             }

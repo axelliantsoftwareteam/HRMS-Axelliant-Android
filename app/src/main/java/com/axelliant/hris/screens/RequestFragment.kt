@@ -87,7 +87,8 @@ class RequestFragment : BaseFragment() {
             isUpdate = true
 
             val type = arguments?.getString(RequestType, RequestFilter.LEAVE.name)
-            if (type == RequestFilter.LEAVE.name) {
+            if (type == RequestFilter.LEAVE.name)
+            {
                 currentFilter = RequestFilter.LEAVE
                 val leaveDetail = Gson().fromJson(
                     arguments?.getString(LeaveRequestParam),

@@ -116,7 +116,6 @@ class CheckInListFragment : BaseFragment() {
                         ErrorMessages.CHECK_IN_PENDING_ONLY.toString().plus(" ")
                             .plus(attendanceDetail.requeststatus)
                     )
-
             }
         })
         binding?.rvAttendanceDetail?.adapter = weeklyAdapter
