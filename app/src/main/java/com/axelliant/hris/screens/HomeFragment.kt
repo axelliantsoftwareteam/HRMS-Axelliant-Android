@@ -394,7 +394,9 @@ class HomeFragment : BaseFragment() {
 //        binding?.tvLocTxt?.text = getLocationAddress(currentLocation)
 
         for (targetloc in targetLocList) {
-            if (currentLocation != null) {
+            if (currentLocation != null)
+            {
+                Log.d("loc"," ${currentLocation!!.latitude} ${currentLocation!!.longitude}")
                 val isWithinRadius = isLocationWithinRadius(
                     currentLocation!!.latitude,
                     currentLocation!!.longitude,
