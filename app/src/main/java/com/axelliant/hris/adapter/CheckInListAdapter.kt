@@ -1,16 +1,21 @@
 package com.axelliant.hris.adapter
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import com.axelliant.hris.R
 import com.axelliant.hris.callback.AdapterItemClick
 import com.axelliant.hris.databinding.CheckInListRowBinding
+import com.axelliant.hris.enums.LeaveStatus
 import com.axelliant.hris.extention.nullToEmpty
 import com.axelliant.hris.model.checkin.CheckInDetail
 
 class CheckInListAdapter(
     private val attendanceList: ArrayList<CheckInDetail>,
+    private val mContext: Context,
     private val adapterItemClick: AdapterItemClick
 ) :
     RecyclerView.Adapter<CheckInListAdapter.AccountsVH>() {
@@ -27,7 +32,8 @@ class CheckInListAdapter(
         holder.bind(attendanceList[position])
 
 
-        holder.binding.lyActionBtn.setOnClickListener {
+
+        holder.binding.tvAttendStatus.setOnClickListener {
             adapterItemClick.onItemClick(attendanceList[position], position)
         }
 
@@ -36,7 +42,24 @@ class CheckInListAdapter(
             attendanceList[position].isDetailVisible = !attendanceList[position].isDetailVisible
             notifyItemChanged(position)
         }
-
+        when (attendanceList[position].requeststatus) {
+            LeaveStatus.DRAFT.value -> {
+                holder.binding.status.backgroundTintList = ContextCompat.getColorStateList(mContext, R.color.light_yellow)
+                holder.binding.status.setTextColor(ContextCompat.getColorStateList(mContext, R.color.yellow))
+            }
+            LeaveStatus.PENDING.value -> {
+                holder.binding.status.backgroundTintList = ContextCompat.getColorStateList(mContext, R.color.light_yellow)
+                holder.binding.status.setTextColor(ContextCompat.getColorStateList(mContext, R.color.yellow))
+            }
+            LeaveStatus.APPROVED.value -> {
+                holder.binding.status.backgroundTintList = ContextCompat.getColorStateList(mContext, R.color.light_green)
+                holder.binding.status.setTextColor(ContextCompat.getColorStateList(mContext, R.color.green))
+            }
+            LeaveStatus.REJECTED.value -> {
+                holder.binding.status.backgroundTintList = ContextCompat.getColorStateList(mContext, R.color.color_third_light)
+                holder.binding.status.setTextColor(ContextCompat.getColorStateList(mContext, R.color.color_third))
+            }
+        }
 
     }
 
