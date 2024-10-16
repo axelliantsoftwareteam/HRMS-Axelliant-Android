@@ -77,10 +77,18 @@ class ExpenseFragment : BaseFragment() {
             viewLifecycleOwner,
             EventObserver { response ->
 
-                if (response?.meta?.status == true && response.expenses!=null) {
-
-                    dataPopulate(response.expenses)
+                if (response?.meta?.status == true && response.expenses != null) {
                     subFilterPopulations(response.expense_status)
+
+                    if (response.expenses.size > 0) {
+                        binding?.rvExpense?.visibility=View.VISIBLE
+                        binding?.tvNoRecord?.visibility=View.GONE
+
+                        dataPopulate(response.expenses)
+                    } else {
+                        binding?.rvExpense?.visibility=View.GONE
+                        binding?.tvNoRecord?.visibility=View.VISIBLE
+                    }
 
                 } else {
                     requireContext().showErrorMsg(response?.meta?.message.toString())
@@ -106,8 +114,14 @@ class ExpenseFragment : BaseFragment() {
                     if (expense.status == "Draft") {
                         AppNavigator.navigateToAddExpenseFragment(Bundle().apply {
                             this.putString(AppConst.ExpenseRequestIDParam, expense.name)
-                            this.putString(AppConst.ExpenseRequestParam, Gson().toJson(expense.expenses_detail))
-                            this.putString(AppConst.ExpenseRequestAttachments, Gson().toJson(expense.attachments))
+                            this.putString(
+                                AppConst.ExpenseRequestParam,
+                                Gson().toJson(expense.expenses_detail)
+                            )
+                            this.putString(
+                                AppConst.ExpenseRequestAttachments,
+                                Gson().toJson(expense.attachments)
+                            )
                         })
                     } else {
                         requireContext().showErrorMsg(
@@ -253,6 +267,7 @@ class ExpenseFragment : BaseFragment() {
         // Showing the date picker dialog
         datePicker.show(activity?.supportFragmentManager!!, "DATE_PICKER")
     }
+
     private fun subFilterPopulations(leaveStatus: ArrayList<FilterModel>?) {
 
         leaveStatus?.add(0, FilterModel().apply {

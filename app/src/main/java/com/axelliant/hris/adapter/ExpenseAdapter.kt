@@ -4,12 +4,15 @@ import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.axelliant.hris.R
 import com.axelliant.hris.callback.AdapterItemClick
 import com.axelliant.hris.databinding.MyTeamExpenseRowBinding
+import com.axelliant.hris.enums.LeaveStatus
 import com.axelliant.hris.extention.valueQualifier
 import com.axelliant.hris.model.expense.Attachments
 import com.axelliant.hris.model.expense.Expense
@@ -44,9 +47,8 @@ class ExpenseAdapter(
         holder.binding.rvLeaveCount.isNestedScrollingEnabled = false
 
 
-        holder.binding.lyWeekly.setOnClickListener {
 
-
+        holder.binding.tvAttendStatus.setOnClickListener {
             itemClick.onItemClick(list[position], position)
         }
 
@@ -54,6 +56,21 @@ class ExpenseAdapter(
             holder.binding.lyDropDown.hideShow(it)
             holder.binding.lineDiv.isVisible = holder.binding.rvLeaveCount.isVisible
 
+        }
+
+        when (list[position].approval_status) {
+            LeaveStatus.DRAFT.value -> {
+                holder.binding.tvDate.backgroundTintList = ContextCompat.getColorStateList(mContext, R.color.light_yellow)
+                holder.binding.tvDate.setTextColor(ContextCompat.getColorStateList(mContext, R.color.yellow))
+            }
+            LeaveStatus.APPROVED.value -> {
+                holder.binding.tvDate.backgroundTintList = ContextCompat.getColorStateList(mContext, R.color.light_green)
+                holder.binding.tvDate.setTextColor(ContextCompat.getColorStateList(mContext, R.color.green))
+            }
+            LeaveStatus.REJECTED.value -> {
+                holder.binding.tvDate.backgroundTintList = ContextCompat.getColorStateList(mContext, R.color.color_third_light)
+                holder.binding.tvDate.setTextColor(ContextCompat.getColorStateList(mContext, R.color.color_third))
+            }
         }
 
     }
@@ -79,13 +96,11 @@ class ExpenseAdapter(
             else
                 binding.tvDate.text = item.approval_status.toString()
 
+                binding.tvAttendStatus.text = "Edit"
+//            binding.profileImg.setUrlImage(item.image, mContext)
+
             binding.status.text = item.total_claimed_amount.toString().valueQualifier()
             binding.tvHour.text = item.posting_date.valueQualifier()
-            if (item.approval_status == "Draft")
-                binding.tvAttendStatus.text = "Pending"
-            else
-                binding.tvAttendStatus.text = item.approval_status.valueQualifier()
-//            binding.profileImg.setUrlImage(item.image, mContext)
 
 
             binding.rvAttachments.layoutManager =
