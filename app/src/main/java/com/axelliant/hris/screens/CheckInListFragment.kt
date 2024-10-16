@@ -18,10 +18,11 @@ import com.axelliant.hris.enums.AttendanceFilter
 import com.axelliant.hris.enums.AttendanceFilter.Custom
 import com.axelliant.hris.enums.AttendanceFilter.MONTH
 import com.axelliant.hris.enums.AttendanceFilter.WEEK
+import com.axelliant.hris.enums.LeaveStatus
 import com.axelliant.hris.enums.RequestFilter
 import com.axelliant.hris.event.EventObserver
 import com.axelliant.hris.extention.showErrorMsg
-import com.axelliant.hris.model.attendance.AttendanceInput
+import com.axelliant.hris.model.attendance.LeaveCountInput
 import com.axelliant.hris.model.checkin.CheckInDetail
 import com.axelliant.hris.model.dashboard.FilterModel
 import com.axelliant.hris.navigation.AppNavigator
@@ -36,6 +37,8 @@ import java.util.Date
 
 class CheckInListFragment : BaseFragment() {
 
+    private var filterIdList: ArrayList<String>? = null
+    private var filterId: String = ""
     private var startDateString: String? = null
     private var endDateString: String? = null
     private var _binding: FragmentCheckInListBinding? = null
@@ -43,7 +46,6 @@ class CheckInListFragment : BaseFragment() {
     private var currentFilter = WEEK
     private val attendanceViewModel: AttendanceViewModel by inject()
 
-    private var filterId = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -77,9 +79,17 @@ class CheckInListFragment : BaseFragment() {
             EventObserver { response ->
 
                 if (response?.meta?.status == true) {
-                    dataPopulate(response.checkin!!)
-                    subFilterPopulations(response.checkin_status!!)
+                    response.checkin_status?.let { subFilterPopulations(it) }
+                    if (response.checkin?.size ?: 0 > 0) {
+                        binding?.rvAttendanceDetail?.visibility = View.VISIBLE
+                        binding?.tvNoRecord?.visibility = View.GONE
 
+                        response.checkin?.let { dataPopulate(it) }
+
+                    } else {
+                        binding?.rvAttendanceDetail?.visibility = View.GONE
+                        binding?.tvNoRecord?.visibility = View.VISIBLE
+                    }
 
                 } else {
                     requireContext().showErrorMsg(response?.meta?.message.toString())
@@ -98,7 +108,7 @@ class CheckInListFragment : BaseFragment() {
     private fun dataPopulate(attendanceData: ArrayList<CheckInDetail>) {
 
         binding?.rvAttendanceDetail?.layoutManager = LinearLayoutManager(requireActivity())
-        val weeklyAdapter = CheckInListAdapter(attendanceData, object : AdapterItemClick {
+        val weeklyAdapter = CheckInListAdapter(attendanceData,requireContext(),object : AdapterItemClick {
             override fun onItemClick(customObject: Any, position: Int) {
 
                 val attendanceDetail = customObject as CheckInDetail
@@ -124,22 +134,29 @@ class CheckInListFragment : BaseFragment() {
     }
 
     private fun subFilterPopulations(attendanceStatusList: ArrayList<FilterModel>) {
+
         attendanceStatusList.add(0, FilterModel().apply {
             this.id = ""
             this.title = "All"
             this.count = "0"
         })
-
         binding?.rvSubFilter?.layoutManager =
             LinearLayoutManager(requireActivity(), RecyclerView.HORIZONTAL, false)
-        val weeklyAdapter = SubFilterAdapter(filterId,
+        val weeklyAdapter = SubFilterAdapter(
+            filterId,
             attendanceStatusList, requireContext(),
             object : AdapterItemClick {
                 override fun onItemClick(customObject: Any, position: Int) {
                     val filterObject = customObject as FilterModel
 
                     filterId = filterObject.id.toString()
-                    attendanceViewModel.getCheckInList(getCurrentObject())
+                    if (filterIdList == null) {
+                        filterIdList = ArrayList()
+                    }
+                    filterIdList?.clear()
+
+                    filterIdList?.add(filterId)
+                    attendanceViewModel.getCheckInList(getCurrentObject(filterObject.id))
 
                 }
 
@@ -207,7 +224,10 @@ class CheckInListFragment : BaseFragment() {
         }
     }
 
-    private fun getCurrentObject(): AttendanceInput {
+    private fun getCurrentObject(
+        status: String? = null,
+        listFilter: ArrayList<String>? = null
+    ): LeaveCountInput {
 
         when (currentFilter) {
             WEEK -> {
@@ -227,14 +247,31 @@ class CheckInListFragment : BaseFragment() {
 
             Custom -> {}
         }
-        return AttendanceInput().apply {
-            this.startDate = startDateString!!
-            this.endDate = endDateString!!
-            this.filter = currentFilter
-            this.filters = filterId
+        if (status == LeaveStatus.APPROVED.value)
+        {
+            val statusList = listOf(
+                "Processed",
+                "processed",
+                "waiting",
+                "Waiting"
+            )
 
+            return LeaveCountInput().apply {
+                this.startDate = startDateString!!
+                this.endDate = endDateString!!
+                this.filter = currentFilter
+                this.filters = statusList
+
+            }
+        } else {
+            return LeaveCountInput().apply {
+                this.startDate = startDateString!!
+                this.endDate = endDateString!!
+                this.filter = currentFilter
+                this.filters = filterIdList
+
+            }
         }
-
     }
 
 
