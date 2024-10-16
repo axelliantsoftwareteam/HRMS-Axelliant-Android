@@ -91,7 +91,26 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
            />
-
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_edit"
+            style="@style/TEXT_SEMI_BLACK_10"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_time_bg"
+            android:backgroundTint="#1A09589B"
+            android:padding="@dimen/_5sdp"
+            android:textColor="@color/colorApp"
+            android:gravity="center"
+            android:paddingStart="@dimen/_10sdp"
+            android:paddingTop="@dimen/_5sdp"
+            android:paddingBottom="@dimen/_5sdp"
+            android:paddingEnd="@dimen/_5sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:text="Edit"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_attend_status"
+            />
 
         <View
             android:id="@+id/divider"
@@ -104,7 +123,7 @@
             android:layout_marginEnd="@dimen/_10sdp"
             app:layout_constraintEnd_toEndOf="@+id/tv_attend_status"
             app:layout_constraintStart_toStartOf="@+id/tv_attend_status"
-            app:layout_constraintTop_toBottomOf="@+id/tv_attend_status" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_edit" />
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -186,9 +205,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_5sdp"
                         android:background="@drawable/rounded_disabled"
-                        android:text="Un Paid"
-
-                        android:textColor="@color/red"
+                        android:text="Paid"
+                        android:textColor="@color/green"
                         android:textAllCaps="true"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tv_work_home" />
