@@ -40,16 +40,29 @@
             tools:text="100000"
             android:textColor="@color/colorApp" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv_date"
-            style="@style/TEXT_MEDIUM_BLACK_10"
+        <LinearLayout
+            android:id="@+id/tv_custom"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="3"
-            android:paddingStart="@dimen/_1sdp"
-            android:gravity="center"
-            android:textColor="@color/green"
-            tools:text="200" />
+            android:gravity="center">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_date"
+                style="@style/TEXT_SEMI_BLACK_10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_time_bg"
+                android:gravity="center"
+                android:paddingStart="@dimen/_10sdp"
+                android:paddingTop="@dimen/_5sdp"
+                android:paddingEnd="@dimen/_10sdp"
+                android:paddingBottom="@dimen/_5sdp"
+                android:text="Present"
+                android:textColor="@color/green" />
+
+        </LinearLayout>
+
 
         <ImageView
             android:id="@+id/ic_drop_down"
@@ -82,28 +95,28 @@
             style="@style/TEXT_SEMI_BLACK_10"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/rounded_time_bg"
-            android:gravity="start"
-            android:padding="@dimen/_5sdp"
             android:layout_marginTop="@dimen/_5sdp"
-            android:text="Approved"
-            app:layout_constraintTop_toTopOf="parent"
-            android:textColor="@color/green"
+            android:background="@drawable/rounded_time_bg"
+            android:backgroundTint="#1A09589B"
+            android:gravity="center"
+            android:padding="@dimen/_5sdp"
+            tools:text="Edit"
+            android:textColor="@color/colorApp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            />
+            app:layout_constraintTop_toTopOf="parent" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_leave_count"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/_5sdp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_attend_status"
-            tools:itemCount="2"
-            android:layout_marginTop="@dimen/_5sdp"
+            tools:itemCount="1"
             tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            tools:listitem="@layout/my_team_expense_sub_row"
-            />
+            tools:listitem="@layout/my_team_expense_sub_row" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_attachments"
