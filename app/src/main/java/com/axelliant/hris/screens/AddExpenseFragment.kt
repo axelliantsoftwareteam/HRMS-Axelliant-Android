@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.provider.DocumentsContract
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -52,6 +53,7 @@ import java.io.File
 
 class AddExpenseFragment : BaseFragment(), AddExpenseAdapter.OnUpdateList {
 
+    private var srNo: Int = 0
     private var pickMultipleImages = 103
     private val cameraPermissionRequest = 101
     private var galleryPermissionRequest = 102
@@ -66,7 +68,7 @@ class AddExpenseFragment : BaseFragment(), AddExpenseAdapter.OnUpdateList {
     private var expenseId = ""
     private var _binding: FragmentAddExpenseBinding? = null
     private val binding get() = _binding
-    private lateinit var addExpenseList: ArrayList<AddExpense>
+    private var addExpenseList: ArrayList<AddExpense> = arrayListOf()
     private val expenseViewModel: ExpenseViewModel by inject()
 
     var addExpenseAdapter: AddExpenseAdapter? = null
@@ -268,13 +270,14 @@ class AddExpenseFragment : BaseFragment(), AddExpenseAdapter.OnUpdateList {
                             addExpenseList = forUpdateList
 
                         } else {
-                            addExpenseList = arrayListOf(AddExpense().apply {
+                            addExpenseList.add(AddExpense().apply {
+                                this.srno = srNo
                                 this.expense_type = null
                                 this.expense_date = null
-                                this.amount = null
+                                this.amount = 0.0
+                                this.description = ""
                                 this.expenseTypeList = expenseList
                             })
-
                         }
 
                         binding?.rvLeaveCount?.layoutManager =
@@ -302,8 +305,11 @@ class AddExpenseFragment : BaseFragment(), AddExpenseAdapter.OnUpdateList {
 
         binding?.btnApply?.setOnClickListener {
 
+            Log.d("addExpenseListSize",addExpenseList.size.toString())
 
             for (expenseItem in addExpenseList) {
+
+
 
                 if (expenseItem.expense_type == expenseType) {
                     requireContext().showErrorMsg("Please select the type")
@@ -327,13 +333,13 @@ class AddExpenseFragment : BaseFragment(), AddExpenseAdapter.OnUpdateList {
                     this.expense_id = expenseId
                     this.expense_details = addExpenseList
                     this.posting_date = getServerFormat()
-                    this.total_amount = grandTotalCalculation().toString()
+                    this.total_amount = addExpenseAdapter?.grandTotalCalculation().toString()
                 })
             } else {
                 expenseViewModel.postExpense(isUpdate, CreateExpense().apply {
                     this.expense_details = addExpenseList
                     this.posting_date = getServerFormat()
-                    this.total_amount = grandTotalCalculation().toString()
+                    this.total_amount = addExpenseAdapter?.grandTotalCalculation().toString()
                 })
             }
 
@@ -359,7 +365,8 @@ class AddExpenseFragment : BaseFragment(), AddExpenseAdapter.OnUpdateList {
             addExpenseList.add(AddExpense().apply {
                 this.expense_type = null
                 this.expense_date = null
-                this.amount = null
+                this.description = ""
+                this.amount = 0.0
                 this.expenseTypeList = expenseList
 
             })
@@ -431,24 +438,15 @@ class AddExpenseFragment : BaseFragment(), AddExpenseAdapter.OnUpdateList {
     }
 
     override fun onListUpdated(updatedList: ArrayList<AddExpense>) {
+        Log.d("updatedListSize",updatedList.size.toString())
+
         // Handle the updated list here
         addExpenseList = updatedList
-
-        binding?.tvAmount?.text = grandTotalCalculation().toString()
+        binding?.tvAmount?.text = addExpenseAdapter?.grandTotalCalculation().toString()
     }
 
 
-    private fun grandTotalCalculation(): Double {
-        var total = 0.0
-        for (addExpense in addExpenseList) {
-            if (addExpense.amount != null) {
-                total += addExpense.amount!!
-            }
 
-        }
-
-        return total
-    }
 
 
     ////////////////////// image working //////////////////////

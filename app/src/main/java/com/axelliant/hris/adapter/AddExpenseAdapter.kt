@@ -5,6 +5,7 @@ import android.app.DatePickerDialog
 import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -49,24 +50,27 @@ class AddExpenseAdapter(
         spinnerLeavePopulations(mContext, holder.binding.spAttendType, position)
 
         holder.binding.tvDateTxt.text = list[position].expense_date
+        holder.binding.etAttendanceReason.setText(list[position].description)
+        holder.binding.etAmount.setText(list[position].amount.toString())
 
-        if(list[position].description!=null)
-            holder.binding.etAttendanceReason.setText(list[position].description.toString())
-            else{
-            holder.binding.etAttendanceReason.setText("")
-            holder.binding.etAttendanceReason.hint =mContext.getString(R.string.write_descrpt)
-
-        }
-        if(list[position].amount!=null)
-            holder.binding.etAmount.setText(list[position].amount.toString())
-        else {
-            holder.binding.etAmount.setText("")
-            holder.binding.etAmount.hint =mContext.getString(R.string.amount)
-
-        }
+//        if(list[position].description!=null)
+//            holder.binding.etAttendanceReason.setText(list[position].description.toString())
+//            else{
+//            holder.binding.etAttendanceReason.setText("")
+//            holder.binding.etAttendanceReason.hint =mContext.getString(R.string.write_descrpt)
+//
+//        }
+//        if(list[position].amount!=null)
+//            holder.binding.etAmount.setText(list[position].amount.toString())
+//        else {
+//            holder.binding.etAmount.setText("")
+//            holder.binding.etAmount.hint =mContext.getString(R.string.amount)
+//
+//        }
         // Set text change listeners to update the list
         holder.binding.etAttendanceReason.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
+
                 list[position].description = s.toString()
                 onUpdateList.onListUpdated(list) // Notify the fragment
             }
@@ -96,6 +100,7 @@ class AddExpenseAdapter(
             notifyItemRemoved(position)
             notifyItemRangeChanged(position, list.size)
             onUpdateList.onListUpdated(list) // Notify the fragment
+            Log.d("removList",list.size.toString())
         }
     }
 
@@ -171,7 +176,17 @@ class AddExpenseAdapter(
 
         }
     }
+    fun grandTotalCalculation(): Double {
+        var total = 0.0
+        for (addExpense in list) {
+            if (addExpense.amount != null) {
+                total += addExpense.amount!!
+            }
 
+        }
+
+        return total
+    }
 
 }
 
