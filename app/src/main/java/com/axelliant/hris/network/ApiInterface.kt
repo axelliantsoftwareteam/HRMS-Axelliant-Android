@@ -1,11 +1,13 @@
 package com.axelliant.hris.network
 
 import com.axelliant.hris.model.attendance.AttRequest
+import com.axelliant.hris.model.attendance.LeaveCountRequest
 import com.axelliant.hris.model.expense.CreateExpense
 import com.axelliant.hris.model.expense.DeleteAttachment
 import com.axelliant.hris.model.leave.ExpenseApprovalStatus
 import com.axelliant.hris.model.leave.LeaveApproval
 import com.axelliant.hris.model.leave.UpcomingLeaveInput
+import com.axelliant.hris.model.leave.leaveCount.LeaveCountByDaysRequest
 import com.axelliant.hris.model.login.CheckInRequest
 import com.axelliant.hris.model.login.LoginRequest
 import com.axelliant.hris.model.post.AttendanceRequest
@@ -124,6 +126,11 @@ interface ApiInterface {
 
 
     @Headers("Content-Type: application/json")
+    @GET("hrms.hr.doctype.employee.leaves_mobile.get_leaves_detail")  // Leave types for request section
+    fun getLeaveTypesWithCount(@Header("Authorization") auth: String?): Call<ResponseBody>
+
+
+    @Headers("Content-Type: application/json")
     @GET("hrms.hr.doctype.employee.checkin.get_checkin_select_field")  // Attendance types for request section
     fun getAttendanceRequestInformation(@Header("Authorization") auth: String?): Call<ResponseBody>
 
@@ -162,6 +169,14 @@ interface ApiInterface {
     fun deleteLeaveRequest(
         @Header("Authorization") auth: String?,
         @Body leaveRequest: LeaveRequest?
+    ): Call<ResponseBody>
+
+
+    @Headers("Content-Type: application/json")
+    @POST("hrms.hr.doctype.employee.leaves_mobile.get_leave_days")
+    fun leaveCountRequest(
+        @Header("Authorization") auth: String?,
+        @Body leaveCountByDaysRequest: LeaveCountByDaysRequest?
     ): Call<ResponseBody>
 
 
@@ -232,7 +247,7 @@ interface ApiInterface {
     @Headers("Content-Type: application/json")
     @POST("hrms.hr.doctype.employee.checkin.get_checkin_request") // get check in list
     fun callCheckInList(
-        @Header("Authorization") auth: String?, @Body attendanceRequest: AttRequest
+        @Header("Authorization") auth: String?, @Body attendanceRequest: LeaveCountRequest
 
     ): Call<ResponseBody>
 

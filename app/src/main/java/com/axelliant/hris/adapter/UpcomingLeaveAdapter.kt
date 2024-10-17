@@ -51,6 +51,14 @@ class UpcomingLeaveAdapter(
             binding.tvReason.text = item.reason.valueQualifier()
 //            // Assuming `item.status` is of type `LeaveStatus`
             when (item.status) {
+                LeaveStatus.DRAFT.value -> {
+                    binding.tvStatus.apply {
+                        text = item.status
+                        backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context,R.color.pendingColor))
+                        setTypeface(null, Typeface.NORMAL) // Set text style to normal
+                    }
+
+                }
                 LeaveStatus.PENDING.value -> {
                     binding.tvStatus.apply {
                         text = item.status

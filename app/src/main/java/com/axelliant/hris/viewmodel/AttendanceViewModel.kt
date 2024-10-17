@@ -7,6 +7,7 @@ import com.axelliant.hris.model.attendance.AttendanceApproval
 import com.axelliant.hris.model.attendance.AttendanceInput
 import com.axelliant.hris.model.attendance.AttendanceResponse
 import com.axelliant.hris.model.attendance.AttendanceStatsResponse
+import com.axelliant.hris.model.attendance.LeaveCountInput
 import com.axelliant.hris.model.attendance.TeamAttendanceResponse
 import com.axelliant.hris.model.checkin.CheckInListResponse
 import com.axelliant.hris.model.leave.LeaveApproval
@@ -138,7 +139,7 @@ class AttendanceViewModel(private val attendanceRepo: AttendanceRepo) : BaseView
 
     }
 
-    fun getCheckInList(inputObject: AttendanceInput) {
+    fun getCheckInList(inputObject: LeaveCountInput) {
         isLoading.value = Event(true)
         attendanceRepo.checkInList(inputObject)
             .observeForever { data ->

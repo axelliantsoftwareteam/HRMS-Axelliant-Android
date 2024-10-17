@@ -112,7 +112,7 @@
 
              <androidx.constraintlayout.widget.ConstraintLayout
                  android:id="@+id/ly_create_leave"
-                 android:visibility="gone"
+                 android:visibility="visible"
                  android:layout_width="match_parent"
                  android:layout_height="wrap_content"
                  app:layout_constraintTop_toTopOf="parent"
@@ -174,7 +174,7 @@
                  <androidx.constraintlayout.widget.ConstraintLayout
                      android:id="@+id/ly_leave_type"
                      android:layout_width="0dp"
-                     android:layout_height="wrap_content"
+                     android:layout_height="@dimen/_40sdp"
                      android:layout_marginTop="@dimen/_5sdp"
                      android:layout_marginEnd="@dimen/_5sdp"
                      android:background="@drawable/rounded_leave_filter"
@@ -224,7 +224,7 @@
                      <androidx.constraintlayout.widget.ConstraintLayout
                          android:id="@+id/ly_start_date"
                          android:layout_width="0dp"
-                         android:layout_height="wrap_content"
+                         android:layout_height="@dimen/_40sdp"
                          android:layout_marginTop="@dimen/_5sdp"
                          android:layout_marginEnd="@dimen/_5sdp"
                          android:background="@drawable/rounded_leave_filter"
@@ -293,7 +293,7 @@
                      <androidx.constraintlayout.widget.ConstraintLayout
                          android:id="@+id/ly_end_date"
                          android:layout_width="0dp"
-                         android:layout_height="wrap_content"
+                         android:layout_height="@dimen/_40sdp"
                          android:layout_marginStart="@dimen/_5sdp"
                          android:layout_marginTop="@dimen/_5sdp"
                          android:layout_marginEnd="@dimen/_5sdp"
@@ -331,7 +331,113 @@
 
                  </androidx.constraintlayout.widget.ConstraintLayout>
 
+                 <androidx.constraintlayout.widget.ConstraintLayout
+                     android:id="@+id/ly_leave_count_remain"
+                     android:layout_width="0dp"
+                     android:layout_height="wrap_content"
+                     android:layout_marginTop="@dimen/_5sdp"
+                     app:layout_constraintEnd_toEndOf="parent"
+                     app:layout_constraintStart_toStartOf="parent"
+                     app:layout_constraintTop_toBottomOf="@+id/ly_range_date"
+                     app:layout_constraintBottom_toTopOf="@+id/tv_reason_header"
+                     >
 
+                     <com.google.android.material.textview.MaterialTextView
+                         android:id="@+id/tv_leave_count"
+                         style="@style/TEXT_MEDIUM_BLACK_10"
+                         android:layout_width="0dp"
+                         android:layout_height="wrap_content"
+                         android:layout_margin="@dimen/_5sdp"
+                         android:text="@string/leave_count"
+                         android:textAlignment="textStart"
+                         app:layout_constraintEnd_toEndOf="@+id/divider_leave"
+                         app:layout_constraintStart_toStartOf="parent"
+                         app:layout_constraintTop_toTopOf="parent" />
+
+                     <androidx.constraintlayout.widget.ConstraintLayout
+                         android:id="@+id/ly_leave_count"
+                         android:layout_width="0dp"
+                         android:layout_height="@dimen/_40sdp"
+                         android:layout_marginTop="@dimen/_5sdp"
+                         android:layout_marginEnd="@dimen/_5sdp"
+                         android:background="@drawable/rounded_leave_filter"
+                         android:orientation="vertical"
+                         android:padding="@dimen/_8sdp"
+                         app:layout_constraintEnd_toStartOf="@+id/divider_leave"
+                         app:layout_constraintStart_toStartOf="@+id/tv_leave_count"
+                         app:layout_constraintTop_toBottomOf="@+id/tv_leave_count">
+
+
+                         <com.google.android.material.textview.MaterialTextView
+                             android:id="@+id/tv_leave_count_txt"
+                             style="@style/TEXT_MEDIUM_BLACK_10"
+                             android:layout_width="0dp"
+                             android:layout_height="wrap_content"
+                             android:hint="0"
+                             android:textAlignment="textStart"
+                             app:layout_constraintStart_toStartOf="parent"
+                             app:layout_constraintBottom_toBottomOf="parent"
+                             app:layout_constraintEnd_toEndOf="parent"
+                             app:layout_constraintTop_toTopOf="parent"
+                             />
+
+                     </androidx.constraintlayout.widget.ConstraintLayout>
+
+                     <View
+                         android:id="@+id/divider_leave"
+                         android:layout_width="2dp"
+                         android:layout_height="0dp"
+                         android:layout_gravity="center_vertical"
+                         android:layout_margin="@dimen/_5sdp"
+                         android:background="@color/line_divider"
+                         app:layout_constraintBottom_toBottomOf="@+id/ly_remaining_leave"
+                         app:layout_constraintEnd_toEndOf="parent"
+                         app:layout_constraintStart_toStartOf="parent"
+                         app:layout_constraintTop_toTopOf="@+id/ly_remaining_leave" />
+
+
+                     <com.google.android.material.textview.MaterialTextView
+                         android:id="@+id/tv_remaining_leave"
+                         style="@style/TEXT_MEDIUM_BLACK_10"
+                         android:layout_width="0dp"
+                         android:layout_height="wrap_content"
+                         android:layout_marginTop="@dimen/_5sdp"
+                         android:layout_marginEnd="@dimen/_5sdp"
+                         android:text="@string/remaining_leave"
+                         android:textAlignment="textStart"
+                         app:layout_constraintEnd_toEndOf="parent"
+                         app:layout_constraintStart_toStartOf="@+id/ly_remaining_leave"
+                         app:layout_constraintTop_toTopOf="parent" />
+
+                     <androidx.constraintlayout.widget.ConstraintLayout
+                         android:id="@+id/ly_remaining_leave"
+                         android:layout_width="0dp"
+                         android:layout_height="@dimen/_40sdp"
+                         android:layout_marginStart="@dimen/_5sdp"
+                         android:layout_marginTop="@dimen/_5sdp"
+                         android:layout_marginEnd="@dimen/_5sdp"
+                         android:background="@drawable/rounded_leave_filter"
+                         android:orientation="vertical"
+                         android:padding="@dimen/_8sdp"
+                         app:layout_constraintEnd_toEndOf="parent"
+                         app:layout_constraintStart_toEndOf="@+id/divider_leave"
+                         app:layout_constraintTop_toBottomOf="@+id/tv_remaining_leave">
+
+
+                         <com.google.android.material.textview.MaterialTextView
+                             android:id="@+id/tv_remaining_leave_txt"
+                             style="@style/TEXT_MEDIUM_BLACK_10"
+                             android:layout_width="0dp"
+                             android:layout_height="wrap_content"
+                             android:hint="0"
+                             android:textAlignment="textStart"
+                             app:layout_constraintBottom_toBottomOf="parent"
+                             app:layout_constraintStart_toStartOf="parent"
+                             app:layout_constraintEnd_toEndOf="parent"
+                             app:layout_constraintTop_toTopOf="parent" />
+                     </androidx.constraintlayout.widget.ConstraintLayout>
+
+                 </androidx.constraintlayout.widget.ConstraintLayout>
                  <com.google.android.material.textview.MaterialTextView
                      android:id="@+id/tv_reason_header"
                      style="@style/TEXT_MEDIUM_BLACK_10"
@@ -341,7 +447,7 @@
                      android:text="@string/reason_for_leave"
                      app:layout_constraintBottom_toTopOf="@+id/til_leave_reason"
                      app:layout_constraintStart_toStartOf="parent"
-                     app:layout_constraintTop_toBottomOf="@id/ly_range_date" />
+                     app:layout_constraintTop_toBottomOf="@id/ly_leave_count_remain" />
 
 
                  <com.google.android.material.textfield.TextInputLayout
@@ -366,7 +472,7 @@
                          android:maxLines="8"
                          android:hint="@string/write_reason"
                          android:singleLine="false"
-                         tools:text="asdjklaahsd kjashdkjs asdjklajsd kklasnkas jljlk askdjaklsdjaklsdjkasl djklasdjklasjdkl asjkld aklsdjilas jdlaisdouasoduio asudoi asioduasioduioasudoasudoads asdabskd bakjsdhakjsdh kjasdhash djk ahsd kjashdkjs asdjklajsd kklasnkas jljlk askdjaklsdjaklsdjkasl djklasdjklasjdkl asjkld aklsdjilas jdlaisdouasoduio asudoi asioduasioduioasudoasudoads asdabskd bakjsdhakjsdh kjasdhash djk ahsd kjashdkjs"
+                         tools:text="asdjklaahsd"
                          android:textColorHint="@color/grey" />
 
                  </com.google.android.material.textfield.TextInputLayout>
@@ -386,7 +492,7 @@
                  app:layout_constraintStart_toStartOf="parent"
                  app:layout_constraintEnd_toEndOf="parent"
                  android:paddingBottom="@dimen/_10sdp"
-                 android:visibility="visible"
+                 android:visibility="gone"
                  android:orientation="vertical">
 
                  <androidx.constraintlayout.widget.ConstraintLayout

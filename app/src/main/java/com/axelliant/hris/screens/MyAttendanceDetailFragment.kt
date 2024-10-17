@@ -103,7 +103,7 @@ class MyAttendanceDetailFragment : BaseFragment() {
     private fun dataPopulate(attendanceData: ArrayList<AttendanceDetail>) {
 
         binding?.rvAttendanceDetail?.layoutManager = LinearLayoutManager(requireActivity())
-        val weeklyAdapter = MyAttendanceDetailAdapter(attendanceData,object :AdapterItemClick{
+        val weeklyAdapter = MyAttendanceDetailAdapter(attendanceData,requireContext(),object :AdapterItemClick{
             override fun onItemClick(customObject: Any, position: Int) {
 
                 val attendanceDetail = customObject as AttendanceDetail

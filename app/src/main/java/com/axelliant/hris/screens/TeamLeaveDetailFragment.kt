@@ -75,9 +75,18 @@ class TeamLeaveDetailFragment : BaseFragment() {
             EventObserver { response ->
 
                 if (response?.meta?.status == true) {
+                    response.leave_status?.let { subFilterPopulations(it) }
+                    if (response.leaves?.size ?: 0 > 0) {
+                        binding?.rvAttend?.visibility=View.VISIBLE
+                        binding?.tvNoRecord?.visibility=View.GONE
+                        dataPopulate(response.leaves)
 
-                    dataPopulate(response.leaves)
-                    subFilterPopulations(response.leave_status!!)
+
+                    } else {
+                        binding?.rvAttend?.visibility = View.GONE
+                        binding?.tvNoRecord?.visibility = View.VISIBLE
+                    }
+
                     binding?.tvTeamMemberTxt?.text = response.team_count.toString()
 
                 } else {

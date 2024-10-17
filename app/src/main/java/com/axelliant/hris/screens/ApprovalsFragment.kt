@@ -97,9 +97,18 @@ class ApprovalsFragment : BaseFragment() {
             EventObserver { response ->
 
                 if (response?.meta?.status == true) {
+                    if (response.leaves?.size ?: 0 > 0)
+                    {
+                        binding.rvAttend.visibility=View.VISIBLE
+                        binding.tvNoRecord.visibility=View.GONE
 
-                    dataPopulate(response.leaves)
-                    binding?.tvTeamMemberTxt?.text = response.team_count.toString()
+                        dataPopulate(response.leaves)
+                    } else {
+                        binding.rvAttend.visibility = View.GONE
+                        binding.tvNoRecord.visibility = View.VISIBLE
+                    }
+
+                    binding.tvTeamMemberTxt.text = response.team_count.toString()
 
                 } else {
                     requireContext().showErrorMsg(response?.meta?.message.toString())
@@ -114,7 +123,7 @@ class ApprovalsFragment : BaseFragment() {
             EventObserver { response ->
 
                 if (response?.meta?.status == true) {
-                    requireContext().showErrorMsg(response?.status_message)
+                    requireContext().showErrorMsg(response.status_message)
                     leaveViewModel.getTeamLeaveDetail(getCurrentObject())
 
                 } else {
@@ -128,7 +137,7 @@ class ApprovalsFragment : BaseFragment() {
             EventObserver { response ->
 
                 if (response?.meta?.status == true) {
-                    requireContext().showErrorMsg(response?.status_message)
+                    requireContext().showErrorMsg(response.status_message)
                     attendanceViewModel.getAttendanceApproval(getCurrentObject())
                 } else {
                     requireContext().showErrorMsg(response?.meta?.message.toString())
@@ -143,9 +152,16 @@ class ApprovalsFragment : BaseFragment() {
 
                 if (response?.meta?.status == true) {
                     // success
+                    if (response.checkin?.size ?: 0 > 0)
+                    {
+                        binding.rvAttend.visibility=View.VISIBLE
+                        binding.tvNoRecord.visibility=View.GONE
 
-                    attendanceDataPopulate(response.checkin!!)
-
+                        attendanceDataPopulate(response.checkin!!)
+                    } else {
+                        binding.rvAttend.visibility = View.GONE
+                        binding.tvNoRecord.visibility = View.VISIBLE
+                    }
 
                 } else {
                     requireContext().showErrorMsg(response?.meta?.message.toString())
@@ -159,8 +175,17 @@ class ApprovalsFragment : BaseFragment() {
 
                 if (response?.meta?.status == true) {
                     // success
+                    if (response.expenses?.size ?: 0 > 0)
+                    {
+                        binding.rvExpense.visibility=View.VISIBLE
+                        binding.tvNoRecord.visibility=View.GONE
 
-                    expenseDataPopulate(response.expenses!!)
+                        expenseDataPopulate(response.expenses!!)
+                    } else {
+                        binding.rvExpense.visibility = View.GONE
+                        binding.tvNoRecord.visibility = View.VISIBLE
+                    }
+
 
 
                 } else {
@@ -173,7 +198,7 @@ class ApprovalsFragment : BaseFragment() {
             EventObserver { response ->
 
                 if (response?.meta?.status == true) {
-                    requireContext().showErrorMsg(response?.status_message)
+                    requireContext().showErrorMsg(response.status_message)
                     expenseViewModel.getExpenseApproval(getCurrentObject())
                 } else {
                     requireContext().showErrorMsg(response?.meta?.message.toString())
@@ -200,7 +225,7 @@ class ApprovalsFragment : BaseFragment() {
         binding.tvWeek.setOnClickListener {
             currentFilter = RequestFilter.LEAVE
             leaveViewModel.getTeamLeaveDetail(getCurrentObject())
-            binding.tvTeamMember?.text = "Leave Requests"
+            binding.tvTeamMember.text = "Leave Requests"
             binding.rvAttend.visibility=View.VISIBLE
             binding.rvExpense.visibility=View.GONE
             eventSelection()
@@ -208,7 +233,7 @@ class ApprovalsFragment : BaseFragment() {
         binding.tvMonth.setOnClickListener {
             currentFilter = RequestFilter.ATTENDANCE
             attendanceViewModel.getAttendanceApproval(getCurrentObject())
-            binding.tvTeamMember?.text = "Check In Requests"
+            binding.tvTeamMember.text = "Check In Requests"
             binding.rvAttend.visibility=View.VISIBLE
             binding.rvExpense.visibility=View.GONE
             eventSelection()
@@ -217,7 +242,7 @@ class ApprovalsFragment : BaseFragment() {
         binding.tvExpense.setOnClickListener {
             currentFilter = RequestFilter.APPROVAL
             expenseViewModel.getExpenseApproval(getCurrentObject())
-            binding.tvTeamMember?.text = "Approval Requests"
+            binding.tvTeamMember.text = "Approval Requests"
             binding.rvAttend.visibility=View.GONE
             binding.rvExpense.visibility=View.VISIBLE
             eventSelection()
@@ -300,7 +325,7 @@ class ApprovalsFragment : BaseFragment() {
     }
 
     private fun dataPopulate(leaves: ArrayList<TeamLeaveDetail>?) {
-        binding?.rvAttend?.layoutManager = LinearLayoutManager(requireActivity())
+        binding.rvAttend.layoutManager = LinearLayoutManager(requireActivity())
         val weeklyAdapter = TeamLeaveDetailAdapter(requireContext(),
             leaves!!, true, object : AdapterItemClick {
                 override fun onItemClick(customObject: Any, position: Int) {
@@ -328,7 +353,7 @@ class ApprovalsFragment : BaseFragment() {
                 }
 
             })
-        binding?.rvAttend?.adapter = weeklyAdapter
+        binding.rvAttend.adapter = weeklyAdapter
 
     }
 

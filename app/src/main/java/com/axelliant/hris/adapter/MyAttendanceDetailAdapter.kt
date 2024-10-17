@@ -1,16 +1,21 @@
 package com.axelliant.hris.adapter
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import com.axelliant.hris.R
 import com.axelliant.hris.callback.AdapterItemClick
 import com.axelliant.hris.databinding.MyAttendanceDetailRowBinding
+import com.axelliant.hris.enums.LeaveStatus
 import com.axelliant.hris.enums.LocationFilter
 import com.axelliant.hris.model.attendance.AttendanceDetail
 
 class MyAttendanceDetailAdapter(
     private val attendanceList: ArrayList<AttendanceDetail>,
+    private val context: Context,
     private val adapterItemClick: AdapterItemClick
 ) :
     RecyclerView.Adapter<MyAttendanceDetailAdapter.AccountsVH>() {
@@ -27,8 +32,8 @@ class MyAttendanceDetailAdapter(
         holder.bind(attendanceList[position])
 
 
-        holder.binding.lyActionBtn.setOnClickListener{
-            adapterItemClick.onItemClick(attendanceList[position],position)
+        holder.binding.lyActionBtn.setOnClickListener {
+            adapterItemClick.onItemClick(attendanceList[position], position)
         }
 
         holder.binding.tvDropDown.setOnClickListener {
@@ -37,6 +42,21 @@ class MyAttendanceDetailAdapter(
             notifyItemChanged(position)
         }
 
+        when (attendanceList[position].status) {
+            LeaveStatus.Absent.value -> {
+                holder.binding.status.backgroundTintList = ContextCompat.getColorStateList(context, R.color.light_red)
+                holder.binding.status.setTextColor(ContextCompat.getColorStateList(context, R.color.color_third))
+            }
+            LeaveStatus.Present.value -> {
+                holder.binding.status.backgroundTintList = ContextCompat.getColorStateList(context, R.color.light_green)
+                holder.binding.status.setTextColor(ContextCompat.getColorStateList(context, R.color.green))
+            }
+            LeaveStatus.OnLeave.value -> {
+
+                holder.binding.status.backgroundTintList = ContextCompat.getColorStateList(context, R.color.purple_bg)
+                holder.binding.status.setTextColor(ContextCompat.getColorStateList(context, R.color.purple))
+            }
+        }
 
     }
 
@@ -58,9 +78,11 @@ class MyAttendanceDetailAdapter(
             else
                 binding.tvHour.text = attendanceDetail.working_hours.toString().plus(" Hrs")
 
-             binding.tvDate.text = attendanceDetail.date
-                       binding.status.text = attendanceDetail.status
-            binding.tvAttendStatus.text = LocationFilter.OFFICE.value
+            binding.tvDate.text = attendanceDetail.date
+
+            binding.tvAttendStatus.text = attendanceDetail.custom_attendance_status
+
+
             binding.tvShiftTxt.text = attendanceDetail.shift
             binding.tvShiftTimeTxt.text = attendanceDetail.shift_timings
             binding.tvActualInTxt.text = attendanceDetail.in_time
@@ -69,6 +91,10 @@ class MyAttendanceDetailAdapter(
             binding.tvExpectedOutTxt.text = attendanceDetail.expected_out
 
             binding.lyDropDown.isVisible = attendanceDetail.isDetailVisible
+
+
+            binding.status.text = attendanceDetail.status
+
 
         }
     }

@@ -81,8 +81,16 @@ class TeamAttendanceDetailFragment : BaseFragment() {
 
                 if (response?.meta?.status == true) {
                     // success
+                    if (response.attendance_data?.size ?: 0 > 0) {
+                        binding?.rvAttend?.visibility=View.VISIBLE
+                        binding?.tvNoRecord?.visibility=View.GONE
 
-                    dataPopulate(response.attendance_data!!)
+                        response.attendance_data?.let { dataPopulate(it) }
+                    } else {
+                        binding?.rvAttend?.visibility = View.GONE
+                        binding?.tvNoRecord?.visibility = View.VISIBLE
+                    }
+
                     binding?.tvTeamMemberTxt?.text = response.team_count.toString()
                 } else {
                     requireContext().showErrorMsg(response?.meta?.message.toString())
@@ -163,7 +171,7 @@ class TeamAttendanceDetailFragment : BaseFragment() {
     private fun dataPopulate(detailArrayList: ArrayList<AttendanceData>) {
         binding?.rvAttend?.layoutManager = LinearLayoutManager(requireActivity())
         val weeklyAdapter = TeamAttendanceDetailAdapter(requireContext(),
-            detailArrayList!!,
+            detailArrayList,
             object : AdapterItemClick {
                 override fun onItemClick(customObject: Any, position: Int) {
                     val currentObject = customObject as AttendanceData

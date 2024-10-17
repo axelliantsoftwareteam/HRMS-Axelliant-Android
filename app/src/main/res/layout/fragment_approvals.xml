@@ -227,8 +227,20 @@
                     app:layout_constraintTop_toBottomOf="@id/ly_header"
                     app:layout_constraintVertical_bias="0.0"
                     tools:itemCount="2"
+                    android:visibility="gone"
                     tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:listitem="@layout/my_team_expense_approval_row" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_no_record"
+                    style="@style/TEXT_SEMI_BLACK_15"
+                    android:layout_width="0dp"
+                    android:gravity="center"
+                    android:text="@string/no_record_found"
+                    app:layout_constraintTop_toBottomOf="@id/ly_header"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

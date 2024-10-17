@@ -131,7 +131,14 @@ class LeavesFragment : BaseFragment() {
             viewLifecycleOwner,
             EventObserver { response ->
                 if (response?.meta?.status == true) {
-                    upcomingLeavePopulate(response.upcoming_leaves)
+                    if (response.upcoming_leaves?.size?: 0 > 0){
+                        binding?.tvMyShift?.isVisible=true
+                        upcomingLeavePopulate(response.upcoming_leaves)
+                    }
+                    else{
+                        binding?.tvMyShift?.isVisible=false
+                        binding?.rvUpcomingLeaves?.isVisible=false
+                    }
                 } else {
                     requireContext().showErrorMsg(response?.meta?.message.toString())
                 }

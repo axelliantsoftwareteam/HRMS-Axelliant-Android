@@ -9,6 +9,8 @@ import com.axelliant.hris.model.attendance.AttendanceApproval
 import com.axelliant.hris.model.attendance.AttendanceInput
 import com.axelliant.hris.model.attendance.AttendanceResponse
 import com.axelliant.hris.model.attendance.AttendanceStatsResponse
+import com.axelliant.hris.model.attendance.LeaveCountInput
+import com.axelliant.hris.model.attendance.LeaveCountRequest
 import com.axelliant.hris.model.attendance.TeamAttendanceResponse
 import com.axelliant.hris.model.base.BaseApiModel
 import com.axelliant.hris.model.base.BaseModel
@@ -327,12 +329,12 @@ class AttendanceRepo(private var apiInterface: ApiInterface) {
 
 
     fun checkInList(
-        inputObject: AttendanceInput
+        inputObject: LeaveCountInput
     ): MutableLiveData<BaseApiModel<CheckInListResponse>> {
         val serverResponse = MutableLiveData<BaseApiModel<CheckInListResponse>>()
 
         val call = apiInterface.callCheckInList(
-            "token ${AppConst.TOKEN}",AttRequest().apply {
+            "token ${AppConst.TOKEN}",LeaveCountRequest().apply {
                 this.start_date = inputObject.startDate
                 this.end_date = inputObject.endDate
                 this.employee_list = inputObject.employeeId

@@ -124,8 +124,8 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/_5sdp"
                     android:text="@string/start_date"
-                    android:visibility="gone"
                     android:textAlignment="textStart"
+                    android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="@+id/divider_absent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -134,8 +134,8 @@
                     android:id="@+id/ly_start_date"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/_5sdp"
                     android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginEnd="@dimen/_5sdp"
                     android:background="@drawable/rounded_leave_filter"
                     android:orientation="vertical"
                     android:padding="@dimen/_10sdp"
@@ -191,8 +191,8 @@
                     android:layout_marginStart="@dimen/_5sdp"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:text="@string/end_date"
-                    android:visibility="gone"
                     android:textAlignment="textStart"
+                    android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/divider_absent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -229,9 +229,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_calendar"
-                        app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent">
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
 
                     </ImageView>
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -243,13 +243,13 @@
                 android:id="@+id/ly_team_filter"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:background="@drawable/rounded_bgg"
                 android:layout_marginTop="@dimen/_5sdp"
-                android:padding="@dimen/_5sdp"
+                android:background="@drawable/rounded_bgg"
                 android:gravity="center"
                 android:orientation="horizontal"
-                app:layout_constraintStart_toStartOf="parent"
+                android:padding="@dimen/_5sdp"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ly_range_date">
 
                 <Spinner
@@ -259,9 +259,9 @@
                     android:overlapAnchor="false"
                     android:padding="@dimen/_2sdp"
                     android:popupBackground="@drawable/ly_spiner_bg"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
                     tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck"
                     tools:listitem="@layout/spinner_item" />
 
@@ -272,8 +272,8 @@
                 android:id="@+id/ly_myteam_attend"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_marginTop="@dimen/_10sdp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ly_team_filter">
@@ -311,34 +311,46 @@
                         android:background="@drawable/circle_no_bg"
                         android:backgroundTint="@color/colorApp"
                         android:padding="@dimen/_5sdp"
-                        tools:text="20"
                         android:textSize="@dimen/_8sdp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintHorizontal_weight="3"
                         app:layout_constraintStart_toEndOf="@id/tv_team_member"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="20" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rv_attend"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:orientation="vertical"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/ly_header"
-                        tools:itemCount="1"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        tools:listitem="@layout/my_team_attend_row"
-                      />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_attend"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/ly_header"
+                    tools:itemCount="1"
+                    android:visibility="gone"
+                    tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/my_team_attend_row" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_no_record"
+                    style="@style/TEXT_SEMI_BLACK_15"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/no_record_found"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/ly_header" />
 
 
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
