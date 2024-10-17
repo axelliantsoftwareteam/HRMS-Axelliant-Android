@@ -325,7 +325,7 @@
                         android:background="@drawable/circle_no_bg"
                         android:backgroundTint="@color/colorApp"
                         android:padding="@dimen/_3sdp"
-                        android:text="20"
+                        tools:text="20"
                         android:textSize="@dimen/_8sdp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintHorizontal_weight="3"
@@ -338,6 +338,7 @@
                     android:id="@+id/ly_teams_members"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
+                    android:visibility="gone"
                     android:layout_margin="@dimen/_5sdp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -356,6 +357,20 @@
                         tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                         tools:listitem="@layout/my_team_leave_row" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_no_record"
+                    style="@style/TEXT_SEMI_BLACK_15"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:visibility="visible"
+                    android:text="@string/no_record_found"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/ly_header"/>
+
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

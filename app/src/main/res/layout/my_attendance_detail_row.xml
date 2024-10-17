@@ -40,7 +40,6 @@
             android:gravity="center">
 
             <com.google.android.material.textview.MaterialTextView
-
                 android:id="@+id/status"
                 style="@style/TEXT_SEMI_BLACK_10"
                 android:layout_width="wrap_content"

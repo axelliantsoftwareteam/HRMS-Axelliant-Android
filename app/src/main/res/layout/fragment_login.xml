@@ -123,6 +123,7 @@
             style="@style/TEXT_MEDIUM_BLACK_10"
             android:layout_marginTop="@dimen/_10sdp"
             android:text="@string/username"
+            android:visibility="invisible"
             app:layout_constraintStart_toStartOf="@id/start_guideline"
             app:layout_constraintTop_toBottomOf="@+id/ly_action_btn" />
 
@@ -144,6 +145,7 @@
                 android:layout_height="wrap_content"
                 android:imeOptions="actionNext"
                 android:textAlignment="textStart"
+                android:visibility="invisible"
                 android:inputType="textEmailAddress"
                 android:textColorHint="@color/grey" />
 
@@ -156,6 +158,7 @@
             android:layout_marginTop="@dimen/_10sdp"
             android:text="@string/password"
             android:textAllCaps="true"
+            android:visibility="invisible"
             app:layout_constraintStart_toStartOf="@id/start_guideline"
             app:layout_constraintTop_toBottomOf="@+id/til_email" />
 
@@ -165,6 +168,7 @@
             android:layout_width="0dp"
             android:layout_height="@dimen/_40sdp"
             android:layout_marginTop="@dimen/_2sdp"
+            android:visibility="invisible"
             app:endIconMode="password_toggle"
             app:layout_constraintEnd_toEndOf="@id/end_guideline"
             app:layout_constraintStart_toStartOf="@id/start_guideline"
@@ -184,6 +188,7 @@
             android:id="@+id/rb_remember_me"
             style="@style/CheckBoxStyle"
             android:text="@string/remember_me"
+            android:visibility="invisible"
             android:textSize="@dimen/_12ssp"
             app:layout_constraintStart_toStartOf="@+id/start_guideline"
             app:layout_constraintTop_toBottomOf="@+id/til_password">
@@ -195,13 +200,14 @@
             style="@style/TEXT_MEDIUM_BLACK_10"
             android:layout_marginTop="@dimen/_10sdp"
             android:text="@string/forget_pass"
+            android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="@+id/end_guideline"
             app:layout_constraintTop_toBottomOf="@+id/til_password">
 
         </com.google.android.material.textview.MaterialTextView>
 
 
-        <com.axelliant.hrms.components.RoundedButton
+        <com.axelliant.hris.components.RoundedButton
             android:id="@+id/btn_login"
             style="@style/ButtonTextStyle"
             android:layout_width="0dp"
@@ -210,15 +216,16 @@
             android:layout_marginBottom="@dimen/_10sdp"
             app:buttonBg="@drawable/rounded_enabled"
             app:iconVisibility="false"
+            android:visibility="invisible"
             app:layout_constraintLeft_toRightOf="@id/start_guideline"
             app:layout_constraintRight_toLeftOf="@id/end_guideline"
             app:layout_constraintTop_toBottomOf="@+id/tv_forget_password"
             app:text="@string/login"
             app:textColor="@color/white">
 
-        </com.axelliant.hrms.components.RoundedButton>
+        </com.axelliant.hris.components.RoundedButton>
 
-        <com.axelliant.hrms.components.RoundedButton
+        <com.axelliant.hris.components.RoundedButton
             android:id="@+id/btn_mic_login"
             style="@style/ButtonTextStyle"
             android:layout_width="0dp"

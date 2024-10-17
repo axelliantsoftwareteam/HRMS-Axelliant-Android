@@ -12,8 +12,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        >
+        app:layout_constraintTop_toTopOf="parent">
 
         <View
             android:id="@+id/divider"
@@ -24,6 +23,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_no"
             style="@style/TEXT_MEDIUM_BLACK_10"
@@ -40,11 +40,11 @@
             style="@style/TEXT_MEDIUM_GREY_10"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_5sdp"
             android:gravity="start"
             android:text="@string/expense_type"
-            android:layout_marginStart="@dimen/_5sdp"
             android:textAllCaps="true"
-            app:layout_constraintEnd_toStartOf="@+id/tv_to_date"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/tv_no"
             app:layout_constraintTop_toBottomOf="@+id/divider" />
 
@@ -53,65 +53,87 @@
             style="@style/TEXT_MEDIUM_BLACK_10"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-
             android:background="@drawable/rounded_disabled"
             android:gravity="start"
-            android:text="Travel"
-            app:layout_constraintEnd_toStartOf="@+id/tv_to_date_txt"
+            android:text=""
+
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/tv_from_date"
             app:layout_constraintTop_toBottomOf="@+id/tv_from_date" />
 
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv_to_date"
-            style="@style/TEXT_MEDIUM_GREY_10"
+        <LinearLayout
+            android:id="@+id/ly_amount"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:gravity="start"
-            android:text="@string/expense_date"
-            android:textAllCaps="true"
-            app:layout_constraintEnd_toStartOf="@+id/tv_amount"
-            app:layout_constraintStart_toEndOf="@+id/tv_from_date"
-            app:layout_constraintTop_toTopOf="@+id/tv_from_date" />
+            android:orientation="horizontal"
+            android:weightSum="1"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tv_no"
+            app:layout_constraintTop_toBottomOf="@+id/tv_from_date_txt">
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv_to_date_txt"
-            style="@style/TEXT_MEDIUM_BLACK_10"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight=".5"
+                android:orientation="vertical">
 
-            android:background="@drawable/rounded_disabled"
-            android:gravity="start"
-            android:text="2024-06-11"
-            app:layout_constraintEnd_toStartOf="@+id/tv_amount_txt"
-            app:layout_constraintStart_toEndOf="@+id/tv_from_date_txt"
-            app:layout_constraintTop_toBottomOf="@+id/tv_to_date" />
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_to_date"
+                    style="@style/TEXT_MEDIUM_GREY_10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:text="@string/expense_date"
+                    android:textAllCaps="true"
+                    app:layout_constraintEnd_toStartOf="@+id/tv_amount"
+                    app:layout_constraintStart_toEndOf="@+id/tv_from_date"
+                    app:layout_constraintTop_toTopOf="@+id/tv_from_date" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_to_date_txt"
+                    style="@style/TEXT_MEDIUM_BLACK_10"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rounded_disabled"
+                    android:gravity="start"
+                    android:text="2024-06-11"
+                    app:layout_constraintStart_toEndOf="@+id/tv_from_date_txt"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_to_date" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight=".5"
+                android:orientation="vertical">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_amount"
+                    style="@style/TEXT_MEDIUM_GREY_10"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:text="@string/amount"
+                    android:textAllCaps="true"/>
 
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv_amount"
-            style="@style/TEXT_MEDIUM_GREY_10"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@string/amount"
-            android:gravity="start"
-            android:textAllCaps="true"
-            app:layout_constraintEnd_toEndOf="@+id/divider"
-            app:layout_constraintStart_toEndOf="@+id/tv_to_date"
-            app:layout_constraintTop_toTopOf="@+id/tv_from_date"  />
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_amount_txt"
+                    style="@style/TEXT_MEDIUM_BLACK_10"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rounded_disabled"
+                    android:gravity="start|center"
+                    app:layout_constraintEnd_toEndOf="@+id/divider"
+                    app:layout_constraintStart_toEndOf="@+id/tv_to_date_txt"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_amount"
+                    tools:text="10000" />
+            </LinearLayout>
 
-
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv_amount_txt"
-            style="@style/TEXT_MEDIUM_BLACK_10"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/rounded_disabled"
-            android:gravity="start|center"
-            app:layout_constraintEnd_toEndOf="@+id/divider"
-            app:layout_constraintStart_toEndOf="@+id/tv_to_date_txt"
-            app:layout_constraintTop_toBottomOf="@+id/tv_amount"
-            tools:text="10000" />
+        </LinearLayout>
 
 
         <com.google.android.material.textview.MaterialTextView
@@ -121,12 +143,12 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_5sdp"
             android:layout_marginStart="@dimen/_5sdp"
-            android:text="@string/description"
             android:gravity="start"
+            android:text="@string/description"
             android:textAllCaps="true"
             app:layout_constraintEnd_toEndOf="@+id/divider"
             app:layout_constraintStart_toEndOf="@+id/tv_no"
-            app:layout_constraintTop_toBottomOf="@id/tv_amount_txt" />
+            app:layout_constraintTop_toBottomOf="@id/ly_amount" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_reason_txt"
@@ -140,7 +162,6 @@
             app:layout_constraintStart_toStartOf="@+id/tv_reason"
             app:layout_constraintTop_toBottomOf="@+id/tv_reason"
             tools:text="I am not feeling well because i am having fever and stomach issues" />
-
 
 
         <View

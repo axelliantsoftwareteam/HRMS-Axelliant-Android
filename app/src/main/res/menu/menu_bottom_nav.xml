@@ -12,6 +12,10 @@
         android:icon="@drawable/ic_profile"
         android:title="Profile" />
     <item
+
+        android:icon="@drawable/ic_profile"
+        android:title="Profile" />
+    <item
         android:id="@+id/moreFragment"
         android:icon="@drawable/ic_leav"
         android:title="Leaves" />

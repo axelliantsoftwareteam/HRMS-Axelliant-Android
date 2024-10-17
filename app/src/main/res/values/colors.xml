@@ -17,6 +17,8 @@
     <color name="colorApp">#09589B</color>
     <color name="color_secondry">#25A8E0</color>
     <color name="color_third">#D83242</color>
+    <color name="color_third_light">#33D83242</color>
+    <color name="light_red">#EFD7D8</color>
     <color name="layout_bg">#ffffff</color>
     <color name="approved_bg">#F1FBFB</color>
     <color name="approved">#2B2B2B</color>
@@ -25,6 +27,7 @@
     <color name="light_grey">#CCCACA</color>
     <color name="red">#BB4F4E</color>
     <color name="green">#159360</color>
+    <color name="light_green">#CAE6DE</color>
     <color name="orange">#E97E5B</color>
     <color name="blue">#03112C</color>
 
@@ -36,6 +39,7 @@
 
 
     <color name="yellow">#FFB532</color>
+    <color name="light_yellow">#1AFFB532</color>
     <color name="greeny">#8ED17D</color>
 <!--    <color name="purple">#6E4BA7</color>-->
     <color name="border">#EAEAEA</color>
@@ -43,6 +47,7 @@
 
     <!--combination of grid colors-->
     <color name="purple">#603F8B</color>
+    <color name="purple_bg">#33603F8B</color>
     <color name="aqua">#B4FEE7</color>
     <color name="violet">#A16AE8</color>
     <color name="fuchsia">#FD49A0</color>
