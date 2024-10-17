@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name"></string>
+    <string name="app_name">AXE HR</string>
     <string name="welcome">Welcome Back</string>
     <string name="please_login">Please login with Microsoft account to continue</string>
     <string name="hello">Hello there, login to continue</string>
@@ -175,4 +175,7 @@
     <string name="info">Logout</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="no_record_found">No Record Found</string>
+    <string name="leave_count">Leave Counts</string>
+    <string name="remaining_leave">Remaining Leaves</string>
 </resources>

@@ -11,7 +11,7 @@ import com.axelliant.hris.databinding.SubFilterRowBinding
 import com.axelliant.hris.model.dashboard.FilterModel
 
 class SubFilterAdapter(
-    private var filterId: String = "",
+    private var filterId: String? = null,
     private val list: List<FilterModel>,
     private val context: Context,
     private val itemClick: AdapterItemClick
@@ -36,7 +36,8 @@ class SubFilterAdapter(
 
         holder.binding.tvWorkTxt.isVisible = list[position].id != ""
 
-        if (filterId == list[position].id) {
+        if (filterId == list[position].id)
+        {
             holder.binding.tvWorkFrom.setTextColor(context.getColor(R.color.white))
             holder.binding.lyWorkHome.background =
                 context.resources.getDrawable(R.drawable.enable_rounded_bgg)

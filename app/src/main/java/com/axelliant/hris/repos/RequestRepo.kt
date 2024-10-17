@@ -9,6 +9,9 @@ import com.axelliant.hris.model.base.Meta
 import com.axelliant.hris.model.leave.GetAttendanceResponse
 import com.axelliant.hris.model.leave.GetLeavesResponse
 import com.axelliant.hris.model.leave.PostResponse
+import com.axelliant.hris.model.leave.leaveCount.GetLeaveCount
+import com.axelliant.hris.model.leave.leaveCount.LeaveCountByDate
+import com.axelliant.hris.model.leave.leaveCount.LeaveCountByDaysRequest
 import com.axelliant.hris.model.post.AttendanceRequest
 import com.axelliant.hris.model.post.LeaveRequest
 import com.axelliant.hris.network.ApiInterface
@@ -54,6 +57,43 @@ class RequestRepo(private var apiInterface: ApiInterface) {
                 serverResponse.value =
                     BaseApiModel(BaseModel(GetLeavesResponse(meta = Meta(errorString.toString(), false))))
 
+            }
+
+        })
+
+        return serverResponse
+    }
+
+    fun getLeavesTypeWithCount(): MutableLiveData<BaseApiModel<GetLeaveCount>> {
+        val serverResponse = MutableLiveData<BaseApiModel<GetLeaveCount>>()
+
+        val call: Call<ResponseBody>  = apiInterface.getLeaveTypesWithCount("token ${AppConst.TOKEN}")
+
+        Log.e("HTTP Request", " " + call?.request().toString())
+
+        call.enqueue(object : BaseCallBack<ResponseBody>(call) {
+            override fun onFinalSuccess(
+                call: Call<ResponseBody>,
+                response: Response<ResponseBody>
+            ) {
+
+                Log.e("API success", " " + response.body())
+
+                val type: Type = object : TypeToken<BaseApiModel<GetLeaveCount>>() {}.type
+                val jsonString = response.body()?.string()
+                val userModel = Gson().fromJson<BaseApiModel<GetLeaveCount>>(jsonString, type)
+                serverResponse.value = userModel
+            }
+
+
+            override fun onFinalFailure(
+                errorString: String?
+            ) {
+
+                Log.e("API Failure", " $errorString")
+
+                serverResponse.value =
+                    BaseApiModel(BaseModel(GetLeaveCount(null, meta = Meta(errorString.toString(), false) )))
             }
 
         })
@@ -167,6 +207,44 @@ class RequestRepo(private var apiInterface: ApiInterface) {
 
                 serverResponse.value =
                     BaseApiModel(BaseModel(PostResponse(meta = Meta(errorString.toString(), false))))
+
+            }
+
+        })
+
+        return serverResponse
+    }
+
+    fun getLeaveCountRequest(leaveCountByDaysRequest: LeaveCountByDaysRequest): MutableLiveData<BaseApiModel<LeaveCountByDate>> {
+        val serverResponse = MutableLiveData<BaseApiModel<LeaveCountByDate>>()
+
+        val call: Call<ResponseBody>  = apiInterface.leaveCountRequest("token ${AppConst.TOKEN}",leaveCountByDaysRequest)
+
+        Log.e("HTTP Request", " " + call?.request().toString())
+
+        call.enqueue(object : BaseCallBack<ResponseBody>(call) {
+            override fun onFinalSuccess(
+                call: Call<ResponseBody>,
+                response: Response<ResponseBody>
+            ) {
+
+                Log.e("API success", " " + response.body())
+
+                val type: Type = object : TypeToken<BaseApiModel<LeaveCountByDate>>() {}.type
+                val jsonString = response.body()?.string()
+                val userModel = Gson().fromJson<BaseApiModel<LeaveCountByDate>>(jsonString, type)
+                serverResponse.value = userModel
+            }
+
+
+            override fun onFinalFailure(
+                errorString: String?
+            ) {
+
+                Log.e("API Failure", " $errorString")
+
+                serverResponse.value =
+                    BaseApiModel(BaseModel(LeaveCountByDate(null,meta = Meta(errorString.toString(), false))))
 
             }
 
