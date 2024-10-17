@@ -78,9 +78,17 @@ class MyLeaveDetailFragment : BaseFragment() {
             EventObserver { response ->
 
                 if (response?.meta?.status == true) {
+                    response.leave_status?.let { subFilterPopulations(it) }
+                    if (response.leaves?.size ?: 0 > 0) {
+                        binding?.rvAttendanceDetail?.visibility=View.VISIBLE
+                        binding?.tvNoRecord?.visibility=View.GONE
+                        dataPopulate(response.leaves)
 
-                    dataPopulate(response.leaves)
-                    subFilterPopulations(response.leave_status)
+                    } else {
+                        binding?.rvAttendanceDetail?.visibility = View.GONE
+                        binding?.tvNoRecord?.visibility = View.VISIBLE
+                    }
+
 
                 } else {
                     requireContext().showErrorMsg(response?.meta?.message.toString())
@@ -91,9 +99,9 @@ class MyLeaveDetailFragment : BaseFragment() {
 
     }
 
-    private fun subFilterPopulations(leaveStatus: ArrayList<FilterModel>?) {
+    private fun subFilterPopulations(leaveStatus: ArrayList<FilterModel>) {
 
-        leaveStatus?.add(0, FilterModel().apply {
+        leaveStatus.add(0, FilterModel().apply {
             this.id = ""
             this.title = "All"
             this.count = "0"
@@ -103,7 +111,7 @@ class MyLeaveDetailFragment : BaseFragment() {
             LinearLayoutManager(requireActivity(), RecyclerView.HORIZONTAL, false)
         val weeklyAdapter = SubFilterAdapter(
             filterId,
-            leaveStatus!!, requireContext(),
+            leaveStatus, requireContext(),
             object : AdapterItemClick {
                 override fun onItemClick(customObject: Any, position: Int) {
                     val filterObject = customObject as FilterModel
