@@ -22,7 +22,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.axelliant.hris.adapter.AddExpenseAdapter
 import com.axelliant.hris.adapter.AttachmentsAdapter
-import com.axelliant.hris.adapter.expenseType
 import com.axelliant.hris.base.BaseFragment
 import com.axelliant.hris.callback.AdapterItemClick
 import com.axelliant.hris.config.AppConst
@@ -53,7 +52,6 @@ import java.io.File
 
 class AddExpenseFragment : BaseFragment(), AddExpenseAdapter.OnUpdateList {
 
-    private var srNo: Int = 0
     private var pickMultipleImages = 103
     private val cameraPermissionRequest = 101
     private var galleryPermissionRequest = 102
@@ -64,6 +62,7 @@ class AddExpenseFragment : BaseFragment(), AddExpenseAdapter.OnUpdateList {
     private var attachmentsAdapter: AttachmentsAdapter? = null
 
 
+    val expenseType = "None"
     private var isUpdate = false
     private var expenseId = ""
     private var _binding: FragmentAddExpenseBinding? = null
@@ -271,7 +270,6 @@ class AddExpenseFragment : BaseFragment(), AddExpenseAdapter.OnUpdateList {
 
                         } else {
                             addExpenseList.add(AddExpense().apply {
-                                this.srno = srNo
                                 this.expense_type = null
                                 this.expense_date = null
                                 this.amount = 0.0
@@ -363,7 +361,7 @@ class AddExpenseFragment : BaseFragment(), AddExpenseAdapter.OnUpdateList {
 
         binding?.tvAddNew?.setOnClickListener {
             addExpenseList.add(AddExpense().apply {
-                this.expense_type = null
+                this.expense_type = expenseType
                 this.expense_date = null
                 this.description = ""
                 this.amount = 0.0
@@ -438,16 +436,10 @@ class AddExpenseFragment : BaseFragment(), AddExpenseAdapter.OnUpdateList {
     }
 
     override fun onListUpdated(updatedList: ArrayList<AddExpense>) {
-        Log.d("updatedListSize",updatedList.size.toString())
-
         // Handle the updated list here
         addExpenseList = updatedList
         binding?.tvAmount?.text = addExpenseAdapter?.grandTotalCalculation().toString()
     }
-
-
-
-
 
     ////////////////////// image working //////////////////////
 

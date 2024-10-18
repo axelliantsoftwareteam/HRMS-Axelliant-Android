@@ -18,9 +18,8 @@ import com.axelliant.hris.config.AppConst.SERVER_DATE_FORMAT_ATTENDANCE
 import com.axelliant.hris.databinding.LyAddNewExpenseBinding
 import com.axelliant.hris.model.expense.AddExpense
 import com.axelliant.hris.utils.Utils
+import com.google.gson.Gson
 import java.util.Calendar
-
-const val expenseType = "None"
 
 class AddExpenseAdapter(
     private val list: ArrayList<AddExpense>,
@@ -41,76 +40,79 @@ class AddExpenseAdapter(
 
     override fun onBindViewHolder(holder: AccountsVH, @SuppressLint("RecyclerView") position: Int) {
         holder.bind(list[position], mContext)
-
-        if (position == 0)
-            holder.binding.ivDelete.visibility = View.GONE
-        else
-            holder.binding.ivDelete.visibility = View.VISIBLE
-
+        Log.d("updatedListJson", Gson().toJson(list[position]))
+        // Populate spinner for expense types
         spinnerLeavePopulations(mContext, holder.binding.spAttendType, position)
 
-        holder.binding.tvDateTxt.text = list[position].expense_date
-        holder.binding.etAttendanceReason.setText(list[position].description)
-        holder.binding.etAmount.setText(list[position].amount.toString())
+        // Show/Hide delete button for the first item
+        holder.binding.ivDelete.visibility = if (position == 0) View.GONE else View.VISIBLE
 
-//        if(list[position].description!=null)
-//            holder.binding.etAttendanceReason.setText(list[position].description.toString())
-//            else{
-//            holder.binding.etAttendanceReason.setText("")
-//            holder.binding.etAttendanceReason.hint =mContext.getString(R.string.write_descrpt)
-//
-//        }
-//        if(list[position].amount!=null)
-//            holder.binding.etAmount.setText(list[position].amount.toString())
-//        else {
-//            holder.binding.etAmount.setText("")
-//            holder.binding.etAmount.hint =mContext.getString(R.string.amount)
-//
-//        }
-        // Set text change listeners to update the list
-        holder.binding.etAttendanceReason.addTextChangedListener(object : TextWatcher {
+        // Remove any previous TextWatchers before adding new ones
+        holder.binding.etAttendanceReason.removeTextChangedListener(holder.reasonTextWatcher)
+        holder.binding.etAmount.removeTextChangedListener(holder.amountTextWatcher)
+
+        // Set text in the EditText fields
+        holder.binding.etAttendanceReason.setText(list[position].description ?: "")
+        holder.binding.etAmount.setText(list[position].amount?.toString() ?: "")
+
+        // Add new TextWatchers for description and amount
+        holder.reasonTextWatcher = object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-
-                list[position].description = s.toString()
-                onUpdateList.onListUpdated(list) // Notify the fragment
+                val newDescription = s.toString()
+                list[position].description = newDescription
+                onUpdateList.onListUpdated(list)
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-        })
-        holder.binding.etAmount.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-                list[position].amount = try {
-                    s.toString().toDouble()
-                } catch (e: NumberFormatException) {
-                    null
-                }
-                onUpdateList.onListUpdated(list) // Notify the fragment
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-        })
-        holder.binding.lyDate.setOnClickListener {
-            pickDate(position)
         }
 
+        holder.amountTextWatcher = object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                val newAmount = try {
+                    s.toString().toDouble()
+                } catch (e: NumberFormatException) {
+                    0.0
+                }
+                list[position].amount = newAmount
+                onUpdateList.onListUpdated(list)
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        }
+
+        // Re-add the new TextWatchers
+        holder.binding.etAttendanceReason.addTextChangedListener(holder.reasonTextWatcher)
+        holder.binding.etAmount.addTextChangedListener(holder.amountTextWatcher)
+
+        // Handle the delete action
         holder.binding.tvDelete.setOnClickListener {
             list.removeAt(position)
             notifyItemRemoved(position)
             notifyItemRangeChanged(position, list.size)
-            onUpdateList.onListUpdated(list) // Notify the fragment
-            Log.d("removList",list.size.toString())
+            onUpdateList.onListUpdated(list)
+            Log.d("removeList", list.size.toString())
         }
+
+        // Handle the date picker
+        holder.binding.lyDate.setOnClickListener {
+            pickDate(position)
+        }
+
+
     }
 
-    override fun getItemCount(): Int {
-        return list.size
-    }
+    override fun getItemCount(): Int = list.size
 
     class AccountsVH(val binding: LyAddNewExpenseBinding) : RecyclerView.ViewHolder(binding.root) {
+        var reasonTextWatcher: TextWatcher? = null
+        var amountTextWatcher: TextWatcher? = null
+
         fun bind(item: AddExpense, mContext: Context) {
-            // You can bind other view elements here if needed
+            binding.tvDateTxt.text = item.expense_date ?: ""
+//            binding.etAttendanceReason.setText(item.description ?: "")
+//            binding.etAmount.setText(item.amount?.toString() ?: "")
         }
     }
 
@@ -119,74 +121,53 @@ class AddExpenseAdapter(
         val year = c.get(Calendar.YEAR)
         val month = c.get(Calendar.MONTH)
         val day = c.get(Calendar.DAY_OF_MONTH)
+
         val datePickerDialog = DatePickerDialog(
-            mContext, R.style.my_dialog_theme, // Apply the theme here
-            { view, year, monthOfYear, dayOfMonth ->
+            mContext, R.style.my_dialog_theme,
+            { _, year, monthOfYear, dayOfMonth ->
                 val selectedDate = Calendar.getInstance()
                 selectedDate.set(year, monthOfYear, dayOfMonth)
 
-                // Format the date using SimpleDateFormat
+                // Format the date and update the list
                 list[position].expense_date = Utils.getServerFormat(
-                    dateFormat = SERVER_DATE_FORMAT_ATTENDANCE, date = selectedDate.time
+                    SERVER_DATE_FORMAT_ATTENDANCE, selectedDate.time
                 )
-                notifyItemChanged(position) // Update the specific item
-                onUpdateList.onListUpdated(list) // Notify the fragment
+                notifyItemChanged(position)
+                onUpdateList.onListUpdated(list)
             },
-            year,
-            month,
-            day
+            year, month, day
         )
         datePickerDialog.datePicker.maxDate = c.timeInMillis
         datePickerDialog.show()
     }
-
 
     private fun spinnerLeavePopulations(
         mContext: Context,
         spinner: Spinner,
         mainItemPosition: Int
     ) {
-
-        val adapter = LeaveSpinnerAdapter(
-            mContext, list[mainItemPosition].expenseTypeList
-        )
+        val adapter = LeaveSpinnerAdapter(mContext, list[mainItemPosition].expenseTypeList)
         spinner.adapter = adapter
 
-        for (counter in 0..<list[mainItemPosition].expenseTypeList.size) {
-            if (list[mainItemPosition].expenseTypeList[counter].type == list[mainItemPosition].expense_type) {
+        val selectedType = list[mainItemPosition].expense_type
+        for (counter in 0 until list[mainItemPosition].expenseTypeList.size) {
+            if (list[mainItemPosition].expenseTypeList[counter].type == selectedType) {
                 spinner.setSelection(counter)
+                break
             }
         }
 
-        spinner.onItemSelectedListener = object :
-            AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                pos: Int,
-                id: Long
-            ) {
-
-                list[mainItemPosition].expense_type =
-                    list[mainItemPosition].expenseTypeList[pos].type
-                onUpdateList.onListUpdated(list) // Notify the fragment
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
+                list[mainItemPosition].expense_type = list[mainItemPosition].expenseTypeList[pos].type
+                onUpdateList.onListUpdated(list)
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
-
         }
     }
+
     fun grandTotalCalculation(): Double {
-        var total = 0.0
-        for (addExpense in list) {
-            if (addExpense.amount != null) {
-                total += addExpense.amount!!
-            }
-
-        }
-
-        return total
+        return list.sumOf { it.amount ?: 0.0 }
     }
-
 }
-
