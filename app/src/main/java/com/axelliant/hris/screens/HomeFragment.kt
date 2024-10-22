@@ -46,6 +46,8 @@ import com.axelliant.hris.extention.showErrorMsg
 import com.axelliant.hris.extention.showSuccessMsg
 import com.axelliant.hris.extention.valueQualifier
 import com.axelliant.hris.model.Modules
+import com.axelliant.hris.model.TodayTeam.TodayTeamResponse
+import com.axelliant.hris.model.attendance.ShiftData
 import com.axelliant.hris.model.dashboard.BranchDataResponse
 import com.axelliant.hris.model.dashboard.Birthday
 import com.axelliant.hris.model.dashboard.CheckInInfoResponse
@@ -213,6 +215,7 @@ class HomeFragment : BaseFragment() {
                     response.employee_profile?.let { GlobalConfig.setCurrentEmployee(it) }
 
                     birthdayPopulate(response.birthday_data!!)
+                    response.shift_detail?.let { dashBoardShiftPopulate(it) }
                     checkInInfoPopulate(response.checkin_info!!)
                     checkInInfoResponse = response.checkin_info
 
@@ -240,6 +243,28 @@ class HomeFragment : BaseFragment() {
                 }
 
             })
+
+        homeViewModel.todayTeamResponse.observe(
+            viewLifecycleOwner,
+            EventObserver { response ->
+
+                if (response?.meta?.status == true) {
+                    // success
+                    if (response!=null)
+                    {
+                        binding?.tvShift?.isVisible=true
+                        binding?.lyMyTeam?.isVisible=true
+                        teamsToday(response)
+
+                    }
+
+                } else {
+                    requireContext().showErrorMsg(response?.meta?.message.toString())
+                }
+
+            })
+
+
         homeViewModel.getIsLoading()
             .observe(viewLifecycleOwner, EventObserver { isLoading ->
                 if (isLoading) {
@@ -351,6 +376,40 @@ class HomeFragment : BaseFragment() {
 
     }
 
+    private fun teamsToday(response: TodayTeamResponse) {
+
+        binding?.tvTotalMemberTxt?.text = response.team_member_count.toString().valueQualifier()
+        binding?.tvPresentTxt?.text = response.checkin_count.toString().valueQualifier()
+        binding?.tvWorkHomeTxt?.text = response.checkout_count.toString().valueQualifier()
+        binding?.tvMissPunchOutTxt?.text = response.leave_count.toString().valueQualifier()
+        binding?.tvTeamsAbsentTxt?.text = response.in_office.toString().valueQualifier()
+        binding?.tvTeamsOnleaveTxt?.text = response.work_from_home.toString().valueQualifier()
+        binding?.tvWeeklyOffsTxt?.text = response.absent_count.toString().valueQualifier()
+
+        binding?.tvTotalMemberTxt?.setOnClickListener {
+
+        }
+        binding?.tvPresentTxt?.setOnClickListener {
+
+        }
+        binding?.tvWorkHomeTxt?.setOnClickListener {
+
+        }
+        binding?.tvMissPunchOutTxt?.setOnClickListener {
+
+        }
+        binding?.tvTeamsAbsentTxt?.setOnClickListener {
+
+        }
+        binding?.tvTeamsOnleaveTxt?.setOnClickListener {
+
+        }
+        binding?.tvWeeklyOffsTxt?.setOnClickListener {
+
+        }
+
+    }
+
     // Show a rationale dialog explaining why the permission is needed
     private fun showPermissionRationale() {
         AlertDialog.Builder(requireContext())
@@ -441,6 +500,9 @@ class HomeFragment : BaseFragment() {
     }
 
     private fun checkInInfoPopulate(checkInInfo: CheckInInfoResponse) {
+
+        binding?.tvLocation?.text = checkInInfo.location.valueQualifier()
+
         if (checkInInfo.is_check_in_button == false && checkInInfo.is_check_out_button == false) {
             binding?.btnCheckIn?.isEnabled = false
 
@@ -449,6 +511,7 @@ class HomeFragment : BaseFragment() {
 
             binding?.tvCheckInTxt?.text = checkInInfo.check_in.valueQualifier()
             binding?.tvCheckOutTxt?.text = checkInInfo.check_out.valueQualifier()
+
 
 
         } else {
@@ -498,11 +561,11 @@ class HomeFragment : BaseFragment() {
                     radiusInMeters
                 )
                 if (isWithinRadius) {
-                    binding?.tvLocation?.text = targetloc.name
+                    binding?.tvCurrentLoc?.text = targetloc.name
                     loc = LocationFilter.OFFICE.value
                     return
                 } else {
-                    binding?.tvLocation?.text = LocationFilter.WHF.value
+                    binding?.tvCurrentLoc?.text = LocationFilter.WHF.value
                     loc = LocationFilter.WHF.value
                 }
             }
@@ -584,7 +647,11 @@ class HomeFragment : BaseFragment() {
 //        )
         val isManager = GlobalConfig.isCurrentManager()
 
+
+
+
         if (isManager) {
+        homeViewModel.getTodayTeamInfo()
             gridList.add(
                 Modules(
                     id = 3,
@@ -650,6 +717,14 @@ class HomeFragment : BaseFragment() {
 
 
     }
+
+    private fun dashBoardShiftPopulate(shiftData: ShiftData) {
+
+        binding?.tvShiftNote?.text="Your shift, titled ${shiftData.name},starts at ${shiftData.actual_start} and ends at ${shiftData.actual_end},taking place ${shiftData.location}"
+
+
+    }
+
 
     private fun dashBoardPopulate(employProfile: EmployProfile) {
         binding?.tvEmployeName?.text = employProfile.employee_name

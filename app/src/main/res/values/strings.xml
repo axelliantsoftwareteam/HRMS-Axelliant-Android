@@ -178,4 +178,8 @@
     <string name="no_record_found">No Record Found</string>
     <string name="leave_count">Leave Counts</string>
     <string name="remaining_leave">Remaining Leaves</string>
+    <string name="note_shift">Your shift, titled "AXE - (11-20)",starts at "11:00:00 " and ends at "20:00:00",taking place "In office".</string>
+    <string name="note">Note:</string>
+    <string name="team_presence">Team Presence</string>
+    <string name="today_statis">Today\'s Attendance</string>
 </resources>

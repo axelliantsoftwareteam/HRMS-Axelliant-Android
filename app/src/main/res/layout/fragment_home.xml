@@ -37,8 +37,8 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/profile_img"
-                android:layout_width="@dimen/_30sdp"
-                android:layout_height="@dimen/_30sdp"
+                android:layout_width="@dimen/_35sdp"
+                android:layout_height="@dimen/_35sdp"
                 app:civ_border_width="@dimen/_1sdp"
                 app:civ_border_color="@color/black"
                 android:src="@drawable/ic_place_holder"
@@ -55,7 +55,7 @@
                 tools:text="Arslan"
                 android:textAlignment="textStart"
                 android:textSize="@dimen/_12ssp"
-
+                app:layout_constraintEnd_toStartOf="@+id/iv_notification"
                 app:layout_constraintBottom_toTopOf="@+id/tv_employe_designation"
                 app:layout_constraintStart_toEndOf="@id/profile_img"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -63,12 +63,27 @@
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_employe_designation"
                 style="@style/TEXT_MEDIUM_BLACK_10"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 tools:text="Software engineer"
                 android:textAlignment="textStart"
                 app:layout_constraintStart_toStartOf="@+id/tv_employe_name"
+                app:layout_constraintEnd_toStartOf="@+id/iv_notification"
                 app:layout_constraintTop_toBottomOf="@+id/tv_employe_name" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_current_loc"
+                style="@style/TEXT_MEDIUM_BLACK_10"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                tools:text="MM Tower lahore"
+                android:drawableStart="@drawable/ic_location_tick"
+                android:drawablePadding="@dimen/_2sdp"
+                android:drawableTint="@color/black"
+                android:textAlignment="textStart"
+                app:layout_constraintStart_toStartOf="@+id/tv_employe_name"
+                app:layout_constraintEnd_toStartOf="@+id/iv_notification"
+                app:layout_constraintTop_toBottomOf="@+id/tv_employe_designation" />
 
             <ImageView
                 android:id="@+id/iv_notification"
@@ -128,8 +143,23 @@
                     android:layout_marginTop="@dimen/_10sdp"
                     android:text="@string/today_attend"
                     android:textAlignment="textStart"
+                    app:layout_constraintEnd_toStartOf="@+id/tv_current_locs"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/divider" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_current_locs"
+                    style="@style/TEXT_MEDIUM_BLACK_10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="MM tower Lahore"
+                    android:textAlignment="textStart"
+                    android:drawableLeft="@drawable/ic_location_tick"
+                    app:layout_constraintStart_toEndOf="@+id/tv_today_title"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/divider"
+                    app:layout_constraintBottom_toTopOf="@+id/ly_today"
+                    />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/ly_today"
@@ -315,6 +345,578 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
+
+                <!--                android:backgroundTint="#B38965FB"
+
+                android:backgroundTint="#B3E91E63"
+                -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/ly_shift_note"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/_5sdp"
+                    android:background="@drawable/rounded_bgg"
+                    android:backgroundTint="#4CB5F5"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/ly_today">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/tv_note"
+                        style="@style/TEXT_MEDIUM_WHITE_12"
+                        android:textAlignment="textStart"
+                        android:textStyle="italic"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:text="@string/note" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/tv_shift_note"
+                        style="@style/TEXT_MEDIUM_WHITE_10"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="@string/note_shift"
+                        android:textAlignment="textStart"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_note" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_shift"
+                    style="@style/TEXT_SEMI_BLACK_15"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:text="@string/team_presence"
+                    android:visibility="gone"
+                    android:textAlignment="textStart"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/ly_shift_note" />
+
+
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/ly_my_team"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:background="@drawable/rounded_team_presence"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_shift">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/ly_header"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/rounded_shifts"
+                        android:backgroundTint="#15D06D"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/_5sdp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <ImageView
+                            android:id="@+id/iv_today"
+                            style="@style/TEXT_REGULAR_WHITE_10"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_5sdp"
+                            android:src="@drawable/ic_line_chart"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:tint="@color/white"
+                            tools:ignore="ContentDescription" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            style="@style/TEXT_MEDIUM_WHITE_12"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_5sdp"
+                            android:text="@string/today_statis"
+                            app:layout_constraintBottom_toBottomOf="@+id/iv_today"
+                            app:layout_constraintStart_toEndOf="@+id/iv_today"
+                            app:layout_constraintTop_toTopOf="@+id/iv_today" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/ly_teams_members"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/_5sdp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/ly_header">
+
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/ly_total_members"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/tv_total_member_txt"
+                                style="@style/TEXT_MEDIUM_BLACK_15"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                tools:text="@string/_3"
+                                android:text="@string/dash"
+                                android:textColor="@color/blue"
+                                android:textSize="@dimen/_20ssp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/tv_total_member"
+                                style="@style/TEXT_MEDIUM_GREY_10"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:background="@drawable/rounded_disabled"
+                                android:text="@string/total_members"
+                                android:textAllCaps="true"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/tv_total_member_txt" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/ly_teams_details"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/_5sdp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/ly_teams_members">
+
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/ly_present"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintEnd_toStartOf="@+id/ly_work_home"
+                            app:layout_constraintHorizontal_weight="3.3"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/tv_present_txt"
+                                style="@style/TEXT_MEDIUM_BLACK_15"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                tools:text="@string/_3"
+                                android:text="@string/dash"
+                                android:textColor="@color/green"
+                                android:textSize="@dimen/_20ssp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/tv_present"
+                                style="@style/TEXT_MEDIUM_GREY_10"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:background="@drawable/rounded_disabled"
+                                android:text="@string/check_in"
+                                android:textAllCaps="true"
+                                android:textAlignment="textStart"
+
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/tv_present_txt" />
+
+                            <View
+                                android:layout_width="2dp"
+                                android:layout_height="0dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginEnd="@dimen/_10sdp"
+                                android:background="@color/line_divider"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="@+id/tv_present_txt" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/ly_work_home"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintHorizontal_weight="3.3"
+
+                            app:layout_constraintStart_toEndOf="@+id/ly_present"
+                            app:layout_constraintEnd_toStartOf="@+id/ly_mis_punch_out"
+
+                            app:layout_constraintTop_toTopOf="@+id/ly_present">
+
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/tv_work_home_txt"
+                                style="@style/TEXT_MEDIUM_BLACK_15"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/dash"
+                                android:textColor="@color/colorApp"
+                                android:textSize="@dimen/_20ssp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                tools:text="@string/_2" />
+
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/tv_work_home"
+                                style="@style/TEXT_MEDIUM_GREY_10"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:background="@drawable/rounded_disabled"
+                                android:text="@string/check_out"
+                                android:textAlignment="textStart"
+                                android:textAllCaps="true"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/tv_work_home_txt" />
+
+                            <View
+                                android:layout_width="2dp"
+                                android:layout_height="0dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginEnd="@dimen/_10sdp"
+                                android:background="@color/line_divider"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="@+id/tv_work_home_txt" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/ly_mis_punch_out"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintHorizontal_weight="3.3"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/ly_work_home"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/tv_miss_punch_out_txt"
+                                style="@style/TEXT_MEDIUM_BLACK_15"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                tools:text="@string/_8"
+                                android:text="@string/dash"
+                                android:textColor="@color/red"
+                                android:textSize="@dimen/_20ssp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/tv_miss_punch_ou"
+                                style="@style/TEXT_MEDIUM_GREY_10"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:background="@drawable/rounded_disabled"
+                                android:text="@string/on_leave"
+                                android:textAlignment="textStart"
+                                android:textAllCaps="true"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/tv_miss_punch_out_txt" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/ly_teams_absent_leave"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/_5sdp"
+                        android:paddingBottom="@dimen/_5sdp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/ly_teams_details">
+
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/ly_teams_absent"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintEnd_toStartOf="@+id/ly_on_leave"
+                            app:layout_constraintHorizontal_weight="3.3"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/tv_teams_absent_txt"
+                                style="@style/TEXT_MEDIUM_BLACK_15"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                tools:text="@string/_3"
+                                android:text="@string/dash"
+                                android:textColor="@color/red"
+                                android:textSize="@dimen/_20ssp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/tv_teams_absent"
+                                style="@style/TEXT_MEDIUM_GREY_10"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:background="@drawable/rounded_disabled"
+                                android:text="@string/in_office"
+                                android:textAllCaps="true"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/tv_teams_absent_txt" />
+
+                            <View
+                                android:layout_width="2dp"
+                                android:layout_height="0dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginEnd="@dimen/_10sdp"
+                                android:background="@color/line_divider"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="@+id/tv_teams_absent_txt" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/ly_on_leave"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintEnd_toStartOf="@+id/ly_weekly_offs"
+                            app:layout_constraintHorizontal_weight="3.3"
+                            app:layout_constraintStart_toEndOf="@+id/ly_teams_absent"
+                            app:layout_constraintTop_toTopOf="@+id/ly_teams_absent">
+
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/tv_teams_onleave_txt"
+                                style="@style/TEXT_MEDIUM_BLACK_15"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                tools:text="@string/_2"
+                                android:text="@string/dash"
+                                android:textColor="@color/orange"
+                                android:textSize="@dimen/_20ssp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/tv_teams_onleave"
+                                style="@style/TEXT_MEDIUM_GREY_10"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:background="@drawable/rounded_disabled"
+                                android:text="@string/work_from_home"
+                                android:textAllCaps="true"
+                                android:textAlignment="textStart"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/tv_teams_onleave_txt" />
+
+                            <View
+                                android:layout_width="2dp"
+                                android:layout_height="0dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginEnd="@dimen/_10sdp"
+                                android:background="@color/line_divider"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="@+id/tv_teams_onleave_txt" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/ly_weekly_offs"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_weight="3.3"
+                            app:layout_constraintStart_toEndOf="@+id/ly_on_leave"
+                            app:layout_constraintTop_toTopOf="@+id/ly_teams_absent">
+
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/tv_weekly_offs_txt"
+                                style="@style/TEXT_MEDIUM_BLACK_15"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                tools:text="@string/_4"
+                                android:text="@string/dash"
+                                android:textColor="@color/colorApp"
+                                android:textSize="@dimen/_20ssp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/tv_weekly_offs"
+                                style="@style/TEXT_MEDIUM_GREY_10"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:background="@drawable/rounded_disabled"
+                                android:text="@string/miss_punch_out"
+                                android:textAlignment="textStart"
+                                android:textAllCaps="true"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/tv_weekly_offs_txt" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/ly_my_shift"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/_5sdp"
+                    android:background="@drawable/rounded_bgg"
+                    android:backgroundTint="#ACD3E6"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/ly_my_team">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/ly_shift_name"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <ImageView
+                            android:id="@+id/iv_shift"
+                            android:layout_width="@dimen/_20sdp"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_toggel"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/tv_shift_name"
+                            app:tint="@color/white">
+
+                        </ImageView>
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/tv_shift_name"
+                            style="@style/TEXT_MEDIUM_WHITE_10"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="@string/shift_name"
+                            android:textAllCaps="true"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/iv_shift" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/tv_shift_name_txt"
+                            style="@style/TEXT_MEDIUM_WHITE_10"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:background="@drawable/rounded_disabled"
+                            android:text="@string/morning_11_00am_8_00pm"
+                            app:layout_constraintStart_toEndOf="@+id/iv_shift"
+                            app:layout_constraintTop_toBottomOf="@+id/tv_shift_name" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/ly_shift_details"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/ly_shift_name">
+
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/ly_shift_premiss"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintEnd_toStartOf="@+id/ly_working_from"
+                            app:layout_constraintHorizontal_weight="5"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/tv_shift_premiss_txt"
+                                style="@style/TEXT_MEDIUM_WHITE_10"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/shift_timings"
+                                android:textAllCaps="true"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/tv_shift_premiss"
+                                style="@style/TEXT_MEDIUM_WHITE_10"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:background="@drawable/rounded_disabled"
+                                android:text="@string/not_specified"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/tv_shift_premiss_txt" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/ly_working_from"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_weight="5"
+                            app:layout_constraintStart_toEndOf="@+id/ly_shift_premiss"
+                            app:layout_constraintTop_toTopOf="@+id/ly_shift_premiss">
+
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/tv_work_from_txt"
+                                style="@style/TEXT_MEDIUM_WHITE_10"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/working_from"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/tv_work_from"
+                                style="@style/TEXT_MEDIUM_WHITE_10"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:background="@drawable/rounded_disabled"
+                                android:text="@string/in_office"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/tv_work_from_txt" />
+
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tv_weekly"
                     style="@style/TEXT_SEMI_BLACK_15"
@@ -324,16 +926,16 @@
                     android:text="@string/my_actions"
                     android:textAlignment="textStart"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/ly_today" />
+                    app:layout_constraintTop_toBottomOf="@+id/ly_my_team" />
 
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_module"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_5sdp"
                     android:orientation="vertical"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_weekly"
                     app:spanCount="2"

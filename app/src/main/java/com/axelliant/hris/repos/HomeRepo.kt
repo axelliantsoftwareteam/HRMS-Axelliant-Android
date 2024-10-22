@@ -3,6 +3,7 @@ package com.axelliant.hris.repos
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.axelliant.hris.config.AppConst
+import com.axelliant.hris.model.TodayTeam.TodayTeamResponse
 import com.axelliant.hris.model.base.BaseApiModel
 import com.axelliant.hris.model.base.BaseModel
 import com.axelliant.hris.model.base.Meta
@@ -95,6 +96,42 @@ class HomeRepo(private var apiInterface: ApiInterface) {
 
                 serverResponse.value =
                     BaseApiModel(BaseModel(DashboardResponse(meta = Meta(errorString.toString(), false))))
+
+            }
+
+        })
+
+        return serverResponse
+    }
+    fun getTeamAttendData(): MutableLiveData<BaseApiModel<TodayTeamResponse>> {
+        val serverResponse = MutableLiveData<BaseApiModel<TodayTeamResponse>>()
+        val call = apiInterface.callTeamInfo("token ${AppConst.TOKEN}")
+
+        Log.e("HTTP Request", " " + call.request().toString())
+
+        call.enqueue(object : BaseCallBack<ResponseBody>(call) {
+            override fun onFinalSuccess(
+                call: Call<ResponseBody>,
+                response: Response<ResponseBody>
+            ) {
+
+                Log.e("API success", " " + response.body())
+
+                val type: Type = object : TypeToken<BaseApiModel<TodayTeamResponse>>() {}.type
+                val jsonString = response.body()?.string()
+                val userModel = Gson().fromJson<BaseApiModel<TodayTeamResponse>>(jsonString, type)
+                serverResponse.value = userModel
+            }
+
+
+            override fun onFinalFailure(
+                errorString: String?
+            ) {
+
+                Log.e("API Failure", " $errorString")
+
+                serverResponse.value =
+                    BaseApiModel(BaseModel(TodayTeamResponse(meta = Meta(errorString.toString(), false))))
 
             }
 

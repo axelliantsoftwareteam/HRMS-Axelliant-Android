@@ -273,4 +273,8 @@ interface ApiInterface {
     fun getExpenseType(@Header("Authorization") auth: String?): Call<ResponseBody>
 
 
+    @Headers("Content-Type: application/json")
+    @GET("hrms.hr.doctype.employee.mobile_api.get_team_checkin_detail")  // dashboard
+    fun callTeamInfo(@Header("Authorization") auth: String?): Call<ResponseBody>
+
 }
