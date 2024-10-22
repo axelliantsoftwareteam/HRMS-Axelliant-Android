@@ -1,0 +1,47 @@
+package com.axelliant.hris.adapter
+
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
+
+import com.axelliant.hris.databinding.RemaningLeaveRowBinding
+import com.axelliant.hris.model.leave.LeaveType
+
+class RemainingLeaveAdapter(
+    private val leaves: ArrayList<LeaveType>
+) :
+    RecyclerView.Adapter<RemainingLeaveAdapter.AccountsVH>() {
+
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccountsVH {
+        val layoutInflater = LayoutInflater.from(parent.context)
+        val binding = RemaningLeaveRowBinding.inflate(layoutInflater, parent, false)
+        return AccountsVH(binding)
+    }
+
+    override fun onBindViewHolder(holder: AccountsVH, position: Int) {
+        holder.bind(leaves[position])
+        if((position+1)%3==0)
+        {
+            holder.binding.viewDivider.visibility=View.GONE
+        }
+        else{
+            holder.binding.viewDivider.visibility=View.VISIBLE
+        }
+    }
+
+    override fun getItemCount(): Int {
+        return leaves.size
+    }
+
+    class AccountsVH(val binding: RemaningLeaveRowBinding) : RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(item: LeaveType) {
+            binding.tvTitle.text = item.title
+            binding.tvValue.text = item.value.toString()
+
+        }
+    }
+
+}

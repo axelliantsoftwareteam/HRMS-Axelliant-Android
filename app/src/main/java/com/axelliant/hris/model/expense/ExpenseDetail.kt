@@ -1,0 +1,32 @@
+package com.axelliant.hris.model.expense
+
+data class ExpenseDetail(
+    val advances: List<Any>,
+    val approval_status: String,
+    val company: String,
+    val cost_center: String,
+    val creation: String,
+    val department: String,
+    val docstatus: Int,
+    val doctype: String,
+    val employee: String,
+    val employee_name: String,
+    val expense_approver: String,
+    val expenses: List<ExpenseX>,
+    val grand_total: Double,
+    val idx: Int,
+    val is_paid: Int,
+    val modified: String,
+    val modified_by: String,
+    val name: String,
+    val naming_series: String,
+    val owner: String,
+    val posting_date: String,
+    val status: String,
+    val taxes: List<Any>,
+    val total_advance_amount: Double,
+    val total_amount_reimbursed: Double,
+    val total_claimed_amount: Double,
+    val total_sanctioned_amount: Double,
+    val total_taxes_and_charges: Double
+)

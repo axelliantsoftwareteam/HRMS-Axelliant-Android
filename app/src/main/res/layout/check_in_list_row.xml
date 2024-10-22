@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
     <LinearLayout
@@ -66,25 +67,43 @@
             android:src="@drawable/ic_down" />
     </LinearLayout>
 
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1sdp"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_15sdp"
+        android:background="@color/divider"
+        app:layout_constraintTop_toBottomOf="@+id/ly_action_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/ly_drop_down"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="visible"
         android:padding="@dimen/_5sdp">
 
-        <View
-            android:id="@+id/divider"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/_1sdp"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginEnd="@dimen/_10sdp"
-            android:layout_marginBottom="@dimen/_15sdp"
-            android:background="@color/divider"
 
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_attend_status"
+            style="@style/TEXT_SEMI_BLACK_10"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_time_bg"
+            android:backgroundTint="#1A09589B"
+            android:gravity="center"
+            android:padding="@dimen/_5sdp"
+            android:text="Edit"
+            android:textColor="@color/colorApp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+             />
+
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -92,9 +111,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/_5sdp"
-            app:layout_constraintEnd_toEndOf="@+id/divider"
-            app:layout_constraintStart_toStartOf="@+id/divider"
-            app:layout_constraintTop_toBottomOf="@id/divider">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_attend_status">
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_shift"
@@ -113,7 +132,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
                 android:background="@drawable/rounded_disabled"
-                android:text="@string/total_members"
+                tools:text="@string/total_members"
 
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_shift" />
@@ -126,8 +145,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/_5sdp"
-            app:layout_constraintEnd_toEndOf="@+id/divider"
-            app:layout_constraintStart_toStartOf="@+id/divider"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
 
             app:layout_constraintTop_toBottomOf="@id/ly_shift">
 
@@ -148,7 +167,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
                 android:background="@drawable/rounded_disabled"
-                android:text="9:00 - 17:00"
+                tools:text="9:00 - 17:00"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_shift_time" />
 
@@ -158,7 +177,8 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-</LinearLayout><!--
+</LinearLayout>
+    <!--
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"

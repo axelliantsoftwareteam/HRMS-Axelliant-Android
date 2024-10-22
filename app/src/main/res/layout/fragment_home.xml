@@ -71,12 +71,11 @@
                 app:layout_constraintTop_toBottomOf="@+id/tv_employe_name" />
 
             <ImageView
-
                 android:id="@+id/iv_notification"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
+                android:layout_width="@dimen/_30sdp"
+                android:layout_height="@dimen/_30sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
-                android:src="@drawable/ic_notification_status"
+                android:src="@drawable/logout"
                 app:tint="@color/black"
                 android:padding="@dimen/_5sdp"
                 app:layout_constraintBottom_toBottomOf="@+id/profile_img"
