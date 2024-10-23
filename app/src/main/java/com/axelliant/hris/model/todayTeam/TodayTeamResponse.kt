@@ -1,4 +1,4 @@
-package com.axelliant.hris.model.TodayTeam
+package com.axelliant.hris.model.todayTeam
 
 import com.axelliant.hris.model.base.Meta
 

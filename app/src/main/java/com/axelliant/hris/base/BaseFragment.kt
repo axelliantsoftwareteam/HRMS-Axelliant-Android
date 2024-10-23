@@ -3,6 +3,7 @@ package com.axelliant.hris.base
 import androidx.fragment.app.Fragment
 import com.axelliant.hris.navigation.AppNavigator
 import com.axelliant.hris.screens.BaseActivity
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 open class BaseFragment : Fragment() {
 
@@ -23,6 +24,11 @@ open class BaseFragment : Fragment() {
      fun hideDialog() {
         if (requireActivity() is BaseActivity)
             (requireActivity() as BaseActivity).loadingDialog.dismiss()
+    }
+
+    fun navigateToBottomSheet(bottomSheetFragment: BottomSheetDialogFragment) {
+        bottomSheetFragment.show(parentFragmentManager, bottomSheetFragment.tag)
+
     }
 
 

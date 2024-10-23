@@ -33,6 +33,7 @@ import com.axelliant.hris.adapter.BirthdayAdapter
 
 import com.axelliant.hris.adapter.ModulesAdapter
 import com.axelliant.hris.base.BaseFragment
+import com.axelliant.hris.bottomSheet.TodayTeamAttendanceDetailBottomSheet
 import com.axelliant.hris.callback.AdapterItemClick
 import com.axelliant.hris.config.AppConst
 import com.axelliant.hris.config.GlobalConfig
@@ -40,19 +41,22 @@ import com.axelliant.hris.databinding.FragmentHomeBinding
 import com.axelliant.hris.enums.CheckRequestFilter
 import com.axelliant.hris.enums.LeaveStatus
 import com.axelliant.hris.enums.LocationFilter
+import com.axelliant.hris.enums.TodayTeamStatus
 import com.axelliant.hris.event.EventObserver
+import com.axelliant.hris.extention.getNtpTimeFormatted
 import com.axelliant.hris.extention.setUrlImage
 import com.axelliant.hris.extention.showErrorMsg
 import com.axelliant.hris.extention.showSuccessMsg
 import com.axelliant.hris.extention.valueQualifier
 import com.axelliant.hris.model.Modules
-import com.axelliant.hris.model.TodayTeam.TodayTeamResponse
+import com.axelliant.hris.model.todayTeam.TodayTeamResponse
 import com.axelliant.hris.model.attendance.ShiftData
 import com.axelliant.hris.model.dashboard.BranchDataResponse
 import com.axelliant.hris.model.dashboard.Birthday
 import com.axelliant.hris.model.dashboard.CheckInInfoResponse
 import com.axelliant.hris.model.dashboard.EmployProfile
 import com.axelliant.hris.model.login.CheckInRequest
+import com.axelliant.hris.model.todayTeam.EmployTeamProfile
 import com.axelliant.hris.navigation.AppNavigator
 import com.axelliant.hris.utils.SessionManager
 import com.axelliant.hris.utils.Utils.getCurrentTime
@@ -62,10 +66,15 @@ import com.microsoft.identity.client.IPublicClientApplication
 import com.microsoft.identity.client.ISingleAccountPublicClientApplication
 import com.microsoft.identity.client.PublicClientApplication
 import com.microsoft.identity.client.exception.MsalException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 
 class HomeFragment : BaseFragment() {
 
+    private var ntpTimeString: String? = null
+    private var currentStatus: String? = null
     private var loc: String? = null
     private lateinit var frontAnimation: AnimatorSet
     private lateinit var backAnimation: AnimatorSet
@@ -80,6 +89,7 @@ class HomeFragment : BaseFragment() {
 
     // Create an ArrayList to store the converted time strings
     private var targetLocList = ArrayList<BranchDataResponse>()
+    private var employeeTodayList = ArrayList<EmployTeamProfile>()
     private lateinit var locationPermissionLauncher: ActivityResultLauncher<String>
 
 
@@ -250,10 +260,9 @@ class HomeFragment : BaseFragment() {
 
                 if (response?.meta?.status == true) {
                     // success
-                    if (response!=null)
-                    {
-                        binding?.tvShift?.isVisible=true
-                        binding?.lyMyTeam?.isVisible=true
+                    if (response != null) {
+                        binding?.tvShift?.isVisible = true
+                        binding?.lyMyTeam?.isVisible = true
                         teamsToday(response)
 
                     }
@@ -263,7 +272,20 @@ class HomeFragment : BaseFragment() {
                 }
 
             })
+        homeViewModel.employListResponse.observe(
+            viewLifecycleOwner,
+            EventObserver { response ->
+                if (response?.meta?.status == true) {
+                    // success
+                    if ((response.employee_list?.size ?: 0) > 0) {
+                        employeeTodayList = response.employee_list!!
+                        getEmployeeList()
+                    }
+                } else {
+                    requireContext().showErrorMsg(response?.meta?.message.toString())
+                }
 
+            })
 
         homeViewModel.getIsLoading()
             .observe(viewLifecycleOwner, EventObserver { isLoading ->
@@ -273,6 +295,51 @@ class HomeFragment : BaseFragment() {
                     hideDialog()
                 }
             })
+
+
+        // Call the NTP time method in a coroutine
+        CoroutineScope(Dispatchers.Main).launch {
+            ntpTimeString = getNtpTimeFormatted() // Call the method that returns a string
+            Log.d("NTP", ntpTimeString!!)
+        }
+
+
+        binding?.lyTotalMembers?.setOnClickListener {
+//            requireContext().showSuccessMsg(TodayTeamStatus.AllTeamMember.value)
+//            homeViewModel.getTodayTeamList()
+//            val todayTeamAttendance =
+//                TodayTeamAttendanceDetailBottomSheet(TodayTeamStatus.AllTeamMember.value)
+//            navigateToBottomSheet(todayTeamAttendance)
+        }
+        binding?.lyPresent?.setOnClickListener {
+            homeViewModel.getTodayTeamList(TodayTeamStatus.CheckIn.value)
+
+            currentStatus = TodayTeamStatus.CheckIn.value
+
+
+        }
+        binding?.lyWorkHome?.setOnClickListener {
+            homeViewModel.getTodayTeamList(TodayTeamStatus.CheckOut.value)
+
+            currentStatus = TodayTeamStatus.CheckOut.value
+        }
+        binding?.lyMisPunchOut?.setOnClickListener {
+            homeViewModel.getTodayTeamList(TodayTeamStatus.OnLeave.value)
+            currentStatus = TodayTeamStatus.OnLeave.value
+        }
+        binding?.lyTeamsAbsent?.setOnClickListener {
+            homeViewModel.getTodayTeamList(TodayTeamStatus.InOffice.value)
+            currentStatus = TodayTeamStatus.InOffice.value
+        }
+        binding?.lyOnLeave?.setOnClickListener {
+            homeViewModel.getTodayTeamList(TodayTeamStatus.WFH.value)
+            currentStatus = TodayTeamStatus.WFH.value
+
+        }
+        binding?.lyWeeklyOffs?.setOnClickListener {
+            homeViewModel.getTodayTeamList(TodayTeamStatus.MissedPunch.value)
+            currentStatus = TodayTeamStatus.MissedPunch.value
+        }
 
         binding?.ivQr?.setOnClickListener {
             requireContext().showSuccessMsg()
@@ -376,6 +443,21 @@ class HomeFragment : BaseFragment() {
 
     }
 
+    private fun getEmployeeList() {
+        if (employeeTodayList.size > 0) {
+            val todayTeamAttendance =
+                currentStatus?.let {
+                    TodayTeamAttendanceDetailBottomSheet(
+                        it,
+                        employeeTodayList
+                    )
+                }
+            if (todayTeamAttendance != null) {
+                navigateToBottomSheet(todayTeamAttendance)
+            }
+        }
+    }
+
     private fun teamsToday(response: TodayTeamResponse) {
 
         binding?.tvTotalMemberTxt?.text = response.team_member_count.toString().valueQualifier()
@@ -386,27 +468,6 @@ class HomeFragment : BaseFragment() {
         binding?.tvTeamsOnleaveTxt?.text = response.work_from_home.toString().valueQualifier()
         binding?.tvWeeklyOffsTxt?.text = response.absent_count.toString().valueQualifier()
 
-        binding?.tvTotalMemberTxt?.setOnClickListener {
-
-        }
-        binding?.tvPresentTxt?.setOnClickListener {
-
-        }
-        binding?.tvWorkHomeTxt?.setOnClickListener {
-
-        }
-        binding?.tvMissPunchOutTxt?.setOnClickListener {
-
-        }
-        binding?.tvTeamsAbsentTxt?.setOnClickListener {
-
-        }
-        binding?.tvTeamsOnleaveTxt?.setOnClickListener {
-
-        }
-        binding?.tvWeeklyOffsTxt?.setOnClickListener {
-
-        }
 
     }
 
@@ -467,12 +528,12 @@ class HomeFragment : BaseFragment() {
 
                     homeViewModel.postCheckIn(CheckInRequest().apply {
                         this.log_type = type
-                        this.date_time = getCurrentTime()
+                        this.date_time = ntpTimeString
                         this.location = loc
                         this.request_status = LeaveStatus.APPROVED.value
                         this.attendance_reason = "Punch from application"
                     })
-
+//                    this.date_time = getCurrentTime()
                 } else {
                     requireContext().showErrorMsg("Please wait we are fetching your location")
                 }
@@ -511,7 +572,6 @@ class HomeFragment : BaseFragment() {
 
             binding?.tvCheckInTxt?.text = checkInInfo.check_in.valueQualifier()
             binding?.tvCheckOutTxt?.text = checkInInfo.check_out.valueQualifier()
-
 
 
         } else {
@@ -561,11 +621,11 @@ class HomeFragment : BaseFragment() {
                     radiusInMeters
                 )
                 if (isWithinRadius) {
-                    binding?.tvCurrentLoc?.text = targetloc.name
+                    binding?.tvCurrentLocs?.text = targetloc.name
                     loc = LocationFilter.OFFICE.value
                     return
                 } else {
-                    binding?.tvCurrentLoc?.text = LocationFilter.WHF.value
+                    binding?.tvCurrentLocs?.text = LocationFilter.WHF.value
                     loc = LocationFilter.WHF.value
                 }
             }
@@ -651,7 +711,7 @@ class HomeFragment : BaseFragment() {
 
 
         if (isManager) {
-        homeViewModel.getTodayTeamInfo()
+            homeViewModel.getTodayTeamInfo()
             gridList.add(
                 Modules(
                     id = 3,
@@ -720,9 +780,8 @@ class HomeFragment : BaseFragment() {
 
     private fun dashBoardShiftPopulate(shiftData: ShiftData) {
 
-        binding?.tvShiftNote?.text="Your shift, titled ${shiftData.name},starts at ${shiftData.actual_start} and ends at ${shiftData.actual_end},taking place ${shiftData.location}"
-
-
+        binding?.tvShiftNote?.text =
+            "Your shift, titled ${shiftData.name},starts at ${shiftData.actual_start} and ends at ${shiftData.actual_end},taking place ${shiftData.location}"
     }
 
 

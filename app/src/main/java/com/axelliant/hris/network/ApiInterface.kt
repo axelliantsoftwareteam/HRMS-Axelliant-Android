@@ -12,6 +12,7 @@ import com.axelliant.hris.model.login.CheckInRequest
 import com.axelliant.hris.model.login.LoginRequest
 import com.axelliant.hris.model.post.AttendanceRequest
 import com.axelliant.hris.model.post.LeaveRequest
+import com.axelliant.hris.model.post.TeamListRequest
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody;
 import retrofit2.Call
@@ -276,5 +277,13 @@ interface ApiInterface {
     @Headers("Content-Type: application/json")
     @GET("hrms.hr.doctype.employee.mobile_api.get_team_checkin_detail")  // dashboard
     fun callTeamInfo(@Header("Authorization") auth: String?): Call<ResponseBody>
+
+
+    @Headers("Content-Type: application/json")
+    @POST("hrms.hr.doctype.employee.mobile_api.get_team_checkin_detail_list")  // dashboard
+    fun callTodayTeamList(
+        @Header("Authorization") auth: String?,
+        @Body teamListRequest: TeamListRequest?
+    ): Call<ResponseBody>
 
 }
