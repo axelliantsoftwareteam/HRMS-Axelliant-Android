@@ -304,16 +304,14 @@
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/tv_team_member_txt"
-                        style="@style/TEXT_MEDIUM_WHITE_12"
+                        style="@style/TEXT_MEDIUM_BLACK_12"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_marginStart="@dimen/_5sdp"
                         android:background="@drawable/circle_no_bg"
-                        android:backgroundTint="@color/colorApp"
                         android:padding="@dimen/_5sdp"
                         android:textSize="@dimen/_8sdp"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintHorizontal_weight="3"
                         app:layout_constraintStart_toEndOf="@id/tv_team_member"
                         app:layout_constraintTop_toTopOf="parent"
                         tools:text="20" />
