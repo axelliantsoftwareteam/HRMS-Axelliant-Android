@@ -73,6 +73,8 @@ import org.koin.android.ext.android.inject
 
 class HomeFragment : BaseFragment() {
 
+    private var gridList: ArrayList<Modules>?= null
+    private var teamattend: TodayTeamResponse?= null
     private var ntpTimeString: String? = null
     private var currentStatus: String? = null
     private var loc: String? = null
@@ -220,19 +222,36 @@ class HomeFragment : BaseFragment() {
             viewLifecycleOwner,
             EventObserver { response ->
 
-                if (response?.meta?.status == true) {
+                if (response?.meta?.status == true)
+                {
                     // success
                     response.employee_profile?.let { GlobalConfig.setCurrentEmployee(it) }
+                    val isManager = GlobalConfig.isCurrentManager()
 
+                    if (isManager) {
+                        homeViewModel.getTodayTeamInfo()
+                        gridList?.add(
+                            Modules(
+                                id = 3,
+                                name = "Approval",
+                                description = "View all requests",
+                                color = requireContext().getColor(R.color.colorApp),
+                                drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_approv)
+                            )
+                        )
+                    }
                     birthdayPopulate(response.birthday_data!!)
                     response.shift_detail?.let { dashBoardShiftPopulate(it) }
                     checkInInfoPopulate(response.checkin_info!!)
                     checkInInfoResponse = response.checkin_info
 
                     if (response.branch_data != null)
+                    {
                         targetLocList = response.branch_data
 
+                    }
                     response.employee_profile?.let { dashBoardPopulate(it) }
+                  
                     dataPopulate()
                 } else {
                     requireContext().showErrorMsg(response?.meta?.message.toString())
@@ -263,6 +282,7 @@ class HomeFragment : BaseFragment() {
                     if (response != null) {
                         binding?.tvShift?.isVisible = true
                         binding?.lyMyTeam?.isVisible = true
+                        teamattend=response
                         teamsToday(response)
 
                     }
@@ -312,33 +332,46 @@ class HomeFragment : BaseFragment() {
 //            navigateToBottomSheet(todayTeamAttendance)
         }
         binding?.lyPresent?.setOnClickListener {
-            homeViewModel.getTodayTeamList(TodayTeamStatus.CheckIn.value)
-
             currentStatus = TodayTeamStatus.CheckIn.value
-
-
+            if ((teamattend?.checkin_count ?: 0) > 0) {
+                homeViewModel.getTodayTeamList(currentStatus)
+            }
         }
         binding?.lyWorkHome?.setOnClickListener {
-            homeViewModel.getTodayTeamList(TodayTeamStatus.CheckOut.value)
-
             currentStatus = TodayTeamStatus.CheckOut.value
+            if ((teamattend?.checkout_count ?: 0) > 0) {
+                homeViewModel.getTodayTeamList(currentStatus)
+            }
+
         }
         binding?.lyMisPunchOut?.setOnClickListener {
-            homeViewModel.getTodayTeamList(TodayTeamStatus.OnLeave.value)
             currentStatus = TodayTeamStatus.OnLeave.value
+            if ((teamattend?.leave_count ?: 0) > 0) {
+                homeViewModel.getTodayTeamList(currentStatus)
+            }
+            homeViewModel.getTodayTeamList(currentStatus)
+
         }
         binding?.lyTeamsAbsent?.setOnClickListener {
-            homeViewModel.getTodayTeamList(TodayTeamStatus.InOffice.value)
             currentStatus = TodayTeamStatus.InOffice.value
+            if ((teamattend?.in_office ?: 0) > 0) {
+                homeViewModel.getTodayTeamList(currentStatus)
+            }
+
         }
         binding?.lyOnLeave?.setOnClickListener {
-            homeViewModel.getTodayTeamList(TodayTeamStatus.WFH.value)
             currentStatus = TodayTeamStatus.WFH.value
+            if ((teamattend?.work_from_home ?: 0) > 0) {
+                homeViewModel.getTodayTeamList(currentStatus)
+            }
 
         }
         binding?.lyWeeklyOffs?.setOnClickListener {
-            homeViewModel.getTodayTeamList(TodayTeamStatus.MissedPunch.value)
             currentStatus = TodayTeamStatus.MissedPunch.value
+            if ((teamattend?.absent_count ?: 0) > 0) {
+                homeViewModel.getTodayTeamList(currentStatus)
+            }
+
         }
 
         binding?.ivQr?.setOnClickListener {
@@ -657,7 +690,7 @@ class HomeFragment : BaseFragment() {
 
     private fun dataPopulate() {
 
-        val gridList = arrayListOf(
+         gridList = arrayListOf(
             Modules(
                 id = 0,
                 name = "Attendance",
@@ -705,29 +738,10 @@ class HomeFragment : BaseFragment() {
 //            color = requireContext().getColor(R.color.greeny),
 //            drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_payslip)
 //        )
-        val isManager = GlobalConfig.isCurrentManager()
-
-
-
-
-        if (isManager) {
-            homeViewModel.getTodayTeamInfo()
-            gridList.add(
-                Modules(
-                    id = 3,
-                    name = "Approval",
-                    description = "View all requests",
-                    color = requireContext().getColor(R.color.colorApp),
-                    drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_approv)
-                )
-            )
-        }
-
-
-
+        
         binding?.rvModule?.layoutManager = GridLayoutManager(requireContext(), 2)
         val modulesAdapter = ModulesAdapter(
-            gridList,
+            gridList!!,
             object : AdapterItemClick {
                 override fun onItemClick(customObject: Any, position: Int) {
                     val currentObject = customObject as Modules
@@ -781,7 +795,7 @@ class HomeFragment : BaseFragment() {
     private fun dashBoardShiftPopulate(shiftData: ShiftData) {
 
         binding?.tvShiftNote?.text =
-            "Your shift, titled ${shiftData.name},starts at ${shiftData.actual_start} and ends at ${shiftData.actual_end},taking place ${shiftData.location}"
+            "Your shift ${shiftData.name} is ${shiftData.location}"
     }
 
 

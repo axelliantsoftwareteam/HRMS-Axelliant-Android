@@ -3,6 +3,7 @@ package com.axelliant.hris.extention
 import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.content.res.AppCompatResources
@@ -107,6 +108,7 @@ fun ImageView.setUrlImage(url: String?, context: Context? = null) {
 suspend fun getNtpTimeFormatted(): String {
     return withContext(Dispatchers.IO) {
         val ntpTime = getNtpTime()
+        Log.d("ntpTime",ntpTime.toString())
         if (ntpTime != null) {
             val dateFormat = SimpleDateFormat(AppConst.ATTENDANCE_DATE_FORMAT, Locale.getDefault())
             "${dateFormat.format(ntpTime)}"
