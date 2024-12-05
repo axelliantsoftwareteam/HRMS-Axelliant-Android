@@ -174,7 +174,7 @@
                                 android:layout_marginTop="@dimen/_5sdp"
                                 android:background="@drawable/rounded_disabled"
                                 android:text="@string/absent"
-                                android:textAllCaps="true"
+
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/tv_absent_txt" />
 
@@ -221,7 +221,7 @@
                                 android:layout_marginTop="@dimen/_5sdp"
                                 android:background="@drawable/rounded_disabled"
                                 android:text="@string/present"
-                                android:textAllCaps="true"
+
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/tv_half_day_txt" />
 
@@ -270,7 +270,7 @@
                                 android:background="@drawable/rounded_disabled"
                                 android:text="@string/miss_punch_out"
                                 android:textAlignment="textStart"
-                                android:textAllCaps="true"
+
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/tv_miss_punch_out_txt" />
 
@@ -319,7 +319,7 @@
                                 android:layout_marginTop="@dimen/_5sdp"
                                 android:background="@drawable/rounded_disabled"
                                 android:text="@string/leaves"
-                                android:textAllCaps="true"
+
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/tv_leaves_txt" />
 
@@ -363,7 +363,7 @@
                                 android:layout_marginTop="@dimen/_5sdp"
                                 android:background="@drawable/rounded_disabled"
                                 android:text="@string/holiday"
-                                android:textAllCaps="true"
+
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/tv_holiday_txt" />
 
@@ -409,7 +409,7 @@
                                 android:background="@drawable/rounded_disabled"
                                 android:text="@string/weekly_offs"
                                 android:textAlignment="textStart"
-                                android:textAllCaps="true"
+
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/tv_weekly_offs_txt" />
 
@@ -526,7 +526,7 @@
                                 android:layout_marginTop="@dimen/_5sdp"
                                 android:background="@drawable/rounded_disabled"
                                 android:text="@string/total_members"
-                                android:textAllCaps="true"
+
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/tv_total_member_txt" />
 
@@ -572,7 +572,7 @@
                                 android:layout_marginTop="@dimen/_5sdp"
                                 android:background="@drawable/rounded_disabled"
                                 android:text="@string/present_on_site"
-                                android:textAllCaps="true"
+
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/tv_present_txt" />
 
@@ -618,7 +618,7 @@
                                 android:layout_marginTop="@dimen/_5sdp"
                                 android:background="@drawable/rounded_disabled"
                                 android:text="@string/work_from_home"
-                                android:textAllCaps="true"
+
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/tv_work_home_txt" />
 
@@ -667,7 +667,7 @@
                                 android:layout_marginTop="@dimen/_5sdp"
                                 android:background="@drawable/rounded_disabled"
                                 android:text="@string/absent"
-                                android:textAllCaps="true"
+
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/tv_teams_absent_txt" />
 
@@ -711,7 +711,7 @@
                                 android:layout_marginTop="@dimen/_5sdp"
                                 android:background="@drawable/rounded_disabled"
                                 android:text="@string/on_leave"
-                                android:textAllCaps="true"
+
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/tv_teams_onleave_txt" />
 
@@ -796,7 +796,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/shift_name"
-                                android:textAllCaps="true"
+
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -838,7 +838,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="@string/shift_timings"
-                                    android:textAllCaps="true"
+
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="parent" />
 

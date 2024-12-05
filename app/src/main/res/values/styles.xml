@@ -368,4 +368,11 @@
         <item name="android:textColorPrimary">@color/black</item> <!--days of the month-->
         <item name="android:textColorSecondary">@color/colorApp</item>    <!--days of the week-->
     </style>
+
+    <style name="ThemeOverlay_Demo_BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/Widget.Demo.BottomSheet</item>
+    </style>
+    <style name="Widget.Demo.BottomSheet" parent="Widget.MaterialComponents.BottomSheet">
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.Demo</item>
+    </style>
 </resources>

@@ -33,24 +33,31 @@ import com.axelliant.hris.adapter.BirthdayAdapter
 
 import com.axelliant.hris.adapter.ModulesAdapter
 import com.axelliant.hris.base.BaseFragment
+import com.axelliant.hris.bottomSheet.TodayTeamAttendanceDetailBottomSheet
 import com.axelliant.hris.callback.AdapterItemClick
 import com.axelliant.hris.config.AppConst
 import com.axelliant.hris.config.GlobalConfig
 import com.axelliant.hris.databinding.FragmentHomeBinding
 import com.axelliant.hris.enums.CheckRequestFilter
+import com.axelliant.hris.enums.HomeMenu
 import com.axelliant.hris.enums.LeaveStatus
 import com.axelliant.hris.enums.LocationFilter
+import com.axelliant.hris.enums.TodayTeamStatus
 import com.axelliant.hris.event.EventObserver
+import com.axelliant.hris.extention.getNtpTimeFormatted
 import com.axelliant.hris.extention.setUrlImage
 import com.axelliant.hris.extention.showErrorMsg
 import com.axelliant.hris.extention.showSuccessMsg
 import com.axelliant.hris.extention.valueQualifier
 import com.axelliant.hris.model.Modules
+import com.axelliant.hris.model.todayTeam.TodayTeamResponse
+import com.axelliant.hris.model.attendance.ShiftData
 import com.axelliant.hris.model.dashboard.BranchDataResponse
 import com.axelliant.hris.model.dashboard.Birthday
 import com.axelliant.hris.model.dashboard.CheckInInfoResponse
 import com.axelliant.hris.model.dashboard.EmployProfile
 import com.axelliant.hris.model.login.CheckInRequest
+import com.axelliant.hris.model.todayTeam.EmployTeamProfile
 import com.axelliant.hris.navigation.AppNavigator
 import com.axelliant.hris.utils.SessionManager
 import com.axelliant.hris.utils.Utils.getCurrentTime
@@ -60,10 +67,17 @@ import com.microsoft.identity.client.IPublicClientApplication
 import com.microsoft.identity.client.ISingleAccountPublicClientApplication
 import com.microsoft.identity.client.PublicClientApplication
 import com.microsoft.identity.client.exception.MsalException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 
 class HomeFragment : BaseFragment() {
 
+    private var gridList: ArrayList<Modules>?= null
+    private var teamattend: TodayTeamResponse?= null
+    private var ntpTimeString: String? = null
+    private var currentStatus: String? = null
     private var loc: String? = null
     private lateinit var frontAnimation: AnimatorSet
     private lateinit var backAnimation: AnimatorSet
@@ -78,6 +92,7 @@ class HomeFragment : BaseFragment() {
 
     // Create an ArrayList to store the converted time strings
     private var targetLocList = ArrayList<BranchDataResponse>()
+    private var employeeTodayList = ArrayList<EmployTeamProfile>()
     private lateinit var locationPermissionLauncher: ActivityResultLauncher<String>
 
 
@@ -208,18 +223,36 @@ class HomeFragment : BaseFragment() {
             viewLifecycleOwner,
             EventObserver { response ->
 
-                if (response?.meta?.status == true) {
+                if (response?.meta?.status == true)
+                {
                     // success
                     response.employee_profile?.let { GlobalConfig.setCurrentEmployee(it) }
+                    val isManager = GlobalConfig.isCurrentManager()
 
+                    if (isManager) {
+                        homeViewModel.getTodayTeamInfo()
+                        gridList?.add(
+                            Modules(
+                                id = 3,
+                                name = HomeMenu.Approval.gridName,
+                                description = HomeMenu.Approval.description,
+                                color = requireContext().getColor(R.color.colorApp),
+                                drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_approv)
+                            )
+                        )
+                    }
                     birthdayPopulate(response.birthday_data!!)
+                    response.shift_detail?.let { dashBoardShiftPopulate(it) }
                     checkInInfoPopulate(response.checkin_info!!)
                     checkInInfoResponse = response.checkin_info
 
                     if (response.branch_data != null)
+                    {
                         targetLocList = response.branch_data
 
+                    }
                     response.employee_profile?.let { dashBoardPopulate(it) }
+                  
                     dataPopulate()
                 } else {
                     requireContext().showErrorMsg(response?.meta?.message.toString())
@@ -240,6 +273,41 @@ class HomeFragment : BaseFragment() {
                 }
 
             })
+
+        homeViewModel.todayTeamResponse.observe(
+            viewLifecycleOwner,
+            EventObserver { response ->
+
+                if (response?.meta?.status == true) {
+                    // success
+                    if (response != null) {
+                        binding?.tvShift?.isVisible = true
+                        binding?.lyMyTeam?.isVisible = true
+                        teamattend=response
+                        teamsToday(response)
+
+                    }
+
+                } else {
+                    requireContext().showErrorMsg(response?.meta?.message.toString())
+                }
+
+            })
+        homeViewModel.employListResponse.observe(
+            viewLifecycleOwner,
+            EventObserver { response ->
+                if (response?.meta?.status == true) {
+                    // success
+                    if ((response.employee_list?.size ?: 0) > 0) {
+                        employeeTodayList = response.employee_list!!
+                        getEmployeeList()
+                    }
+                } else {
+                    requireContext().showErrorMsg(response?.meta?.message.toString())
+                }
+
+            })
+
         homeViewModel.getIsLoading()
             .observe(viewLifecycleOwner, EventObserver { isLoading ->
                 if (isLoading) {
@@ -248,6 +316,64 @@ class HomeFragment : BaseFragment() {
                     hideDialog()
                 }
             })
+
+
+        // Call the NTP time method in a coroutine
+        CoroutineScope(Dispatchers.Main).launch {
+            ntpTimeString = getNtpTimeFormatted() // Call the method that returns a string
+            Log.d("NTP", ntpTimeString!!)
+        }
+
+
+        binding?.lyTotalMembers?.setOnClickListener {
+//            requireContext().showSuccessMsg(TodayTeamStatus.AllTeamMember.value)
+//            homeViewModel.getTodayTeamList()
+//            val todayTeamAttendance =
+//                TodayTeamAttendanceDetailBottomSheet(TodayTeamStatus.AllTeamMember.value)
+//            navigateToBottomSheet(todayTeamAttendance)
+        }
+        binding?.lyPresent?.setOnClickListener {
+            currentStatus = TodayTeamStatus.CheckIn.value
+            if ((teamattend?.checkin_count ?: 0) > 0) {
+                homeViewModel.getTodayTeamList(currentStatus)
+            }
+        }
+        binding?.lyWorkHome?.setOnClickListener {
+            currentStatus = TodayTeamStatus.CheckOut.value
+            if ((teamattend?.checkout_count ?: 0) > 0) {
+                homeViewModel.getTodayTeamList(currentStatus)
+            }
+
+        }
+        binding?.lyMisPunchOut?.setOnClickListener {
+            currentStatus = TodayTeamStatus.OnLeave.value
+            if ((teamattend?.leave_count ?: 0) > 0) {
+                homeViewModel.getTodayTeamList(currentStatus)
+            }
+            homeViewModel.getTodayTeamList(currentStatus)
+
+        }
+        binding?.lyTeamsAbsent?.setOnClickListener {
+            currentStatus = TodayTeamStatus.InOffice.value
+            if ((teamattend?.in_office ?: 0) > 0) {
+                homeViewModel.getTodayTeamList(currentStatus)
+            }
+
+        }
+        binding?.lyOnLeave?.setOnClickListener {
+            currentStatus = TodayTeamStatus.WFH.value
+            if ((teamattend?.work_from_home ?: 0) > 0) {
+                homeViewModel.getTodayTeamList(currentStatus)
+            }
+
+        }
+        binding?.lyWeeklyOffs?.setOnClickListener {
+            currentStatus = TodayTeamStatus.MissedPunch.value
+            if ((teamattend?.absent_count ?: 0) > 0) {
+                homeViewModel.getTodayTeamList(currentStatus)
+            }
+
+        }
 
         binding?.ivQr?.setOnClickListener {
             requireContext().showSuccessMsg()
@@ -351,6 +477,34 @@ class HomeFragment : BaseFragment() {
 
     }
 
+    private fun getEmployeeList() {
+        if (employeeTodayList.size > 0) {
+            val todayTeamAttendance =
+                currentStatus?.let {
+                    TodayTeamAttendanceDetailBottomSheet(
+                        it,
+                        employeeTodayList
+                    )
+                }
+            if (todayTeamAttendance != null) {
+                navigateToBottomSheet(todayTeamAttendance)
+            }
+        }
+    }
+
+    private fun teamsToday(response: TodayTeamResponse) {
+
+        binding?.tvTotalMemberTxt?.text = response.team_member_count.toString().valueQualifier()
+        binding?.tvPresentTxt?.text = response.checkin_count.toString().valueQualifier()
+        binding?.tvWorkHomeTxt?.text = response.checkout_count.toString().valueQualifier()
+        binding?.tvMissPunchOutTxt?.text = response.leave_count.toString().valueQualifier()
+        binding?.tvTeamsAbsentTxt?.text = response.in_office.toString().valueQualifier()
+        binding?.tvTeamsOnleaveTxt?.text = response.work_from_home.toString().valueQualifier()
+        binding?.tvWeeklyOffsTxt?.text = response.absent_count.toString().valueQualifier()
+
+
+    }
+
     // Show a rationale dialog explaining why the permission is needed
     private fun showPermissionRationale() {
         AlertDialog.Builder(requireContext())
@@ -408,12 +562,12 @@ class HomeFragment : BaseFragment() {
 
                     homeViewModel.postCheckIn(CheckInRequest().apply {
                         this.log_type = type
-                        this.date_time = getCurrentTime()
+                        this.date_time = ntpTimeString
                         this.location = loc
                         this.request_status = LeaveStatus.APPROVED.value
                         this.attendance_reason = "Punch from application"
                     })
-
+//                    this.date_time = getCurrentTime()
                 } else {
                     requireContext().showErrorMsg("Please wait we are fetching your location")
                 }
@@ -441,6 +595,9 @@ class HomeFragment : BaseFragment() {
     }
 
     private fun checkInInfoPopulate(checkInInfo: CheckInInfoResponse) {
+
+        binding?.tvLocation?.text = checkInInfo.location.valueQualifier()
+
         if (checkInInfo.is_check_in_button == false && checkInInfo.is_check_out_button == false) {
             binding?.btnCheckIn?.isEnabled = false
 
@@ -498,11 +655,11 @@ class HomeFragment : BaseFragment() {
                     radiusInMeters
                 )
                 if (isWithinRadius) {
-                    binding?.tvLocation?.text = targetloc.name
+                    binding?.tvCurrentLocs?.text = targetloc.name
                     loc = LocationFilter.OFFICE.value
                     return
                 } else {
-                    binding?.tvLocation?.text = LocationFilter.WHF.value
+                    binding?.tvCurrentLocs?.text = LocationFilter.WHF.value
                     loc = LocationFilter.WHF.value
                 }
             }
@@ -534,33 +691,33 @@ class HomeFragment : BaseFragment() {
 
     private fun dataPopulate() {
 
-        val gridList = arrayListOf(
+         gridList = arrayListOf(
             Modules(
                 id = 0,
-                name = "Attendance",
-                description = "Present of this month",
+                name = HomeMenu.Attendance.gridName,
+                description = HomeMenu.Attendance.description,
                 color = requireContext().getColor(R.color.color_secondry),
                 drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_atten)
             ),
             Modules(
                 id = 1,
-                name = "Request",
-                description = "Present of this month",
+                name = HomeMenu.Request.gridName,
+                description = HomeMenu.Request.description,
                 color = requireContext().getColor(R.color.yellow),
                 drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_req)
             ),
             Modules(
                 id = 2,
-                name = "Leaves",
-                description = "Leaves you have",
+                name = HomeMenu.Leaves.gridName,
+                description = HomeMenu.Leaves.description,
                 color = requireContext().getColor(R.color.color_third),
                 drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_leaves)
 
             ),
             Modules(
                 id = 4,
-                name = "Check IN",
-                description = "View all the check-in requests",
+                name = HomeMenu.CheckIN.gridName,
+                description = HomeMenu.CheckIN.description,
                 color = requireContext().getColor(R.color.blue_iris),
                 drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_checkin)
 
@@ -568,73 +725,61 @@ class HomeFragment : BaseFragment() {
             ),
             Modules(
                 id = 5,
-                name = "Expense",
-                description = "View all the expense requests",
+                name = HomeMenu.Expense.gridName,
+                description = HomeMenu.Expense.description,
                 color = requireContext().getColor(R.color.violet),
                 drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_expe)
             )
+             , Modules(
+                 id = 6,
+                 name = HomeMenu.DocumentManagement.gridName,
+                 description = HomeMenu.DocumentManagement.description,
+                 color = requireContext().getColor(R.color.greeny),
+                 drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_payslip)
+             )
         )
-
-//        , Modules(
-//            id = 6,
-//            name = "Shift Management",
-//            description = "View your all shifts",
-//            color = requireContext().getColor(R.color.greeny),
-//            drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_payslip)
-//        )
-        val isManager = GlobalConfig.isCurrentManager()
-
-        if (isManager) {
-            gridList.add(
-                Modules(
-                    id = 3,
-                    name = "Approval",
-                    description = "View all requests",
-                    color = requireContext().getColor(R.color.colorApp),
-                    drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_approv)
-                )
-            )
-        }
-
-
 
         binding?.rvModule?.layoutManager = GridLayoutManager(requireContext(), 2)
         val modulesAdapter = ModulesAdapter(
-            gridList,
+            gridList!!,
             object : AdapterItemClick {
                 override fun onItemClick(customObject: Any, position: Int) {
                     val currentObject = customObject as Modules
 
 
                     when (currentObject.name) {
-                        "Attendance" -> {
+                        HomeMenu.Attendance.gridName -> {
                             showDialog()
                             AppNavigator.navigateToAttendanceStats()
                         }
 
-                        "Leaves" -> {
+                        HomeMenu.Leaves.gridName-> {
                             showDialog()
                             AppNavigator.navigateToLeaves()
                         }
 
-                        "Request" -> {
+                        HomeMenu.Request.gridName -> {
                             showDialog()
                             AppNavigator.navigateToRequest()
                         }
 
-                        "Approval" -> {
+                       HomeMenu.Approval.gridName-> {
                             showDialog()
                             AppNavigator.navigateToApprovals()
                         }
 
-                        "Check IN" -> {
+                        HomeMenu.CheckIN.gridName-> {
                             showDialog()
                             AppNavigator.navigateToCheckInFragment()
                         }
 
-                        "Expense" -> {
+                        HomeMenu.Expense.gridName -> {
                             showDialog()
                             AppNavigator.navigateToExpenseFragment()
+                        }
+                        HomeMenu.DocumentManagement.gridName -> {
+                            showDialog()
+                            AppNavigator.navigateToDocumentManageFragment()
                         }
 
                         else -> {
@@ -650,6 +795,13 @@ class HomeFragment : BaseFragment() {
 
 
     }
+
+    private fun dashBoardShiftPopulate(shiftData: ShiftData) {
+
+        binding?.tvShiftNote?.text =
+            "Your shift ${shiftData.name} is ${shiftData.location}"
+    }
+
 
     private fun dashBoardPopulate(employProfile: EmployProfile) {
         binding?.tvEmployeName?.text = employProfile.employee_name
