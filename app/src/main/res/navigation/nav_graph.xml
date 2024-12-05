@@ -142,5 +142,13 @@
 
     </fragment>
 
+    <fragment
+        android:id="@+id/documentManageFragment"
+        android:name="com.axelliant.hris.screens.DocumentManagementFragment"
+        android:label="Document Fragment"
+        tools:layout="@layout/fragment_document_management">
+
+    </fragment>
+
 
 </navigation>

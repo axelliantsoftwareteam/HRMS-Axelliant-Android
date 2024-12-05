@@ -8,6 +8,7 @@
     <item name="approvals_fragment_action" type="id" />
     <item name="profile_fragment_action" type="id" />
     <item name="expense_fragment_action" type="id" />
+    <item name="document_manage_fragment_action" type="id" />
     <item name="add_expense_fragment_action" type="id" />
     <item name="request_fragment_action" type="id" />
     <item name="attendance_stats_fragment_action" type="id" />

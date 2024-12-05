@@ -182,4 +182,5 @@
     <string name="note">Note:</string>
     <string name="team_presence">Team Presence</string>
     <string name="today_statis">Today\'s Attendance</string>
+    <string name="docrequest">Document Management</string>
 </resources>

@@ -39,6 +39,7 @@ import com.axelliant.hris.config.AppConst
 import com.axelliant.hris.config.GlobalConfig
 import com.axelliant.hris.databinding.FragmentHomeBinding
 import com.axelliant.hris.enums.CheckRequestFilter
+import com.axelliant.hris.enums.HomeMenu
 import com.axelliant.hris.enums.LeaveStatus
 import com.axelliant.hris.enums.LocationFilter
 import com.axelliant.hris.enums.TodayTeamStatus
@@ -233,8 +234,8 @@ class HomeFragment : BaseFragment() {
                         gridList?.add(
                             Modules(
                                 id = 3,
-                                name = "Approval",
-                                description = "View all requests",
+                                name = HomeMenu.Approval.gridName,
+                                description = HomeMenu.Approval.description,
                                 color = requireContext().getColor(R.color.colorApp),
                                 drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_approv)
                             )
@@ -693,30 +694,30 @@ class HomeFragment : BaseFragment() {
          gridList = arrayListOf(
             Modules(
                 id = 0,
-                name = "Attendance",
-                description = "Present of this month",
+                name = HomeMenu.Attendance.gridName,
+                description = HomeMenu.Attendance.description,
                 color = requireContext().getColor(R.color.color_secondry),
                 drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_atten)
             ),
             Modules(
                 id = 1,
-                name = "Request",
-                description = "Present of this month",
+                name = HomeMenu.Request.gridName,
+                description = HomeMenu.Request.description,
                 color = requireContext().getColor(R.color.yellow),
                 drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_req)
             ),
             Modules(
                 id = 2,
-                name = "Leaves",
-                description = "Leaves you have",
+                name = HomeMenu.Leaves.gridName,
+                description = HomeMenu.Leaves.description,
                 color = requireContext().getColor(R.color.color_third),
                 drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_leaves)
 
             ),
             Modules(
                 id = 4,
-                name = "Check IN",
-                description = "View all the check-in requests",
+                name = HomeMenu.CheckIN.gridName,
+                description = HomeMenu.CheckIN.description,
                 color = requireContext().getColor(R.color.blue_iris),
                 drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_checkin)
 
@@ -724,21 +725,20 @@ class HomeFragment : BaseFragment() {
             ),
             Modules(
                 id = 5,
-                name = "Expense",
-                description = "View all the expense requests",
+                name = HomeMenu.Expense.gridName,
+                description = HomeMenu.Expense.description,
                 color = requireContext().getColor(R.color.violet),
                 drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_expe)
             )
+             , Modules(
+                 id = 6,
+                 name = HomeMenu.DocumentManagement.gridName,
+                 description = HomeMenu.DocumentManagement.description,
+                 color = requireContext().getColor(R.color.greeny),
+                 drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_payslip)
+             )
         )
 
-//        , Modules(
-//            id = 6,
-//            name = "Shift Management",
-//            description = "View your all shifts",
-//            color = requireContext().getColor(R.color.greeny),
-//            drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_payslip)
-//        )
-        
         binding?.rvModule?.layoutManager = GridLayoutManager(requireContext(), 2)
         val modulesAdapter = ModulesAdapter(
             gridList!!,
@@ -748,34 +748,38 @@ class HomeFragment : BaseFragment() {
 
 
                     when (currentObject.name) {
-                        "Attendance" -> {
+                        HomeMenu.Attendance.gridName -> {
                             showDialog()
                             AppNavigator.navigateToAttendanceStats()
                         }
 
-                        "Leaves" -> {
+                        HomeMenu.Leaves.gridName-> {
                             showDialog()
                             AppNavigator.navigateToLeaves()
                         }
 
-                        "Request" -> {
+                        HomeMenu.Request.gridName -> {
                             showDialog()
                             AppNavigator.navigateToRequest()
                         }
 
-                        "Approval" -> {
+                       HomeMenu.Approval.gridName-> {
                             showDialog()
                             AppNavigator.navigateToApprovals()
                         }
 
-                        "Check IN" -> {
+                        HomeMenu.CheckIN.gridName-> {
                             showDialog()
                             AppNavigator.navigateToCheckInFragment()
                         }
 
-                        "Expense" -> {
+                        HomeMenu.Expense.gridName -> {
                             showDialog()
                             AppNavigator.navigateToExpenseFragment()
+                        }
+                        HomeMenu.DocumentManagement.gridName -> {
+                            showDialog()
+                            AppNavigator.navigateToDocumentManageFragment()
                         }
 
                         else -> {
