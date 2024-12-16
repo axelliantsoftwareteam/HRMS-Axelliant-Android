@@ -47,10 +47,12 @@ class MyLeaveDetailAdapter(
 
         when (leaves[position].status) {
             LeaveStatus.REJECTED.value -> {
+                holder.binding.tvEdit.isVisible=false
                 holder.binding.tvAttendStatus.backgroundTintList = ContextCompat.getColorStateList(mContext, R.color.light_red)
                 holder.binding.tvAttendStatus.setTextColor(ContextCompat.getColorStateList(mContext, R.color.color_third))
             }
             LeaveStatus.APPROVED.value -> {
+                holder.binding.tvEdit.isVisible=false
                 holder.binding.tvAttendStatus.backgroundTintList = ContextCompat.getColorStateList(mContext, R.color.light_green)
                 holder.binding.tvAttendStatus.setTextColor(ContextCompat.getColorStateList(mContext, R.color.green))
             }
