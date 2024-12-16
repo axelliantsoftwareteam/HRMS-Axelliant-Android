@@ -74,6 +74,7 @@ import org.koin.android.ext.android.inject
 
 class HomeFragment : BaseFragment() {
 
+    private var isManager: Boolean = false
     private var gridList: ArrayList<Modules>?= null
     private var teamattend: TodayTeamResponse?= null
     private var ntpTimeString: String? = null
@@ -227,20 +228,8 @@ class HomeFragment : BaseFragment() {
                 {
                     // success
                     response.employee_profile?.let { GlobalConfig.setCurrentEmployee(it) }
-                    val isManager = GlobalConfig.isCurrentManager()
+                    isManager = GlobalConfig.isCurrentManager()
 
-                    if (isManager) {
-                        homeViewModel.getTodayTeamInfo()
-                        gridList?.add(
-                            Modules(
-                                id = 3,
-                                name = HomeMenu.Approval.gridName,
-                                description = HomeMenu.Approval.description,
-                                color = requireContext().getColor(R.color.colorApp),
-                                drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_approv)
-                            )
-                        )
-                    }
                     birthdayPopulate(response.birthday_data!!)
                     response.shift_detail?.let { dashBoardShiftPopulate(it) }
                     checkInInfoPopulate(response.checkin_info!!)
@@ -252,7 +241,7 @@ class HomeFragment : BaseFragment() {
 
                     }
                     response.employee_profile?.let { dashBoardPopulate(it) }
-                  
+
                     dataPopulate()
                 } else {
                     requireContext().showErrorMsg(response?.meta?.message.toString())
@@ -691,6 +680,19 @@ class HomeFragment : BaseFragment() {
 
     private fun dataPopulate() {
 
+        if (isManager) {
+            homeViewModel.getTodayTeamInfo()
+            gridList?.add(
+                Modules(
+                    id = 3,
+                    name = HomeMenu.Approval.gridName,
+                    description = HomeMenu.Approval.description,
+                    color = requireContext().getColor(R.color.colorApp),
+                    drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_approv)
+                )
+            )
+        }
+
          gridList = arrayListOf(
             Modules(
                 id = 0,
@@ -730,14 +732,27 @@ class HomeFragment : BaseFragment() {
                 color = requireContext().getColor(R.color.violet),
                 drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_expe)
             )
-             , Modules(
-                 id = 6,
-                 name = HomeMenu.DocumentManagement.gridName,
-                 description = HomeMenu.DocumentManagement.description,
-                 color = requireContext().getColor(R.color.greeny),
-                 drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_payslip)
-             )
+//             , Modules(
+//                 id = 6,
+//                 name = HomeMenu.DocumentManagement.gridName,
+//                 description = HomeMenu.DocumentManagement.description,
+//                 color = requireContext().getColor(R.color.greeny),
+//                 drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_payslip)
+//             )
         )
+        if (isManager) {
+            homeViewModel.getTodayTeamInfo()
+            gridList?.add(
+                Modules(
+                    id = 3,
+                    name = HomeMenu.Approval.gridName,
+                    description = HomeMenu.Approval.description,
+                    color = requireContext().getColor(R.color.colorApp),
+                    drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_approv)
+                )
+            )
+        }
+
 
         binding?.rvModule?.layoutManager = GridLayoutManager(requireContext(), 2)
         val modulesAdapter = ModulesAdapter(
