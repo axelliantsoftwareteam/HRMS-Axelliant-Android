@@ -187,6 +187,7 @@
     <string name="document_request">Request Document</string>
     <string name="create_document_req">Create Document Request</string>
     <string name="employe_id">Employee*</string>
-    <string name="subject">Subject*</string>
+    <string name="subject">Subject</string>
+    <string name="subject_req">Subject*</string>
     <string name="description_req">Description*</string>
 </resources>
