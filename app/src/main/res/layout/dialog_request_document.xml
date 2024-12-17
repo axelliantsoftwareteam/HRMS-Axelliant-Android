@@ -149,7 +149,7 @@
                         android:layout_height="wrap_content"
                         android:imeOptions="actionNext"
                         android:textAlignment="textStart"
-                        android:hint="@string/write_descrpt"
+                        android:hint="@string/write_subject"
                         android:text="@={expenseViewModel.subject}"
                         android:inputType="textEmailAddress"
                         android:textColorHint="@color/grey" />

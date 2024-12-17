@@ -190,4 +190,5 @@
     <string name="subject">Subject</string>
     <string name="subject_req">Subject*</string>
     <string name="description_req">Description*</string>
+    <string name="write_subject">Write a Subject</string>
 </resources>
