@@ -150,5 +150,13 @@
 
     </fragment>
 
+    <fragment
+        android:id="@+id/addDocumentFragment"
+        android:name="com.axelliant.hris.screens.AddDocumnetFragment"
+        android:label="Add Document Fragment"
+        tools:layout="@layout/fragment_add_documnet">
+
+    </fragment>
+
 
 </navigation>

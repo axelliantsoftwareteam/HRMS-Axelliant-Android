@@ -328,5 +328,22 @@ class AppNavigator {
 
         }
 
+        fun navigateToAddDocumentFragment(args: Bundle = Bundle()) {
+            Log.i(TAG, "navigateToAddDocumentFragment: $args")
+            val navAction = NavAction(R.id.addDocumentFragment)
+            val navOptions = NavOptions.Builder()
+                .setPopUpTo(getCurrentDestinationId()!!, false).build()
+            navAction.navOptions = navOptions
+
+            val destination: NavDestination? = getCurrentDestinationId()?.let {
+                getController().graph.findNode(it)
+            }
+            if (destination != null) {
+                destination.putAction(R.id.add_document_fragment_action, navAction)
+                getController().navigate(R.id.add_document_fragment_action, args)
+            }
+
+        }
+
     }
 }

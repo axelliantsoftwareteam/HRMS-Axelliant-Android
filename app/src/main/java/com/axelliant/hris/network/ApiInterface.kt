@@ -2,6 +2,7 @@ package com.axelliant.hris.network
 
 import com.axelliant.hris.model.attendance.AttRequest
 import com.axelliant.hris.model.attendance.LeaveCountRequest
+import com.axelliant.hris.model.documentRequest.CreateDocument
 import com.axelliant.hris.model.expense.CreateExpense
 import com.axelliant.hris.model.expense.DeleteAttachment
 import com.axelliant.hris.model.leave.ExpenseApprovalStatus
@@ -87,6 +88,15 @@ interface ApiInterface {
     @Headers("Content-Type: application/json")
     @POST("hrms.hr.doctype.employee.expense.get_expense_claim_requests") // my leave detail
     fun callMyExpenseDetail(
+        @Header("Authorization") auth: String?,
+        @Body attRequest: AttRequest
+    ): Call<ResponseBody>
+
+
+
+    @Headers("Content-Type: application/json")
+    @POST("hrms.hr.doctype.employee.employee_request_form.get_employee_forms") // my leave detail
+    fun callDocumentRequestDetail(
         @Header("Authorization") auth: String?,
         @Body attRequest: AttRequest
     ): Call<ResponseBody>
@@ -194,6 +204,14 @@ interface ApiInterface {
     fun callCreateExp(
         @Header("Authorization") auth: String?,
         @Body createExpense: CreateExpense
+    ): Call<ResponseBody>
+
+
+    @Headers("Content-Type: application/json")
+    @POST("hrms.hr.doctype.employee.employee_request_form.create_employee_form") // create expense
+    fun callCreateDocument(
+        @Header("Authorization") auth: String?,
+        @Body createDocument: CreateDocument
     ): Call<ResponseBody>
 
     @Headers("Content-Type: application/json")
