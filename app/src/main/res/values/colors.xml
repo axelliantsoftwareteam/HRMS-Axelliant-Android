@@ -26,6 +26,7 @@
     <color name="grey">#8D8D8D</color>
     <color name="light_grey">#CCCACA</color>
     <color name="red">#BB4F4E</color>
+    <color name="soft_red">#fe8155</color>
     <color name="green">#159360</color>
     <color name="light_green">#CAE6DE</color>
     <color name="orange">#E97E5B</color>

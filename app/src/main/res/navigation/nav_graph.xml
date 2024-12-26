@@ -159,4 +159,13 @@
     </fragment>
 
 
+    <fragment
+        android:id="@+id/resourceManageFragment"
+        android:name="com.axelliant.hris.screens.ResourceManagementFragment"
+        android:label="Resource Fragment"
+        tools:layout="@layout/fragment_resource_managment">
+
+    </fragment>
+
+
 </navigation>

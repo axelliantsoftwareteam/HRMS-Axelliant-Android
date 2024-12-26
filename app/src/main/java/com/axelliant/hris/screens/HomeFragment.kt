@@ -739,6 +739,13 @@ class HomeFragment : BaseFragment() {
                  color = requireContext().getColor(R.color.greeny),
                  drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_payslip)
              )
+             , Modules(
+                 id = 7,
+                 name = HomeMenu.ResourceManagement.gridName,
+                 description = HomeMenu.ResourceManagement.description,
+                 color = requireContext().getColor(R.color.soft_red),
+                 drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_manage)
+             )
         )
         if (isManager) {
             homeViewModel.getTodayTeamInfo()
@@ -795,6 +802,10 @@ class HomeFragment : BaseFragment() {
                         HomeMenu.DocumentManagement.gridName -> {
                             showDialog()
                             AppNavigator.navigateToDocumentManageFragment()
+                        }
+                        HomeMenu.ResourceManagement.gridName -> {
+                            showDialog()
+                            AppNavigator.navigateToResourceManageFragment()
                         }
 
                         else -> {

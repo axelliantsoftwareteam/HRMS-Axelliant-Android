@@ -8,6 +8,7 @@ import com.axelliant.hris.repos.HomeRepo
 import com.axelliant.hris.repos.LeaveRepo
 import com.axelliant.hris.repos.LoginRepo
 import com.axelliant.hris.repos.RequestRepo
+import com.axelliant.hris.repos.ResourceManageRepo
 import com.axelliant.hris.utils.SessionManager
 import com.axelliant.hris.utils.Validator
 import com.axelliant.hris.viewmodel.AttendanceViewModel
@@ -17,6 +18,7 @@ import com.axelliant.hris.viewmodel.HomeViewModel
 import com.axelliant.hris.viewmodel.LeaveViewModel
 import com.axelliant.hris.viewmodel.LoginViewModel
 import com.axelliant.hris.viewmodel.RequestViewModel
+import com.axelliant.hris.viewmodel.ResourceManageViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -39,6 +41,8 @@ val viewModelModule = module {
     viewModel { ExpenseViewModel(get(),get()) }
     viewModel { RequestViewModel(get()) }
     viewModel { BaseViewModel() }
+    viewModel { ResourceManageViewModel(get(),get()) }
+
 
 }
 
@@ -49,5 +53,6 @@ val factoryModule = module {
     factory { LeaveRepo(get()) }
     factory { ExpenseRepo(get()) }
     factory { RequestRepo(get()) }
+    factory { ResourceManageRepo(get()) }
 
 }
