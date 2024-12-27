@@ -280,42 +280,47 @@
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tv_hour"
-                    style="@style/TEXT_MEDIUM_WHITE_12"
+                    style="@style/TEXT_MEDIUM_WHITE_10"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:paddingStart="@dimen/_2sdp"
-                    android:layout_weight="3.5"
-                    android:textAlignment="textStart"
-                    android:text="@string/posting_date" />
+                    android:layout_weight="2"
+                    android:gravity="center"
+                    android:text="@string/date" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tv_status"
-                    style="@style/TEXT_MEDIUM_WHITE_12"
+                    style="@style/TEXT_MEDIUM_WHITE_10"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:paddingStart="@dimen/_1sdp"
-                    android:layout_weight="2.5"
-                    android:textAlignment="textStart"
+                    android:layout_weight="2"
+                    android:gravity="center"
                     android:background="@drawable/rounded_disabled"
-                    android:text="@string/amount" />
+                    android:text="@string/hours" />
 
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tv_date"
-                    style="@style/TEXT_MEDIUM_WHITE_12"
+                    style="@style/TEXT_MEDIUM_WHITE_10"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/_1sdp"
                     android:layout_weight="3"
                     android:gravity="center"
                     android:text="@string/status" />
-
-
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_details"
+                    style="@style/TEXT_MEDIUM_WHITE_10"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:gravity="center"
+                    android:background="@drawable/rounded_disabled"
+                    android:text="@string/detail" />
 
                 <View
                     android:id="@+id/view_expand"
                     android:layout_width="0dp"
-                    android:layout_height="@dimen/_2sdp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1" />
 
 
@@ -335,7 +340,7 @@
             android:background="@color/bg_color"
             android:orientation="vertical"
             tools:itemCount="3"
-            android:visibility="gone"
+            android:visibility="visible"
             app:layout_constraintTop_toBottomOf="@+id/ly_header_title"
             app:layout_constraintBottom_toTopOf="@+id/bottom_guideline"
             app:layout_constraintStart_toEndOf="@id/start_guideline"

@@ -167,5 +167,14 @@
 
     </fragment>
 
+    <fragment
+        android:id="@+id/addResourceManageFragment"
+        android:name="com.axelliant.hris.screens.AddResourceManageFragment"
+        android:label="Add Resource Manage Fragment"
+        tools:layout="@layout/fragment_add_resource_manage">
+
+    </fragment>
+
+
 
 </navigation>

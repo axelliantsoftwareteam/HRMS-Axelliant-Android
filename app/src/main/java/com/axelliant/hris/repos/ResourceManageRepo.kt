@@ -14,12 +14,13 @@ import com.axelliant.hris.model.documentRequest.CreateDocument
 import com.axelliant.hris.model.documentRequest.MyDocumentResponse
 import com.axelliant.hris.model.expense.CreateExpense
 import com.axelliant.hris.model.expense.DeleteAttachment
-import com.axelliant.hris.model.expense.GetExpenseResponse
 import com.axelliant.hris.model.expense.MyExpenseDetailResponse
 import com.axelliant.hris.model.expense.MyExpensePostResponse
 import com.axelliant.hris.model.leave.ExpenseApprovalStatus
 import com.axelliant.hris.model.leave.PostExpenseImageResponse
 import com.axelliant.hris.model.leave.PostResponse
+import com.axelliant.hris.model.resourceManage.CreateResourceHour
+import com.axelliant.hris.model.resourceManage.GetListProject
 import com.axelliant.hris.network.ApiInterface
 import com.axelliant.hris.network.BaseCallBack
 import com.google.gson.Gson
@@ -244,21 +245,21 @@ class ResourceManageRepo(private var apiInterface: ApiInterface) {
         return serverResponse
     }
 
-    fun createExpense(
+    fun createResourceHour(
         isUpdate: Boolean,
-        createExpense: CreateExpense
+        createResourceHour: CreateResourceHour
     ): MutableLiveData<BaseApiModel<MyExpensePostResponse>> {
         val serverResponse = MutableLiveData<BaseApiModel<MyExpensePostResponse>>()
 
         val call: Call<ResponseBody>?
 
         if (isUpdate) {
-            call = apiInterface.callUpdateExp(
-                "token ${AppConst.TOKEN}", createExpense
+            call = apiInterface.callUpdateResourceType(
+                "token ${AppConst.TOKEN}", createResourceHour
             )
         } else {
-            call = apiInterface.callCreateExp(
-                "token ${AppConst.TOKEN}", createExpense
+            call = apiInterface.callCreateResourceHour(
+                "token ${AppConst.TOKEN}", createResourceHour
             )
         }
 
@@ -414,10 +415,10 @@ class ResourceManageRepo(private var apiInterface: ApiInterface) {
     }
 
 
-    fun getExpenseTypes(): MutableLiveData<BaseApiModel<GetExpenseResponse>> {
-        val serverResponse = MutableLiveData<BaseApiModel<GetExpenseResponse>>()
+    fun getProjectsTypes(): MutableLiveData<BaseApiModel<GetListProject>> {
+        val serverResponse = MutableLiveData<BaseApiModel<GetListProject>>()
 
-        val call: Call<ResponseBody> = apiInterface.getExpenseType("token ${AppConst.TOKEN}")
+        val call: Call<ResponseBody> = apiInterface.getProjectTypeList("token ${AppConst.TOKEN}")
 
         Log.e("HTTP Request", " " + call?.request().toString())
 
@@ -429,9 +430,9 @@ class ResourceManageRepo(private var apiInterface: ApiInterface) {
 
                 Log.e("API success", " " + response.body())
 
-                val type: Type = object : TypeToken<BaseApiModel<GetExpenseResponse>>() {}.type
+                val type: Type = object : TypeToken<BaseApiModel<GetListProject>>() {}.type
                 val jsonString = response.body()?.string()
-                val userModel = Gson().fromJson<BaseApiModel<GetExpenseResponse>>(jsonString, type)
+                val userModel = Gson().fromJson<BaseApiModel<GetListProject>>(jsonString, type)
                 serverResponse.value = userModel
             }
 
@@ -445,7 +446,7 @@ class ResourceManageRepo(private var apiInterface: ApiInterface) {
                 serverResponse.value =
                     BaseApiModel(
                         BaseModel(
-                            GetExpenseResponse(
+                            GetListProject(
                                 meta = Meta(
                                     errorString.toString(),
                                     false

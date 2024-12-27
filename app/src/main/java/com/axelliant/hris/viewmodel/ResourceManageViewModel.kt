@@ -11,13 +11,13 @@ import com.axelliant.hris.model.documentRequest.CreateDocument
 import com.axelliant.hris.model.documentRequest.MyDocumentResponse
 import com.axelliant.hris.model.expense.CreateExpense
 import com.axelliant.hris.model.expense.DeleteAttachment
-import com.axelliant.hris.model.expense.GetExpenseResponse
 import com.axelliant.hris.model.expense.MyExpenseDetailResponse
 import com.axelliant.hris.model.expense.MyExpensePostResponse
 import com.axelliant.hris.model.leave.ExpenseApprovalStatus
 import com.axelliant.hris.model.leave.PostExpenseImageResponse
 import com.axelliant.hris.model.leave.PostResponse
-import com.axelliant.hris.repos.ExpenseRepo
+import com.axelliant.hris.model.resourceManage.CreateResourceHour
+import com.axelliant.hris.model.resourceManage.GetListProject
 import com.axelliant.hris.repos.ResourceManageRepo
 import com.axelliant.hris.utils.Validator
 
@@ -40,7 +40,7 @@ class ResourceManageViewModel(private val resourceManageRepo: ResourceManageRepo
     val deleteExpenseResponse: MutableLiveData<Event<MyExpensePostResponse?>> by lazy { MutableLiveData<Event<MyExpensePostResponse?>>() }
     val deleteAttachmentResponse: MutableLiveData<Event<MyExpensePostResponse?>> by lazy { MutableLiveData<Event<MyExpensePostResponse?>>() }
 
-    val expenseTypeResponse: MutableLiveData<Event<GetExpenseResponse?>> by lazy { MutableLiveData<Event<GetExpenseResponse?>>() }
+    val projectTypeResponse: MutableLiveData<Event<GetListProject?>> by lazy { MutableLiveData<Event<GetListProject?>>() }
     val expenseApproval: MutableLiveData<Event<expenseApprovalList?>> by lazy { MutableLiveData<Event<expenseApprovalList?>>() }
 
     val expenseApprovalResponse: MutableLiveData<Event<PostResponse?>> by lazy { MutableLiveData<Event<PostResponse?>>() }
@@ -173,9 +173,9 @@ class ResourceManageViewModel(private val resourceManageRepo: ResourceManageRepo
             }
     }
 
-    fun postExpense(isUpdate:Boolean,createExpense: CreateExpense) {
+    fun postResourceHour(isUpdate:Boolean, createResourceHour: CreateResourceHour) {
         isLoading.value = Event(true)
-        resourceManageRepo.createExpense(isUpdate,createExpense)
+        resourceManageRepo.createResourceHour(isUpdate,createResourceHour)
             .observeForever { data ->
                 // Handle the login response
                 data?.let { baseModel ->
@@ -194,6 +194,8 @@ class ResourceManageViewModel(private val resourceManageRepo: ResourceManageRepo
 
 
     }
+
+
     fun deleteExpense(createExpense: CreateExpense) {
         isLoading.value = Event(true)
         resourceManageRepo.deleteExpense(createExpense)
@@ -215,36 +217,16 @@ class ResourceManageViewModel(private val resourceManageRepo: ResourceManageRepo
 
 
     }
-    fun deleteAttachment(deleteAttachment: DeleteAttachment) {
+
+    fun getProjectTypeList() {
         isLoading.value = Event(true)
-        resourceManageRepo.deleteAttachment(deleteAttachment)
+        resourceManageRepo.getProjectsTypes()
             .observeForever { data ->
                 // Handle the login response
                 data?.let { baseModel ->
                     isLoading.value = Event(false)
                     // Handle success
-                    deleteAttachmentResponse.value = Event(baseModel.message?.data)
-                } ?: run {
-                    isLoading.value = Event(false)
-                    // Handle error
-                    Log.d("Success VieModel->", "false")
-
-
-                }
-            }
-
-
-    }
-
-    fun getExpenseTypeList() {
-        isLoading.value = Event(true)
-        resourceManageRepo.getExpenseTypes()
-            .observeForever { data ->
-                // Handle the login response
-                data?.let { baseModel ->
-                    isLoading.value = Event(false)
-                    // Handle success
-                    expenseTypeResponse.value = Event(baseModel.message?.data)
+                    projectTypeResponse.value = Event(baseModel.message?.data)
 
                 } ?: run {
                     isLoading.value = Event(false)

@@ -60,7 +60,6 @@ import com.axelliant.hris.model.login.CheckInRequest
 import com.axelliant.hris.model.todayTeam.EmployTeamProfile
 import com.axelliant.hris.navigation.AppNavigator
 import com.axelliant.hris.utils.SessionManager
-import com.axelliant.hris.utils.Utils.getCurrentTime
 import com.axelliant.hris.viewmodel.HomeViewModel
 import com.microsoft.identity.client.IAccount
 import com.microsoft.identity.client.IPublicClientApplication
@@ -82,9 +81,6 @@ class HomeFragment : BaseFragment() {
     private var loc: String? = null
     private lateinit var frontAnimation: AnimatorSet
     private lateinit var backAnimation: AnimatorSet
-    private var isFront = true
-    private var checkIn: String? = null
-    private var checkOut: String? = null
     private val radiusInMeters: Double = 200.0
     private var _binding: FragmentHomeBinding? = null
 

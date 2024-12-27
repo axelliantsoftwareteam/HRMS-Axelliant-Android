@@ -14,6 +14,7 @@ import com.axelliant.hris.model.login.LoginRequest
 import com.axelliant.hris.model.post.AttendanceRequest
 import com.axelliant.hris.model.post.LeaveRequest
 import com.axelliant.hris.model.post.TeamListRequest
+import com.axelliant.hris.model.resourceManage.CreateResourceHour
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody;
 import retrofit2.Call
@@ -302,6 +303,25 @@ interface ApiInterface {
     fun callTodayTeamList(
         @Header("Authorization") auth: String?,
         @Body teamListRequest: TeamListRequest?
+    ): Call<ResponseBody>
+
+    @Headers("Content-Type: application/json")
+    @GET("hrms.hr.doctype.employee.employee_resource_hours.get_projects")  // Leave types for request section
+    fun getProjectTypeList(@Header("Authorization") auth: String?): Call<ResponseBody>
+
+    @Headers("Content-Type: application/json")
+    @POST("hrms.hr.doctype.employee.expense.update_expense") // update expense
+    fun callUpdateResourceType(
+        @Header("Authorization") auth: String?,
+        @Body createResourceHour: CreateResourceHour
+    ): Call<ResponseBody>
+
+
+    @Headers("Content-Type: application/json")
+    @POST("hrms.hr.doctype.employee.expense.create_expenses") // create expense
+    fun callCreateResourceHour(
+        @Header("Authorization") auth: String?,
+        @Body createResourceHour: CreateResourceHour
     ): Call<ResponseBody>
 
 }
