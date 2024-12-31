@@ -20,7 +20,7 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_module"
-            style="@style/TEXT_SEMI_WHITE_15"
+            style="@style/TEXT_SEMI_WHITE_10"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Attendance"
@@ -31,6 +31,7 @@
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_description"
             style="@style/TEXT_MEDIUM_WHITE_10"
+            android:textSize="@dimen/_9ssp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Attendance"
@@ -42,8 +43,8 @@
 
         <ImageView
             android:id="@+id/iv_loc"
-            android:layout_width="@dimen/_40sdp"
-            android:layout_height="@dimen/_40sdp"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_25sdp"
             android:src="@drawable/ic_loc_pin"
             android:layout_marginEnd="@dimen/_5sdp"
             android:layout_marginTop="@dimen/_5sdp"

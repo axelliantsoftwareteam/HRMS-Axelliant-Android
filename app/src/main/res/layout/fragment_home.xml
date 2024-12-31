@@ -70,6 +70,16 @@
                 app:layout_constraintStart_toStartOf="@+id/tv_employe_name"
                 app:layout_constraintEnd_toStartOf="@+id/iv_notification"
                 app:layout_constraintTop_toBottomOf="@+id/tv_employe_name" />
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_employe_id"
+                style="@style/TEXT_MEDIUM_BLACK_10"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                tools:text="Software engineer"
+                android:textAlignment="textStart"
+                app:layout_constraintStart_toStartOf="@+id/tv_employe_name"
+                app:layout_constraintEnd_toStartOf="@+id/iv_notification"
+                app:layout_constraintTop_toBottomOf="@+id/tv_employe_designation" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_current_loc"
@@ -169,8 +179,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_5sdp"
-                    android:background="@drawable/rounded_bgg"
-                    android:backgroundTint="@color/periwinkle"
+                    android:background="@drawable/gradient_bg"
                     android:paddingStart="@dimen/_10sdp"
                     android:paddingTop="@dimen/_10sdp"
                     android:paddingEnd="@dimen/_10sdp"
@@ -359,7 +368,7 @@
                     android:layout_height="wrap_content"
                     android:padding="@dimen/_5sdp"
                     android:background="@drawable/rounded_bgg"
-                    android:backgroundTint="#CCE91E1E"
+                    android:backgroundTint="@color/periwinkle"
                     android:layout_marginTop="@dimen/_10sdp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

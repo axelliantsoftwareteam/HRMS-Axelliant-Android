@@ -212,7 +212,7 @@ class HomeFragment : BaseFragment() {
         )
         activityResultLauncher.launch(appPerms)
 
-        AppConst.TOKEN = sessionManager.getToken()
+//        AppConst.TOKEN = sessionManager.getToken()
         homeViewModel.getDashboardInformation()
         // data population
         dataPopulate()
@@ -683,7 +683,7 @@ class HomeFragment : BaseFragment() {
                     id = 3,
                     name = HomeMenu.Approval.gridName,
                     description = HomeMenu.Approval.description,
-                    color = requireContext().getColor(R.color.colorApp),
+                    color = ContextCompat.getDrawable(requireContext(), R.drawable.gradient_bg),
                     drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_approv)
                 )
             )
@@ -694,21 +694,21 @@ class HomeFragment : BaseFragment() {
                 id = 0,
                 name = HomeMenu.Attendance.gridName,
                 description = HomeMenu.Attendance.description,
-                color = requireContext().getColor(R.color.color_secondry),
+                color = ContextCompat.getDrawable(requireContext(), R.drawable.attend_gradient),
                 drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_atten)
             ),
             Modules(
                 id = 1,
                 name = HomeMenu.Request.gridName,
                 description = HomeMenu.Request.description,
-                color = requireContext().getColor(R.color.yellow),
+                color = ContextCompat.getDrawable(requireContext(), R.drawable.request_gradient),
                 drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_req)
             ),
             Modules(
                 id = 2,
                 name = HomeMenu.Leaves.gridName,
                 description = HomeMenu.Leaves.description,
-                color = requireContext().getColor(R.color.color_third),
+                color =ContextCompat.getDrawable(requireContext(), R.drawable.leaves_gradient),
                 drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_leaves)
 
             ),
@@ -716,7 +716,7 @@ class HomeFragment : BaseFragment() {
                 id = 4,
                 name = HomeMenu.CheckIN.gridName,
                 description = HomeMenu.CheckIN.description,
-                color = requireContext().getColor(R.color.blue_iris),
+                color = ContextCompat.getDrawable(requireContext(), R.drawable.checkin_gradient),
                 drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_checkin)
 
 
@@ -725,21 +725,21 @@ class HomeFragment : BaseFragment() {
                 id = 5,
                 name = HomeMenu.Expense.gridName,
                 description = HomeMenu.Expense.description,
-                color = requireContext().getColor(R.color.violet),
+                color = ContextCompat.getDrawable(requireContext(), R.drawable.expense_gradient),
                 drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_expe)
             )
              , Modules(
                  id = 6,
                  name = HomeMenu.DocumentManagement.gridName,
                  description = HomeMenu.DocumentManagement.description,
-                 color = requireContext().getColor(R.color.greeny),
+                 color = ContextCompat.getDrawable(requireContext(), R.drawable.documt_gradient),
                  drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_payslip)
              )
              , Modules(
                  id = 7,
                  name = HomeMenu.ResourceManagement.gridName,
                  description = HomeMenu.ResourceManagement.description,
-                 color = requireContext().getColor(R.color.soft_red),
+                 color = ContextCompat.getDrawable(requireContext(), R.drawable.resource_gradient),
                  drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_manage)
              )
         )
@@ -750,12 +750,11 @@ class HomeFragment : BaseFragment() {
                     id = 3,
                     name = HomeMenu.Approval.gridName,
                     description = HomeMenu.Approval.description,
-                    color = requireContext().getColor(R.color.colorApp),
+                    color = ContextCompat.getDrawable(requireContext(), R.drawable.approval_gradient),
                     drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_approv)
                 )
             )
         }
-
 
         binding?.rvModule?.layoutManager = GridLayoutManager(requireContext(), 2)
         val modulesAdapter = ModulesAdapter(
@@ -828,6 +827,7 @@ class HomeFragment : BaseFragment() {
     private fun dashBoardPopulate(employProfile: EmployProfile) {
         binding?.tvEmployeName?.text = employProfile.employee_name
         binding?.tvEmployeDesignation?.text = employProfile.designation
+        binding?.tvEmployeId?.text =  "Emp ID: ${employProfile.custom_employee_code}"
         binding?.profileImg?.setUrlImage(employProfile.image, requireContext())
 
 
