@@ -283,7 +283,7 @@
                     style="@style/TEXT_MEDIUM_WHITE_10"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="2"
+                    android:layout_weight="2.5"
                     android:gravity="center"
                     android:text="@string/date" />
 
@@ -304,7 +304,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/_1sdp"
-                    android:layout_weight="3"
+                    android:layout_weight="2.5"
                     android:gravity="center"
                     android:text="@string/status" />
                 <com.google.android.material.textview.MaterialTextView
@@ -317,7 +317,7 @@
                     android:background="@drawable/rounded_disabled"
                     android:text="@string/detail" />
 
-                <View
+                <CheckBox
                     android:id="@+id/view_expand"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -342,11 +342,11 @@
             tools:itemCount="3"
             android:visibility="visible"
             app:layout_constraintTop_toBottomOf="@+id/ly_header_title"
-            app:layout_constraintBottom_toTopOf="@+id/bottom_guideline"
+            app:layout_constraintBottom_toTopOf="@+id/btn_apply"
             app:layout_constraintStart_toEndOf="@id/start_guideline"
             app:layout_constraintEnd_toStartOf="@+id/end_guideline"
             tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/my_team_expense_row" />
+            tools:listitem="@layout/my_resource_hour_row" />
 
 
         <com.google.android.material.textview.MaterialTextView
@@ -354,6 +354,7 @@
             style="@style/TEXT_SEMI_BLACK_15"
             android:layout_width="0dp"
             android:gravity="center"
+            android:visibility="gone"
             android:text="@string/no_record_found"
             app:layout_constraintTop_toBottomOf="@+id/ly_header_title"
             app:layout_constraintBottom_toTopOf="@+id/bottom_guideline"
@@ -365,18 +366,33 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="@id/end_guideline"
-            app:layout_constraintBottom_toBottomOf="@id/bottom_guideline"
+            app:layout_constraintBottom_toTopOf="@id/btn_apply"
             android:src="@drawable/plus"
             android:tint="@color/white"
             app:backgroundTint="@color/colorApp"
             app:borderWidth="0dp"
-            android:layout_marginBottom="@dimen/_20sdp"
+            android:layout_marginBottom="@dimen/_10sdp"
             app:elevation="6dp"
             app:fabSize="normal">
 
         </com.google.android.material.floatingactionbutton.FloatingActionButton>
 
 
-
+        <com.axelliant.hris.components.RoundedButton
+            android:id="@+id/btn_apply"
+            style="@style/ButtonTextStyle"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:visibility="visible"
+            app:buttonBg="@drawable/rounded_enabled"
+            app:iconVisibility="false"
+            app:layout_constraintTop_toBottomOf="@+id/rv_expense"
+            app:layout_constraintBottom_toTopOf="@+id/bottom_guideline"
+            app:layout_constraintStart_toEndOf="@id/start_guideline"
+            app:layout_constraintEnd_toStartOf="@+id/end_guideline"
+            app:text="Submit"
+            app:textColor="@color/white" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

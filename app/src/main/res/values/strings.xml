@@ -198,4 +198,7 @@
     <string name="create_resource_claim">Create Resource Claim</string>
     <string name="project">Project*</string>
     <string name="hours_comp">Hours*</string>
+    <string name="project_name">Project Name</string>
+    <string name="resource">Resources</string>
+    <string name="request_approvals">Request Approvals</string>
 </resources>

@@ -88,7 +88,6 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/ly_attend_status"
-            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_5sdp"

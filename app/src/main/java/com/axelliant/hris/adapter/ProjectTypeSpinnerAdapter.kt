@@ -30,7 +30,7 @@ class ProjectTypeSpinnerAdapter(context: Context, private val leaves: ArrayList<
 
         item?.let {
 //            imageView.setImageResource(it.imageResource)
-            textView.text = it.project_name
+            textView.text = it.name
         }
 
         return view

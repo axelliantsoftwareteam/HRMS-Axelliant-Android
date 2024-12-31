@@ -13,6 +13,7 @@ package com.axelliant.hris.model.dashboard
      val department: String?=null
      val designation: String?=null
      val reports_to:ReportsTo?=null
+     val custom_employee_code:String?=null
      val reporting_to_emp: ArrayList<EmployProfile>?=null
 
  }

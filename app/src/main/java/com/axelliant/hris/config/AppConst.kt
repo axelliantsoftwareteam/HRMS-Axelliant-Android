@@ -17,11 +17,17 @@ object AppConst {
     const val SERVER_DATE_FORMAT =  "yyyy-MM-dd"
     const val SERVER_DATE_FORMAT_ATTENDANCE =  "yyyy-MM-dd"
     const val ATTENDANCE_DATE_FORMAT =  "yyyy-MM-dd HH:mm:ss"
+    const val RESOURCE_DATE_FORMAT =  "yyyy-MM-dd HH:mm:ss.SSSSSS"
 //    const val DISPLAY_TIME_FORMAT =  "HH:mm"
 
     const val ExpenseRequestParam  = "expenseRequest"
     const val ExpenseRequestIDParam  = "expenseId"
     const val ExpenseRequestAttachments  = "expenseAttachments"
+
+    const val HoursRequestIDParam  = "hoursId"
+    const val HoursRequestParam  = "hoursRequest"
+
+
 
 
 
