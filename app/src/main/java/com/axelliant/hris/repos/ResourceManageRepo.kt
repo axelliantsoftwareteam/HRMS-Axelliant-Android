@@ -12,15 +12,15 @@ import com.axelliant.hris.model.base.BaseModel
 import com.axelliant.hris.model.base.Meta
 import com.axelliant.hris.model.documentRequest.CreateDocument
 import com.axelliant.hris.model.documentRequest.MyDocumentResponse
-import com.axelliant.hris.model.expense.CreateExpense
-import com.axelliant.hris.model.expense.DeleteAttachment
-import com.axelliant.hris.model.expense.MyExpenseDetailResponse
-import com.axelliant.hris.model.expense.MyExpensePostResponse
+import com.axelliant.hris.model.documentRequest.SubmitDocument
 import com.axelliant.hris.model.leave.ExpenseApprovalStatus
 import com.axelliant.hris.model.leave.PostExpenseImageResponse
 import com.axelliant.hris.model.leave.PostResponse
 import com.axelliant.hris.model.resourceManage.CreateResourceHour
+import com.axelliant.hris.model.resourceManage.DeleteProject
 import com.axelliant.hris.model.resourceManage.GetListProject
+import com.axelliant.hris.model.resourceManage.MyHoursDetails
+import com.axelliant.hris.model.resourceManage.PostHoursRequestResponse
 import com.axelliant.hris.network.ApiInterface
 import com.axelliant.hris.network.BaseCallBack
 import com.google.gson.Gson
@@ -33,10 +33,10 @@ import java.lang.reflect.Type
 
 class ResourceManageRepo(private var apiInterface: ApiInterface) {
 
-    fun getMyExpenseDetail(attendanceInput: AttendanceInput): MutableLiveData<BaseApiModel<MyExpenseDetailResponse>> {
-        val serverResponse = MutableLiveData<BaseApiModel<MyExpenseDetailResponse>>()
+    fun getMyHoursDetail(attendanceInput: AttendanceInput): MutableLiveData<BaseApiModel<MyHoursDetails>> {
+        val serverResponse = MutableLiveData<BaseApiModel<MyHoursDetails>>()
 
-        val call: Call<ResponseBody> = apiInterface.callMyExpenseDetail("token ${AppConst.TOKEN}",
+        val call: Call<ResponseBody> = apiInterface.callMyResourceHoursDetail("token ${AppConst.TOKEN}",
             AttRequest().apply {
                 this.start_date = attendanceInput.startDate
                 this.end_date = attendanceInput.endDate
@@ -55,10 +55,10 @@ class ResourceManageRepo(private var apiInterface: ApiInterface) {
 
                 Log.e("API success", " " + response.body())
 
-                val type: Type = object : TypeToken<BaseApiModel<MyExpenseDetailResponse>>() {}.type
+                val type: Type = object : TypeToken<BaseApiModel<MyHoursDetails>>() {}.type
                 val jsonString = response.body()?.string()
                 val userModel =
-                    Gson().fromJson<BaseApiModel<MyExpenseDetailResponse>>(jsonString, type)
+                    Gson().fromJson<BaseApiModel<MyHoursDetails>>(jsonString, type)
                 serverResponse.value = userModel
             }
 
@@ -72,7 +72,7 @@ class ResourceManageRepo(private var apiInterface: ApiInterface) {
                 serverResponse.value =
                     BaseApiModel(
                         BaseModel(
-                            MyExpenseDetailResponse(
+                            MyHoursDetails(
                                 meta = Meta(
                                     errorString.toString(),
                                     false
@@ -152,7 +152,7 @@ class ResourceManageRepo(private var apiInterface: ApiInterface) {
         val call: Call<ResponseBody> = apiInterface.callMyExpensefile("token ${AppConst.TOKEN}",
             imagePath.file!!,docName,isPrivate,folder,doctype)
 
-        Log.e("HTTP Request", " " + call?.request().toString())
+        Log.e("HTTP Request", " " + call.request().toString())
 
         call.enqueue(object : BaseCallBack<ResponseBody>(call) {
             override fun onFinalSuccess(
@@ -195,9 +195,7 @@ class ResourceManageRepo(private var apiInterface: ApiInterface) {
         return serverResponse
     }
 
-    fun createDocument(
-        createDocument: CreateDocument
-    ): MutableLiveData<BaseApiModel<PostResponse>> {
+    fun createDocument(createDocument: CreateDocument): MutableLiveData<BaseApiModel<PostResponse>> {
         val serverResponse = MutableLiveData<BaseApiModel<PostResponse>>()
 
         val call: Call<ResponseBody>?
@@ -245,26 +243,21 @@ class ResourceManageRepo(private var apiInterface: ApiInterface) {
         return serverResponse
     }
 
-    fun createResourceHour(
-        isUpdate: Boolean,
-        createResourceHour: CreateResourceHour
-    ): MutableLiveData<BaseApiModel<MyExpensePostResponse>> {
-        val serverResponse = MutableLiveData<BaseApiModel<MyExpensePostResponse>>()
+    fun createResourceHour(isUpdate: Boolean, createResourceHour: CreateResourceHour): MutableLiveData<BaseApiModel<PostHoursRequestResponse>> {
+        val serverResponse = MutableLiveData<BaseApiModel<PostHoursRequestResponse>>()
 
-        val call: Call<ResponseBody>?
-
-        if (isUpdate) {
-            call = apiInterface.callUpdateResourceType(
+        val call: Call<ResponseBody> = if (isUpdate) {
+            apiInterface.callUpdateResourceType(
                 "token ${AppConst.TOKEN}", createResourceHour
             )
         } else {
-            call = apiInterface.callCreateResourceHour(
+            apiInterface.callCreateResourceHour(
                 "token ${AppConst.TOKEN}", createResourceHour
             )
         }
 
 
-        Log.e("HTTP Request", " " + call?.request().toString())
+        Log.e("HTTP Request", " " + call.request().toString())
 
         call.enqueue(object : BaseCallBack<ResponseBody>(call) {
             override fun onFinalSuccess(
@@ -274,10 +267,10 @@ class ResourceManageRepo(private var apiInterface: ApiInterface) {
 
                 Log.e("API success", " " + response.body())
 
-                val type: Type = object : TypeToken<BaseApiModel<MyExpensePostResponse>>() {}.type
+                val type: Type = object : TypeToken<BaseApiModel<PostHoursRequestResponse>>() {}.type
                 val jsonString = response.body()?.string()
                 val userModel =
-                    Gson().fromJson<BaseApiModel<MyExpensePostResponse>>(jsonString, type)
+                    Gson().fromJson<BaseApiModel<PostHoursRequestResponse>>(jsonString, type)
                 serverResponse.value = userModel
             }
 
@@ -291,7 +284,54 @@ class ResourceManageRepo(private var apiInterface: ApiInterface) {
                 serverResponse.value =
                     BaseApiModel(
                         BaseModel(
-                            MyExpensePostResponse(
+                            PostHoursRequestResponse(
+                                meta = Meta(
+                                    errorString.toString(),
+                                    false
+                                )
+                            )
+                        )
+                    )
+
+            }
+
+        })
+
+        return serverResponse
+    }
+    fun submitResourceHour(submitDocument: SubmitDocument): MutableLiveData<BaseApiModel<PostResponse>> {
+        val serverResponse = MutableLiveData<BaseApiModel<PostResponse>>()
+
+        val call: Call<ResponseBody> = apiInterface.callSubmitResource(
+                "token ${AppConst.TOKEN}", submitDocument)
+        Log.e("HTTP Request", " " + call.request().toString())
+
+        call.enqueue(object : BaseCallBack<ResponseBody>(call) {
+            override fun onFinalSuccess(
+                call: Call<ResponseBody>,
+                response: Response<ResponseBody>
+            ) {
+
+                Log.e("API success", " " + response.body())
+
+                val type: Type = object : TypeToken<BaseApiModel<PostResponse>>() {}.type
+                val jsonString = response.body()?.string()
+                val userModel =
+                    Gson().fromJson<BaseApiModel<PostResponse>>(jsonString, type)
+                serverResponse.value = userModel
+            }
+
+
+            override fun onFinalFailure(
+                errorString: String?
+            ) {
+
+                Log.e("API Failure", " $errorString")
+
+                serverResponse.value =
+                    BaseApiModel(
+                        BaseModel(
+                            PostResponse(
                                 meta = Meta(
                                     errorString.toString(),
                                     false
@@ -307,34 +347,27 @@ class ResourceManageRepo(private var apiInterface: ApiInterface) {
         return serverResponse
     }
 
-    fun deleteExpense(
-        createExpense: CreateExpense
-    ): MutableLiveData<BaseApiModel<MyExpensePostResponse>> {
-        val serverResponse = MutableLiveData<BaseApiModel<MyExpensePostResponse>>()
+    fun deleteProject(
+        deleteProject: DeleteProject
+    ): MutableLiveData<BaseApiModel<PostHoursRequestResponse>> {
+        val serverResponse = MutableLiveData<BaseApiModel<PostHoursRequestResponse>>()
+        val call: Call<ResponseBody> = apiInterface.deleteHoursCall(
+            "token ${AppConst.TOKEN}", deleteProject)
 
-        val call: Call<ResponseBody> = apiInterface.deleteExpenseCall(
-            "token ${AppConst.TOKEN}", createExpense
-        )
-
-
-        Log.e("HTTP Request", " " + call?.request().toString())
+        Log.e("HTTP Request", " " + call.request().toString())
 
         call.enqueue(object : BaseCallBack<ResponseBody>(call) {
             override fun onFinalSuccess(
                 call: Call<ResponseBody>,
-                response: Response<ResponseBody>
-            ) {
-
+                response: Response<ResponseBody>)
+            {
                 Log.e("API success", " " + response.body())
-
-                val type: Type = object : TypeToken<BaseApiModel<MyExpensePostResponse>>() {}.type
+                val type: Type = object : TypeToken<BaseApiModel<PostHoursRequestResponse>>() {}.type
                 val jsonString = response.body()?.string()
                 val userModel =
-                    Gson().fromJson<BaseApiModel<MyExpensePostResponse>>(jsonString, type)
+                    Gson().fromJson<BaseApiModel<PostHoursRequestResponse>>(jsonString, type)
                 serverResponse.value = userModel
             }
-
-
             override fun onFinalFailure(
                 errorString: String?
             ) {
@@ -344,7 +377,7 @@ class ResourceManageRepo(private var apiInterface: ApiInterface) {
                 serverResponse.value =
                     BaseApiModel(
                         BaseModel(
-                            MyExpensePostResponse(
+                            PostHoursRequestResponse(
                                 meta = Meta(
                                     errorString.toString(),
                                     false
@@ -359,68 +392,13 @@ class ResourceManageRepo(private var apiInterface: ApiInterface) {
 
         return serverResponse
     }
-
-
-    fun deleteAttachment(
-        deleteAttachment: DeleteAttachment
-    ): MutableLiveData<BaseApiModel<MyExpensePostResponse>> {
-        val serverResponse = MutableLiveData<BaseApiModel<MyExpensePostResponse>>()
-
-        val call: Call<ResponseBody> = apiInterface.deleteExpenseAttachmentCall(
-            "token ${AppConst.TOKEN}", deleteAttachment
-        )
-
-
-        Log.e("HTTP Request", " " + call?.request().toString())
-
-        call.enqueue(object : BaseCallBack<ResponseBody>(call) {
-            override fun onFinalSuccess(
-                call: Call<ResponseBody>,
-                response: Response<ResponseBody>
-            ) {
-
-                Log.e("API success", " " + response.body())
-
-                val type: Type = object : TypeToken<BaseApiModel<MyExpensePostResponse>>() {}.type
-                val jsonString = response.body()?.string()
-                val userModel =
-                    Gson().fromJson<BaseApiModel<MyExpensePostResponse>>(jsonString, type)
-                serverResponse.value = userModel
-            }
-
-
-            override fun onFinalFailure(
-                errorString: String?
-            ) {
-
-                Log.e("API Failure", " $errorString")
-
-                serverResponse.value =
-                    BaseApiModel(
-                        BaseModel(
-                            MyExpensePostResponse(
-                                meta = Meta(
-                                    errorString.toString(),
-                                    false
-                                )
-                            )
-                        )
-                    )
-
-            }
-
-        })
-
-        return serverResponse
-    }
-
 
     fun getProjectsTypes(): MutableLiveData<BaseApiModel<GetListProject>> {
         val serverResponse = MutableLiveData<BaseApiModel<GetListProject>>()
 
         val call: Call<ResponseBody> = apiInterface.getProjectTypeList("token ${AppConst.TOKEN}")
 
-        Log.e("HTTP Request", " " + call?.request().toString())
+        Log.e("HTTP Request", " " + call.request().toString())
 
         call.enqueue(object : BaseCallBack<ResponseBody>(call) {
             override fun onFinalSuccess(
@@ -462,12 +440,12 @@ class ResourceManageRepo(private var apiInterface: ApiInterface) {
         return serverResponse
     }
 
-    fun expenseListApproval(
+    fun resourceListApproval(
         inputObject: AttendanceInput
-    ): MutableLiveData<BaseApiModel<expenseApprovalList>> {
-        val serverResponse = MutableLiveData<BaseApiModel<expenseApprovalList>>()
+    ): MutableLiveData<BaseApiModel<MyHoursDetails>> {
+        val serverResponse = MutableLiveData<BaseApiModel<MyHoursDetails>>()
 
-        val call = apiInterface.callExpenseApproval(
+        val call = apiInterface.callResourcesApproval(
             "token ${AppConst.TOKEN}", AttRequest().apply {
                 this.start_date = inputObject.startDate
                 this.end_date = inputObject.endDate
@@ -487,10 +465,10 @@ class ResourceManageRepo(private var apiInterface: ApiInterface) {
 
                 Log.e("API success", " " + response.body())
 
-                val type: Type = object : TypeToken<BaseApiModel<expenseApprovalList>>() {}.type
+                val type: Type = object : TypeToken<BaseApiModel<MyHoursDetails>>() {}.type
                 val jsonString = response.body()?.string()
                 val userModel =
-                    Gson().fromJson<BaseApiModel<expenseApprovalList>>(jsonString, type)
+                    Gson().fromJson<BaseApiModel<MyHoursDetails>>(jsonString, type)
                 serverResponse.value = userModel
             }
 
@@ -504,7 +482,7 @@ class ResourceManageRepo(private var apiInterface: ApiInterface) {
                 serverResponse.value =
                     BaseApiModel(
                         BaseModel(
-                            expenseApprovalList(
+                            MyHoursDetails(
                                 meta = Meta(
                                     errorString.toString(),
                                     false

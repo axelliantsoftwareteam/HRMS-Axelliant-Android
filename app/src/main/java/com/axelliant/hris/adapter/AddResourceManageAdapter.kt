@@ -16,20 +16,20 @@ import com.axelliant.hris.R
 import com.axelliant.hris.callback.AdapterItemClick
 import com.axelliant.hris.config.AppConst.SERVER_DATE_FORMAT_ATTENDANCE
 import com.axelliant.hris.databinding.LyAddNewResourceBinding
-import com.axelliant.hris.model.resourceManage.AddResourceType
+import com.axelliant.hris.model.resourceManage. ProjectHour
 import com.axelliant.hris.utils.Utils
 import com.google.gson.Gson
 import java.util.Calendar
 
 class AddResourceManageAdapter(
-    private val list: ArrayList<AddResourceType>,
+    private val list: ArrayList<ProjectHour>,
     private val mContext: Context,
     private val itemClick: AdapterItemClick,
     private val onUpdateList: OnUpdateList // Add this parameter
 ) : RecyclerView.Adapter<AddResourceManageAdapter.AccountsVH>() {
 
     interface OnUpdateList {
-        fun onListUpdated(updatedList: ArrayList<AddResourceType>)
+        fun onListUpdated(updatedList: ArrayList< ProjectHour>)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccountsVH {
@@ -52,20 +52,20 @@ class AddResourceManageAdapter(
         holder.binding.etAmount.removeTextChangedListener(holder.amountTextWatcher)
 
         // Set text in the EditText fields
-        holder.binding.etAttendanceReason.setText(list[position].description ?: "")
-        holder.binding.etAmount.setText(list[position].amount?.toString() ?: "")
+//        holder.binding.etAttendanceReason.setText(list[position].description ?: "")
+        holder.binding.etAmount.setText(list[position].working_hours?.toString() ?: "")
 
-        // Add new TextWatchers for description and amount
-        holder.reasonTextWatcher = object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-                val newDescription = s.toString()
-                list[position].description = newDescription
-                onUpdateList.onListUpdated(list)
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-        }
+//        // Add new TextWatchers for description and amount
+//        holder.reasonTextWatcher = object : TextWatcher {
+//            override fun afterTextChanged(s: Editable?) {
+//                val newDescription = s.toString()
+//                list[position].description = newDescription
+//                onUpdateList.onListUpdated(list)
+//            }
+//
+//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+//        }
 
         holder.amountTextWatcher = object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -74,7 +74,7 @@ class AddResourceManageAdapter(
                 } catch (e: NumberFormatException) {
                     0.0
                 }
-                list[position].amount = newAmount
+                list[position].working_hours = newAmount
                 onUpdateList.onListUpdated(list)
             }
 
@@ -109,8 +109,8 @@ class AddResourceManageAdapter(
         var reasonTextWatcher: TextWatcher? = null
         var amountTextWatcher: TextWatcher? = null
 
-        fun bind(item: AddResourceType, mContext: Context) {
-            binding.tvDateTxt.text = item.expense_date ?: ""
+        fun bind(item:  ProjectHour, mContext: Context) {
+            binding.tvDateTxt.text = item.date ?: ""
 //            binding.etAttendanceReason.setText(item.description ?: "")
 //            binding.etAmount.setText(item.amount?.toString() ?: "")
         }
@@ -129,7 +129,7 @@ class AddResourceManageAdapter(
                 selectedDate.set(year, monthOfYear, dayOfMonth)
 
                 // Format the date and update the list
-                list[position].expense_date = Utils.getServerFormat(
+                list[position].date = Utils.getServerFormat(
                     SERVER_DATE_FORMAT_ATTENDANCE, selectedDate.time
                 )
                 notifyItemChanged(position)
@@ -149,9 +149,9 @@ class AddResourceManageAdapter(
         val adapter = ProjectTypeSpinnerAdapter(mContext, list[mainItemPosition].expenseTypeList)
         spinner.adapter = adapter
 
-        val selectedType = list[mainItemPosition].expense_type
+        val selectedType = list[mainItemPosition].project_name
         for (counter in 0 until list[mainItemPosition].expenseTypeList.size) {
-            if (list[mainItemPosition].expenseTypeList[counter].project_name == selectedType) {
+            if (list[mainItemPosition].expenseTypeList[counter].name == selectedType) {
                 spinner.setSelection(counter)
                 break
             }
@@ -159,7 +159,8 @@ class AddResourceManageAdapter(
 
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
-                list[mainItemPosition].expense_type = list[mainItemPosition].expenseTypeList[pos].project_name
+                list[mainItemPosition].name = list[mainItemPosition].expenseTypeList[pos].name
+                list[mainItemPosition].project = list[mainItemPosition].expenseTypeList[pos].project
                 onUpdateList.onListUpdated(list)
             }
 
@@ -168,6 +169,6 @@ class AddResourceManageAdapter(
     }
 
     fun grandTotalCalculation(): Double {
-        return list.sumOf { it.amount ?: 0.0 }
+        return list.sumOf { it.working_hours ?: 0.0 }
     }
 }

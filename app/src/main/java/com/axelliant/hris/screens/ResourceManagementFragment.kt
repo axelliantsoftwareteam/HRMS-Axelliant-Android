@@ -1,7 +1,7 @@
 package com.axelliant.hris.screens
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,31 +9,39 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.axelliant.hris.R
-import com.axelliant.hris.adapter.ExpenseAdapter
+import com.axelliant.hris.adapter.AddResourceManageAdapter
+import com.axelliant.hris.adapter.ResourceHoursAdapter
 import com.axelliant.hris.adapter.SubFilterAdapter
 import com.axelliant.hris.base.BaseFragment
 import com.axelliant.hris.callback.AdapterItemClick
+import com.axelliant.hris.callback.CheckBoxAdapterItemClick
 import com.axelliant.hris.config.AppConst
-import com.axelliant.hris.databinding.FragmentExpenseBinding
 import com.axelliant.hris.databinding.FragmentResourceManagmentBinding
 import com.axelliant.hris.enums.AttendanceFilter
+import com.axelliant.hris.enums.LeaveStatus
+import com.axelliant.hris.enums.ResourceStatus
 import com.axelliant.hris.event.EventObserver
 import com.axelliant.hris.extention.showErrorMsg
+import com.axelliant.hris.extention.showSuccessMsg
 import com.axelliant.hris.model.attendance.AttendanceInput
 import com.axelliant.hris.model.dashboard.FilterModel
-import com.axelliant.hris.model.expense.Expense
+import com.axelliant.hris.model.documentRequest.SubmitDocument
+import com.axelliant.hris.model.resourceManage.DocumentHours
+import com.axelliant.hris.model.resourceManage.ProjectHour
+import com.axelliant.hris.model.resourceManage.ProjectType
 import com.axelliant.hris.navigation.AppNavigator
 import com.axelliant.hris.network.ErrorMessages
 import com.axelliant.hris.utils.Utils
-import com.axelliant.hris.viewmodel.ExpenseViewModel
 import com.axelliant.hris.viewmodel.ResourceManageViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.gson.Gson
 import org.koin.android.ext.android.inject
 import java.util.Date
 
-class ResourceManagementFragment  : BaseFragment() {
+class ResourceManagementFragment : BaseFragment() {
 
+    private var resourceHours: ArrayList<DocumentHours>? = null
+    private lateinit var resourceHoursAdapter: ResourceHoursAdapter
     private var _binding: FragmentResourceManagmentBinding? = null
     private val binding get() = _binding
     private var currentFilter = AttendanceFilter.WEEK
@@ -41,7 +49,7 @@ class ResourceManagementFragment  : BaseFragment() {
     private var startDateString: String? = null
     private var endDateString: String? = null
     private var filterId = ""
-   
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -69,24 +77,22 @@ class ResourceManagementFragment  : BaseFragment() {
             previousFragmentNavigation()
         }
         eventSelection()
-        resourceManageViewModel.getMyExpenseDetail(getCurrentObject())
-
-
-        resourceManageViewModel.expenseResponse.observe(
+        resourceManageViewModel.getMyHoursDetail(getCurrentObject())
+        resourceManageViewModel.hoursResponse.observe(
             viewLifecycleOwner,
             EventObserver { response ->
 
-                if (response?.meta?.status == true && response.expenses != null) {
-                    subFilterPopulations(response.expense_status)
+                if (response?.meta?.status == true && response.resource_hour_data != null) {
+//                    subFilterPopulations(response.expense_status)
 
-                    if (response.expenses.size > 0) {
-                        binding?.rvExpense?.visibility=View.VISIBLE
-                        binding?.tvNoRecord?.visibility=View.GONE
-
-                        dataPopulate(response.expenses)
+                    if (response.resource_hour_data.size > 0) {
+                        binding?.rvExpense?.visibility = View.VISIBLE
+                        binding?.tvNoRecord?.visibility = View.GONE
+                        resourceHours = response.resource_hour_data
+                        dataPopulate()
                     } else {
-                        binding?.rvExpense?.visibility=View.GONE
-                        binding?.tvNoRecord?.visibility=View.VISIBLE
+                        binding?.rvExpense?.visibility = View.GONE
+                        binding?.tvNoRecord?.visibility = View.VISIBLE
                     }
 
                 } else {
@@ -96,46 +102,81 @@ class ResourceManagementFragment  : BaseFragment() {
             })
 
 
+        resourceManageViewModel.postResponse.observe(
+            viewLifecycleOwner,
+            EventObserver { response ->
+
+                if (response?.meta?.status == true) {
+                    requireContext().showSuccessMsg(response.status_message.toString())
+                    resourceManageViewModel.getMyHoursDetail(getCurrentObject())
+
+                } else {
+                    requireContext().showErrorMsg(response?.meta?.message.toString())
+                }
+            })
+
         binding?.addExpense?.setOnClickListener {
-            AppNavigator.navigateToAddExpenseFragment()
+            AppNavigator.navigateToAddResourceManageFragment()
+        }
+        binding?.btnApply?.setOnClickListener {
+            Log.d("Approved", getMultiSelectedDocument().toString())
+            resourceManageViewModel.submitResourceHour(SubmitDocument().apply {
+                this.resource_hour_id_list = getMultiSelectedDocument()
+            })
+        }
+        binding?.viewExpand?.setOnCheckedChangeListener { _, isChecked ->
+            resourceHours?.forEachIndexed { index, documentHour ->
+                if (documentHour.docstatus == ResourceStatus.DRAFT.value) {
+                    documentHour.isSelected = isChecked
+                    resourceHoursAdapter.notifyItemChanged(index)
+                }
+            }
         }
     }
 
+    private fun getMultiSelectedDocument(): ArrayList<String> {
 
-    private fun dataPopulate(expenseList: ArrayList<Expense>?) {
+        val arrayList: ArrayList<String> = arrayListOf()
 
+        for (item in 0..<(resourceHours?.size ?: 0)) {
+            if (resourceHours?.get(item)?.isSelected == true)
+                arrayList.add(resourceHours!![item].name.toString())
+        }
+
+        return arrayList
+    }
+
+    private fun dataPopulate() {
         binding?.rvExpense?.layoutManager = LinearLayoutManager(requireActivity())
-        val expenseAdapter = ExpenseAdapter(
-            expenseList!!, requireContext(), object : AdapterItemClick {
+        resourceHoursAdapter = ResourceHoursAdapter(
+            resourceHours!!, requireContext(), object : CheckBoxAdapterItemClick {
                 override fun onItemClick(customObject: Any, position: Int) {
-
-                    val expense = customObject as Expense
-                    if (expense.status == "Draft") {
-                        AppNavigator.navigateToAddExpenseFragment(Bundle().apply {
-                            this.putString(AppConst.ExpenseRequestIDParam, expense.name)
+                    val documentHours = customObject as DocumentHours
+                    if (documentHours.status == LeaveStatus.PENDING.value) {
+                        AppNavigator.navigateToAddResourceManageFragment(Bundle().apply {
+                            this.putString(AppConst.HoursRequestIDParam, documentHours.name)
                             this.putString(
-                                AppConst.ExpenseRequestParam,
-                                Gson().toJson(expense.expenses_detail)
-                            )
-                            this.putString(
-                                AppConst.ExpenseRequestAttachments,
-                                Gson().toJson(expense.attachments)
+                                AppConst.HoursRequestParam,
+                                Gson().toJson(documentHours.project_hours)
                             )
                         })
                     } else {
                         requireContext().showErrorMsg(
                             ErrorMessages.DRAFT_EXPENSE_ONLY.errorString.plus(
-                                expense.approval_status
+                                documentHours.status
                             )
                         )
                     }
-
-
                 }
 
+                override fun onCheckBoxItemClick(customObject: Any, position: Int) {
+                    val documentHour = customObject as DocumentHours
+                    documentHour.isSelected = !documentHour.isSelected
+                    resourceHoursAdapter.notifyItemChanged(position)
+                }
             }
         )
-        binding?.rvExpense?.adapter = expenseAdapter
+        binding?.rvExpense?.adapter = resourceHoursAdapter
     }
 
     private fun eventSelection() {
@@ -155,19 +196,19 @@ class ResourceManagementFragment  : BaseFragment() {
 
         binding?.tvWeek?.setOnClickListener {
             currentFilter = AttendanceFilter.WEEK
-            resourceManageViewModel.getMyExpenseDetail(getCurrentObject())
+            resourceManageViewModel.getMyHoursDetail(getCurrentObject())
             eventSelection()
         }
         binding?.tvMonth?.setOnClickListener {
             currentFilter = AttendanceFilter.MONTH
-            resourceManageViewModel.getMyExpenseDetail(getCurrentObject())
+            resourceManageViewModel.getMyHoursDetail(getCurrentObject())
             eventSelection()
         }
 
         binding?.tvCustom?.setOnClickListener {
             datePickerDialog()
             currentFilter = AttendanceFilter.Custom
-            resourceManageViewModel.getMyExpenseDetail(getCurrentObject())
+            resourceManageViewModel.getMyHoursDetail(getCurrentObject())
             eventSelection()
         }
 
@@ -259,7 +300,7 @@ class ResourceManagementFragment  : BaseFragment() {
             setDateView()
 
             currentFilter = AttendanceFilter.Custom
-            resourceManageViewModel.getMyExpenseDetail(getCurrentObject())
+            resourceManageViewModel.getMyHoursDetail(getCurrentObject())
             eventSelection()
         }
 
@@ -277,20 +318,22 @@ class ResourceManagementFragment  : BaseFragment() {
 
         binding?.rvSubFilter?.layoutManager =
             LinearLayoutManager(requireActivity(), RecyclerView.HORIZONTAL, false)
-        val weeklyAdapter = SubFilterAdapter(
-            filterId,
-            leaveStatus!!, requireContext(),
-            object : AdapterItemClick {
-                override fun onItemClick(customObject: Any, position: Int) {
-                    val filterObject = customObject as FilterModel
+        val weeklyAdapter = leaveStatus?.let {
+            SubFilterAdapter(
+                filterId,
+                it, requireContext(),
+                object : AdapterItemClick {
+                    override fun onItemClick(customObject: Any, position: Int) {
+                        val filterObject = customObject as FilterModel
 
 
-                    filterId = filterObject.id.toString()
-                    resourceManageViewModel.getMyExpenseDetail(getCurrentObject())
+                        filterId = filterObject.id.toString()
+                        resourceManageViewModel.getMyHoursDetail(getCurrentObject())
+                    }
+
                 }
-
-            }
-        )
+            )
+        }
         binding?.rvSubFilter?.adapter = weeklyAdapter
 
     }

@@ -1,14 +1,11 @@
 package com.axelliant.hris.screens
 
-import android.Manifest
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.axelliant.hris.adapter.AddResourceManageAdapter
@@ -19,13 +16,10 @@ import com.axelliant.hris.databinding.FragmentAddResourceManageBinding
 import com.axelliant.hris.event.EventObserver
 import com.axelliant.hris.extention.showErrorMsg
 import com.axelliant.hris.extention.showSuccessMsg
-import com.axelliant.hris.model.expense.Attachments
-import com.axelliant.hris.model.expense.CreateExpense
-import com.axelliant.hris.model.expense.ImageType
-import com.axelliant.hris.model.resourceManage.AddResourceType
 import com.axelliant.hris.model.resourceManage.CreateResourceHour
+import com.axelliant.hris.model.resourceManage.DeleteProject
+import com.axelliant.hris.model.resourceManage.ProjectHour
 import com.axelliant.hris.model.resourceManage.ProjectType
-import com.axelliant.hris.model.resourceManage.UpdateResourceHour
 import com.axelliant.hris.navigation.AppNavigator
 import com.axelliant.hris.utils.Utils.getServerFormat
 import com.axelliant.hris.viewmodel.ResourceManageViewModel
@@ -34,24 +28,22 @@ import com.google.gson.reflect.TypeToken
 import org.koin.android.ext.android.inject
 
 
-class AddResourceManageFragment: BaseFragment(), AddResourceManageAdapter.OnUpdateList {
+class AddResourceManageFragment : BaseFragment(), AddResourceManageAdapter.OnUpdateList {
 
-    private val multiPartArray = ArrayList<ImageType>()
     private var currentIndex = 0
 
     val expenseType = "None"
     private var isUpdate = false
-    private var expenseId = ""
+    private var docId = ""
     private var _binding: FragmentAddResourceManageBinding? = null
     private val binding get() = _binding
-    private var addExpenseList: ArrayList<AddResourceType> = arrayListOf()
+    private var addProjectHoursList: ArrayList<ProjectHour> = arrayListOf()
     private val resourceManageViewModel: ResourceManageViewModel by inject()
 
     var addResourceManageAdapter: AddResourceManageAdapter? = null
-    private var expenseList: ArrayList<ProjectType> = arrayListOf()
+    private var projectTypeList: ArrayList<ProjectType> = arrayListOf()
 
-
-    private var forUpdateList: ArrayList<UpdateResourceHour> = arrayListOf()
+    private var forUpdateList: ArrayList<ProjectHour> = arrayListOf()
 
 
     override fun onCreateView(
@@ -66,52 +58,16 @@ class AddResourceManageFragment: BaseFragment(), AddResourceManageAdapter.OnUpda
         super.onViewCreated(view, savedInstanceState)
 
 
-        val activityResultLauncher: ActivityResultLauncher<Array<String>> =
-            registerForActivityResult(
-                ActivityResultContracts.RequestMultiplePermissions()
-            ) { result ->
-                var allAreGranted = true
-                for (b in result.values) {
-                    allAreGranted = allAreGranted && b
-                }
-
-            }
-
-        val appPerms = arrayOf(
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.CAMERA
-        )
-        activityResultLauncher.launch(appPerms)
-
-        if (arguments != null && requireArguments().containsKey(AppConst.ExpenseRequestParam)) {
-            val parsedData = arguments?.getString(AppConst.ExpenseRequestParam, "")
-            val expenseID = arguments?.getString(AppConst.ExpenseRequestIDParam, "")
-            val attachments = arguments?.getString(AppConst.ExpenseRequestAttachments, "")
+        if (arguments != null && requireArguments().containsKey(AppConst.HoursRequestParam)) {
+            val parsedData = arguments?.getString(AppConst.HoursRequestParam, "")
+            val docID = arguments?.getString(AppConst.HoursRequestIDParam, "")
 
             if (parsedData != null) {
                 forUpdateList =
-                    Gson().fromJson(parsedData, object : TypeToken<List<AddResourceType>>() {}.type)
-                var attachments: List<Attachments> =
-                    Gson().fromJson(attachments, object : TypeToken<List<Attachments>>() {}.type)
-
-
-                if (attachments.isNotEmpty()) {
-
-                    for (item in attachments) {
-                        multiPartArray.add(ImageType().apply {
-                            this.isUploaded = true
-                            this.isMediaQuery = false
-                            this.uri = null
-                            this.imageUrl = item.file_url
-                            this.file_id = item.name
-
-                        })
-                    }
-
-                }
+                    Gson().fromJson(parsedData, object : TypeToken<List<ProjectHour>>() {}.type)
 
                 isUpdate = true
-                expenseId = expenseID.toString()
+                docId = docID.toString()
 
             }
 
@@ -157,13 +113,25 @@ class AddResourceManageFragment: BaseFragment(), AddResourceManageAdapter.OnUpda
             EventObserver { response ->
 
                 if (response?.meta?.status == true) {
-                    if (!isUpdate)
-                        expenseId = response.expense_detail?.name.toString()
+                    if (!isUpdate) {
+                        docId = response.resource_hour_data?.name.toString()
+                        requireContext().showSuccessMsg(response.status_message)
+                        Handler().postDelayed({
+                            // do stuff
+                            AppNavigator.moveBackToPreviousFragment()
+                        }, 200)
+                    }
+                    else{
+                        requireContext().showSuccessMsg(response.status_message)
+                        Handler().postDelayed({
+                            // do stuff
+                            AppNavigator.moveBackToPreviousFragment()
+                        }, 200)
+                    }
 
                 } else {
                     requireContext().showErrorMsg(response?.meta?.message.toString())
                 }
-
             })
         resourceManageViewModel.getProjectTypeList()
         resourceManageViewModel.projectTypeResponse.observe(
@@ -175,37 +143,33 @@ class AddResourceManageFragment: BaseFragment(), AddResourceManageAdapter.OnUpda
 
                     if (response.project_list != null) {
 
-                        expenseList.add(0, ProjectType().apply {
+                        projectTypeList.add(0, ProjectType().apply {
+                            this.project = null
                             this.name = expenseType
                         })
-                        expenseList.addAll(response.project_list!!)
-
-
+                        projectTypeList.addAll(response.project_list!!)
 
                         if (isUpdate) {
                             for (counter in 0..<forUpdateList.size) {
-                                forUpdateList[counter].expenseTypeList = expenseList
+                                forUpdateList[counter].expenseTypeList = projectTypeList
                             }
 
-                            addExpenseList = forUpdateList
+                            addProjectHoursList = forUpdateList
 
                         } else {
-                            addExpenseList.add(AddResourceType().apply {
-//                                this.expense_type = null
-//                                this.expense_date = null
-//                                this.amount = 0.0
-//                                this.description = ""
-//                                this.expenseTypeList = expenseList
-                                this.project_id = expenseType
+                            addProjectHoursList.add(ProjectHour().apply {
+                                this.project = null
+                                this.name = expenseType
                                 this.date = null
                                 this.working_hours = 0.0
+                                this.expenseTypeList = projectTypeList
                             })
                         }
 
                         binding?.rvLeaveCount?.layoutManager =
                             LinearLayoutManager(requireActivity())
                         addResourceManageAdapter = AddResourceManageAdapter(
-                            addExpenseList, requireContext(), object : AdapterItemClick {
+                            addProjectHoursList, requireContext(), object : AdapterItemClick {
                                 override fun onItemClick(customObject: Any, position: Int) {
                                     // Handle item click if needed
                                 }
@@ -225,18 +189,18 @@ class AddResourceManageFragment: BaseFragment(), AddResourceManageAdapter.OnUpda
 
         binding?.btnApply?.setOnClickListener {
 
-            Log.d("addExpenseListSize",addExpenseList.size.toString())
+            Log.d("addExpenseListSize", addProjectHoursList.size.toString())
 
-            for (expenseItem in addExpenseList) {
+            for (expenseItem in addProjectHoursList) {
 
-                if (expenseItem.project_id == expenseType) {
+                if (expenseItem.name == expenseType) {
                     requireContext().showErrorMsg("Please select the type")
                     return@setOnClickListener
                 } else if (expenseItem.date == null) {
-                    requireContext().showErrorMsg("Please choose expense date")
+                    requireContext().showErrorMsg("Please choose date")
                     return@setOnClickListener
                 } else if (expenseItem.working_hours == null || expenseItem.working_hours == 0.0) {
-                    requireContext().showErrorMsg("Please enter expense amount")
+                    requireContext().showErrorMsg("Please enter working hours")
                     return@setOnClickListener
                 }
 
@@ -245,16 +209,12 @@ class AddResourceManageFragment: BaseFragment(), AddResourceManageAdapter.OnUpda
             // assume all good
             if (isUpdate) {
                 resourceManageViewModel.postResourceHour(isUpdate, CreateResourceHour().apply {
-//                    this.expense_id = expenseId
-                    this.employee_hours = addExpenseList
-//                    this.posting_date = getServerFormat()
-//                    this.total_amount = addResourceManageAdapter?.grandTotalCalculation().toString()
+                    this.name = docId
+                    this.project_hours = addProjectHoursList
                 })
             } else {
                 resourceManageViewModel.postResourceHour(isUpdate, CreateResourceHour().apply {
-                    this.employee_hours = addExpenseList
-//                    this.posting_date = getServerFormat()
-//                    this.total_amount = addResourceManageAdapter?.grandTotalCalculation().toString()
+                    this.project_hours = addProjectHoursList
                 })
             }
 
@@ -266,30 +226,30 @@ class AddResourceManageFragment: BaseFragment(), AddResourceManageAdapter.OnUpda
         }
 
         binding?.tvReject?.setOnClickListener {
-
-            resourceManageViewModel.deleteExpense(CreateExpense().apply {
-                this.expense_id = expenseId
+            resourceManageViewModel.deleteExpense(DeleteProject().apply {
+                this.name = docId
             })
-
         }
 
 
         // Initial item list with one item
 
         binding?.tvAddNew?.setOnClickListener {
-            addExpenseList.add(AddResourceType().apply {
-                this.project_id = expenseType
+            addProjectHoursList.add(ProjectHour().apply {
+                this.project = null
+                this.name = expenseType
                 this.date = null
                 this.working_hours = 0.0
-//                this.expenseTypeList = expenseList
-
+                this.expenseTypeList = projectTypeList
             })
-            addResourceManageAdapter?.notifyItemInserted(addExpenseList.size - 1)
-            binding?.rvLeaveCount?.scrollToPosition(addExpenseList.size - 1)
+            addResourceManageAdapter?.notifyItemInserted(addProjectHoursList.size - 1)
+            binding?.rvLeaveCount?.scrollToPosition(addProjectHoursList.size - 1)
         }
     }
-    override fun onListUpdated(updatedList: ArrayList<AddResourceType>) {
-        addExpenseList = updatedList
+
+
+    override fun onListUpdated(updatedList: ArrayList<ProjectHour>) {
+        addProjectHoursList = updatedList
         binding?.tvAmount?.text = addResourceManageAdapter?.grandTotalCalculation().toString()
     }
 
