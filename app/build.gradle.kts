@@ -13,8 +13,8 @@ android {
         applicationId = "com.axelliant.hris"
         minSdk = 24
         targetSdk = 34
-        versionCode = 4
-        versionName = "1.3"
+        versionCode = 5
+        versionName = "1.4"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -49,6 +49,7 @@ dependencies {
     implementation(libs.play.services.location)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.play.services.maps)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -73,7 +74,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.livedata.ktx)
 
-    implementation("com.google.android.material:material:1.2.0-alpha03")
+    implementation(libs.material.v120alpha03)
     implementation ("com.microsoft.identity.client:msal:5.+")
     {
         exclude(group = "io.opentelemetry")
@@ -81,12 +82,15 @@ dependencies {
     }
 
     // OpenTelemetry API
-    implementation ("io.opentelemetry:opentelemetry-api:1.11.0") // Add this line
-    implementation ("com.google.android.gms:play-services-location:21.0.1")
+    implementation (libs.opentelemetry.api) // Add this line
+    implementation (libs.play.services.location.v2101)
 
-    implementation("com.github.ibrahimsn98:SmoothBottomBar:1.7.9")
-
+    implementation(libs.smoothbottombar)
     implementation(libs.imagepicker)
 
+    implementation(libs.app.update)
+    implementation (libs.app.update.ktx)
+
+    implementation (libs.commons.net)
 
 }

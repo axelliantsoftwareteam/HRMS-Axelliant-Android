@@ -3,7 +3,6 @@ package com.axelliant.hris.model.expense
 import com.axelliant.hris.model.leave.SpinnerType
 
 data class AddExpense(
-    var srno:Int?=null,
     var amount: Double?=0.0,
     var description: String="",
     var expense_date: String?=null,

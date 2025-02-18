@@ -174,7 +174,7 @@
                                 android:layout_marginTop="@dimen/_5sdp"
                                 android:background="@drawable/rounded_disabled"
                                 android:text="@string/total_leaves"
-                                android:textAllCaps="true"
+
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/tv_total_leave_txt" />
 
@@ -225,7 +225,7 @@
                                 android:layout_marginTop="@dimen/_5sdp"
                                 android:background="@drawable/rounded_disabled"
                                 android:text="@string/pending"
-                                android:textAllCaps="true"
+
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/tv_pending_txt" />
 
@@ -269,7 +269,7 @@
                                 android:layout_marginTop="@dimen/_5sdp"
                                 android:background="@drawable/rounded_disabled"
                                 android:text="@string/approved"
-                                android:textAllCaps="true"
+
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/tv_approved_txt" />
 
@@ -315,7 +315,7 @@
                                 android:background="@drawable/rounded_disabled"
                                 android:text="@string/rejected"
                                 android:textAlignment="textStart"
-                                android:textAllCaps="true"
+
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/tv_rejected_txt" />
 
@@ -356,7 +356,7 @@
                             android:layout_marginTop="@dimen/_5sdp"
                             android:background="@drawable/rounded_disabled"
                             android:text="@string/remaining"
-                            android:textAllCaps="true"
+
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/tv_used_leaves_txt" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -486,7 +486,7 @@
                                 android:layout_marginTop="@dimen/_5sdp"
                                 android:background="@drawable/rounded_disabled"
                                 android:text="@string/total_members"
-                                android:textAllCaps="true"
+
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/tv_total_member_txt" />
 
@@ -535,7 +535,7 @@
                                 android:layout_marginTop="@dimen/_5sdp"
                                 android:background="@drawable/rounded_disabled"
                                 android:text="@string/all_leaves"
-                                android:textAllCaps="true"
+
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/tv_present_txt" />
 
@@ -581,7 +581,7 @@
                                 android:layout_marginTop="@dimen/_5sdp"
                                 android:background="@drawable/rounded_disabled"
                                 android:text="@string/approved"
-                                android:textAllCaps="true"
+
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/tv_work_home_txt" />
 
@@ -632,7 +632,7 @@
                                 android:layout_marginTop="@dimen/_5sdp"
                                 android:background="@drawable/rounded_disabled"
                                 android:text="@string/rejected"
-                                android:textAllCaps="true"
+
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/tv_teams_absent_txt" />
 
@@ -678,7 +678,7 @@
                                 android:layout_marginTop="@dimen/_5sdp"
                                 android:background="@drawable/rounded_disabled"
                                 android:text="@string/pending"
-                                android:textAllCaps="true"
+
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/tv_teams_onleave_txt" />
 

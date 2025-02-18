@@ -53,7 +53,9 @@
     <color name="fuchsia">#FD49A0</color>
     <color name="rose_quartz">#F6D4D2</color>
     <color name="blue_iris">#4120A9</color>
+    <color name="blue_iris_bg">#4120A9</color>
     <color name="periwinkle">#A1A9FE</color>
+    <color name="periwinkle_bg">#1AA1A9FE</color>
 
 
     <color name="pendingColor">#FAF5CE</color> <!-- Yellow for Pending -->

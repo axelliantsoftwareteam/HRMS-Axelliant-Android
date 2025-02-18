@@ -33,6 +33,7 @@ class ExpenseAdapter(
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = MyTeamExpenseRowBinding.inflate(layoutInflater, parent, false)
         return AccountsVH(binding)
+
     }
 
     override fun onBindViewHolder(holder: AccountsVH, position: Int) {
@@ -78,6 +79,7 @@ class ExpenseAdapter(
     override fun getItemCount(): Int {
         return list.size
     }
+
 
     class AccountsVH(val binding: MyTeamExpenseRowBinding) : RecyclerView.ViewHolder(binding.root) {
 
