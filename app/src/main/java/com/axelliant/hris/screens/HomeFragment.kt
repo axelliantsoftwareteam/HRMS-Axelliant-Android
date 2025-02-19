@@ -18,6 +18,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -73,9 +74,10 @@ import org.koin.android.ext.android.inject
 
 class HomeFragment : BaseFragment() {
 
+    private var employProfileResponse: EmployProfile? = null
     private var isManager: Boolean = false
-    private var gridList: ArrayList<Modules>?= null
-    private var teamattend: TodayTeamResponse?= null
+    private var gridList: ArrayList<Modules>? = null
+    private var teamattend: TodayTeamResponse? = null
     private var ntpTimeString: String? = null
     private var currentStatus: String? = null
     private var loc: String? = null
@@ -220,10 +222,11 @@ class HomeFragment : BaseFragment() {
             viewLifecycleOwner,
             EventObserver { response ->
 
-                if (response?.meta?.status == true)
-                {
+                if (response?.meta?.status == true) {
                     // success
-                    response.employee_profile?.let { GlobalConfig.setCurrentEmployee(it) }
+
+                    employProfileResponse = response.employee_profile
+                    employProfileResponse?.let { GlobalConfig.setCurrentEmployee(it) }
                     isManager = GlobalConfig.isCurrentManager()
 
                     birthdayPopulate(response.birthday_data!!)
@@ -425,20 +428,24 @@ class HomeFragment : BaseFragment() {
             AnimatorInflater.loadAnimator(requireContext(), R.animator.back_animator) as AnimatorSet
 
         binding?.btnCheckIn?.setOnClickListener {
-            if (checkLocationPermission()) {
-                setCurrentLocationText()
-                if (checkInInfoResponse?.is_check_in_button == true) {
-                    showAttendanceDialog(LeaveStatus.CHECKIN.value)
+
+            if (employProfileResponse?.allow_punch_in == 1) return@setOnClickListener
+            else {
+                if (checkLocationPermission()) {
+                    setCurrentLocationText()
+                    if (checkInInfoResponse?.is_check_in_button == true) {
+                        showAttendanceDialog(LeaveStatus.CHECKIN.value)
+                    } else {
+                        showAttendanceDialog(LeaveStatus.CHECKOUT.value)
+                    }
                 } else {
-                    showAttendanceDialog(LeaveStatus.CHECKOUT.value)
-                }
-            } else {
-                requireContext().showErrorMsg("Premission denied")
-                // Request permission if not granted
+                    requireContext().showErrorMsg("Premission denied")
+                    // Request permission if not granted
 //                requestLocationPermission()
-                locationPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+                    locationPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
 
 
+                }
             }
 
 
@@ -689,7 +696,7 @@ class HomeFragment : BaseFragment() {
             )
         }
 
-         gridList = arrayListOf(
+        gridList = arrayListOf(
             Modules(
                 id = 0,
                 name = HomeMenu.Attendance.gridName,
@@ -708,7 +715,7 @@ class HomeFragment : BaseFragment() {
                 id = 2,
                 name = HomeMenu.Leaves.gridName,
                 description = HomeMenu.Leaves.description,
-                color =ContextCompat.getDrawable(requireContext(), R.drawable.leaves_gradient),
+                color = ContextCompat.getDrawable(requireContext(), R.drawable.leaves_gradient),
                 drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_leaves)
 
             ),
@@ -727,21 +734,19 @@ class HomeFragment : BaseFragment() {
                 description = HomeMenu.Expense.description,
                 color = ContextCompat.getDrawable(requireContext(), R.drawable.expense_gradient),
                 drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_expe)
+            ), Modules(
+                id = 6,
+                name = HomeMenu.DocumentManagement.gridName,
+                description = HomeMenu.DocumentManagement.description,
+                color = ContextCompat.getDrawable(requireContext(), R.drawable.documt_gradient),
+                drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_payslip)
+            ), Modules(
+                id = 7,
+                name = HomeMenu.ResourceManagement.gridName,
+                description = HomeMenu.ResourceManagement.description,
+                color = ContextCompat.getDrawable(requireContext(), R.drawable.resource_gradient),
+                drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_manage)
             )
-             , Modules(
-                 id = 6,
-                 name = HomeMenu.DocumentManagement.gridName,
-                 description = HomeMenu.DocumentManagement.description,
-                 color = ContextCompat.getDrawable(requireContext(), R.drawable.documt_gradient),
-                 drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_payslip)
-             )
-             , Modules(
-                 id = 7,
-                 name = HomeMenu.ResourceManagement.gridName,
-                 description = HomeMenu.ResourceManagement.description,
-                 color = ContextCompat.getDrawable(requireContext(), R.drawable.resource_gradient),
-                 drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_manage)
-             )
         )
         if (isManager) {
             homeViewModel.getTodayTeamInfo()
@@ -750,7 +755,10 @@ class HomeFragment : BaseFragment() {
                     id = 3,
                     name = HomeMenu.Approval.gridName,
                     description = HomeMenu.Approval.description,
-                    color = ContextCompat.getDrawable(requireContext(), R.drawable.approval_gradient),
+                    color = ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.approval_gradient
+                    ),
                     drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_approv)
                 )
             )
@@ -770,7 +778,7 @@ class HomeFragment : BaseFragment() {
                             AppNavigator.navigateToAttendanceStats()
                         }
 
-                        HomeMenu.Leaves.gridName-> {
+                        HomeMenu.Leaves.gridName -> {
                             showDialog()
                             AppNavigator.navigateToLeaves()
                         }
@@ -780,12 +788,12 @@ class HomeFragment : BaseFragment() {
                             AppNavigator.navigateToRequest()
                         }
 
-                       HomeMenu.Approval.gridName-> {
+                        HomeMenu.Approval.gridName -> {
                             showDialog()
                             AppNavigator.navigateToApprovals()
                         }
 
-                        HomeMenu.CheckIN.gridName-> {
+                        HomeMenu.CheckIN.gridName -> {
                             showDialog()
                             AppNavigator.navigateToCheckInFragment()
                         }
@@ -827,7 +835,7 @@ class HomeFragment : BaseFragment() {
     private fun dashBoardPopulate(employProfile: EmployProfile) {
         binding?.tvEmployeName?.text = employProfile.employee_name
         binding?.tvEmployeDesignation?.text = employProfile.designation
-        binding?.tvEmployeId?.text =  "Emp ID: ${employProfile.custom_employee_code}"
+        binding?.tvEmployeId?.text = "Emp ID: ${employProfile.custom_employee_code}"
         binding?.profileImg?.setUrlImage(employProfile.image, requireContext())
 
 

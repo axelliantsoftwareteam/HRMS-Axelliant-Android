@@ -14,6 +14,7 @@ package com.axelliant.hris.model.dashboard
      val designation: String?=null
      val reports_to:ReportsTo?=null
      val custom_employee_code:String?=null
+     val allow_punch_in:Int?=null
      val reporting_to_emp: ArrayList<EmployProfile>?=null
 
  }
