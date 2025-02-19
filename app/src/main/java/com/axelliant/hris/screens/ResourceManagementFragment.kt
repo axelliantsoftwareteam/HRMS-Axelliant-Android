@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.axelliant.hris.R
@@ -90,9 +91,16 @@ class ResourceManagementFragment : BaseFragment() {
                         binding?.tvNoRecord?.visibility = View.GONE
                         resourceHours = response.resource_hour_data
                         dataPopulate()
+                        binding?.viewExpand?.isVisible=true
+                        binding?.btnApply?.isVisible=true
+
+
                     } else {
                         binding?.rvExpense?.visibility = View.GONE
                         binding?.tvNoRecord?.visibility = View.VISIBLE
+                        binding?.viewExpand?.isVisible=false
+                        binding?.btnApply?.isVisible=false
+
                     }
 
                 } else {
@@ -152,12 +160,13 @@ class ResourceManagementFragment : BaseFragment() {
             resourceHours!!, requireContext(), object : CheckBoxAdapterItemClick {
                 override fun onItemClick(customObject: Any, position: Int) {
                     val documentHours = customObject as DocumentHours
-                    if (documentHours.status == LeaveStatus.PENDING.value) {
+                    if (documentHours.status == LeaveStatus.PENDING.value)
+                    {
                         AppNavigator.navigateToAddResourceManageFragment(Bundle().apply {
                             this.putString(AppConst.HoursRequestIDParam, documentHours.name)
                             this.putString(
                                 AppConst.HoursRequestParam,
-                                Gson().toJson(documentHours.project_hours)
+                                Gson().toJson(documentHours.resource_detail)
                             )
                         })
                     } else {

@@ -40,7 +40,7 @@ class ResourceHoursAdapter(
 //        }
         holder.binding.rvLeaveCount.layoutManager = GridLayoutManager(mContext, 1)
         holder.binding.rvLeaveCount.adapter =
-            list[position].project_hours?.let { HoursRowAdapter(it, mContext) }
+            list[position].resource_detail?.let { HoursRowAdapter(it, mContext) }
         holder.binding.rvLeaveCount.isNestedScrollingEnabled = false
 
         holder.binding.tvAttendStatus.setOnClickListener {

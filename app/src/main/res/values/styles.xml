@@ -295,7 +295,7 @@
     <style name="CheckBoxStyle" parent="Base.Widget.Material3.CompoundButton.CheckBox">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="titleTextStyle">@style/TEXT_REGULAR_0C0C0C_15</item>
+        <item name="titleTextStyle">@style/TEXT_MEDIUM_BLACK_10</item>
         <item name="buttonTint">@color/black</item>
     </style>
     <style name="TEXT_REGULAR_0C0C0C_15" parent="@style/TextAppearance.MaterialComponents.Subtitle1">
@@ -349,8 +349,6 @@
         <item name="cornerSize">2%</item>
     </style>
 
-
-
     <style name="CustomDatePickerDialog" parent="Theme.AppCompat.Light.Dialog">
         <!-- Customize your theme -->
         <item name="android:datePickerDialogTheme">@style/CustomDatePicker</item>
@@ -360,6 +358,8 @@
         <item name="android:headerBackground">@color/colorApp</item>
         <item name="android:calendarTextColor">@color/black</item>
     </style>
+
+
 
     <style name="my_dialog_theme" parent="ThemeOverlay.AppCompat.Dialog">
         <item name="colorAccent">@color/colorApp</item>                   <!--header background-->

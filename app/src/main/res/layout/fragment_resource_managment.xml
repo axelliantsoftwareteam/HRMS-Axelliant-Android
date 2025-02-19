@@ -321,7 +321,9 @@
                     android:id="@+id/view_expand"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"
+                    android:visibility="gone"
+                    />
 
 
             </LinearLayout>
@@ -340,7 +342,7 @@
             android:background="@color/bg_color"
             android:orientation="vertical"
             tools:itemCount="3"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@+id/ly_header_title"
             app:layout_constraintBottom_toTopOf="@+id/btn_apply"
             app:layout_constraintStart_toEndOf="@id/start_guideline"
@@ -354,7 +356,7 @@
             style="@style/TEXT_SEMI_BLACK_15"
             android:layout_width="0dp"
             android:gravity="center"
-            android:visibility="gone"
+            android:visibility="visible"
             android:text="@string/no_record_found"
             app:layout_constraintTop_toBottomOf="@+id/ly_header_title"
             app:layout_constraintBottom_toTopOf="@+id/bottom_guideline"
@@ -363,10 +365,10 @@
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/add_expense"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/_50sdp"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="@id/end_guideline"
-            app:layout_constraintBottom_toTopOf="@id/btn_apply"
+            app:layout_constraintBottom_toTopOf="@id/bottom_guideline"
             android:src="@drawable/plus"
             android:tint="@color/white"
             app:backgroundTint="@color/colorApp"
@@ -383,15 +385,14 @@
             style="@style/ButtonTextStyle"
             android:layout_width="0dp"
             android:layout_height="@dimen/_40sdp"
-            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginStart="@dimen/_50sdp"
             android:layout_marginEnd="@dimen/_10sdp"
-            android:visibility="visible"
+            android:visibility="gone"
             app:buttonBg="@drawable/rounded_enabled"
             app:iconVisibility="false"
-            app:layout_constraintTop_toBottomOf="@+id/rv_expense"
             app:layout_constraintBottom_toTopOf="@+id/bottom_guideline"
             app:layout_constraintStart_toEndOf="@id/start_guideline"
-            app:layout_constraintEnd_toStartOf="@+id/end_guideline"
+            app:layout_constraintEnd_toStartOf="@+id/add_expense"
             app:text="Submit"
             app:textColor="@color/white" />
     </androidx.constraintlayout.widget.ConstraintLayout>
