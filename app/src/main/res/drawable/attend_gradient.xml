@@ -6,11 +6,19 @@
             <gradient
                 android:angle="0"
                 android:startColor="@color/color_secondry"
-                android:centerColor="#16769E"
-                android:endColor="#082E42"/>
+                android:centerColor="@color/color_secondry"
+                android:endColor="@color/color_secondry"/>
 
             <corners android:radius="@dimen/_8sdp" />
 
         </shape>
     </item>
 </layer-list>
+
+
+
+<!--<gradient
+android:angle="0"
+android:startColor="@color/color_secondry"
+android:centerColor="#16769E"
+android:endColor="#082E42"/>-->
