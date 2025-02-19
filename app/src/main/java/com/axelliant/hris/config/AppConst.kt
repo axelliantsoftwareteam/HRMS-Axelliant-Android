@@ -4,7 +4,10 @@ import com.axelliant.hris.observable.ObservableCode
 
 object AppConst {
 
+/*
     var TOKEN: String? = "17cdde0cded53dd:84d1ed09630ae50"
+*/
+    var TOKEN: String? = ""
 //    const val KEY_PARAM  = "key"
     const val KEY_ID  = "employeeId"
     const val LeaveRequestParam  = "leaveRequest"
