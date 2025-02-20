@@ -5,6 +5,7 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -181,7 +182,7 @@ class RequestFragment : BaseFragment() {
                     else
                         clearAttendanceForm()
 
-                    Handler().postDelayed({
+                    Handler(Looper.getMainLooper()).postDelayed({
                         // do stuff
                         AppNavigator.moveBackToPreviousFragment()
                     }, 200)
@@ -218,7 +219,7 @@ class RequestFragment : BaseFragment() {
                         clearAttendanceForm()
 
 
-                    Handler().postDelayed({
+                    Handler(Looper.getMainLooper()).postDelayed({
                         // do stuff
                         AppNavigator.moveBackToPreviousFragment()
                     }, 200)
@@ -303,7 +304,8 @@ class RequestFragment : BaseFragment() {
                 halfDateString = null
                 binding?.tvHalfDateTxt?.text = halfDateString
             }
-            getDayCount()
+            if (startDateString != null && endDateString != null)
+                getDayCount()
         }
 
         binding?.btnApply?.setOnClickListener {
@@ -544,7 +546,8 @@ class RequestFragment : BaseFragment() {
         val month = calendar.get(Calendar.MONTH)
         val day = calendar.get(Calendar.DAY_OF_MONTH)
 
-        val datePickerDialog = DatePickerDialog(requireContext(),
+        val datePickerDialog = DatePickerDialog(
+            requireContext(),
             { _, selectedYear, selectedMonth, selectedDay ->
                 // Set the selected date in a Calendar instance
                 val selectedCalendar = Calendar.getInstance().apply {

@@ -2,6 +2,7 @@ package com.axelliant.hris.screens
 
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -98,7 +99,7 @@ class AddResourceManageFragment : BaseFragment(), AddResourceManageAdapter.OnUpd
                 if (response?.meta?.status == true) {
                     requireContext().showSuccessMsg(response.status_message)
 
-                    Handler().postDelayed({
+                    Handler(Looper.getMainLooper()).postDelayed({
                         // do stuff
                         AppNavigator.moveBackToPreviousFragment()
                     }, 200)
@@ -116,14 +117,14 @@ class AddResourceManageFragment : BaseFragment(), AddResourceManageAdapter.OnUpd
                     if (!isUpdate) {
                         docId = response.resource_hour_data?.name.toString()
                         requireContext().showSuccessMsg(response.status_message)
-                        Handler().postDelayed({
+                        Handler(Looper.getMainLooper()).postDelayed({
                             // do stuff
                             AppNavigator.moveBackToPreviousFragment()
                         }, 200)
                     }
                     else{
                         requireContext().showSuccessMsg(response.status_message)
-                        Handler().postDelayed({
+                        Handler(Looper.getMainLooper()).postDelayed({
                             // do stuff
                             AppNavigator.moveBackToPreviousFragment()
                         }, 200)

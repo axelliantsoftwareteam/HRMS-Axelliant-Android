@@ -88,7 +88,7 @@ class MainActivity : BaseActivity() {
 
             AppConst.observableCode.observe(this) { code ->
                 if (code == 401) {
-                   /* mSingleAccountApp!!.signOut(object :
+                    mSingleAccountApp!!.signOut(object :
                         ISingleAccountPublicClientApplication.SignOutCallback {
                         override fun onSignOut() {
                             mAccount = null
@@ -97,7 +97,7 @@ class MainActivity : BaseActivity() {
                         override fun onError(exception: MsalException) {
                             this@MainActivity.showErrorMsg(exception.toString())
                         }
-                    })*/
+                    })
                     AppNavigator.navigateToLogin()
                 }
 

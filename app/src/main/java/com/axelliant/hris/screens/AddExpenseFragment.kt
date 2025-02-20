@@ -9,6 +9,7 @@ import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.util.Log
@@ -207,7 +208,7 @@ class AddExpenseFragment : BaseFragment(), AddExpenseAdapter.OnUpdateList {
                 if (response?.meta?.status == true) {
                     requireContext().showSuccessMsg(response.status_message)
 
-                    Handler().postDelayed({
+                    Handler(Looper.getMainLooper()).postDelayed({
                         // do stuff
                         AppNavigator.moveBackToPreviousFragment()
                     }, 200)
@@ -405,7 +406,7 @@ class AddExpenseFragment : BaseFragment(), AddExpenseAdapter.OnUpdateList {
             }
             if (!isAnyFound) {
                 requireActivity().showSuccessMsg(statusMessage)
-                Handler().postDelayed({
+                Handler(Looper.getMainLooper()).postDelayed({
                     // do stuff
                     AppNavigator.moveBackToPreviousFragment()
                 }, 200)
@@ -413,7 +414,7 @@ class AddExpenseFragment : BaseFragment(), AddExpenseAdapter.OnUpdateList {
 
         } else {
             requireActivity().showSuccessMsg(statusMessage)
-            Handler().postDelayed({
+            Handler(Looper.getMainLooper()).postDelayed({
                 // do stuff
                 AppNavigator.moveBackToPreviousFragment()
             }, 200)
