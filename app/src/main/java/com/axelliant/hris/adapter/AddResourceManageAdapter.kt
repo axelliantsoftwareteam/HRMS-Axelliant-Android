@@ -29,7 +29,7 @@ class AddResourceManageAdapter(
 ) : RecyclerView.Adapter<AddResourceManageAdapter.AccountsVH>() {
 
     interface OnUpdateList {
-        fun onListUpdated(updatedList: ArrayList< ProjectHour>)
+        fun onListUpdated(updatedList: ArrayList<ProjectHour>)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccountsVH {
@@ -48,11 +48,9 @@ class AddResourceManageAdapter(
         holder.binding.ivDelete.visibility = if (position == 0) View.GONE else View.VISIBLE
 
         // Remove any previous TextWatchers before adding new ones
-        holder.binding.etAttendanceReason.removeTextChangedListener(holder.reasonTextWatcher)
         holder.binding.etAmount.removeTextChangedListener(holder.amountTextWatcher)
 
         // Set text in the EditText fields
-//        holder.binding.etAttendanceReason.setText(list[position].description ?: "")
         holder.binding.etAmount.setText(list[position].working_hours?.toString() ?: "")
 
 //        // Add new TextWatchers for description and amount
@@ -83,7 +81,6 @@ class AddResourceManageAdapter(
         }
 
         // Re-add the new TextWatchers
-        holder.binding.etAttendanceReason.addTextChangedListener(holder.reasonTextWatcher)
         holder.binding.etAmount.addTextChangedListener(holder.amountTextWatcher)
 
         // Handle the delete action
@@ -111,7 +108,6 @@ class AddResourceManageAdapter(
 
         fun bind(item:  ProjectHour, mContext: Context) {
             binding.tvDateTxt.text = item.date ?: ""
-//            binding.etAttendanceReason.setText(item.description ?: "")
 //            binding.etAmount.setText(item.amount?.toString() ?: "")
         }
     }
@@ -128,10 +124,14 @@ class AddResourceManageAdapter(
                 val selectedDate = Calendar.getInstance()
                 selectedDate.set(year, monthOfYear, dayOfMonth)
 
+                val selectedProjectName = list[position].name
+
                 // Format the date and update the list
                 list[position].date = Utils.getServerFormat(
                     SERVER_DATE_FORMAT_ATTENDANCE, selectedDate.time
                 )
+                list[position].name = selectedProjectName
+
                 notifyItemChanged(position)
                 onUpdateList.onListUpdated(list)
             },
@@ -149,13 +149,16 @@ class AddResourceManageAdapter(
         val adapter = ProjectTypeSpinnerAdapter(mContext, list[mainItemPosition].expenseTypeList)
         spinner.adapter = adapter
 
-        val selectedType = list[mainItemPosition].project_name
+      /*  val selectedType = list[mainItemPosition].project_name
         for (counter in 0 until list[mainItemPosition].expenseTypeList.size) {
             if (list[mainItemPosition].expenseTypeList[counter].name == selectedType) {
                 spinner.setSelection(counter)
                 break
             }
-        }
+        }*/
+        spinner.setSelection(list[mainItemPosition].expenseTypeList.indexOfFirst {
+            it.name == list[mainItemPosition].name
+        }.takeIf { it != -1 } ?: 0)
 
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {

@@ -119,14 +119,13 @@ class SplashFragment : BaseFragment() {
                             Animatable2Compat.AnimationCallback() {
                             override fun onAnimationEnd(drawable: Drawable) {
 //                                do whatever after specified number of loops complete
-                                if (sessionManager.checkLogin()) {
+                             /*   if (sessionManager.checkLogin()) {
                                     AppNavigator.navigateToHome()
                                 } else {
                                     AppNavigator.navigateToLogin()
-                                }
-/*
+                                }*/
+
                                AppNavigator.navigateToHome()
-*/
 
 
                             }

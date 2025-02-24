@@ -33,7 +33,7 @@ class AddResourceManageFragment : BaseFragment(), AddResourceManageAdapter.OnUpd
 
     private var currentIndex = 0
 
-    val expenseType = "None"
+    val ResourceType = "None"
     private var isUpdate = false
     private var docId = ""
     private var _binding: FragmentAddResourceManageBinding? = null
@@ -146,7 +146,7 @@ class AddResourceManageFragment : BaseFragment(), AddResourceManageAdapter.OnUpd
 
                         projectTypeList.add(0, ProjectType().apply {
                             this.project = null
-                            this.name = expenseType
+                            this.name = ResourceType
                         })
                         projectTypeList.addAll(response.project_list!!)
 
@@ -160,7 +160,7 @@ class AddResourceManageFragment : BaseFragment(), AddResourceManageAdapter.OnUpd
                         } else {
                             addProjectHoursList.add(ProjectHour().apply {
                                 this.project = null
-                                this.name = expenseType
+                                this.name = ResourceType
                                 this.date = null
                                 this.working_hours = 0.0
                                 this.expenseTypeList = projectTypeList
@@ -187,14 +187,13 @@ class AddResourceManageFragment : BaseFragment(), AddResourceManageAdapter.OnUpd
 
             })
 
-
         binding?.btnApply?.setOnClickListener {
 
             Log.d("addExpenseListSize", addProjectHoursList.size.toString())
 
             for (expenseItem in addProjectHoursList) {
 
-                if (expenseItem.name == expenseType) {
+                if (expenseItem.name == ResourceType) {
                     requireContext().showErrorMsg("Please select the type")
                     return@setOnClickListener
                 } else if (expenseItem.date == null) {
@@ -238,7 +237,7 @@ class AddResourceManageFragment : BaseFragment(), AddResourceManageAdapter.OnUpd
         binding?.tvAddNew?.setOnClickListener {
             addProjectHoursList.add(ProjectHour().apply {
                 this.project = null
-                this.name = expenseType
+                this.name = ResourceType
                 this.date = null
                 this.working_hours = 0.0
                 this.expenseTypeList = projectTypeList
