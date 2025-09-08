@@ -637,10 +637,10 @@ class HomeFragment : BaseFragment() {
     private fun setCurrentLocationText() {
 //        binding?.tvLocTxt?.text = getLocationAddress(currentLocation)
 
-        currentLocation = Location("").apply {
+       /* currentLocation = Location("").apply {
             latitude = 31.5226884
             longitude = 74.3490491
-        }
+        }*/
         for (targetloc in targetLocList) {
             if (currentLocation != null) {
                 Log.d("loc", " ${currentLocation!!.latitude} ${currentLocation!!.longitude}")
