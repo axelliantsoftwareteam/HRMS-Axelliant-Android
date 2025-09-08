@@ -44,8 +44,6 @@ class SplashFragment : BaseFragment() {
         _binding = FragmentSplashBinding.inflate(inflater).also { _binding = it }
         return binding?.root
     }
-
-    @RequiresApi(Build.VERSION_CODES.P)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         // Load GIF when running the app:
@@ -58,7 +56,7 @@ class SplashFragment : BaseFragment() {
         try {
             val info: PackageInfo = pContext.getPackageManager()
                 .getPackageInfo(pContext.getPackageName(), PackageManager.GET_SIGNATURES)
-            for (signature in info.signatures) {
+            for (signature in info.signatures!!) {
                 val md = MessageDigest.getInstance("SHA")
                 md.update(signature.toByteArray())
                 val hashKey = String(Base64.encode(md.digest(), 0))
@@ -77,7 +75,11 @@ class SplashFragment : BaseFragment() {
                 "com.axelliant.android_erp",
                 PackageManager.GET_SIGNING_CERTIFICATES
             )
-            for (signature in info.signingInfo.apkContentsSigners) {
+            for (signature in if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                info.signingInfo?.apkContentsSigners!!
+            } else {
+                TODO("VERSION.SDK_INT < P")
+            }) {
                 val md = MessageDigest.getInstance("SHA")
                 md.update(signature.toByteArray())
                 Log.d(

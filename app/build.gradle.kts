@@ -7,14 +7,14 @@ plugins {
 
 android {
     namespace = "com.axelliant.hris"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.axelliant.hris"
         minSdk = 24
-        targetSdk = 34
-        versionCode = 6
-        versionName = "1.5"
+        targetSdk = 36
+        versionCode = 7
+        versionName = "1.6"
         multiDexEnabled = true
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

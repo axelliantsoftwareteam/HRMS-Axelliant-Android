@@ -62,6 +62,7 @@ import com.axelliant.hris.model.todayTeam.EmployTeamProfile
 import com.axelliant.hris.navigation.AppNavigator
 import com.axelliant.hris.utils.SessionManager
 import com.axelliant.hris.viewmodel.HomeViewModel
+import com.google.android.gms.maps.model.LatLng
 import com.microsoft.identity.client.IAccount
 import com.microsoft.identity.client.IPublicClientApplication
 import com.microsoft.identity.client.ISingleAccountPublicClientApplication
@@ -214,7 +215,7 @@ class HomeFragment : BaseFragment() {
         )
         activityResultLauncher.launch(appPerms)
 
-//        AppConst.TOKEN = sessionManager.getToken()
+       AppConst.TOKEN = sessionManager.getToken()
         homeViewModel.getDashboardInformation()
         // data population
         dataPopulate()
@@ -366,7 +367,7 @@ class HomeFragment : BaseFragment() {
         binding?.ivQr?.setOnClickListener {
             requireContext().showSuccessMsg()
         }
-        binding?.ivNotification?.setOnClickListener(View.OnClickListener {
+        binding?.ivNotification?.setOnClickListener {
 
             AlertDialog.Builder(requireContext())
                 .setMessage(getString(R.string.logout_message))
@@ -400,7 +401,7 @@ class HomeFragment : BaseFragment() {
                 .show()
 
 
-        })
+        }
 
 //        targetLocList.add(BranchDataResponse(LocationFilter.NTC_OFFICE.value, 31.5494, 74.3333))
 //        targetLocList.add(
@@ -429,8 +430,8 @@ class HomeFragment : BaseFragment() {
 
         binding?.btnCheckIn?.setOnClickListener {
 
-            if (employProfileResponse?.allow_punch_in == 1) return@setOnClickListener
-            else {
+          /*  if (employProfileResponse?.allow_punch_in == 1) return@setOnClickListener
+            else {*/
                 if (checkLocationPermission()) {
                     setCurrentLocationText()
                     if (checkInInfoResponse?.is_check_in_button == true) {
@@ -439,14 +440,14 @@ class HomeFragment : BaseFragment() {
                         showAttendanceDialog(LeaveStatus.CHECKOUT.value)
                     }
                 } else {
-                    requireContext().showErrorMsg("Premission denied")
+                    requireContext().showErrorMsg("Permission denied")
                     // Request permission if not granted
 //                requestLocationPermission()
                     locationPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
 
 
                 }
-            }
+           /* }*/
 
 
         }
@@ -636,6 +637,10 @@ class HomeFragment : BaseFragment() {
     private fun setCurrentLocationText() {
 //        binding?.tvLocTxt?.text = getLocationAddress(currentLocation)
 
+        currentLocation = Location("").apply {
+            latitude = 31.5226884
+            longitude = 74.3490491
+        }
         for (targetloc in targetLocList) {
             if (currentLocation != null) {
                 Log.d("loc", " ${currentLocation!!.latitude} ${currentLocation!!.longitude}")
@@ -740,7 +745,9 @@ class HomeFragment : BaseFragment() {
                 description = HomeMenu.DocumentManagement.description,
                 color = ContextCompat.getDrawable(requireContext(), R.drawable.documt_gradient),
                 drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_payslip)
-            ), Modules(
+            ),
+
+            Modules(
                 id = 7,
                 name = HomeMenu.ResourceManagement.gridName,
                 description = HomeMenu.ResourceManagement.description,

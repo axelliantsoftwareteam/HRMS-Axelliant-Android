@@ -3,16 +3,16 @@
     <!-- Content -->
     <item>
         <shape android:shape="rectangle">
-          <!--  <gradient
-                android:angle="0"
-                android:startColor="@color/color_third"
-                android:centerColor="#B61A29"
-                android:endColor="#680F17"/> -->
             <gradient
                 android:angle="0"
                 android:startColor="@color/color_third"
+                android:centerColor="#B61A29"
+                android:endColor="#680F17"/>
+           <!-- <gradient
+                android:angle="0"
+                android:startColor="@color/color_third"
                 android:centerColor="@color/color_third"
-                android:endColor="@color/color_third"/>
+                android:endColor="@color/color_third"/>-->
 
             <corners android:radius="@dimen/_8sdp" />
 
