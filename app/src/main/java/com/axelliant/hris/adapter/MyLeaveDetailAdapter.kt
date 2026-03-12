@@ -34,14 +34,14 @@ class MyLeaveDetailAdapter(
 
 
         holder.binding.tvEdit.setOnClickListener {
-            val adapterPosition = holder.bindingAdapterPosition
+            val adapterPosition = holder.adapterPosition
             if (adapterPosition != RecyclerView.NO_POSITION) {
                 adapterItemClick.onItemClick(leaves[adapterPosition], adapterPosition)
             }
         }
 
         holder.binding.tvDropDown.setOnClickListener {
-            val adapterPosition = holder.bindingAdapterPosition
+            val adapterPosition = holder.adapterPosition
             if (adapterPosition != RecyclerView.NO_POSITION) {
                 val currentItem = leaves[adapterPosition]
                 currentItem.isDetailVisible = !currentItem.isDetailVisible

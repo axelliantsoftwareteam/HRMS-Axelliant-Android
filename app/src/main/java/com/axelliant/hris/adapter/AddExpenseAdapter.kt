@@ -58,7 +58,7 @@ class AddExpenseAdapter(
         // Add new TextWatchers for description and amount
         holder.reasonTextWatcher = object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                val adapterPosition = holder.bindingAdapterPosition
+                val adapterPosition = holder.adapterPosition
                 if (adapterPosition != RecyclerView.NO_POSITION) {
                     list[adapterPosition].description = s.toString()
                     onUpdateList.onListUpdated(list)
@@ -71,7 +71,7 @@ class AddExpenseAdapter(
 
         holder.amountTextWatcher = object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                val adapterPosition = holder.bindingAdapterPosition
+                val adapterPosition = holder.adapterPosition
                 if (adapterPosition != RecyclerView.NO_POSITION) {
                     val newAmount = try {
                         s.toString().toDouble()
@@ -93,7 +93,7 @@ class AddExpenseAdapter(
 
         // Handle the delete action
         holder.binding.tvDelete.setOnClickListener {
-            val adapterPosition = holder.bindingAdapterPosition
+            val adapterPosition = holder.adapterPosition
             if (adapterPosition != RecyclerView.NO_POSITION) {
                 list.removeAt(adapterPosition)
                 notifyItemRemoved(adapterPosition)
@@ -105,7 +105,7 @@ class AddExpenseAdapter(
 
         // Handle the date picker
         holder.binding.lyDate.setOnClickListener {
-            val adapterPosition = holder.bindingAdapterPosition
+            val adapterPosition = holder.adapterPosition
             if (adapterPosition != RecyclerView.NO_POSITION) {
                 pickDate(adapterPosition)
             }
@@ -171,7 +171,7 @@ class AddExpenseAdapter(
 
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
-                val adapterPosition = holder.bindingAdapterPosition
+                val adapterPosition = holder.adapterPosition
                 if (adapterPosition != RecyclerView.NO_POSITION) {
                     val currentItem = list[adapterPosition]
                     currentItem.expense_type = currentItem.expenseTypeList[pos].type

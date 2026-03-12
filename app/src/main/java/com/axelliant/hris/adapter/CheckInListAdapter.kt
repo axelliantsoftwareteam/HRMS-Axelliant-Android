@@ -34,14 +34,14 @@ class CheckInListAdapter(
 
         holder.binding.tvAttendStatus.isVisible = item.requeststatus == LeaveStatus.PENDING.value
         holder.binding.tvAttendStatus.setOnClickListener {
-            val adapterPosition = holder.bindingAdapterPosition
+            val adapterPosition = holder.adapterPosition
             if (adapterPosition != RecyclerView.NO_POSITION) {
                 adapterItemClick.onItemClick(attendanceList[adapterPosition], adapterPosition)
             }
         }
 
         holder.binding.tvDropDown.setOnClickListener {
-            val adapterPosition = holder.bindingAdapterPosition
+            val adapterPosition = holder.adapterPosition
             if (adapterPosition != RecyclerView.NO_POSITION) {
                 val currentItem = attendanceList[adapterPosition]
                 currentItem.isDetailVisible = !currentItem.isDetailVisible

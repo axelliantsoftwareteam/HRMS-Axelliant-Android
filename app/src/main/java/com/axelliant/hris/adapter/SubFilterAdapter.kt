@@ -29,7 +29,7 @@ class SubFilterAdapter(
         val item = list[position]
         holder.bind(item, position, context)
         holder.binding.lyWorkHome.setOnClickListener {
-            val adapterPosition = holder.bindingAdapterPosition
+            val adapterPosition = holder.adapterPosition
             if (adapterPosition != RecyclerView.NO_POSITION) {
                 val currentItem = list[adapterPosition]
                 filterId = currentItem.id.toString()

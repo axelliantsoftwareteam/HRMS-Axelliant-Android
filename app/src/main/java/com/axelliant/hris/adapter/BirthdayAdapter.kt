@@ -27,7 +27,7 @@ class BirthdayAdapter(
         holder.bind(list[position], context)
 
         holder.binding.lyDay.setOnClickListener {
-            val adapterPosition = holder.bindingAdapterPosition
+            val adapterPosition = holder.adapterPosition
             if (adapterPosition != RecyclerView.NO_POSITION) {
                 itemClick.onItemClick(list[adapterPosition], adapterPosition)
             }

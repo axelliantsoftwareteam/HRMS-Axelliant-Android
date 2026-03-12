@@ -36,14 +36,14 @@ class MyAttendanceDetailAdapter(
 
 
         holder.binding.lyActionBtn.setOnClickListener {
-            val adapterPosition = holder.bindingAdapterPosition
+            val adapterPosition = holder.adapterPosition
             if (adapterPosition != RecyclerView.NO_POSITION) {
                 adapterItemClick.onItemClick(attendanceList[adapterPosition], adapterPosition)
             }
         }
 
         holder.binding.tvDropDown.setOnClickListener {
-            val adapterPosition = holder.bindingAdapterPosition
+            val adapterPosition = holder.adapterPosition
             if (adapterPosition != RecyclerView.NO_POSITION) {
                 val currentItem = attendanceList[adapterPosition]
                 currentItem.isDetailVisible = !currentItem.isDetailVisible

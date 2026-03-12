@@ -57,7 +57,7 @@ class ExpenseAdapter(
                 attachmentTypeMapping(currentItem.attachments),
                 object : AdapterItemClick {
                     override fun onItemClick(customObject: Any, position: Int) {
-                        val adapterPosition = holder.bindingAdapterPosition
+                        val adapterPosition = holder.adapterPosition
                         if (adapterPosition != RecyclerView.NO_POSITION) {
                             AppNavigator.navigateToImageDetailFragment(Bundle().apply {
                                 this.putString("images", Gson().toJson(list[adapterPosition].attachments))
@@ -69,7 +69,7 @@ class ExpenseAdapter(
 
 
         holder.binding.tvAttendStatus.setOnClickListener {
-            val adapterPosition = holder.bindingAdapterPosition
+            val adapterPosition = holder.adapterPosition
             if (adapterPosition != RecyclerView.NO_POSITION) {
                 itemClick.onItemClick(list[adapterPosition], adapterPosition)
             }

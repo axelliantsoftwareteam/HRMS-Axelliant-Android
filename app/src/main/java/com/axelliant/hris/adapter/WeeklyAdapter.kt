@@ -24,7 +24,7 @@ class WeeklyAdapter(
         holder.bind(list[position])
 
         holder.binding.lyModule.setOnClickListener {
-            val adapterPosition = holder.bindingAdapterPosition
+            val adapterPosition = holder.adapterPosition
             if (adapterPosition != RecyclerView.NO_POSITION) {
                 itemClick.onItemClick(list[adapterPosition], adapterPosition)
             }

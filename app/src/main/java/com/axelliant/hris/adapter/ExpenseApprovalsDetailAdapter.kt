@@ -48,14 +48,14 @@ class ExpenseApprovalsDetailAdapter(
         }
 
         holder.binding.tvApproved.setOnClickListener {
-            val adapterPosition = holder.bindingAdapterPosition
+            val adapterPosition = holder.adapterPosition
             if (adapterPosition != RecyclerView.NO_POSITION) {
                 approvedItemClick.onItemClick(detailArrayList[adapterPosition], adapterPosition)
             }
         }
 
         holder.binding.tvReject.setOnClickListener {
-            val adapterPosition = holder.bindingAdapterPosition
+            val adapterPosition = holder.adapterPosition
             if (adapterPosition != RecyclerView.NO_POSITION) {
                 rejectItemClick.onItemClick(detailArrayList[adapterPosition], adapterPosition)
             }
@@ -71,7 +71,7 @@ class ExpenseApprovalsDetailAdapter(
                 attachmentTypeMapping(currentItem.attachments),
                 object : AdapterItemClick {
                     override fun onItemClick(customObject: Any, pos: Int) {
-                        val adapterPosition = holder.bindingAdapterPosition
+                        val adapterPosition = holder.adapterPosition
                         if (adapterPosition != RecyclerView.NO_POSITION) {
                             AppNavigator.navigateToImageDetailFragment(Bundle().apply {
                                 this.putString("images", Gson().toJson(detailArrayList[adapterPosition].attachments))
