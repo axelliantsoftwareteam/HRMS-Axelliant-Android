@@ -203,14 +203,29 @@ This repo now includes:
 - `android-ci.yml` for PR and main-branch validation
 - `android-release.yml` for tagged or manually triggered release builds
 
-Optional release signing is driven by GitHub secrets:
+Store-ready release signing and Google Play publishing are driven by GitHub configuration.
+
+GitHub secrets:
 
 - `ANDROID_KEYSTORE_BASE64`
 - `ANDROID_KEYSTORE_PASSWORD`
 - `ANDROID_KEY_ALIAS`
 - `ANDROID_KEY_PASSWORD`
+- `GOOGLE_PLAY_SERVICE_ACCOUNT_JSON`
 
-If those secrets are not configured, the release workflow still builds artifacts, but they will not be signed for store distribution.
+GitHub variables:
+
+- `ANDROID_PACKAGE_NAME`
+- `ANDROID_PLAY_TRACK`
+- `ANDROID_PLAY_RELEASE_STATUS`
+
+Recommended values:
+
+- `ANDROID_PACKAGE_NAME=com.axelliant.hris`
+- `ANDROID_PLAY_TRACK=internal`
+- `ANDROID_PLAY_RELEASE_STATUS=completed`
+
+If the signing secrets are not configured, the release workflow still builds artifacts, but they will not be signed for store distribution. If `GOOGLE_PLAY_SERVICE_ACCOUNT_JSON` and `ANDROID_PACKAGE_NAME` are configured, the workflow will also push the generated `.aab` to Google Play.
 
 ## Immediate Product Priorities
 

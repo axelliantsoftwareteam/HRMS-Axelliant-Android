@@ -20,6 +20,7 @@ jobs:
       ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
       ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
       ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+      ANDROID_PACKAGE_NAME: ${{ vars.ANDROID_PACKAGE_NAME }}
 
     steps:
       - name: Checkout
@@ -56,6 +57,17 @@ jobs:
             app/build/outputs/apk/release/*.apk
             app/build/outputs/bundle/release/*.aab
           if-no-files-found: error
+
+      - name: Upload AAB to Google Play
+        if: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON != '' && env.ANDROID_PACKAGE_NAME != '' }}
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
+          packageName: ${{ env.ANDROID_PACKAGE_NAME }}
+          releaseFiles: app/build/outputs/bundle/release/*.aab
+          track: ${{ vars.ANDROID_PLAY_TRACK != '' && vars.ANDROID_PLAY_TRACK || 'internal' }}
+          status: ${{ vars.ANDROID_PLAY_RELEASE_STATUS != '' && vars.ANDROID_PLAY_RELEASE_STATUS || 'completed' }}
+          releaseName: ${{ github.ref_name }}
 
       - name: Upload mapping and reports
         if: always()
