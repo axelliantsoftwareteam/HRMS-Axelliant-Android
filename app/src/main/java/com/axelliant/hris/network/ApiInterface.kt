@@ -2,6 +2,8 @@ package com.axelliant.hris.network
 
 import com.axelliant.hris.model.attendance.AttRequest
 import com.axelliant.hris.model.attendance.LeaveCountRequest
+import com.axelliant.hris.model.documentRequest.CreateDocument
+import com.axelliant.hris.model.documentRequest.SubmitDocument
 import com.axelliant.hris.model.expense.CreateExpense
 import com.axelliant.hris.model.expense.DeleteAttachment
 import com.axelliant.hris.model.leave.ExpenseApprovalStatus
@@ -13,6 +15,8 @@ import com.axelliant.hris.model.login.LoginRequest
 import com.axelliant.hris.model.post.AttendanceRequest
 import com.axelliant.hris.model.post.LeaveRequest
 import com.axelliant.hris.model.post.TeamListRequest
+import com.axelliant.hris.model.resourceManage.CreateResourceHour
+import com.axelliant.hris.model.resourceManage.DeleteProject
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody;
 import retrofit2.Call
@@ -87,6 +91,15 @@ interface ApiInterface {
     @Headers("Content-Type: application/json")
     @POST("hrms.hr.doctype.employee.expense.get_expense_claim_requests") // my leave detail
     fun callMyExpenseDetail(
+        @Header("Authorization") auth: String?,
+        @Body attRequest: AttRequest
+    ): Call<ResponseBody>
+
+
+
+    @Headers("Content-Type: application/json")
+    @POST("hrms.hr.doctype.employee.employee_request_form.get_employee_forms") // my leave detail
+    fun callDocumentRequestDetail(
         @Header("Authorization") auth: String?,
         @Body attRequest: AttRequest
     ): Call<ResponseBody>
@@ -196,6 +209,14 @@ interface ApiInterface {
         @Body createExpense: CreateExpense
     ): Call<ResponseBody>
 
+
+    @Headers("Content-Type: application/json")
+    @POST("hrms.hr.doctype.employee.employee_request_form.create_employee_form") // create expense
+    fun callCreateDocument(
+        @Header("Authorization") auth: String?,
+        @Body createDocument: CreateDocument
+    ): Call<ResponseBody>
+
     @Headers("Content-Type: application/json")
     @POST("hrms.hr.doctype.employee.expense.update_expense") // update expense
     fun callUpdateExp(
@@ -285,5 +306,56 @@ interface ApiInterface {
         @Header("Authorization") auth: String?,
         @Body teamListRequest: TeamListRequest?
     ): Call<ResponseBody>
+
+
+
+    @Headers("Content-Type: application/json")
+    @POST("hrms.hr.doctype.employee.employee_resource_hours.get_resource_hour_requests") // my leave detail
+    fun callMyResourceHoursDetail(
+        @Header("Authorization") auth: String?,
+        @Body attRequest: AttRequest
+    ): Call<ResponseBody>
+
+
+    @Headers("Content-Type: application/json")
+    @GET("hrms.hr.doctype.employee.employee_resource_hours.get_projects")  // Leave types for request section
+    fun getProjectTypeList(@Header("Authorization") auth: String?): Call<ResponseBody>
+
+    @Headers("Content-Type: application/json")
+    @POST("hrms.hr.doctype.employee.employee_resource_hours.update_resource_hours") // update resource hours
+    fun callUpdateResourceType(
+        @Header("Authorization") auth: String?,
+        @Body createResourceHour: CreateResourceHour
+    ): Call<ResponseBody>
+
+
+    @Headers("Content-Type: application/json")
+    @POST("hrms.hr.doctype.employee.employee_resource_hours.create_resource_hours") // create resource hours
+    fun callCreateResourceHour(
+        @Header("Authorization") auth: String?,
+        @Body createResourceHour: CreateResourceHour
+    ): Call<ResponseBody>
+
+    @Headers("Content-Type: application/json")
+    @POST("hrms.hr.doctype.employee.employee_resource_hours.delete_employee_resource_hours") // delete resource hours
+    fun deleteHoursCall(
+        @Header("Authorization") auth: String?,
+        @Body deleteProject: DeleteProject
+    ): Call<ResponseBody>
+
+    @Headers("Content-Type: application/json")
+    @POST("hrms.hr.doctype.employee.employee_resource_hours.submit_resource_hours") // update resource hours
+    fun callSubmitResource(
+        @Header("Authorization") auth: String?,
+        @Body submitDocument: SubmitDocument
+    ): Call<ResponseBody>
+
+
+    @Headers("Content-Type: application/json")
+    @POST("hrms.hr.doctype.employee.employee_resource_hours.get_resource_hour_approvals")  // attendance approval
+    fun callResourcesApproval(
+        @Header("Authorization") auth: String?, @Body attendanceRequest: AttRequest
+    ): Call<ResponseBody>
+
 
 }

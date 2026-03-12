@@ -8,4 +8,6 @@ class LeaveRequest {
         var post_date: String?=null
         var leave_id: String?=null
         var checkin_id: String?=null
+        var half_day_date: String?=null
+        var half_day: Boolean?=false
 }

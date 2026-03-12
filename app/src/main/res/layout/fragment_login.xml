@@ -238,7 +238,8 @@
             app:layout_constraintHorizontal_bias="0.487"
             app:layout_constraintLeft_toRightOf="@id/start_guideline"
             app:layout_constraintRight_toLeftOf="@id/end_guideline"
-            app:layout_constraintTop_toBottomOf="@+id/btn_login"
+            app:layout_constraintTop_toBottomOf="@+id/ly_action_btn"
+            app:layout_constraintBottom_toTopOf="@id/bottom_guideline"
             app:text="@string/login_mic"
             app:textColor="@color/colorApp" />
 

@@ -1,11 +1,19 @@
 package com.axelliant.hris.utils
 
+import android.content.Context
+import android.view.LayoutInflater
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
+import com.axelliant.hris.R
 import com.axelliant.hris.config.AppConst
 import com.axelliant.hris.config.AppConst.SERVER_DATE_FORMAT
+import com.axelliant.hris.databinding.DialogRequestDocumentBinding
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.time.format.TextStyle
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
@@ -32,6 +40,35 @@ object Utils {
                 val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
                 return sdf.format(Date())*/
     }
+
+    fun formatDate(input: String): String {
+        // Parse the input date string
+        val inputFormatter = DateTimeFormatter.ofPattern(AppConst.RESOURCE_DATE_FORMAT)
+        val dateTime = LocalDateTime.parse(input, inputFormatter)
+
+        // Format the date to the desired output
+        val dayOfWeek = dateTime.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.ENGLISH) // "Mon"
+        val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        val formattedDate = dateTime.format(dateFormatter)
+
+        return "$dayOfWeek, $formattedDate"
+    }
+
+    fun formatTitleDate(input: String): String {
+        // Parse the input date string
+        val inputFormatter = DateTimeFormatter.ofPattern(AppConst.RESOURCE_DATE_FORMAT)
+        val dateTime = LocalDateTime.parse(input, inputFormatter)
+
+        // Format the date to the desired output
+        val dayOfWeek = dateTime.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.ENGLISH) // "Mon"
+        val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        val formattedDate = dateTime.format(dateFormatter)
+
+        return " $formattedDate"
+    }
+
+
+
 
 
     fun getLastWeek(): Date {
@@ -80,4 +117,7 @@ object Utils {
             false
         }
     }
+
+
+
 }
