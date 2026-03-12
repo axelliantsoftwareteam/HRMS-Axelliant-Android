@@ -679,21 +679,7 @@ class HomeFragment : BaseFragment() {
 
 
     private fun dataPopulate() {
-
-        if (isManager) {
-            homeViewModel.getTodayTeamInfo()
-            gridList?.add(
-                Modules(
-                    id = 3,
-                    name = HomeMenu.Approval.gridName,
-                    description = HomeMenu.Approval.description,
-                    color = requireContext().getColor(R.color.colorApp),
-                    drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_approv)
-                )
-            )
-        }
-
-         gridList = arrayListOf(
+        gridList = arrayListOf(
             Modules(
                 id = 0,
                 name = HomeMenu.Attendance.gridName,
@@ -743,6 +729,7 @@ class HomeFragment : BaseFragment() {
         if (isManager) {
             homeViewModel.getTodayTeamInfo()
             gridList?.add(
+                3,
                 Modules(
                     id = 3,
                     name = HomeMenu.Approval.gridName,
