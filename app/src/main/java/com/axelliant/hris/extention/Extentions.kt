@@ -128,6 +128,10 @@ fun String?.toUserSafeErrorMessage(): String {
     return this.toUserErrorPresentation().userMessage
 }
 
+internal fun String?.shouldOfferSupportForError(): Boolean {
+    return this.toUserErrorPresentation().shouldOfferSupport
+}
+
 private fun Context.buildIssueReportBody(screenName: String?, presentation: UserErrorPresentation): String {
     val sessionManager = SessionManager(applicationContext)
     val packageInfo = packageManager.getPackageInfo(packageName, 0)
@@ -285,4 +289,3 @@ private fun getNtpTime(): Date? {
         ntpClient.close()
     }
 }
-

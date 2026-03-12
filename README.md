@@ -68,7 +68,7 @@ Core endpoint groups:
 - Check-in and attendance requests
   - `GET hrms.api.mobile_v1.get_checkin_select_field`
   - `POST hrms.api.mobile_v1.create_checkin`
-  - `POST hrms.api.mobile_v1.get_checkin_request`
+  - `POST hrms.api.mobile_v1.get_employee_checkins` (replaces legacy `get_checkin_request`)
   - `POST hrms.api.mobile_v1.update_checkin_request`
   - `POST hrms.api.mobile_v1.removed_checkin`
   - `POST hrms.api.mobile_v1.get_checkin_approvals`
@@ -186,7 +186,15 @@ Release workflow:
 git checkout develop
 git pull --rebase origin develop
 git push origin develop
+git tag android-v1.5.0
+git push origin android-v1.5.0
 ```
+
+Notes:
+
+- CI validation runs on pull requests and pushes.
+- the release workflow is triggered by tags matching `android-v*` or by manual workflow dispatch
+- cut release tags from the branch you intend to ship after CI is green
 
 ## GitHub Actions
 
