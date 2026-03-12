@@ -125,9 +125,13 @@ class RequestFragment : BaseFragment() {
                     CheckInDetail::class.java
                 )
                 checkInId = checkInDetail.name
-                val array = checkInDetail.time.split(" ")
-                currentDateString = array[0]
-                currentTimeString = array[1]
+                val dateTimeParts = checkInDetail.time
+                    ?.trim()
+                    ?.split(Regex("\\s+"), limit = 2)
+                    .orEmpty()
+
+                currentDateString = dateTimeParts.getOrNull(0)
+                currentTimeString = dateTimeParts.getOrNull(1)
 
                 binding?.etAttendanceReason?.setText(checkInDetail.reason)
                 preAttendanceType = checkInDetail.log_type
@@ -811,7 +815,6 @@ class RequestFragment : BaseFragment() {
 
     }
 }
-
 
 
 

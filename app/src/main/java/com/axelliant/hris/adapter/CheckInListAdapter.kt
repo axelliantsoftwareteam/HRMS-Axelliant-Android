@@ -31,8 +31,7 @@ class CheckInListAdapter(
     override fun onBindViewHolder(holder: AccountsVH, position: Int) {
         holder.bind(attendanceList[position])
 
-
-
+        holder.binding.tvAttendStatus.isVisible = attendanceList[position].requeststatus == LeaveStatus.PENDING.value
         holder.binding.tvAttendStatus.setOnClickListener {
             adapterItemClick.onItemClick(attendanceList[position], position)
         }
@@ -76,7 +75,15 @@ class CheckInListAdapter(
             binding.tvHour.text = attendanceDetail.log_type
             binding.status.text = attendanceDetail.requeststatus
             binding.tvShiftTxt.text = attendanceDetail.location
-            binding.tvShiftTimeTxt.text = attendanceDetail.reason.nullToEmpty()
+            binding.tvShiftTimeTxt.text = if (attendanceDetail.reason.isBlank()) {
+                if (attendanceDetail.working_hours > 0) {
+                    "Working Hours: ${attendanceDetail.working_hours}"
+                } else {
+                    "--"
+                }
+            } else {
+                attendanceDetail.reason.nullToEmpty()
+            }
             binding.lyDropDown.isVisible = attendanceDetail.isDetailVisible
 
         }

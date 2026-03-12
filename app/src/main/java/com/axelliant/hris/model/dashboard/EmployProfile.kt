@@ -1,8 +1,11 @@
 package com.axelliant.hris.model.dashboard
 
+import com.google.gson.annotations.SerializedName
+
  class EmployProfile{
      val company: String?=null
      val date_of_birth: String?=null
+     @SerializedName(value = "employee_code", alternate = ["custom_employee_code"])
      val employee_code: String?=null
      var employee_name: String?=null
      val gender: String?=null
@@ -16,5 +19,4 @@ package com.axelliant.hris.model.dashboard
      val reporting_to_emp: ArrayList<EmployProfile>?=null
 
  }
-
 
