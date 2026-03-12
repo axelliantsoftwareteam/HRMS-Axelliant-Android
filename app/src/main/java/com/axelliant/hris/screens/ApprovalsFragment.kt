@@ -40,6 +40,9 @@ class ApprovalsFragment : BaseFragment() {
 
     private val binding get() = _binding!!
     private var currentFilter = RequestFilter.LEAVE
+    private var currentLeaveApprovals: ArrayList<TeamLeaveDetail> = arrayListOf()
+    private var currentAttendanceApprovals: ArrayList<AttendanceApprovalObject> = arrayListOf()
+    private var currentExpenseApprovals: ArrayList<Expense> = arrayListOf()
     private val attendanceViewModel: AttendanceViewModel by inject()
     private val leaveViewModel: LeaveViewModel by inject()
     private val expenseViewModel: ExpenseViewModel by inject()
@@ -85,6 +88,12 @@ class ApprovalsFragment : BaseFragment() {
         binding.ivBack.setOnClickListener {
             previousFragmentNavigation()
         }
+        binding.btnBulkApprove.setOnClickListener {
+            bulkUpdateVisibleApprovals("Approved")
+        }
+        binding.btnBulkReject.setOnClickListener {
+            bulkUpdateVisibleApprovals("Rejected")
+        }
 
         spinnerPopulations()
         binding.rvAttend.visibility=View.VISIBLE
@@ -99,14 +108,17 @@ class ApprovalsFragment : BaseFragment() {
                 if (response?.meta?.status == true) {
                     if (response.leaves?.size ?: 0 > 0)
                     {
+                        currentLeaveApprovals = ArrayList(response.leaves ?: arrayListOf())
                         binding.rvAttend.visibility=View.VISIBLE
                         binding.tvNoRecord.visibility=View.GONE
 
                         dataPopulate(response.leaves)
                     } else {
+                        currentLeaveApprovals = arrayListOf()
                         binding.rvAttend.visibility = View.GONE
                         binding.tvNoRecord.visibility = View.VISIBLE
                     }
+                    updateBulkActionsState()
 
                     binding.tvTeamMemberTxt.text = response.team_count.toString()
 
@@ -154,14 +166,17 @@ class ApprovalsFragment : BaseFragment() {
                     // success
                     if (response.checkin?.size ?: 0 > 0)
                     {
+                        currentAttendanceApprovals = ArrayList(response.checkin ?: arrayListOf())
                         binding.rvAttend.visibility=View.VISIBLE
                         binding.tvNoRecord.visibility=View.GONE
 
                         attendanceDataPopulate(response.checkin!!)
                     } else {
+                        currentAttendanceApprovals = arrayListOf()
                         binding.rvAttend.visibility = View.GONE
                         binding.tvNoRecord.visibility = View.VISIBLE
                     }
+                    updateBulkActionsState()
 
                 } else {
                     requireContext().showErrorMsg(response?.meta?.message.toString())
@@ -177,14 +192,17 @@ class ApprovalsFragment : BaseFragment() {
                     // success
                     if (response.expenses?.size ?: 0 > 0)
                     {
+                        currentExpenseApprovals = ArrayList(response.expenses ?: arrayListOf())
                         binding.rvExpense.visibility=View.VISIBLE
                         binding.tvNoRecord.visibility=View.GONE
 
                         expenseDataPopulate(response.expenses!!)
                     } else {
+                        currentExpenseApprovals = arrayListOf()
                         binding.rvExpense.visibility = View.GONE
                         binding.tvNoRecord.visibility = View.VISIBLE
                     }
+                    updateBulkActionsState()
 
 
 
@@ -224,11 +242,12 @@ class ApprovalsFragment : BaseFragment() {
 
         binding.tvWeek.setOnClickListener {
             currentFilter = RequestFilter.LEAVE
-            leaveViewModel.getTeamLeaveDetail(getCurrentObject())
-            binding.tvTeamMember.text = "Leave Requests"
-            binding.rvAttend.visibility=View.VISIBLE
-            binding.rvExpense.visibility=View.GONE
-            eventSelection()
+                    leaveViewModel.getTeamLeaveDetail(getCurrentObject())
+                    binding.tvTeamMember.text = "Leave Requests"
+                    binding.rvAttend.visibility=View.VISIBLE
+                    binding.rvExpense.visibility=View.GONE
+                    eventSelection()
+                    updateBulkActionsState()
         }
         binding.tvMonth.setOnClickListener {
             currentFilter = RequestFilter.ATTENDANCE
@@ -237,6 +256,7 @@ class ApprovalsFragment : BaseFragment() {
             binding.rvAttend.visibility=View.VISIBLE
             binding.rvExpense.visibility=View.GONE
             eventSelection()
+            updateBulkActionsState()
         }
 
         binding.tvExpense.setOnClickListener {
@@ -246,6 +266,7 @@ class ApprovalsFragment : BaseFragment() {
             binding.rvAttend.visibility=View.GONE
             binding.rvExpense.visibility=View.VISIBLE
             eventSelection()
+            updateBulkActionsState()
 
         }
 
@@ -276,6 +297,47 @@ class ApprovalsFragment : BaseFragment() {
         }
 
 
+    }
+
+    private fun bulkUpdateVisibleApprovals(status: String) {
+        when (currentFilter) {
+            RequestFilter.LEAVE -> {
+                val ids = currentLeaveApprovals.mapNotNull { it.name }.filter { it.isNotBlank() }
+                if (ids.isEmpty()) {
+                    requireContext().showErrorMsg("No leave approvals are visible right now.")
+                    return
+                }
+                leaveViewModel.bulkLeaveApprovalStatus(ids, status)
+            }
+            RequestFilter.ATTENDANCE -> {
+                val ids = currentAttendanceApprovals.mapNotNull { it.name }.filter { it.isNotBlank() }
+                if (ids.isEmpty()) {
+                    requireContext().showErrorMsg("No attendance approvals are visible right now.")
+                    return
+                }
+                attendanceViewModel.bulkAttendanceApprovalStatus(ids, status)
+            }
+            RequestFilter.APPROVAL -> {
+                val ids = currentExpenseApprovals.mapNotNull { it.name }.filter { it.isNotBlank() }
+                if (ids.isEmpty()) {
+                    requireContext().showErrorMsg("No expense approvals are visible right now.")
+                    return
+                }
+                expenseViewModel.bulkExpenseApprovalStatus(ids, status)
+            }
+            else -> Unit
+        }
+    }
+
+    private fun updateBulkActionsState() {
+        val hasBulkItems = when (currentFilter) {
+            RequestFilter.LEAVE -> currentLeaveApprovals.isNotEmpty()
+            RequestFilter.ATTENDANCE -> currentAttendanceApprovals.isNotEmpty()
+            RequestFilter.APPROVAL -> currentExpenseApprovals.isNotEmpty()
+            else -> false
+        }
+
+        binding.lyBulkActions.visibility = if (hasBulkItems) View.VISIBLE else View.GONE
     }
 
     private fun getCurrentObject(): AttendanceInput {

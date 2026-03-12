@@ -151,6 +151,8 @@
     <string name="update">Update</string>
     <string name="check_in_requests">Check In Requests</string>
     <string name="employee_checkins">Employee Check-ins</string>
+    <string name="approve_all">Approve All</string>
+    <string name="reject_all">Reject All</string>
     <string name="attendance_type">Log type</string>
     <string name="total_no_expense">Total no Expense</string>
     <string name="expense_date">Expense Date</string>

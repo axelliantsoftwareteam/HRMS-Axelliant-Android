@@ -10,8 +10,10 @@ import com.axelliant.hris.R
 import com.axelliant.hris.callback.AdapterItemClick
 import com.axelliant.hris.databinding.MyAttendanceDetailRowBinding
 import com.axelliant.hris.enums.LeaveStatus
-import com.axelliant.hris.enums.LocationFilter
 import com.axelliant.hris.model.attendance.AttendanceDetail
+import java.text.SimpleDateFormat
+import java.util.Locale
+import java.util.TimeZone
 
 class MyAttendanceDetailAdapter(
     private val attendanceList: ArrayList<AttendanceDetail>,
@@ -42,19 +44,32 @@ class MyAttendanceDetailAdapter(
             notifyItemChanged(position)
         }
 
-        when (attendanceList[position].status) {
-            LeaveStatus.Absent.value -> {
+        val statusValue = attendanceList[position].display_status.ifBlank { attendanceList[position].status }
+        when {
+            statusValue == LeaveStatus.Absent.value -> {
                 holder.binding.status.backgroundTintList = ContextCompat.getColorStateList(context, R.color.light_red)
                 holder.binding.status.setTextColor(ContextCompat.getColorStateList(context, R.color.color_third))
             }
-            LeaveStatus.Present.value -> {
+            statusValue == LeaveStatus.Present.value -> {
                 holder.binding.status.backgroundTintList = ContextCompat.getColorStateList(context, R.color.light_green)
                 holder.binding.status.setTextColor(ContextCompat.getColorStateList(context, R.color.green))
             }
-            LeaveStatus.OnLeave.value -> {
+            statusValue == LeaveStatus.OnLeave.value -> {
 
                 holder.binding.status.backgroundTintList = ContextCompat.getColorStateList(context, R.color.purple_bg)
                 holder.binding.status.setTextColor(ContextCompat.getColorStateList(context, R.color.purple))
+            }
+            statusValue.contains("Weekend", ignoreCase = true) -> {
+                holder.binding.status.backgroundTintList = ContextCompat.getColorStateList(context, R.color.purple_bg)
+                holder.binding.status.setTextColor(ContextCompat.getColorStateList(context, R.color.purple))
+            }
+            statusValue.contains("Holiday", ignoreCase = true) -> {
+                holder.binding.status.backgroundTintList = ContextCompat.getColorStateList(context, R.color.light_green)
+                holder.binding.status.setTextColor(ContextCompat.getColorStateList(context, R.color.green))
+            }
+            else -> {
+                holder.binding.status.backgroundTintList = ContextCompat.getColorStateList(context, R.color.light_green)
+                holder.binding.status.setTextColor(ContextCompat.getColorStateList(context, R.color.green))
             }
         }
 
@@ -68,9 +83,6 @@ class MyAttendanceDetailAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(attendanceDetail: AttendanceDetail) {
-//            binding.tvTitle.text = item.title.toString()
-
-
             if (attendanceDetail.working_hours.toString() == "0")
                 binding.tvHour.text = attendanceDetail.working_hours.toString().plus(" Hr")
             else if (attendanceDetail.working_hours.toString() == "1")
@@ -85,17 +97,46 @@ class MyAttendanceDetailAdapter(
 
             binding.tvShiftTxt.text = attendanceDetail.shift
             binding.tvShiftTimeTxt.text = attendanceDetail.shift_timings
-            binding.tvActualInTxt.text = attendanceDetail.in_time
-            binding.tvExpectedInTxt.text = attendanceDetail.expected_in
-            binding.tvActualOutTxt.text = attendanceDetail.out_time
-            binding.tvExpectedOutTxt.text = attendanceDetail.expected_out
+            binding.tvActualInTxt.text = formatDisplayTime(attendanceDetail.in_time_iso, attendanceDetail.in_time)
+            binding.tvExpectedInTxt.text = formatDisplayTime(attendanceDetail.expected_in_iso, attendanceDetail.expected_in)
+            binding.tvActualOutTxt.text = formatDisplayTime(attendanceDetail.out_time_iso, attendanceDetail.out_time)
+            binding.tvExpectedOutTxt.text = formatDisplayTime(attendanceDetail.expected_out_iso, attendanceDetail.expected_out)
 
             binding.lyDropDown.isVisible = attendanceDetail.isDetailVisible
 
+            binding.status.text = attendanceDetail.display_status.ifBlank { attendanceDetail.status }
 
-            binding.status.text = attendanceDetail.status
 
+        }
 
+        private fun formatDisplayTime(isoValue: String, fallback: String): String {
+            if (isoValue.isNotBlank()) {
+                parseIsoDate(isoValue)?.let { date ->
+                    val displayFormat = SimpleDateFormat("h:mm a", Locale.getDefault())
+                    displayFormat.timeZone = TimeZone.getDefault()
+                    return displayFormat.format(date)
+                }
+            }
+            return when (fallback) {
+                "Weekend", "Holiday", "Check in Missing", "Check out Missing" -> "--"
+                else -> fallback
+            }
+        }
+
+        private fun parseIsoDate(value: String): java.util.Date? {
+            val formats = listOf(
+                "yyyy-MM-dd'T'HH:mm:ssXXX",
+                "yyyy-MM-dd'T'HH:mm:ss.SSSXXX",
+                "yyyy-MM-dd'T'HH:mm:ssXXXXX",
+                "yyyy-MM-dd'T'HH:mm:ss.SSSXXXXX"
+            )
+            for (pattern in formats) {
+                runCatching {
+                    val formatter = SimpleDateFormat(pattern, Locale.US)
+                    return formatter.parse(value)
+                }
+            }
+            return null
         }
     }
 

@@ -14,6 +14,14 @@ data class AttendanceDetail(
     val status: String,
     val custom_attendance_status : String,
     val working_hours: Double,
+    val display_status: String = "",
+    val off_day_type: String = "",
+    val worked_on_off_day: Boolean = false,
+    val time_zone: String = "",
+    val in_time_iso: String = "",
+    val out_time_iso: String = "",
+    val expected_in_iso: String = "",
+    val expected_out_iso: String = "",
     var isDetailVisible:Boolean=false,
     val attendance_reason :String = "",
     val attendance_location :String = "",  // In office , work from home
@@ -21,4 +29,3 @@ data class AttendanceDetail(
 
 
 )
-

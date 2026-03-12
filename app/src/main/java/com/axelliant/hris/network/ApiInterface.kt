@@ -2,6 +2,8 @@ package com.axelliant.hris.network
 
 import com.axelliant.hris.model.attendance.AttRequest
 import com.axelliant.hris.model.attendance.LeaveCountRequest
+import com.axelliant.hris.model.approval.ApprovalActionRequest
+import com.axelliant.hris.model.approval.BulkApprovalActionRequest
 import com.axelliant.hris.model.expense.CreateExpense
 import com.axelliant.hris.model.expense.DeleteAttachment
 import com.axelliant.hris.model.leave.ExpenseApprovalStatus
@@ -242,6 +244,18 @@ interface ApiInterface {
     @POST("hrms.api.mobile_v1.change_status_of_expense")  // attendance approval rejection
     fun callExpenseApprovalStatus(
         @Header("Authorization") auth: String?, @Body attendanceRequest: ExpenseApprovalStatus
+    ): Call<ResponseBody>
+
+    @Headers("Content-Type: application/json")
+    @POST("hrms.api.mobile_v1.take_approval_action")
+    fun takeApprovalAction(
+        @Header("Authorization") auth: String?, @Body approvalActionRequest: ApprovalActionRequest
+    ): Call<ResponseBody>
+
+    @Headers("Content-Type: application/json")
+    @POST("hrms.api.mobile_v1.bulk_take_approval_action")
+    fun bulkTakeApprovalAction(
+        @Header("Authorization") auth: String?, @Body bulkApprovalActionRequest: BulkApprovalActionRequest
     ): Call<ResponseBody>
 
 
