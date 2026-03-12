@@ -150,7 +150,7 @@
     <string name="reject">Reject</string>
     <string name="update">Update</string>
     <string name="check_in_requests">Check In Requests</string>
-    <string name="employee_checkins">Employee Checkins</string>
+    <string name="employee_checkins">Employee Check-ins</string>
     <string name="attendance_type">Log type</string>
     <string name="total_no_expense">Total no Expense</string>
     <string name="expense_date">Expense Date</string>
