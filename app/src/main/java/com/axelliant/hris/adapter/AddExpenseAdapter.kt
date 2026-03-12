@@ -1,6 +1,5 @@
 package com.axelliant.hris.adapter
 
-import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.Context
 import android.text.Editable
@@ -38,11 +37,12 @@ class AddExpenseAdapter(
         return AccountsVH(binding)
     }
 
-    override fun onBindViewHolder(holder: AccountsVH, @SuppressLint("RecyclerView") position: Int) {
-        holder.bind(list[position], mContext)
-        Log.d("updatedListJson", Gson().toJson(list[position]))
+    override fun onBindViewHolder(holder: AccountsVH, position: Int) {
+        val currentItem = list[position]
+        holder.bind(currentItem, mContext)
+        Log.d("updatedListJson", Gson().toJson(currentItem))
         // Populate spinner for expense types
-        spinnerLeavePopulations(mContext, holder.binding.spAttendType, position)
+        spinnerLeavePopulations(mContext, holder.binding.spAttendType, currentItem, holder)
 
         // Show/Hide delete button for the first item
         holder.binding.ivDelete.visibility = if (position == 0) View.GONE else View.VISIBLE
@@ -52,15 +52,17 @@ class AddExpenseAdapter(
         holder.binding.etAmount.removeTextChangedListener(holder.amountTextWatcher)
 
         // Set text in the EditText fields
-        holder.binding.etAttendanceReason.setText(list[position].description ?: "")
-        holder.binding.etAmount.setText(list[position].amount?.toString() ?: "")
+        holder.binding.etAttendanceReason.setText(currentItem.description)
+        holder.binding.etAmount.setText(currentItem.amount?.toString() ?: "")
 
         // Add new TextWatchers for description and amount
         holder.reasonTextWatcher = object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                val newDescription = s.toString()
-                list[position].description = newDescription
-                onUpdateList.onListUpdated(list)
+                val adapterPosition = holder.bindingAdapterPosition
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    list[adapterPosition].description = s.toString()
+                    onUpdateList.onListUpdated(list)
+                }
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -69,13 +71,16 @@ class AddExpenseAdapter(
 
         holder.amountTextWatcher = object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                val newAmount = try {
-                    s.toString().toDouble()
-                } catch (e: NumberFormatException) {
-                    0.0
+                val adapterPosition = holder.bindingAdapterPosition
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    val newAmount = try {
+                        s.toString().toDouble()
+                    } catch (e: NumberFormatException) {
+                        0.0
+                    }
+                    list[adapterPosition].amount = newAmount
+                    onUpdateList.onListUpdated(list)
                 }
-                list[position].amount = newAmount
-                onUpdateList.onListUpdated(list)
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -88,16 +93,22 @@ class AddExpenseAdapter(
 
         // Handle the delete action
         holder.binding.tvDelete.setOnClickListener {
-            list.removeAt(position)
-            notifyItemRemoved(position)
-            notifyItemRangeChanged(position, list.size)
-            onUpdateList.onListUpdated(list)
-            Log.d("removeList", list.size.toString())
+            val adapterPosition = holder.bindingAdapterPosition
+            if (adapterPosition != RecyclerView.NO_POSITION) {
+                list.removeAt(adapterPosition)
+                notifyItemRemoved(adapterPosition)
+                notifyItemRangeChanged(adapterPosition, list.size)
+                onUpdateList.onListUpdated(list)
+                Log.d("removeList", list.size.toString())
+            }
         }
 
         // Handle the date picker
         holder.binding.lyDate.setOnClickListener {
-            pickDate(position)
+            val adapterPosition = holder.bindingAdapterPosition
+            if (adapterPosition != RecyclerView.NO_POSITION) {
+                pickDate(adapterPosition)
+            }
         }
 
 
@@ -144,14 +155,15 @@ class AddExpenseAdapter(
     private fun spinnerLeavePopulations(
         mContext: Context,
         spinner: Spinner,
-        mainItemPosition: Int
+        item: AddExpense,
+        holder: AccountsVH
     ) {
-        val adapter = LeaveSpinnerAdapter(mContext, list[mainItemPosition].expenseTypeList)
+        val adapter = LeaveSpinnerAdapter(mContext, item.expenseTypeList)
         spinner.adapter = adapter
 
-        val selectedType = list[mainItemPosition].expense_type
-        for (counter in 0 until list[mainItemPosition].expenseTypeList.size) {
-            if (list[mainItemPosition].expenseTypeList[counter].type == selectedType) {
+        val selectedType = item.expense_type
+        for (counter in 0 until item.expenseTypeList.size) {
+            if (item.expenseTypeList[counter].type == selectedType) {
                 spinner.setSelection(counter)
                 break
             }
@@ -159,8 +171,12 @@ class AddExpenseAdapter(
 
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
-                list[mainItemPosition].expense_type = list[mainItemPosition].expenseTypeList[pos].type
-                onUpdateList.onListUpdated(list)
+                val adapterPosition = holder.bindingAdapterPosition
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    val currentItem = list[adapterPosition]
+                    currentItem.expense_type = currentItem.expenseTypeList[pos].type
+                    onUpdateList.onListUpdated(list)
+                }
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}

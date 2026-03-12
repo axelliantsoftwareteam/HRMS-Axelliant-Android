@@ -37,16 +37,34 @@ class ExpenseAdapter(
     }
 
     override fun onBindViewHolder(holder: AccountsVH, position: Int) {
-        val item = list[position]
-        holder.bind(item, mContext)
+        val currentItem = list[position]
+        holder.bind(currentItem, mContext)
 
 //        holder.binding.tvViewDetail.setOnClickListener {
 //            itemClick.onItemClick(list[position], position)
 //        }
         holder.binding.rvLeaveCount.layoutManager = GridLayoutManager(mContext, 1)
         holder.binding.rvLeaveCount.adapter =
-            item.expenses_detail?.let { ExpenseRowAdapter(it, mContext) }
+            currentItem.expenses_detail?.let { ExpenseRowAdapter(it, mContext) }
         holder.binding.rvLeaveCount.isNestedScrollingEnabled = false
+
+        holder.binding.rvAttachments.layoutManager =
+            LinearLayoutManager(mContext, RecyclerView.HORIZONTAL, false)
+        holder.binding.rvAttachments.adapter =
+            AttachmentsAdapter(
+                false,
+                mContext,
+                attachmentTypeMapping(currentItem.attachments),
+                object : AdapterItemClick {
+                    override fun onItemClick(customObject: Any, position: Int) {
+                        val adapterPosition = holder.bindingAdapterPosition
+                        if (adapterPosition != RecyclerView.NO_POSITION) {
+                            AppNavigator.navigateToImageDetailFragment(Bundle().apply {
+                                this.putString("images", Gson().toJson(list[adapterPosition].attachments))
+                            })
+                        }
+                    }
+                })
 
 
 
@@ -63,7 +81,7 @@ class ExpenseAdapter(
 
         }
 
-        when (item.approval_status) {
+        when (currentItem.approval_status) {
             LeaveStatus.DRAFT.value -> {
                 holder.binding.tvDate.backgroundTintList = ContextCompat.getColorStateList(mContext, R.color.light_yellow)
                 holder.binding.tvDate.setTextColor(ContextCompat.getColorStateList(mContext, R.color.yellow))
@@ -107,52 +125,30 @@ class ExpenseAdapter(
 
             binding.status.text = item.total_claimed_amount.toString().valueQualifier()
             binding.tvHour.text = item.posting_date.valueQualifier()
-
-
-            binding.rvAttachments.layoutManager =
-                LinearLayoutManager(mContext, RecyclerView.HORIZONTAL, false)
-            binding.rvAttachments.adapter =
-                AttachmentsAdapter(
-                    false,
-                    mContext,
-                    attachmentTypeMapping(item.attachments),
-                    object : AdapterItemClick {
-                        override fun onItemClick(customObject: Any, position: Int) {
-
-                            AppNavigator.navigateToImageDetailFragment(Bundle().apply {
-                                this.putString("images",Gson().toJson(item.attachments))
-
-                            })
-
-                        }
-
-                    })
-
         }
+    }
 
-        private fun attachmentTypeMapping(attachmentArray: List<Attachments>?): ArrayList<ImageType> {
+    private fun attachmentTypeMapping(attachmentArray: List<Attachments>?): ArrayList<ImageType> {
 
-            val localItems: ArrayList<ImageType> = arrayListOf()
+        val localItems: ArrayList<ImageType> = arrayListOf()
 
-            if (attachmentArray != null) {
-                for (serverItem in attachmentArray) {
+        if (attachmentArray != null) {
+            for (serverItem in attachmentArray) {
 
-                    localItems.add(ImageType().apply {
-                        this.isUploaded = true
-                        this.isMediaQuery = false
-                        this.uri = null
-                        this.imageUrl = serverItem.file_url
-                        this.file_id = serverItem.name
+                localItems.add(ImageType().apply {
+                    this.isUploaded = true
+                    this.isMediaQuery = false
+                    this.uri = null
+                    this.imageUrl = serverItem.file_url
+                    this.file_id = serverItem.name
 
-                    })
+                })
 
-                }
             }
-
-
-            return localItems
         }
 
+
+        return localItems
     }
 
 

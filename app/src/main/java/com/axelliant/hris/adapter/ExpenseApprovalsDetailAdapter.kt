@@ -34,12 +34,12 @@ class ExpenseApprovalsDetailAdapter(
     }
 
     override fun onBindViewHolder(holder: AccountsVH, position: Int) {
-        val item = detailArrayList[position]
-        holder.bind(item, mContext)
+        val currentItem = detailArrayList[position]
+        holder.bind(currentItem, mContext)
 
         holder.binding.rvLeaveCount.layoutManager = GridLayoutManager(mContext, 1)
         holder.binding.rvLeaveCount.adapter =
-            item.expenses_detail?.let { ExpenseRowAdapter(it, mContext) }
+            currentItem.expenses_detail?.let { ExpenseRowAdapter(it, mContext) }
         holder.binding.rvLeaveCount.isNestedScrollingEnabled = false
 
         holder.binding.dropDown.setOnClickListener {
@@ -68,14 +68,15 @@ class ExpenseApprovalsDetailAdapter(
             AttachmentsAdapter(
                 false,
                 mContext,
-                attachmentTypeMapping(item.attachments),
+                attachmentTypeMapping(currentItem.attachments),
                 object : AdapterItemClick {
                     override fun onItemClick(customObject: Any, pos: Int) {
-
-                        AppNavigator.navigateToImageDetailFragment(Bundle().apply {
-                            this.putString("images", Gson().toJson(item.attachments))
-
-                        })
+                        val adapterPosition = holder.bindingAdapterPosition
+                        if (adapterPosition != RecyclerView.NO_POSITION) {
+                            AppNavigator.navigateToImageDetailFragment(Bundle().apply {
+                                this.putString("images", Gson().toJson(detailArrayList[adapterPosition].attachments))
+                            })
+                        }
 
                     }
 
