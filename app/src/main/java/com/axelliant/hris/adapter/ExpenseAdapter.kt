@@ -37,20 +37,24 @@ class ExpenseAdapter(
     }
 
     override fun onBindViewHolder(holder: AccountsVH, position: Int) {
-        holder.bind(list[position], mContext)
+        val item = list[position]
+        holder.bind(item, mContext)
 
 //        holder.binding.tvViewDetail.setOnClickListener {
 //            itemClick.onItemClick(list[position], position)
 //        }
         holder.binding.rvLeaveCount.layoutManager = GridLayoutManager(mContext, 1)
         holder.binding.rvLeaveCount.adapter =
-            list[position].expenses_detail?.let { ExpenseRowAdapter(it, mContext) }
+            item.expenses_detail?.let { ExpenseRowAdapter(it, mContext) }
         holder.binding.rvLeaveCount.isNestedScrollingEnabled = false
 
 
 
         holder.binding.tvAttendStatus.setOnClickListener {
-            itemClick.onItemClick(list[position], position)
+            val adapterPosition = holder.bindingAdapterPosition
+            if (adapterPosition != RecyclerView.NO_POSITION) {
+                itemClick.onItemClick(list[adapterPosition], adapterPosition)
+            }
         }
 
         holder.binding.icDropDown.setOnClickListener {
@@ -59,7 +63,7 @@ class ExpenseAdapter(
 
         }
 
-        when (list[position].approval_status) {
+        when (item.approval_status) {
             LeaveStatus.DRAFT.value -> {
                 holder.binding.tvDate.backgroundTintList = ContextCompat.getColorStateList(mContext, R.color.light_yellow)
                 holder.binding.tvDate.setTextColor(ContextCompat.getColorStateList(mContext, R.color.yellow))
@@ -153,4 +157,3 @@ class ExpenseAdapter(
 
 
 }
-

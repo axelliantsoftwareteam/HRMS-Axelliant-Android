@@ -31,20 +31,27 @@ class MyAttendanceDetailAdapter(
     }
 
     override fun onBindViewHolder(holder: AccountsVH, position: Int) {
-        holder.bind(attendanceList[position])
+        val item = attendanceList[position]
+        holder.bind(item)
 
 
         holder.binding.lyActionBtn.setOnClickListener {
-            adapterItemClick.onItemClick(attendanceList[position], position)
+            val adapterPosition = holder.bindingAdapterPosition
+            if (adapterPosition != RecyclerView.NO_POSITION) {
+                adapterItemClick.onItemClick(attendanceList[adapterPosition], adapterPosition)
+            }
         }
 
         holder.binding.tvDropDown.setOnClickListener {
-
-            attendanceList[position].isDetailVisible = !attendanceList[position].isDetailVisible
-            notifyItemChanged(position)
+            val adapterPosition = holder.bindingAdapterPosition
+            if (adapterPosition != RecyclerView.NO_POSITION) {
+                val currentItem = attendanceList[adapterPosition]
+                currentItem.isDetailVisible = !currentItem.isDetailVisible
+                notifyItemChanged(adapterPosition)
+            }
         }
 
-        val statusValue = attendanceList[position].display_status.ifBlank { attendanceList[position].status }
+        val statusValue = item.display_status.ifBlank { item.status }
         when {
             statusValue == LeaveStatus.Absent.value -> {
                 holder.binding.status.backgroundTintList = ContextCompat.getColorStateList(context, R.color.light_red)

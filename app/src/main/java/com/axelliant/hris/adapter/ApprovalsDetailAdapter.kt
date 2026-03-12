@@ -28,22 +28,27 @@ class ApprovalsDetailAdapter(
     }
 
     override fun onBindViewHolder(holder: AccountsVH, position: Int) {
-        holder.bind(detailArrayList[position], mContext)
+        val item = detailArrayList[position]
+        holder.bind(item, mContext)
 
         holder.binding.dropDown.setOnClickListener {
             holder.binding.lyAttendStatus.hideShow(it)
             holder.binding.divider.isVisible = holder.binding.lyAttendStatus.isVisible
         }
 
-        holder.binding.tvApproved.setOnClickListener{
-            approvedItemClick.onItemClick(detailArrayList[position],position)
+        holder.binding.tvApproved.setOnClickListener {
+            val adapterPosition = holder.bindingAdapterPosition
+            if (adapterPosition != RecyclerView.NO_POSITION) {
+                approvedItemClick.onItemClick(detailArrayList[adapterPosition], adapterPosition)
+            }
         }
 
-        holder.binding.tvReject.setOnClickListener{
-            rejectItemClick.onItemClick(detailArrayList[position],position)
-
+        holder.binding.tvReject.setOnClickListener {
+            val adapterPosition = holder.bindingAdapterPosition
+            if (adapterPosition != RecyclerView.NO_POSITION) {
+                rejectItemClick.onItemClick(detailArrayList[adapterPosition], adapterPosition)
+            }
         }
-
     }
 
     override fun getItemCount(): Int {

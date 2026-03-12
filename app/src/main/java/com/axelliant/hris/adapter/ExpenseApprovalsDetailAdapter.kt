@@ -34,11 +34,12 @@ class ExpenseApprovalsDetailAdapter(
     }
 
     override fun onBindViewHolder(holder: AccountsVH, position: Int) {
-        holder.bind(detailArrayList[position], mContext)
+        val item = detailArrayList[position]
+        holder.bind(item, mContext)
 
         holder.binding.rvLeaveCount.layoutManager = GridLayoutManager(mContext, 1)
         holder.binding.rvLeaveCount.adapter =
-            detailArrayList[position].expenses_detail?.let { ExpenseRowAdapter(it, mContext) }
+            item.expenses_detail?.let { ExpenseRowAdapter(it, mContext) }
         holder.binding.rvLeaveCount.isNestedScrollingEnabled = false
 
         holder.binding.dropDown.setOnClickListener {
@@ -46,13 +47,18 @@ class ExpenseApprovalsDetailAdapter(
             holder.binding.divider.isVisible = holder.binding.lyAttendStatus.isVisible
         }
 
-        holder.binding.tvApproved.setOnClickListener{
-            approvedItemClick.onItemClick(detailArrayList[position],position)
+        holder.binding.tvApproved.setOnClickListener {
+            val adapterPosition = holder.bindingAdapterPosition
+            if (adapterPosition != RecyclerView.NO_POSITION) {
+                approvedItemClick.onItemClick(detailArrayList[adapterPosition], adapterPosition)
+            }
         }
 
-        holder.binding.tvReject.setOnClickListener{
-            rejectItemClick.onItemClick(detailArrayList[position],position)
-
+        holder.binding.tvReject.setOnClickListener {
+            val adapterPosition = holder.bindingAdapterPosition
+            if (adapterPosition != RecyclerView.NO_POSITION) {
+                rejectItemClick.onItemClick(detailArrayList[adapterPosition], adapterPosition)
+            }
         }
 
 
@@ -62,20 +68,18 @@ class ExpenseApprovalsDetailAdapter(
             AttachmentsAdapter(
                 false,
                 mContext,
-                attachmentTypeMapping(detailArrayList[position].attachments),
+                attachmentTypeMapping(item.attachments),
                 object : AdapterItemClick {
                     override fun onItemClick(customObject: Any, pos: Int) {
 
                         AppNavigator.navigateToImageDetailFragment(Bundle().apply {
-                            this.putString("images", Gson().toJson(detailArrayList[position].attachments))
+                            this.putString("images", Gson().toJson(item.attachments))
 
                         })
 
                     }
 
                 })
-
-
     }
     private fun attachmentTypeMapping(attachmentArray: List<Attachments>?): ArrayList<ImageType> {
 

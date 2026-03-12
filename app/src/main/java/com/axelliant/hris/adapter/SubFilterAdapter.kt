@@ -26,17 +26,22 @@ class SubFilterAdapter(
     }
 
     override fun onBindViewHolder(holder: AccountsVH, position: Int) {
-        holder.bind(list[position], position, context)
+        val item = list[position]
+        holder.bind(item, position, context)
         holder.binding.lyWorkHome.setOnClickListener {
-            filterId = list[position].id.toString()
-            notifyDataSetChanged()
-            itemClick.onItemClick(list[position], position)
+            val adapterPosition = holder.bindingAdapterPosition
+            if (adapterPosition != RecyclerView.NO_POSITION) {
+                val currentItem = list[adapterPosition]
+                filterId = currentItem.id.toString()
+                notifyDataSetChanged()
+                itemClick.onItemClick(currentItem, adapterPosition)
+            }
 
         }
 
-        holder.binding.tvWorkTxt.isVisible = list[position].id != ""
+        holder.binding.tvWorkTxt.isVisible = item.id != ""
 
-        if (filterId == list[position].id)
+        if (filterId == item.id)
         {
             holder.binding.tvWorkFrom.setTextColor(context.getColor(R.color.white))
             holder.binding.lyWorkHome.background =
@@ -48,8 +53,8 @@ class SubFilterAdapter(
                 context.resources.getDrawable(R.drawable.rounded_bgg)
         }
 
-        holder.binding.tvWorkFrom.text = list[position].title
-        holder.binding.tvWorkTxt.text = list[position].count
+        holder.binding.tvWorkFrom.text = item.title
+        holder.binding.tvWorkTxt.text = item.count
 
 
     }

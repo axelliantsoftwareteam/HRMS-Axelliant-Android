@@ -33,11 +33,17 @@ class AttachmentsAdapter(
 
         if(isDeleteShow){
             holder.binding.imgClose.setOnClickListener {
-                itemClick.onItemClick(list[position], position)
+                val adapterPosition = holder.bindingAdapterPosition
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    itemClick.onItemClick(list[adapterPosition], adapterPosition)
+                }
             }
         }else{
-            holder.binding.ivImg.setOnClickListener{
-                itemClick.onItemClick(list[position],position)
+            holder.binding.ivImg.setOnClickListener {
+                val adapterPosition = holder.bindingAdapterPosition
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    itemClick.onItemClick(list[adapterPosition], adapterPosition)
+                }
             }
         }
 

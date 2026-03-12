@@ -29,19 +29,26 @@ class CheckInListAdapter(
     }
 
     override fun onBindViewHolder(holder: AccountsVH, position: Int) {
-        holder.bind(attendanceList[position])
+        val item = attendanceList[position]
+        holder.bind(item)
 
-        holder.binding.tvAttendStatus.isVisible = attendanceList[position].requeststatus == LeaveStatus.PENDING.value
+        holder.binding.tvAttendStatus.isVisible = item.requeststatus == LeaveStatus.PENDING.value
         holder.binding.tvAttendStatus.setOnClickListener {
-            adapterItemClick.onItemClick(attendanceList[position], position)
+            val adapterPosition = holder.bindingAdapterPosition
+            if (adapterPosition != RecyclerView.NO_POSITION) {
+                adapterItemClick.onItemClick(attendanceList[adapterPosition], adapterPosition)
+            }
         }
 
         holder.binding.tvDropDown.setOnClickListener {
-
-            attendanceList[position].isDetailVisible = !attendanceList[position].isDetailVisible
-            notifyItemChanged(position)
+            val adapterPosition = holder.bindingAdapterPosition
+            if (adapterPosition != RecyclerView.NO_POSITION) {
+                val currentItem = attendanceList[adapterPosition]
+                currentItem.isDetailVisible = !currentItem.isDetailVisible
+                notifyItemChanged(adapterPosition)
+            }
         }
-        when (attendanceList[position].requeststatus) {
+        when (item.requeststatus) {
             LeaveStatus.DRAFT.value -> {
                 holder.binding.status.backgroundTintList = ContextCompat.getColorStateList(mContext, R.color.light_yellow)
                 holder.binding.status.setTextColor(ContextCompat.getColorStateList(mContext, R.color.yellow))
