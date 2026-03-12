@@ -215,6 +215,9 @@ class HomeFragment : BaseFragment() {
         )
         activityResultLauncher.launch(appPerms)
 
+/*
+       AppConst.TOKEN = "8b87d8a458a89e9:a1705cecb80d093"
+*/
        AppConst.TOKEN = sessionManager.getToken()
         homeViewModel.getDashboardInformation()
         // data population
