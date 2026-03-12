@@ -15,6 +15,7 @@ import com.axelliant.hris.model.login.LoginRequest
 import com.axelliant.hris.model.post.AttendanceRequest
 import com.axelliant.hris.model.post.LeaveRequest
 import com.axelliant.hris.model.post.TeamListRequest
+import com.axelliant.hris.model.profile.CertificationCreateRequest
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody;
 import retrofit2.Call
@@ -131,6 +132,21 @@ interface ApiInterface {
     @Headers("Content-Type: application/json")
     @GET("hrms.api.mobile_v1.get_leaves_detail")  // Leave types for request section
     fun getLeaveTypesWithCount(@Header("Authorization") auth: String?): Call<ResponseBody>
+
+    @Headers("Content-Type: application/json")
+    @GET("hrms.api.mobile_v1.get_profile_of_employee")
+    fun getProfileOfEmployee(@Header("Authorization") auth: String?): Call<ResponseBody>
+
+    @Headers("Content-Type: application/json")
+    @GET("hrms.api.mobile_v1.get_employee_certifications")
+    fun getEmployeeCertifications(@Header("Authorization") auth: String?): Call<ResponseBody>
+
+    @Headers("Content-Type: application/json")
+    @POST("hrms.api.mobile_v1.create_employee_certification")
+    fun createEmployeeCertification(
+        @Header("Authorization") auth: String?,
+        @Body request: CertificationCreateRequest
+    ): Call<ResponseBody>
 
 
     @Headers("Content-Type: application/json")
