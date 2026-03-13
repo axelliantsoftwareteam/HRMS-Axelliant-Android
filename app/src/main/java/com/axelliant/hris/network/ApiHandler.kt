@@ -1,9 +1,11 @@
 package com.axelliant.hris.network
 
 import okhttp3.OkHttpClient
+import okhttp3.Request
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.TimeZone
 import java.util.concurrent.TimeUnit
 
 object ApiHandler {
@@ -23,6 +25,12 @@ private const val BASE_URL = "https://hris.axelliant.com/api/method/" // Local t
                 .connectTimeout(ConnectTimeout, TimeUnit.SECONDS)
                 .readTimeout(ReadTimeout, TimeUnit.SECONDS)
                 .writeTimeout(WriteTimeout, TimeUnit.SECONDS)
+                .addInterceptor { chain ->
+                    val request: Request = chain.request().newBuilder()
+                        .header("X-Client-Timezone", TimeZone.getDefault().id)
+                        .build()
+                    chain.proceed(request)
+                }
                 .addInterceptor(HttpLoggingInterceptor().apply {
                     level = HttpLoggingInterceptor.Level.BODY
                 })

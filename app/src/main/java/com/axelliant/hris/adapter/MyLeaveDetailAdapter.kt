@@ -29,23 +29,27 @@ class MyLeaveDetailAdapter(
     }
 
     override fun onBindViewHolder(holder: AccountsVH, position: Int) {
-        holder.bind(leaves[position], mContext)
+        val item = leaves[position]
+        holder.bind(item, mContext)
 
 
-        holder.binding.tvEdit.setOnClickListener{
-            adapterItemClick.onItemClick(leaves[position],position)
-
+        holder.binding.tvEdit.setOnClickListener {
+            val adapterPosition = holder.adapterPosition
+            if (adapterPosition != RecyclerView.NO_POSITION) {
+                adapterItemClick.onItemClick(leaves[adapterPosition], adapterPosition)
+            }
         }
 
         holder.binding.tvDropDown.setOnClickListener {
-
-//            holder.binding.lyDropDown.isVisible = !holder.binding.lyDropDown.isVisible
-
-            leaves[position].isDetailVisible = !leaves[position].isDetailVisible
-            notifyItemChanged(position)
+            val adapterPosition = holder.adapterPosition
+            if (adapterPosition != RecyclerView.NO_POSITION) {
+                val currentItem = leaves[adapterPosition]
+                currentItem.isDetailVisible = !currentItem.isDetailVisible
+                notifyItemChanged(adapterPosition)
+            }
         }
 
-        when (leaves[position].status) {
+        when (item.status) {
             LeaveStatus.REJECTED.value -> {
                 holder.binding.tvEdit.isVisible=false
                 holder.binding.tvAttendStatus.backgroundTintList = ContextCompat.getColorStateList(mContext, R.color.light_red)

@@ -250,6 +250,8 @@ class CheckInListFragment : BaseFragment() {
         if (status == LeaveStatus.APPROVED.value)
         {
             val statusList = listOf(
+                "Approved",
+                "approved",
                 "Processed",
                 "processed",
                 "waiting",

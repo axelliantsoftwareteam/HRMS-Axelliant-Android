@@ -4,6 +4,9 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.axelliant.hris.config.AppConst
 import com.axelliant.hris.model.ImagePath
+import com.axelliant.hris.model.approval.ApprovalActionRequest
+import com.axelliant.hris.model.approval.ApprovalActionItem
+import com.axelliant.hris.model.approval.BulkApprovalActionRequest
 import com.axelliant.hris.model.attendance.AttRequest
 import com.axelliant.hris.model.attendance.AttendanceInput
 import com.axelliant.hris.model.attendance.expenseApprovalList
@@ -525,8 +528,13 @@ class ExpenseRepo(private var apiInterface: ApiInterface) {
     ): MutableLiveData<BaseApiModel<PostResponse>> {
         val serverResponse = MutableLiveData<BaseApiModel<PostResponse>>()
 
-        val call = apiInterface.callExpenseApprovalStatus(
-            "token ${AppConst.TOKEN}", inputObject
+        val call = apiInterface.takeApprovalAction(
+            "token ${AppConst.TOKEN}",
+            ApprovalActionRequest(
+                approval_type = "expense",
+                reference_name = inputObject.expense_id,
+                status = inputObject.status
+            )
         )
 
         Log.e("HTTP Request", " " + call.request().toString())
@@ -567,6 +575,56 @@ class ExpenseRepo(private var apiInterface: ApiInterface) {
 
             }
 
+        })
+
+        return serverResponse
+    }
+
+    fun bulkExpenseApprovalStatus(
+        expenseIds: List<String>,
+        status: String
+    ): MutableLiveData<BaseApiModel<PostResponse>> {
+        val serverResponse = MutableLiveData<BaseApiModel<PostResponse>>()
+
+        val call = apiInterface.bulkTakeApprovalAction(
+            "token ${AppConst.TOKEN}",
+            BulkApprovalActionRequest(
+                actions = expenseIds.filter { it.isNotBlank() }.map {
+                    ApprovalActionItem(
+                        approval_type = "expense",
+                        reference_name = it
+                    )
+                },
+                status = status
+            )
+        )
+
+        Log.e("HTTP Request", " " + call.request().toString())
+
+        call.enqueue(object : BaseCallBack<ResponseBody>(call) {
+            override fun onFinalSuccess(
+                call: Call<ResponseBody>,
+                response: Response<ResponseBody>
+            ) {
+                val type: Type = object : TypeToken<BaseApiModel<PostResponse>>() {}.type
+                val jsonString = response.body()?.string()
+                val userModel = Gson().fromJson<BaseApiModel<PostResponse>>(jsonString, type)
+                serverResponse.value = userModel
+            }
+
+            override fun onFinalFailure(errorString: String?) {
+                serverResponse.value =
+                    BaseApiModel(
+                        BaseModel(
+                            PostResponse(
+                                meta = Meta(
+                                    errorString.toString(),
+                                    false
+                                )
+                            )
+                        )
+                    )
+            }
         })
 
         return serverResponse

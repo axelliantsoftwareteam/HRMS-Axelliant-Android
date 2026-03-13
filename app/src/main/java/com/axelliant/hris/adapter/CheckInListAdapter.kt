@@ -29,20 +29,26 @@ class CheckInListAdapter(
     }
 
     override fun onBindViewHolder(holder: AccountsVH, position: Int) {
-        holder.bind(attendanceList[position])
+        val item = attendanceList[position]
+        holder.bind(item)
 
-
-
+        holder.binding.tvAttendStatus.isVisible = item.requeststatus == LeaveStatus.PENDING.value
         holder.binding.tvAttendStatus.setOnClickListener {
-            adapterItemClick.onItemClick(attendanceList[position], position)
+            val adapterPosition = holder.adapterPosition
+            if (adapterPosition != RecyclerView.NO_POSITION) {
+                adapterItemClick.onItemClick(attendanceList[adapterPosition], adapterPosition)
+            }
         }
 
         holder.binding.tvDropDown.setOnClickListener {
-
-            attendanceList[position].isDetailVisible = !attendanceList[position].isDetailVisible
-            notifyItemChanged(position)
+            val adapterPosition = holder.adapterPosition
+            if (adapterPosition != RecyclerView.NO_POSITION) {
+                val currentItem = attendanceList[adapterPosition]
+                currentItem.isDetailVisible = !currentItem.isDetailVisible
+                notifyItemChanged(adapterPosition)
+            }
         }
-        when (attendanceList[position].requeststatus) {
+        when (item.requeststatus) {
             LeaveStatus.DRAFT.value -> {
                 holder.binding.status.backgroundTintList = ContextCompat.getColorStateList(mContext, R.color.light_yellow)
                 holder.binding.status.setTextColor(ContextCompat.getColorStateList(mContext, R.color.yellow))
@@ -76,7 +82,15 @@ class CheckInListAdapter(
             binding.tvHour.text = attendanceDetail.log_type
             binding.status.text = attendanceDetail.requeststatus
             binding.tvShiftTxt.text = attendanceDetail.location
-            binding.tvShiftTimeTxt.text = attendanceDetail.reason.nullToEmpty()
+            binding.tvShiftTimeTxt.text = if (attendanceDetail.reason.isBlank()) {
+                if (attendanceDetail.working_hours > 0) {
+                    "Working Hours: ${attendanceDetail.working_hours}"
+                } else {
+                    "--"
+                }
+            } else {
+                attendanceDetail.reason.nullToEmpty()
+            }
             binding.lyDropDown.isVisible = attendanceDetail.isDetailVisible
 
         }

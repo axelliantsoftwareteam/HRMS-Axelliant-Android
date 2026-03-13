@@ -240,9 +240,10 @@ class LoginFragment : BaseFragment() {
                 if (response!=null && response.meta.status==true)
                 {
                     // success
+                    sessionManager.saveUserEmail(response.access_token?.email)
                     sessionManager.saveToken(response.access_token?.api_key.plus(":").plus(response.access_token?.api_sec))
                     sessionManager.createLoginSession(
-                        username = null,
+                        username = response.access_token?.email,
                         userPass = null,
                         accessToken = response.access_token?.api_key.plus(":").plus(response.access_token?.api_sec),
                         lastRemember = true
@@ -280,4 +281,3 @@ class LoginFragment : BaseFragment() {
         val TAG = LoginFragment::class.java.simpleName
     }
 }
-

@@ -41,7 +41,7 @@
             style="@style/TEXT_SEMI_BLACK_15"
             android:layout_width="0dp"
             android:gravity="center"
-            android:text="@string/check_in_requests"
+            android:text="Check In Requests"
             app:layout_constraintBottom_toBottomOf="@+id/iv_back"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

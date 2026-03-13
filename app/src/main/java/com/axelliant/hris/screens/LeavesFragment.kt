@@ -1,12 +1,10 @@
 package com.axelliant.hris.screens
 
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.GridLayoutManager
@@ -33,10 +31,9 @@ import com.axelliant.hris.navigation.AppNavigator
 import com.axelliant.hris.utils.Utils
 import com.axelliant.hris.viewmodel.LeaveViewModel
 import org.koin.android.ext.android.inject
-import java.time.LocalDate
-import java.time.Year
-import java.time.format.DateTimeFormatter
-import java.time.temporal.ChronoUnit
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 
 class LeavesFragment : BaseFragment() {
@@ -56,7 +53,6 @@ class LeavesFragment : BaseFragment() {
     }
 
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -112,20 +108,20 @@ class LeavesFragment : BaseFragment() {
 
 
         leaveViewModel.getUpcomingLeaveDetail(UpcomingLeaveInput().apply {
-            val formatter = DateTimeFormatter.ofPattern(SERVER_DATE_FORMAT)
-            val tomorrow = LocalDate.now().plus(1, ChronoUnit.DAYS)
-            val formattedTomorrow = tomorrow.format(formatter)
-
-            // Get the last day of the current year
-            val lastDayOfYear = Year.now().atMonth(12).atEndOfMonth()
-            val formattedLastDayOfYear = lastDayOfYear.format(formatter)
-
-            Log.d("Upcoming Leaves date", "dates:" + formattedLastDayOfYear+formattedTomorrow)
-            if (formattedTomorrow!=null && formattedLastDayOfYear!=null)
-            {
-                this.start_date = formattedTomorrow
-                this.end_date = formattedLastDayOfYear
+            val formatter = SimpleDateFormat(SERVER_DATE_FORMAT, Locale.getDefault())
+            val tomorrow = Calendar.getInstance().apply {
+                add(Calendar.DAY_OF_YEAR, 1)
             }
+            val lastDayOfYear = Calendar.getInstance().apply {
+                set(Calendar.MONTH, Calendar.DECEMBER)
+                set(Calendar.DAY_OF_MONTH, getActualMaximum(Calendar.DAY_OF_MONTH))
+            }
+            val formattedTomorrow = formatter.format(tomorrow.time)
+            val formattedLastDayOfYear = formatter.format(lastDayOfYear.time)
+
+            Log.d("Upcoming Leaves date", "dates:" + formattedLastDayOfYear + formattedTomorrow)
+            this.start_date = formattedTomorrow
+            this.end_date = formattedLastDayOfYear
         })
         leaveViewModel.upcomingLeavesResponse.observe(
             viewLifecycleOwner,

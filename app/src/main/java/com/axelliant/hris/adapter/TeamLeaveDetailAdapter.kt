@@ -27,7 +27,8 @@ class TeamLeaveDetailAdapter(
     }
 
     override fun onBindViewHolder(holder: AccountsVH, position: Int) {
-        holder.bind(leaves[position], mContext)
+        val item = leaves[position]
+        holder.bind(item, mContext)
         holder.binding.lyDropDown.isVisible = false
 
         if (isForApproval) {
@@ -35,10 +36,16 @@ class TeamLeaveDetailAdapter(
             holder.binding.tvApproved.isVisible = true
             holder.binding.tvReject.isVisible = true
             holder.binding.tvApproved.setOnClickListener {
-                approvedClick?.onItemClick(leaves[position], position)
+                val adapterPosition = holder.adapterPosition
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    approvedClick?.onItemClick(leaves[adapterPosition], adapterPosition)
+                }
             }
             holder.binding.tvReject.setOnClickListener {
-                rejectClick?.onItemClick(leaves[position], position)
+                val adapterPosition = holder.adapterPosition
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    rejectClick?.onItemClick(leaves[adapterPosition], adapterPosition)
+                }
             }
         } else {
             holder.binding.btnDivider.isVisible = false
@@ -46,10 +53,7 @@ class TeamLeaveDetailAdapter(
             holder.binding.tvReject.isVisible = false
         }
 
-
-
         holder.binding.dropDown.setOnClickListener {
-
             holder.binding.lyDropDown.isVisible = !holder.binding.lyDropDown.isVisible
         }
     }

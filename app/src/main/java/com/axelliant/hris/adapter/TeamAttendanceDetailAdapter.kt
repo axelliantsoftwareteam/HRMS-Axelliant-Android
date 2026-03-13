@@ -27,18 +27,20 @@ class TeamAttendanceDetailAdapter(
     }
 
     override fun onBindViewHolder(holder: AccountsVH, position: Int) {
-        holder.bind(detailArrayList[position], mContext)
+        val item = detailArrayList[position]
+        holder.bind(item, mContext)
 
         holder.binding.rvLeaveCount.layoutManager = GridLayoutManager(mContext, 3)
         holder.binding.rvLeaveCount.adapter =
-            ValuesAdapter(detailArrayList[position].values!!, mContext)
+            ValuesAdapter(item.values!!, mContext)
         holder.binding.rvLeaveCount.isNestedScrollingEnabled = false
 
 
         holder.binding.lyWeekly.setOnClickListener {
-
-
-            itemClick.onItemClick(detailArrayList[position], position)
+            val adapterPosition = holder.adapterPosition
+            if (adapterPosition != RecyclerView.NO_POSITION) {
+                itemClick.onItemClick(detailArrayList[adapterPosition], adapterPosition)
+            }
         }
 
         holder.binding.dropDown.setOnClickListener {

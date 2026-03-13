@@ -300,4 +300,18 @@ class ExpenseViewModel(private val expenseRepo: ExpenseRepo,private val validato
 
 
     }
+
+    fun bulkExpenseApprovalStatus(expenseIds: List<String>, status: String) {
+        isLoading.value = Event(true)
+        expenseRepo.bulkExpenseApprovalStatus(expenseIds, status)
+            .observeForever { data ->
+                data?.let { baseModel ->
+                    isLoading.value = Event(false)
+                    expenseApprovalResponse.value = Event(baseModel.message?.data)
+                } ?: run {
+                    isLoading.value = Event(false)
+                    Log.d("Success VieModel->", "false")
+                }
+            }
+    }
 }

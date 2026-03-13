@@ -81,6 +81,14 @@ class RequestFragment : BaseFragment() {
     private var preAttendanceType: String = attendanceType
     private var preLocationType: String = locationType
 
+    private fun selectedLeaveBalance(): Double {
+        return binding?.tvRemainingLeaveTxt?.text?.toString()?.toDoubleOrNull() ?: 0.0
+    }
+
+    private fun requestedLeaveDays(): Double {
+        return binding?.tvLeaveCountTxt?.text?.toString()?.toDoubleOrNull() ?: 0.0
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -129,9 +137,13 @@ class RequestFragment : BaseFragment() {
                     CheckInDetail::class.java
                 )
                 checkInId = checkInDetail.name
-                val array = checkInDetail.time.split(" ")
-                currentDateString = array[0]
-                currentTimeString = array[1]
+                val dateTimeParts = checkInDetail.time
+                    ?.trim()
+                    ?.split(Regex("\\s+"), limit = 2)
+                    .orEmpty()
+
+                currentDateString = dateTimeParts.getOrNull(0)
+                currentTimeString = dateTimeParts.getOrNull(1)
 
                 binding?.etAttendanceReason?.setText(checkInDetail.reason)
                 preAttendanceType = checkInDetail.log_type
@@ -372,6 +384,8 @@ class RequestFragment : BaseFragment() {
                     requireContext().showErrorMsg("Please select end date")
                 } else if (binding?.etLeaveReason?.text?.isEmpty() == true) {
                     requireContext().showErrorMsg("Please add reason for leave")
+                } else if (requestedLeaveDays() > selectedLeaveBalance()) {
+                    requireContext().showErrorMsg("Requested leave exceeds your remaining quota for this leave type")
                 } else {
                     val leaveItem = binding?.spLeaveType?.selectedItem as LeaveAllocation
 
@@ -679,7 +693,9 @@ class RequestFragment : BaseFragment() {
             this.remaining_leaves = 0.0
         })
         if (leaves?.leave_allocation != null) {
-            finalLeavesArray.addAll(leaves.leave_allocation)
+            finalLeavesArray.addAll(
+                leaves.leave_allocation.filter { !it.name.isNullOrBlank() }
+            )
         }
 
         val adapter = LeaveWithCountSpinnerAdapter(
@@ -720,6 +736,14 @@ class RequestFragment : BaseFragment() {
 
                 binding?.tvRemainingLeaveTxt?.text =
                     finalLeavesArray[position].remaining_leaves.toString()
+
+                if (startDateString != null && endDateString != null && !selectedLeaveType.isNullOrEmpty()) {
+                    requestViewModel.getLeaveCountOnDate(LeaveCountByDaysRequest().apply {
+                        this.leave_type = selectedLeaveType
+                        this.from_date = startDateString
+                        this.to_date = endDateString
+                    })
+                }
 
             }
 
@@ -871,7 +895,4 @@ class RequestFragment : BaseFragment() {
 
     }
 }
-
-
-
 

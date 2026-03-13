@@ -139,6 +139,20 @@ class AttendanceViewModel(private val attendanceRepo: AttendanceRepo) : BaseView
 
     }
 
+    fun bulkAttendanceApprovalStatus(checkinIds: List<String>, status: String) {
+        isLoading.value = Event(true)
+        attendanceRepo.bulkAttendanceApprovalStatus(checkinIds, status)
+            .observeForever { data ->
+                data?.let { baseModel ->
+                    isLoading.value = Event(false)
+                    attendanceApprovalResponse.value = Event(baseModel.message?.data)
+                } ?: run {
+                    isLoading.value = Event(false)
+                    Log.d("Success VieModel->", "false")
+                }
+            }
+    }
+
     fun getCheckInList(inputObject: LeaveCountInput) {
         isLoading.value = Event(true)
         attendanceRepo.checkInList(inputObject)
