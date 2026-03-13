@@ -115,12 +115,13 @@ class ExpenseAdapter(
 //                    binding.tvDelete.visibility = View.GONE
 //                }
 //            }
-            if (item.approval_status.toString() == "Draft")
+            if (item.approval_status.toString() == "Draft") {
                 binding.tvDate.text = "Pending"
-            else
+            } else {
                 binding.tvDate.text = item.approval_status.toString()
+            }
 
-                binding.tvAttendStatus.text = "Edit"
+            binding.tvAttendStatus.text = "Edit"
 //            binding.profileImg.setUrlImage(item.image, mContext)
 
             binding.status.text = item.total_claimed_amount.toString().valueQualifier()
