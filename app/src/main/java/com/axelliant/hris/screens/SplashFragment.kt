@@ -3,6 +3,7 @@ package com.axelliant.hris.screens
 import android.content.Context
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
+import android.content.pm.Signature
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
@@ -11,7 +12,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.RequiresApi
 import androidx.vectordrawable.graphics.drawable.Animatable2Compat
 import com.axelliant.hris.R
 import com.axelliant.hris.base.BaseFragment
@@ -45,7 +45,6 @@ class SplashFragment : BaseFragment() {
         return binding?.root
     }
 
-    @RequiresApi(Build.VERSION_CODES.P)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         // Load GIF when running the app:
@@ -73,11 +72,19 @@ class SplashFragment : BaseFragment() {
 
     private fun getSignatureHash() {
         try {
-            val info = requireContext().packageManager.getPackageInfo(
-                "com.axelliant.android_erp",
-                PackageManager.GET_SIGNING_CERTIFICATES
-            )
-            for (signature in info.signingInfo.apkContentsSigners) {
+            val info = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                requireContext().packageManager.getPackageInfo(
+                    "com.axelliant.android_erp",
+                    PackageManager.GET_SIGNING_CERTIFICATES
+                )
+            } else {
+                @Suppress("DEPRECATION")
+                requireContext().packageManager.getPackageInfo(
+                    "com.axelliant.android_erp",
+                    PackageManager.GET_SIGNATURES
+                )
+            }
+            for (signature in getPackageSignatures(info)) {
                 val md = MessageDigest.getInstance("SHA")
                 md.update(signature.toByteArray())
                 Log.d(
@@ -89,6 +96,15 @@ class SplashFragment : BaseFragment() {
             }
         } catch (e: PackageManager.NameNotFoundException) {
         } catch (e: NoSuchAlgorithmException) {
+        }
+    }
+
+    private fun getPackageSignatures(info: PackageInfo): Array<Signature> {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            info.signingInfo.apkContentsSigners
+        } else {
+            @Suppress("DEPRECATION")
+            info.signatures
         }
     }
 

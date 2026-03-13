@@ -24,7 +24,10 @@ class LeaveAdapter(
         holder.bind(list[position])
 
         holder.binding.lyWeekly.setOnClickListener {
-            itemClick.onItemClick(list[position], position)
+            val adapterPosition = holder.adapterPosition
+            if (adapterPosition != RecyclerView.NO_POSITION) {
+                itemClick.onItemClick(list[adapterPosition], adapterPosition)
+            }
         }
     }
 

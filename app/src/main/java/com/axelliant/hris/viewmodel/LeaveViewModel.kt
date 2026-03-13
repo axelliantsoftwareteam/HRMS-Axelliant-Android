@@ -132,4 +132,18 @@ class LeaveViewModel(private val leaveRepo: LeaveRepo) : BaseViewModel() {
 
 
     }
+
+    fun bulkLeaveApprovalStatus(leaveIds: List<String>, status: String) {
+        isLoading.value = Event(true)
+        leaveRepo.bulkLeaveApproval(leaveIds, status)
+            .observeForever { data ->
+                data?.let { baseModel ->
+                    isLoading.value = Event(false)
+                    leaveApprovalResponse.value = Event(baseModel.message?.data)
+                } ?: run {
+                    isLoading.value = Event(false)
+                    Log.d("Success VieModel->", "false")
+                }
+            }
+    }
 }

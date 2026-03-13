@@ -2,6 +2,8 @@ package com.axelliant.hris.network
 
 import com.axelliant.hris.model.attendance.AttRequest
 import com.axelliant.hris.model.attendance.LeaveCountRequest
+import com.axelliant.hris.model.approval.ApprovalActionRequest
+import com.axelliant.hris.model.approval.BulkApprovalActionRequest
 import com.axelliant.hris.model.expense.CreateExpense
 import com.axelliant.hris.model.expense.DeleteAttachment
 import com.axelliant.hris.model.leave.ExpenseApprovalStatus
@@ -13,6 +15,7 @@ import com.axelliant.hris.model.login.LoginRequest
 import com.axelliant.hris.model.post.AttendanceRequest
 import com.axelliant.hris.model.post.LeaveRequest
 import com.axelliant.hris.model.post.TeamListRequest
+import com.axelliant.hris.model.profile.CertificationCreateRequest
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody;
 import retrofit2.Call
@@ -130,6 +133,21 @@ interface ApiInterface {
     @GET("hrms.api.mobile_v1.get_leaves_detail")  // Leave types for request section
     fun getLeaveTypesWithCount(@Header("Authorization") auth: String?): Call<ResponseBody>
 
+    @Headers("Content-Type: application/json")
+    @GET("hrms.api.mobile_v1.get_profile_of_employee")
+    fun getProfileOfEmployee(@Header("Authorization") auth: String?): Call<ResponseBody>
+
+    @Headers("Content-Type: application/json")
+    @GET("hrms.api.mobile_v1.get_employee_certifications")
+    fun getEmployeeCertifications(@Header("Authorization") auth: String?): Call<ResponseBody>
+
+    @Headers("Content-Type: application/json")
+    @POST("hrms.api.mobile_v1.create_employee_certification")
+    fun createEmployeeCertification(
+        @Header("Authorization") auth: String?,
+        @Body request: CertificationCreateRequest
+    ): Call<ResponseBody>
+
 
     @Headers("Content-Type: application/json")
     @GET("hrms.api.mobile_v1.get_checkin_select_field")  // Attendance types for request section
@@ -242,6 +260,18 @@ interface ApiInterface {
     @POST("hrms.api.mobile_v1.change_status_of_expense")  // attendance approval rejection
     fun callExpenseApprovalStatus(
         @Header("Authorization") auth: String?, @Body attendanceRequest: ExpenseApprovalStatus
+    ): Call<ResponseBody>
+
+    @Headers("Content-Type: application/json")
+    @POST("hrms.api.mobile_v1.take_approval_action")
+    fun takeApprovalAction(
+        @Header("Authorization") auth: String?, @Body approvalActionRequest: ApprovalActionRequest
+    ): Call<ResponseBody>
+
+    @Headers("Content-Type: application/json")
+    @POST("hrms.api.mobile_v1.bulk_take_approval_action")
+    fun bulkTakeApprovalAction(
+        @Header("Authorization") auth: String?, @Body bulkApprovalActionRequest: BulkApprovalActionRequest
     ): Call<ResponseBody>
 
 
