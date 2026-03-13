@@ -242,19 +242,19 @@ class ApprovalsFragment : BaseFragment() {
 
         binding.tvWeek.setOnClickListener {
             currentFilter = RequestFilter.LEAVE
-                    leaveViewModel.getTeamLeaveDetail(getCurrentObject())
-                    binding.tvTeamMember.text = "Leave Requests"
-                    binding.rvAttend.visibility=View.VISIBLE
-                    binding.rvExpense.visibility=View.GONE
-                    eventSelection()
-                    updateBulkActionsState()
+            leaveViewModel.getTeamLeaveDetail(getCurrentObject())
+            binding.tvTeamMember.text = "Leave Requests"
+            binding.rvAttend.visibility = View.VISIBLE
+            binding.rvExpense.visibility = View.GONE
+            eventSelection()
+            updateBulkActionsState()
         }
         binding.tvMonth.setOnClickListener {
             currentFilter = RequestFilter.ATTENDANCE
             attendanceViewModel.getAttendanceApproval(getCurrentObject())
             binding.tvTeamMember.text = "Check In Requests"
-            binding.rvAttend.visibility=View.VISIBLE
-            binding.rvExpense.visibility=View.GONE
+            binding.rvAttend.visibility = View.VISIBLE
+            binding.rvExpense.visibility = View.GONE
             eventSelection()
             updateBulkActionsState()
         }
@@ -263,8 +263,8 @@ class ApprovalsFragment : BaseFragment() {
             currentFilter = RequestFilter.APPROVAL
             expenseViewModel.getExpenseApproval(getCurrentObject())
             binding.tvTeamMember.text = "Approval Requests"
-            binding.rvAttend.visibility=View.GONE
-            binding.rvExpense.visibility=View.VISIBLE
+            binding.rvAttend.visibility = View.GONE
+            binding.rvExpense.visibility = View.VISIBLE
             eventSelection()
             updateBulkActionsState()
 
