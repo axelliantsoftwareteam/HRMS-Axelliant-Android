@@ -196,6 +196,21 @@ Notes:
 - the release workflow is triggered by tags matching `android-v*` or by manual workflow dispatch
 - cut release tags from the branch you intend to ship after CI is green
 
+## Local Git Hooks
+
+Install the pre-push hook to run `lint`, `testDebugUnitTest`, and `assembleDebug` before every push (mirrors CI):
+
+```bash
+chmod +x scripts/pre-push.sh
+ln -sf ../../scripts/pre-push.sh .git/hooks/pre-push
+```
+
+To skip in emergencies:
+
+```bash
+SKIP_PRE_PUSH=1 git push
+```
+
 ## GitHub Actions
 
 This repo now includes:
