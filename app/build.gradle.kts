@@ -85,7 +85,7 @@ dependencies {
     implementation(libs.ssp.android) // multi screen text sizes support
     implementation(libs.sdp.android) // multi screen width height support
 //gif image
-    implementation(libs.android.gif.drawable)
+//    implementation(libs.android.gif.drawable)
     implementation(libs.glide)
 
     implementation(libs.converter.scalars)
