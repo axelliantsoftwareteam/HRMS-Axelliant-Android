@@ -1,0 +1,16 @@
+{
+  "client_id" : "38918633-d068-4166-bf9a-2cc8fd24ca2c",
+  "authorization_user_agent" : "DEFAULT",
+  "redirect_uri" : "msauth://com.axelliant.hris/mts5f%2F2GsEaaqZozKLzOqnhJJCQ%3D",
+  "account_mode": "SINGLE",
+  "broker_redirect_uri_registered": false,
+  "authorities" : [
+    {
+      "type": "AAD",
+      "audience": {
+        "type": "AzureADMultipleOrgs",
+        "tenant_id": "organizations"
+      }
+    }
+  ]
+}

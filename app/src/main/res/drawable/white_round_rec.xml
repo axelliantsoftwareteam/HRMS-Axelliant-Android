@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Drop Shadow Stack - Bottom Shadow Only -->
+    <item>
+        <shape>
+            <!-- Rounded corners only on bottom-left and bottom-right -->
+            <corners
+                android:topLeftRadius="@dimen/_10sdp"
+                android:topRightRadius="@dimen/_10sdp" />
+
+            <padding
+                android:bottom="@dimen/_2sdp"
+                android:left="@dimen/_2sdp"
+                android:right="@dimen/_2sdp" />
+
+            <solid android:color="#10CCCCCC" />
+        </shape>
+    </item>
+
+
+    <!-- Background (Main Item with White Color) -->
+    <item>
+        <shape>
+            <!-- Rounded corners only on bottom-left and bottom-right -->
+            <corners
+                android:topLeftRadius="@dimen/_10sdp"
+                android:topRightRadius="@dimen/_10sdp" />
+
+            <!-- Set background color to white -->
+            <solid android:color="@android:color/white" />
+        </shape>
+    </item>
+
+</layer-list>

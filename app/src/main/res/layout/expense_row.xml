@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/rounded_bg"
+    >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/ly_expense"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_bgg"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/ly_action_btn"
+        android:padding="@dimen/_10sdp">
+
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_id"
+            style="@style/TEXT_MEDIUM_GREY_10"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/id"
+            android:textAlignment="textStart"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/tv_id_txt"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_id_txt"
+            style="@style/TEXT_MEDIUM_BLACK_10"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="HR-EXP-224-0013"
+            android:textAlignment="textStart"
+            app:layout_constraintTop_toBottomOf="@+id/tv_id"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_date"
+            style="@style/TEXT_MEDIUM_GREY_10"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/date"
+            android:textAlignment="textStart"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/tv_date_txt"
+            app:layout_constraintTop_toBottomOf="@+id/tv_id_txt"
+            />
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_date_txt"
+            style="@style/TEXT_MEDIUM_BLACK_10"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="HR-EXP-224-0013"
+            android:textAlignment="textStart"
+            app:layout_constraintTop_toBottomOf="@+id/tv_date"
+            app:layout_constraintBottom_toTopOf="@+id/divider"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_status"
+            style="@style/TEXT_SEMI_BLACK_10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Approved"
+            android:textColor="@color/approved"
+            android:padding="@dimen/_5sdp"
+            android:background="@drawable/rounded_time_bg"
+            android:backgroundTint="@color/approved_bg"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+        <View
+            android:id="@+id/divider"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_1sdp"
+            android:background="@color/divider"
+            android:layout_marginBottom="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_date_txt"
+            app:layout_constraintBottom_toTopOf="@+id/ll_leave_filter"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+        </View>
+
+        <LinearLayout
+            android:id="@+id/ll_leave_filter"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:weightSum="1"
+            android:padding="@dimen/_5sdp"
+            android:background="@drawable/rounded_leave_filter"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_15sdp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/divider">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight=".35">
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_apply"
+                    style="@style/TEXT_MEDIUM_GREY_10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/grand_total" />
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_grand_total_txt"
+                    style="@style/TEXT_SEMI_BLACK_10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1000000000" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight=".30">
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_leave_bal"
+                    style="@style/TEXT_MEDIUM_GREY_10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/paid" />
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_paid_txt"
+                    style="@style/TEXT_SEMI_BLACK_10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="No"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight=".35">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_approved_by"
+                    style="@style/TEXT_MEDIUM_GREY_10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/approved_by" />
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_approved_by_txt"
+                    style="@style/TEXT_SEMI_BLACK_10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:maxLines="1"
+                    android:text="Muhammad arslan" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/ly_action_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="@dimen/_5sdp"
+        android:background="@drawable/rounded_leave_filter"
+        android:orientation="horizontal"
+        android:layout_margin="@dimen/_5sdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ly_expense"
+        >
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_view_detail"
+            style="@style/TEXT_REGULAR_WHITE_10"
+            android:layout_width="0dp"
+            android:paddingTop="@dimen/_6sdp"
+            android:paddingBottom="@dimen/_6sdp"
+            android:layout_height="match_parent"
+           app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/tv_delete"
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@drawable/rounded_enabled"
+            android:text="@string/view_detail" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_delete"
+            style="@style/TEXT_REGULAR_WHITE_10"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:background="@drawable/rounded_enabled"
+            android:backgroundTint="#F78061"
+            android:paddingTop="@dimen/_6sdp"
+
+            android:paddingBottom="@dimen/_6sdp"
+            android:text="@string/delete"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tv_view_detail"
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

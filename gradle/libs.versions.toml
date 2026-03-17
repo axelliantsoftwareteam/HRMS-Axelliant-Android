@@ -1,0 +1,88 @@
+[versions]
+androidx-junit = "1.1.5"
+app-update-ktx = "2.1.0"
+appcompat = "1.6.1"
+circleimageview = "3.1.0"
+commons-net = "3.6"
+converter-scalars = "2.9.0"
+core-ktx = "1.13.1"
+espresso-core = "3.5.1"
+glide = "4.16.0"
+gson = "2.10.1"
+imagepicker = "2.1"
+jjwt-api = "0.11.2"
+junit = "4.13.2"
+koin-android = "3.5.6"
+lifecycle-viewmodel-ktx = "2.7.0"
+logging-interceptor = "4.12.0"
+material = "1.12.0"
+android-gradle-plugin = "8.3.2"
+jet-brains-plugin = "1.9.10"
+material-version = "1.2.0-alpha03"
+mpandroidchart = "v3.1.0"
+navigation-fragment = "1.0.0"
+navigation-fragment-ktx = "2.7.7"
+nav-safe-args = "2.7.7"
+opentelemetry-api = "1.18.0"
+play-services-location-version = "21.2.0"
+
+sdp-android = "1.1.0"
+smoothbottombar = "1.7.9"
+ssp-android = "1.1.0"
+play-services-location = "21.2.0"
+activity = "1.9.0"
+constraintlayout = "2.1.4"
+play-services-maps = "19.0.0"
+
+[libraries]
+androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
+androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "core-ktx" }
+androidx-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espresso-core" }
+androidx-junit = { module = "androidx.test.ext:junit", version.ref = "androidx-junit" }
+androidx-lifecycle-livedata-ktx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycle-viewmodel-ktx" }
+androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle-viewmodel-ktx" }
+androidx-navigation-fragment-ktx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigation-fragment-ktx" }
+androidx-navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigation-fragment-ktx" }
+app-update = { module = "com.google.android.play:app-update", version.ref = "app-update-ktx" }
+app-update-ktx = { module = "com.google.android.play:app-update-ktx", version.ref = "app-update-ktx" }
+circleimageview = { module = "de.hdodenhof:circleimageview", version.ref = "circleimageview" }
+commons-net = { module = "commons-net:commons-net", version.ref = "commons-net" }
+converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converter-scalars" }
+converter-scalars = { module = "com.squareup.retrofit2:converter-scalars", version.ref = "converter-scalars" }
+glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+imagepicker = { module = "com.github.dhaval2404:imagepicker", version.ref = "imagepicker" }
+jjwt-api = { module = "io.jsonwebtoken:jjwt-api", version.ref = "jjwt-api" }
+jjwt-impl = { module = "io.jsonwebtoken:jjwt-impl", version.ref = "jjwt-api" }
+jjwt-jackson = { module = "io.jsonwebtoken:jjwt-jackson", version.ref = "jjwt-api" }
+junit = { module = "junit:junit", version.ref = "junit" }
+koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin-android" }
+logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "logging-interceptor" }
+material = { module = "com.google.android.material:material", version.ref = "material" }
+material-v120alpha03 = { module = "com.google.android.material:material", version.ref = "material-version" }
+mpandroidchart = { module = "com.github.PhilJay:MPAndroidChart", version.ref = "mpandroidchart" }
+navigation-fragment = { module = "android.arch.navigation:navigation-fragment", version.ref = "navigation-fragment" }
+okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "logging-interceptor" }
+opentelemetry-api = { module = "io.opentelemetry:opentelemetry-api", version.ref = "opentelemetry-api" }
+play-services-location-v2101 = { module = "com.google.android.gms:play-services-location", version.ref = "play-services-location-version" }
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "converter-scalars" }
+sdp-android = { module = "com.intuit.sdp:sdp-android", version.ref = "sdp-android" }
+smoothbottombar = { module = "com.github.ibrahimsn98:SmoothBottomBar", version.ref = "smoothbottombar" }
+ssp-android = { module = "com.intuit.ssp:ssp-android", version.ref = "ssp-android" }
+play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "play-services-location" }
+androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
+androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "play-services-maps" }
+
+
+#implementation(libs.androidx.appcompat)
+#androidx.appcompat:appcompat:1.6.1
+
+#implementation("com.google.android.material:material:1.12.0")
+#implementation(libs.material)
+
+
+[plugins]
+androidApplication = {id="com.android.application",version.ref="android-gradle-plugin"}
+jetbrainsKotlin = {id="org.jetbrains.kotlin.android",version.ref="jet-brains-plugin"}
+navigationSafeArgs={id="androidx.navigation.safeargs",version.ref="nav-safe-args"}

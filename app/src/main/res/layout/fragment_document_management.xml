@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/start_guideline"
+            style="@style/start_gl"
+            android:orientation="vertical" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/end_guideline"
+            style="@style/end_gl"
+            android:orientation="vertical" />
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/bottom_guideline"
+            style="@style/bottom_gl" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/top_guideline"
+            style="@style/top_gl" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_title"
+            style="@style/TEXT_SEMI_BLACK_15"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:text="@string/docrequest"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_back"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintStart_toEndOf="@+id/iv_back"
+            app:layout_constraintTop_toTopOf="@+id/iv_back" />
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_30sdp"
+            android:importantForAccessibility="no"
+            android:src="@drawable/ic_left"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/top_guideline" />
+
+<!--        <fragment-->
+<!--            android:id="@+id/ux_fragment"-->
+<!--            android:name="com.google.ar.sceneform.ux.ArFragment"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_marginBottom="16dp"-->
+<!--            tools:layout_editor_absoluteY="0dp" />-->
+
+        <LinearLayout
+            android:id="@+id/ly_header_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintTop_toBottomOf="@+id/iv_back">
+
+
+            <LinearLayout
+                android:id="@+id/ly_action_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:background="@drawable/rounded_bgg"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="@dimen/_3sdp"
+                android:weightSum="9">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_week"
+                    style="@style/TEXT_REGULAR_WHITE_10"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:background="@drawable/rounded_enabled"
+                    android:paddingTop="@dimen/_6sdp"
+                    android:paddingBottom="@dimen/_6sdp"
+                    android:text="@string/last_seven" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_month"
+                    style="@style/TEXT_REGULAR_BLACK_10"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_weight="3"
+                    android:background="@drawable/rounded_disabled"
+                    android:paddingTop="@dimen/_6sdp"
+                    android:paddingBottom="@dimen/_6sdp"
+                    android:text="@string/this_month" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_custom"
+                    style="@style/TEXT_REGULAR_BLACK_10"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_weight="3"
+                    android:background="@drawable/rounded_disabled"
+                    android:paddingTop="@dimen/_6sdp"
+                    android:paddingBottom="@dimen/_6sdp"
+                    android:text="@string/custom" />
+            </LinearLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/ly_range_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_start_date"
+                    style="@style/TEXT_MEDIUM_BLACK_10"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_5sdp"
+                    android:text="@string/start_date"
+                    android:visibility="gone"
+                    android:textAlignment="textStart"
+                    app:layout_constraintEnd_toEndOf="@+id/divider_absent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/ly_start_date"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:background="@drawable/rounded_leave_filter"
+                    android:orientation="vertical"
+                    android:padding="@dimen/_10sdp"
+                    app:layout_constraintEnd_toStartOf="@+id/divider_absent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/tv_start_date_txt"
+                        style="@style/TEXT_MEDIUM_GREY_10"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        android:hint="@string/start_date"
+                        android:textAlignment="textStart"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/img_start_cal"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/img_start_cal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/_5sdp"
+                        android:src="@drawable/ic_calendar"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                    </ImageView>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <View
+                    android:id="@+id/divider_absent"
+                    android:layout_width="2dp"
+                    android:layout_height="0dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/_5sdp"
+                    android:background="@color/line_divider"
+                    app:layout_constraintBottom_toBottomOf="@+id/ly_end_date"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/ly_end_date" />
+
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_end_date"
+                    style="@style/TEXT_MEDIUM_BLACK_10"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:text="@string/end_date"
+                    android:visibility="gone"
+                    android:textAlignment="textStart"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/divider_absent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/ly_end_date"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:background="@drawable/rounded_leave_filter"
+                    android:orientation="vertical"
+                    android:padding="@dimen/_10sdp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/divider_absent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/tv_end_date_txt"
+                        style="@style/TEXT_MEDIUM_GREY_10"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        android:hint="@string/end_date"
+                        android:textAlignment="textStart"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/img_end_cal"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/img_end_cal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_calendar"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                    </ImageView>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_sub_filter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:itemCount="3"
+                tools:listitem="@layout/sub_filter_row">
+            </androidx.recyclerview.widget.RecyclerView>
+
+
+            <LinearLayout
+                android:id="@+id/ly_header"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:background="@drawable/rounded_shifts"
+                android:orientation="horizontal"
+                android:padding="@dimen/_6sdp"
+                android:weightSum="10">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_hour"
+                    style="@style/TEXT_MEDIUM_WHITE_12"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:paddingStart="@dimen/_2sdp"
+                    android:layout_weight="3"
+                    android:textAlignment="textStart"
+                    android:text="@string/subject" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_status"
+                    style="@style/TEXT_MEDIUM_WHITE_12"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:paddingStart="@dimen/_1sdp"
+                    android:layout_weight="3"
+                    android:textAlignment="textStart"
+                    android:background="@drawable/rounded_disabled"
+                    android:text="@string/posting_date" />
+
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_date"
+                    style="@style/TEXT_MEDIUM_WHITE_12"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/_1sdp"
+                    android:layout_weight="3"
+                    android:gravity="center"
+                    android:text="@string/status" />
+
+
+
+                <View
+                    android:id="@+id/view_expand"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_2sdp"
+                    android:layout_weight="1" />
+
+
+            </LinearLayout>
+
+
+
+
+
+
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_expense"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/bg_color"
+            android:orientation="vertical"
+            tools:itemCount="3"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@+id/ly_header_title"
+            app:layout_constraintBottom_toTopOf="@+id/bottom_guideline"
+            app:layout_constraintStart_toEndOf="@id/start_guideline"
+            app:layout_constraintEnd_toStartOf="@+id/end_guideline"
+            tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/my_team_expense_row" />
+
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_no_record"
+            style="@style/TEXT_SEMI_BLACK_15"
+            android:layout_width="0dp"
+            android:gravity="center"
+            android:text="@string/no_record_found"
+            app:layout_constraintTop_toBottomOf="@+id/ly_header_title"
+            app:layout_constraintBottom_toTopOf="@+id/bottom_guideline"
+            app:layout_constraintStart_toEndOf="@id/start_guideline"
+            app:layout_constraintEnd_toStartOf="@+id/end_guideline"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/add_expense"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintBottom_toBottomOf="@id/bottom_guideline"
+            android:src="@drawable/plus"
+            android:tint="@color/white"
+            app:backgroundTint="@color/colorApp"
+            app:borderWidth="0dp"
+            android:layout_marginBottom="@dimen/_20sdp"
+            app:elevation="6dp"
+            app:fabSize="normal">
+
+        </com.google.android.material.floatingactionbutton.FloatingActionButton>
+
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

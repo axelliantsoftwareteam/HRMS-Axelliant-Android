@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/_5sdp"
+    >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/ly_weekly"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_bg"
+        app:layout_constraintTop_toTopOf="parent"
+        android:padding="@dimen/_10sdp">
+
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_date"
+            style="@style/TEXT_MEDIUM_GREY_10"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/date"
+            android:textAlignment="textStart"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/tv_date_txt"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_date_txt"
+            style="@style/TEXT_MEDIUM_BLACK_10"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="10 Sep, 2024"
+            android:textAlignment="textStart"
+            app:layout_constraintTop_toBottomOf="@+id/tv_date"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_status"
+            style="@style/TEXT_SEMI_BLACK_10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Approved"
+            android:textColor="@color/approved"
+            android:padding="@dimen/_5sdp"
+            android:background="@drawable/rounded_time_bg"
+            android:backgroundTint="@color/approved_bg"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+        <View
+            android:id="@+id/divider"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_1sdp"
+            android:background="@color/divider"
+            android:layout_marginBottom="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_date_txt"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+        </View>
+
+        <LinearLayout
+            android:id="@+id/ll_leave_filter"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:weightSum="1"
+            android:padding="@dimen/_5sdp"
+            android:background="@drawable/rounded_leave_filter"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_15sdp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/divider">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_weight=".35">
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_apply"
+                    style="@style/TEXT_MEDIUM_GREY_10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/apply_day" />
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_apply_txt"
+                    style="@style/TEXT_SEMI_BLACK_10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="03 days" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_weight=".30">
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_leave_bal"
+                    style="@style/TEXT_MEDIUM_GREY_10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/leave_bal" />
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_leave_bal_txt"
+                    style="@style/TEXT_SEMI_BLACK_10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="03" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_weight=".35">
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_approved_by"
+                    style="@style/TEXT_MEDIUM_GREY_10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/approved_by" />
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tv_approved_by_txt"
+                    style="@style/TEXT_SEMI_BLACK_10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:maxLines="1"
+                    android:text="Muhammad arslan" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

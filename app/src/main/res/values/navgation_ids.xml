@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <item name="splash_fragment_action" type="id" />
+    <item name="login_fragment_action" type="id" />
+    <item name="home_fragment_action" type="id" />
+    <item name="leaves_fragment_action" type="id" />
+    <item name="approvals_fragment_action" type="id" />
+    <item name="profile_fragment_action" type="id" />
+    <item name="expense_fragment_action" type="id" />
+    <item name="document_manage_fragment_action" type="id" />
+    <item name="add_expense_fragment_action" type="id" />
+    <item name="request_fragment_action" type="id" />
+    <item name="attendance_stats_fragment_action" type="id" />
+    <item name="my_attendance_detail_fragment_action" type="id" />
+    <item name="team_attendance_detail_fragment_action" type="id" />
+    <item name="my_leave_detail_fragment_action" type="id" />
+    <item name="team_leave_detail_fragment_action" type="id" />
+    <item name="check_in_list_fragment_action" type="id" />
+    <item name="image_detail_fragment_action" type="id" />
+    <item name="add_document_fragment_action" type="id" />
+    <item name="resource_manage_fragment_action" type="id" />
+    <item name="add_resource_manage_fragment_action" type="id" />
+
+
+
+
+</resources>

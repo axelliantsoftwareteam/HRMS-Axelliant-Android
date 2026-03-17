@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/ly_doc_info"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_300sdp"
+        android:background="@drawable/white_round_rec"
+        android:padding="@dimen/_5sdp"
+        app:layout_constraintBottom_toBottomOf="parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/ly_header"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_rectengle"
+            android:backgroundTint="#15D06D"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="@dimen/_6sdp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_team_member"
+                style="@style/TEXT_MEDIUM_WHITE_15"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                tools:text="@string/team_member"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHorizontal_weight="3"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_team_member_txt"
+                style="@style/TEXT_MEDIUM_WHITE_10"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:background="@drawable/circle_no_bg"
+                android:textColor="@color/black"
+                android:padding="@dimen/_5sdp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHorizontal_weight="3"
+                app:layout_constraintStart_toEndOf="@id/tv_team_member"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="20" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <ImageView
+            android:id="@+id/iv_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_8sdp"
+            android:gravity="start|center"
+            android:importantForAccessibility="no"
+            android:src="@drawable/ic_cross_small"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/ly_header"
+            app:layout_constraintBottom_toBottomOf="@+id/ly_header"
+            >
+        </ImageView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_attend"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_300sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ly_header"
+            tools:itemCount="1"
+            android:visibility="visible"
+            tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/today_my_team_attend_row" />
+
+<!--        <com.google.android.material.textview.MaterialTextView-->
+<!--            android:id="@+id/tv_no_record"-->
+<!--            style="@style/TEXT_SEMI_BLACK_15"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:gravity="center"-->
+<!--            android:text="@string/no_record_found"-->
+<!--            android:visibility="visible"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/ly_header" />-->
+
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</layout>

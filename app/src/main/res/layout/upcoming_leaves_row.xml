@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingEnd="@dimen/_5sdp">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/ly_myteam_attend"
+        android:layout_width="@dimen/_170sdp"
+        android:layout_height="@dimen/_140sdp"
+        android:background="@drawable/rounded_leave_cancelled"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/ly_header"
+            android:layout_width="@dimen/_170sdp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_shifts"
+            android:backgroundTint="@color/color_third"
+            android:gravity="start"
+            android:orientation="horizontal"
+            android:padding="@dimen/_5sdp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_start_end"
+                style="@style/TEXT_MEDIUM_WHITE_12"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/_5sdp"
+                tools:text="29 May -30 May"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_total_member_txt"
+            style="@style/TEXT_SEMI_BLACK_12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            tools:text="Bank Holiday"
+            android:textAlignment="textStart"
+            android:textColor="@color/blue"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ly_header" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_day"
+            style="@style/TEXT_MEDIUM_BLACK_10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            tools:text="Out of City"
+            android:textAlignment="textStart"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_total_member_txt" />
+
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_reason"
+            style="@style/TEXT_MEDIUM_GREY_10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:paddingBottom="@dimen/_5sdp"
+            tools:text="Its a public holiday"
+            android:textAlignment="textStart"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_status" />
+
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_status"
+            style="@style/TEXT_SEMI_BLACK_10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_10sdp"
+            android:background="@drawable/rounded_time_bg"
+            android:gravity="center"
+            android:paddingStart="@dimen/_10sdp"
+            android:paddingTop="@dimen/_3sdp"
+            android:paddingEnd="@dimen/_10sdp"
+            android:paddingBottom="@dimen/_3sdp"
+            tools:text="Approved"
+            android:textColor="@color/green"
+            app:layout_constraintTop_toBottomOf="@id/tv_day"
+            app:layout_constraintStart_toStartOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/_40sdp"
+    xmlns:tool="http://schemas.android.com/tools"
+    android:paddingEnd="@dimen/_5sdp"
+    android:paddingTop="@dimen/_3sdp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/ly_present"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_bgg"
+        android:padding="@dimen/_5sdp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/iv_attend"
+            android:layout_width="@dimen/_15sdp"
+            android:layout_height="@dimen/_15sdp"
+            tool:src="@drawable/ic_present"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+        </ImageView>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_attend"
+            style="@style/TEXT_MEDIUM_GREY_10"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:text="@string/present"
+            android:paddingStart="@dimen/_3sdp"
+            android:paddingEnd="@dimen/_3sdp"
+            android:ellipsize="end"
+            android:lines="1"
+            android:textSize="@dimen/_8ssp"
+            app:layout_constraintStart_toEndOf="@+id/iv_attend"
+            app:layout_constraintEnd_toStartOf="@+id/tv_present_txt"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_present_txt"
+            style="@style/TEXT_MEDIUM_WHITE_10"
+            android:layout_width="@dimen/_15sdp"
+            android:layout_height="@dimen/_15sdp"
+            android:background="@drawable/circle_no_bg"
+            android:gravity="center"
+            android:textSize="@dimen/_6ssp"
+            android:backgroundTint="@color/colorApp"
+            android:text="20"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_attend"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf= "@+id/tv_attend"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/start_guideline"
+            style="@style/start_gl"
+            android:orientation="vertical" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/end_guideline"
+            style="@style/end_gl"
+            android:orientation="vertical" />
+
+
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/bottom_guideline"
+            style="@style/bottom_gl" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/top_guideline"
+            style="@style/top_gl" />
+
+        <ImageView
+            android:id="@+id/iv_logo"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:padding="@dimen/_5sdp"
+            android:src="@drawable/ic_applogo"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintTop_toBottomOf="@+id/top_guideline" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/ly_action_btn"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_120sdp"
+            android:layout_margin="@dimen/_20sdp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_logo">
+
+            <LinearLayout
+                android:id="@+id/tv_view_detail"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_80sdp"
+                android:orientation="vertical"
+                android:layout_margin="@dimen/_10sdp"
+                android:gravity="center"
+                android:background="@drawable/rounded_bgg"
+                app:layout_constraintEnd_toStartOf="@+id/tv_delete"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                >
+            <ImageView
+                android:id="@+id/iv_employee"
+                android:layout_width="@dimen/_70sdp"
+                android:layout_height="@dimen/_70sdp"
+                android:padding="@dimen/_5sdp"
+                android:src="@drawable/ic_employee"
+                app:layout_constraintEnd_toStartOf="@+id/tv_delete"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+            </LinearLayout>
+
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_employ"
+                style="@style/TEXT_MEDIUM_BLACK_10"
+                android:layout_width="0dp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:gravity="center"
+                android:text="@string/employe"
+                app:layout_constraintEnd_toEndOf="@+id/tv_view_detail"
+                app:layout_constraintStart_toStartOf="@+id/tv_view_detail"
+                app:layout_constraintTop_toBottomOf="@+id/tv_view_detail" />
+
+
+
+            <LinearLayout
+                android:id="@+id/tv_delete"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_80sdp"
+                android:orientation="vertical"
+                android:layout_margin="@dimen/_10sdp"
+                android:gravity="center"
+                android:background="@drawable/rounded_bgg"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tv_view_detail"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                >
+            <ImageView
+                android:layout_width="@dimen/_70sdp"
+                android:layout_height="@dimen/_70sdp"
+                android:padding="@dimen/_5sdp"
+                android:src="@drawable/ic_vender" />
+            </LinearLayout>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_vendor"
+                style="@style/TEXT_MEDIUM_BLACK_10"
+                android:layout_width="0dp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:gravity="center"
+                android:text="@string/Vendor"
+                app:layout_constraintEnd_toEndOf="@+id/tv_delete"
+                app:layout_constraintStart_toStartOf="@+id/tv_delete"
+                app:layout_constraintTop_toBottomOf="@+id/tv_delete" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_email"
+            style="@style/TEXT_MEDIUM_BLACK_10"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:text="@string/username"
+            android:visibility="invisible"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintTop_toBottomOf="@+id/ly_action_btn" />
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_email"
+            style="@style/OutlinedTextInputLayout"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_marginTop="@dimen/_2sdp"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintTop_toBottomOf="@+id/tv_email">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_email"
+                style="@style/TEXT_MEDIUM_BLACK_10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionNext"
+                android:textAlignment="textStart"
+                android:visibility="invisible"
+                android:inputType="textEmailAddress"
+                android:textColorHint="@color/grey" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_password"
+            style="@style/TEXT_MEDIUM_BLACK_10"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:text="@string/password"
+            android:textAllCaps="true"
+            android:visibility="invisible"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintTop_toBottomOf="@+id/til_email" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_password"
+            style="@style/OutlinedTextInputLayout"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:visibility="invisible"
+            app:endIconMode="password_toggle"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintTop_toBottomOf="@+id/tv_password">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionDone"
+                android:inputType="textPassword"
+                android:textColorHint="@color/grey" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/rb_remember_me"
+            style="@style/CheckBoxStyle"
+            android:text="@string/remember_me"
+            android:visibility="invisible"
+            android:textSize="@dimen/_12ssp"
+            app:layout_constraintStart_toStartOf="@+id/start_guideline"
+            app:layout_constraintTop_toBottomOf="@+id/til_password">
+
+        </com.google.android.material.checkbox.MaterialCheckBox>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_forget_password"
+            style="@style/TEXT_MEDIUM_BLACK_10"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:text="@string/forget_pass"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="@+id/end_guideline"
+            app:layout_constraintTop_toBottomOf="@+id/til_password">
+
+        </com.google.android.material.textview.MaterialTextView>
+
+
+        <com.axelliant.hris.components.RoundedButton
+            android:id="@+id/btn_login"
+            style="@style/ButtonTextStyle"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:layout_marginBottom="@dimen/_10sdp"
+            app:buttonBg="@drawable/rounded_enabled"
+            app:iconVisibility="false"
+            android:visibility="invisible"
+            app:layout_constraintLeft_toRightOf="@id/start_guideline"
+            app:layout_constraintRight_toLeftOf="@id/end_guideline"
+            app:layout_constraintTop_toBottomOf="@+id/tv_forget_password"
+            app:text="@string/login"
+            app:textColor="@color/white">
+
+        </com.axelliant.hris.components.RoundedButton>
+
+        <com.axelliant.hris.components.RoundedButton
+            android:id="@+id/btn_mic_login"
+            style="@style/ButtonTextStyle"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_marginTop="@dimen/_20sdp"
+            app:buttonBg="@drawable/rounded_enabled"
+            app:buttonIcon="@drawable/ic_miclogoone"
+            app:iconVisibility="true"
+            app:isOutlineButton="true"
+            app:layout_constraintHorizontal_bias="0.487"
+            app:layout_constraintLeft_toRightOf="@id/start_guideline"
+            app:layout_constraintRight_toLeftOf="@id/end_guideline"
+            app:layout_constraintTop_toBottomOf="@+id/ly_action_btn"
+            app:layout_constraintBottom_toTopOf="@id/bottom_guideline"
+            app:text="@string/login_mic"
+            app:textColor="@color/colorApp" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_app_version"
+            style="@style/TEXT_MEDIUM_GREY_10"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            tools:text="v "
+            android:layout_marginBottom="@dimen/_5sdp"
+            app:layout_constraintLeft_toRightOf="@id/start_guideline"
+            app:layout_constraintRight_toLeftOf="@id/end_guideline"
+            app:layout_constraintBottom_toTopOf="@+id/bottom_guideline"  />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

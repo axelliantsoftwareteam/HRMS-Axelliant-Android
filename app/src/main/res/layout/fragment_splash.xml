@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/start_guideline"
+            style="@style/start_gl"
+            android:orientation="vertical" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/end_guideline"
+            style="@style/end_gl"
+            android:orientation="vertical" />
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/bottom_guideline"
+            style="@style/bottom_gl" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/top_guideline"
+            style="@style/top_gl" />
+
+        <ImageView
+            android:id="@+id/myImageView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/applogo"
+            android:layout_marginStart="@dimen/_50sdp"
+            android:padding="@dimen/_15sdp"
+            app:layout_constraintTop_toBottomOf="@id/top_guideline"
+            app:layout_constraintBottom_toTopOf="@id/bottom_guideline"
+            app:layout_constraintRight_toLeftOf="@id/end_guideline"
+            app:layout_constraintLeft_toRightOf="@id/start_guideline"
+            />
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</LinearLayout>

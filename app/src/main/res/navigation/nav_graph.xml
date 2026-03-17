@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_nav_graph"
+    app:startDestination="@id/splashFragment">
+
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="com.axelliant.hris.screens.SplashFragment"
+        android:label="Splash Fragment"
+        tools:layout="@layout/fragment_splash">
+
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.axelliant.hris.screens.LoginFragment"
+        android:label="Login Fragment"
+        tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/action_secondFragment_to_firstFragment"
+            app:destination="@id/splashFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.axelliant.hris.screens.HomeFragment"
+        android:label="Home Fragment"
+        tools:layout="@layout/fragment_home">
+
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/leavesFragment"
+        android:name="com.axelliant.hris.screens.LeavesFragment"
+        android:label="Leaves Fragment"
+        tools:layout="@layout/fragment_leaves">
+
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.axelliant.hris.screens.ProfileFragment"
+        android:label="Profile Fragment"
+        tools:layout="@layout/fragment_profile">
+
+    </fragment>
+    <fragment
+        android:id="@+id/expenseFragment"
+        android:name="com.axelliant.hris.screens.ExpenseFragment"
+        android:label="Expense Fragment"
+        tools:layout="@layout/fragment_expense">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/requestFragment"
+        android:name="com.axelliant.hris.screens.RequestFragment"
+        android:label="Request Fragment"
+        tools:layout="@layout/fragment_request">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/approvalFragment"
+        android:name="com.axelliant.hris.screens.ApprovalsFragment"
+        android:label="Expense Fragment"
+        tools:layout="@layout/fragment_approvals">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/attendanceStatsFragment"
+        android:name="com.axelliant.hris.screens.AttendanceStatsFragment"
+        android:label="Apply Leaves Fragment"
+        tools:layout="@layout/fragment_attendance_stats">
+
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/myAttendanceDetailFragment"
+        android:name="com.axelliant.hris.screens.MyAttendanceDetailFragment"
+        android:label="My Attendance Detail Fragment"
+        tools:layout="@layout/fragment_my_attendance_detail">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/teamAttendanceDetailFragment"
+        android:name="com.axelliant.hris.screens.TeamAttendanceDetailFragment"
+        android:label="Team Attendance Detail Fragment"
+        tools:layout="@layout/fragment_team_attendance_detail">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/myLeaveDetailFragment"
+        android:name="com.axelliant.hris.screens.MyLeaveDetailFragment"
+        android:label="My Leave Detail Fragment"
+        tools:layout="@layout/fragment_my_leave_detail">
+
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/teamLeaveDetailFragment"
+        android:name="com.axelliant.hris.screens.TeamLeaveDetailFragment"
+        android:label="Team Leave Detail Fragment"
+        tools:layout="@layout/fragment_my_team_leave_detail">
+
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/checkInListFragment"
+        android:name="com.axelliant.hris.screens.CheckInListFragment"
+        android:label="Expense List Fragment"
+        tools:layout="@layout/fragment_check_in_list">
+
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/addExpenseFragment"
+        android:name="com.axelliant.hris.screens.AddExpenseFragment"
+        android:label="Add Expense Fragment"
+        tools:layout="@layout/fragment_add_expense">
+
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/imageDetailFragment"
+        android:name="com.axelliant.hris.screens.ImageDetailFragment"
+        android:label="Image Detail Fragment"
+        tools:layout="@layout/fragment_image_detail">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/documentManageFragment"
+        android:name="com.axelliant.hris.screens.DocumentManagementFragment"
+        android:label="Document Fragment"
+        tools:layout="@layout/fragment_document_management">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/addDocumentFragment"
+        android:name="com.axelliant.hris.screens.AddDocumnetFragment"
+        android:label="Add Document Fragment"
+        tools:layout="@layout/fragment_add_documnet">
+
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/resourceManageFragment"
+        android:name="com.axelliant.hris.screens.ResourceManagementFragment"
+        android:label="Resource Fragment"
+        tools:layout="@layout/fragment_resource_managment">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/addResourceManageFragment"
+        android:name="com.axelliant.hris.screens.AddResourceManageFragment"
+        android:label="Add Resource Manage Fragment"
+        tools:layout="@layout/fragment_add_resource_manage">
+
+    </fragment>
+
+
+
+</navigation>
