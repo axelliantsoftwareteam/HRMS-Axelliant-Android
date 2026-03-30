@@ -18,17 +18,21 @@ val hasReleaseSigning =
 android {
     namespace = "com.axelliant.hris"
     compileSdk = 36
-
+    ndkVersion = "26.1.10909125"
     defaultConfig {
         applicationId = "com.axelliant.hris"
         minSdk = 24
         targetSdk = 36
-        versionCode = 7
-        versionName = "1.6"
+        versionCode = 15
+        versionName = "1.15"
         multiDexEnabled = true
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        ndk {
+            abiFilters += listOf("arm64-v8a", "armeabi-v7a")
+        }
     }
+
 
     signingConfigs {
         create("release") {
@@ -63,6 +67,12 @@ android {
     buildFeatures {
         viewBinding = true
         dataBinding = true
+    }
+
+    packagingOptions {
+        jniLibs {
+            useLegacyPackaging = false
+        }
     }
 }
 
@@ -100,7 +110,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.livedata.ktx)
 
     implementation(libs.material.v120alpha03)
-    implementation ("com.microsoft.identity.client:msal:5.+")
+    implementation("com.microsoft.identity.client:msal:5.6.0")
     {
         exclude(group = "io.opentelemetry")
         exclude (group="com.microsoft.device.display")

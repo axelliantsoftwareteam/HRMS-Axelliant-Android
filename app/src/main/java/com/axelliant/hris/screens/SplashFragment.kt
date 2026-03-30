@@ -95,49 +95,38 @@ class SplashFragment : BaseFragment() {
     }
 
     private fun loadGif() {
-        binding?.let {
+        binding?.let { viewBinding ->
             Glide.with(this)
-                .asGif()  // Load as animated GIF
-                .load(R.drawable.applogo)  // Call your GIF here (url, raw, etc.)
+                .asGif()
+                .load(R.drawable.applogo)
                 .listener(object : RequestListener<GifDrawable> {
                     override fun onLoadFailed(
                         e: GlideException?,
                         model: Any?,
-                        target: Target<GifDrawable>?,
+                        target: Target<GifDrawable>,
                         isFirstResource: Boolean
                     ): Boolean {
                         return false
                     }
 
                     override fun onResourceReady(
-                        resource: GifDrawable?,
-                        model: Any?,
+                        resource: GifDrawable,
+                        model: Any,
                         target: Target<GifDrawable>?,
-                        dataSource: DataSource?,
+                        dataSource: DataSource,
                         isFirstResource: Boolean
                     ): Boolean {
-                        resource?.setLoopCount(1)
-                        resource?.registerAnimationCallback(object :
+                        resource.setLoopCount(1)
+                        resource.registerAnimationCallback(object :
                             Animatable2Compat.AnimationCallback() {
                             override fun onAnimationEnd(drawable: Drawable) {
-//                                do whatever after specified number of loops complete
-                             /*   if (sessionManager.checkLogin()) {
-                                    AppNavigator.navigateToHome()
-                                } else {
-                                    AppNavigator.navigateToLogin()
-                                }*/
-
-                               AppNavigator.navigateToHome()
-
-
+                                AppNavigator.navigateToHome()
                             }
                         })
                         return false
                     }
-
                 })
-                .into(it.myImageView)
+                .into(viewBinding.myImageView)
         }
     }
-
 }

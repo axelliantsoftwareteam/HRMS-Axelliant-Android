@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -82,7 +83,6 @@
                 app:layout_constraintEnd_toEndOf="@+id/tv_view_detail"
                 app:layout_constraintStart_toStartOf="@+id/tv_view_detail"
                 app:layout_constraintTop_toBottomOf="@+id/tv_view_detail" />
-
             <LinearLayout
                 android:id="@+id/tv_delete"
                 android:layout_width="0dp"
@@ -243,5 +243,15 @@
             app:text="@string/login_mic"
             app:textColor="@color/colorApp" />
 
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_app_version"
+            style="@style/TEXT_MEDIUM_GREY_10"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            tools:text="v "
+            android:layout_marginBottom="@dimen/_5sdp"
+            app:layout_constraintLeft_toRightOf="@id/start_guideline"
+            app:layout_constraintRight_toLeftOf="@id/end_guideline"
+            app:layout_constraintBottom_toTopOf="@+id/bottom_guideline"  />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

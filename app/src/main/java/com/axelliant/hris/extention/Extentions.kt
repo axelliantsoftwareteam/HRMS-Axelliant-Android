@@ -128,7 +128,7 @@ fun String?.toUserSafeErrorMessage(): String {
     return this.toUserErrorPresentation().userMessage
 }
 
-internal fun String?.shouldOfferSupportForError(): Boolean {
+fun String?.shouldOfferSupportForError(): Boolean {
     return this.toUserErrorPresentation().shouldOfferSupport
 }
 
