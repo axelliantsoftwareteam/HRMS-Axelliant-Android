@@ -3,7 +3,6 @@ package com.axelliant.hris.screens
 import android.content.Context
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
-import android.content.pm.Signature
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
@@ -12,6 +11,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.vectordrawable.graphics.drawable.Animatable2Compat
 import com.axelliant.hris.R
 import com.axelliant.hris.base.BaseFragment
@@ -44,7 +44,6 @@ class SplashFragment : BaseFragment() {
         _binding = FragmentSplashBinding.inflate(inflater).also { _binding = it }
         return binding?.root
     }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         // Load GIF when running the app:
@@ -57,7 +56,7 @@ class SplashFragment : BaseFragment() {
         try {
             val info: PackageInfo = pContext.getPackageManager()
                 .getPackageInfo(pContext.getPackageName(), PackageManager.GET_SIGNATURES)
-            for (signature in info.signatures) {
+            for (signature in info.signatures!!) {
                 val md = MessageDigest.getInstance("SHA")
                 md.update(signature.toByteArray())
                 val hashKey = String(Base64.encode(md.digest(), 0))
@@ -72,19 +71,15 @@ class SplashFragment : BaseFragment() {
 
     private fun getSignatureHash() {
         try {
-            val info = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                requireContext().packageManager.getPackageInfo(
-                    "com.axelliant.android_erp",
-                    PackageManager.GET_SIGNING_CERTIFICATES
-                )
+            val info = requireContext().packageManager.getPackageInfo(
+                "com.axelliant.android_erp",
+                PackageManager.GET_SIGNING_CERTIFICATES
+            )
+            for (signature in if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                info.signingInfo?.apkContentsSigners!!
             } else {
-                @Suppress("DEPRECATION")
-                requireContext().packageManager.getPackageInfo(
-                    "com.axelliant.android_erp",
-                    PackageManager.GET_SIGNATURES
-                )
-            }
-            for (signature in getPackageSignatures(info)) {
+                TODO("VERSION.SDK_INT < P")
+            }) {
                 val md = MessageDigest.getInstance("SHA")
                 md.update(signature.toByteArray())
                 Log.d(
@@ -99,57 +94,39 @@ class SplashFragment : BaseFragment() {
         }
     }
 
-    private fun getPackageSignatures(info: PackageInfo): Array<Signature> {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            info.signingInfo.apkContentsSigners
-        } else {
-            @Suppress("DEPRECATION")
-            info.signatures
-        }
-    }
-
     private fun loadGif() {
-        binding?.let {
+        binding?.let { viewBinding ->
             Glide.with(this)
-                .asGif()  // Load as animated GIF
-                .load(R.drawable.applogo)  // Call your GIF here (url, raw, etc.)
+                .asGif()
+                .load(R.drawable.applogo)
                 .listener(object : RequestListener<GifDrawable> {
                     override fun onLoadFailed(
                         e: GlideException?,
                         model: Any?,
-                        target: Target<GifDrawable>?,
+                        target: Target<GifDrawable>,
                         isFirstResource: Boolean
                     ): Boolean {
                         return false
                     }
 
                     override fun onResourceReady(
-                        resource: GifDrawable?,
-                        model: Any?,
+                        resource: GifDrawable,
+                        model: Any,
                         target: Target<GifDrawable>?,
-                        dataSource: DataSource?,
+                        dataSource: DataSource,
                         isFirstResource: Boolean
                     ): Boolean {
-                        resource?.setLoopCount(1)
-                        resource?.registerAnimationCallback(object :
+                        resource.setLoopCount(1)
+                        resource.registerAnimationCallback(object :
                             Animatable2Compat.AnimationCallback() {
                             override fun onAnimationEnd(drawable: Drawable) {
-                                //do whatever after specified number of loops complete
-                                if (sessionManager.checkLogin()) {
-                                    AppNavigator.navigateToHome()
-                                } else {
-                                    AppNavigator.navigateToLogin()
-                                }
-
-
+                                AppNavigator.navigateToHome()
                             }
                         })
                         return false
                     }
-
                 })
-                .into(it.myImageView)
+                .into(viewBinding.myImageView)
         }
     }
-
 }

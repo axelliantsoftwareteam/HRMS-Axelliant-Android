@@ -339,8 +339,7 @@
                      android:layout_marginTop="@dimen/_5sdp"
                      app:layout_constraintEnd_toEndOf="parent"
                      app:layout_constraintStart_toStartOf="parent"
-                     app:layout_constraintTop_toBottomOf="@+id/ly_range_date"
-                     app:layout_constraintBottom_toTopOf="@+id/tv_reason_header"
+                     app:layout_constraintTop_toBottomOf="@+id/ly_halfday"
                      >
 
                      <com.google.android.material.textview.MaterialTextView
@@ -439,6 +438,86 @@
                      </androidx.constraintlayout.widget.ConstraintLayout>
 
                  </androidx.constraintlayout.widget.ConstraintLayout>
+
+                 <CheckBox
+                     android:id="@+id/half_day"
+                     style="@style/CheckBoxStyle"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     app:layout_constraintStart_toStartOf="parent"
+                     app:layout_constraintTop_toBottomOf="@+id/ly_range_date"
+                     android:text="@string/half_day"
+                     android:textSize="@dimen/_10ssp"
+                     android:layout_margin="@dimen/_5sdp">
+                 </CheckBox>
+
+                 <androidx.constraintlayout.widget.ConstraintLayout
+                     android:id="@+id/ly_halfday"
+                     android:layout_width="0dp"
+                     android:layout_height="wrap_content"
+                     android:visibility="gone"
+                     android:layout_marginTop="@dimen/_5sdp"
+                     app:layout_constraintEnd_toEndOf="parent"
+                     app:layout_constraintStart_toStartOf="parent"
+                     app:layout_constraintTop_toBottomOf="@+id/half_day">
+
+                     <com.google.android.material.textview.MaterialTextView
+                         android:id="@+id/tv_halfday_date"
+                         style="@style/TEXT_MEDIUM_BLACK_10"
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:layout_margin="@dimen/_5sdp"
+                         android:text="@string/half_day_date"
+                         android:textAlignment="textStart"
+                         app:layout_constraintStart_toStartOf="parent"
+                         app:layout_constraintTop_toTopOf="parent" />
+
+                     <androidx.constraintlayout.widget.ConstraintLayout
+                         android:id="@+id/ly_halfday_date"
+                         android:layout_width="0dp"
+                         android:layout_height="@dimen/_40sdp"
+                         android:layout_marginTop="@dimen/_5sdp"
+                         android:layout_marginEnd="@dimen/_5sdp"
+                         android:background="@drawable/rounded_leave_filter"
+                         android:orientation="vertical"
+                         android:padding="@dimen/_8sdp"
+                         app:layout_constraintEnd_toEndOf="parent"
+                         app:layout_constraintStart_toStartOf="@+id/tv_halfday_date"
+                         app:layout_constraintTop_toBottomOf="@+id/tv_halfday_date">
+
+
+                         <com.google.android.material.textview.MaterialTextView
+                             android:id="@+id/tv_half_date_txt"
+                             style="@style/TEXT_MEDIUM_BLACK_10"
+                             android:layout_width="0dp"
+                             android:layout_height="wrap_content"
+                             android:layout_marginStart="@dimen/_5sdp"
+                             android:layout_marginTop="@dimen/_3sdp"
+                             android:hint="@string/select_half_day"
+                             android:textAlignment="textStart"
+                             app:layout_constraintBottom_toBottomOf="parent"
+                             app:layout_constraintEnd_toEndOf="parent"
+                             app:layout_constraintStart_toEndOf="@+id/img_half_cal"
+                             app:layout_constraintTop_toTopOf="parent" />
+
+                         <ImageView
+                             android:id="@+id/img_half_cal"
+                             android:layout_width="wrap_content"
+                             android:layout_height="wrap_content"
+                             android:layout_marginTop="@dimen/_3sdp"
+                             android:layout_marginEnd="@dimen/_5sdp"
+                             android:src="@drawable/ic_calendar"
+                             app:layout_constraintBottom_toBottomOf="parent"
+                             app:layout_constraintStart_toStartOf="parent"
+                             app:layout_constraintTop_toTopOf="parent"
+                             android:contentDescription="@string/todo">
+
+                         </ImageView>
+                     </androidx.constraintlayout.widget.ConstraintLayout>
+                 </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
                  <com.google.android.material.textview.MaterialTextView
                      android:id="@+id/tv_reason_header"
                      style="@style/TEXT_MEDIUM_BLACK_10"

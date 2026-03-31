@@ -13,6 +13,8 @@ import com.axelliant.hris.model.attendance.expenseApprovalList
 import com.axelliant.hris.model.base.BaseApiModel
 import com.axelliant.hris.model.base.BaseModel
 import com.axelliant.hris.model.base.Meta
+import com.axelliant.hris.model.documentRequest.CreateDocument
+import com.axelliant.hris.model.documentRequest.MyDocumentResponse
 import com.axelliant.hris.model.expense.CreateExpense
 import com.axelliant.hris.model.expense.DeleteAttachment
 import com.axelliant.hris.model.expense.GetExpenseResponse
@@ -87,6 +89,62 @@ class ExpenseRepo(private var apiInterface: ApiInterface) {
 
         return serverResponse
     }
+
+    fun getDocumentDetail(attendanceInput: AttendanceInput): MutableLiveData<BaseApiModel<MyDocumentResponse>> {
+        val serverResponse = MutableLiveData<BaseApiModel<MyDocumentResponse>>()
+
+        val call: Call<ResponseBody> = apiInterface.callDocumentRequestDetail("token ${AppConst.TOKEN}",
+            AttRequest().apply {
+                this.start_date = attendanceInput.startDate
+                this.end_date = attendanceInput.endDate
+                this.filters = attendanceInput.filters
+            }
+
+        )
+
+        Log.e("HTTP Request", " " + call?.request().toString())
+
+        call.enqueue(object : BaseCallBack<ResponseBody>(call) {
+            override fun onFinalSuccess(
+                call: Call<ResponseBody>,
+                response: Response<ResponseBody>
+            ) {
+
+                Log.e("API success", " " + response.body())
+
+                val type: Type = object : TypeToken<BaseApiModel<MyDocumentResponse>>() {}.type
+                val jsonString = response.body()?.string()
+                val userModel =
+                    Gson().fromJson<BaseApiModel<MyDocumentResponse>>(jsonString, type)
+                serverResponse.value = userModel
+            }
+
+
+            override fun onFinalFailure(
+                errorString: String?
+            ) {
+
+                Log.e("API Failure", " $errorString")
+
+                serverResponse.value =
+                    BaseApiModel(
+                        BaseModel(
+                            MyDocumentResponse(
+                                meta = Meta(
+                                    errorString.toString(),
+                                    false
+                                )
+                            )
+                        )
+                    )
+
+            }
+
+        })
+
+        return serverResponse
+    }
+
     fun createMyExpenseImage(imagePath: ImagePath): MutableLiveData<BaseApiModel<PostExpenseImageResponse>> {
         val serverResponse = MutableLiveData<BaseApiModel<PostExpenseImageResponse>>()
         val docName: MultipartBody.Part = MultipartBody.Part.createFormData("docname", imagePath.docname!!)
@@ -124,6 +182,56 @@ class ExpenseRepo(private var apiInterface: ApiInterface) {
                     BaseApiModel(
                         BaseModel(
                             PostExpenseImageResponse(
+                                meta = Meta(
+                                    errorString.toString(),
+                                    false
+                                )
+                            )
+                        )
+                    )
+
+            }
+
+        })
+
+        return serverResponse
+    }
+
+    fun createDocument(
+        createDocument: CreateDocument
+    ): MutableLiveData<BaseApiModel<PostResponse>> {
+        val serverResponse = MutableLiveData<BaseApiModel<PostResponse>>()
+
+        val call: Call<ResponseBody>?
+        call = apiInterface.callCreateDocument("token ${AppConst.TOKEN}", createDocument)
+        Log.e("HTTP Request", " " + call.request().toString())
+
+        call.enqueue(object : BaseCallBack<ResponseBody>(call) {
+            override fun onFinalSuccess(
+                call: Call<ResponseBody>,
+                response: Response<ResponseBody>
+            ) {
+
+                Log.e("API success", " " + response.body())
+
+                val type: Type = object : TypeToken<BaseApiModel<PostResponse>>() {}.type
+                val jsonString = response.body()?.string()
+                val userModel =
+                    Gson().fromJson<BaseApiModel<PostResponse>>(jsonString, type)
+                serverResponse.value = userModel
+            }
+
+
+            override fun onFinalFailure(
+                errorString: String?
+            ) {
+
+                Log.e("API Failure", " $errorString")
+
+                serverResponse.value =
+                    BaseApiModel(
+                        BaseModel(
+                            PostResponse(
                                 meta = Meta(
                                     errorString.toString(),
                                     false

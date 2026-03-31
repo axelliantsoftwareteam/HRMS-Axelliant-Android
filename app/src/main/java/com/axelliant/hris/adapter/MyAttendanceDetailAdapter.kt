@@ -99,7 +99,7 @@ class MyAttendanceDetailAdapter(
 
             binding.tvDate.text = attendanceDetail.date
 
-            binding.tvAttendStatus.text = attendanceDetail.custom_attendance_status
+            binding.tvAttendStatus.text = attendanceDetail.requested
 
 
             binding.tvShiftTxt.text = attendanceDetail.shift

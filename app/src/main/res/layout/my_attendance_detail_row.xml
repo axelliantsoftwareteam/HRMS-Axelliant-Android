@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
     <LinearLayout
@@ -69,7 +70,7 @@
         android:id="@+id/ly_drop_down"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
+        android:visibility="visible"
         android:padding="@dimen/_5sdp">
 
 
@@ -81,7 +82,7 @@
             android:background="@drawable/rounded_time_bg"
             android:gravity="start"
             android:padding="@dimen/_5sdp"
-            android:text="Approved"
+            tools:text="Approved"
             android:textColor="@color/green"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

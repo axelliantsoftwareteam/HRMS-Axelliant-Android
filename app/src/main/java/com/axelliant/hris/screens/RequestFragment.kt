@@ -5,6 +5,7 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -42,8 +43,10 @@ import com.axelliant.hris.viewmodel.RequestViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.gson.Gson
 import org.koin.android.ext.android.inject
+import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
+import java.util.Locale
 
 
 const val leaveType = "Select leave type"
@@ -52,11 +55,14 @@ const val locationType = "Select location"
 
 class RequestFragment : BaseFragment() {
 
-    private var daysCount: Long?=null
+    private var halfDayCount: Double? = null
+    private var ishalfday: Boolean? = null
+    private var daysCount: Long? = null
     private var currentFilter = RequestFilter.LEAVE
     private var currentDateString: String? = null
     private var currentTimeString: String? = null
 
+    private var halfDateString: String? = null
     private var startDateString: String? = null
     private var endDateString: String? = null
     private var selectedDateRange: String? = null
@@ -98,13 +104,11 @@ class RequestFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (arguments != null && requireArguments().containsKey(RequestType))
-        {
+        if (arguments != null && requireArguments().containsKey(RequestType)) {
             isUpdate = true
 
             val type = arguments?.getString(RequestType, RequestFilter.LEAVE.name)
-            if (type == RequestFilter.LEAVE.name)
-            {
+            if (type == RequestFilter.LEAVE.name) {
                 currentFilter = RequestFilter.LEAVE
                 val leaveDetail = Gson().fromJson(
                     arguments?.getString(LeaveRequestParam),
@@ -190,7 +194,7 @@ class RequestFragment : BaseFragment() {
                     else
                         clearAttendanceForm()
 
-                    Handler().postDelayed({
+                    Handler(Looper.getMainLooper()).postDelayed({
                         // do stuff
                         AppNavigator.moveBackToPreviousFragment()
                     }, 200)
@@ -205,7 +209,9 @@ class RequestFragment : BaseFragment() {
             EventObserver { response ->
 
                 if (response?.meta?.status == true) {
-                    binding?.tvLeaveCountTxt?.text=response.days?.toInt().toString()
+                    halfDayCount = response.days
+                    binding?.tvLeaveCountTxt?.text = halfDayCount.toString()
+
                 } else {
                     requireContext().showErrorMsg(response?.meta?.message.toString())
                 }
@@ -225,7 +231,7 @@ class RequestFragment : BaseFragment() {
                         clearAttendanceForm()
 
 
-                    Handler().postDelayed({
+                    Handler(Looper.getMainLooper()).postDelayed({
                         // do stuff
                         AppNavigator.moveBackToPreviousFragment()
                     }, 200)
@@ -300,6 +306,20 @@ class RequestFragment : BaseFragment() {
 
         eventSelection()
 
+        binding?.halfDay?.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                ishalfday = isChecked
+                binding?.lyHalfday?.isVisible = (halfDayCount?.toInt() ?: 0) > 1
+            } else {
+                ishalfday = isChecked
+                binding?.lyHalfday?.isVisible = false
+                halfDateString = null
+                binding?.tvHalfDateTxt?.text = halfDateString
+            }
+            if (startDateString != null && endDateString != null)
+                getDayCount()
+        }
+
         binding?.btnApply?.setOnClickListener {
 
             addUpdateCall()
@@ -340,9 +360,14 @@ class RequestFragment : BaseFragment() {
             pickTime()
         }
         binding?.lyStartDate?.setOnClickListener {
+            binding?.halfDay?.isChecked = false
             datePickerDialog()
         }
 
+        binding?.lyHalfdayDate?.setOnClickListener {
+
+            showDatePicker()
+        }
 
 
     }
@@ -372,6 +397,8 @@ class RequestFragment : BaseFragment() {
                             this.leave_type = leaveItem.name
                             this.post_date = Utils.getServerFormat()
                             this.leave_id = leaveId
+                            this.half_day_date = halfDateString
+                            this.half_day = ishalfday
 
                         })
                     } else {
@@ -381,6 +408,8 @@ class RequestFragment : BaseFragment() {
                             this.leave_reason = binding?.etLeaveReason?.text.toString()
                             this.leave_type = leaveItem.name
                             this.post_date = Utils.getServerFormat()
+                            this.half_day_date = halfDateString
+                            this.half_day = ishalfday
 
                         })
                     }
@@ -525,6 +554,32 @@ class RequestFragment : BaseFragment() {
 
     }
 
+    private fun showDatePicker() {
+        val calendar = Calendar.getInstance()
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH)
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+        val datePickerDialog = DatePickerDialog(
+            requireContext(),
+            { _, selectedYear, selectedMonth, selectedDay ->
+                // Set the selected date in a Calendar instance
+                val selectedCalendar = Calendar.getInstance().apply {
+                    set(selectedYear, selectedMonth, selectedDay)
+                }
+
+                // Format the date as "yyyy-MM-dd"
+                val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                halfDateString = dateFormat.format(selectedCalendar.time)
+
+                binding?.tvHalfDateTxt?.text = halfDateString
+                getDayCount()
+            }, year, month, day
+        )
+
+        datePickerDialog.show()
+    }
+
     private fun datePickerDialog() {
         // Creating a MaterialDatePicker builder for selecting a date range
         val builder = MaterialDatePicker.Builder.dateRangePicker()
@@ -544,9 +599,8 @@ class RequestFragment : BaseFragment() {
 
             // Calculate the difference in days
             val differenceInMillis = endDate - startDate
-             daysCount = differenceInMillis / (1000 * 60 * 60 * 24) // Convert milliseconds to days
+            daysCount = differenceInMillis / (1000 * 60 * 60 * 24) // Convert milliseconds to days
 
-            // Log or display the number of days in the range
             Log.d("DateRange", "Number of days: $daysCount")
             // Creating the date range string
             selectedDateRange = "$startDateString - $endDateString"
@@ -561,13 +615,7 @@ class RequestFragment : BaseFragment() {
         if (startDateString != null && endDateString != null) {
             binding?.tvStartDateTxt?.text = startDateString
             binding?.tvEndDateTxt?.text = endDateString
-
-            requestViewModel.getLeaveCountOnDate(LeaveCountByDaysRequest().apply {
-                this.leave_type = selectedLeaveType
-                this.from_date = startDateString
-                this.to_date = endDateString
-
-            })
+            getDayCount()
 
         } else {
             binding?.tvStartDateTxt?.text = null
@@ -578,6 +626,18 @@ class RequestFragment : BaseFragment() {
 
         }
 
+    }
+
+    private fun getDayCount() {
+
+
+        requestViewModel.getLeaveCountOnDate(LeaveCountByDaysRequest().apply {
+            this.leave_type = selectedLeaveType
+            this.from_date = startDateString
+            this.to_date = endDateString
+            this.half_day = ishalfday
+            this.half_day_date = halfDateString
+        })
     }
 
     private fun eventSelection() {
@@ -672,7 +732,7 @@ class RequestFragment : BaseFragment() {
                 id: Long
             ) {
 
-                selectedLeaveType=finalLeavesArray[position].name.toString()
+                selectedLeaveType = finalLeavesArray[position].name.toString()
 
                 binding?.tvRemainingLeaveTxt?.text =
                     finalLeavesArray[position].remaining_leaves.toString()
