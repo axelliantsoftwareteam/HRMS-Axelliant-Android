@@ -295,7 +295,7 @@
     <style name="CheckBoxStyle" parent="Base.Widget.Material3.CompoundButton.CheckBox">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="titleTextStyle">@style/TEXT_REGULAR_0C0C0C_15</item>
+        <item name="titleTextStyle">@style/TEXT_MEDIUM_BLACK_10</item>
         <item name="buttonTint">@color/black</item>
     </style>
     <style name="TEXT_REGULAR_0C0C0C_15" parent="@style/TextAppearance.MaterialComponents.Subtitle1">
@@ -312,7 +312,7 @@
     <!-- outline text input layout!-->
 
     <style name="OutlinedTextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-        <item name="boxStrokeColor">@color/black</item>
+        <item name="boxStrokeColor">@color/color_file</item>
         <item name="colorPrimary">@color/black</item>
         <item name="shapeAppearanceOverlay">@style/RoundCornerShapeAppearanceOverlay</item>
         <item name="hintEnabled">false</item>
@@ -321,7 +321,7 @@
     <!--    rounded corner-->
     <style name="RoundCornerShapeAppearanceOverlay" parent="">
         <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">@dimen/_15ssp</item> <!-- Adjust the corner size as needed -->
+        <item name="cornerSize">@dimen/_8sdp</item> <!-- Adjust the corner size as needed -->
     </style>
 
 
@@ -349,8 +349,6 @@
         <item name="cornerSize">2%</item>
     </style>
 
-
-
     <style name="CustomDatePickerDialog" parent="Theme.AppCompat.Light.Dialog">
         <!-- Customize your theme -->
         <item name="android:datePickerDialogTheme">@style/CustomDatePicker</item>
@@ -360,6 +358,8 @@
         <item name="android:headerBackground">@color/colorApp</item>
         <item name="android:calendarTextColor">@color/black</item>
     </style>
+
+
 
     <style name="my_dialog_theme" parent="ThemeOverlay.AppCompat.Dialog">
         <item name="colorAccent">@color/colorApp</item>                   <!--header background-->
@@ -374,5 +374,19 @@
     </style>
     <style name="Widget.Demo.BottomSheet" parent="Widget.MaterialComponents.BottomSheet">
         <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.Demo</item>
+    </style>
+
+    <!-- this is for your dialog. To make round corners -->
+    <style name="alert_dialog_round_corners" parent="@style/Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:windowBackground">@drawable/dialog_background</item>
+        <item name="android:buttonBarButtonStyle">@style/alert_dialog_button_style</item>
+    </style>
+    <!-- this one is for your buttons. To make them NOT TRANSPARENT -->
+    <style name="alert_dialog_button_style" parent="">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:layout_margin">8dp</item>
+        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:background">@drawable/alert_dialog_button_background</item>
+        <item name="android:layout_gravity">center</item>
     </style>
 </resources>

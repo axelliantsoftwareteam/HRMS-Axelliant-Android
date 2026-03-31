@@ -5,6 +5,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import com.axelliant.hris.config.AppConst
 import com.axelliant.hris.config.AppConst.SERVER_DATE_FORMAT
+import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -33,6 +34,20 @@ object Utils {
                 return sdf.format(Date())*/
     }
 
+    fun formatTitleDate(input: String): String {
+        try {
+            val inputFormatter = SimpleDateFormat(AppConst.RESOURCE_DATE_FORMAT, Locale.ENGLISH)
+            val date = inputFormatter.parse(input)
+
+            val outputFormatter = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+            val formattedDate = date?.let { outputFormatter.format(it) } ?: input
+
+            return " $formattedDate"
+        } catch (e: ParseException) {
+            e.printStackTrace()
+            return input
+        }
+    }
 
     fun getLastWeek(): Date {
         val cal = Calendar.getInstance()

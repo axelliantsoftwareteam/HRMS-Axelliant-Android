@@ -55,6 +55,7 @@ class ApprovalsDetailAdapter(
         return detailArrayList.size
     }
 
+
     class AccountsVH(val binding: MyTeamApprovalRowBinding) :
         RecyclerView.ViewHolder(binding.root) {
 

@@ -10,5 +10,6 @@ enum class LeaveStatus (val value: String){
     CHECKOUT("Check Out"),
     Absent("Absent"),
     Present("Present"),
-    OnLeave("OnLeave")
+    OnLeave("OnLeave"),
+    Submit("Submit")
 }

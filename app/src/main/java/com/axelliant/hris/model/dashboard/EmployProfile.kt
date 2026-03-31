@@ -5,8 +5,8 @@ import com.google.gson.annotations.SerializedName
  class EmployProfile{
      val company: String?=null
      val date_of_birth: String?=null
-     @SerializedName(value = "employee_code", alternate = ["custom_employee_code"])
-     val employee_code: String?=null
+/*     @SerializedName(value = "employee_code", alternate = ["custom_employee_code"])
+     val employee_code: String?=null*/
      var employee_name: String?=null
      val gender: String?=null
      val image: String?=null
@@ -16,6 +16,8 @@ import com.google.gson.annotations.SerializedName
      val department: String?=null
      val designation: String?=null
      val reports_to:ReportsTo?=null
+     val custom_employee_code:String?=null
+     val allow_punch_in:Int?=null
      val reporting_to_emp: ArrayList<EmployProfile>?=null
 
  }

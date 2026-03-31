@@ -46,7 +46,7 @@ class LoginFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
+        binding.tvAppVersion.text = appVersion()
         binding.btnMicLogin.setOnClickListener(View.OnClickListener {
 
             if (mSingleAccountApp == null) {

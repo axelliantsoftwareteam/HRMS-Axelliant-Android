@@ -1,31 +1,32 @@
 package com.axelliant.hris.screens
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.axelliant.hris.R
-import com.axelliant.hris.adapter.ExpenseAdapter
+import com.axelliant.hris.adapter.DocumentRequestAdapter
 import com.axelliant.hris.adapter.SubFilterAdapter
 import com.axelliant.hris.base.BaseFragment
 import com.axelliant.hris.callback.AdapterItemClick
-import com.axelliant.hris.config.AppConst
+import com.axelliant.hris.databinding.DialogRequestDocumentBinding
 import com.axelliant.hris.databinding.FragmentDocumentManagementBinding
 import com.axelliant.hris.enums.AttendanceFilter
 import com.axelliant.hris.event.EventObserver
 import com.axelliant.hris.extention.showErrorMsg
 import com.axelliant.hris.model.attendance.AttendanceInput
 import com.axelliant.hris.model.dashboard.FilterModel
-import com.axelliant.hris.model.expense.Expense
-import com.axelliant.hris.navigation.AppNavigator
-import com.axelliant.hris.network.ErrorMessages
+import com.axelliant.hris.model.documentRequest.CreateDocument
+import com.axelliant.hris.model.documentRequest.DocumentForm
+import com.axelliant.hris.model.leave.ExpenseApprovalStatus
 import com.axelliant.hris.utils.Utils
 import com.axelliant.hris.viewmodel.ExpenseViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
-import com.google.gson.Gson
 import org.koin.android.ext.android.inject
 import java.util.Date
 
@@ -67,24 +68,22 @@ class DocumentManagementFragment : BaseFragment() {
             previousFragmentNavigation()
         }
         eventSelection()
-        expenseViewModel.getMyExpenseDetail(getCurrentObject())
-
-
-        expenseViewModel.expenseResponse.observe(
+        expenseViewModel.getDocumentReqDetail(getCurrentObject())
+        expenseViewModel.documentResponse.observe(
             viewLifecycleOwner,
             EventObserver { response ->
 
-                if (response?.meta?.status == true && response.expenses != null) {
-                    subFilterPopulations(response.expense_status)
+                if (response?.meta?.status == true && response.employee_forms != null) {
+                    subFilterPopulations(response.employee_form_status)
 
-                    if (response.expenses.size > 0) {
-                        binding?.rvExpense?.visibility=View.VISIBLE
-                        binding?.tvNoRecord?.visibility=View.GONE
+                    if (response.employee_forms.size > 0) {
+                        binding?.rvExpense?.visibility = View.VISIBLE
+                        binding?.tvNoRecord?.visibility = View.GONE
 
-                        dataPopulate(response.expenses)
+                        dataPopulate(response.employee_forms)
                     } else {
-                        binding?.rvExpense?.visibility=View.GONE
-                        binding?.tvNoRecord?.visibility=View.VISIBLE
+                        binding?.rvExpense?.visibility = View.GONE
+                        binding?.tvNoRecord?.visibility = View.VISIBLE
                     }
 
                 } else {
@@ -95,39 +94,89 @@ class DocumentManagementFragment : BaseFragment() {
 
 
         binding?.addExpense?.setOnClickListener {
-            AppNavigator.navigateToAddExpenseFragment()
+//            AppNavigator.navigateToAddDocumentFragment()
+            customDialog(requireContext(),expenseViewModel)
         }
+
+
+
     }
 
+    private fun customDialog(
+        context: Context,
+        expenseViewModel: ExpenseViewModel
+    ): AlertDialog {
+        val dialogBinding = DialogRequestDocumentBinding.inflate(LayoutInflater.from(context))
+        dialogBinding.lifecycleOwner = this
+        dialogBinding.expenseViewModel = expenseViewModel
+
+        // Create AlertDialog.Builder instance with custom theme
+        val dialog = AlertDialog.Builder(context, R.style.alert_dialog_round_corners).apply {
+            setView(dialogBinding.root)
+        }.create()
 
 
-    private fun dataPopulate(expenseList: ArrayList<Expense>?) {
+        expenseViewModel.subjectError.observe(viewLifecycleOwner) { error ->
+            dialogBinding.tilDocId.error = error
+        }
+
+        expenseViewModel.descriptionError.observe(viewLifecycleOwner) { error ->
+            dialogBinding.tilAttendanceReason.error = error
+        }
+
+        dialogBinding.llBack.setOnClickListener {
+            dialog.dismiss()
+        }
+        dialogBinding.btnOkNo.setOnClickListener {
+//            dialog.dismiss()
+            expenseViewModel.postDocument()
+
+        }
+        expenseViewModel.expenseApprovalResponse.observe(
+            viewLifecycleOwner,
+            EventObserver { response ->
+                if (response?.meta?.status == true) {
+                    dialog.dismiss()
+                    requireContext().showErrorMsg(response.status_message)
+                    expenseViewModel.getDocumentReqDetail(getCurrentObject())
+
+                } else {
+                    requireContext().showErrorMsg(response?.meta?.message.toString())
+                    dialog.dismiss()
+                }
+            }
+        )
+        dialog.show()
+        return dialog
+    }
+
+    private fun dataPopulate(expenseList: ArrayList<DocumentForm>?) {
 
         binding?.rvExpense?.layoutManager = LinearLayoutManager(requireActivity())
-        val expenseAdapter = ExpenseAdapter(
+        val expenseAdapter = DocumentRequestAdapter(
             expenseList!!, requireContext(), object : AdapterItemClick {
                 override fun onItemClick(customObject: Any, position: Int) {
 
-                    val expense = customObject as Expense
-                    if (expense.status == "Draft") {
-                        AppNavigator.navigateToAddExpenseFragment(Bundle().apply {
-                            this.putString(AppConst.ExpenseRequestIDParam, expense.name)
-                            this.putString(
-                                AppConst.ExpenseRequestParam,
-                                Gson().toJson(expense.expenses_detail)
-                            )
-                            this.putString(
-                                AppConst.ExpenseRequestAttachments,
-                                Gson().toJson(expense.attachments)
-                            )
-                        })
-                    } else {
-                        requireContext().showErrorMsg(
-                            ErrorMessages.DRAFT_EXPENSE_ONLY.errorString.plus(
-                                expense.approval_status
-                            )
-                        )
-                    }
+                    val expense = customObject as DocumentForm
+//                    if (expense.status == "Draft") {
+//                        AppNavigator.navigateToAddExpenseFragment(Bundle().apply {
+//                            this.putString(AppConst.ExpenseRequestIDParam, expense.name)
+//                            this.putString(
+//                                AppConst.ExpenseRequestParam,
+//                                Gson().toJson(expense.expenses_detail)
+//                            )
+//                            this.putString(
+//                                AppConst.ExpenseRequestAttachments,
+//                                Gson().toJson(expense.attachments)
+//                            )
+//                        })
+//                    } else {
+//                        requireContext().showErrorMsg(
+//                            ErrorMessages.DRAFT_EXPENSE_ONLY.errorString.plus(
+//                                expense.approval_status
+//                            )
+//                        )
+//                    }
 
 
                 }
@@ -154,19 +203,19 @@ class DocumentManagementFragment : BaseFragment() {
 
         binding?.tvWeek?.setOnClickListener {
             currentFilter = AttendanceFilter.WEEK
-            expenseViewModel.getMyExpenseDetail(getCurrentObject())
+            expenseViewModel.getDocumentReqDetail(getCurrentObject())
             eventSelection()
         }
         binding?.tvMonth?.setOnClickListener {
             currentFilter = AttendanceFilter.MONTH
-            expenseViewModel.getMyExpenseDetail(getCurrentObject())
+            expenseViewModel.getDocumentReqDetail(getCurrentObject())
             eventSelection()
         }
 
         binding?.tvCustom?.setOnClickListener {
             datePickerDialog()
             currentFilter = AttendanceFilter.Custom
-            expenseViewModel.getMyExpenseDetail(getCurrentObject())
+            expenseViewModel.getDocumentReqDetail(getCurrentObject())
             eventSelection()
         }
 
@@ -257,7 +306,7 @@ class DocumentManagementFragment : BaseFragment() {
             setDateView()
 
             currentFilter = AttendanceFilter.Custom
-            expenseViewModel.getMyExpenseDetail(getCurrentObject())
+            expenseViewModel.getDocumentReqDetail(getCurrentObject())
             eventSelection()
         }
 
@@ -284,7 +333,7 @@ class DocumentManagementFragment : BaseFragment() {
 
 
                     filterId = filterObject.id.toString()
-                    expenseViewModel.getMyExpenseDetail(getCurrentObject())
+                    expenseViewModel.getDocumentReqDetail(getCurrentObject())
                 }
 
             }
