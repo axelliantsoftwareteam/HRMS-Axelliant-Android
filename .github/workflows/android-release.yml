@@ -4,6 +4,8 @@ on:
   push:
     tags:
       - "android-v*"
+    branches:
+      - "main"
   workflow_dispatch:
 
 permissions:
@@ -38,6 +40,33 @@ jobs:
       - name: Make Gradle wrapper executable
         run: chmod +x gradlew
 
+      - name: Validate release configuration
+        run: |
+          test -n "${ANDROID_PACKAGE_NAME}" || (echo "ANDROID_PACKAGE_NAME variable is required" && exit 1)
+          test -n "${ANDROID_KEYSTORE_PASSWORD}" || (echo "ANDROID_KEYSTORE_PASSWORD secret is required" && exit 1)
+          test -n "${ANDROID_KEY_ALIAS}" || (echo "ANDROID_KEY_ALIAS secret is required" && exit 1)
+          test -n "${ANDROID_KEY_PASSWORD}" || (echo "ANDROID_KEY_PASSWORD secret is required" && exit 1)
+          if [ -z "${PLAY_SERVICE_ACCOUNT_JSON}" ] && [ -z "${GOOGLE_PLAY_SERVICE_ACCOUNT_JSON}" ]; then
+            echo "PLAY_SERVICE_ACCOUNT_JSON (or GOOGLE_PLAY_SERVICE_ACCOUNT_JSON) secret is required"
+            exit 1
+          fi
+        env:
+          PLAY_SERVICE_ACCOUNT_JSON: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
+          GOOGLE_PLAY_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
+
+      - name: Auto increment versionCode and versionName
+        run: |
+          VERSION_CODE="$(date -u +%y%j%H%M)"
+          VERSION_NAME_DATE="$(date -u +%Y.%m.%d)"
+          BASE_VERSION_NAME="${ANDROID_BASE_VERSION_NAME:-1.0.0}"
+          VERSION_NAME="${BASE_VERSION_NAME}+${VERSION_NAME_DATE}.${GITHUB_RUN_NUMBER}"
+          sed -i -E "s/versionCode = [0-9]+/versionCode = ${VERSION_CODE}/" app/build.gradle.kts
+          sed -i -E "s/versionName = \"[^\"]+\"/versionName = \"${VERSION_NAME}\"/" app/build.gradle.kts
+          echo "Computed VERSION_CODE=${VERSION_CODE}"
+          echo "Computed VERSION_NAME=${VERSION_NAME}"
+          echo "ANDROID_RELEASE_NAME=${VERSION_NAME}" >> "${GITHUB_ENV}"
+          grep -nE "versionCode|versionName" app/build.gradle.kts
+
       - name: Decode release keystore
         if: ${{ secrets.ANDROID_KEYSTORE_BASE64 != '' }}
         run: |
@@ -59,15 +88,15 @@ jobs:
           if-no-files-found: error
 
       - name: Upload AAB to Google Play
-        if: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON != '' && env.ANDROID_PACKAGE_NAME != '' }}
+        if: ${{ (secrets.PLAY_SERVICE_ACCOUNT_JSON != '' || secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON != '') && env.ANDROID_PACKAGE_NAME != '' }}
         uses: r0adkll/upload-google-play@v1
         with:
-          serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
+          serviceAccountJsonPlainText: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON != '' && secrets.PLAY_SERVICE_ACCOUNT_JSON || secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
           packageName: ${{ env.ANDROID_PACKAGE_NAME }}
           releaseFiles: app/build/outputs/bundle/release/*.aab
-          track: ${{ vars.ANDROID_PLAY_TRACK != '' && vars.ANDROID_PLAY_TRACK || 'internal' }}
+          track: ${{ vars.ANDROID_PLAY_TRACK != '' && vars.ANDROID_PLAY_TRACK || 'production' }}
           status: ${{ vars.ANDROID_PLAY_RELEASE_STATUS != '' && vars.ANDROID_PLAY_RELEASE_STATUS || 'completed' }}
-          releaseName: ${{ github.ref_name }}
+          releaseName: ${{ env.ANDROID_RELEASE_NAME }}
 
       - name: Upload mapping and reports
         if: always()
