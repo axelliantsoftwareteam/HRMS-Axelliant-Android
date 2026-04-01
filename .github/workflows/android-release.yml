@@ -18,11 +18,15 @@ concurrency:
 jobs:
   release:
     runs-on: ubuntu-latest
+    environment: Production
     env:
+      ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
       ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
       ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
       ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
-      ANDROID_PACKAGE_NAME: ${{ vars.ANDROID_PACKAGE_NAME }}
+      PLAY_SERVICE_ACCOUNT_JSON: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
+      GOOGLE_PLAY_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
+      ANDROID_PACKAGE_NAME: ${{ vars.ANDROID_PACKAGE_NAME != '' && vars.ANDROID_PACKAGE_NAME || secrets.ANDROID_PACKAGE_NAME }}
 
     steps:
       - name: Checkout
@@ -50,9 +54,6 @@ jobs:
             echo "PLAY_SERVICE_ACCOUNT_JSON (or GOOGLE_PLAY_SERVICE_ACCOUNT_JSON) secret is required"
             exit 1
           fi
-        env:
-          PLAY_SERVICE_ACCOUNT_JSON: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
-          GOOGLE_PLAY_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
 
       - name: Auto increment versionCode and versionName
         run: |
@@ -68,12 +69,10 @@ jobs:
           grep -nE "versionCode|versionName" app/build.gradle.kts
 
       - name: Decode release keystore
-        if: ${{ secrets.ANDROID_KEYSTORE_BASE64 != '' }}
+        if: ${{ env.ANDROID_KEYSTORE_BASE64 != '' }}
         run: |
           echo "${ANDROID_KEYSTORE_BASE64}" | base64 --decode > "${RUNNER_TEMP}/android-release.jks"
           echo "ANDROID_KEYSTORE_PATH=${RUNNER_TEMP}/android-release.jks" >> "${GITHUB_ENV}"
-        env:
-          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
 
       - name: Build release artifacts
         run: ./gradlew assembleRelease bundleRelease --stacktrace
@@ -88,10 +87,10 @@ jobs:
           if-no-files-found: error
 
       - name: Upload AAB to Google Play
-        if: ${{ (secrets.PLAY_SERVICE_ACCOUNT_JSON != '' || secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON != '') && env.ANDROID_PACKAGE_NAME != '' }}
+        if: ${{ (env.PLAY_SERVICE_ACCOUNT_JSON != '' || env.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON != '') && env.ANDROID_PACKAGE_NAME != '' }}
         uses: r0adkll/upload-google-play@v1
         with:
-          serviceAccountJsonPlainText: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON != '' && secrets.PLAY_SERVICE_ACCOUNT_JSON || secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
+          serviceAccountJsonPlainText: ${{ env.PLAY_SERVICE_ACCOUNT_JSON != '' && env.PLAY_SERVICE_ACCOUNT_JSON || env.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
           packageName: ${{ env.ANDROID_PACKAGE_NAME }}
           releaseFiles: app/build/outputs/bundle/release/*.aab
           track: ${{ vars.ANDROID_PLAY_TRACK != '' && vars.ANDROID_PLAY_TRACK || 'production' }}
