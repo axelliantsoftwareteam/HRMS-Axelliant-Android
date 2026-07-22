@@ -10,6 +10,7 @@ import com.axelliant.hris.model.leave.MyLeaveDetailResponse
 import com.axelliant.hris.model.leave.MyUpcomingLeaveDetailResponse
 import com.axelliant.hris.model.leave.PostResponse
 import com.axelliant.hris.model.leave.TeamLeaveDetailResponse
+import com.axelliant.hris.model.leave.TeamLeaveQuotaResponse
 import com.axelliant.hris.model.leave.UpcomingLeaveInput
 import com.axelliant.hris.repos.LeaveRepo
 
@@ -19,6 +20,7 @@ class LeaveViewModel(private val leaveRepo: LeaveRepo) : BaseViewModel() {
      val upcomingLeavesResponse: MutableLiveData<Event<MyUpcomingLeaveDetailResponse?>> by lazy { MutableLiveData<Event<MyUpcomingLeaveDetailResponse?>>() }
      val myLeaveDetailResponse: MutableLiveData<Event<MyLeaveDetailResponse?>> by lazy { MutableLiveData<Event<MyLeaveDetailResponse?>>() }
      val teamLeaveDetailResponse: MutableLiveData<Event<TeamLeaveDetailResponse?>> by lazy { MutableLiveData<Event<TeamLeaveDetailResponse?>>() }
+     val teamLeaveQuotaResponse: MutableLiveData<Event<TeamLeaveQuotaResponse?>> by lazy { MutableLiveData<Event<TeamLeaveQuotaResponse?>>() }
      val leaveApprovalResponse: MutableLiveData<Event<PostResponse?>> by lazy { MutableLiveData<Event<PostResponse?>>() }
 
     fun getLeaveStats(attendanceInput: AttendanceInput) {
@@ -88,6 +90,20 @@ class LeaveViewModel(private val leaveRepo: LeaveRepo) : BaseViewModel() {
 
 
     }
+    fun getTeamLeaveQuota() {
+        isLoading.value = Event(true)
+        leaveRepo.getTeamLeaveQuota()
+            .observeForever { data ->
+                data?.let { baseModel ->
+                    isLoading.value = Event(false)
+                    teamLeaveQuotaResponse.value = Event(baseModel.message?.data)
+                } ?: run {
+                    isLoading.value = Event(false)
+                    Log.d("Success VieModel->", "false")
+                }
+            }
+    }
+
     fun getUpcomingLeaveDetail(upcomingLeaveInput: UpcomingLeaveInput) {
         isLoading.value = Event(true)
         leaveRepo.getUpcomingLeaveDetail(upcomingLeaveInput)

@@ -1,14 +1,18 @@
 package com.axelliant.hris.screens
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.axelliant.hris.R
+import com.axelliant.hris.adapter.LeaveQuotaAdapter
 import com.axelliant.hris.adapter.PersonSpinnerAdapter
 import com.axelliant.hris.adapter.SubFilterAdapter
 import com.axelliant.hris.adapter.TeamLeaveDetailAdapter
@@ -38,6 +42,8 @@ class TeamLeaveDetailFragment : BaseFragment() {
     private var startDateString: String? = null
     private var endDateString: String? = null
     private var filterId = ""
+    private var quotaAdapter: LeaveQuotaAdapter? = null
+    private var quotaLoaded = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -65,6 +71,31 @@ class TeamLeaveDetailFragment : BaseFragment() {
         binding?.ivBack?.setOnClickListener {
             previousFragmentNavigation()
         }
+
+        setupTabs()
+        setupQuotaSearch()
+
+        leaveViewModel.teamLeaveQuotaResponse.observe(
+            viewLifecycleOwner,
+            EventObserver { response ->
+                if (response?.meta?.status == true) {
+                    val employees = response.employees ?: arrayListOf()
+                    binding?.tvQuotaCount?.text = employees.size.toString()
+
+                    if (employees.isNotEmpty()) {
+                        binding?.rvQuota?.visibility = View.VISIBLE
+                        binding?.tvQuotaNoRecord?.visibility = View.GONE
+                        quotaAdapter = LeaveQuotaAdapter(requireContext(), employees)
+                        binding?.rvQuota?.layoutManager = LinearLayoutManager(requireActivity())
+                        binding?.rvQuota?.adapter = quotaAdapter
+                    } else {
+                        binding?.rvQuota?.visibility = View.GONE
+                        binding?.tvQuotaNoRecord?.visibility = View.VISIBLE
+                    }
+                } else {
+                    requireContext().showErrorMsg(response?.meta?.message.toString())
+                }
+            })
 
         spinnerPopulations()
         leaveViewModel.getTeamLeaveDetail(getCurrentObject())
@@ -97,6 +128,53 @@ class TeamLeaveDetailFragment : BaseFragment() {
 
 
     }
+    private fun setupTabs() {
+        // Default to the first tab (Leave Requests), which holds the existing functionality.
+        selectTab(showQuota = false)
+
+        binding?.tvTabRequests?.setOnClickListener { selectTab(showQuota = false) }
+        binding?.tvTabQuota?.setOnClickListener { selectTab(showQuota = true) }
+    }
+
+    private fun selectTab(showQuota: Boolean) {
+        binding?.lyRequestsTab?.isVisible = !showQuota
+        binding?.lyQuotaTab?.isVisible = showQuota
+
+        val selected = ContextCompat.getDrawable(requireContext(), R.drawable.rounded_enabled)
+        val unselected = ContextCompat.getDrawable(requireContext(), R.drawable.rounded_disabled)
+        val selectedText = requireContext().getColor(R.color.white)
+        val unselectedText = requireContext().getColor(R.color.btn_text_color)
+
+        if (showQuota) {
+            binding?.tvTabQuota?.background = selected
+            binding?.tvTabQuota?.setTextColor(selectedText)
+            binding?.tvTabRequests?.background = unselected
+            binding?.tvTabRequests?.setTextColor(unselectedText)
+
+            // Load the quota data lazily the first time the tab is opened.
+            if (!quotaLoaded) {
+                quotaLoaded = true
+                leaveViewModel.getTeamLeaveQuota()
+            }
+        } else {
+            binding?.tvTabRequests?.background = selected
+            binding?.tvTabRequests?.setTextColor(selectedText)
+            binding?.tvTabQuota?.background = unselected
+            binding?.tvTabQuota?.setTextColor(unselectedText)
+        }
+    }
+
+    private fun setupQuotaSearch() {
+        binding?.etSearch?.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                quotaAdapter?.filter(s?.toString())
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+        })
+    }
+
     private fun spinnerPopulations() {
 
         val adapter = PersonSpinnerAdapter(

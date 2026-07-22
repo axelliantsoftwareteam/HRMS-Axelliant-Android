@@ -66,5 +66,10 @@
     <color name="rejectedColor">#05D83242</color> <!-- Red for Rejected -->
 
 
+    <!-- Leave Quota (Design-Fluent) -->
+    <color name="quota_badge_bg">#E4EEF8</color>
+    <color name="quota_badge_text">#09589B</color>
+    <color name="quota_usage_value">#09589B</color>
+    <color name="quota_card_stroke">#EAEAEA</color>
 
 </resources>

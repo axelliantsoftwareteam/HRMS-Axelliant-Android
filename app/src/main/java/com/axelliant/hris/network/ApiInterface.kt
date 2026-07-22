@@ -134,6 +134,10 @@ interface ApiInterface {
         @Body upcomingLeaveInput: UpcomingLeaveInput
     ): Call<ResponseBody>
 
+    @Headers("Content-Type: application/json")
+    @GET("hrms.api.mobile_v1.get_leaves_detail_team") // team leave quota (used/total per member)
+    fun callTeamLeaveQuota(@Header("Authorization") auth: String?): Call<ResponseBody>
+
     // required APIS
 
 

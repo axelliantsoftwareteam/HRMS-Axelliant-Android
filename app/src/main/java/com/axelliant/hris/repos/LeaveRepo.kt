@@ -17,6 +17,7 @@ import com.axelliant.hris.model.leave.MyLeaveDetailResponse
 import com.axelliant.hris.model.leave.MyUpcomingLeaveDetailResponse
 import com.axelliant.hris.model.leave.PostResponse
 import com.axelliant.hris.model.leave.TeamLeaveDetailResponse
+import com.axelliant.hris.model.leave.TeamLeaveQuotaResponse
 import com.axelliant.hris.model.leave.UpcomingLeaveInput
 import com.axelliant.hris.network.ApiInterface
 import com.axelliant.hris.network.BaseCallBack
@@ -192,6 +193,50 @@ class LeaveRepo(private var apiInterface: ApiInterface) {
 
         return serverResponse
     }
+    fun getTeamLeaveQuota(): MutableLiveData<BaseApiModel<TeamLeaveQuotaResponse>> {
+        val serverResponse = MutableLiveData<BaseApiModel<TeamLeaveQuotaResponse>>()
+
+        val call: Call<ResponseBody> =
+            apiInterface.callTeamLeaveQuota("token ${AppConst.TOKEN}")
+
+        Log.e("HTTP Request", " " + call.request().toString())
+
+        call.enqueue(object : BaseCallBack<ResponseBody>(call) {
+            override fun onFinalSuccess(
+                call: Call<ResponseBody>,
+                response: Response<ResponseBody>
+            ) {
+                Log.e("API success", " " + response.body())
+
+                val type: Type = object : TypeToken<BaseApiModel<TeamLeaveQuotaResponse>>() {}.type
+                val jsonString = response.body()?.string()
+                val userModel =
+                    Gson().fromJson<BaseApiModel<TeamLeaveQuotaResponse>>(jsonString, type)
+                serverResponse.value = userModel
+            }
+
+            override fun onFinalFailure(
+                errorString: String?
+            ) {
+                Log.e("API Failure", " $errorString")
+
+                serverResponse.value =
+                    BaseApiModel(
+                        BaseModel(
+                            TeamLeaveQuotaResponse(
+                                meta = Meta(
+                                    errorString.toString(),
+                                    false
+                                )
+                            )
+                        )
+                    )
+            }
+        })
+
+        return serverResponse
+    }
+
     fun getUpcomingLeaveDetail(upcomingLeaveInput: UpcomingLeaveInput): MutableLiveData<BaseApiModel<MyUpcomingLeaveDetailResponse>> {
         val serverResponse = MutableLiveData<BaseApiModel<MyUpcomingLeaveDetailResponse>>()
 

@@ -109,6 +109,14 @@
     <string name="_17_may_2024">17 May 2024</string>
     <string name="_3_hr">3 Hr</string>
     <string name="my_team_leave">My Team Leaves</string>
+    <string name="team_leave">Team Leave</string>
+    <string name="leave_requests">Leave Requests</string>
+    <string name="leave_quota">Leave Quota</string>
+    <string name="search_team_member">Search team member</string>
+    <string name="leave_usage_used_total">LEAVE USAGE (USED / TOTAL)</string>
+    <string name="you">You</string>
+    <string name="available_suffix">available</string>
+    <string name="available_badge">%1$s available</string>
     <string name="total_leaves">Total Leaves</string>
     <string name="used_leaves">Used Leaves</string>
     <string name="approved">Approved</string>
