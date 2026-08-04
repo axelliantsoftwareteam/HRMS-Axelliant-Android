@@ -3,6 +3,9 @@ plugins {
     alias(libs.plugins.jetbrainsKotlin)
     alias(libs.plugins.navigationSafeArgs)
     id("kotlin-kapt")
+    id("kotlin-parcelize")
+    id("org.jetbrains.kotlin.plugin.parcelize")
+
 }
 
 val androidKeystorePath = System.getenv("ANDROID_KEYSTORE_PATH")
@@ -69,6 +72,11 @@ android {
     buildFeatures {
         viewBinding = true
         dataBinding = true
+        compose = true
+
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.3"
     }
 
     packaging {
@@ -79,11 +87,20 @@ android {
 }
 
 dependencies {
+    implementation(platform("androidx.compose:compose-bom:2024.09.00"))
+
+    implementation("androidx.compose.ui:ui")
+    implementation("androidx.compose.ui:ui-tooling-preview")
+    implementation("androidx.compose.material3:material3")
+    implementation("androidx.activity:activity-compose:1.9.2")
+    implementation("androidx.compose.runtime:runtime-livedata")
+    implementation("androidx.compose.ui:ui-viewbinding")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.play.services.location)
+    implementation("com.facebook.shimmer:shimmer:0.5.0")
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.play.services.maps)
@@ -93,6 +110,7 @@ dependencies {
     implementation(libs.koin.android)
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
+
 //    implementation(libs.navigation.fragment)
     implementation(libs.ssp.android) // multi screen text sizes support
     implementation(libs.sdp.android) // multi screen width height support
@@ -110,7 +128,6 @@ dependencies {
     implementation(libs.circleimageview) // circle image view
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.livedata.ktx)
-
     implementation(libs.material.v120alpha03)
     implementation("com.microsoft.identity.client:msal:5.6.0")
     {
@@ -129,5 +146,18 @@ dependencies {
     implementation (libs.app.update.ktx)
 
     implementation (libs.commons.net)
+    implementation(libs.androidx.core.ktx)
+
+    implementation(libs.fluentui.core)
+    implementation(libs.fluentui.drawer)
+    implementation(libs.fluentui.icons)
+    implementation(libs.fluentui.listitem)
+    implementation(libs.fluentui.menus)
+    implementation(libs.fluentui.progress)
+    implementation(libs.fluentui.controls)
+    implementation("com.intuit.sdp:sdp-android:1.1.1")
+    implementation("com.microsoft.fluentui:fluentui_calendar:0.3.3")
+    implementation("androidx.compose.runtime:runtime-livedata:1.7.0")
+    implementation("com.microsoft.fluentui:fluentui_topappbars:0.3.9")
 
 }

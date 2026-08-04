@@ -13,7 +13,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.axelliant.hris.R
 import com.axelliant.hris.adapter.RemainingLeaveAdapter
 import com.axelliant.hris.adapter.UpcomingLeaveAdapter
-
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import com.axelliant.hris.components.SelfLeaveStatsGrid
+import com.axelliant.hris.components.TeamLeaveStatsGrid
 import com.axelliant.hris.base.BaseFragment
 import com.axelliant.hris.config.AppConst.SERVER_DATE_FORMAT
 import com.axelliant.hris.config.GlobalConfig
@@ -34,6 +37,7 @@ import org.koin.android.ext.android.inject
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
+import androidx.compose.material.icons.Icons
 
 
 class LeavesFragment : BaseFragment() {
@@ -47,7 +51,6 @@ class LeavesFragment : BaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         _binding = FragmentLeavesBinding.inflate(inflater).also { _binding = it }
         return binding?.root
     }
@@ -55,7 +58,12 @@ class LeavesFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        binding?.composeSelfLeaveStats?.setViewCompositionStrategy(
+            ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed
+        )
+        binding?.composeTeamLeaveStats?.setViewCompositionStrategy(
+            ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed
+        )
         leaveViewModel.getIsLoading()
             .observe(viewLifecycleOwner, EventObserver { isLoading ->
                 if (isLoading) {
@@ -81,7 +89,7 @@ class LeavesFragment : BaseFragment() {
 
                     selfAttendanceStats(response.self_count!!)
 
-                    if(currentFilter == AttendanceFilter.WEEK)
+                    if (currentFilter == AttendanceFilter.WEEK)
                         teamAttendanceStats(response.team_count!!)
 
                     remainingLeaveDataPopulate(response.remaining_balance!!)
@@ -127,13 +135,12 @@ class LeavesFragment : BaseFragment() {
             viewLifecycleOwner,
             EventObserver { response ->
                 if (response?.meta?.status == true) {
-                    if (response.upcoming_leaves?.size?: 0 > 0){
-                        binding?.tvMyShift?.isVisible=true
+                    if (response.upcoming_leaves?.size ?: 0 > 0) {
+                        binding?.tvMyShift?.isVisible = true
                         upcomingLeavePopulate(response.upcoming_leaves)
-                    }
-                    else{
-                        binding?.tvMyShift?.isVisible=false
-                        binding?.rvUpcomingLeaves?.isVisible=false
+                    } else {
+                        binding?.tvMyShift?.isVisible = false
+                        binding?.rvUpcomingLeaves?.isVisible = false
                     }
                 } else {
                     requireContext().showErrorMsg(response?.meta?.message.toString())
@@ -166,7 +173,7 @@ class LeavesFragment : BaseFragment() {
         when (currentFilter) {
             AttendanceFilter.WEEK -> {
                 binding?.tvWeek?.background =
-                    ContextCompat.getDrawable(requireContext(), R.drawable.rounded_enabled)
+                    ContextCompat.getDrawable(requireContext(), R.drawable.fluent_blue)
                 binding?.tvWeek?.setTextColor(requireContext().getColor(R.color.white))
 
             }
@@ -174,7 +181,7 @@ class LeavesFragment : BaseFragment() {
             AttendanceFilter.MONTH -> {
 
                 binding?.tvMonth?.background =
-                    ContextCompat.getDrawable(requireContext(), R.drawable.rounded_enabled)
+                    ContextCompat.getDrawable(requireContext(), R.drawable.fluent_blue)
                 binding?.tvMonth?.setTextColor(requireContext().getColor(R.color.white))
             }
 
@@ -197,7 +204,7 @@ class LeavesFragment : BaseFragment() {
 
 
     private fun upcomingLeavePopulate(upcomingLeaves: ArrayList<UpcomingLeaves>?) {
-        Log.d("upcomingLeaves", ""+upcomingLeaves)
+        Log.d("upcomingLeaves", "" + upcomingLeaves)
         if (upcomingLeaves != null) {
             binding?.rvUpcomingLeaves?.layoutManager =
                 LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
@@ -210,30 +217,36 @@ class LeavesFragment : BaseFragment() {
     }
 
     private fun selfAttendanceStats(selfStats: SelfLeaveStats) {
-
-        binding?.tvTotalLeaveTxt?.text = selfStats.total_leave.toString() //total leaves
-
-        binding?.tvPendingTxt?.text = selfStats.self_pending.toString()
-        binding?.tvApprovedTxt?.text = selfStats.self_approved.toString()
-        binding?.tvRejectedTxt?.text = selfStats.self_reject.toString()
-        binding?.tvUsedLeavesTxt?.text = selfStats.remaining_leave.toString()  // reamining leave
-
-        /*        binding?.tvCasualTxt?.text = selfAttendanceStats.week_count.toString()
-                binding?.tvSickTxt?.text = selfAttendanceStats.week_count.toString()
-                binding?.tvAnnualTxt?.text = selfAttendanceStats.week_count.toString()*/
-
+        binding?.composeSelfLeaveStats?.setContent {
+            SelfLeaveStatsGrid(
+                total = selfStats.total_leave.toString(),
+                pending = selfStats.self_pending.toString(),
+                approved = selfStats.self_approved.toString(),
+                rejected = selfStats.self_reject.toString(),
+                remaining = selfStats.remaining_leave.toString(),
+                appColor = Color(requireContext().getColor(R.color.colorApp)),
+                yellowColor = Color(requireContext().getColor(R.color.yellow)),
+                greenColor = Color(requireContext().getColor(R.color.green)),
+                redColor = Color(requireContext().getColor(R.color.red))
+            )
+        }
     }
-
     private fun teamAttendanceStats(teamLeaveStats: TeamLeaveStats) {
-
-        binding?.tvTotalMemberTxt?.text = teamLeaveStats.total_team_members.toString()
-        binding?.tvPresentTxt?.text = teamLeaveStats.all_leaves.toString()
-        binding?.tvWorkHomeTxt?.text = teamLeaveStats.team_approved.toString()
-        binding?.tvTeamsAbsentTxt?.text = teamLeaveStats.team_reject.toString()
-        binding?.tvTeamsOnleaveTxt?.text = teamLeaveStats.team_pending.toString()
-
+        binding?.composeTeamLeaveStats?.setContent {
+            TeamLeaveStatsGrid(
+                totalMembers = teamLeaveStats.total_team_members.toString(),
+                present = teamLeaveStats.all_leaves.toString(),
+                approved = teamLeaveStats.team_approved.toString(),
+                rejected = teamLeaveStats.team_reject.toString(),
+                pending = teamLeaveStats.team_pending.toString(),
+                blueColor = Color(requireContext().getColor(R.color.blue)),
+                appColor = Color(requireContext().getColor(R.color.colorApp)),
+                greenColor = Color(requireContext().getColor(R.color.green)),
+                redColor = Color(requireContext().getColor(R.color.red)),
+                yellowColor = Color(requireContext().getColor(R.color.yellow))
+            )
+        }
     }
-
     private fun getCurrentObject(): AttendanceInput {
 
         var localStart = ""

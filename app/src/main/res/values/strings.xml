@@ -4,12 +4,17 @@
     <string name="please_login">Please login with Microsoft account to continue</string>
     <string name="hello">Hello there, login to continue</string>
     <string name="login_mic">Login with Microsoft</string>
+    <string name="current_shift_time">CURRENT SHIFT TIME</string>
+    <string name="shift_timer_placeholder">--:--:--</string>
 
 
     <string name="home">Home</string>
     <string name="leaves">Leaves</string>
     <string name="profile">Profile</string>
-
+    <string name="total_leave_count">Total Leave Count</string>
+    <string name="days_allocated_per_year">Days allocated per year</string>
+    <string name="remaining_balance">Remaining Balance</string>
+    <string name="available_to_request">Available to request</string>
 
     <string name="date">Date</string>
     <string name="location">Location</string>
@@ -211,4 +216,6 @@
     <string name="request_approvals">Request Approvals</string>
     <string name="half_day_date">Half Day Date</string>
     <string name="select_half_day">Select Half Day</string>
+    <string name="my_shift_details">My Shift Details</string>
+    <string name="my_team_stats">My Team Stats</string>
 </resources>

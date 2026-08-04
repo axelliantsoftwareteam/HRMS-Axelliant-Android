@@ -41,8 +41,8 @@ class ModulesAdapter(
         fun bind(item: Modules) {
             binding.tvModule.text = item.name
             binding.tvDescription.text = item.description
-            binding.lyModule.background=item.color
             binding.ivLoc.setImageDrawable(item.drawable)
+            binding.lyModule.background = item.color
         }
     }
 

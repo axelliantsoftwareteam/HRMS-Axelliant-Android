@@ -222,7 +222,7 @@ class DocumentManagementFragment : BaseFragment() {
         when (currentFilter) {
             AttendanceFilter.WEEK -> {
                 binding?.tvWeek?.background =
-                    ContextCompat.getDrawable(requireContext(), R.drawable.rounded_enabled)
+                    ContextCompat.getDrawable(requireContext(), R.drawable.fluent_blue)
                 binding?.tvWeek?.setTextColor(requireContext().getColor(R.color.white))
 
             }
@@ -230,14 +230,14 @@ class DocumentManagementFragment : BaseFragment() {
             AttendanceFilter.MONTH -> {
 
                 binding?.tvMonth?.background =
-                    ContextCompat.getDrawable(requireContext(), R.drawable.rounded_enabled)
+                    ContextCompat.getDrawable(requireContext(), R.drawable.fluent_blue)
                 binding?.tvMonth?.setTextColor(requireContext().getColor(R.color.white))
             }
 
             AttendanceFilter.Custom -> {
 
                 binding?.tvCustom?.background =
-                    ContextCompat.getDrawable(requireContext(), R.drawable.rounded_enabled)
+                    ContextCompat.getDrawable(requireContext(), R.drawable.fluent_blue)
                 binding?.tvCustom?.setTextColor(requireContext().getColor(R.color.white))
             }
 
@@ -290,6 +290,7 @@ class DocumentManagementFragment : BaseFragment() {
         // Creating a MaterialDatePicker builder for selecting a date range
         val builder = MaterialDatePicker.Builder.dateRangePicker()
         builder.setTitleText("Select a date range")
+        builder.setTheme(R.style.MyDatePickerTheme)
 
         // Building the date picker dialog
         val datePicker = builder.build()

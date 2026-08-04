@@ -23,16 +23,54 @@ import com.axelliant.hris.navigation.AppNavigator
 import com.axelliant.hris.utils.Utils
 import com.axelliant.hris.viewmodel.AttendanceViewModel
 import org.koin.android.ext.android.inject
+import com.axelliant.hris.extention.showShimmer
+import com.axelliant.hris.extention.hideShimmer
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.graphics.Color as ComposeColor
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.width
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.unit.dp
+import com.microsoft.fluentui.theme.FluentTheme
+import com.axelliant.hris.components.AttendanceStatsGrid
+import com.axelliant.hris.components.DetailCard
+import com.axelliant.hris.components.DetailLabelValue
+import com.intuit.sdp.R as SdpR
+
+
 
 
 
 class AttendanceStatsFragment : BaseFragment() {
     private var currentFilter = AttendanceFilter.WEEK
+    private var isDataLoaded = false
 
     private var _binding: FragmentAttendanceStatsBinding? = null
     private val binding get() = _binding
 
     private val attendanceViewModel: AttendanceViewModel by inject()
+    private val absentState = mutableStateOf("0")
+    private val presentState = mutableStateOf("0")
+    private val missedPunchOutState = mutableStateOf("0")
+    private val leavesState = mutableStateOf("0")
+    private val holidayState = mutableStateOf("0")
+    private val weeklyOffsState = mutableStateOf("0")
+
+    private val teamCountState = mutableStateOf("0")
+    private val teamPresentState = mutableStateOf("0")
+    private val teamWfhState = mutableStateOf("0")
+    private val teamAbsentState = mutableStateOf("0")
+    private val teamOnLeaveState = mutableStateOf("0")
+
+    private val shiftNameState = mutableStateOf("")
+    private val shiftTimingsState = mutableStateOf("")
+    private val workFromState = mutableStateOf("")
 
 
     override fun onCreateView(
@@ -48,30 +86,29 @@ class AttendanceStatsFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        setupComposeViews()
         attendanceViewModel.getIsLoading()
             .observe(viewLifecycleOwner, EventObserver { isLoading ->
-                if (isLoading) {
-                    showDialog()
-                } else {
-                    hideDialog()
-                }
+                if (!isDataLoaded && isLoading) return@EventObserver
+                if (isLoading) showDialog() else hideDialog()
             })
-
 
         val isManager = GlobalConfig.isCurrentManager()
 
         binding?.tvMyTeamStat?.isVisible = isManager
         binding?.tvMyTeamView?.isVisible = isManager
         binding?.lyMyteamAttend?.isVisible = isManager
-
+        if (!isDataLoaded) {
+            binding?.shimmerLayout?.showShimmer(binding?.contentGroup!!)
+        }
         attendanceViewModel.getAttendanceStats(getCurrentObject())
         eventSelection()
 
         attendanceViewModel.attendanceResponse.observe(
             viewLifecycleOwner,
             EventObserver { response ->
-
+                binding?.shimmerLayout?.hideShimmer(binding?.contentGroup!!)
+                isDataLoaded = true
                 if (response?.meta?.status == true) {
 
                     selfAttendanceStats(response.self_attendance_counts!!)
@@ -88,7 +125,6 @@ class AttendanceStatsFragment : BaseFragment() {
             })
         binding?.ivBack?.setOnClickListener {
             previousFragmentNavigation()
-
         }
 
         binding?.tvMyTeam?.setOnClickListener {
@@ -106,15 +142,17 @@ class AttendanceStatsFragment : BaseFragment() {
         }
 
     }
-
+    override fun onDestroyView() {
+        binding?.shimmerLayout?.stopShimmer()
+        super.onDestroyView()
+        _binding = null
+    }
     private fun setShiftTimings(shiftDetails: ShiftData) {
-        if (shiftDetails!=null)
-        {
-            binding?.tvShiftNameTxt?.text=shiftDetails.name.valueQualifier()
-            binding?.tvWorkFrom?.text=shiftDetails.location.valueQualifier()
-            binding?.tvShiftPremiss?.text=shiftDetails.actual_start.plus(" - ").plus(shiftDetails.actual_end).valueQualifier()
+        if (shiftDetails != null) {
+            shiftNameState.value = shiftDetails.name.valueQualifier()
+            workFromState.value = shiftDetails.location.valueQualifier()
+            shiftTimingsState.value = shiftDetails.actual_start.plus(" - ").plus(shiftDetails.actual_end).valueQualifier()
         }
-
     }
 
     private fun eventSelection() {
@@ -143,7 +181,7 @@ class AttendanceStatsFragment : BaseFragment() {
         when (currentFilter) {
             AttendanceFilter.WEEK -> {
                 binding?.tvWeek?.background =
-                    ContextCompat.getDrawable(requireContext(), R.drawable.rounded_enabled)
+                    ContextCompat.getDrawable(requireContext(), R.drawable.fluent_blue)
                 binding?.tvWeek?.setTextColor(requireContext().getColor(R.color.white))
 
             }
@@ -151,7 +189,7 @@ class AttendanceStatsFragment : BaseFragment() {
             AttendanceFilter.MONTH -> {
 
                 binding?.tvMonth?.background =
-                    ContextCompat.getDrawable(requireContext(), R.drawable.rounded_enabled)
+                    ContextCompat.getDrawable(requireContext(), R.drawable.fluent_blue)
                 binding?.tvMonth?.setTextColor(requireContext().getColor(R.color.white))
             }
 
@@ -162,21 +200,109 @@ class AttendanceStatsFragment : BaseFragment() {
 
 
     private fun selfAttendanceStats(selfAttendanceStats: SelfAttendanceStats){
-        binding?.tvAbsentTxt?.text = selfAttendanceStats.absent_count.toString()
-        binding?.tvHalfDayTxt?.text =selfAttendanceStats.present.toString()
-        binding?.tvMissPunchOutTxt?.text =selfAttendanceStats.missed_punch_out.toString()
-        binding?.tvLeavesTxt?.text =selfAttendanceStats.leave_count.toString()
-        binding?.tvHolidayTxt?.text =selfAttendanceStats.holiday_count.toString()
-        binding?.tvWeeklyOffsTxt?.text =selfAttendanceStats.week_count.toString()
+        absentState.value = selfAttendanceStats.absent_count.toString()
+        presentState.value = selfAttendanceStats.present.toString()
+        missedPunchOutState.value = selfAttendanceStats.missed_punch_out.toString()
+        leavesState.value = selfAttendanceStats.leave_count.toString()
+        holidayState.value = selfAttendanceStats.holiday_count.toString()
+        weeklyOffsState.value = selfAttendanceStats.week_count.toString()
 
     }
     private fun teamAttendanceStats(teamAttendanceStats: TeamAttendanceStats){
-        binding?.tvTotalMemberTxt?.text = teamAttendanceStats.team_count.toString()
-        binding?.tvPresentTxt?.text = teamAttendanceStats.present.toString()
-        binding?.tvWorkHomeTxt?.text = teamAttendanceStats.work_from_home.toString()
-        binding?.tvTeamsOnleaveTxt?.text = teamAttendanceStats.leave_count.toString()
-        binding?.tvTeamsAbsentTxt?.text = teamAttendanceStats.absent_count.toString()
+        teamCountState.value = teamAttendanceStats.team_count.toString()
+        teamPresentState.value = teamAttendanceStats.present.toString()
+        teamWfhState.value = teamAttendanceStats.work_from_home.toString()
+        teamOnLeaveState.value = teamAttendanceStats.leave_count.toString()
+        teamAbsentState.value = teamAttendanceStats.absent_count.toString()
 
+    }
+
+    private fun setupComposeViews() {
+        val red = ComposeColor(ContextCompat.getColor(requireContext(), R.color.pure_red))
+        val blue = ComposeColor(ContextCompat.getColor(requireContext(), R.color.sky_blue))
+        val neutral = ComposeColor(0xFF1C1C1E)
+        val green = ComposeColor(ContextCompat.getColor(requireContext(), R.color.green))
+
+        binding?.composeMyAttendanceStats?.apply {
+            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+            setContent {
+                FluentTheme {
+                    AttendanceStatsGrid(
+                        absent = absentState.value,
+                        present = presentState.value,
+                        missedPunchOut = missedPunchOutState.value,
+                        leaves = leavesState.value,
+                        holiday = holidayState.value,
+                        weeklyOffs = weeklyOffsState.value,
+                        redColor = red,
+                        blueColor = blue,
+                        neutralColor = neutral
+                    )
+                }
+            }
+        }
+
+        binding?.composeMyShiftDetails?.apply {
+            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+            setContent {
+                FluentTheme {
+                    DetailCard {
+
+
+                        DetailLabelValue(
+                            label = "Shift Name",
+                            value = shiftNameState.value
+                        )
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.Top
+                        ) {
+
+                            DetailLabelValue(
+                                modifier = Modifier.weight(1.7f),
+                                label = "Shift Timings",
+                                value = shiftTimingsState.value
+                            )
+
+                            Spacer(
+                                modifier = Modifier.width(
+                                    dimensionResource(SdpR.dimen._20sdp)
+                                )
+                            )
+                            DetailLabelValue(
+                                modifier = Modifier.weight(1f),
+                                label = "Working From",
+                                value = workFromState.value,
+                                dotColor = green
+                            )
+                        }
+                    }
+                }
+            }
+        }
+        binding?.composeMyTeamStats?.apply {
+            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+            setContent {
+                FluentTheme {
+                    DetailCard {
+                        DetailLabelValue(label = "Total Members", value = teamCountState.value)
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Row(modifier = Modifier.fillMaxWidth()) {
+                            DetailLabelValue(Modifier.weight(1f), "Present on Site", teamPresentState.value)
+                            DetailLabelValue(Modifier.weight(1f), "Work From Home", teamWfhState.value)
+                        }
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Row(modifier = Modifier.fillMaxWidth()) {
+                            DetailLabelValue(Modifier.weight(1f), "Absent", teamAbsentState.value)
+                            DetailLabelValue(Modifier.weight(1f), "On Leave", teamOnLeaveState.value)
+                        }
+                    }
+                }
+            }
+        }
     }
     private fun getCurrentObject(): AttendanceInput {
 

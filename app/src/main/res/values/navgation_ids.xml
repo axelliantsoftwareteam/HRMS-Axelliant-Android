@@ -21,6 +21,7 @@
     <item name="add_document_fragment_action" type="id" />
     <item name="resource_manage_fragment_action" type="id" />
     <item name="add_resource_manage_fragment_action" type="id" />
+    <item name="payslip_fragment_action" type="id"/>
 
 
 

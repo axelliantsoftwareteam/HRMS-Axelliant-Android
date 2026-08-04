@@ -89,6 +89,14 @@ class RequestFragment : BaseFragment() {
         return binding?.tvLeaveCountTxt?.text?.toString()?.toDoubleOrNull() ?: 0.0
     }
 
+    // Formats a Double as a whole number when possible (24.0 -> "24"), otherwise keeps decimals (12.5 -> "12.5")
+    private fun formatLeaveNumber(value: Double): String {
+        return if (value == value.toLong().toDouble())
+            value.toLong().toString()
+        else
+            value.toString()
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -584,6 +592,7 @@ class RequestFragment : BaseFragment() {
         // Creating a MaterialDatePicker builder for selecting a date range
         val builder = MaterialDatePicker.Builder.dateRangePicker()
         builder.setTitleText("Select a date range")
+        builder.setTheme(R.style.MyDatePickerTheme)
 
         // Building the date picker dialog
         val datePicker = builder.build()
@@ -663,7 +672,7 @@ class RequestFragment : BaseFragment() {
         when (currentFilter) {
             RequestFilter.LEAVE -> {
                 binding?.tvWeek?.background =
-                    ContextCompat.getDrawable(requireContext(), R.drawable.rounded_enabled)
+                    ContextCompat.getDrawable(requireContext(), R.drawable.fluent_blue)
                 binding?.tvWeek?.setTextColor(requireContext().getColor(R.color.white))
                 binding?.lyCreateLeave!!.visibility = View.VISIBLE
                 binding?.lyCreateAttend!!.visibility = View.GONE
@@ -673,7 +682,7 @@ class RequestFragment : BaseFragment() {
             RequestFilter.ATTENDANCE -> {
 
                 binding?.tvMonth?.background =
-                    ContextCompat.getDrawable(requireContext(), R.drawable.rounded_enabled)
+                    ContextCompat.getDrawable(requireContext(), R.drawable.fluent_blue)
                 binding?.tvMonth?.setTextColor(requireContext().getColor(R.color.white))
                 binding?.lyCreateAttend!!.visibility = View.VISIBLE
                 binding?.lyCreateLeave!!.visibility = View.GONE
@@ -692,11 +701,20 @@ class RequestFragment : BaseFragment() {
             this.name = leaveType
             this.remaining_leaves = 0.0
         })
-        if (leaves?.leave_allocation != null) {
-            finalLeavesArray.addAll(
-                leaves.leave_allocation.filter { !it.name.isNullOrBlank() }
-            )
-        }
+
+        val realAllocations = leaves?.leave_allocation?.filter { !it.name.isNullOrBlank() } ?: emptyList()
+        finalLeavesArray.addAll(realAllocations)
+
+        // ---- Aggregate Total Leave Count & Remaining Balance cards (independent of dropdown) ----
+        val overallRemaining = realAllocations.sumOf { it.remaining_leaves ?: 0.0 }
+        val overallTaken = realAllocations.sumOf { it.leaves_taken ?: 0.0 }
+        val overallPending = realAllocations.sumOf { it.leaves_pending_approval ?: 0.0 }
+        val overallExpired = realAllocations.sumOf { it.expired_leaves ?: 0.0 }
+        val overallTotal = overallRemaining + overallTaken + overallPending + overallExpired
+
+        binding?.tvTotalLeaveValue?.text = formatLeaveNumber(overallTotal)
+        binding?.tvRemainingLeaveValue?.text = formatLeaveNumber(overallRemaining)
+        // -------------------------------------------------------------------------------------
 
         val adapter = LeaveWithCountSpinnerAdapter(
             requireContext(), finalLeavesArray
@@ -704,7 +722,6 @@ class RequestFragment : BaseFragment() {
         binding?.spLeaveType?.adapter = adapter
 
         if (isUpdate) {
-
             for (index in 0..<finalLeavesArray.size) {
                 if (finalLeavesArray[index].name.equals(preLeaveType)) {
                     binding?.spLeaveType?.setSelection(index)
@@ -715,13 +732,11 @@ class RequestFragment : BaseFragment() {
             binding?.spLeaveType?.isClickable = false
             binding?.spLeaveType?.setOnTouchListener { _, event ->
                 if (event.action == MotionEvent.ACTION_UP) {
-                    //Your code
                     requireContext().showErrorMsg(ErrorMessages.UNABLE_TO_EDIT_LEAVE.errorString)
                 }
                 true
             }
         }
-
 
         binding?.spLeaveType?.onItemSelectedListener = object :
             AdapterView.OnItemSelectedListener {
@@ -731,11 +746,13 @@ class RequestFragment : BaseFragment() {
                 position: Int,
                 id: Long
             ) {
+                val selectedAllocation = finalLeavesArray[position]
+                selectedLeaveType = selectedAllocation.name.toString()
 
-                selectedLeaveType = finalLeavesArray[position].name.toString()
-
+                // This still tracks the SELECTED type's remaining balance — used only for
+                // the "requested exceeds quota" validation in addUpdateCall(), not the cards.
                 binding?.tvRemainingLeaveTxt?.text =
-                    finalLeavesArray[position].remaining_leaves.toString()
+                    selectedAllocation.remaining_leaves.toString()
 
                 if (startDateString != null && endDateString != null && !selectedLeaveType.isNullOrEmpty()) {
                     requestViewModel.getLeaveCountOnDate(LeaveCountByDaysRequest().apply {
@@ -744,11 +761,9 @@ class RequestFragment : BaseFragment() {
                         this.to_date = endDateString
                     })
                 }
-
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
-
         }
     }
 
@@ -895,4 +910,3 @@ class RequestFragment : BaseFragment() {
 
     }
 }
-

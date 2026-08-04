@@ -17,7 +17,6 @@
             style="@style/end_gl"
             android:orientation="vertical" />
 
-
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/bottom_guideline"
             style="@style/bottom_gl" />
@@ -35,7 +34,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/top_guideline" />
 
-
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_title"
             style="@style/TEXT_SEMI_BLACK_15"
@@ -47,291 +45,64 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/iv_back" />
 
-
         <LinearLayout
-            android:id="@+id/ly_header_title"
+            android:id="@+id/ly_action_btn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:background="@drawable/rounded_bgg"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="@dimen/_3sdp"
+            android:weightSum="9"
             app:layout_constraintEnd_toEndOf="@id/end_guideline"
             app:layout_constraintStart_toStartOf="@id/start_guideline"
             app:layout_constraintTop_toBottomOf="@+id/iv_back">
-            <LinearLayout
-                android:id="@+id/ly_action_btn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:background="@drawable/rounded_bgg"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:padding="@dimen/_3sdp"
-                android:weightSum="9">
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/tv_week"
-                    style="@style/TEXT_REGULAR_WHITE_10"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="3"
-                    android:background="@drawable/rounded_enabled"
-                    android:paddingTop="@dimen/_6sdp"
-                    android:paddingBottom="@dimen/_6sdp"
-                    android:text="@string/last_seven" />
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_week"
+                style="@style/TEXT_REGULAR_WHITE_10"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:background="@drawable/rounded_enabled"
+                android:paddingTop="@dimen/_6sdp"
+                android:paddingBottom="@dimen/_6sdp"
+                android:text="@string/last_seven" />
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/tv_month"
-                    style="@style/TEXT_REGULAR_BLACK_10"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="@dimen/_5sdp"
-                    android:layout_weight="3"
-                    android:background="@drawable/rounded_disabled"
-                    android:paddingTop="@dimen/_6sdp"
-                    android:paddingBottom="@dimen/_6sdp"
-                    android:text="@string/this_month" />
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_month"
+                style="@style/TEXT_REGULAR_BLACK_10"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_weight="3"
+                android:background="@drawable/rounded_disabled"
+                android:paddingTop="@dimen/_6sdp"
+                android:paddingBottom="@dimen/_6sdp"
+                android:text="@string/this_month" />
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/tv_custom"
-                    style="@style/TEXT_REGULAR_BLACK_10"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="@dimen/_5sdp"
-                    android:layout_weight="3"
-                    android:background="@drawable/rounded_disabled"
-                    android:paddingTop="@dimen/_6sdp"
-                    android:paddingBottom="@dimen/_6sdp"
-                    android:text="@string/custom" />
-            </LinearLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/ly_range_date"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp">
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/tv_start_date"
-                    style="@style/TEXT_MEDIUM_BLACK_10"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_5sdp"
-                    android:text="@string/start_date"
-                    android:visibility="gone"
-                    android:textAlignment="textStart"
-                    app:layout_constraintEnd_toEndOf="@+id/divider_absent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/ly_start_date"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/_5sdp"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:background="@drawable/rounded_leave_filter"
-                    android:orientation="vertical"
-                    android:padding="@dimen/_10sdp"
-                    app:layout_constraintEnd_toStartOf="@+id/divider_absent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/tv_start_date_txt"
-                        style="@style/TEXT_MEDIUM_GREY_10"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_5sdp"
-                        android:hint="@string/start_date"
-                        android:textAlignment="textStart"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <ImageView
-                        android:id="@+id/img_start_cal"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/_5sdp"
-                        android:src="@drawable/ic_calendar"
-                        android:visibility="gone"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
-
-                    </ImageView>
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <View
-                    android:id="@+id/divider_absent"
-                    android:layout_width="2dp"
-                    android:layout_height="0dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_margin="@dimen/_5sdp"
-                    android:background="@color/line_divider"
-                    app:layout_constraintBottom_toBottomOf="@+id/ly_end_date"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/ly_end_date" />
-
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/tv_end_date"
-                    style="@style/TEXT_MEDIUM_BLACK_10"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_5sdp"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:text="@string/end_date"
-                    android:visibility="gone"
-                    android:textAlignment="textStart"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/divider_absent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/ly_end_date"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_5sdp"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:background="@drawable/rounded_leave_filter"
-                    android:orientation="vertical"
-                    android:padding="@dimen/_10sdp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/divider_absent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/tv_end_date_txt"
-                        style="@style/TEXT_MEDIUM_GREY_10"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_5sdp"
-                        android:hint="@string/end_date"
-                        android:textAlignment="textStart"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <ImageView
-                        android:id="@+id/img_end_cal"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_calendar"
-                        android:visibility="gone"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
-
-                    </ImageView>
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_sub_filter"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:orientation="horizontal"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:itemCount="3"
-                tools:listitem="@layout/sub_filter_row"
-                >
-
-            </androidx.recyclerview.widget.RecyclerView>
-
-            <LinearLayout
-                android:id="@+id/ly_header"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_40sdp"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:background="@drawable/rounded_shifts"
-                android:orientation="horizontal"
-                android:padding="@dimen/_6sdp"
-                android:weightSum="10">
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/tv_date"
-                    style="@style/TEXT_MEDIUM_WHITE_12"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="@dimen/_10sdp"
-                    android:layout_weight="3"
-                    android:gravity="start|center"
-                    android:text="@string/time" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/tv_hour"
-                    style="@style/TEXT_MEDIUM_WHITE_12"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="@dimen/_5sdp"
-                    android:layout_weight="3"
-                    android:gravity="center"
-                    android:text="@string/attendance_type" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/tv_status"
-                    style="@style/TEXT_MEDIUM_WHITE_12"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="@dimen/_5sdp"
-                    android:layout_weight="3"
-                    android:background="@drawable/rounded_disabled"
-                    android:text="@string/status" />
-
-                <View
-                    android:id="@+id/view_expand"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/_2sdp"
-                    android:layout_weight="1" />
-
-
-            </LinearLayout>
-
-
-
-
-
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_custom"
+                style="@style/TEXT_REGULAR_BLACK_10"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_weight="3"
+                android:background="@drawable/rounded_disabled"
+                android:paddingTop="@dimen/_6sdp"
+                android:paddingBottom="@dimen/_6sdp"
+                android:text="@string/custom" />
         </LinearLayout>
 
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_attendance_detail"
+        <androidx.compose.ui.platform.ComposeView
+            android:id="@+id/compose_check_in_list"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@color/bg_color"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toTopOf="@id/bottom_guideline"
-            android:visibility="gone"
-            app:layout_constraintEnd_toStartOf="@id/end_guideline"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@id/start_guideline"
-            app:layout_constraintTop_toBottomOf="@+id/ly_header_title"
-            app:layout_constraintVertical_bias="0.0"
-            tools:itemCount="3"
-            tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/my_attendance_detail_row" />
-
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv_no_record"
-            style="@style/TEXT_SEMI_BLACK_15"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/no_record_found"
-            android:visibility="visible"
-            app:layout_constraintStart_toEndOf="@id/start_guideline"
-            app:layout_constraintEnd_toStartOf="@id/end_guideline"
-            app:layout_constraintBottom_toTopOf="@id/bottom_guideline"
-            app:layout_constraintTop_toBottomOf="@+id/ly_header_title"/>
-
+            app:layout_constraintTop_toBottomOf="@+id/ly_action_btn"
+            app:layout_constraintBottom_toTopOf="@+id/bottom_guideline"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

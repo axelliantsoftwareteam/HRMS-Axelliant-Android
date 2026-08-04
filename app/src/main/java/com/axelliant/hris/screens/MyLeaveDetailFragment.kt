@@ -4,14 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.axelliant.hris.R
-import com.axelliant.hris.adapter.MyLeaveDetailAdapter
-import com.axelliant.hris.adapter.SubFilterAdapter
 import com.axelliant.hris.base.BaseFragment
-import com.axelliant.hris.callback.AdapterItemClick
+import com.axelliant.hris.components.LeaveDetailContent
 import com.axelliant.hris.config.AppConst.LeaveRequestParam
 import com.axelliant.hris.config.AppConst.RequestType
 import com.axelliant.hris.databinding.FragmentMyLeaveDetailBinding
@@ -42,27 +42,26 @@ class MyLeaveDetailFragment : BaseFragment() {
 
     private var filterId = ""
 
+    private var leaveListState by mutableStateOf(listOf<LeaveDetail>())
+    private var filterListState by mutableStateOf(listOf<FilterModel>())
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         _binding = FragmentMyLeaveDetailBinding.inflate(inflater).also { _binding = it }
         return binding?.root
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupCompose()
+
         leaveViewModel.getIsLoading()
             .observe(viewLifecycleOwner, EventObserver { isLoading ->
-                if (isLoading) {
-                    showDialog()
-                } else {
-                    hideDialog()
-                }
+                if (isLoading) showDialog() else hideDialog()
             })
 
         binding?.ivBack?.setOnClickListener {
@@ -72,101 +71,67 @@ class MyLeaveDetailFragment : BaseFragment() {
         leaveViewModel.getMyLeaveDetail(getCurrentObject())
         eventSelection()
 
-
         leaveViewModel.myLeaveDetailResponse.observe(
             viewLifecycleOwner,
             EventObserver { response ->
-
                 if (response?.meta?.status == true) {
                     response.leave_status?.let { subFilterPopulations(it) }
-                    if (response.leaves?.size ?: 0 > 0) {
-                        binding?.rvAttendanceDetail?.visibility=View.VISIBLE
-                        binding?.tvNoRecord?.visibility=View.GONE
-                        dataPopulate(response.leaves)
-
-                    } else {
-                        binding?.rvAttendanceDetail?.visibility = View.GONE
-                        binding?.tvNoRecord?.visibility = View.VISIBLE
-                    }
-
-
+                    dataPopulate(response.leaves)
                 } else {
                     requireContext().showErrorMsg(response?.meta?.message.toString())
                 }
-
             })
+    }
 
-
+    private fun setupCompose() {
+        binding?.composeLeaveDetail?.apply {
+            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+            setContent {
+                LeaveDetailContent(
+                    filters = filterListState,
+                    selectedFilterId = filterId,
+                    leaveList = leaveListState,
+                    onFilterClick = { filter ->
+                        filterId = filter.id.toString()
+                        leaveViewModel.getMyLeaveDetail(getCurrentObject())
+                    },
+                    onEditClick = { leaveDetail ->
+                        if (leaveDetail.status == "Open") {
+                            AppNavigator.navigateToRequest(Bundle().apply {
+                                this.putString(RequestType, RequestFilter.LEAVE.name)
+                                this.putString(LeaveRequestParam, Gson().toJson(leaveDetail))
+                            })
+                        } else {
+                            requireContext().showErrorMsg(
+                                ErrorMessages.OPEN_LEAVES_ONLY.errorString.plus(leaveDetail.status)
+                            )
+                        }
+                    }
+                )
+            }
+        }
     }
 
     private fun subFilterPopulations(leaveStatus: ArrayList<FilterModel>) {
-
         leaveStatus.add(0, FilterModel().apply {
             this.id = ""
             this.title = "All"
             this.count = "0"
         })
-
-        binding?.rvSubFilter?.layoutManager =
-            LinearLayoutManager(requireActivity(), RecyclerView.HORIZONTAL, false)
-        val weeklyAdapter = SubFilterAdapter(
-            filterId,
-            leaveStatus, requireContext(),
-            object : AdapterItemClick {
-                override fun onItemClick(customObject: Any, position: Int) {
-                    val filterObject = customObject as FilterModel
-
-                    filterId = filterObject.id.toString()
-                    leaveViewModel.getMyLeaveDetail(getCurrentObject())
-                }
-
-            }
-        )
-        binding?.rvSubFilter?.adapter = weeklyAdapter
-
+        filterListState = leaveStatus
     }
 
     private fun dataPopulate(leaves: ArrayList<LeaveDetail>?) {
-
-        binding?.rvAttendanceDetail?.layoutManager = LinearLayoutManager(requireActivity())
-        val weeklyAdapter = MyLeaveDetailAdapter(
-            leaves!!, requireContext(), object : AdapterItemClick {
-                override fun onItemClick(customObject: Any, position: Int) {
-
-                    val leaveDetail = customObject as LeaveDetail
-
-                    if (leaveDetail.status == "Open") {
-                        AppNavigator.navigateToRequest(Bundle().apply {
-                            this.putString(RequestType, RequestFilter.LEAVE.name)
-                            this.putString(LeaveRequestParam, Gson().toJson(leaveDetail))
-                        })
-                    } else {
-                        requireContext().showErrorMsg(
-                            ErrorMessages.OPEN_LEAVES_ONLY.errorString.plus(
-                                leaveDetail.status
-                            )
-                        )
-                    }
-
-
-                }
-
-            }
-        )
-        binding?.rvAttendanceDetail?.adapter = weeklyAdapter
-
+        leaveListState = leaves ?: arrayListOf()
     }
 
     private fun eventSelection() {
         binding?.tvWeek?.background =
             ContextCompat.getDrawable(requireContext(), R.drawable.rounded_disabled)
-
         binding?.tvMonth?.background =
             ContextCompat.getDrawable(requireContext(), R.drawable.rounded_disabled)
-
         binding?.tvCustom?.background =
             ContextCompat.getDrawable(requireContext(), R.drawable.rounded_disabled)
-
 
         binding?.tvWeek?.setTextColor(requireContext().getColor(R.color.btn_text_color))
         binding?.tvMonth?.setTextColor(requireContext().getColor(R.color.btn_text_color))
@@ -182,109 +147,69 @@ class MyLeaveDetailFragment : BaseFragment() {
             leaveViewModel.getMyLeaveDetail(getCurrentObject())
             eventSelection()
         }
-
         binding?.tvCustom?.setOnClickListener {
             datePickerDialog()
-            currentFilter = AttendanceFilter.Custom
-            leaveViewModel.getMyLeaveDetail(getCurrentObject())
-            eventSelection()
         }
 
         when (currentFilter) {
             AttendanceFilter.WEEK -> {
                 binding?.tvWeek?.background =
-                    ContextCompat.getDrawable(requireContext(), R.drawable.rounded_enabled)
+                    ContextCompat.getDrawable(requireContext(), R.drawable.fluent_blue)
                 binding?.tvWeek?.setTextColor(requireContext().getColor(R.color.white))
-
             }
-
             AttendanceFilter.MONTH -> {
-
                 binding?.tvMonth?.background =
-                    ContextCompat.getDrawable(requireContext(), R.drawable.rounded_enabled)
+                    ContextCompat.getDrawable(requireContext(), R.drawable.fluent_blue)
                 binding?.tvMonth?.setTextColor(requireContext().getColor(R.color.white))
             }
-
             AttendanceFilter.Custom -> {
-
                 binding?.tvCustom?.background =
-                    ContextCompat.getDrawable(requireContext(), R.drawable.rounded_enabled)
+                    ContextCompat.getDrawable(requireContext(), R.drawable.fluent_blue)
                 binding?.tvCustom?.setTextColor(requireContext().getColor(R.color.white))
             }
-
             else -> {}
         }
     }
 
     private fun getCurrentObject(): AttendanceInput {
-
-
         when (currentFilter) {
             AttendanceFilter.WEEK -> {
-
-
                 startDateString = Utils.getServerFormat(date = Utils.getLastWeek())
                 endDateString = Utils.getServerFormat()
-
-                setDateView()
             }
-
             AttendanceFilter.MONTH -> {
                 startDateString = Utils.getServerFormat(date = Utils.getFirstDayOfMonth())
-                endDateString =
-                    Utils.getServerFormat(date = Utils.getLastDayOfMonth())
-
-                setDateView()
+                endDateString = Utils.getServerFormat(date = Utils.getLastDayOfMonth())
             }
-
             else -> {}
-
         }
         return AttendanceInput().apply {
             this.startDate = startDateString!!
             this.endDate = endDateString!!
             this.filter = currentFilter
             this.filters = filterId
-
         }
-
-    }
-
-    private fun setDateView() {
-        if (startDateString != null && endDateString != null) {
-            binding?.tvStartDateTxt?.text = startDateString
-            binding?.tvEndDateTxt?.text = endDateString
-        }
-
     }
 
     private fun datePickerDialog() {
-        // Creating a MaterialDatePicker builder for selecting a date range
         val builder = MaterialDatePicker.Builder.dateRangePicker()
         builder.setTitleText("Select a date range")
-
-        // Building the date picker dialog
+        builder.setTheme(R.style.MyDatePickerTheme)
         val datePicker = builder.build()
         datePicker.addOnPositiveButtonClickListener { selection ->
-            // Retrieving the selected start and end dates
             val startDate = selection.first
             val endDate = selection.second
-
-            // Formatting the selected dates as strings
-
             startDateString = Utils.getServerFormat(date = Date(startDate))
             endDateString = Utils.getServerFormat(date = Date(endDate))
-
-            setDateView()
-
             currentFilter = AttendanceFilter.Custom
             leaveViewModel.getMyLeaveDetail(getCurrentObject())
             eventSelection()
         }
-
-        // Showing the date picker dialog
         datePicker.show(activity?.supportFragmentManager!!, "DATE_PICKER")
     }
 
-
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }

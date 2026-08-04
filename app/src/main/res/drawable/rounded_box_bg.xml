@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Place this file in res/drawable/rounded_box_bg.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+
+    <solid android:color="#26FFFFFF" />
+
+    <corners android:radius="@dimen/_12sdp" />
+
+</shape>
