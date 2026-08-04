@@ -18,13 +18,15 @@ val hasReleaseSigning =
 android {
     namespace = "com.axelliant.hris"
     compileSdk = 36
-    ndkVersion = "26.1.10909125"
+    ndkVersion = "28.2.13676358"
     defaultConfig {
         applicationId = "com.axelliant.hris"
         minSdk = 24
         targetSdk = 36
-        versionCode = 15
-        versionName = "1.15"
+        // Must exceed Play Store production versionCode (currently 260911137).
+        // CI uses date -u +%y%j%H%M; keep manual builds above the latest store value.
+        versionCode = 262031249
+        versionName = "1.17"
         multiDexEnabled = true
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -69,7 +71,7 @@ android {
         dataBinding = true
     }
 
-    packagingOptions {
+    packaging {
         jniLibs {
             useLegacyPackaging = false
         }
