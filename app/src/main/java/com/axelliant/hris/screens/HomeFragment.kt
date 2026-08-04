@@ -1,8 +1,6 @@
 package com.axelliant.hris.screens
 
 import android.Manifest
-import android.animation.AnimatorInflater
-import android.animation.AnimatorSet
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
@@ -18,8 +16,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-
+import com.axelliant.hris.extention.showShimmer
+import com.axelliant.hris.extention.hideShimmer
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
@@ -28,7 +26,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-
+import androidx.compose.ui.res.vectorResource
 import com.axelliant.hris.R
 import com.axelliant.hris.adapter.BirthdayAdapter
 
@@ -62,7 +60,6 @@ import com.axelliant.hris.model.todayTeam.EmployTeamProfile
 import com.axelliant.hris.navigation.AppNavigator
 import com.axelliant.hris.utils.SessionManager
 import com.axelliant.hris.viewmodel.HomeViewModel
-import com.google.android.gms.maps.model.LatLng
 import com.microsoft.identity.client.IAccount
 import com.microsoft.identity.client.IPublicClientApplication
 import com.microsoft.identity.client.ISingleAccountPublicClientApplication
@@ -72,6 +69,20 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import com.microsoft.fluentui.theme.FluentTheme
+import com.axelliant.hris.components.AppButton
+import com.axelliant.hris.components.CheckInButtonTokens
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidViewBinding
+import com.axelliant.hris.databinding.LayoutTodayCardContentBinding
+import com.axelliant.hris.components.AppCard
+import com.axelliant.hris.components.TodayCardTokens
+
 
 class HomeFragment : BaseFragment() {
 
@@ -82,13 +93,12 @@ class HomeFragment : BaseFragment() {
     private var ntpTimeString: String? = null
     private var currentStatus: String? = null
     private var loc: String? = null
-    private lateinit var frontAnimation: AnimatorSet
-    private lateinit var backAnimation: AnimatorSet
     private val radiusInMeters: Double = 200.0
     private var _binding: FragmentHomeBinding? = null
 
-
     private var isCheckIn: Boolean = true
+    private val isCheckInState = mutableStateOf(true)
+    private val checkInEnabledState = mutableStateOf(true)
 
     // Create an ArrayList to store the converted time strings
     private var targetLocList = ArrayList<BranchDataResponse>()
@@ -97,6 +107,8 @@ class HomeFragment : BaseFragment() {
 
 
     private val binding get() = _binding
+    private var _todayCardBinding: LayoutTodayCardContentBinding? = null
+    private val todayCardBinding get() = _todayCardBinding
 
     private var currentLocation: Location? = null
     private var checkInInfoResponse: CheckInInfoResponse? = null
@@ -108,6 +120,7 @@ class HomeFragment : BaseFragment() {
     /* Azure AD Variables */
     private var mSingleAccountApp: ISingleAccountPublicClientApplication? = null
     private var mAccount: IAccount? = null
+
 
 
     private val gpsLocationListener: LocationListener = object : LocationListener {
@@ -154,7 +167,7 @@ class HomeFragment : BaseFragment() {
         ) { isGranted ->
             if (isGranted) {
                 // Permission granted, perform location-based task
-                binding?.btnCheckIn?.performClick()
+                onCheckInButtonClicked()
             } else {
                 // Permission denied, check if "Don't ask again" was selected
                 if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)) {
@@ -215,17 +228,19 @@ class HomeFragment : BaseFragment() {
         )
         activityResultLauncher.launch(appPerms)
 
-/*
-       AppConst.TOKEN = "8b87d8a458a89e9:a1705cecb80d093"
-*/
-       AppConst.TOKEN = sessionManager.getToken()
+        /*
+               AppConst.TOKEN = "8b87d8a458a89e9:a1705cecb80d093"
+        */
+        AppConst.TOKEN = sessionManager.getToken()
+        if (employProfileResponse == null) {
+            binding?.shimmerLayout?.showShimmer(binding?.contentGroup!!)
+        }
         homeViewModel.getDashboardInformation()
         // data population
-        dataPopulate()
         homeViewModel.dashboardResponse.observe(
             viewLifecycleOwner,
             EventObserver { response ->
-
+                binding?.shimmerLayout?.hideShimmer(binding?.contentGroup!!)
                 if (response?.meta?.status == true) {
                     // success
 
@@ -302,11 +317,8 @@ class HomeFragment : BaseFragment() {
 
         homeViewModel.getIsLoading()
             .observe(viewLifecycleOwner, EventObserver { isLoading ->
-                if (isLoading) {
-                    showDialog()
-                } else {
-                    hideDialog()
-                }
+                if (employProfileResponse == null && isLoading) return@EventObserver
+                if (isLoading) showDialog() else hideDialog()
             })
 
 
@@ -417,42 +429,46 @@ class HomeFragment : BaseFragment() {
 
 
         setCurrentLocationText()
-
-        val scale = requireContext().resources.displayMetrics.density
-        binding?.tvCheckInStatus?.cameraDistance = 8000 * scale
-        binding?.tvCheckInStatus?.cameraDistance = 8000 * scale
-
-
-        // Now we will set the front animation
-        frontAnimation = AnimatorInflater.loadAnimator(
-            requireContext(),
-            R.animator.front_animator
-        ) as AnimatorSet
-        backAnimation =
-            AnimatorInflater.loadAnimator(requireContext(), R.animator.back_animator) as AnimatorSet
-
-        binding?.btnCheckIn?.setOnClickListener {
-
-          /*  if (employProfileResponse?.allow_punch_in == 1) return@setOnClickListener
-            else {*/
-                if (checkLocationPermission()) {
-                    setCurrentLocationText()
-                    if (checkInInfoResponse?.is_check_in_button == true) {
-                        showAttendanceDialog(LeaveStatus.CHECKIN.value)
-                    } else {
-                        showAttendanceDialog(LeaveStatus.CHECKOUT.value)
+        binding?.root?.findViewById<ComposeView>(R.id.compose_today_card)?.apply {
+            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+            setContent {
+                FluentTheme {
+                    AppCard(
+                        basicCardTokens = TodayCardTokens(
+                            cornerRadiusRes = R.dimen.ds_radius_md
+                        ),
+                        contentPadding = PaddingValues(0.dp)
+                    ) {
+                        AndroidViewBinding(
+                            factory = LayoutTodayCardContentBinding::inflate
+                        ) {
+                            _todayCardBinding = this
+                            composeCheckIn.apply {
+                                setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+                                setContent {
+                                    FluentTheme {
+                                        AppButton(
+                                            text = if (isCheckInState.value) getString(R.string.check_in) else getString(R.string.check_out),
+                                            onClick = { onCheckInButtonClicked() },
+                                            enabled = checkInEnabledState.value,
+                                            icon = ImageVector.vectorResource(id = R.drawable.ic_signout_fluent),
+                                            buttonTokens = CheckInButtonTokens(
+                                                fontSizeDimenName = "_13sdp",
+                                                iconSizeDimenName = "_23sdp",
+                                                bgRest = 0xFF0078D4,
+                                                bgPressed = 0xFF106EBE,
+                                                bgSelected = 0xFF106EBE,
+                                                bgFocused = 0xFF272757,
+                                                bgDisabled = 0xFFACACAC,
+                                            )
+                                        )
+                                    }
+                                }
+                            }
+                        }
                     }
-                } else {
-                    requireContext().showErrorMsg("Permission denied")
-                    // Request permission if not granted
-//                requestLocationPermission()
-                    locationPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
-
-
                 }
-           /* }*/
-
-
+            }
         }
 
         PublicClientApplication.createSingleAccountPublicClientApplication(
@@ -472,7 +488,6 @@ class HomeFragment : BaseFragment() {
             })
 
     }
-
     private fun getEmployeeList() {
         if (employeeTodayList.size > 0) {
             val todayTeamAttendance =
@@ -530,6 +545,20 @@ class HomeFragment : BaseFragment() {
             .show()
     }
 
+    private fun onCheckInButtonClicked() {
+        if (checkLocationPermission()) {
+            setCurrentLocationText()
+            if (checkInInfoResponse?.is_check_in_button == true) {
+                showAttendanceDialog(LeaveStatus.CHECKIN.value)
+            } else {
+                showAttendanceDialog(LeaveStatus.CHECKOUT.value)
+            }
+        } else {
+            requireContext().showErrorMsg("Permission denied")
+            locationPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+        }
+    }
+
     fun showAttendanceDialog(action: String) {
         val title = "Confirm Action"
         val description = when (action) {
@@ -543,18 +572,9 @@ class HomeFragment : BaseFragment() {
             .setTitle(title)
             .setMessage(description)
             .setPositiveButton("Yes") { dialog, _ ->
-
                 if (loc != null) {
-                    if (isCheckIn) {
-                        checkInAnimate()
-                    } else {
-                        checkOutAnimate()
-                    }
-
                     var type = CheckRequestFilter.OUT.name
-
-                    if (isCheckIn)
-                        type = CheckRequestFilter.IN.name
+                    if (isCheckIn) type = CheckRequestFilter.IN.name
 
                     homeViewModel.postCheckIn(CheckInRequest().apply {
                         this.log_type = type
@@ -563,7 +583,6 @@ class HomeFragment : BaseFragment() {
                         this.request_status = LeaveStatus.APPROVED.value
                         this.attendance_reason = "Punch from application"
                     })
-//                    this.date_time = getCurrentTime()
                 } else {
                     requireContext().showErrorMsg("Please wait we are fetching your location")
                 }
@@ -576,74 +595,44 @@ class HomeFragment : BaseFragment() {
     }
 
 
-    private fun checkOutAnimate() {
-        frontAnimation.setTarget(binding?.lyCheckOut)
-        backAnimation.setTarget(binding?.lyCheckIn)
-        backAnimation.start()
-        frontAnimation.start()
-    }
-
-    private fun checkInAnimate() {
-        frontAnimation.setTarget(binding?.lyCheckIn)
-        backAnimation.setTarget(binding?.lyCheckOut)
-        frontAnimation.start()
-        backAnimation.start()
-    }
-
     private fun checkInInfoPopulate(checkInInfo: CheckInInfoResponse) {
 
-        binding?.tvLocation?.text = checkInInfo.location.valueQualifier()
+//        todayCardBinding?.tvLocation?.text = checkInInfo.location.valueQualifier()
 
         if (checkInInfo.is_check_in_button == false && checkInInfo.is_check_out_button == false) {
-            binding?.btnCheckIn?.isEnabled = false
+            checkInEnabledState.value = false
 
-            binding?.lyCheckIn?.visibility = View.VISIBLE
-            binding?.lyCheckOut?.visibility = View.GONE
-
-            binding?.tvCheckInTxt?.text = checkInInfo.check_in.valueQualifier()
-            binding?.tvCheckOutTxt?.text = checkInInfo.check_out.valueQualifier()
-
+            todayCardBinding?.tvCheckInTxt?.text = checkInInfo.check_in.valueQualifier()
+            todayCardBinding?.tvCheckOutTxt?.text = checkInInfo.check_out.valueQualifier()
 
         } else {
-            binding?.btnCheckIn?.isEnabled = true
+            checkInEnabledState.value = true
 
             if (checkInInfo.is_check_in_button == true && checkInInfo.is_check_out_button == true) {
-                checkOutAnimate()
-                binding?.lyCheckIn?.visibility = View.VISIBLE
-                binding?.lyCheckOut?.visibility = View.GONE
-
                 isCheckIn = true
+                isCheckInState.value = true
             } else {
                 if (checkInInfo.is_check_in_button == true) {
-                    checkOutAnimate()
                     isCheckIn = true
-                    binding?.lyCheckIn?.visibility = View.VISIBLE
-                    binding?.lyCheckOut?.visibility = View.GONE
-
-                    binding?.tvCheckInTxt?.text = checkInInfo.check_in.valueQualifier()
+                    isCheckInState.value = true
+                    todayCardBinding?.tvCheckInTxt?.text = checkInInfo.check_in.valueQualifier()
 
                 } else if (checkInInfo.is_check_out_button == true) {
-                    checkInAnimate()
-                    binding?.tvCheckInTxt?.text = checkInInfo.check_in.valueQualifier()
                     isCheckIn = false
-                    binding?.lyCheckIn?.visibility = View.GONE
-                    binding?.lyCheckOut?.visibility = View.VISIBLE
-                    binding?.tvCheckOutTxt?.text = checkInInfo.check_out.valueQualifier()
-
-
+                    isCheckInState.value = false
+                    todayCardBinding?.tvCheckInTxt?.text = checkInInfo.check_in.valueQualifier()
+                    todayCardBinding?.tvCheckOutTxt?.text = checkInInfo.check_out.valueQualifier()
                 }
             }
-
         }
     }
-
     private fun setCurrentLocationText() {
 //        binding?.tvLocTxt?.text = getLocationAddress(currentLocation)
 
-       /* currentLocation = Location("").apply {
-            latitude = 31.5226884
-            longitude = 74.3490491
-        }*/
+        /* currentLocation = Location("").apply {
+             latitude = 31.5226884
+             longitude = 74.3490491
+         }*/
         for (targetloc in targetLocList) {
             if (currentLocation != null) {
                 Log.d("loc", " ${currentLocation!!.latitude} ${currentLocation!!.longitude}")
@@ -710,21 +699,25 @@ class HomeFragment : BaseFragment() {
                 name = HomeMenu.Attendance.gridName,
                 description = HomeMenu.Attendance.description,
                 color = ContextCompat.getDrawable(requireContext(), R.drawable.attend_gradient),
-                drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_atten)
+                drawable = ContextCompat.getDrawable(requireContext(), R.drawable.fluent_attendance)
             ),
             Modules(
                 id = 1,
                 name = HomeMenu.Request.gridName,
                 description = HomeMenu.Request.description,
                 color = ContextCompat.getDrawable(requireContext(), R.drawable.request_gradient),
-                drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_req)
+                drawable = ContextCompat.getDrawable(requireContext(), R.drawable.fluent_requests),
+                progressValue = 2,
+                progressMax = 5
             ),
             Modules(
                 id = 2,
                 name = HomeMenu.Leaves.gridName,
                 description = HomeMenu.Leaves.description,
                 color = ContextCompat.getDrawable(requireContext(), R.drawable.leaves_gradient),
-                drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_leaves)
+                drawable = ContextCompat.getDrawable(requireContext(), R.drawable.fluent_leaves),
+                progressValue = 4,
+                progressMax = 10
 
             ),
             Modules(
@@ -732,7 +725,7 @@ class HomeFragment : BaseFragment() {
                 name = HomeMenu.CheckIN.gridName,
                 description = HomeMenu.CheckIN.description,
                 color = ContextCompat.getDrawable(requireContext(), R.drawable.checkin_gradient),
-                drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_checkin)
+                drawable = ContextCompat.getDrawable(requireContext(), R.drawable.fluent_check_in)
 
 
             ),
@@ -741,22 +734,18 @@ class HomeFragment : BaseFragment() {
                 name = HomeMenu.Expense.gridName,
                 description = HomeMenu.Expense.description,
                 color = ContextCompat.getDrawable(requireContext(), R.drawable.expense_gradient),
-                drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_expe)
-            ), Modules(
-                id = 6,
-                name = HomeMenu.DocumentManagement.gridName,
-                description = HomeMenu.DocumentManagement.description,
-                color = ContextCompat.getDrawable(requireContext(), R.drawable.documt_gradient),
-                drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_payslip)
+                drawable = ContextCompat.getDrawable(requireContext(), R.drawable.fluent_expense)
             ),
-
             Modules(
-                id = 7,
-                name = HomeMenu.ResourceManagement.gridName,
-                description = HomeMenu.ResourceManagement.description,
-                color = ContextCompat.getDrawable(requireContext(), R.drawable.resource_gradient),
-                drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_manage)
-            )
+                id = 6,
+                name = HomeMenu.PaySlips.gridName,
+                description = HomeMenu.PaySlips.description,
+                color = ContextCompat.getDrawable(requireContext(), R.drawable.payslips_gradient),
+                drawable = ContextCompat.getDrawable(requireContext(), R.drawable.fluent_pay),
+                progressValue = 4,
+                progressMax = 10
+
+            ),
         )
         if (isManager) {
             homeViewModel.getTodayTeamInfo()
@@ -784,7 +773,6 @@ class HomeFragment : BaseFragment() {
 
                     when (currentObject.name) {
                         HomeMenu.Attendance.gridName -> {
-                            showDialog()
                             AppNavigator.navigateToAttendanceStats()
                         }
 
@@ -819,6 +807,10 @@ class HomeFragment : BaseFragment() {
                         HomeMenu.ResourceManagement.gridName -> {
                             showDialog()
                             AppNavigator.navigateToResourceManageFragment()
+                        }
+                        HomeMenu.PaySlips.gridName -> {
+                            showDialog()
+                            AppNavigator.navigateToPaySlips()
                         }
 
                         else -> {
@@ -909,15 +901,6 @@ class HomeFragment : BaseFragment() {
         }
     }
 
-    // Request location permission
-//    private fun requestLocationPermission() {
-//        ActivityCompat.requestPermissions(
-//            requireActivity(),
-//            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-//            LOCATION_PERMISSION_REQUEST_CODE
-//        )
-//    }
-
     // Handle permission result
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -927,47 +910,20 @@ class HomeFragment : BaseFragment() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
             if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                // Permission granted, retry check-in/out logic
-                binding?.btnCheckIn?.performClick() // Call the check-in logic again
+                onCheckInButtonClicked()
             } else {
                 requireContext().showErrorMsg("Location permission is required to check in/out.")
             }
         }
     }
-
+    override fun onDestroyView() {
+        binding?.shimmerLayout?.stopShimmer()
+        super.onDestroyView()
+        _binding = null
+        _todayCardBinding = null
+    }
     companion object {
         private val TAG = HomeFragment::class.java.simpleName
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1001
     }
 }
-
-
-/*
-private fun getLocationAddress(location: Location?): String {
-    if (location == null) {
-        return "Location not available"
-    }
-    if (!Geocoder.isPresent()) {
-        return "Geocoding not supported"
-    }
-    val geocoder = Geocoder(requireContext(), Locale.getDefault())
-    try {
-        val addresses: List<Address> =
-            geocoder.getFromLocation(location.latitude, location.longitude, 1)!!
-        if (addresses.isNotEmpty()) {
-            val address: Address = addresses[0]
-
-            val sb = StringBuilder()
-            sb.append(address.thoroughfare ?: "").append(address.subThoroughfare ?: "")
-            for (i in 0 until address.maxAddressLineIndex) {
-                sb.append(address.getAddressLine(i)).append(", ")
-            }
-            sb.append(address.locality).append(", ")
-            sb.append(address.countryName)
-            return sb.toString()
-        }
-    } catch (e: IOException) {
-        e.printStackTrace()
-    }
-    return "NA"
-}*/

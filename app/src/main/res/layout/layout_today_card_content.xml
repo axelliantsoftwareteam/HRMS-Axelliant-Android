@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/_10sdp">
+
+    <!-- LEFT CARD -->
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/leftCard"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/_4sdp"
+        android:background="@drawable/bg_today_card"
+        android:paddingVertical="@dimen/_8sdp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/rightCard"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHorizontal_weight="1">
+
+        <FrameLayout
+            android:id="@+id/badge_check_in"
+            android:layout_width="@dimen/_24sdp"
+            android:layout_height="@dimen/_24sdp"
+            android:background="@drawable/fluent__timer_start"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_check_in_txt"
+            style="@style/TEXT_SEMI_WHITE_15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_6sdp"
+            android:text="--:--"
+            app:layout_constraintTop_toBottomOf="@id/badge_check_in"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_check_in"
+            style="@style/TEXT_MEDIUM_WHITE_10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:alpha="0.7"
+            android:text="@string/check_in"
+            app:layout_constraintTop_toBottomOf="@id/tv_check_in_txt"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- RIGHT CARD -->
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/rightCard"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_4sdp"
+        android:background="@drawable/bg_today_card"
+        android:paddingVertical="@dimen/_8sdp"
+        app:layout_constraintStart_toEndOf="@id/leftCard"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHorizontal_weight="1">
+
+        <FrameLayout
+            android:id="@+id/badge_check_out"
+            android:layout_width="@dimen/_24sdp"
+            android:layout_height="@dimen/_24sdp"
+            android:background="@drawable/fluent__timer_end"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_check_out_txt"
+            style="@style/TEXT_SEMI_WHITE_15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_6sdp"
+            android:text="--:--"
+            app:layout_constraintTop_toBottomOf="@id/badge_check_out"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_check_out"
+            style="@style/TEXT_MEDIUM_WHITE_10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:alpha="0.7"
+            android:text="@string/check_out"
+            app:layout_constraintTop_toBottomOf="@id/tv_check_out_txt"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Full-width pill punch button -->
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/compose_check_in"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_42sdp"
+        android:layout_marginTop="@dimen/_8sdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/leftCard"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

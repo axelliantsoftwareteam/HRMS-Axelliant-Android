@@ -174,7 +174,13 @@
         tools:layout="@layout/fragment_add_resource_manage">
 
     </fragment>
+    <fragment
+        android:id="@+id/PayslipFragment"
+        android:name="com.axelliant.hris.screens.payslip.PayslipFragment"
+        android:label="Payslip">
+</fragment>
 
 
 
-</navigation>
+
+    </navigation>

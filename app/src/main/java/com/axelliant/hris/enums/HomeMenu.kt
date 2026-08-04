@@ -10,6 +10,8 @@ enum class HomeMenu(val gridName:String,val description:String) {
     Expense("Expense","View all the expense requests"),
     DocumentManagement("Document Vault","View your all document"),
     ResourceManagement("Resource Management","View your all resource management"),
-    Approval("Approval","View all requests")
+    Approval("Approval","View all requests"),
+    PaySlips("Pay Slips","Download/View your pay slips"),
+
 
 }

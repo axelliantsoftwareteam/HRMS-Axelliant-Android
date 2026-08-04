@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="ds_radius_sm">@dimen/_4sdp</dimen>
+    <dimen name="ds_radius_md">@dimen/_8sdp</dimen>
+    <dimen name="ds_radius_lg">@dimen/_12sdp</dimen>
+    <dimen name="ds_radius_xl">@dimen/_16sdp</dimen>
+</resources>

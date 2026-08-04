@@ -45,7 +45,7 @@ class SubFilterAdapter(
         {
             holder.binding.tvWorkFrom.setTextColor(context.getColor(R.color.white))
             holder.binding.lyWorkHome.background =
-                context.resources.getDrawable(R.drawable.enable_rounded_bgg)
+                context.resources.getDrawable(R.drawable.fluent_blue)
         } else {
             holder.binding.tvWorkFrom.setTextColor(context.getColor(R.color.black))
 

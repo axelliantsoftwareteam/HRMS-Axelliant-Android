@@ -17,7 +17,6 @@
             style="@style/end_gl"
             android:orientation="vertical" />
 
-
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/bottom_guideline"
             style="@style/bottom_gl" />
@@ -42,25 +41,24 @@
             android:layout_height="@dimen/_30sdp"
             android:src="@drawable/ic_left"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/top_guideline">
-
-        </ImageView>
+            app:layout_constraintTop_toBottomOf="@id/top_guideline" />
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginTop="@dimen/_10sdp"
+            android:clipToPadding="false"
+            android:clipChildren="false"
             app:layout_constraintBottom_toBottomOf="@id/bottom_guideline"
             app:layout_constraintEnd_toEndOf="@id/end_guideline"
             app:layout_constraintStart_toStartOf="@id/start_guideline"
             app:layout_constraintTop_toBottomOf="@+id/iv_back">
 
-
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                >
-
+                android:clipChildren="false"
+                android:clipToPadding="false">
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tv_title"
@@ -78,28 +76,29 @@
                     android:padding="@dimen/_5sdp"
                     android:text="@string/view"
                     android:textAlignment="textStart"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/tv_title"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_title"
-                    />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/tv_title" />
 
+                <!-- ================= SELF LEAVE SECTION ================= -->
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/ly_attend"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:background="@drawable/rounded_leave_cancelled"
-                    android:padding="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_view">
 
+                    <!-- Week / Month toggle (unchanged, still XML/View based) -->
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/ly_action_btn"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/_5sdp"
-                        android:background="@drawable/rounded_leave_filter"
+                        android:background="@drawable/rounded_bgg"
                         android:gravity="center"
                         android:orientation="horizontal"
                         android:padding="@dimen/_3sdp"
@@ -133,258 +132,45 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/tv_week" />
 
-
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/ly_details"
+                    <!-- NEW: Compose replaces ly_details + ly_leave_status + ly_used_leaves -->
+                    <androidx.compose.ui.platform.ComposeView
+                        android:id="@+id/compose_self_leave_stats"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/_5sdp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/ly_action_btn">
-
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/ly_total_leaves"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent">
-
-                            <com.google.android.material.textview.MaterialTextView
-                                android:id="@+id/tv_total_leave_txt"
-                                style="@style/TEXT_SEMI_BLACK_15"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                tools:text="@string/_3"
-                                android:text="@string/dash"
-                                android:textColor="@color/colorApp"
-                                android:textSize="@dimen/_20ssp"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                            <com.google.android.material.textview.MaterialTextView
-                                android:id="@+id/tv_total_leave"
-                                style="@style/TEXT_MEDIUM_GREY_10"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/_5sdp"
-                                android:background="@drawable/rounded_disabled"
-                                android:text="@string/total_leaves"
-
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/tv_total_leave_txt" />
-
-
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/ly_leave_status"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/_5sdp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/ly_details">
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/ly_pending"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toStartOf="@+id/ly_approved"
-                            app:layout_constraintHorizontal_weight="3.3"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent">
-
-                            <com.google.android.material.textview.MaterialTextView
-                                android:id="@+id/tv_pending_txt"
-                                style="@style/TEXT_MEDIUM_BLACK_15"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                tools:text="@string/_3"
-                                android:text="@string/dash"
-                                android:textColor="@color/yellow"
-                                android:textSize="@dimen/_20ssp"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent"
-
-                                />
-
-                            <com.google.android.material.textview.MaterialTextView
-                                android:id="@+id/tv_pending"
-                                style="@style/TEXT_MEDIUM_GREY_10"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/_5sdp"
-                                android:background="@drawable/rounded_disabled"
-                                android:text="@string/pending"
-
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/tv_pending_txt" />
-
-                            <View
-                                android:id="@+id/divider_leaves"
-                                android:layout_width="2dp"
-                                android:layout_height="0dp"
-                                android:layout_marginEnd="@dimen/_10sdp"
-                                android:background="@color/line_divider"
-                                app:layout_constraintBottom_toBottomOf="@+id/tv_pending"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toTopOf="@+id/tv_pending_txt" />
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/ly_approved"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            app:layout_constraintEnd_toStartOf="@+id/ly_rejected"
-                            app:layout_constraintHorizontal_weight="3.3"
-                            app:layout_constraintStart_toEndOf="@+id/ly_pending"
-                            app:layout_constraintTop_toTopOf="@+id/ly_pending">
-
-                            <com.google.android.material.textview.MaterialTextView
-                                android:id="@+id/tv_approved_txt"
-                                style="@style/TEXT_MEDIUM_BLACK_15"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                tools:text="@string/_3"
-                                android:text="@string/dash"
-                                android:textColor="@color/green"
-                                android:textSize="@dimen/_20ssp"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                            <com.google.android.material.textview.MaterialTextView
-                                android:id="@+id/tv_approved"
-                                style="@style/TEXT_MEDIUM_GREY_10"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/_5sdp"
-                                android:background="@drawable/rounded_disabled"
-                                android:text="@string/approved"
-
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/tv_approved_txt" />
-
-                            <View
-                                android:layout_width="2dp"
-                                android:layout_height="0dp"
-                                android:layout_gravity="center_vertical"
-                                android:layout_marginEnd="@dimen/_10sdp"
-                                android:background="@color/line_divider"
-                                app:layout_constraintBottom_toBottomOf="@+id/tv_approved"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toTopOf="@+id/tv_approved_txt" />
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/ly_rejected"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_weight="3.3"
-                            app:layout_constraintStart_toEndOf="@+id/ly_approved"
-                            app:layout_constraintTop_toTopOf="@+id/ly_approved">
-
-                            <com.google.android.material.textview.MaterialTextView
-                                android:id="@+id/tv_rejected_txt"
-                                style="@style/TEXT_MEDIUM_BLACK_15"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                tools:text="@string/_3"
-                                android:text="@string/dash"
-                                android:textColor="@color/red"
-                                android:textSize="@dimen/_20ssp"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                            <com.google.android.material.textview.MaterialTextView
-                                android:id="@+id/tv_rejected"
-                                style="@style/TEXT_MEDIUM_GREY_10"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/_5sdp"
-                                android:background="@drawable/rounded_disabled"
-                                android:text="@string/rejected"
-                                android:textAlignment="textStart"
-
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/tv_rejected_txt" />
-
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/ly_used_leaves"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_5sdp"
                         android:layout_marginStart="@dimen/_5sdp"
-
-                        android:layout_marginTop="@dimen/_20sdp"
                         android:layout_marginEnd="@dimen/_5sdp"
-                        android:layout_marginBottom="@dimen/_5sdp"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/ly_action_btn"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/ly_leave_status">
-
-                        <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/tv_used_leaves_txt"
-                            style="@style/TEXT_SEMI_BLACK_15"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            tools:text="@string/_3"
-                            android:text="@string/dash"
-                            android:textColor="@color/colorApp"
-                            android:textSize="@dimen/_20ssp"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/tv_used_leaves"
-                            style="@style/TEXT_MEDIUM_GREY_10"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_5sdp"
-                            android:background="@drawable/rounded_disabled"
-                            android:text="@string/remaining"
-
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/tv_used_leaves_txt" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
+                        app:layout_constraintEnd_toEndOf="parent" />
 
                     <androidx.recyclerview.widget.RecyclerView
-                        android:layout_marginTop="@dimen/_10sdp"
-                        android:layout_marginStart="@dimen/_5sdp"
                         android:id="@+id/rv_remaining"
-                        app:layout_constraintTop_toBottomOf="@+id/ly_used_leaves"
                         android:layout_width="0dp"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:layout_marginStart="@dimen/_6sdp"
+                        app:layout_constraintTop_toBottomOf="@+id/compose_self_leave_stats"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:clipChildren="false"
+                        android:clipToPadding="false"
                         tools:listitem="@layout/remaning_leave_row"
                         tools:itemCount="3"
                         app:spanCount="3"
-                        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        >
-
-                    </androidx.recyclerview.widget.RecyclerView>
+                        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
+                <!-- ================= MY TEAM SECTION ================= -->
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tv_my_team"
                     style="@style/TEXT_SEMI_BLACK_15"
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_10sdp"
                     android:text="@string/my_team"
                     app:layout_constraintStart_toStartOf="parent"
@@ -400,17 +186,19 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/tv_my_team" />
 
-
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/ly_myteam_attend"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_10sdp"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
                     android:background="@drawable/rounded_leave_cancelled"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_my_team_view">
 
+                    <!-- Header row (unchanged) -->
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/ly_header"
                         android:layout_width="0dp"
@@ -445,252 +233,22 @@
                             app:layout_constraintStart_toEndOf="@+id/iv_today"
                             app:layout_constraintTop_toTopOf="parent" />
 
-
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/ly_teams_members"
+                    <!-- NEW: Compose replaces ly_teams_members + ly_teams_details + ly_teams_absent_leave -->
+                    <androidx.compose.ui.platform.ComposeView
+                        android:id="@+id/compose_team_leave_stats"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/_5sdp"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/ly_header"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/ly_header">
-
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/ly_total_members"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent">
-
-                            <com.google.android.material.textview.MaterialTextView
-                                android:id="@+id/tv_total_member_txt"
-                                style="@style/TEXT_MEDIUM_BLACK_15"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                tools:text="@string/_3"
-                                android:text="@string/dash"
-                                android:textColor="@color/blue"
-                                android:textSize="@dimen/_20ssp"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                            <com.google.android.material.textview.MaterialTextView
-                                android:id="@+id/tv_total_member"
-                                style="@style/TEXT_MEDIUM_GREY_10"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/_5sdp"
-                                android:background="@drawable/rounded_disabled"
-                                android:text="@string/total_members"
-
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/tv_total_member_txt" />
-
-
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/ly_teams_details"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/_5sdp"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/ly_teams_members">
-
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/ly_present"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            app:layout_constraintEnd_toStartOf="@+id/ly_work_home"
-                            app:layout_constraintHorizontal_weight="5"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent">
-
-                            <com.google.android.material.textview.MaterialTextView
-                                android:id="@+id/tv_present_txt"
-                                style="@style/TEXT_MEDIUM_BLACK_15"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                tools:text="@string/_3"
-                                android:text="@string/dash"
-                                android:textColor="@color/colorApp"
-                                android:textSize="@dimen/_20ssp"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                            <com.google.android.material.textview.MaterialTextView
-                                android:id="@+id/tv_present"
-                                style="@style/TEXT_MEDIUM_GREY_10"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/_5sdp"
-                                android:background="@drawable/rounded_disabled"
-                                android:text="@string/all_leaves"
-
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/tv_present_txt" />
-
-                            <View
-                                android:layout_width="2dp"
-                                android:layout_height="0dp"
-                                android:layout_gravity="center_vertical"
-                                android:layout_marginEnd="@dimen/_10sdp"
-                                android:background="@color/line_divider"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toTopOf="@+id/tv_present_txt" />
-
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/ly_work_home"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_weight="5"
-                            app:layout_constraintStart_toEndOf="@+id/ly_present"
-
-                            app:layout_constraintTop_toTopOf="@+id/ly_present">
-
-                            <com.google.android.material.textview.MaterialTextView
-                                android:id="@+id/tv_work_home_txt"
-                                style="@style/TEXT_MEDIUM_BLACK_15"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                tools:text="@string/_3"
-                                android:text="@string/dash"
-                                android:textColor="@color/green"
-                                android:textSize="@dimen/_20ssp"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                            <com.google.android.material.textview.MaterialTextView
-                                android:id="@+id/tv_work_home"
-                                style="@style/TEXT_MEDIUM_GREY_10"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/_5sdp"
-                                android:background="@drawable/rounded_disabled"
-                                android:text="@string/approved"
-
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/tv_work_home_txt" />
-
-
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/ly_teams_absent_leave"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/_5sdp"
-                        android:paddingBottom="@dimen/_5sdp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/ly_teams_details">
-
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/ly_teams_absent"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toStartOf="@+id/ly_on_leave"
-                            app:layout_constraintHorizontal_weight="5"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent">
-
-                            <com.google.android.material.textview.MaterialTextView
-                                android:id="@+id/tv_teams_absent_txt"
-                                style="@style/TEXT_MEDIUM_BLACK_15"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                tools:text="@string/_3"
-                                android:text="@string/dash"
-                                android:textColor="@color/red"
-                                android:textSize="@dimen/_20ssp"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                            <com.google.android.material.textview.MaterialTextView
-                                android:id="@+id/tv_teams_absent"
-                                style="@style/TEXT_MEDIUM_GREY_10"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/_5sdp"
-                                android:background="@drawable/rounded_disabled"
-                                android:text="@string/rejected"
-
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/tv_teams_absent_txt" />
-
-                            <View
-                                android:layout_width="2dp"
-                                android:layout_height="0dp"
-                                android:layout_gravity="center_vertical"
-                                android:layout_marginEnd="@dimen/_10sdp"
-                                android:background="@color/line_divider"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toTopOf="@+id/tv_teams_absent_txt" />
-
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/ly_on_leave"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_weight="5"
-                            app:layout_constraintStart_toEndOf="@+id/ly_teams_absent"
-                            app:layout_constraintTop_toTopOf="@+id/ly_teams_absent">
-
-                            <com.google.android.material.textview.MaterialTextView
-                                android:id="@+id/tv_teams_onleave_txt"
-                                style="@style/TEXT_MEDIUM_BLACK_15"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                tools:text="@string/_3"
-                                android:text="@string/dash"
-                                android:textSize="@dimen/_20ssp"
-                                android:textColor="@color/yellow"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                            <com.google.android.material.textview.MaterialTextView
-                                android:id="@+id/tv_teams_onleave"
-                                style="@style/TEXT_MEDIUM_GREY_10"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/_5sdp"
-                                android:background="@drawable/rounded_disabled"
-                                android:text="@string/pending"
-
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/tv_teams_onleave_txt" />
-
-
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
+                        app:layout_constraintBottom_toBottomOf="parent" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-
+                <!-- ================= UPCOMING LEAVES SECTION ================= -->
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tv_my_shift"
                     style="@style/TEXT_SEMI_BLACK_15"
@@ -705,6 +263,8 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
@@ -722,18 +282,3 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

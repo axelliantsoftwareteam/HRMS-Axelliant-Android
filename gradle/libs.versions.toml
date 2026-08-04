@@ -8,6 +8,13 @@ commons-net = "3.6"
 converter-scalars = "2.9.0"
 core-ktx = "1.13.1"
 espresso-core = "3.5.1"
+fluentui_core = "0.3.11"
+fluentui_drawer = "0.3.10"
+fluentui_icons = "0.3.2"
+fluentui_menus = "0.3.5"
+fluentui_progress = "0.3.7"
+fluentui_topappbars = "0.3.9"
+fluentui_controls = "0.3.3"
 glide = "4.16.0"
 gson = "2.10.1"
 imagepicker = "2.1"
@@ -36,6 +43,7 @@ constraintlayout = "2.1.4"
 play-services-maps = "19.0.0"
 
 [libraries]
+fluentui_controls = { module = "com.microsoft.fluentui:fluentui_controls", version.ref = "fluentui_controls" }
 android-gif-drawable = { module = "pl.droidsonroids.gif:android-gif-drawable", version.ref = "android-gif-drawable" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "core-ktx" }
@@ -51,6 +59,15 @@ circleimageview = { module = "de.hdodenhof:circleimageview", version.ref = "circ
 commons-net = { module = "commons-net:commons-net", version.ref = "commons-net" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converter-scalars" }
 converter-scalars = { module = "com.squareup.retrofit2:converter-scalars", version.ref = "converter-scalars" }
+fluentui_core = { module = "com.microsoft.fluentui:fluentui_core", version.ref = "fluentui_core" }
+fluentui_drawer = { module = "com.microsoft.fluentui:fluentui_drawer", version.ref = "fluentui_drawer" }
+fluentui_icons = { module = "com.microsoft.fluentui:fluentui_icons", version.ref = "fluentui_icons" }
+fluentui_listitem = { module = "com.microsoft.fluentui:fluentui_listitem", version.ref = "fluentui_progress" }
+fluentui_menus = { module = "com.microsoft.fluentui:fluentui_menus", version.ref = "fluentui_menus" }
+fluentui_notification = { module = "com.microsoft.fluentui:fluentui_notification", version.ref = "fluentui_drawer" }
+fluentui_persona = { module = "com.microsoft.fluentui:fluentui_persona", version.ref = "fluentui_drawer" }
+fluentui_progress = { module = "com.microsoft.fluentui:fluentui_progress", version.ref = "fluentui_progress" }
+fluentui_topappbars = { module = "com.microsoft.fluentui:fluentui_topappbars", version.ref = "fluentui_topappbars" }
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 imagepicker = { module = "com.github.dhaval2404:imagepicker", version.ref = "imagepicker" }

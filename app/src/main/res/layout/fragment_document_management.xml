@@ -352,7 +352,7 @@
             app:layout_constraintBottom_toBottomOf="@id/bottom_guideline"
             android:src="@drawable/plus"
             android:tint="@color/white"
-            app:backgroundTint="@color/colorApp"
+            app:backgroundTint="@color/sky_blue"
             app:borderWidth="0dp"
             android:layout_marginBottom="@dimen/_20sdp"
             app:elevation="6dp"

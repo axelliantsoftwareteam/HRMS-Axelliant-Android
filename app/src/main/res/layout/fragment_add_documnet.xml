@@ -383,7 +383,7 @@
             android:layout_marginStart="@dimen/_10sdp"
             android:layout_marginEnd="@dimen/_10sdp"
             android:visibility="visible"
-            app:buttonBg="@drawable/rounded_enabled"
+            app:buttonBg="@drawable/fluent_blue"
             app:iconVisibility="false"
             app:layout_constraintBottom_toTopOf="@id/bottom_guideline"
             app:layout_constraintEnd_toEndOf="parent"
