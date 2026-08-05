@@ -13,8 +13,13 @@ import com.axelliant.hris.model.leave.TeamLeaveDetailResponse
 import com.axelliant.hris.model.leave.TeamLeaveQuotaResponse
 import com.axelliant.hris.model.leave.UpcomingLeaveInput
 import com.axelliant.hris.repos.LeaveRepo
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class LeaveViewModel(private val leaveRepo: LeaveRepo) : BaseViewModel() {
+@HiltViewModel
+class LeaveViewModel @Inject constructor(
+    private val leaveRepo: LeaveRepo
+) : BaseViewModel() {
 
      val leaveStatResponse: MutableLiveData<Event<LeaveResponse?>> by lazy { MutableLiveData<Event<LeaveResponse?>>() }
      val upcomingLeavesResponse: MutableLiveData<Event<MyUpcomingLeaveDetailResponse?>> by lazy { MutableLiveData<Event<MyUpcomingLeaveDetailResponse?>>() }

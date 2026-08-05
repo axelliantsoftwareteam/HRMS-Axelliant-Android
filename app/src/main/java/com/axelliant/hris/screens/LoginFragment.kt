@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.core.content.ContextCompat
 import com.axelliant.hris.R
 import com.axelliant.hris.base.BaseFragment
@@ -20,14 +21,17 @@ import com.axelliant.hris.viewmodel.LoginViewModel
 import com.google.android.material.textview.MaterialTextView
 import com.microsoft.identity.client.*
 import com.microsoft.identity.client.exception.MsalException
-import org.koin.android.ext.android.inject
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class LoginFragment : BaseFragment() {
 
-    private val sessionManager: SessionManager by inject()
+    @Inject
+    lateinit var sessionManager: SessionManager
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
-    private val loginViewModel: LoginViewModel by inject()
+    private val loginViewModel: LoginViewModel by viewModels()
 
     /* Azure AD Variables */
     private var mSingleAccountApp: ISingleAccountPublicClientApplication? = null

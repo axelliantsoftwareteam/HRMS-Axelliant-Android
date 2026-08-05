@@ -26,9 +26,12 @@ import com.google.gson.reflect.TypeToken
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
+import javax.inject.Inject
 import java.lang.reflect.Type
 
-class LeaveRepo(private var apiInterface: ApiInterface) {
+class LeaveRepo @Inject constructor(
+    private val apiInterface: ApiInterface
+) {
 
     fun getLeaveStats(attendanceInput: AttendanceInput): MutableLiveData<BaseApiModel<LeaveResponse>> {
         val serverResponse = MutableLiveData<BaseApiModel<LeaveResponse>>()

@@ -5,8 +5,13 @@ import com.axelliant.hris.event.Event
 import com.axelliant.hris.model.login.LoginRequest
 import com.axelliant.hris.model.login.UserLoginResponse
 import com.axelliant.hris.repos.LoginRepo
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class LoginViewModel(private val loginRepo: LoginRepo) : BaseViewModel() {
+@HiltViewModel
+class LoginViewModel @Inject constructor(
+    private val loginRepo: LoginRepo
+) : BaseViewModel() {
     val userLoginResponse: MutableLiveData<Event<UserLoginResponse?>> by lazy { MutableLiveData<Event<UserLoginResponse?>>() }
 
 

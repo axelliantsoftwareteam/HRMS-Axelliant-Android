@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/layout_bg"
+    android:layoutDirection="ltr"
+    android:textDirection="ltr">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/start_guideline"
+        style="@style/start_gl"
+        android:orientation="vertical" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/end_guideline"
+        style="@style/end_gl"
+        android:orientation="vertical" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/top_guideline"
+        style="@style/top_gl" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/bottom_guideline"
+        style="@style/bottom_gl" />
+
+    <ImageView
+        android:id="@+id/appLogo"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_50sdp"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/app_name"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_applogo"
+        app:layout_constraintBottom_toTopOf="@id/entryTitle"
+        app:layout_constraintEnd_toEndOf="@id/end_guideline"
+        app:layout_constraintStart_toStartOf="@id/start_guideline"
+        app:layout_constraintTop_toBottomOf="@id/top_guideline"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/entryTitle"
+        style="@style/Heading_1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_24sdp"
+        android:gravity="center"
+        android:text="@string/app_entry_title"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toTopOf="@id/entrySubtitle"
+        app:layout_constraintEnd_toEndOf="@id/appLogo"
+        app:layout_constraintStart_toStartOf="@id/appLogo"
+        app:layout_constraintTop_toBottomOf="@id/appLogo" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/entrySubtitle"
+        style="@style/TEXT_MEDIUM_GREY_12"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:gravity="center"
+        android:text="@string/app_entry_subtitle"
+        app:layout_constraintBottom_toTopOf="@id/hrisButton"
+        app:layout_constraintEnd_toEndOf="@id/appLogo"
+        app:layout_constraintStart_toStartOf="@id/appLogo"
+        app:layout_constraintTop_toBottomOf="@id/entryTitle" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/hrisButton"
+        style="@style/ButtonTextStyle"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_44sdp"
+        android:layout_marginTop="@dimen/_24sdp"
+        android:text="@string/entry_hris"
+        android:textColor="@color/white"
+        app:backgroundTint="@color/colorApp"
+        app:cornerRadius="@dimen/ds_radius_md"
+        app:icon="@drawable/ic_home"
+        app:iconGravity="textStart"
+        app:iconPadding="@dimen/_8sdp"
+        app:iconTint="@color/white"
+        app:layout_constraintBottom_toTopOf="@id/internalAppsButton"
+        app:layout_constraintEnd_toEndOf="@id/appLogo"
+        app:layout_constraintStart_toStartOf="@id/appLogo"
+        app:layout_constraintTop_toBottomOf="@id/entrySubtitle" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/internalAppsButton"
+        style="@style/ButtonTextStyle"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_44sdp"
+        android:layout_marginTop="@dimen/_12sdp"
+        android:text="@string/entry_internal_apps"
+        android:textColor="@color/button_disable_color"
+        app:backgroundTint="@color/white"
+        app:cornerRadius="@dimen/ds_radius_md"
+        app:icon="@drawable/fluent_resource_management"
+        app:iconGravity="textStart"
+        app:iconPadding="@dimen/_8sdp"
+        app:iconTint="@color/button_disable_color"
+        app:layout_constraintBottom_toBottomOf="@id/bottom_guideline"
+        app:layout_constraintEnd_toEndOf="@id/appLogo"
+        app:layout_constraintStart_toStartOf="@id/appLogo"
+        app:layout_constraintTop_toBottomOf="@id/hrisButton"
+        app:strokeColor="@color/button_disable_color"
+        app:strokeWidth="@dimen/_1sdp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

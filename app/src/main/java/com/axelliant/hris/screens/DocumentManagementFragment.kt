@@ -27,16 +27,18 @@ import com.axelliant.hris.model.leave.ExpenseApprovalStatus
 import com.axelliant.hris.utils.Utils
 import com.axelliant.hris.viewmodel.ExpenseViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
-import org.koin.android.ext.android.inject
+import androidx.fragment.app.viewModels
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.Date
 
 
+@AndroidEntryPoint
 class DocumentManagementFragment : BaseFragment() {
 
     private var _binding: FragmentDocumentManagementBinding? = null
     private val binding get() = _binding
     private var currentFilter = AttendanceFilter.WEEK
-    private val expenseViewModel: ExpenseViewModel by inject()
+    private val expenseViewModel: ExpenseViewModel by viewModels()
     private var startDateString: String? = null
     private var endDateString: String? = null
     private var filterId = ""

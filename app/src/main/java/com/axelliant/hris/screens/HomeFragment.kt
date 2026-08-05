@@ -68,7 +68,9 @@ import com.microsoft.identity.client.exception.MsalException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.koin.android.ext.android.inject
+import androidx.fragment.app.viewModels
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.ComposeView
@@ -84,6 +86,7 @@ import com.axelliant.hris.components.AppCard
 import com.axelliant.hris.components.TodayCardTokens
 
 
+@AndroidEntryPoint
 class HomeFragment : BaseFragment() {
 
     private var employProfileResponse: EmployProfile? = null
@@ -114,8 +117,10 @@ class HomeFragment : BaseFragment() {
     private var checkInInfoResponse: CheckInInfoResponse? = null
     private lateinit var locationManager: LocationManager
 
-    private val homeViewModel: HomeViewModel by inject()
-    private val sessionManager: SessionManager by inject()
+    private val homeViewModel: HomeViewModel by viewModels()
+
+    @Inject
+    lateinit var sessionManager: SessionManager
 
     /* Azure AD Variables */
     private var mSingleAccountApp: ISingleAccountPublicClientApplication? = null

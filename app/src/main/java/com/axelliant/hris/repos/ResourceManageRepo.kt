@@ -29,9 +29,12 @@ import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
+import javax.inject.Inject
 import java.lang.reflect.Type
 
-class ResourceManageRepo(private var apiInterface: ApiInterface) {
+class ResourceManageRepo @Inject constructor(
+    private val apiInterface: ApiInterface
+) {
 
     fun getMyHoursDetail(attendanceInput: AttendanceInput): MutableLiveData<BaseApiModel<MyHoursDetails>> {
         val serverResponse = MutableLiveData<BaseApiModel<MyHoursDetails>>()

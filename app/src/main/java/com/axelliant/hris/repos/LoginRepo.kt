@@ -15,8 +15,11 @@ import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
 import java.lang.reflect.Type
+import javax.inject.Inject
 
-class LoginRepo(private var apiInterface: ApiInterface) {
+class LoginRepo @Inject constructor(
+    private val apiInterface: ApiInterface
+) {
     fun userLoginApiCall(loginRequest: LoginRequest): MutableLiveData<BaseApiModel<UserLoginResponse>?> {
         val userLoginResponse = MutableLiveData<BaseApiModel<UserLoginResponse>?>()
         val call = apiInterface.userLoginCall(loginRequest)

@@ -14,7 +14,8 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.axelliant.hris.R
 import com.axelliant.hris.config.AppConst
-import com.axelliant.hris.di.Components
+import com.axelliant.hris.config.GlobalConfig
+import com.axelliant.hris.core.contracts.navigation.AppNavControllerStore
 import com.axelliant.hris.extention.showErrorMsg
 import com.axelliant.hris.navigation.AppNavigator
 import com.axelliant.hris.utils.SessionManager
@@ -30,9 +31,11 @@ import com.google.android.play.core.install.model.UpdateAvailability
 import com.microsoft.identity.client.IAccount
 import com.microsoft.identity.client.ISingleAccountPublicClientApplication
 import com.microsoft.identity.client.exception.MsalException
-import org.koin.android.ext.android.inject
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 
+@AndroidEntryPoint
 class MainActivity : BaseActivity() {
 
     private val appUpdateManager: AppUpdateManager by lazy { AppUpdateManagerFactory.create(this) }
@@ -47,25 +50,28 @@ class MainActivity : BaseActivity() {
             }
         }
     }
-    private lateinit var diComponents: Components
+    @Inject
+    lateinit var globalConfig: GlobalConfig
     private var lastBackPressedTime: Long = 0
     private val exitThreshold: Long = 2000 // Time threshold in milliseconds
-    private val sessionManager: SessionManager by inject()
+    @Inject
+    lateinit var sessionManager: SessionManager
+    @Inject
+    lateinit var appNavControllerStore: AppNavControllerStore
     private var mSingleAccountApp: ISingleAccountPublicClientApplication? = null
     private var mAccount: IAccount? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        diComponents = Components()
-
         val bottomNavigation: BottomNavigationView = findViewById(R.id.bottomNavigation)
 
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         // above will assign it
-        diComponents.globalConfig.navController = navHostFragment.navController
-        diComponents.globalConfig.navController.addOnDestinationChangedListener { controller, destination, arguments ->
+        globalConfig.navController = navHostFragment.navController
+        appNavControllerStore.attach(navHostFragment.navController)
+        globalConfig.navController.addOnDestinationChangedListener { controller, destination, arguments ->
 
             Handler(Looper.getMainLooper()).postDelayed({
                 hideDialog()
@@ -109,7 +115,7 @@ class MainActivity : BaseActivity() {
 //            bottomNavigation.visibility = View.VISIBLE
 //        }
 
-        bottomNavigation.setupWithNavController(diComponents.globalConfig.navController)
+        bottomNavigation.setupWithNavController(globalConfig.navController)
 
         AppConst.observableCode.observe(this) { code ->
             if (code == 401) {
@@ -194,7 +200,7 @@ class MainActivity : BaseActivity() {
     }
 
     override fun onBackPressed() {
-        if (diComponents.globalConfig.navController.currentDestination?.id == R.id.homeFragment) {
+        if (globalConfig.navController.currentDestination?.id == R.id.homeFragment) {
             val currentTime = System.currentTimeMillis()
             if (currentTime - lastBackPressedTime < exitThreshold) {
                 finish()

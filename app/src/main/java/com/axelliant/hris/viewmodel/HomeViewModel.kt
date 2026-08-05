@@ -9,8 +9,13 @@ import com.axelliant.hris.model.login.CheckInRequest
 import com.axelliant.hris.model.login.CheckInResponse
 import com.axelliant.hris.model.todayTeam.EmployProfileListModel
 import com.axelliant.hris.repos.HomeRepo
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class HomeViewModel(private val homeRepo: HomeRepo) : BaseViewModel() {
+@HiltViewModel
+class HomeViewModel @Inject constructor(
+    private val homeRepo: HomeRepo
+) : BaseViewModel() {
 
      val dashboardResponse: MutableLiveData<Event<DashboardResponse?>> by lazy { MutableLiveData<Event<DashboardResponse?>>() }
      val employListResponse: MutableLiveData<Event<EmployProfileListModel?>> by lazy { MutableLiveData<Event<EmployProfileListModel?>>() }

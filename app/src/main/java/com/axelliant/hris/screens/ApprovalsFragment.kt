@@ -37,9 +37,11 @@ import com.axelliant.hris.viewmodel.AttendanceViewModel
 import com.axelliant.hris.viewmodel.ExpenseViewModel
 import com.axelliant.hris.viewmodel.LeaveViewModel
 import com.axelliant.hris.viewmodel.ResourceManageViewModel
-import org.koin.android.ext.android.inject
+import androidx.fragment.app.viewModels
+import dagger.hilt.android.AndroidEntryPoint
 
 
+@AndroidEntryPoint
 class ApprovalsFragment : BaseFragment() {
 
 
@@ -52,10 +54,10 @@ class ApprovalsFragment : BaseFragment() {
 
     private val binding get() = _binding!!
     private var currentFilter = RequestFilter.LEAVE
-    private val attendanceViewModel: AttendanceViewModel by inject()
-    private val leaveViewModel: LeaveViewModel by inject()
-    private val expenseViewModel: ExpenseViewModel by inject()
-    private val resourceManageViewModel: ResourceManageViewModel by inject()
+    private val attendanceViewModel: AttendanceViewModel by viewModels()
+    private val leaveViewModel: LeaveViewModel by viewModels()
+    private val expenseViewModel: ExpenseViewModel by viewModels()
+    private val resourceManageViewModel: ResourceManageViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

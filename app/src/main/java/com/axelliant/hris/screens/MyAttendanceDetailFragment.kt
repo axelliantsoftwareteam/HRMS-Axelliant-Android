@@ -27,9 +27,11 @@ import com.axelliant.hris.model.dashboard.FilterModel
 import com.axelliant.hris.utils.Utils
 import com.axelliant.hris.viewmodel.AttendanceViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
-import org.koin.android.ext.android.inject
+import androidx.fragment.app.viewModels
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.Date
 
+@AndroidEntryPoint
 class MyAttendanceDetailFragment : BaseFragment() {
 
     private var startDateString: String? = null
@@ -37,7 +39,7 @@ class MyAttendanceDetailFragment : BaseFragment() {
     private var _binding: FragmentMyAttendanceDetailBinding? = null
     private val binding get() = _binding
     private var currentFilter = WEEK
-    private val attendanceViewModel: AttendanceViewModel by inject()
+    private val attendanceViewModel: AttendanceViewModel by viewModels()
 
     private var emplId = ""
     private var filterId = ""

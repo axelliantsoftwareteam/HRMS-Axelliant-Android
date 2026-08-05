@@ -19,8 +19,14 @@ import com.axelliant.hris.model.leave.PostExpenseImageResponse
 import com.axelliant.hris.model.leave.PostResponse
 import com.axelliant.hris.repos.ExpenseRepo
 import com.axelliant.hris.utils.Validator
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class ExpenseViewModel(private val expenseRepo: ExpenseRepo,private val validator: Validator) : BaseViewModel() {
+@HiltViewModel
+class ExpenseViewModel @Inject constructor(
+    private val expenseRepo: ExpenseRepo,
+    private val validator: Validator
+) : BaseViewModel() {
 
     var subject = ObservableField<String>()
     var description = ObservableField<String>()

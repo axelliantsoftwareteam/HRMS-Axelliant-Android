@@ -42,7 +42,8 @@ import com.axelliant.hris.utils.Utils
 import com.axelliant.hris.viewmodel.RequestViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.gson.Gson
-import org.koin.android.ext.android.inject
+import androidx.fragment.app.viewModels
+import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -53,6 +54,7 @@ const val leaveType = "Select leave type"
 const val attendanceType = "Select attendance type"
 const val locationType = "Select location"
 
+@AndroidEntryPoint
 class RequestFragment : BaseFragment() {
 
     private var halfDayCount: Double? = null
@@ -70,7 +72,7 @@ class RequestFragment : BaseFragment() {
     private var _binding: FragmentRequestBinding? = null
     private val binding get() = _binding
 
-    private val requestViewModel: RequestViewModel by inject()
+    private val requestViewModel: RequestViewModel by viewModels()
 
     private var isUpdate: Boolean = false
     private var leaveId: String = ""

@@ -12,19 +12,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
+import androidx.core.os.bundleOf
+import androidx.navigation.NavOptions
+import androidx.navigation.fragment.findNavController
 import androidx.vectordrawable.graphics.drawable.Animatable2Compat
 import com.axelliant.hris.R
 import com.axelliant.hris.base.BaseFragment
 import com.axelliant.hris.databinding.FragmentSplashBinding
-import com.axelliant.hris.navigation.AppNavigator
-import com.axelliant.hris.utils.SessionManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.gif.GifDrawable
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
-import org.koin.android.ext.android.inject
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 
@@ -34,7 +34,6 @@ class SplashFragment : BaseFragment() {
     private var _binding: FragmentSplashBinding? = null
     private val binding get() = _binding
 
-    private val sessionManager: SessionManager by inject()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -106,6 +105,7 @@ class SplashFragment : BaseFragment() {
                         target: Target<GifDrawable>,
                         isFirstResource: Boolean
                     ): Boolean {
+                        navigateAfterSplash()
                         return false
                     }
 
@@ -120,7 +120,7 @@ class SplashFragment : BaseFragment() {
                         resource.registerAnimationCallback(object :
                             Animatable2Compat.AnimationCallback() {
                             override fun onAnimationEnd(drawable: Drawable) {
-                                AppNavigator.navigateToHome()
+                                navigateAfterSplash()
                             }
                         })
                         return false
@@ -128,5 +128,16 @@ class SplashFragment : BaseFragment() {
                 })
                 .into(viewBinding.myImageView)
         }
+    }
+
+    private fun navigateAfterSplash() {
+        if (!isAdded) return
+        findNavController().navigate(
+            R.id.appEntryFragment,
+            bundleOf(),
+            NavOptions.Builder()
+                .setPopUpTo(R.id.splashFragment, true)
+                .build()
+        )
     }
 }

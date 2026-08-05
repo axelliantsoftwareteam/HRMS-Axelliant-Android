@@ -22,7 +22,8 @@ import com.axelliant.hris.model.attendance.TeamAttendanceStats
 import com.axelliant.hris.navigation.AppNavigator
 import com.axelliant.hris.utils.Utils
 import com.axelliant.hris.viewmodel.AttendanceViewModel
-import org.koin.android.ext.android.inject
+import androidx.fragment.app.viewModels
+import dagger.hilt.android.AndroidEntryPoint
 import com.axelliant.hris.extention.showShimmer
 import com.axelliant.hris.extention.hideShimmer
 import androidx.compose.runtime.mutableStateOf
@@ -47,6 +48,7 @@ import com.intuit.sdp.R as SdpR
 
 
 
+@AndroidEntryPoint
 class AttendanceStatsFragment : BaseFragment() {
     private var currentFilter = AttendanceFilter.WEEK
     private var isDataLoaded = false
@@ -54,7 +56,7 @@ class AttendanceStatsFragment : BaseFragment() {
     private var _binding: FragmentAttendanceStatsBinding? = null
     private val binding get() = _binding
 
-    private val attendanceViewModel: AttendanceViewModel by inject()
+    private val attendanceViewModel: AttendanceViewModel by viewModels()
     private val absentState = mutableStateOf("0")
     private val presentState = mutableStateOf("0")
     private val missedPunchOutState = mutableStateOf("0")

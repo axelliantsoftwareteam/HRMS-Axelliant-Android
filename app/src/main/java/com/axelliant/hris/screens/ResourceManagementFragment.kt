@@ -36,9 +36,11 @@ import com.axelliant.hris.utils.Utils
 import com.axelliant.hris.viewmodel.ResourceManageViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.gson.Gson
-import org.koin.android.ext.android.inject
+import androidx.fragment.app.viewModels
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.Date
 
+@AndroidEntryPoint
 class ResourceManagementFragment : BaseFragment() {
 
     private var resourceHours: ArrayList<DocumentHours>? = null
@@ -46,7 +48,7 @@ class ResourceManagementFragment : BaseFragment() {
     private var _binding: FragmentResourceManagmentBinding? = null
     private val binding get() = _binding
     private var currentFilter = AttendanceFilter.WEEK
-    private val resourceManageViewModel: ResourceManageViewModel by inject()
+    private val resourceManageViewModel: ResourceManageViewModel by viewModels()
     private var startDateString: String? = null
     private var endDateString: String? = null
     private var filterId = ""

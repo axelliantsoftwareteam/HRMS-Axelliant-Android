@@ -33,19 +33,21 @@ import com.axelliant.hris.model.leave.UpcomingLeaves
 import com.axelliant.hris.navigation.AppNavigator
 import com.axelliant.hris.utils.Utils
 import com.axelliant.hris.viewmodel.LeaveViewModel
-import org.koin.android.ext.android.inject
+import androidx.fragment.app.viewModels
+import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 import androidx.compose.material.icons.Icons
 
 
+@AndroidEntryPoint
 class LeavesFragment : BaseFragment() {
     private var currentFilter = AttendanceFilter.WEEK
 
     private var _binding: FragmentLeavesBinding? = null
     private val binding get() = _binding
-    private val leaveViewModel: LeaveViewModel by inject()
+    private val leaveViewModel: LeaveViewModel by viewModels()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

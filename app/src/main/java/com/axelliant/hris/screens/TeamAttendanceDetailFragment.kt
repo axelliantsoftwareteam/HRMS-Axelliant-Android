@@ -26,10 +26,12 @@ import com.axelliant.hris.navigation.AppNavigator
 import com.axelliant.hris.utils.Utils
 import com.axelliant.hris.viewmodel.AttendanceViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
-import org.koin.android.ext.android.inject
+import androidx.fragment.app.viewModels
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.Date
 
 
+@AndroidEntryPoint
 class TeamAttendanceDetailFragment : BaseFragment() {
 
     private var startDateString: String? = null
@@ -40,7 +42,7 @@ class TeamAttendanceDetailFragment : BaseFragment() {
     private var selectedDateRange: String? = null
     private var emplId = ""
 
-    private val attendanceViewModel: AttendanceViewModel by inject()
+    private val attendanceViewModel: AttendanceViewModel by viewModels()
 
 
     override fun onCreateView(

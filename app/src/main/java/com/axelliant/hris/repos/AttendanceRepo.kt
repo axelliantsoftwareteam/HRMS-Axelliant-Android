@@ -28,9 +28,12 @@ import com.google.gson.reflect.TypeToken
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
+import javax.inject.Inject
 import java.lang.reflect.Type
 
-class AttendanceRepo(private var apiInterface: ApiInterface) {
+class AttendanceRepo @Inject constructor(
+    private val apiInterface: ApiInterface
+) {
 
     fun getAttendanceStats(attendanceInput: AttendanceInput): MutableLiveData<BaseApiModel<AttendanceStatsResponse>> {
         val serverResponse = MutableLiveData<BaseApiModel<AttendanceStatsResponse>>()

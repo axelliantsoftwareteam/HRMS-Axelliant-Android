@@ -29,9 +29,11 @@ import com.axelliant.hris.utils.Utils
 import com.axelliant.hris.viewmodel.AttendanceViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.gson.Gson
-import org.koin.android.ext.android.inject
+import androidx.fragment.app.viewModels
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.Date
 
+@AndroidEntryPoint
 class CheckInListFragment : BaseFragment() {
 
     private var filterIdList: ArrayList<String>? = null
@@ -45,7 +47,7 @@ class CheckInListFragment : BaseFragment() {
     private var subFilters: ArrayList<FilterModel> = arrayListOf()
     private var checkInList: ArrayList<CheckInDetail> = arrayListOf()
     private var noRecord: Boolean = false
-    private val attendanceViewModel: AttendanceViewModel by inject()
+    private val attendanceViewModel: AttendanceViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,

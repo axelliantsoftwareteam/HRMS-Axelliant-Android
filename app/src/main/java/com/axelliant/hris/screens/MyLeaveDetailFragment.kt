@@ -28,15 +28,17 @@ import com.axelliant.hris.utils.Utils
 import com.axelliant.hris.viewmodel.LeaveViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.gson.Gson
-import org.koin.android.ext.android.inject
+import androidx.fragment.app.viewModels
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.Date
 
+@AndroidEntryPoint
 class MyLeaveDetailFragment : BaseFragment() {
 
     private var _binding: FragmentMyLeaveDetailBinding? = null
     private val binding get() = _binding
     private var currentFilter = AttendanceFilter.WEEK
-    private val leaveViewModel: LeaveViewModel by inject()
+    private val leaveViewModel: LeaveViewModel by viewModels()
     private var startDateString: String? = null
     private var endDateString: String? = null
 

@@ -47,10 +47,12 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
-import org.koin.android.ext.android.inject
+import androidx.fragment.app.viewModels
+import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 
 
+@AndroidEntryPoint
 class AddExpenseFragment : BaseFragment(), AddExpenseAdapter.OnUpdateList {
 
     private var pickMultipleImages = 103
@@ -69,7 +71,7 @@ class AddExpenseFragment : BaseFragment(), AddExpenseAdapter.OnUpdateList {
     private var _binding: FragmentAddExpenseBinding? = null
     private val binding get() = _binding
     private var addExpenseList: ArrayList<AddExpense> = arrayListOf()
-    private val expenseViewModel: ExpenseViewModel by inject()
+    private val expenseViewModel: ExpenseViewModel by viewModels()
 
     var addExpenseAdapter: AddExpenseAdapter? = null
     private var expenseList: ArrayList<SpinnerType> = arrayListOf()

@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">AXE HR</string>
+    <string name="app_entry_title">Choose Workspace</string>
+    <string name="app_entry_subtitle">Select the application area you want to open.</string>
+    <string name="entry_hris">HRIS</string>
+    <string name="entry_internal_apps">Internal Apps</string>
     <string name="welcome">Welcome Back</string>
     <string name="please_login">Please login with Microsoft account to continue</string>
     <string name="hello">Hello there, login to continue</string>

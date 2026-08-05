@@ -17,14 +17,16 @@ import com.axelliant.hris.model.profile.CertificationCreateRequest
 import com.axelliant.hris.model.profile.ProfileCertification
 import com.axelliant.hris.model.profile.ProfileResponse
 import com.axelliant.hris.viewmodel.ProfileViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import androidx.fragment.app.viewModels
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.Calendar
 
+@AndroidEntryPoint
 class ProfileFragment : BaseFragment() {
 
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
-    private val profileViewModel: ProfileViewModel by viewModel()
+    private val profileViewModel: ProfileViewModel by viewModels()
     private val certificationsAdapter = ProfileCertificationAdapter()
 
     override fun onCreateView(

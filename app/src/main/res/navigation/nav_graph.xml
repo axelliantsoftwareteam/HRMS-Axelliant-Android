@@ -15,6 +15,15 @@
 
 
     <fragment
+        android:id="@+id/appEntryFragment"
+        android:name="com.axelliant.hris.core.appentry.AppEntryFragment"
+        android:label="@string/app_entry_title"
+        tools:layout="@layout/fragment_app_entry">
+
+    </fragment>
+
+
+    <fragment
         android:id="@+id/loginFragment"
         android:name="com.axelliant.hris.screens.LoginFragment"
         android:label="Login Fragment"
