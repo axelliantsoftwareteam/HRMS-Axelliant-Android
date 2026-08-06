@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="IA_TEXT_MEDIUM_GREY_15">
+        <item name="android:textColor">@color/ds_text_grey</item>
+        <item name="android:textSize">@dimen/text_size_15</item>
+        <item name="android:lineHeight">@dimen/_21ssp</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="fontFamily">sans-serif-medium</item>
+    </style>
+</resources>
+
+

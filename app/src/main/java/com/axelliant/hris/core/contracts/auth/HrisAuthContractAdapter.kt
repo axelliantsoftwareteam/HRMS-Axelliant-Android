@@ -15,7 +15,7 @@ class HrisAuthContractAdapter @Inject constructor(
 
         return AuthResult(
             session = null,
-            errorMessage = "Interactive sign-in is handled by the existing HRIS login flow."
+            errorMessage = "Interactive sign-in is handled by the common login flow."
         )
     }
 

@@ -20,18 +20,24 @@
         android:label="@string/app_entry_title"
         tools:layout="@layout/fragment_app_entry">
 
-    </fragment>
+        <action
+            android:id="@+id/action_appEntryFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
 
+        <action
+            android:id="@+id/action_appEntryFragment_to_iaInternalAppsNavGraph"
+            app:destination="@id/iaInternalAppsNavGraph" />
+
+    </fragment>
 
     <fragment
-        android:id="@+id/loginFragment"
-        android:name="com.axelliant.hris.screens.LoginFragment"
-        android:label="Login Fragment"
-        tools:layout="@layout/fragment_login">
-        <action
-            android:id="@+id/action_secondFragment_to_firstFragment"
-            app:destination="@id/splashFragment" />
-    </fragment>
+        android:id="@+id/commonLoginFragment"
+        android:name="com.axelliant.hris.features.commonlogin.presentation.CommonLoginFragment"
+        android:label="@string/ia_login"
+        tools:layout="@layout/ia_fragment_login" />
+
+    <include app:graph="@navigation/ia_nav_graph" />
+
 
     <fragment
         android:id="@+id/homeFragment"

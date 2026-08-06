@@ -4,4 +4,5 @@
     <dimen name="ds_radius_md">@dimen/_8sdp</dimen>
     <dimen name="ds_radius_lg">@dimen/_12sdp</dimen>
     <dimen name="ds_radius_xl">@dimen/_16sdp</dimen>
+    <dimen name="ds_radius_2xl">@dimen/_24sdp</dimen>
 </resources>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Responsive screen spacing using SDP -->
+    <dimen name="ds_screen_horizontal_margin">@dimen/_16sdp</dimen>
+    <dimen name="ds_screen_vertical_margin">@dimen/_16sdp</dimen>
+
+    <dimen name="ds_space_2">@dimen/_2sdp</dimen>
+    <dimen name="ds_space_4">@dimen/_4sdp</dimen>
+    <dimen name="ds_space_6">@dimen/_6sdp</dimen>
+    <dimen name="ds_space_8">@dimen/_8sdp</dimen>
+    <dimen name="ds_space_10">@dimen/_10sdp</dimen>
+    <dimen name="ds_space_12">@dimen/_12sdp</dimen>
+    <dimen name="ds_space_14">@dimen/_14sdp</dimen>
+    <dimen name="ds_space_16">@dimen/_16sdp</dimen>
+    <dimen name="ds_space_20">@dimen/_20sdp</dimen>
+    <dimen name="ds_space_24">@dimen/_24sdp</dimen>
+    <dimen name="ds_space_32">@dimen/_32sdp</dimen>
+    <dimen name="ds_space_72">@dimen/_72sdp</dimen>
+
+    <!-- Fluent 2 corner radius -->
+    <dimen name="ds_radius_none">0dp</dimen>
+    <dimen name="ds_radius_xs">@dimen/_4sdp</dimen>
+    <dimen name="ia_ds_radius_sm">@dimen/ds_radius_md</dimen>
+    <dimen name="ia_ds_radius_md">@dimen/ds_radius_lg</dimen>
+    <dimen name="ia_ds_radius_lg">@dimen/ds_radius_xl</dimen>
+    <dimen name="ia_ds_radius_xl">@dimen/ds_radius_2xl</dimen>
+
+    <!-- Responsive controls. Keep minimum touch sizes near 48dp. -->
+    <dimen name="ds_input_height">@dimen/_42sdp</dimen>
+    <dimen name="ds_button_height">@dimen/_42sdp</dimen>
+    <dimen name="ds_touch_target">@dimen/_48sdp</dimen>
+    <dimen name="ds_card_elevation">@dimen/_1sdp</dimen>
+
+    <!-- Responsive typography using SSP -->
+<!--    <dimen name="ds_text_display">@dimen/_28ssp</dimen>
+    <dimen name="ds_text_heading">@dimen/_20ssp</dimen>
+    <dimen name="ds_text_title">@dimen/_16ssp</dimen>
+    <dimen name="ds_text_subheading">@dimen/_14ssp</dimen>
+    <dimen name="ds_text_body">@dimen/_14ssp</dimen>
+    <dimen name="ds_text_caption">@dimen/_12ssp</dimen>-->
+    <dimen name="ds_text_display">@dimen/_20ssp</dimen>
+    <dimen name="ds_text_heading">@dimen/_16ssp</dimen>
+    <dimen name="ds_text_title">@dimen/_14ssp</dimen>
+    <dimen name="ds_text_subheading">@dimen/_12ssp</dimen>
+    <dimen name="ds_text_body">@dimen/_11ssp</dimen>
+    <dimen name="ds_text_caption">@dimen/_10ssp</dimen>
+
+    <!-- Backward-compatible aliases -->
+    <dimen name="text_size_10">@dimen/_10ssp</dimen>
+    <dimen name="text_size_12">@dimen/_12ssp</dimen>
+    <dimen name="text_size_15">@dimen/_15ssp</dimen>
+    <dimen name="text_size_18">@dimen/_18ssp</dimen>
+    <dimen name="text_size_20">@dimen/_20ssp</dimen>
+    <dimen name="text_size_24">@dimen/_24ssp</dimen>
+
+    <!-- Existing navigation/layout values -->
+    <dimen name="bottom_nav_fab_clearance">@dimen/_92sdp</dimen>
+    <dimen name="bottom_nav_content_padding">@dimen/_116sdp</dimen>
+    <dimen name="quote_workflow_step_width">@dimen/_168sdp</dimen>
+    <dimen name="quote_workflow_step_min_height">@dimen/_220sdp</dimen>
+
+    <!-- Login -->
+    <dimen name="login_logo_width">@dimen/_110sdp</dimen>
+    <dimen name="login_logo_height">@dimen/_40sdp</dimen>
+    <dimen name="login_field_height">@dimen/_48sdp</dimen>
+    <dimen name="login_screen_padding">@dimen/_20sdp</dimen>
+    <dimen name="login_top_spacing">@dimen/_28sdp</dimen>
+    <dimen name="login_pattern_height">@dimen/_180sdp</dimen>
+    <dimen name="login_panel_padding">@dimen/_14sdp</dimen>
+    <dimen name="login_icon_box_size">@dimen/_34sdp</dimen>
+    <dimen name="login_microsoft_button_height">@dimen/_42sdp</dimen>
+    <dimen name="login_microsoft_icon_size">@dimen/_16sdp</dimen>
+
+    <!-- Drawer/dashboard -->
+    <dimen name="drawer_width">@dimen/_280sdp</dimen>
+    <dimen name="drawer_item_height">@dimen/_48sdp</dimen>
+    <dimen name="drawer_icon_size">@dimen/_20sdp</dimen>
+    <dimen name="drawer_avatar_size">@dimen/_42sdp</dimen>
+    <dimen name="dashboard_grid_card_height">@dimen/_110sdp</dimen>
+
+    <!-- Launcher -->
+    <dimen name="ic_launcher_foreground_inset_horizontal">@dimen/_10sdp</dimen>
+    <dimen name="ic_launcher_foreground_inset_vertical">@dimen/_22sdp</dimen>
+</resources>

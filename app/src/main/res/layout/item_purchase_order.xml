@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.axelliant.hris.ui.designsystem.components.AppCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/purchaseOrderCard"
+    style="@style/Widget.InternalApps.Card"
+    android:layout_marginBottom="@dimen/ds_space_12"
+    android:foreground="?attr/selectableItemBackground"
+    app:cardBackgroundColor="@color/purchase_order_fluent_surface"
+    app:cardCornerRadius="@dimen/ia_ds_radius_sm"
+    app:cardElevation="@dimen/_1sdp"
+    app:strokeColor="@color/purchase_order_fluent_stroke"
+    app:strokeWidth="@dimen/_1sdp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/_124sdp"
+        android:paddingStart="@dimen/ds_space_12"
+        android:paddingTop="@dimen/ds_space_14"
+        android:paddingEnd="@dimen/ds_space_10"
+        android:paddingBottom="@dimen/ds_space_14">
+
+        <FrameLayout
+            android:id="@+id/documentIconTile"
+            android:layout_width="@dimen/_36sdp"
+            android:layout_height="@dimen/_36sdp"
+            android:background="@drawable/bg_po_document_icon_tile"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:layout_width="@dimen/_22sdp"
+                android:layout_height="@dimen/_22sdp"
+                android:layout_gravity="center"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_po_card_document" />
+        </FrameLayout>
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            android:id="@+id/poNumberBadge"
+            style="@style/Text.InternalApps.Subheading"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_28sdp"
+            android:layout_marginStart="@dimen/ds_space_12"
+            android:background="@drawable/bg_purchase_order_id_badge"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:maxLines="1"
+            android:paddingStart="@dimen/ds_space_12"
+            android:paddingEnd="@dimen/ds_space_12"
+            android:textColor="@color/purchase_order_id_text"
+            android:textSize="@dimen/_9ssp"
+            app:layout_constraintBottom_toBottomOf="@id/documentIconTile"
+            app:layout_constraintStart_toEndOf="@id/documentIconTile"
+            app:layout_constraintTop_toTopOf="@id/documentIconTile" />
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            android:id="@+id/statusBadge"
+            style="@style/Text.InternalApps.Caption"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_28sdp"
+            android:layout_marginStart="@dimen/ds_space_10"
+            android:gravity="center"
+            android:maxLines="1"
+            android:paddingStart="@dimen/ds_space_12"
+            android:paddingEnd="@dimen/ds_space_12"
+            android:textSize="@dimen/_9ssp"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toBottomOf="@id/poNumberBadge"
+            app:layout_constraintEnd_toStartOf="@id/menuButton"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toEndOf="@id/poNumberBadge"
+            app:layout_constraintTop_toTopOf="@id/poNumberBadge" />
+
+        <com.axelliant.hris.ui.designsystem.components.AppButtonView
+            android:id="@+id/menuButton"
+            style="@style/Widget.InternalApps.Button.Text"
+            android:layout_width="@dimen/_36sdp"
+            android:layout_height="@dimen/_36sdp"
+            android:background="@android:color/transparent"
+            android:insetLeft="0dp"
+            android:insetTop="0dp"
+            android:insetRight="0dp"
+            android:insetBottom="0dp"
+            android:minWidth="0dp"
+            android:text=""
+            app:backgroundTint="@android:color/transparent"
+            app:icon="@drawable/ic_more_vert"
+            app:iconGravity="textStart"
+            app:noBackground="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            android:id="@+id/vendorNameText"
+            style="@style/Text.InternalApps.Title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ds_space_16"
+            android:ellipsize="end"
+            android:fontFamily="sans-serif-medium"
+            android:maxLines="1"
+            android:textColor="@color/purchase_order_fluent_text_primary"
+            android:textSize="@dimen/_13ssp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/documentIconTile" />
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            android:id="@+id/grandTotalLabel"
+            style="@style/Text.InternalApps.Caption"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ds_space_16"
+            android:text="@string/purchase_orders_grand_total"
+            android:textColor="@color/purchase_order_fluent_text_secondary"
+            android:textSize="@dimen/_9ssp"
+            app:layout_constraintEnd_toStartOf="@id/deliveryDateLabel"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/vendorNameText" />
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            android:id="@+id/deliveryDateLabel"
+            style="@style/Text.InternalApps.Caption"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/purchase_orders_delivery_date"
+            android:textColor="@color/purchase_order_fluent_text_secondary"
+            android:textSize="@dimen/_9ssp"
+            app:layout_constraintBaseline_toBaselineOf="@id/grandTotalLabel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toEndOf="@id/grandTotalLabel" />
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            android:id="@+id/grandTotalValue"
+            style="@style/Text.InternalApps.Subheading"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ds_space_4"
+            android:fontFamily="sans-serif-medium"
+            android:textColor="@color/purchase_order_fluent_text_primary"
+            android:textSize="@dimen/_11ssp"
+            app:layout_constraintEnd_toEndOf="@id/grandTotalLabel"
+            app:layout_constraintStart_toStartOf="@id/grandTotalLabel"
+            app:layout_constraintTop_toBottomOf="@id/grandTotalLabel" />
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            android:id="@+id/deliveryDateValue"
+            style="@style/Text.InternalApps.Subheading"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/purchase_order_fluent_text_primary"
+            android:textSize="@dimen/_11ssp"
+            app:layout_constraintBaseline_toBaselineOf="@id/grandTotalValue"
+            app:layout_constraintEnd_toEndOf="@id/deliveryDateLabel"
+            app:layout_constraintStart_toStartOf="@id/deliveryDateLabel" />
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            android:id="@+id/utilizationBadge"
+            style="@style/Text.InternalApps.Caption"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_28sdp"
+            android:layout_marginTop="@dimen/ds_space_12"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:maxLines="1"
+            android:paddingStart="@dimen/ds_space_12"
+            android:paddingEnd="@dimen/ds_space_12"
+            android:textSize="@dimen/_9ssp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/grandTotalValue" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.axelliant.hris.ui.designsystem.components.AppCardView>
+
+
+
+

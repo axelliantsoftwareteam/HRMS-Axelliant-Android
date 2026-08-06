@@ -8,7 +8,7 @@ import com.axelliant.hris.core.contracts.designsystem.DesignSystemContract
 import com.axelliant.hris.core.contracts.designsystem.HrisDesignSystemContractAdapter
 import com.axelliant.hris.core.contracts.navigation.AppNavigationContract
 import com.axelliant.hris.core.contracts.navigation.HrisAppNavigationContractAdapter
-import com.axelliant.hris.core.contracts.session.HrisSessionContractAdapter
+import com.axelliant.hris.core.contracts.session.AppSessionContractAdapter
 import com.axelliant.hris.core.contracts.session.SessionContract
 import com.axelliant.hris.network.ApiHandler
 import com.axelliant.hris.network.ApiInterface
@@ -38,7 +38,7 @@ object HrisCoreModule {
     @Provides
     @Singleton
     fun provideSessionContract(
-        adapter: HrisSessionContractAdapter
+        adapter: AppSessionContractAdapter
     ): SessionContract = adapter
 
     @Provides

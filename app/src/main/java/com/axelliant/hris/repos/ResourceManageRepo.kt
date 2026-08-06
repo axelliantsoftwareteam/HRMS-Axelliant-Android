@@ -2,7 +2,7 @@ package com.axelliant.hris.repos
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import com.axelliant.hris.config.AppConst
+import com.axelliant.hris.core.auth.HrisTokenProvider
 import com.axelliant.hris.model.ImagePath
 import com.axelliant.hris.model.attendance.AttRequest
 import com.axelliant.hris.model.attendance.AttendanceInput
@@ -33,13 +33,14 @@ import javax.inject.Inject
 import java.lang.reflect.Type
 
 class ResourceManageRepo @Inject constructor(
-    private val apiInterface: ApiInterface
+    private val apiInterface: ApiInterface,
+    private val hrisTokenProvider: HrisTokenProvider
 ) {
 
     fun getMyHoursDetail(attendanceInput: AttendanceInput): MutableLiveData<BaseApiModel<MyHoursDetails>> {
         val serverResponse = MutableLiveData<BaseApiModel<MyHoursDetails>>()
 
-        val call: Call<ResponseBody> = apiInterface.callMyResourceHoursDetail("token ${AppConst.TOKEN}",
+        val call: Call<ResponseBody> = apiInterface.callMyResourceHoursDetail(hrisTokenProvider.authorizationHeader(),
             AttRequest().apply {
                 this.start_date = attendanceInput.startDate
                 this.end_date = attendanceInput.endDate
@@ -94,7 +95,7 @@ class ResourceManageRepo @Inject constructor(
     fun getDocumentDetail(attendanceInput: AttendanceInput): MutableLiveData<BaseApiModel<MyDocumentResponse>> {
         val serverResponse = MutableLiveData<BaseApiModel<MyDocumentResponse>>()
 
-        val call: Call<ResponseBody> = apiInterface.callDocumentRequestDetail("token ${AppConst.TOKEN}",
+        val call: Call<ResponseBody> = apiInterface.callDocumentRequestDetail(hrisTokenProvider.authorizationHeader(),
             AttRequest().apply {
                 this.start_date = attendanceInput.startDate
                 this.end_date = attendanceInput.endDate
@@ -152,7 +153,7 @@ class ResourceManageRepo @Inject constructor(
         val isPrivate: MultipartBody.Part = MultipartBody.Part.createFormData("is_private", imagePath.is_private!!.toString())
         val folder: MultipartBody.Part = MultipartBody.Part.createFormData("docname", imagePath.folder!!)
         val doctype: MultipartBody.Part = MultipartBody.Part.createFormData("doctype", imagePath.doctype!!)
-        val call: Call<ResponseBody> = apiInterface.callMyExpensefile("token ${AppConst.TOKEN}",
+        val call: Call<ResponseBody> = apiInterface.callMyExpensefile(hrisTokenProvider.authorizationHeader(),
             imagePath.file!!,docName,isPrivate,folder,doctype)
 
         Log.e("HTTP Request", " " + call.request().toString())
@@ -202,7 +203,7 @@ class ResourceManageRepo @Inject constructor(
         val serverResponse = MutableLiveData<BaseApiModel<PostResponse>>()
 
         val call: Call<ResponseBody>?
-        call = apiInterface.callCreateDocument("token ${AppConst.TOKEN}", createDocument)
+        call = apiInterface.callCreateDocument(hrisTokenProvider.authorizationHeader(), createDocument)
         Log.e("HTTP Request", " " + call.request().toString())
 
         call.enqueue(object : BaseCallBack<ResponseBody>(call) {
@@ -251,11 +252,11 @@ class ResourceManageRepo @Inject constructor(
 
         val call: Call<ResponseBody> = if (isUpdate) {
             apiInterface.callUpdateResourceType(
-                "token ${AppConst.TOKEN}", createResourceHour
+                hrisTokenProvider.authorizationHeader(), createResourceHour
             )
         } else {
             apiInterface.callCreateResourceHour(
-                "token ${AppConst.TOKEN}", createResourceHour
+                hrisTokenProvider.authorizationHeader(), createResourceHour
             )
         }
 
@@ -306,7 +307,7 @@ class ResourceManageRepo @Inject constructor(
         val serverResponse = MutableLiveData<BaseApiModel<PostResponse>>()
 
         val call: Call<ResponseBody> = apiInterface.callSubmitResource(
-                "token ${AppConst.TOKEN}", submitDocument)
+                hrisTokenProvider.authorizationHeader(), submitDocument)
         Log.e("HTTP Request", " " + call.request().toString())
 
         call.enqueue(object : BaseCallBack<ResponseBody>(call) {
@@ -355,7 +356,7 @@ class ResourceManageRepo @Inject constructor(
     ): MutableLiveData<BaseApiModel<PostHoursRequestResponse>> {
         val serverResponse = MutableLiveData<BaseApiModel<PostHoursRequestResponse>>()
         val call: Call<ResponseBody> = apiInterface.deleteHoursCall(
-            "token ${AppConst.TOKEN}", deleteProject)
+            hrisTokenProvider.authorizationHeader(), deleteProject)
 
         Log.e("HTTP Request", " " + call.request().toString())
 
@@ -399,7 +400,7 @@ class ResourceManageRepo @Inject constructor(
     fun getProjectsTypes(): MutableLiveData<BaseApiModel<GetListProject>> {
         val serverResponse = MutableLiveData<BaseApiModel<GetListProject>>()
 
-        val call: Call<ResponseBody> = apiInterface.getProjectTypeList("token ${AppConst.TOKEN}")
+        val call: Call<ResponseBody> = apiInterface.getProjectTypeList(hrisTokenProvider.authorizationHeader())
 
         Log.e("HTTP Request", " " + call.request().toString())
 
@@ -449,7 +450,7 @@ class ResourceManageRepo @Inject constructor(
         val serverResponse = MutableLiveData<BaseApiModel<MyHoursDetails>>()
 
         val call = apiInterface.callResourcesApproval(
-            "token ${AppConst.TOKEN}", AttRequest().apply {
+            hrisTokenProvider.authorizationHeader(), AttRequest().apply {
                 this.start_date = inputObject.startDate
                 this.end_date = inputObject.endDate
                 this.employee_list = inputObject.employeeId
@@ -508,7 +509,7 @@ class ResourceManageRepo @Inject constructor(
         val serverResponse = MutableLiveData<BaseApiModel<PostResponse>>()
 
         val call = apiInterface.callExpenseApprovalStatus(
-            "token ${AppConst.TOKEN}", inputObject
+            hrisTokenProvider.authorizationHeader(), inputObject
         )
 
         Log.e("HTTP Request", " " + call.request().toString())

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.axelliant.hris.ui.designsystem.components.AppTextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tabText"
+    style="@style/Text.InternalApps.Caption"
+    android:layout_width="wrap_content"
+    android:layout_height="@dimen/_38sdp"
+    android:gravity="center"
+    android:maxLines="2"
+    android:minWidth="@dimen/_78sdp"
+    android:paddingStart="@dimen/ds_space_8"
+    android:paddingEnd="@dimen/ds_space_8"
+    tools:text="Vendor Associated" />
+

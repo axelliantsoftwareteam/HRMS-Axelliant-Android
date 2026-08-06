@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_login_screen"
+    android:layoutDirection="ltr"
+    android:textDirection="ltr">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/start_guideline"
+        style="@style/ia_start_gl"
+        android:orientation="vertical" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/end_guideline"
+        style="@style/ia_end_gl"
+        android:orientation="vertical" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/top_guideline"
+        style="@style/ia_top_gl" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/bottom_guideline"
+        style="@style/ia_bottom_gl" />
+
+    <ImageView
+        android:id="@+id/loginPatternImage"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/login_pattern_height"
+        android:alpha="0.72"
+        android:contentDescription="@null"
+        android:scaleType="fitXY"
+        android:src="@drawable/bg_login_hex_pattern"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/loginScrollView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:fillViewport="true"
+        android:overScrollMode="never"
+        android:paddingTop="@dimen/login_top_spacing"
+        app:layout_constraintBottom_toTopOf="@id/bottom_guideline"
+        app:layout_constraintEnd_toEndOf="@id/end_guideline"
+        app:layout_constraintStart_toStartOf="@id/start_guideline"
+        app:layout_constraintTop_toBottomOf="@id/top_guideline">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/loginContentLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/appLogo"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/login_logo_height"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/axelliant_logo_text"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ia_ic_applogo"
+                app:layout_constraintEnd_toEndOf="@id/endInnerGuideline"
+                app:layout_constraintStart_toStartOf="@id/startInnerGuideline"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/startInnerGuideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.05" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/endInnerGuideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.95" />
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                android:id="@+id/loginTitle"
+                style="@style/IA_TEXT_SEMIBOLD_WHITE_18"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ds_space_16"
+                android:gravity="center"
+                android:text="@string/ia_login_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/appLogo" />
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                android:id="@+id/loginSubtitle"
+                style="@style/IA_TEXT_REGULAR_GREY_10"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ds_space_8"
+                android:gravity="center"
+                android:text="@string/ia_login_subtitle"
+                android:textColor="@color/login_subtitle"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/loginTitle" />
+
+            <View
+                android:id="@+id/loginPanelBackground"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="@dimen/ds_space_12"
+                android:background="@drawable/bg_login_panel"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/loginSubtitle" />
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                android:id="@+id/emailLabel"
+                style="@style/IA_TEXT_MEDIUM_WHITE_10"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/login_panel_padding"
+                android:layout_marginTop="@dimen/ds_space_20"
+                android:layout_marginEnd="@dimen/login_panel_padding"
+                android:text="@string/email_hint"
+                android:textSize="@dimen/_12sdp"
+                app:layout_constraintEnd_toEndOf="@id/loginPanelBackground"
+                app:layout_constraintStart_toStartOf="@id/loginPanelBackground"
+                app:layout_constraintTop_toTopOf="@id/loginPanelBackground" />
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout
+                android:id="@+id/emailLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ds_space_6"
+                android:background="@android:color/transparent"
+                app:layout_constraintEnd_toEndOf="@id/emailLabel"
+                app:layout_constraintStart_toStartOf="@id/emailLabel"
+                app:layout_constraintTop_toBottomOf="@id/emailLabel">
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextFieldView
+                    android:id="@+id/emailInput"
+                    style="@style/IA_TEXT_REGULAR_WHITE_12"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/login_field_height"
+                    android:background="@drawable/bg_login_input"
+                    android:backgroundTint="@null"
+                    android:hint="@string/email_placeholder"
+                    android:imeOptions="actionNext"
+                    android:inputType="textEmailAddress"
+                    android:paddingStart="@dimen/ds_space_20"
+                    android:paddingEnd="@dimen/ds_space_12"
+                    android:singleLine="true"
+                    app:icon="@drawable/ic_login_email"
+                    app:iconGravity="start"
+                    app:iconPadding="@dimen/ds_space_14"
+                    android:textColorHint="@color/login_input_hint" />
+            </com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout>
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                android:id="@+id/passwordLabel"
+                style="@style/IA_TEXT_MEDIUM_WHITE_10"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ds_space_16"
+                android:text="@string/password_hint"
+                android:textSize="@dimen/_12sdp"
+                app:layout_constraintEnd_toEndOf="@id/emailLabel"
+                app:layout_constraintStart_toStartOf="@id/emailLabel"
+                app:layout_constraintTop_toBottomOf="@id/emailLayout" />
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout
+                android:id="@+id/passwordLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ds_space_6"
+                android:background="@android:color/transparent"
+                app:endIconMode="password_toggle"
+                app:endIconTint="@color/login_subtitle"
+                app:layout_constraintEnd_toEndOf="@id/emailLabel"
+                app:layout_constraintStart_toStartOf="@id/emailLabel"
+                app:layout_constraintTop_toBottomOf="@id/passwordLabel">
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextFieldView
+                    android:id="@+id/passwordInput"
+                    style="@style/IA_TEXT_REGULAR_WHITE_12"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/login_field_height"
+                    android:background="@drawable/bg_login_input"
+                    android:backgroundTint="@null"
+                    android:hint="@string/password_hint"
+                    android:imeOptions="actionDone"
+                    android:inputType="textPassword"
+                    android:paddingStart="@dimen/ds_space_20"
+                    android:paddingEnd="@dimen/_42sdp"
+                    android:singleLine="true"
+                    app:icon="@drawable/ic_login_lock"
+                    app:iconGravity="start"
+                    app:iconPadding="@dimen/ds_space_14"
+                    android:textColorHint="@color/login_input_hint" />
+            </com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout>
+
+            <com.axelliant.hris.ui.designsystem.components.AppCheckboxView
+                android:id="@+id/rememberCheckBox"
+                android:layout_width="@dimen/_18sdp"
+                android:layout_height="@dimen/_18sdp"
+                android:layout_marginTop="@dimen/ds_space_12"
+                android:buttonTint="@color/ds_primary"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:padding="0dp"
+                app:layout_constraintStart_toStartOf="@id/emailLabel"
+                app:layout_constraintTop_toBottomOf="@id/passwordLayout" />
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                android:id="@+id/rememberMeText"
+                style="@style/IA_TEXT_REGULAR_WHITE_10"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/ds_space_6"
+                android:layout_marginEnd="@dimen/ds_space_8"
+                android:text="@string/ia_remember_me"
+                app:layout_constraintBottom_toBottomOf="@id/rememberCheckBox"
+                app:layout_constraintEnd_toStartOf="@id/forgotPasswordText"
+                app:layout_constraintStart_toEndOf="@id/rememberCheckBox"
+                app:layout_constraintTop_toTopOf="@id/rememberCheckBox" />
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                android:id="@+id/forgotPasswordText"
+                style="@style/IA_TEXT_REGULAR_WHITE_10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/forgot_password"
+                android:textColor="#1495FF"
+                app:layout_constraintEnd_toEndOf="@id/emailLabel"
+                app:layout_constraintTop_toTopOf="@+id/rememberMeText"
+                />
+
+            <ProgressBar
+                android:id="@+id/loginProgress"
+                android:layout_width="@dimen/_28sdp"
+                android:layout_height="@dimen/_28sdp"
+                android:layout_marginTop="@dimen/ds_space_12"
+                android:indeterminateTint="@color/ia_white"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/forgotPasswordText" />
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                android:id="@+id/errorText"
+                style="@style/IA_TEXT_REGULAR_WHITE_10"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ds_space_8"
+                android:gravity="center"
+                android:textColor="@color/login_error"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/loginProgress" />
+
+            <com.axelliant.hris.ui.designsystem.components.AppButtonView
+                android:id="@+id/loginButton"
+                style="@style/IA_TEXT_SEMIBOLD_WHITE_12"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/ds_button_height"
+                android:layout_marginTop="@dimen/ds_space_12"
+                android:background="@drawable/bg_login_button"
+                android:enabled="false"
+                android:text="@string/ia_login_action"
+                android:textAllCaps="false"
+                android:textAppearance="@style/IA_TEXT_SEMIBOLD_WHITE_12"
+                app:backgroundTint="@null"
+                app:icon="@drawable/ic_login_arrow_right"
+                app:iconGravity="textStart"
+                app:iconPadding="@dimen/ds_space_12"
+                app:layout_constraintEnd_toEndOf="@id/emailLabel"
+                app:layout_constraintStart_toStartOf="@id/emailLabel"
+                app:layout_constraintTop_toBottomOf="@id/errorText" />
+
+            <View
+                android:id="@+id/startDivider"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_1sdp"
+                android:background="@drawable/bg_login_divider"
+                app:layout_constraintBottom_toBottomOf="@id/orText"
+                app:layout_constraintEnd_toStartOf="@id/orText"
+                app:layout_constraintStart_toStartOf="@id/emailLabel"
+                app:layout_constraintTop_toTopOf="@id/orText" />
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                android:id="@+id/orText"
+                style="@style/IA_TEXT_REGULAR_WHITE_10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/ds_space_12"
+                android:layout_marginTop="@dimen/ds_space_16"
+                android:layout_marginEnd="@dimen/ds_space_12"
+                android:text="@string/or"
+                app:layout_constraintEnd_toStartOf="@id/endDivider"
+                app:layout_constraintStart_toEndOf="@id/startDivider"
+                app:layout_constraintTop_toBottomOf="@id/loginButton" />
+
+            <View
+                android:id="@+id/endDivider"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_1sdp"
+                android:background="@drawable/bg_login_divider"
+                app:layout_constraintBottom_toBottomOf="@id/orText"
+                app:layout_constraintEnd_toEndOf="@id/emailLabel"
+                app:layout_constraintStart_toEndOf="@id/orText"
+                app:layout_constraintTop_toTopOf="@id/orText" />
+
+            <com.axelliant.hris.ui.designsystem.components.AppButtonView
+                android:id="@+id/microsoftButton"
+                style="@style/IA_TEXT_SEMIBOLD_BLACK_15"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/login_microsoft_button_height"
+                android:layout_marginTop="@dimen/ds_space_16"
+                android:background="@drawable/bg_microsoft_button"
+                android:gravity="center"
+                android:insetLeft="0dp"
+                android:insetTop="0dp"
+                android:insetRight="0dp"
+                android:insetBottom="0dp"
+                android:text="@string/sign_in_microsoft"
+                android:textAllCaps="false"
+                android:textColor="@color/ds_primary"
+                android:textSize="@dimen/text_size_12"
+                app:icon="@drawable/ia_ic_microsoft"
+                app:iconGravity="start"
+                app:iconPadding="@dimen/ds_space_12"
+                app:layout_constraintEnd_toEndOf="@id/emailLabel"
+                app:layout_constraintStart_toStartOf="@id/emailLabel"
+                app:layout_constraintTop_toBottomOf="@id/orText" />
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                android:id="@+id/contactAdminPrompt"
+                style="@style/IA_TEXT_REGULAR_WHITE_10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ds_space_24"
+                android:text="@string/contact_admin_prompt"
+                android:textColor="@color/login_subtitle"
+                app:layout_constraintEnd_toStartOf="@id/contactAdminAction"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/microsoftButton" />
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                android:id="@+id/contactAdminAction"
+                style="@style/IA_TEXT_REGULAR_WHITE_10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/ds_space_4"
+                android:text="@string/contact_admin_action"
+                android:textColor="#1495FF"
+                app:layout_constraintBaseline_toBaselineOf="@id/contactAdminPrompt"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/contactAdminPrompt" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+

@@ -1,0 +1,240 @@
+<resources>
+
+    <style name="TextAppearance" />
+    <style name="TextAppearance.InternalApps" parent="@style/TextAppearance.Axelliant" />
+    <style name="TextAppearance.InternalApps.BottomNav">
+        <item name="android:textSize">@dimen/_8ssp</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:fontFamily">@font/poppins_medium</item>
+        <item name="fontFamily">@font/poppins_medium</item>
+    </style>
+
+    <style name="TextAppearance.InternalApps.Display" parent="@style/TextAppearance.Axelliant.Display" />
+
+    <style name="TextAppearance.InternalApps.Heading" parent="@style/TextAppearance.Axelliant.Heading" />
+
+    <style name="TextAppearance.InternalApps.Title" parent="@style/TextAppearance.Axelliant.Title" />
+
+    <style name="TextAppearance.InternalApps.Subheading" parent="@style/TextAppearance.Axelliant.Subheading" />
+
+    <style name="TextAppearance.InternalApps.Body" parent="@style/TextAppearance.Axelliant.Body" />
+
+    <style name="TextAppearance.InternalApps.Caption" parent="@style/TextAppearance.Axelliant.Caption" />
+
+    <style name="Text" />
+    <style name="Text.InternalApps" parent="@style/Text.Axelliant" />
+
+    <style name="Text.InternalApps.Display" parent="@style/Text.Axelliant.Display" />
+
+    <style name="Text.InternalApps.Heading" parent="@style/Text.Axelliant.Heading" />
+
+    <style name="Text.InternalApps.Title" parent="@style/Text.Axelliant.Title" />
+
+    <style name="Text.InternalApps.Subheading" parent="@style/Text.Axelliant.Subheading" />
+
+    <style name="Text.InternalApps.Body" parent="@style/Text.Axelliant.Body" />
+
+    <style name="Text.InternalApps.Caption" parent="@style/Text.Axelliant.Caption" />
+
+    <style name="Text.InternalApps.FormLabel" parent="@style/Text.Axelliant.FormLabel" />
+
+    <style name="Widget" />
+    <style name="Widget.InternalApps" />
+    <style name="Widget.InternalApps.Button" />
+    <style name="Widget.InternalApps.Dashboard" />
+
+    <style name="IA_TEXT_REGULAR_WHITE_10">
+        <item name="android:textColor">@color/ia_white</item>
+        <item name="android:textSize">@dimen/text_size_10</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="fontFamily">sans-serif</item>
+    </style>
+
+    <style name="IA_TEXT_REGULAR_GREY_10">
+        <item name="android:textColor">@color/ds_text_grey</item>
+        <item name="android:textSize">@dimen/text_size_10</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="fontFamily">sans-serif</item>
+    </style>
+
+    <style name="IA_TEXT_REGULAR_BLACK_12">
+        <item name="android:textColor">@color/ds_text_black</item>
+        <item name="android:textSize">@dimen/text_size_12</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="fontFamily">sans-serif</item>
+    </style>
+
+    <style name="IA_TEXT_REGULAR_WHITE_12">
+        <item name="android:textColor">@color/ia_white</item>
+        <item name="android:textSize">@dimen/text_size_12</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="fontFamily">sans-serif</item>
+    </style>
+
+    <style name="IA_TEXT_MEDIUM_WHITE_10">
+        <item name="android:textColor">@color/ia_white</item>
+        <item name="android:textSize">@dimen/text_size_10</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="IA_TEXT_MEDIUM_GREY_15">
+        <item name="android:textColor">@color/ds_text_grey</item>
+        <item name="android:textSize">@dimen/text_size_15</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="IA_TEXT_SEMIBOLD_WHITE_12">
+        <item name="android:textColor">@color/ia_white</item>
+        <item name="android:textSize">@dimen/text_size_12</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="IA_TEXT_SEMIBOLD_WHITE_18">
+        <item name="android:textColor">@color/ia_white</item>
+        <item name="android:textSize">@dimen/text_size_18</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="IA_TEXT_BOLD_BLACK_24">
+        <item name="android:textColor">@color/ds_text_black</item>
+        <item name="android:textSize">@dimen/text_size_24</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="Widget.InternalApps.InputLayout" parent="@style/Widget.Axelliant.InputLayout" />
+
+    <style name="Widget.InternalApps.InputEditText" parent="@style/Widget.Axelliant.InputEditText" />
+
+    <style name="Widget.InternalApps.Button.Primary" parent="@style/Widget.Axelliant.Button.Primary" />
+
+    <style name="Widget.InternalApps.Button.Secondary" parent="@style/Widget.Axelliant.Button.Secondary" />
+
+    <style name="Widget.InternalApps.Button.Text" parent="@style/Widget.Axelliant.Button.Text" />
+
+    <style name="Widget.InternalApps.Card" parent="@style/Widget.Axelliant.Card" />
+
+    <style name="Widget.InternalApps.Dashboard.IconButton" parent="@style/Widget.Axelliant.IconButton" />
+
+    <style name="IA_TEXT_SEMIBOLD_BLACK_18">
+        <item name="android:textColor">@color/ds_text_primary</item>
+        <item name="android:textSize">@dimen/text_size_18</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="IA_TEXT_SEMIBOLD_BLACK_15">
+        <item name="android:textColor">@color/ds_text_primary</item>
+        <item name="android:textSize">@dimen/text_size_15</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="IA_TEXT_MEDIUM_BLACK_10">
+        <item name="android:textColor">@color/ds_text_muted</item>
+        <item name="android:textSize">@dimen/text_size_10</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="IA_TEXT_BOLD_BLACK_18">
+        <item name="android:textColor">@color/ds_text_primary</item>
+        <item name="android:textSize">@dimen/text_size_18</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="IA_TEXT_BOLD_WHITE_24">
+        <item name="android:textColor">@color/ia_white</item>
+        <item name="android:textSize">@dimen/text_size_24</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="fontFamily">sans-serif-medium</item>
+    </style>
+    <style name="IA_TEXT_BOLD_WHITE_18">
+        <item name="android:textColor">@color/ia_white</item>
+        <item name="android:textSize">@dimen/text_size_18</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="Widget.InternalApps.BottomNav.ActiveIndicator" parent="">
+        <item name="android:color">@color/ds_primary_container</item>
+        <item name="android:width">@dimen/_52sdp</item>
+        <item name="android:height">@dimen/_28sdp</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.InternalApps.BottomNavIndicator</item>
+    </style>
+
+    <style name="ShapeAppearance.InternalApps.BottomNavIndicator" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">@dimen/_14sdp</item>
+    </style>
+
+    <style name="TextAppearance.InternalApps.BottomNav.Active">
+        <item name="android:textSize">@dimen/ds_text_caption</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="TextAppearance.InternalApps.BottomNav.Inactive">
+        <item name="android:textSize">@dimen/ds_text_caption</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="fontFamily">sans-serif-medium</item>
+    </style>
+
+    <!-- Backward-compatible aliases for the previous template styles. -->
+    <style name="IA_TEXT_REGULAR_GREY_15">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/app_text_secondary</item>
+        <item name="android:textSize">@dimen/text_size_10</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:gravity">center</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="fontFamily">sans-serif</item>
+    </style>
+
+    <style name="IA_TEXT_BOLD_BLACK_20">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/app_text_primary</item>
+        <item name="android:textSize">@dimen/text_size_12</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:gravity">center</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="fontFamily">sans-serif-medium</item>
+    </style>
+
+
+
+    <style name="ia_start_gl" parent="@style/Guideline.Axelliant.Start" />
+
+    <style name="ia_end_gl" parent="@style/Guideline.Axelliant.End" />
+
+    <style name="ia_bottom_gl" parent="@style/Guideline.Axelliant.Bottom" />
+    <style name="ia_top_gl" parent="@style/Guideline.Axelliant.Top" />
+
+
+
+</resources>
+

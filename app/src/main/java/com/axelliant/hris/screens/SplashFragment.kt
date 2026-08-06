@@ -133,7 +133,7 @@ class SplashFragment : BaseFragment() {
     private fun navigateAfterSplash() {
         if (!isAdded) return
         findNavController().navigate(
-            R.id.appEntryFragment,
+            R.id.commonLoginFragment,
             bundleOf(),
             NavOptions.Builder()
                 .setPopUpTo(R.id.splashFragment, true)

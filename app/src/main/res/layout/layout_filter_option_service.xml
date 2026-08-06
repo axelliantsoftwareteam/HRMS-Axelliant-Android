@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/_36sdp"
+    android:layout_marginTop="@dimen/_4sdp"
+    android:background="@drawable/bg_filter_option_selected"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingStart="@dimen/_6sdp"
+    android:paddingEnd="@dimen/_8sdp">
+
+    <CheckBox
+        android:layout_width="@dimen/_26sdp"
+        android:layout_height="@dimen/_26sdp"
+        android:buttonTint="@color/ds_primary"
+        android:checked="true" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        style="@style/Text.InternalApps.Body"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_weight="1"
+        android:text="@string/filter_service"
+        android:textColor="@color/ds_text_primary"
+        android:textSize="@dimen/_12ssp" />
+
+    <ImageView
+        android:layout_width="@dimen/_18sdp"
+        android:layout_height="@dimen/_18sdp"
+        android:contentDescription="@null"
+        android:src="@drawable/ia_ic_filter_check" />
+</LinearLayout>
+

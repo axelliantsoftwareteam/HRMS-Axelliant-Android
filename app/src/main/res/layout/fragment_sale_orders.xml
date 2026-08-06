@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/ds_surface">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/startGuideline"
+        style="@style/ia_start_gl"
+        android:orientation="vertical" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/endGuideline"
+        style="@style/ia_end_gl"
+        android:orientation="vertical" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/topGuideline"
+        style="@style/ia_top_gl"
+        android:orientation="horizontal" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/bottomGuideline"
+        style="@style/ia_bottom_gl"
+        android:orientation="horizontal" />
+
+    <View
+        android:id="@+id/topBarBackground"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/ds_surface"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/toolbarBarrier"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppButtonView
+        android:id="@+id/backButton"
+        style="@style/Widget.InternalApps.Dashboard.IconButton"
+        android:contentDescription="@string/sale_orders_title"
+        app:icon="@drawable/ic_arrow_back"
+        app:noBackground="true"
+        app:layout_constraintBottom_toBottomOf="@id/searchIconButton"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintTop_toTopOf="@id/searchIconButton" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        android:id="@+id/toolbarTitle"
+        style="@style/Text.InternalApps.Heading"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/ds_space_8"
+        android:layout_marginEnd="@dimen/ds_space_8"
+        android:fontFamily="@font/poppins_semibold"
+        android:text="@string/sale_orders_title"
+        android:textColor="@color/ds_text_primary"
+        app:layout_constraintBottom_toBottomOf="@id/searchIconButton"
+        app:layout_constraintEnd_toStartOf="@id/searchIconButton"
+        app:layout_constraintStart_toEndOf="@id/backButton"
+        app:layout_constraintTop_toTopOf="@id/searchIconButton" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppButtonView
+        android:id="@+id/searchIconButton"
+        style="@style/Widget.InternalApps.Button.Text"
+        android:layout_width="@dimen/_40sdp"
+        android:layout_height="@dimen/_40sdp"
+        android:contentDescription="@string/sale_orders_search_open"
+        android:insetLeft="0dp"
+        android:insetTop="0dp"
+        android:insetRight="0dp"
+        android:insetBottom="0dp"
+        android:minWidth="0dp"
+        android:text=""
+        app:icon="@drawable/ia_ic_search"
+        app:iconGravity="textStart"
+        app:noBackground="true"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:layout_constraintTop_toBottomOf="@id/topGuideline" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/toolbarBarrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:barrierMargin="@dimen/ds_space_8"
+        app:constraint_referenced_ids="backButton,toolbarTitle,searchIconButton" />
+
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        android:id="@+id/totalEntriesText"
+        style="@style/Text.InternalApps.Display"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ds_space_2"
+        android:textSize="@dimen/text_size_18"
+        android:textColor="@color/ds_text_muted"
+        android:fontFamily="@font/poppins_bold"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/searchInputLayout" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/statusFilterRecycler"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ds_space_12"
+        android:clipToPadding="false"
+        android:overScrollMode="never"
+        android:paddingEnd="@dimen/ds_space_8"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/totalEntriesText" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout
+        android:id="@+id/searchInputLayout"
+        style="@style/Widget.InternalApps.InputLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ds_space_2"
+        android:visibility="visible"
+        app:boxBackgroundMode="none"
+        app:endIconDrawable="@drawable/ia_ic_filter_close"
+        app:endIconMode="clear_text"
+        app:hintEnabled="false"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/toolbarBarrier"
+        app:startIconDrawable="@drawable/ia_ic_search">
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextFieldView
+            android:id="@+id/searchEditText"
+            style="@style/Text.InternalApps.Body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_quote_search"
+            android:hint="@string/sale_orders_search_hint"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+            android:minHeight="@dimen/ds_input_height"
+            android:paddingStart="@dimen/ds_space_8"
+            android:paddingEnd="@dimen/ds_space_12"
+            android:textColorHint="@color/ds_text_muted" />
+    </com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout>
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/listTopBarrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="statusFilterRecycler,searchInputLayout" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/saleOrdersRecyclerView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/ds_space_12"
+        android:clipToPadding="false"
+        android:overScrollMode="never"
+        android:paddingBottom="@dimen/ds_space_72"
+        app:layout_constraintBottom_toTopOf="@id/paginationShimmerContainer"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/listTopBarrier" />
+
+    <LinearLayout
+        android:id="@+id/paginationShimmerContainer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/bottomGuideline"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:layout_constraintStart_toStartOf="@id/startGuideline" />
+
+    <LinearLayout
+        android:id="@+id/shimmerContainer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/ds_space_12"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/bottomGuideline"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/listTopBarrier" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        android:id="@+id/emptyStateText"
+        style="@style/Text.InternalApps.Body"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/sale_orders_empty"
+        android:textColor="@color/ds_text_secondary"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/bottomGuideline"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/listTopBarrier"
+        app:layout_constraintVertical_bias="0.35" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        android:id="@+id/errorStateText"
+        style="@style/Text.InternalApps.Body"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/sale_orders_error"
+        android:textColor="@color/ds_error"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/bottomGuideline"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/listTopBarrier" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppFloatingActionButtonView
+        android:id="@+id/createSaleOrderFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/ds_space_8"
+        android:layout_marginBottom="@dimen/ds_space_16"
+        android:contentDescription="@string/sale_orders_create"
+        android:src="@drawable/ia_ic_add"
+        app:backgroundTint="@color/quotes_navy"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:tint="@color/ds_on_primary" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+

@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/ds_background"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/ds_screen_horizontal_margin"
+        android:paddingTop="@dimen/ds_space_12"
+        android:paddingEnd="@dimen/ds_screen_horizontal_margin">
+
+        <com.axelliant.hris.ui.designsystem.components.AppButtonView
+            android:id="@+id/backButton"
+            style="@style/Widget.InternalApps.Button.Text"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:contentDescription="@string/back"
+            android:insetLeft="0dp"
+            android:insetTop="0dp"
+            android:insetRight="0dp"
+            android:insetBottom="0dp"
+            android:minWidth="0dp"
+            android:text=""
+            app:icon="@drawable/ic_back"
+            app:iconGravity="textStart"
+            app:noBackground="true" />
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            style="@style/Text.InternalApps.Heading"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_marginStart="@dimen/ds_space_4"
+            android:text="@string/product_details"
+            tools:text="Product Details" />
+
+        <com.axelliant.hris.ui.designsystem.components.AppButtonView
+            android:id="@+id/searchButton"
+            style="@style/Widget.InternalApps.Button.Text"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:contentDescription="@string/product_search_hint"
+            android:insetLeft="0dp"
+            android:insetTop="0dp"
+            android:insetRight="0dp"
+            android:insetBottom="0dp"
+            android:minWidth="0dp"
+            android:text=""
+            app:icon="@drawable/ia_ic_search"
+            app:iconGravity="textStart"
+            app:noBackground="true" />
+
+        <com.axelliant.hris.ui.designsystem.components.AppButtonView
+            android:id="@+id/moreButton"
+            style="@style/Widget.InternalApps.Button.Text"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:contentDescription="@string/more"
+            android:insetLeft="0dp"
+            android:insetTop="0dp"
+            android:insetRight="0dp"
+            android:insetBottom="0dp"
+            android:minWidth="0dp"
+            android:text=""
+            app:icon="@drawable/ic_more_vertical"
+            app:iconGravity="textStart"
+            app:noBackground="true" />
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:visibility="gone" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        android:id="@+id/errorText"
+        style="@style/Text.InternalApps.Body"
+        android:layout_width="match_parent"
+        android:layout_marginStart="@dimen/ds_screen_horizontal_margin"
+        android:layout_marginEnd="@dimen/ds_screen_horizontal_margin"
+        android:textColor="@color/ds_error"
+        android:visibility="gone" />
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/contentScroll"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:paddingStart="@dimen/ds_screen_horizontal_margin"
+        android:paddingEnd="@dimen/ds_screen_horizontal_margin"
+        android:paddingBottom="@dimen/ds_space_24">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.axelliant.hris.ui.designsystem.components.AppCardView
+                android:id="@+id/heroCard"
+                style="@style/Widget.InternalApps.Card"
+                android:layout_marginTop="@dimen/ds_space_8"
+                app:strokeColor="#E6EEF8"
+                app:strokeWidth="@dimen/_1sdp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/ds_space_8">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_90sdp"
+                        android:baselineAligned="false"
+                        android:orientation="horizontal">
+
+                        <FrameLayout
+                            android:id="@+id/productImageFrame"
+                            android:layout_width="@dimen/_90sdp"
+                            android:layout_height="@dimen/_90sdp"
+                            android:background="@drawable/bg_product_detail_image">
+
+                            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                                android:id="@+id/productImageLabel"
+                                style="@style/Text.InternalApps.Heading"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:textColor="@color/ds_on_primary"
+                                tools:text="EW" />
+                        </FrameLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="@dimen/ds_space_8"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                                android:id="@+id/statusBadge"
+                                style="@style/Text.InternalApps.Caption"
+                                android:layout_width="@dimen/_56sdp"
+                                android:layout_height="@dimen/_22sdp"
+                                android:background="@drawable/bg_status_success"
+                                android:gravity="center"
+                                android:textColor="@color/ds_success"
+                                tools:text="Active" />
+
+                            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                                android:id="@+id/productName"
+                                style="@style/Text.InternalApps.Subheading"
+                                android:layout_width="match_parent"
+                                android:layout_marginTop="@dimen/ds_space_6"
+                                android:ellipsize="end"
+                                android:fontFamily="@font/poppins_semibold"
+                                android:maxLines="2"
+                                android:textColor="@color/ds_text_primary"
+                                tools:text="EW MONITORPLS NBD AHR H34174" />
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/ds_space_4"
+                                android:paddingBottom="@dimen/ds_space_2">
+
+                                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                                    android:id="@+id/productPrice"
+                                    style="@style/Text.InternalApps.Subheading"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginEnd="@dimen/ds_space_4"
+                                    android:ellipsize="end"
+                                    android:fontFamily="@font/poppins_bold"
+                                    android:gravity="start|center_vertical"
+                                    android:singleLine="true"
+                                    android:textColor="@color/ds_text_secondary"
+                                    app:layout_constraintEnd_toStartOf="@id/stockBadge"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    tools:text="$245.00" />
+
+                                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                                    android:id="@+id/stockBadge"
+                                    style="@style/Text.InternalApps.Caption"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:padding="@dimen/_4sdp"
+                                    android:background="@drawable/bg_status_success"
+                                    android:gravity="center"
+                                    android:textColor="@color/ds_success"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    tools:text="In Stock" />
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/productInfoRecyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/ds_space_8"
+                        android:nestedScrollingEnabled="false"
+                        android:overScrollMode="never"
+                        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                        app:spanCount="2"
+                        tools:itemCount="4"
+                        tools:listitem="@layout/item_product_detail_info_tile" />
+                </LinearLayout>
+            </com.axelliant.hris.ui.designsystem.components.AppCardView>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/detailTabsRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ds_space_12"
+                android:clipToPadding="false"
+                android:overScrollMode="never"
+                android:scrollbars="none"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                android:orientation="horizontal"
+                tools:itemCount="5"
+                tools:listitem="@layout/item_product_detail_tab" />
+
+            <com.axelliant.hris.ui.designsystem.components.AppCardView
+                android:id="@+id/descriptionCard"
+                style="@style/Widget.InternalApps.Card"
+                android:layout_marginTop="@dimen/ds_space_10"
+                app:strokeColor="#E6EEF8"
+                app:strokeWidth="@dimen/_1sdp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/ds_space_12">
+
+                    <LinearLayout
+                        android:id="@+id/detailSectionHeader"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?attr/selectableItemBackground"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <com.axelliant.hris.ui.designsystem.components.AppTextView
+                            android:id="@+id/detailSectionTitle"
+                            style="@style/Text.InternalApps.Heading"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/product_description"
+                            android:textColor="@color/ds_text_primary"
+                            tools:text="Product Description" />
+
+                        <com.axelliant.hris.ui.designsystem.components.AppTextView
+                            android:id="@+id/detailSectionMeta"
+                            style="@style/Text.InternalApps.Caption"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/ds_space_8"
+                            android:textColor="@color/ds_text_secondary"
+                            android:visibility="gone"
+                            tools:text="3 vendors"
+                            tools:visibility="visible" />
+
+                        <ImageView
+                            android:id="@+id/detailSectionChevron"
+                            android:layout_width="@dimen/_24sdp"
+                            android:layout_height="@dimen/_24sdp"
+                            android:contentDescription="@null"
+                            android:src="@drawable/ic_chevron_up" />
+                    </LinearLayout>
+
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
+                        android:id="@+id/productDescription"
+                        style="@style/Text.InternalApps.Body"
+                        android:layout_width="match_parent"
+                        android:layout_marginTop="@dimen/ds_space_16"
+                        android:lineSpacingExtra="@dimen/ds_space_4"
+                        android:maxLines="3"
+                        android:textColor="@color/ds_text_secondary"
+                        tools:text="Maintain service continuity when hardware issues threaten production. This product pairs monitoring support with next-business-day replacement." />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/technicalSpecsRecyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/ds_space_16"
+                        android:nestedScrollingEnabled="false"
+                        android:overScrollMode="never"
+                        android:visibility="gone"
+                        tools:itemCount="2"
+                        tools:listitem="@layout/item_product_detail_info_tile" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/vendorsRecyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/ds_space_12"
+                        android:nestedScrollingEnabled="false"
+                        android:overScrollMode="never"
+                        android:visibility="gone"
+                        tools:itemCount="2"
+                        tools:listitem="@layout/item_product_vendor_associated" />
+
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
+                        android:id="@+id/readMoreText"
+                        style="@style/Text.InternalApps.Subheading"
+                        android:layout_width="wrap_content"
+                        android:textSize="@dimen/_11ssp"
+                        android:layout_marginTop="@dimen/ds_space_12"
+                        android:text="@string/read_more"
+                        android:textColor="@color/ds_primary"
+                        tools:text="Read more" />
+                </LinearLayout>
+            </com.axelliant.hris.ui.designsystem.components.AppCardView>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>
+
+
+
+

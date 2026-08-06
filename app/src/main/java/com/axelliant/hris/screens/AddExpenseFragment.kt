@@ -25,7 +25,7 @@ import com.axelliant.hris.adapter.AddExpenseAdapter
 import com.axelliant.hris.adapter.AttachmentsAdapter
 import com.axelliant.hris.base.BaseFragment
 import com.axelliant.hris.callback.AdapterItemClick
-import com.axelliant.hris.config.AppConst
+import com.axelliant.hris.core.constants.AppRouteArgs
 import com.axelliant.hris.databinding.FragmentAddExpenseBinding
 import com.axelliant.hris.event.EventObserver
 import com.axelliant.hris.extention.showErrorMsg
@@ -111,10 +111,10 @@ class AddExpenseFragment : BaseFragment(), AddExpenseAdapter.OnUpdateList {
 
 
 
-        if (arguments != null && requireArguments().containsKey(AppConst.ExpenseRequestParam)) {
-            val parsedData = arguments?.getString(AppConst.ExpenseRequestParam, "")
-            val expenseID = arguments?.getString(AppConst.ExpenseRequestIDParam, "")
-            val attachments = arguments?.getString(AppConst.ExpenseRequestAttachments, "")
+        if (arguments != null && requireArguments().containsKey(AppRouteArgs.EXPENSE_REQUEST)) {
+            val parsedData = arguments?.getString(AppRouteArgs.EXPENSE_REQUEST, "")
+            val expenseID = arguments?.getString(AppRouteArgs.EXPENSE_REQUEST_ID, "")
+            val attachments = arguments?.getString(AppRouteArgs.EXPENSE_REQUEST_ATTACHMENTS, "")
 
             if (parsedData != null) {
                 forUpdateList =

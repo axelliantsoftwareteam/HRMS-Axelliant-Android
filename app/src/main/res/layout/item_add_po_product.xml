@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_add_po_product_card"
+    android:padding="@dimen/ds_space_12">
+
+    <com.axelliant.hris.ui.designsystem.components.AppCheckboxView
+        android:id="@+id/productCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minWidth="0dp"
+        android:minHeight="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        android:id="@+id/productNameText"
+        style="@style/Text.InternalApps.Subheading"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/ds_space_4"
+        android:layout_marginEnd="@dimen/ds_space_8"
+        android:ellipsize="end"
+        android:fontFamily="@font/poppins_semibold"
+        android:maxLines="2"
+        android:textColor="@color/ds_text_primary"
+        app:layout_constraintEnd_toStartOf="@id/lineTotalText"
+        app:layout_constraintStart_toEndOf="@id/productCheckBox"
+        app:layout_constraintTop_toTopOf="@id/productCheckBox"
+        tools:text="1M USB A/A EXT CBL BLK" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        android:id="@+id/lineTotalText"
+        style="@style/Text.InternalApps.Subheading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_semibold"
+        android:textColor="@color/ds_primary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/productNameText"
+        tools:text="$87.89" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        android:id="@+id/axePartText"
+        style="@style/Text.InternalApps.Caption"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_2sdp"
+        android:textColor="@color/ds_text_muted"
+        app:layout_constraintEnd_toEndOf="@id/productNameText"
+        app:layout_constraintStart_toStartOf="@id/productNameText"
+        app:layout_constraintTop_toBottomOf="@id/productNameText"
+        tools:text="AXE Part: AXE-0006900" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        android:id="@+id/quantityLabel"
+        style="@style/Text.InternalApps.FormLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ds_space_10"
+        android:text="@string/add_purchase_order_quantity"
+        app:layout_constraintStart_toStartOf="@id/productNameText"
+        app:layout_constraintTop_toBottomOf="@id/axePartText" />
+
+    <LinearLayout
+        android:id="@+id/quantityRow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_4sdp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="@id/quantityLabel"
+        app:layout_constraintTop_toBottomOf="@id/quantityLabel">
+
+        <EditText
+            android:id="@+id/quantityEditText"
+            style="@style/Text.InternalApps.Body"
+            android:layout_width="@dimen/_48sdp"
+            android:layout_height="@dimen/_32sdp"
+            android:background="@drawable/bg_add_po_qty_field"
+            android:gravity="center"
+            android:importantForAutofill="no"
+            android:inputType="number"
+            android:maxLines="1"
+            android:paddingHorizontal="@dimen/_4sdp"
+            android:textColor="@color/ds_text_primary"
+            tools:text="11" />
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            android:id="@+id/quantityOfText"
+            style="@style/Text.InternalApps.Caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/ds_space_8"
+            android:textColor="@color/ds_text_muted"
+            tools:text="of 11" />
+    </LinearLayout>
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        android:id="@+id/vendorLabel"
+        style="@style/Text.InternalApps.FormLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/ds_space_12"
+        android:text="@string/add_purchase_order_vendor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/quantityRow"
+        app:layout_constraintTop_toTopOf="@id/quantityLabel" />
+
+    <LinearLayout
+        android:id="@+id/vendorField"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_32sdp"
+        android:layout_marginTop="@dimen/_4sdp"
+        android:background="@drawable/bg_quote_search"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/ds_space_8"
+        android:paddingEnd="@dimen/ds_space_4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/vendorLabel"
+        app:layout_constraintTop_toBottomOf="@id/vendorLabel">
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            android:id="@+id/vendorText"
+            style="@style/Text.InternalApps.Body"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textColor="@color/ds_text_primary"
+            tools:text="TD_SYNNEX" />
+
+        <ImageView
+            android:layout_width="@dimen/_18sdp"
+            android:layout_height="@dimen/_18sdp"
+            android:contentDescription="@null"
+            android:src="@drawable/ia_ic_filter_down" />
+    </LinearLayout>
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        android:id="@+id/unitCostLabel"
+        style="@style/Text.InternalApps.FormLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ds_space_10"
+        android:text="@string/add_purchase_order_unit_cost"
+        app:layout_constraintStart_toStartOf="@id/quantityRow"
+        app:layout_constraintTop_toBottomOf="@id/quantityRow" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        android:id="@+id/unitCostText"
+        style="@style/Text.InternalApps.Body"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_2sdp"
+        android:textColor="@color/ds_text_primary"
+        app:layout_constraintStart_toStartOf="@id/unitCostLabel"
+        app:layout_constraintTop_toBottomOf="@id/unitCostLabel"
+        tools:text="$7.99" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        android:id="@+id/uomLabel"
+        style="@style/Text.InternalApps.FormLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/add_purchase_order_uom"
+        app:layout_constraintStart_toStartOf="@id/vendorField"
+        app:layout_constraintTop_toTopOf="@id/unitCostLabel" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        android:id="@+id/uomText"
+        style="@style/Text.InternalApps.Body"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_2sdp"
+        android:textColor="@color/ds_text_primary"
+        app:layout_constraintStart_toStartOf="@id/uomLabel"
+        app:layout_constraintTop_toBottomOf="@id/uomLabel"
+        tools:text="Each" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+

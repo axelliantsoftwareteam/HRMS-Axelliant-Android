@@ -10,8 +10,12 @@
     <color name="purple_700">#FF3700B3</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="ds_neutral_black">#FF000000</color>
+    <color name="ds_neutral_white">#FFFFFFFF</color>
+    <color name="fluent2_neutral_black">@color/ds_neutral_black</color>
+    <color name="fluent2_neutral_white">@color/ds_neutral_white</color>
+    <color name="black">@color/ds_neutral_black</color>
+    <color name="white">@color/ds_neutral_white</color>
     <color name="sky_blue">#106EBE</color>
     <color name="light_gray">#F5F7FA</color>
     <color name="chip_color">#F1F1F1</color>
@@ -28,7 +32,7 @@
     <color name="color_third">#D83242</color>
     <color name="color_third_light">#33D83242</color>
     <color name="light_red">#EFD7D8</color>
-    <color name="layout_bg">#ffffff</color>
+    <color name="layout_bg">@color/ds_background</color>
     <color name="approved_bg">#F1FBFB</color>
     <color name="approved">#2B2B2B</color>
     <color name="btn_text_color">#0C0C0C</color>

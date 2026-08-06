@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/ds_background">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/startGuideline"
+        style="@style/ia_start_gl"
+        android:orientation="vertical" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/endGuideline"
+        style="@style/ia_end_gl"
+        android:orientation="vertical" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/topGuideline"
+        style="@style/ia_top_gl"
+        android:orientation="horizontal" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/bottomGuideline"
+        style="@style/ia_bottom_gl"
+        android:orientation="horizontal" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppButtonView
+        android:id="@+id/backButton"
+        style="@style/Widget.InternalApps.Dashboard.IconButton"
+        android:visibility="gone"
+        app:icon="@drawable/ic_arrow_back"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/topGuideline" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        android:id="@+id/quotesTitle"
+        style="@style/Text.InternalApps.Heading"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/ds_space_8"
+        android:text="@string/quotes_title"
+        app:layout_constraintBottom_toBottomOf="@id/searchIconButton"
+        app:layout_constraintEnd_toStartOf="@id/searchIconButton"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintTop_toTopOf="@id/searchIconButton" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppButtonView
+        android:id="@+id/searchIconButton"
+        style="@style/Widget.InternalApps.Button.Text"
+        android:layout_width="@dimen/_40sdp"
+        android:layout_height="@dimen/_40sdp"
+        android:contentDescription="@string/quotes_search_open"
+        android:insetLeft="0dp"
+        android:insetTop="0dp"
+        android:insetRight="0dp"
+        android:insetBottom="0dp"
+        android:minWidth="0dp"
+        android:text=""
+        app:noBackground="true"
+        app:icon="@drawable/ia_ic_search"
+        app:iconGravity="textStart"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:layout_constraintTop_toBottomOf="@id/topGuideline" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout
+        android:id="@+id/searchInputLayout"
+        style="@style/Widget.InternalApps.InputLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ds_space_12"
+        android:visibility="visible"
+        app:boxBackgroundMode="none"
+        app:hintEnabled="false"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/searchIconButton"
+        app:endIconDrawable="@drawable/ia_ic_filter_close"
+        app:endIconMode="clear_text"
+        app:startIconDrawable="@drawable/ia_ic_search">
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextFieldView
+            android:id="@+id/searchEditText"
+            style="@style/Text.InternalApps.Body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_quote_search"
+            android:hint="@string/quotes_search_hint"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+            android:minHeight="@dimen/ds_input_height"
+            android:paddingStart="@dimen/ds_space_8"
+            android:paddingEnd="@dimen/ds_space_12"
+            android:textColorHint="@color/ds_text_muted" />
+    </com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout>
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/headerBottomBarrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="searchIconButton,searchInputLayout" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/quoteTypeTabs"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_40sdp"
+        android:layout_marginTop="@dimen/ds_space_10"
+        android:background="@drawable/bg_quote_tab_track"
+        android:padding="@dimen/_3sdp"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/headerBottomBarrier">
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            android:id="@+id/standardTab"
+            style="@style/Text.InternalApps.Subheading"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/bg_quote_tab_selected"
+            android:clickable="true"
+            android:focusable="true"
+            android:fontFamily="@font/poppins_semibold"
+            android:foreground="?attr/selectableItemBackground"
+            android:gravity="center"
+            android:text="@string/quotes_tab_standard"
+            android:textColor="@color/ds_text_primary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/quickTab"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            android:id="@+id/quickTab"
+            style="@style/Text.InternalApps.Subheading"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:fontFamily="@font/poppins_medium"
+            android:foreground="?attr/selectableItemBackground"
+            android:gravity="center"
+            android:text="@string/quotes_tab_quick"
+            android:textColor="@color/ds_text_secondary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/standardTab"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/statusFilterRecycler"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ds_space_12"
+        android:clipToPadding="false"
+        android:overScrollMode="never"
+        android:paddingEnd="@dimen/ds_space_8"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/quoteTypeTabs" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/quotesRecyclerView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/ds_space_8"
+        android:clipToPadding="false"
+        android:overScrollMode="never"
+        android:paddingBottom="@dimen/bottom_nav_content_padding"
+        app:layout_constraintBottom_toTopOf="@id/paginationShimmerContainer"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/statusFilterRecycler" />
+
+    <LinearLayout
+        android:id="@+id/paginationShimmerContainer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/bottomGuideline"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:layout_constraintStart_toStartOf="@id/startGuideline" />
+
+    <LinearLayout
+        android:id="@+id/shimmerContainer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/ds_space_8"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/bottomGuideline"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/statusFilterRecycler" />
+
+    <include
+        android:id="@+id/quotesEmptyState"
+        layout="@layout/layout_quotes_empty_state"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/bottomGuideline"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/statusFilterRecycler"
+        app:layout_constraintVertical_bias="0.35" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        android:id="@+id/errorStateText"
+        style="@style/Text.InternalApps.Body"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/quotes_error"
+        android:textColor="@color/ds_error"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/bottomGuideline"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/statusFilterRecycler" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppFloatingActionButtonView
+        android:id="@+id/createQuoteFab"
+        android:contentDescription="@string/quotes_create"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/ds_space_16"
+        android:layout_marginBottom="@dimen/ds_space_16"
+        android:src="@drawable/ia_ic_add"
+        app:backgroundTint="@color/ds_primary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:tint="@color/ds_on_primary"
+        />
+
+    <View
+        android:id="@+id/quoteActionOverlay"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#66000000"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppCardView
+        android:id="@+id/quoteActionMenuCard"
+        style="@style/Widget.InternalApps.Card"
+        android:layout_width="@dimen/_214sdp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/ds_space_8"
+        android:layout_marginBottom="@dimen/ds_space_8"
+        android:alpha="0"
+        android:visibility="gone"
+        app:cardElevation="@dimen/_6sdp"
+        app:layout_constraintBottom_toTopOf="@id/createQuoteFab"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:strokeColor="#D9E5F2"
+        app:strokeWidth="@dimen/_1sdp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/_8sdp">
+
+            <LinearLayout
+                android:id="@+id/createQuoteOption"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_44sdp"
+                android:background="@drawable/bg_ask_ai_refine_option"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="@dimen/_10sdp"
+                android:paddingEnd="@dimen/_10sdp">
+
+                <ImageView
+                    android:layout_width="@dimen/_22sdp"
+                    android:layout_height="@dimen/_22sdp"
+                    android:background="@drawable/bg_filter_chip"
+                    android:contentDescription="@null"
+                    android:padding="@dimen/_4sdp"
+                    android:src="@drawable/ia_ic_add"
+                    app:tint="@color/ds_primary" />
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                    style="@style/Text.InternalApps.Subheading"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_8sdp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:text="@string/quotes_create"
+                    android:textColor="@color/ds_text_primary"
+                    android:textSize="@dimen/_10ssp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/smartQuoteOption"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_44sdp"
+                android:layout_marginTop="@dimen/_6sdp"
+                android:background="@drawable/bg_ask_ai_refine_option"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="@dimen/_10sdp"
+                android:paddingEnd="@dimen/_10sdp">
+
+                <ImageView
+                    android:layout_width="@dimen/_22sdp"
+                    android:layout_height="@dimen/_22sdp"
+                    android:background="@drawable/bg_filter_chip"
+                    android:contentDescription="@null"
+                    android:padding="@dimen/_4sdp"
+                    android:src="@drawable/ic_lightning"
+                    app:tint="@color/ds_primary" />
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                    style="@style/Text.InternalApps.Subheading"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_8sdp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:text="@string/smart_quote_title"
+                    android:textColor="@color/ds_text_primary"
+                    android:textSize="@dimen/_10ssp" />
+            </LinearLayout>
+        </LinearLayout>
+    </com.axelliant.hris.ui.designsystem.components.AppCardView>
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+

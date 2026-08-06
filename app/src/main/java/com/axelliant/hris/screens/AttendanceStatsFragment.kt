@@ -8,7 +8,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.axelliant.hris.R
 import com.axelliant.hris.base.BaseFragment
-import com.axelliant.hris.config.AppConst.KEY_ID
+import com.axelliant.hris.core.constants.AppRouteArgs
 import com.axelliant.hris.config.GlobalConfig
 import com.axelliant.hris.databinding.FragmentAttendanceStatsBinding
 import com.axelliant.hris.enums.AttendanceFilter
@@ -132,7 +132,7 @@ class AttendanceStatsFragment : BaseFragment() {
         binding?.tvMyTeam?.setOnClickListener {
             showDialog()
             AppNavigator.navigateToMyAttendanceDetail(Bundle().apply {
-                this.putString(KEY_ID,GlobalConfig.currentEmployeeId())
+                this.putString(AppRouteArgs.EMPLOYEE_ID,GlobalConfig.currentEmployeeId())
             })
 
         }

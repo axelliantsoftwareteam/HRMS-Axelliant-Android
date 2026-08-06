@@ -37,15 +37,6 @@ class UpcomingLeaveAdapter(
 
         fun bind(item: UpcomingLeaves) {
             binding.tvTotalMemberTxt.text = item.leave_type.valueQualifier()
-//
-//            val date: Date? = item.from_date?.let { it1 -> AppConst.upComingLeavesinputFormat.parse(it1) }
-//            val formattedTime: String =
-//                date?.let { AppConst.upComingLeavesoutputFormat.format(it) } ?: "Invalid date"
-//
-//            val date1: Date? = item.from_date?.let { it1 -> AppConst.upComingLeavesinputFormat.parse(it1) }
-//            val formattedEndTime: String =
-//                date1?.let { AppConst.upComingLeavesoutputEndFormat.format(it) } ?: "Invalid date"
-
 
             binding.tvStartEnd.text = item.from_date.plus("-").plus(item.from_date).valueQualifier()
             binding.tvReason.text = item.reason.valueQualifier()

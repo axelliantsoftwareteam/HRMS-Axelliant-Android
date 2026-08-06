@@ -16,7 +16,7 @@ import com.axelliant.hris.adapter.SubFilterAdapter
 import com.axelliant.hris.base.BaseFragment
 import com.axelliant.hris.callback.AdapterItemClick
 import com.axelliant.hris.callback.CheckBoxAdapterItemClick
-import com.axelliant.hris.config.AppConst
+import com.axelliant.hris.core.constants.AppRouteArgs
 import com.axelliant.hris.databinding.FragmentResourceManagmentBinding
 import com.axelliant.hris.enums.AttendanceFilter
 import com.axelliant.hris.enums.LeaveStatus
@@ -165,9 +165,9 @@ class ResourceManagementFragment : BaseFragment() {
                     if (documentHours.status == LeaveStatus.PENDING.value)
                     {
                         AppNavigator.navigateToAddResourceManageFragment(Bundle().apply {
-                            this.putString(AppConst.HoursRequestIDParam, documentHours.name)
+                            this.putString(AppRouteArgs.HOURS_REQUEST_ID, documentHours.name)
                             this.putString(
-                                AppConst.HoursRequestParam,
+                                AppRouteArgs.HOURS_REQUEST,
                                 Gson().toJson(documentHours.resource_detail)
                             )
                         })

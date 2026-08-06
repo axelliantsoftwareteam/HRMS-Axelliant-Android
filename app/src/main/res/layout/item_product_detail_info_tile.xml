@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/_52sdp"
+    android:background="@drawable/bg_filter_field"
+    android:baselineAligned="false"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingStart="@dimen/ds_space_6"
+    android:paddingEnd="@dimen/ds_space_6">
+
+    <FrameLayout
+        android:layout_width="@dimen/_30sdp"
+        android:layout_height="@dimen/_30sdp"
+        android:background="@drawable/bg_product_detail_info_icon">
+
+        <ImageView
+            android:id="@+id/tileIcon"
+            android:layout_width="@dimen/_18sdp"
+            android:layout_height="@dimen/_18sdp"
+            android:layout_gravity="center"
+            android:contentDescription="@null" />
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/ds_space_8"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            android:id="@+id/tileLabel"
+            style="@style/Text.InternalApps.Caption"
+            android:layout_width="match_parent"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/ds_text_secondary"
+            tools:text="MFG Name" />
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            android:id="@+id/tileValue"
+            style="@style/Text.InternalApps.Caption"
+            android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/ds_space_2"
+            android:ellipsize="end"
+            android:fontFamily="@font/poppins_semibold"
+            android:maxLines="1"
+            android:textColor="@color/ds_text_primary"
+            tools:text="DELL" />
+    </LinearLayout>
+</LinearLayout>
+

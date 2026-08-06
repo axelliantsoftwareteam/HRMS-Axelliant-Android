@@ -1,0 +1,987 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/ds_background">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingStart="@dimen/ds_screen_horizontal_margin"
+        android:paddingTop="@dimen/_12sdp"
+        android:paddingEnd="@dimen/ds_screen_horizontal_margin"
+        android:paddingBottom="@dimen/_24sdp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_44sdp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/backButton"
+                    android:layout_width="@dimen/_36sdp"
+                    android:layout_height="@dimen/_36sdp"
+                    android:contentDescription="@string/back"
+                    android:padding="@dimen/_7sdp"
+                    android:src="@drawable/ic_arrow_back"
+                    app:tint="@color/ds_text_primary" />
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                    android:id="@+id/screenTitleText"
+                    style="@style/Text.InternalApps.Heading"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/ask_ai" />
+
+                <ImageView
+                    android:id="@+id/inputMethodsMenuButton"
+                    android:layout_width="@dimen/_36sdp"
+                    android:layout_height="@dimen/_36sdp"
+                    android:contentDescription="@string/ask_ai_input_methods"
+                    android:padding="@dimen/_8sdp"
+                    android:src="@drawable/ic_more_vert"
+                    app:tint="@color/ds_text_primary" />
+
+                <ImageView
+                    android:id="@+id/retryHeaderButton"
+                    android:layout_width="@dimen/_36sdp"
+                    android:layout_height="@dimen/_36sdp"
+                    android:contentDescription="@string/ask_ai_try_again"
+                    android:padding="@dimen/_8sdp"
+                    android:src="@drawable/ic_retry"
+                    android:visibility="invisible"
+                    app:tint="@color/ds_text_primary"
+                    tools:visibility="visible" />
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                    android:id="@+id/resetEditButton"
+                    style="@style/Text.InternalApps.Caption"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:padding="@dimen/_8sdp"
+                    android:text="@string/reset"
+                    android:textColor="@color/ds_primary"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/inputContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_12sdp"
+                android:background="@drawable/bg_ask_ai_panel"
+                android:orientation="vertical"
+                android:padding="@dimen/_14sdp"
+                tools:visibility="visible">
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                    style="@style/Text.InternalApps.Title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/ask_ai_heading"
+                    android:textColor="@color/ds_text_primary" />
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                    android:id="@+id/inputSubtitleText"
+                    style="@style/Text.InternalApps.Body"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_4sdp"
+                    android:text="@string/ask_ai_subtitle"
+                    android:textColor="@color/ds_text_secondary" />
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                    android:id="@+id/selectedInputModeText"
+                    style="@style/Text.InternalApps.Caption"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:background="@drawable/bg_filter_chip"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:paddingStart="@dimen/_10sdp"
+                    android:paddingTop="@dimen/_4sdp"
+                    android:paddingEnd="@dimen/_10sdp"
+                    android:paddingBottom="@dimen/_4sdp"
+                    android:textColor="@color/ds_primary"
+                    android:visibility="gone"
+                    tools:text="@string/ask_ai_selected_voice"
+                    tools:visibility="visible" />
+
+                <com.axelliant.hris.ui.designsystem.components.AppButtonView
+                    android:id="@+id/micButton"
+                    style="@style/Widget.InternalApps.Button.Primary"
+                    android:layout_width="@dimen/ds_space_72"
+                    android:layout_height="@dimen/ds_space_72"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/_16sdp"
+                    android:background="@drawable/bg_ask_ai_mic"
+                    android:contentDescription="@string/ask_ai_voice"
+                    android:insetLeft="0dp"
+                    android:insetTop="0dp"
+                    android:insetRight="0dp"
+                    android:insetBottom="0dp"
+                    android:minWidth="0dp"
+                    android:text=""
+                    app:backgroundTint="@null"
+                    app:icon="@drawable/ia_ic_mic"
+                    app:iconGravity="textStart"
+                    app:noBackground="true"
+                    app:iconSize="@dimen/_28sdp"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+
+                <LinearLayout
+                    android:id="@+id/uploadFilePanel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_16sdp"
+                    android:background="@drawable/bg_smart_quote_add_more_products"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="@dimen/_16sdp"
+                    android:visibility="gone"
+                    tools:visibility="visible">
+
+                    <ImageView
+                        android:id="@+id/uploadFileIcon"
+                        android:layout_width="@dimen/_36sdp"
+                        android:layout_height="@dimen/_36sdp"
+                        android:background="@drawable/bg_smart_quote_add_more_icon"
+                        android:contentDescription="@null"
+                        android:padding="@dimen/_8sdp"
+                        android:src="@drawable/ic_document"
+                        app:tint="@color/ds_primary" />
+
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
+                        android:id="@+id/uploadFileTitleText"
+                        style="@style/Text.InternalApps.Subheading"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:text="@string/ask_ai_upload_file_title"
+                        android:textColor="@color/ds_text_primary" />
+
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
+                        android:id="@+id/uploadFileSubtitleText"
+                        style="@style/Text.InternalApps.Caption"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        android:gravity="center"
+                        android:text="@string/ask_ai_upload_file_support"
+                        android:textColor="@color/ds_text_secondary" />
+
+                    <ProgressBar
+                        android:id="@+id/uploadFileProgress"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_3sdp"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:indeterminate="true"
+                        android:indeterminateTint="@color/ds_primary"
+                        android:visibility="gone"
+                        tools:visibility="visible" />
+                </LinearLayout>
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                    android:id="@+id/voiceStatusText"
+                    style="@style/Text.InternalApps.Caption"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:gravity="center"
+                    android:text="@string/ask_ai_voice_hint"
+                    android:textColor="@color/ds_text_secondary"
+                    tools:text="@string/ask_ai_listening" />
+
+                <ProgressBar
+                    android:id="@+id/inputMethodProgress"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_3sdp"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:indeterminate="true"
+                    android:indeterminateTint="@color/ds_primary"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout
+                    android:id="@+id/queryInputLayout"
+                    style="@style/Widget.InternalApps.InputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_16sdp"
+                    android:hint="@string/ask_ai_query_hint"
+                    app:endIconDrawable="@drawable/ia_ic_filter_close"
+                    app:endIconMode="clear_text"
+                    app:startIconDrawable="@drawable/ia_ic_search">
+
+                    <com.axelliant.hris.ui.designsystem.components.AppTextFieldView
+                        android:id="@+id/queryEditText"
+                        style="@style/Widget.InternalApps.InputEditText"
+                        android:imeOptions="actionDone"
+                        android:inputType="textCapSentences"
+                        android:maxLines="1"
+                        android:minHeight="@dimen/_56sdp"
+                        android:singleLine="true"
+                        tools:text="Dell laptops from TD Synnex under 500" />
+                </com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout>
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                    android:id="@+id/inputErrorText"
+                    style="@style/Text.InternalApps.Caption"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_6sdp"
+                    android:textColor="@color/ds_error"
+                    android:visibility="gone"
+                    tools:text="@string/ask_ai_voice_error"
+                    tools:visibility="visible" />
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                    style="@style/Text.InternalApps.Subheading"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_14sdp"
+                    android:text="@string/ask_ai_examples"
+                    android:textColor="@color/ds_text_primary" />
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:overScrollMode="never"
+                    android:scrollbars="none">
+
+                    <LinearLayout
+                        android:id="@+id/exampleChipsContainer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal" />
+                </HorizontalScrollView>
+
+                <com.axelliant.hris.ui.designsystem.components.AppButtonView
+                    android:id="@+id/generateFiltersButton"
+                    style="@style/Widget.InternalApps.Button.Primary"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_42sdp"
+                    android:layout_marginTop="@dimen/_16sdp"
+                    android:text="@string/ask_ai_generate_filters"
+                    android:textAllCaps="false" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/loadingContainer"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_430sdp"
+                android:layout_marginTop="@dimen/_14sdp"
+                android:background="@drawable/bg_ask_ai_panel"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="@dimen/_24sdp"
+                android:visibility="gone"
+                tools:visibility="gone">
+
+                <ImageView
+                    android:layout_width="@dimen/_86sdp"
+                    android:layout_height="@dimen/_86sdp"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_ai_sparkles" />
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                    android:id="@+id/loadingTitleText"
+                    style="@style/Text.InternalApps.Title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_20sdp"
+                    android:text="@string/ask_ai_understanding"
+                    android:textColor="@color/ds_text_primary" />
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                    android:id="@+id/loadingSubtitleText"
+                    style="@style/Text.InternalApps.Caption"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_6sdp"
+                    android:text="@string/ask_ai_extracting_details"
+                    android:textColor="@color/ds_text_secondary" />
+
+                <ProgressBar
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_4sdp"
+                    android:layout_marginStart="@dimen/_18sdp"
+                    android:layout_marginTop="@dimen/_18sdp"
+                    android:layout_marginEnd="@dimen/_18sdp"
+                    android:indeterminate="true"
+                    android:indeterminateTint="@color/ds_primary"
+                    android:progressBackgroundTint="@color/ds_outline" />
+
+                <Space
+                    android:layout_width="1dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                    style="@style/Text.InternalApps.Caption"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/ask_ai_may_take_seconds"
+                    android:textColor="@color/ds_text_muted" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/reviewContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_14sdp"
+                android:background="@drawable/bg_ask_ai_panel"
+                android:orientation="vertical"
+                android:padding="@dimen/_14sdp"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <LinearLayout
+                    android:id="@+id/reviewHeaderRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_34sdp"
+                    android:background="@drawable/bg_ask_ai_confidence"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingStart="@dimen/_10sdp"
+                    android:paddingEnd="@dimen/_8sdp">
+
+                    <ImageView
+                        android:id="@+id/confidenceIcon"
+                        android:layout_width="@dimen/_15sdp"
+                        android:layout_height="@dimen/_15sdp"
+                        android:layout_marginEnd="@dimen/_6sdp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ia_ic_filter_check"
+                        app:tint="@color/ds_success" />
+
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
+                        android:id="@+id/confidenceLabel"
+                        style="@style/Text.InternalApps.Caption"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:text="@string/ask_ai_high_confidence"
+                        android:textColor="@color/ds_success" />
+
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
+                        android:id="@+id/confidenceBadge"
+                        style="@style/Text.InternalApps.Caption"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:textColor="@color/ds_text_primary"
+                        tools:text="High Confidence â€¢ 86%" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/detectedFiltersTitleRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_14sdp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
+                        android:id="@+id/detectedFiltersTitle"
+                        style="@style/Text.InternalApps.Subheading"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/ask_ai_found_filters"
+                        android:textColor="@color/ds_text_primary" />
+
+                    <ImageView
+                        android:id="@+id/promptInfoButton"
+                        android:layout_width="@dimen/_30sdp"
+                        android:layout_height="@dimen/_30sdp"
+                        android:contentDescription="@string/ask_ai_show_prompt"
+                        android:padding="@dimen/_6sdp"
+                        android:src="@drawable/ic_info_outline"
+                        app:tint="@color/ds_primary" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/detectedFiltersContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:orientation="vertical" />
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                    android:id="@+id/noDetectedFiltersText"
+                    style="@style/Text.InternalApps.Body"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:background="@drawable/bg_ask_ai_warning"
+                    android:padding="@dimen/_10sdp"
+                    android:text="@string/ask_ai_no_detected_filters"
+                    android:textColor="@color/ds_text_secondary"
+                    android:visibility="gone"
+                    tools:visibility="gone" />
+
+                <LinearLayout
+                    android:id="@+id/reasonsContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+
+                <LinearLayout
+                    android:id="@+id/warningsContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+
+                <LinearLayout
+                    android:id="@+id/editContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    tools:visibility="gone">
+
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
+                        style="@style/Text.InternalApps.Body"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/ask_ai_edit_subtitle"
+                        android:textColor="@color/ds_text_secondary" />
+
+                    <LinearLayout
+                        android:id="@+id/editSelectedFiltersContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:orientation="vertical" />
+
+                    <com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout
+                        android:id="@+id/editSearchInputLayout"
+                        style="@style/Widget.InternalApps.InputLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:hint="@string/ask_ai_keyword"
+                        app:endIconDrawable="@drawable/ia_ic_filter_close"
+                        app:endIconMode="clear_text">
+
+                        <com.axelliant.hris.ui.designsystem.components.AppTextFieldView
+                            android:id="@+id/editSearchEditText"
+                            style="@style/Widget.InternalApps.InputEditText"
+                            android:inputType="text"
+                            android:minHeight="@dimen/_42sdp"
+                            tools:text="laptops" />
+                    </com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:orientation="horizontal">
+
+                        <com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout
+                            style="@style/Widget.InternalApps.InputLayout"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:hint="@string/min"
+                            app:endIconDrawable="@drawable/ia_ic_filter_close"
+                            app:endIconMode="clear_text">
+
+                            <com.axelliant.hris.ui.designsystem.components.AppTextFieldView
+                                android:id="@+id/editMinPriceEditText"
+                                style="@style/Widget.InternalApps.InputEditText"
+                                android:inputType="numberDecimal"
+                                android:minHeight="@dimen/_42sdp"
+                                tools:text="100" />
+                        </com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout>
+
+                        <Space
+                            android:layout_width="@dimen/_8sdp"
+                            android:layout_height="1dp" />
+
+                        <com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout
+                            style="@style/Widget.InternalApps.InputLayout"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:hint="@string/max"
+                            app:endIconDrawable="@drawable/ia_ic_filter_close"
+                            app:endIconMode="clear_text">
+
+                            <com.axelliant.hris.ui.designsystem.components.AppTextFieldView
+                                android:id="@+id/editMaxPriceEditText"
+                                style="@style/Widget.InternalApps.InputEditText"
+                                android:inputType="numberDecimal"
+                                android:minHeight="@dimen/_42sdp"
+                                tools:text="500" />
+                        </com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout>
+                    </LinearLayout>
+
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
+                        style="@style/Text.InternalApps.Caption"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:text="@string/ask_ai_status"
+                        android:textColor="@color/ds_text_secondary" />
+
+                    <LinearLayout
+                        android:id="@+id/statusChoiceContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_6sdp"
+                        android:orientation="horizontal" />
+
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
+                        style="@style/Text.InternalApps.Caption"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:text="@string/ask_ai_availability"
+                        android:textColor="@color/ds_text_secondary" />
+
+                    <LinearLayout
+                        android:id="@+id/availabilityChoiceContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_6sdp"
+                        android:orientation="horizontal" />
+                </LinearLayout>
+
+                <com.axelliant.hris.ui.designsystem.components.AppButtonView
+                    android:id="@+id/primaryReviewButton"
+                    style="@style/Widget.InternalApps.Button.Primary"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_42sdp"
+                    android:layout_marginTop="@dimen/_16sdp"
+                    android:text="@string/ask_ai_apply_filters"
+                    android:visibility="gone"
+                    android:textAllCaps="false" />
+
+                <LinearLayout
+                    android:id="@+id/reviewActionRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:orientation="horizontal">
+
+                    <com.axelliant.hris.ui.designsystem.components.AppButtonView
+                        android:id="@+id/editFiltersButton"
+                        style="@style/Widget.InternalApps.Button.Secondary"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_weight="1"
+                        android:text="@string/ask_ai_edit_filters"
+                        android:textSize="@dimen/_10ssp"
+                        android:textAllCaps="false" />
+
+                    <Space
+                        android:layout_width="@dimen/_8sdp"
+                        android:layout_height="1dp" />
+
+                    <com.axelliant.hris.ui.designsystem.components.AppButtonView
+                        android:id="@+id/refineSearchButton"
+                        style="@style/Widget.InternalApps.Button.Secondary"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_weight="1"
+                        android:text="@string/ask_ai_refine_search"
+                        android:textSize="@dimen/_10ssp"
+                        android:textAllCaps="false" />
+                </LinearLayout>
+
+                <com.axelliant.hris.ui.designsystem.components.AppButtonView
+                    android:id="@+id/tryAgainButton"
+                    style="@style/Widget.InternalApps.Button.Primary"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_42sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:text="@string/ask_ai_confirm_apply"
+                    android:textAllCaps="false" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <FrameLayout
+        android:id="@+id/clarificationOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/drawer_scrim"
+        android:clickable="true"
+        android:focusable="true"
+        android:paddingStart="@dimen/ds_screen_horizontal_margin"
+        android:paddingTop="@dimen/_16sdp"
+        android:paddingEnd="@dimen/ds_screen_horizontal_margin"
+        android:paddingBottom="@dimen/_16sdp"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:clipToPadding="false"
+            android:fillViewport="false"
+            android:overScrollMode="ifContentScrolls">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                android:paddingBottom="@dimen/_8sdp">
+
+                <LinearLayout
+                    android:id="@+id/clarificationPeekCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_1sdp"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginEnd="0dp"
+                    android:alpha="0.96"
+                    android:background="@drawable/bg_ask_ai_refine_stack_card"
+                    android:elevation="@dimen/_1sdp"
+                    android:gravity="top|end"
+                    android:orientation="vertical"
+                    android:paddingStart="@dimen/_14sdp"
+                    android:paddingTop="@dimen/_7sdp"
+                    android:paddingEnd="@dimen/_12sdp"
+                    android:paddingBottom="@dimen/_8sdp">
+
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
+                        android:id="@+id/clarificationPeekStepText"
+                        style="@style/Text.InternalApps.Caption"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:textColor="@color/ds_primary"
+                        tools:text="Next" />
+
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
+                        android:id="@+id/clarificationPeekTitleText"
+                        style="@style/Text.InternalApps.Caption"
+                        android:layout_width="@dimen/_190sdp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_1sdp"
+                        android:ellipsize="end"
+                        android:gravity="end"
+                        android:maxLines="1"
+                        android:textColor="@color/ds_text_secondary"
+                        tools:text="Which manufacturer should we search for?" />
+
+                    <LinearLayout
+                        android:id="@+id/clarificationPeekShimmer"
+                        android:layout_width="@dimen/_180sdp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_2sdp"
+                        android:gravity="end"
+                        android:orientation="vertical"
+                        android:visibility="gone"
+                        tools:visibility="visible">
+
+                        <View
+                            android:id="@+id/clarificationPeekShimmerBarOne"
+                            android:layout_width="@dimen/_86sdp"
+                            android:layout_height="@dimen/_8sdp"
+                            android:background="@drawable/bg_ask_ai_refine_shimmer_bar" />
+
+                        <View
+                            android:id="@+id/clarificationPeekShimmerBarTwo"
+                            android:layout_width="@dimen/_132sdp"
+                            android:layout_height="@dimen/_8sdp"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:background="@drawable/bg_ask_ai_refine_shimmer_bar" />
+                    </LinearLayout>
+                </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/clarificationContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:layout_marginEnd="@dimen/_8sdp"
+                android:background="@drawable/bg_ask_ai_refine_card"
+                android:elevation="@dimen/_3sdp"
+                android:orientation="vertical"
+                android:padding="@dimen/_12sdp"
+                android:visibility="visible">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_ask_ai_refine_header"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/_10sdp">
+
+                    <ImageView
+                        android:layout_width="@dimen/_24sdp"
+                        android:layout_height="@dimen/_24sdp"
+                        android:background="@drawable/bg_filter_chip"
+                        android:contentDescription="@null"
+                        android:padding="@dimen/_5sdp"
+                        android:src="@drawable/ic_ai_sparkles"
+                        app:tint="@color/ds_primary" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_8sdp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <com.axelliant.hris.ui.designsystem.components.AppTextView
+                            android:id="@+id/clarificationHeaderTitle"
+                            style="@style/Text.InternalApps.Subheading"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins_semibold"
+                            android:text="@string/ask_ai_refine_title"
+                            android:textColor="@color/ds_text_primary" />
+
+                        <com.axelliant.hris.ui.designsystem.components.AppTextView
+                            style="@style/Text.InternalApps.Caption"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_2sdp"
+                            android:text="@string/ask_ai_refine_intro"
+                            android:textColor="@color/ds_text_secondary"
+                            android:visibility="gone"
+                            tools:visibility="visible" />
+                    </LinearLayout>
+
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
+                        android:id="@+id/clarificationStepText"
+                        style="@style/Text.InternalApps.Caption"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_ask_ai_refine_badge"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:paddingStart="@dimen/_7sdp"
+                        android:paddingTop="@dimen/_3sdp"
+                        android:paddingEnd="@dimen/_7sdp"
+                        android:paddingBottom="@dimen/_3sdp"
+                        android:textColor="@color/quotes_status_draft_text"
+                        tools:text="1 of 3" />
+                </LinearLayout>
+
+                <com.axelliant.hris.ui.designsystem.components.AppProgressBarView
+                    android:id="@+id/clarificationProgress"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_3sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:indeterminate="false"
+                    android:max="100"
+                    app:indicatorColor="@color/ds_primary"
+                    app:trackColor="@color/ds_outline" />
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                    android:id="@+id/clarificationCategoryText"
+                    style="@style/Text.InternalApps.Caption"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:textColor="@color/ds_primary"
+                    tools:text="CATEGORY" />
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                    android:id="@+id/clarificationQuestionText"
+                    style="@style/Text.InternalApps.Subheading"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:textColor="@color/ds_text_primary"
+                    tools:text="Which category should we use?" />
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                    android:id="@+id/clarificationSubtitleText"
+                    style="@style/Text.InternalApps.Caption"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_4sdp"
+                    android:textColor="@color/ds_text_secondary"
+                    tools:text="Pick the closest category so specs can be interpreted correctly." />
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout
+                    android:id="@+id/clarificationSearchInputLayout"
+                    style="@style/Widget.InternalApps.InputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:hint="@string/ask_ai_refine_search_hint"
+                    app:endIconDrawable="@drawable/ia_ic_filter_close"
+                    app:endIconMode="clear_text"
+                    app:startIconDrawable="@drawable/ia_ic_search">
+
+                    <com.axelliant.hris.ui.designsystem.components.AppTextFieldView
+                        android:id="@+id/clarificationSearchEditText"
+                        style="@style/Widget.InternalApps.InputEditText"
+                        android:imeOptions="actionDone"
+                        android:inputType="textCapWords"
+                        android:minHeight="@dimen/_34sdp"
+                        android:singleLine="true" />
+                </com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout>
+
+                <LinearLayout
+                    android:id="@+id/clarificationOptionsContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:orientation="vertical" />
+
+                <LinearLayout
+                    android:id="@+id/clarificationSelectionSection"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    tools:visibility="visible">
+
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
+                        style="@style/Text.InternalApps.Caption"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:text="@string/ask_ai_refine_selection_title"
+                        android:textColor="@color/ds_text_muted" />
+
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_6sdp"
+                        android:overScrollMode="never"
+                        android:scrollbars="none">
+
+                        <LinearLayout
+                            android:id="@+id/clarificationSelectionChips"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal" />
+                    </HorizontalScrollView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <com.axelliant.hris.ui.designsystem.components.AppButtonView
+                        android:id="@+id/clarificationBackButton"
+                        style="@style/Widget.InternalApps.Button.Secondary"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/_36sdp"
+                        android:layout_weight="1"
+                        android:text="@string/ask_ai_refine_back"
+                        android:textAllCaps="false"
+                        android:textSize="@dimen/_9ssp" />
+
+                    <Space
+                        android:layout_width="@dimen/_6sdp"
+                        android:layout_height="1dp" />
+
+                    <com.axelliant.hris.ui.designsystem.components.AppButtonView
+                        android:id="@+id/clarificationSkipButton"
+                        style="@style/Widget.InternalApps.Button.Secondary"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/_36sdp"
+                        android:layout_weight="1"
+                        android:text="@string/ask_ai_refine_skip"
+                        android:textAllCaps="false"
+                        android:textSize="@dimen/_9ssp" />
+
+                    <Space
+                        android:layout_width="@dimen/_6sdp"
+                        android:layout_height="1dp" />
+
+                    <com.axelliant.hris.ui.designsystem.components.AppButtonView
+                        android:id="@+id/clarificationNextButton"
+                        style="@style/Widget.InternalApps.Button.Primary"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/_36sdp"
+                        android:layout_weight="1.2"
+                        android:text="@string/ask_ai_refine_next"
+                        android:textAllCaps="false"
+                        android:textSize="@dimen/_9ssp" />
+                </LinearLayout>
+            </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/clarificationSwipeBackHint"
+                    android:layout_width="@dimen/_24sdp"
+                    android:layout_height="@dimen/_24sdp"
+                    android:layout_gravity="center_vertical|start"
+                    android:layout_marginStart="@dimen/_4sdp"
+                    android:alpha="0.86"
+                    android:background="@drawable/bg_ask_ai_refine_swipe_hint"
+                    android:contentDescription="@null"
+                    android:elevation="@dimen/_4sdp"
+                    android:padding="@dimen/_5sdp"
+                    android:rotation="180"
+                    android:src="@drawable/ic_chevron_right"
+                    android:visibility="gone"
+                    app:tint="@color/ds_primary"
+                    tools:visibility="visible" />
+
+                <ImageView
+                    android:id="@+id/clarificationSwipeNextHint"
+                    android:layout_width="@dimen/_24sdp"
+                    android:layout_height="@dimen/_24sdp"
+                    android:layout_gravity="center_vertical|end"
+                    android:layout_marginEnd="@dimen/_12sdp"
+                    android:alpha="0.86"
+                    android:background="@drawable/bg_ask_ai_refine_swipe_hint"
+                    android:contentDescription="@null"
+                    android:elevation="@dimen/_4sdp"
+                    android:padding="@dimen/_5sdp"
+                    android:src="@drawable/ic_chevron_right"
+                    android:visibility="gone"
+                    app:tint="@color/ds_primary"
+                    tools:visibility="visible" />
+            </FrameLayout>
+        </androidx.core.widget.NestedScrollView>
+    </FrameLayout>
+</FrameLayout>
+
+
+
+
+

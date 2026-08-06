@@ -12,8 +12,7 @@ import androidx.core.content.ContextCompat
 import com.axelliant.hris.R
 import com.axelliant.hris.base.BaseFragment
 import com.axelliant.hris.components.LeaveDetailContent
-import com.axelliant.hris.config.AppConst.LeaveRequestParam
-import com.axelliant.hris.config.AppConst.RequestType
+import com.axelliant.hris.core.constants.AppRouteArgs
 import com.axelliant.hris.databinding.FragmentMyLeaveDetailBinding
 import com.axelliant.hris.enums.AttendanceFilter
 import com.axelliant.hris.enums.RequestFilter
@@ -100,8 +99,8 @@ class MyLeaveDetailFragment : BaseFragment() {
                     onEditClick = { leaveDetail ->
                         if (leaveDetail.status == "Open") {
                             AppNavigator.navigateToRequest(Bundle().apply {
-                                this.putString(RequestType, RequestFilter.LEAVE.name)
-                                this.putString(LeaveRequestParam, Gson().toJson(leaveDetail))
+                                this.putString(AppRouteArgs.REQUEST_TYPE, RequestFilter.LEAVE.name)
+                                this.putString(AppRouteArgs.LEAVE_REQUEST, Gson().toJson(leaveDetail))
                             })
                         } else {
                             requireContext().showErrorMsg(

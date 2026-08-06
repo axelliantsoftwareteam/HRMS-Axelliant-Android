@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/appliedFilterChip"
+    android:layout_width="wrap_content"
+    android:layout_height="@dimen/_30sdp"
+    android:layout_marginEnd="@dimen/_6sdp"
+    android:background="@drawable/bg_filter_chip"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingStart="@dimen/_9sdp"
+    android:paddingEnd="@dimen/_7sdp">
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        android:id="@+id/appliedFilterText"
+        style="@style/Text.InternalApps.Caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:fontFamily="@font/poppins_semibold"
+        android:maxWidth="@dimen/_118sdp"
+        android:maxLines="1"
+        android:textColor="@color/ds_primary"
+        android:textSize="@dimen/_8ssp"
+        tools:text="Max Price: $500" />
+
+    <ImageView
+        android:id="@+id/removeFilterIcon"
+        android:layout_width="@dimen/_16sdp"
+        android:layout_height="@dimen/_16sdp"
+        android:layout_marginStart="@dimen/_4sdp"
+        android:contentDescription="@string/close"
+        android:src="@drawable/ia_ic_filter_chip_close" />
+</LinearLayout>
+

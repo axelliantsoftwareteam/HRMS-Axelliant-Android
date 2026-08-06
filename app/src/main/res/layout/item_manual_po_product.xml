@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_add_po_product_card"
+    android:padding="@dimen/ds_space_12">
+
+    <FrameLayout
+        android:id="@+id/thumbnailFrame"
+        android:layout_width="@dimen/_44sdp"
+        android:layout_height="@dimen/_44sdp"
+        android:background="@drawable/bg_product_thumb_placeholder"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            android:id="@+id/thumbnailLabel"
+            style="@style/Text.InternalApps.Caption"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textColor="@color/ds_text_muted"
+            android:textStyle="bold"
+            tools:text="S" />
+    </FrameLayout>
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        android:id="@+id/productNameText"
+        style="@style/Text.InternalApps.Subheading"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/ds_space_10"
+        android:layout_marginEnd="@dimen/ds_space_8"
+        android:ellipsize="end"
+        android:fontFamily="@font/poppins_semibold"
+        android:maxLines="2"
+        android:textColor="@color/ds_text_primary"
+        app:layout_constraintEnd_toStartOf="@id/deleteProductButton"
+        app:layout_constraintStart_toEndOf="@id/thumbnailFrame"
+        app:layout_constraintTop_toTopOf="@id/thumbnailFrame"
+        tools:text="Smart Managed Switch" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        android:id="@+id/skuText"
+        style="@style/Text.InternalApps.Caption"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_2sdp"
+        android:textColor="@color/ds_text_muted"
+        app:layout_constraintEnd_toEndOf="@id/productNameText"
+        app:layout_constraintStart_toStartOf="@id/productNameText"
+        app:layout_constraintTop_toBottomOf="@id/productNameText"
+        tools:text="AXE-1077792" />
+
+    <ImageView
+        android:id="@+id/deleteProductButton"
+        android:layout_width="@dimen/_22sdp"
+        android:layout_height="@dimen/_22sdp"
+        android:contentDescription="@string/create_manual_po_delete_product_cd"
+        android:padding="@dimen/_2sdp"
+        android:src="@drawable/ic_delete"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/ds_error" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        android:id="@+id/quantityLabel"
+        style="@style/Text.InternalApps.FormLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ds_space_12"
+        android:layout_marginEnd="@dimen/ds_space_8"
+        android:text="@string/create_manual_po_quantity"
+        app:layout_constraintEnd_toStartOf="@id/uomLabel"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/thumbnailFrame" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        android:id="@+id/uomLabel"
+        style="@style/Text.InternalApps.FormLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/create_manual_po_uom"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@id/quantityLabel"
+        app:layout_constraintTop_toTopOf="@id/quantityLabel" />
+
+    <EditText
+        android:id="@+id/quantityEditText"
+        style="@style/Text.InternalApps.Body"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_34sdp"
+        android:layout_marginTop="@dimen/_4sdp"
+        android:layout_marginEnd="@dimen/ds_space_8"
+        android:background="@drawable/bg_manual_po_input"
+        android:gravity="center_vertical"
+        android:importantForAutofill="no"
+        android:inputType="number"
+        android:maxLines="1"
+        android:paddingHorizontal="@dimen/ds_space_10"
+        android:textColor="@color/ds_text_primary"
+        app:layout_constraintEnd_toStartOf="@id/uomText"
+        app:layout_constraintStart_toStartOf="@id/quantityLabel"
+        app:layout_constraintTop_toBottomOf="@id/quantityLabel"
+        tools:text="1" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        android:id="@+id/uomText"
+        style="@style/Text.InternalApps.Body"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_34sdp"
+        android:layout_marginTop="@dimen/_4sdp"
+        android:background="@drawable/bg_manual_po_input"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="@dimen/ds_space_10"
+        android:textColor="@color/ds_text_primary"
+        app:layout_constraintEnd_toEndOf="@id/uomLabel"
+        app:layout_constraintStart_toStartOf="@id/uomLabel"
+        app:layout_constraintTop_toBottomOf="@id/uomLabel"
+        tools:text="N/A" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        android:id="@+id/vendorLabel"
+        style="@style/Text.InternalApps.FormLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ds_space_10"
+        android:text="@string/create_manual_po_vendor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/quantityEditText" />
+
+    <LinearLayout
+        android:id="@+id/vendorField"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_34sdp"
+        android:layout_marginTop="@dimen/_4sdp"
+        android:background="@drawable/bg_manual_po_input"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/ds_space_10"
+        android:paddingEnd="@dimen/ds_space_8"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/vendorLabel">
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            android:id="@+id/vendorText"
+            style="@style/Text.InternalApps.Body"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textColor="@color/ds_text_primary"
+            tools:text="TD_SYNNEX" />
+
+        <ImageView
+            android:layout_width="@dimen/_18sdp"
+            android:layout_height="@dimen/_18sdp"
+            android:contentDescription="@null"
+            android:src="@drawable/ia_ic_filter_down" />
+    </LinearLayout>
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        android:id="@+id/unitCostLabel"
+        style="@style/Text.InternalApps.Caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ds_space_12"
+        android:text="@string/create_manual_po_unit_cost"
+        android:textColor="@color/ds_text_muted"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/vendorField" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        android:id="@+id/unitCostText"
+        style="@style/Text.InternalApps.Body"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_2sdp"
+        android:fontFamily="@font/poppins_medium"
+        android:textColor="@color/ds_text_primary"
+        app:layout_constraintStart_toStartOf="@id/unitCostLabel"
+        app:layout_constraintTop_toBottomOf="@id/unitCostLabel"
+        tools:text="$4,363.00" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        android:id="@+id/totalPriceLabel"
+        style="@style/Text.InternalApps.Caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/create_manual_po_total_price"
+        android:textColor="@color/ds_text_muted"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/unitCostLabel" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        android:id="@+id/totalPriceText"
+        style="@style/Text.InternalApps.Subheading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_2sdp"
+        android:fontFamily="@font/poppins_semibold"
+        android:textColor="@color/ds_primary"
+        app:layout_constraintEnd_toEndOf="@id/totalPriceLabel"
+        app:layout_constraintTop_toBottomOf="@id/totalPriceLabel"
+        tools:text="$4,363.00" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+

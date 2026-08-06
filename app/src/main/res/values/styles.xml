@@ -2,298 +2,261 @@
 
     <!--  Poppins Font-->
     <!--Poppins Regular Font-->
-    <style name="TEXT_REGULAR_GREY_15" parent="@style/TextAppearance.MaterialComponents.Subtitle1">
+    <style name="TEXT_REGULAR_GREY_15" parent="@style/TextAppearance.Axelliant">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/grey</item>
         <item name="android:textSize">@dimen/_13ssp</item>
-        <item name="android:letterSpacing">0.01</item>
+        <item name="android:letterSpacing">0</item>
         <item name="android:gravity">center</item>
-        <item name="android:fontFamily">@font/poppins_regular</item>
-        <item name="fontFamily">@font/poppins_regular</item>
+        <item name="android:fontFamily">sans-serif</item>
     </style>
 
-    <style name="TEXT_REGULAR_BLACK_10" parent="@style/TextAppearance.MaterialComponents.Subtitle1">
+    <style name="TEXT_REGULAR_BLACK_10" parent="@style/TextAppearance.Axelliant">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/btn_text_color</item>
         <item name="android:textSize">@dimen/_10ssp</item>
-        <item name="android:letterSpacing">0.01</item>
+        <item name="android:letterSpacing">0</item>
         <item name="android:gravity">center</item>
-        <item name="android:fontFamily">@font/poppins_regular</item>
-        <item name="fontFamily">@font/poppins_regular</item>
+        <item name="android:fontFamily">sans-serif</item>
     </style>
-    <style name="TEXT_REGULAR_WHITE_10" parent="@style/TextAppearance.MaterialComponents.Subtitle1">
+    <style name="TEXT_REGULAR_WHITE_10" parent="@style/TextAppearance.Axelliant">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">@dimen/_10ssp</item>
-        <item name="android:letterSpacing">0.01</item>
+        <item name="android:letterSpacing">0</item>
         <item name="android:gravity">center</item>
-        <item name="android:fontFamily">@font/poppins_regular</item>
-        <item name="fontFamily">@font/poppins_regular</item>
+        <item name="android:fontFamily">sans-serif</item>
     </style>
 
-    <style name="TEXT_REGULAR_WHITE_12" parent="@style/TextAppearance.MaterialComponents.Subtitle1">
+    <style name="TEXT_REGULAR_WHITE_12" parent="@style/TextAppearance.Axelliant">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">@dimen/_12ssp</item>
-        <item name="android:letterSpacing">0.01</item>
+        <item name="android:letterSpacing">0</item>
         <item name="android:gravity">center</item>
-        <item name="android:fontFamily">@font/poppins_regular</item>
-        <item name="fontFamily">@font/poppins_regular</item>
+        <item name="android:fontFamily">sans-serif</item>
     </style>
     <!--Poppins Regular Font-->
 
 
     <!--Poppins MEDIUM Font-->
-    <style name="TEXT_MEDIUM_BLACK_10" parent="@style/TextAppearance.MaterialComponents.Subtitle1">
+    <style name="TEXT_MEDIUM_BLACK_10" parent="@style/TextAppearance.Axelliant">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">@dimen/_10ssp</item>
-        <item name="android:letterSpacing">0.01</item>
+        <item name="android:letterSpacing">0</item>
         <item name="android:gravity">center</item>
-        <item name="android:fontFamily">@font/poppins_medium</item>
-        <item name="fontFamily">@font/poppins_medium</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
 
 
     </style>
 
-    <style name="TEXT_SMALL_BLACK_10" parent="@style/TextAppearance.MaterialComponents.Subtitle1">
+    <style name="TEXT_SMALL_BLACK_10" parent="@style/TextAppearance.Axelliant">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">@dimen/_8ssp</item>
-        <item name="android:letterSpacing">0.01</item>
+        <item name="android:letterSpacing">0</item>
         <item name="android:gravity">center</item>
-        <item name="android:fontFamily">@font/poppins_regular</item>
-        <item name="fontFamily">@font/poppins_medium</item>
+        <item name="android:fontFamily">sans-serif</item>
 
 
     </style>
 
-    <style name="TEXT_MEDIUM_BLACK_12" parent="@style/TextAppearance.MaterialComponents.Subtitle1">
+    <style name="TEXT_MEDIUM_BLACK_12" parent="@style/TextAppearance.Axelliant">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">@dimen/_12ssp</item>
-        <item name="android:letterSpacing">0.01</item>
+        <item name="android:letterSpacing">0</item>
         <item name="android:gravity">center</item>
-        <item name="android:fontFamily">@font/poppins_medium</item>
-        <item name="fontFamily">@font/poppins_medium</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
 
     </style>
 
-    <style name="TEXT_MEDIUM_BLACK_15" parent="@style/TextAppearance.MaterialComponents.Subtitle1">
+    <style name="TEXT_MEDIUM_BLACK_15" parent="@style/TextAppearance.Axelliant">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">@dimen/_15ssp</item>
-        <item name="android:letterSpacing">0.01</item>
+        <item name="android:letterSpacing">0</item>
         <item name="android:gravity">center</item>
-        <item name="android:fontFamily">@font/poppins_medium</item>
-        <item name="fontFamily">@font/poppins_medium</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
 
     </style>
 
-    <style name="TEXT_MEDIUM_WHITE_10" parent="@style/TextAppearance.MaterialComponents.Subtitle1">
+    <style name="TEXT_MEDIUM_WHITE_10" parent="@style/TextAppearance.Axelliant">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">@dimen/_10ssp</item>
-        <item name="android:letterSpacing">0.01</item>
+        <item name="android:letterSpacing">0</item>
         <item name="android:gravity">center</item>
-        <item name="android:fontFamily">@font/poppins_medium</item>
-        <item name="fontFamily">@font/poppins_medium</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
 
     </style>
 
-    <style name="TEXT_MEDIUM_WHITE_15" parent="@style/TextAppearance.MaterialComponents.Subtitle1">
+    <style name="TEXT_MEDIUM_WHITE_15" parent="@style/TextAppearance.Axelliant">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">@dimen/_15ssp</item>
-        <item name="android:letterSpacing">0.01</item>
+        <item name="android:letterSpacing">0</item>
         <item name="android:gravity">center</item>
-        <item name="android:fontFamily">@font/poppins_medium</item>
-        <item name="fontFamily">@font/poppins_medium</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
 
     </style>
 
 
-    <style name="TEXT_MEDIUM_WHITE_12" parent="@style/TextAppearance.MaterialComponents.Subtitle1">
+    <style name="TEXT_MEDIUM_WHITE_12" parent="@style/TextAppearance.Axelliant">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">@dimen/_12ssp</item>
-        <item name="android:letterSpacing">0.01</item>
+        <item name="android:letterSpacing">0</item>
         <item name="android:gravity">center</item>
-        <item name="android:fontFamily">@font/poppins_medium</item>
-        <item name="fontFamily">@font/poppins_medium</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
 
     </style>
 
 
-    <style name="TEXT_MEDIUM_GREY_10" parent="@style/TextAppearance.MaterialComponents.Subtitle1">
+    <style name="TEXT_MEDIUM_GREY_10" parent="@style/TextAppearance.Axelliant">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/grey</item>
         <item name="android:textSize">@dimen/_10ssp</item>
-        <item name="android:letterSpacing">0.01</item>
+        <item name="android:letterSpacing">0</item>
         <item name="android:gravity">center</item>
-        <item name="android:fontFamily">@font/poppins_medium</item>
-        <item name="fontFamily">@font/poppins_medium</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
 
     </style>
 
-    <style name="TEXT_MEDIUM_GREY_12" parent="@style/TextAppearance.MaterialComponents.Subtitle1">
+    <style name="TEXT_MEDIUM_GREY_12" parent="@style/TextAppearance.Axelliant">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/grey</item>
         <item name="android:textSize">@dimen/_12ssp</item>
-        <item name="android:letterSpacing">0.01</item>
+        <item name="android:letterSpacing">0</item>
         <item name="android:gravity">center</item>
-        <item name="android:fontFamily">@font/poppins_medium</item>
-        <item name="fontFamily">@font/poppins_medium</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
 
     </style>
     <!--Poppins MEDIUM Font-->
 
     <!--Poppins SEMI_BOLD Font-->
-    <style name="TEXT_SEMI_BLACK_10" parent="@style/TextAppearance.MaterialComponents.Subtitle1">
+    <style name="TEXT_SEMI_BLACK_10" parent="@style/TextAppearance.Axelliant">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">@dimen/_10ssp</item>
-        <item name="android:letterSpacing">0.01</item>
+        <item name="android:letterSpacing">0</item>
         <item name="android:gravity">center</item>
-        <item name="android:fontFamily">@font/poppins_semibold</item>
-        <item name="fontFamily">@font/poppins_semibold</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
 
     </style>
-    <style name="TEXT_SEMI_BLACK_12" parent="@style/TextAppearance.MaterialComponents.Subtitle1">
+    <style name="TEXT_SEMI_BLACK_12" parent="@style/TextAppearance.Axelliant">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">@dimen/_12ssp</item>
-        <item name="android:letterSpacing">0.01</item>
+        <item name="android:letterSpacing">0</item>
         <item name="android:gravity">center</item>
-        <item name="android:fontFamily">@font/poppins_semibold</item>
-        <item name="fontFamily">@font/poppins_semibold</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
 
     </style>
 
 
-    <style name="TEXT_SEMI_BLACK_15" parent="@style/TextAppearance.MaterialComponents.Subtitle1">
+    <style name="TEXT_SEMI_BLACK_15" parent="@style/TextAppearance.Axelliant">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">@dimen/_15ssp</item>
-        <item name="android:letterSpacing">0.01</item>
+        <item name="android:letterSpacing">0</item>
         <item name="android:gravity">center</item>
-        <item name="android:fontFamily">@font/poppins_semibold</item>
-        <item name="fontFamily">@font/poppins_semibold</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
 
     </style>
 
-    <style name="Heading_1" parent="@style/TextAppearance.MaterialComponents.Subtitle1">
+    <style name="Heading_1" parent="@style/TextAppearance.Axelliant">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">@dimen/_20ssp</item>
-        <item name="android:letterSpacing">0.01</item>
+        <item name="android:letterSpacing">0</item>
         <item name="android:gravity">center</item>
-        <item name="android:fontFamily">@font/poppins_semibold</item>
-        <item name="fontFamily">@font/poppins_semibold</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
 
     </style>
 
 
-    <style name="TEXT_SEMI_WHITE_10" parent="@style/TextAppearance.MaterialComponents.Subtitle1">
+    <style name="TEXT_SEMI_WHITE_10" parent="@style/TextAppearance.Axelliant">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">@dimen/_10ssp</item>
-        <item name="android:letterSpacing">0.01</item>
+        <item name="android:letterSpacing">0</item>
         <item name="android:gravity">center</item>
-        <item name="android:fontFamily">@font/poppins_semibold</item>
-        <item name="fontFamily">@font/poppins_semibold</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
 
     </style>
 
-    <style name="TEXT_SEMI_WHITE_15" parent="@style/TextAppearance.MaterialComponents.Subtitle1">
+    <style name="TEXT_SEMI_WHITE_15" parent="@style/TextAppearance.Axelliant">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">@dimen/_15ssp</item>
-        <item name="android:letterSpacing">0.01</item>
+        <item name="android:letterSpacing">0</item>
         <item name="android:gravity">center</item>
-        <item name="android:fontFamily">@font/poppins_semibold</item>
-        <item name="fontFamily">@font/poppins_semibold</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
 
     </style>
 
-    <style name="TEXT_SEMI_GREY_10" parent="@style/TextAppearance.MaterialComponents.Subtitle1">
+    <style name="TEXT_SEMI_GREY_10" parent="@style/TextAppearance.Axelliant">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/grey</item>
         <item name="android:textSize">@dimen/_10ssp</item>
-        <item name="android:letterSpacing">0.01</item>
+        <item name="android:letterSpacing">0</item>
         <item name="android:gravity">center</item>
-        <item name="android:fontFamily">@font/poppins_semibold</item>
-        <item name="fontFamily">@font/poppins_semibold</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
 
     </style>
 
-    <style name="TEXT_SEMI_GREY_12" parent="@style/TextAppearance.MaterialComponents.Subtitle1">
+    <style name="TEXT_SEMI_GREY_12" parent="@style/TextAppearance.Axelliant">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/grey</item>
         <item name="android:textSize">@dimen/_12ssp</item>
-        <item name="android:letterSpacing">0.01</item>
+        <item name="android:letterSpacing">0</item>
         <item name="android:gravity">center</item>
-        <item name="android:fontFamily">@font/poppins_semibold</item>
-        <item name="fontFamily">@font/poppins_semibold</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
 
     </style>
 
     <!--Poppins SEMI_BOLD Font-->
 
-    <style name="ButtonTextStyle" parent="@style/TextAppearance.MaterialComponents.Subtitle1">
+    <style name="ButtonTextStyle" parent="@style/TextAppearance.Axelliant">
         <item name="android:textColor">@color/black</item>
-        <item name="android:letterSpacing">0.01</item>
+        <item name="android:letterSpacing">0</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:gravity">center</item>
         <item name="textAllCaps">false</item>
-        <item name="android:fontFamily">@font/poppins_medium</item>
-        <item name="fontFamily">@font/poppins_medium</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
         <item name="textFont">@font/poppins_medium</item>
         <item name="android:textSize">@dimen/_12ssp</item>
     </style>
 
-    <style name="start_gl">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:orientation">vertical</item>
-        <item name="layout_constraintGuide_percent">@integer/gl_left</item>
-    </style>
+    <style name="start_gl" parent="@style/Guideline.Axelliant.Start" />
 
-    <style name="end_gl">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:orientation">vertical</item>
-        <item name="layout_constraintGuide_percent">@integer/gl_right</item>
-    </style>
+    <style name="end_gl" parent="@style/Guideline.Axelliant.End" />
 
-    <style name="bottom_gl">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:orientation">horizontal</item>
-        <item name="layout_constraintGuide_percent">@integer/gl_bottom</item>
-    </style>
+    <style name="bottom_gl" parent="@style/Guideline.Axelliant.Bottom" />
 
     <style name="gl_bott">
         <item name="android:layout_width">wrap_content</item>
@@ -302,12 +265,7 @@
         <item name="layout_constraintGuide_percent">@integer/gl_bott</item>
     </style>
 
-    <style name="top_gl">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:orientation">horizontal</item>
-        <item name="layout_constraintGuide_percent">@integer/gl_top</item>
-    </style>
+    <style name="top_gl" parent="@style/Guideline.Axelliant.Top" />
 
     <style name="Theme.App" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorSecondary">@color/colorApp</item>
@@ -315,8 +273,8 @@
         <item name="colorOnSurface">@color/colorApp</item>
     </style>
 
-    <style name="ShapeAppearanceOverlay.Demo" parent="">
-        <item name="cornerSize">@dimen/_8sdp</item>
+    <style name="ShapeAppearanceOverlay.Demo" parent="@style/ShapeAppearance.Axelliant.BottomSheet">
+        <item name="cornerSize">@dimen/ds_radius_md</item>
         <item name="cornerFamily">rounded</item>
     </style>
     <style name="CheckBoxStyle" parent="Base.Widget.Material3.CompoundButton.CheckBox">
@@ -325,15 +283,14 @@
         <item name="titleTextStyle">@style/TEXT_MEDIUM_BLACK_10</item>
         <item name="buttonTint">@color/black</item>
     </style>
-    <style name="TEXT_REGULAR_0C0C0C_15" parent="@style/TextAppearance.MaterialComponents.Subtitle1">
+    <style name="TEXT_REGULAR_0C0C0C_15" parent="@style/TextAppearance.Axelliant">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/btn_text_color</item>
         <item name="android:textSize">@dimen/_10ssp</item>
-        <item name="android:letterSpacing">0.01</item>
+        <item name="android:letterSpacing">0</item>
         <item name="android:gravity">center</item>
-        <item name="android:fontFamily">@font/poppins_regular</item>
-        <item name="fontFamily">@font/poppins_regular</item>
+        <item name="android:fontFamily">sans-serif</item>
 
     </style>
     <!-- outline text input layout!-->
@@ -396,12 +353,8 @@
         <item name="android:textColorSecondary">@color/colorApp</item>    <!--days of the week-->
     </style>
 
-    <style name="ThemeOverlay_Demo_BottomSheetDialog">
-        <item name="bottomSheetStyle">@style/Widget.Demo.BottomSheet</item>
-    </style>
-    <style name="Widget.Demo.BottomSheet" parent="Widget.MaterialComponents.BottomSheet">
-        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.Demo</item>
-    </style>
+    <style name="ThemeOverlay_Demo_BottomSheetDialog" parent="@style/ThemeOverlay.Axelliant.BottomSheetDialog" />
+    <style name="Widget.Demo.BottomSheet" parent="@style/Widget.Axelliant.BottomSheet" />
 
     <!-- this is for your dialog. To make round corners -->
     <style name="alert_dialog_round_corners" parent="@style/Theme.AppCompat.Light.Dialog.Alert">
@@ -422,69 +375,60 @@
     </style>
 
     <!-- Base Fluent Parent Style (Fixes AAPT Error) -->
-    <style name="TextAppearance.Fluent" parent="TextAppearance.MaterialComponents.Subtitle1">
-        <item name="android:textColor">@android:color/black</item>
+    <style name="TextAppearance.Fluent" parent="@style/TextAppearance.Fluent2">
+        <item name="android:textColor">@color/ds_text_primary</item>
     </style>
 
     <!-- Caption -->
     <style name="TextAppearance.Fluent.Caption" parent="TextAppearance.Fluent">
-        <item name="fontFamily">@font/segoe_ui</item>
         <item name="android:textSize">12sp</item>
         <item name="android:includeFontPadding">false</item>
     </style>
 
     <!-- Body 1 (Regular 14sp) -->
     <style name="TextAppearance.Fluent.Body1" parent="TextAppearance.Fluent">
-        <item name="fontFamily">@font/segoe_ui</item>
         <item name="android:textSize">14sp</item>
         <item name="android:includeFontPadding">false</item>
     </style>
 
     <!-- Body 2 (Medium 14sp) -->
     <style name="TextAppearance.Fluent.Body2" parent="TextAppearance.Fluent">
-        <item name="fontFamily">@font/segoe_ui_semibold</item>
         <item name="android:textSize">14sp</item>
         <item name="android:includeFontPadding">false</item>
     </style>
 
     <!-- Subheading 1 (Regular 16sp) -->
     <style name="TextAppearance.Fluent.Subheading1" parent="TextAppearance.Fluent">
-        <item name="fontFamily">@font/segoe_ui</item>
         <item name="android:textSize">16sp</item>
         <item name="android:includeFontPadding">false</item>
     </style>
 
     <!-- Subheading 2 (Medium 16sp) -->
     <style name="TextAppearance.Fluent.Subheading2" parent="TextAppearance.Fluent">
-        <item name="fontFamily">@font/segoe_ui_semibold</item>
         <item name="android:textSize">16sp</item>
         <item name="android:includeFontPadding">false</item>
     </style>
 
     <!-- Heading (Regular 18sp) -->
     <style name="TextAppearance.Fluent.Heading" parent="TextAppearance.Fluent">
-        <item name="fontFamily">@font/segoe_ui</item>
         <item name="android:textSize">18sp</item>
         <item name="android:includeFontPadding">false</item>
     </style>
 
     <!-- Title 2 (Regular 20sp) -->
     <style name="TextAppearance.Fluent.Title2" parent="TextAppearance.Fluent">
-        <item name="fontFamily">@font/segoe_ui</item>
         <item name="android:textSize">20sp</item>
         <item name="android:includeFontPadding">false</item>
     </style>
 
     <!-- Title 1 (Medium 20sp) -->
     <style name="TextAppearance.Fluent.Title1" parent="TextAppearance.Fluent">
-        <item name="fontFamily">@font/segoe_ui_semibold</item>
         <item name="android:textSize">20sp</item>
         <item name="android:includeFontPadding">false</item>
     </style>
 
     <!-- Headline (Light 28sp) -->
     <style name="TextAppearance.Fluent.Headline" parent="TextAppearance.Fluent">
-        <item name="fontFamily">@font/segoe_ui_light</item>
         <item name="android:textSize">28sp</item>
         <item name="android:includeFontPadding">false</item>
     </style>

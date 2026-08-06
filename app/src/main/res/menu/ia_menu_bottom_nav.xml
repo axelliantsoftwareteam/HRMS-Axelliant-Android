@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/iaDashboardFragment"
+        android:icon="@drawable/ic_bt_home"
+        android:title="@string/ia_home"
+        />
+
+    <item
+        android:id="@+id/iaProductsFragment"
+        android:icon="@drawable/ic_dashboard_box"
+        android:title="@string/products" />
+
+    <item
+        android:id="@+id/iaQuotesFragment"
+        android:icon="@drawable/ic_document"
+        android:title="@string/quotes_title" />
+
+    <item
+        android:id="@+id/iaProfilesFragment"
+        android:icon="@drawable/ic_bt_account"
+        android:title="@string/profiles" />
+</menu>

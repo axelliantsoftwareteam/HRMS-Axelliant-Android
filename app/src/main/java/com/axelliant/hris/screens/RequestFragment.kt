@@ -18,10 +18,8 @@ import com.axelliant.hris.R
 import com.axelliant.hris.adapter.LeaveSpinnerAdapter
 import com.axelliant.hris.adapter.LeaveWithCountSpinnerAdapter
 import com.axelliant.hris.base.BaseFragment
-import com.axelliant.hris.config.AppConst.AttendanceRequestParam
-import com.axelliant.hris.config.AppConst.LeaveRequestParam
-import com.axelliant.hris.config.AppConst.RequestType
-import com.axelliant.hris.config.AppConst.SERVER_DATE_FORMAT_ATTENDANCE
+import com.axelliant.hris.core.constants.AppRouteArgs
+import com.axelliant.hris.core.constants.AppDateFormats
 import com.axelliant.hris.databinding.FragmentRequestBinding
 import com.axelliant.hris.enums.RequestFilter
 import com.axelliant.hris.event.EventObserver
@@ -114,14 +112,14 @@ class RequestFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (arguments != null && requireArguments().containsKey(RequestType)) {
+        if (arguments != null && requireArguments().containsKey(AppRouteArgs.REQUEST_TYPE)) {
             isUpdate = true
 
-            val type = arguments?.getString(RequestType, RequestFilter.LEAVE.name)
+            val type = arguments?.getString(AppRouteArgs.REQUEST_TYPE, RequestFilter.LEAVE.name)
             if (type == RequestFilter.LEAVE.name) {
                 currentFilter = RequestFilter.LEAVE
                 val leaveDetail = Gson().fromJson(
-                    arguments?.getString(LeaveRequestParam),
+                    arguments?.getString(AppRouteArgs.LEAVE_REQUEST),
                     LeaveDetail::class.java
                 )
                 startDateString = leaveDetail.from_date
@@ -143,7 +141,7 @@ class RequestFragment : BaseFragment() {
 
 
                 val checkInDetail = Gson().fromJson(
-                    arguments?.getString(AttendanceRequestParam),
+                    arguments?.getString(AppRouteArgs.ATTENDANCE_REQUEST),
                     CheckInDetail::class.java
                 )
                 checkInId = checkInDetail.name
@@ -517,7 +515,7 @@ class RequestFragment : BaseFragment() {
 
                 // Format the date using SimpleDateFormat
                 currentDateString = Utils.getServerFormat(
-                    dateFormat = SERVER_DATE_FORMAT_ATTENDANCE, date = selectedDate.time
+                    dateFormat = AppDateFormats.SERVER_ATTENDANCE_DATE, date = selectedDate.time
                 )
                 setCurrentDate()
             },

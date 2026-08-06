@@ -162,13 +162,13 @@ class DocumentManagementFragment : BaseFragment() {
                     val expense = customObject as DocumentForm
 //                    if (expense.status == "Draft") {
 //                        AppNavigator.navigateToAddExpenseFragment(Bundle().apply {
-//                            this.putString(AppConst.ExpenseRequestIDParam, expense.name)
+//                            this.putString(AppRouteArgs.EXPENSE_REQUEST_ID, expense.name)
 //                            this.putString(
-//                                AppConst.ExpenseRequestParam,
+//                                AppRouteArgs.EXPENSE_REQUEST,
 //                                Gson().toJson(expense.expenses_detail)
 //                            )
 //                            this.putString(
-//                                AppConst.ExpenseRequestAttachments,
+//                                AppRouteArgs.EXPENSE_REQUEST_ATTACHMENTS,
 //                                Gson().toJson(expense.attachments)
 //                            )
 //                        })

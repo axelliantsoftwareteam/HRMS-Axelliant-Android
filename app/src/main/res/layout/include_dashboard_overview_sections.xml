@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.axelliant.hris.ui.designsystem.components.AppCardView
+        android:id="@+id/assetDistributionCard"
+        style="@style/Widget.InternalApps.Card"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ds_space_12"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/ds_space_12">
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                android:id="@+id/assetDistributionTitle"
+                style="@style/IA_TEXT_SEMIBOLD_BLACK_18"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/asset_distribution"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                android:id="@+id/assetDistributionSubtitle"
+                style="@style/IA_TEXT_REGULAR_GREY_10"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ds_space_2"
+                android:text="@string/by_category"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/assetDistributionTitle" />
+
+            <ImageView
+                android:id="@+id/assetDistributionChart"
+                android:layout_width="@dimen/_112sdp"
+                android:layout_height="@dimen/_112sdp"
+                android:layout_marginTop="@dimen/ds_space_12"
+                android:contentDescription="@null"
+                android:src="@drawable/bg_ring_chart"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/assetDistributionSubtitle" />
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                android:id="@+id/hardwarePercentText"
+                style="@style/IA_TEXT_REGULAR_GREY_10"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/ds_space_12"
+                android:text="@string/hardware_percent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/assetDistributionChart"
+                app:layout_constraintTop_toTopOf="@id/assetDistributionChart" />
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                android:id="@+id/edgePercentText"
+                style="@style/IA_TEXT_REGULAR_GREY_10"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ds_space_8"
+                android:text="@string/edge_percent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/hardwarePercentText"
+                app:layout_constraintTop_toBottomOf="@id/hardwarePercentText" />
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                android:id="@+id/networkPercentText"
+                style="@style/IA_TEXT_REGULAR_GREY_10"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ds_space_8"
+                android:text="@string/network_percent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/hardwarePercentText"
+                app:layout_constraintTop_toBottomOf="@id/edgePercentText" />
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                android:id="@+id/otherPercentText"
+                style="@style/IA_TEXT_REGULAR_GREY_10"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ds_space_8"
+                android:text="@string/other_percent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/hardwarePercentText"
+                app:layout_constraintTop_toBottomOf="@id/networkPercentText" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.axelliant.hris.ui.designsystem.components.AppCardView>
+
+    <com.axelliant.hris.ui.designsystem.components.AppCardView
+        android:id="@+id/monthlyOverviewCard"
+        style="@style/Widget.InternalApps.Card"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ds_space_12"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/assetDistributionCard">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/ds_space_12">
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                android:id="@+id/monthlyOverviewTitle"
+                style="@style/IA_TEXT_SEMIBOLD_BLACK_18"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/monthly_overview"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                android:id="@+id/monthlyOverviewSubtitle"
+                style="@style/IA_TEXT_REGULAR_GREY_10"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ds_space_2"
+                android:text="@string/assets_added_removed"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/monthlyOverviewTitle" />
+
+            <LinearLayout
+                android:id="@+id/monthlyBarsContainer"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_118sdp"
+                android:layout_marginTop="@dimen/ds_space_12"
+                android:gravity="bottom"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/monthlyOverviewSubtitle">
+
+                <include layout="@layout/item_dashboard_bar_apr" />
+                <include layout="@layout/item_dashboard_bar_may" />
+                <include layout="@layout/item_dashboard_bar_jun" />
+                <include layout="@layout/item_dashboard_bar_jul" />
+                <include layout="@layout/item_dashboard_bar_aug" />
+                <include layout="@layout/item_dashboard_bar_sep" />
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.axelliant.hris.ui.designsystem.components.AppCardView>
+
+    <com.axelliant.hris.ui.designsystem.components.AppCardView
+        android:id="@+id/moduleOverviewCard"
+        style="@style/Widget.InternalApps.Card"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ds_space_12"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/monthlyOverviewCard">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/ds_space_12">
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                android:id="@+id/moduleOverviewTitle"
+                style="@style/IA_TEXT_SEMIBOLD_BLACK_18"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/module_overview"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                android:id="@+id/moduleOverviewSubtitle"
+                style="@style/IA_TEXT_REGULAR_GREY_10"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ds_space_2"
+                android:text="@string/module_overview_subtitle"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/moduleOverviewTitle" />
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                android:id="@+id/productsLabel"
+                style="@style/IA_TEXT_MEDIUM_BLACK_10"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ds_space_16"
+                android:text="@string/products"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/moduleOverviewSubtitle" />
+
+            <FrameLayout
+                android:id="@+id/productsTrack"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/ds_space_6"
+                android:background="@drawable/bg_bar_track"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/productsLabel">
+
+                <View
+                    android:id="@+id/productsBar"
+                    android:layout_width="@dimen/_240sdp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg_bar_blue" />
+            </FrameLayout>
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                android:id="@+id/profilesLabel"
+                style="@style/IA_TEXT_MEDIUM_BLACK_10"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ds_space_12"
+                android:text="@string/profiles"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/productsTrack" />
+
+            <FrameLayout
+                android:id="@+id/profilesTrack"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/ds_space_6"
+                android:background="@drawable/bg_bar_track"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/profilesLabel">
+
+                <View
+                    android:id="@+id/profilesBar"
+                    android:layout_width="@dimen/_150sdp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg_bar_green" />
+            </FrameLayout>
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                android:id="@+id/modulesLabel"
+                style="@style/IA_TEXT_MEDIUM_BLACK_10"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ds_space_12"
+                android:text="@string/active_modules"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/profilesTrack" />
+
+            <FrameLayout
+                android:id="@+id/modulesTrack"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/ds_space_6"
+                android:background="@drawable/bg_bar_track"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/modulesLabel">
+
+                <View
+                    android:id="@+id/modulesBar"
+                    android:layout_width="@dimen/_96sdp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg_bar_orange" />
+            </FrameLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.axelliant.hris.ui.designsystem.components.AppCardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+

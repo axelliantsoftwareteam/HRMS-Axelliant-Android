@@ -1,29 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/Layout.Fluent2.Screen"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/layout_bg"
-    android:layoutDirection="ltr"
-    android:textDirection="ltr">
+    android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/start_guideline"
-        style="@style/start_gl"
+        style="@style/Guideline.Fluent2.Start"
         android:orientation="vertical" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/end_guideline"
-        style="@style/end_gl"
+        style="@style/Guideline.Fluent2.End"
         android:orientation="vertical" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/top_guideline"
-        style="@style/top_gl" />
+        style="@style/Guideline.Fluent2.Top" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/bottom_guideline"
-        style="@style/bottom_gl" />
+        style="@style/Guideline.Fluent2.Bottom" />
 
     <ImageView
         android:id="@+id/appLogo"
@@ -39,23 +37,23 @@
         app:layout_constraintTop_toBottomOf="@id/top_guideline"
         app:layout_constraintVertical_chainStyle="packed" />
 
-    <com.google.android.material.textview.MaterialTextView
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
         android:id="@+id/entryTitle"
-        style="@style/Heading_1"
+        style="@style/Text.Fluent2.Heading"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_24sdp"
         android:gravity="center"
         android:text="@string/app_entry_title"
-        android:textColor="@color/black"
+        android:textColor="@color/ds_text_primary"
         app:layout_constraintBottom_toTopOf="@id/entrySubtitle"
         app:layout_constraintEnd_toEndOf="@id/appLogo"
         app:layout_constraintStart_toStartOf="@id/appLogo"
         app:layout_constraintTop_toBottomOf="@id/appLogo" />
 
-    <com.google.android.material.textview.MaterialTextView
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
         android:id="@+id/entrySubtitle"
-        style="@style/TEXT_MEDIUM_GREY_12"
+        style="@style/Text.Fluent2.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_8sdp"
@@ -66,28 +64,28 @@
         app:layout_constraintStart_toStartOf="@id/appLogo"
         app:layout_constraintTop_toBottomOf="@id/entryTitle" />
 
-    <com.google.android.material.button.MaterialButton
+    <com.axelliant.hris.ui.designsystem.components.AppButtonView
         android:id="@+id/hrisButton"
-        style="@style/ButtonTextStyle"
+        style="@style/Widget.Fluent2.Button.Primary"
         android:layout_width="0dp"
         android:layout_height="@dimen/_44sdp"
         android:layout_marginTop="@dimen/_24sdp"
         android:text="@string/entry_hris"
-        android:textColor="@color/white"
-        app:backgroundTint="@color/colorApp"
+        android:textColor="@color/ds_on_primary"
+        app:backgroundTint="@color/ds_primary"
         app:cornerRadius="@dimen/ds_radius_md"
         app:icon="@drawable/ic_home"
         app:iconGravity="textStart"
         app:iconPadding="@dimen/_8sdp"
-        app:iconTint="@color/white"
+        app:iconTint="@color/ds_on_primary"
         app:layout_constraintBottom_toTopOf="@id/internalAppsButton"
         app:layout_constraintEnd_toEndOf="@id/appLogo"
         app:layout_constraintStart_toStartOf="@id/appLogo"
         app:layout_constraintTop_toBottomOf="@id/entrySubtitle" />
 
-    <com.google.android.material.button.MaterialButton
+    <com.axelliant.hris.ui.designsystem.components.AppButtonView
         android:id="@+id/internalAppsButton"
-        style="@style/ButtonTextStyle"
+        style="@style/Widget.Fluent2.Button.Secondary"
         android:layout_width="0dp"
         android:layout_height="@dimen/_44sdp"
         android:layout_marginTop="@dimen/_12sdp"

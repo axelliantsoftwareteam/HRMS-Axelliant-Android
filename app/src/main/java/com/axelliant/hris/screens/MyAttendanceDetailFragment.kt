@@ -13,7 +13,7 @@ import com.axelliant.hris.R
 import com.axelliant.hris.base.BaseFragment
 import com.axelliant.hris.components.AttendanceDetailContent
 import com.axelliant.hris.config.GlobalConfig
-import com.axelliant.hris.config.AppConst.KEY_ID
+import com.axelliant.hris.core.constants.AppRouteArgs
 import com.axelliant.hris.databinding.FragmentMyAttendanceDetailBinding
 import com.axelliant.hris.enums.AttendanceFilter
 import com.axelliant.hris.enums.AttendanceFilter.Custom
@@ -64,7 +64,7 @@ class MyAttendanceDetailFragment : BaseFragment() {
 
         val bundle = this.arguments
         if (bundle != null) {
-            emplId = bundle.getString(KEY_ID, GlobalConfig.currentEmployeeId())
+            emplId = bundle.getString(AppRouteArgs.EMPLOYEE_ID, GlobalConfig.currentEmployeeId())
         }
 
         setupCompose()

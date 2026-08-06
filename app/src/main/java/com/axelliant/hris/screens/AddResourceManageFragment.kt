@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.axelliant.hris.adapter.AddResourceManageAdapter
 import com.axelliant.hris.base.BaseFragment
 import com.axelliant.hris.callback.AdapterItemClick
-import com.axelliant.hris.config.AppConst
+import com.axelliant.hris.core.constants.AppRouteArgs
 import com.axelliant.hris.databinding.FragmentAddResourceManageBinding
 import com.axelliant.hris.event.EventObserver
 import com.axelliant.hris.extention.showErrorMsg
@@ -61,9 +61,9 @@ class AddResourceManageFragment : BaseFragment(), AddResourceManageAdapter.OnUpd
         super.onViewCreated(view, savedInstanceState)
 
 
-        if (arguments != null && requireArguments().containsKey(AppConst.HoursRequestParam)) {
-            val parsedData = arguments?.getString(AppConst.HoursRequestParam, "")
-            val docID = arguments?.getString(AppConst.HoursRequestIDParam, "")
+        if (arguments != null && requireArguments().containsKey(AppRouteArgs.HOURS_REQUEST)) {
+            val parsedData = arguments?.getString(AppRouteArgs.HOURS_REQUEST, "")
+            val docID = arguments?.getString(AppRouteArgs.HOURS_REQUEST_ID, "")
 
             if (parsedData != null) {
                 forUpdateList =

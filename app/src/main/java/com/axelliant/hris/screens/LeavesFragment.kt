@@ -18,7 +18,7 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import com.axelliant.hris.components.SelfLeaveStatsGrid
 import com.axelliant.hris.components.TeamLeaveStatsGrid
 import com.axelliant.hris.base.BaseFragment
-import com.axelliant.hris.config.AppConst.SERVER_DATE_FORMAT
+import com.axelliant.hris.core.constants.AppDateFormats
 import com.axelliant.hris.config.GlobalConfig
 import com.axelliant.hris.databinding.FragmentLeavesBinding
 import com.axelliant.hris.enums.AttendanceFilter
@@ -118,7 +118,7 @@ class LeavesFragment : BaseFragment() {
 
 
         leaveViewModel.getUpcomingLeaveDetail(UpcomingLeaveInput().apply {
-            val formatter = SimpleDateFormat(SERVER_DATE_FORMAT, Locale.getDefault())
+            val formatter = SimpleDateFormat(AppDateFormats.SERVER_DATE, Locale.getDefault())
             val tomorrow = Calendar.getInstance().apply {
                 add(Calendar.DAY_OF_YEAR, 1)
             }

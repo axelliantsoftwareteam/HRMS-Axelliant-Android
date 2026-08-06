@@ -2,7 +2,7 @@
 <resources>
 
         <style name="TextAppearance.Fluent.Title2">
-                <item name="android:fontFamily">@font/segoe_ui</item>
+                <item name="android:fontFamily">sans-serif</item>
                 <item name="android:textSize">20sp</item>
                 <item name="android:lineHeight">28sp</item>
                 <item name="android:textColor">@android:color/black</item>

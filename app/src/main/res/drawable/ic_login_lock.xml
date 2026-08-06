@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="@color/login_icon_tint"
+        android:pathData="M7,10V8C7,5.24 9.24,3 12,3C14.76,3 17,5.24 17,8V10H18C19.1,10 20,10.9 20,12V19C20,20.1 19.1,21 18,21H6C4.9,21 4,20.1 4,19V12C4,10.9 4.9,10 6,10H7ZM9,10H15V8C15,6.34 13.66,5 12,5C10.34,5 9,6.34 9,8V10ZM13,15.73C13.6,15.38 14,14.74 14,14C14,12.9 13.1,12 12,12C10.9,12 10,12.9 10,14C10,14.74 10.4,15.38 11,15.73V18H13V15.73Z" />
+</vector>

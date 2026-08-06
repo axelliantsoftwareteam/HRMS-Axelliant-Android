@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="@color/drawer_logout"
+        android:pathData="M10,4H6C4.9,4 4,4.9 4,6V18C4,19.1 4.9,20 6,20H10V18H6V6H10V4ZM15.59,7.59L17,9L14,12L17,15L15.59,16.41L10.17,11L15.59,7.59ZM13,11V13H20V11H13Z" />
+</vector>

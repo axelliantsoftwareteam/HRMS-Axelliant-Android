@@ -43,18 +43,9 @@ class AppNavigator {
 
         fun navigateToLogin(args: Bundle = Bundle()) {
             Log.i(TAG, "navigateToLogin: $args")
-            val navAction = NavAction(R.id.loginFragment)
             val navOptions = NavOptions.Builder()
                 .setPopUpTo(getCurrentDestinationId()!!, true).build()
-            navAction.navOptions = navOptions
-
-            val destination: NavDestination? = getCurrentDestinationId()?.let {
-                getController().graph.findNode(it)
-            }
-            if (destination != null) {
-                destination.putAction(R.id.login_fragment_action, navAction)
-                getController().navigate(R.id.login_fragment_action, args)
-            }
+            getController().navigate(R.id.commonLoginFragment, args, navOptions)
         }
 
 

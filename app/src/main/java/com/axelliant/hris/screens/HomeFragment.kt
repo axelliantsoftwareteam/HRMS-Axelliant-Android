@@ -34,7 +34,6 @@ import com.axelliant.hris.adapter.ModulesAdapter
 import com.axelliant.hris.base.BaseFragment
 import com.axelliant.hris.bottomSheet.TodayTeamAttendanceDetailBottomSheet
 import com.axelliant.hris.callback.AdapterItemClick
-import com.axelliant.hris.config.AppConst
 import com.axelliant.hris.config.GlobalConfig
 import com.axelliant.hris.databinding.FragmentHomeBinding
 import com.axelliant.hris.enums.CheckRequestFilter
@@ -58,7 +57,6 @@ import com.axelliant.hris.model.dashboard.EmployProfile
 import com.axelliant.hris.model.login.CheckInRequest
 import com.axelliant.hris.model.todayTeam.EmployTeamProfile
 import com.axelliant.hris.navigation.AppNavigator
-import com.axelliant.hris.utils.SessionManager
 import com.axelliant.hris.viewmodel.HomeViewModel
 import com.microsoft.identity.client.IAccount
 import com.microsoft.identity.client.IPublicClientApplication
@@ -78,6 +76,7 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import com.microsoft.fluentui.theme.FluentTheme
 import com.axelliant.hris.components.AppButton
 import com.axelliant.hris.components.CheckInButtonTokens
+import com.axelliant.hris.core.contracts.session.WorkspaceSessionProvider
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidViewBinding
@@ -120,7 +119,7 @@ class HomeFragment : BaseFragment() {
     private val homeViewModel: HomeViewModel by viewModels()
 
     @Inject
-    lateinit var sessionManager: SessionManager
+    lateinit var workspaceSessionProvider: WorkspaceSessionProvider
 
     /* Azure AD Variables */
     private var mSingleAccountApp: ISingleAccountPublicClientApplication? = null
@@ -233,10 +232,6 @@ class HomeFragment : BaseFragment() {
         )
         activityResultLauncher.launch(appPerms)
 
-        /*
-               AppConst.TOKEN = "8b87d8a458a89e9:a1705cecb80d093"
-        */
-        AppConst.TOKEN = sessionManager.getToken()
         if (employProfileResponse == null) {
             binding?.shimmerLayout?.showShimmer(binding?.contentGroup!!)
         }
@@ -404,13 +399,13 @@ class HomeFragment : BaseFragment() {
                         override fun onSignOut() {
                             mAccount = null
                             requireContext().showErrorMsg("Sign Out")
-                            sessionManager.logoutUser()
+                            workspaceSessionProvider.clearAllSessions()
                             AppNavigator.navigateToLogin()
                         }
 
                         override fun onError(exception: MsalException) {
                             requireContext().showErrorMsg(exception.toString())
-                            sessionManager.logoutUser()
+                            workspaceSessionProvider.clearAllSessions()
                             AppNavigator.navigateToLogin()
                         }
                     })

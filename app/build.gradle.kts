@@ -34,6 +34,11 @@ android {
         multiDexEnabled = true
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
+        buildConfigField("String", "ENVIRONMENT", "\"release\"")
+        buildConfigField("String", "API_BASE_URL", "\"https://internalsoftware.axelliant.dev/api/\"")
+        buildConfigField("String", "API_BASE_TOKEN", "\"\"")
+        buildConfigField("boolean", "TRUST_SELF_SIGNED_SSL", "false")
+
         ndk {
             abiFilters += listOf("arm64-v8a", "armeabi-v7a")
         }
@@ -71,6 +76,7 @@ android {
         jvmTarget = "1.8"
     }
     buildFeatures {
+        buildConfig = true
         viewBinding = true
         dataBinding = true
         compose = true
@@ -93,12 +99,14 @@ dependencies {
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
+    implementation("androidx.compose.foundation:foundation")
     implementation("androidx.activity:activity-compose:1.9.2")
     implementation("androidx.compose.runtime:runtime-livedata")
     implementation("androidx.compose.ui:ui-viewbinding")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
+    implementation("androidx.cardview:cardview:1.0.0")
     implementation(libs.material)
     implementation(libs.play.services.location)
     implementation("com.facebook.shimmer:shimmer:0.5.0")
@@ -106,6 +114,7 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.play.services.maps)
     testImplementation(libs.junit)
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.1")
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     implementation(libs.hilt.android)
@@ -130,6 +139,8 @@ dependencies {
     implementation(libs.circleimageview) // circle image view
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.livedata.ktx)
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
+    implementation("androidx.security:security-crypto:1.1.0-alpha06")
     implementation(libs.material.v120alpha03)
     implementation("com.microsoft.identity.client:msal:5.6.0")
     {
@@ -161,5 +172,12 @@ dependencies {
     implementation("com.microsoft.fluentui:fluentui_calendar:0.3.3")
     implementation("androidx.compose.runtime:runtime-livedata:1.7.0")
     implementation("com.microsoft.fluentui:fluentui_topappbars:0.3.9")
+    implementation("androidx.camera:camera-camera2:1.4.2")
+    implementation("androidx.camera:camera-core:1.4.2")
+    implementation("androidx.camera:camera-lifecycle:1.4.2")
+    implementation("androidx.camera:camera-view:1.4.2")
+    implementation("com.google.mlkit:barcode-scanning:17.3.0")
+    implementation("com.google.mlkit:text-recognition:16.0.1")
+    implementation("com.google.android.gms:play-services-mlkit-document-scanner:16.0.0")
 
 }

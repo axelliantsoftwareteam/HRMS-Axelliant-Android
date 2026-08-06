@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/ds_background">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/start_guideline"
+        style="@style/ia_start_gl"
+        android:orientation="vertical" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/end_guideline"
+        style="@style/ia_end_gl"
+        android:orientation="vertical" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/top_guideline"
+        style="@style/ia_top_gl" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppCardView
+        android:id="@+id/topBar"
+        style="@style/Widget.InternalApps.Card"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@id/end_guideline"
+        app:layout_constraintStart_toStartOf="@id/start_guideline"
+        app:layout_constraintTop_toTopOf="@id/top_guideline">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="@dimen/ds_space_20"
+            android:paddingVertical="@dimen/ds_space_20">
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                android:id="@+id/tv_heading"
+                style="@style/Text.InternalApps.Heading"
+                android:layout_width="match_parent"
+                android:text="@string/ia_app_name"
+                android:textAlignment="textStart" />
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                style="@style/Text.InternalApps.Subheading"
+                android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/ds_space_6"
+                android:text="@string/ia_home_subtitle"
+                android:textAlignment="textStart" />
+
+        </LinearLayout>
+
+    </com.axelliant.hris.ui.designsystem.components.AppCardView>
+
+    <com.axelliant.hris.ui.designsystem.components.AppCardView
+        android:id="@+id/contentCard"
+        style="@style/Widget.InternalApps.Card"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ds_space_16"
+        app:layout_constraintEnd_toEndOf="@id/end_guideline"
+        app:layout_constraintStart_toStartOf="@id/start_guideline"
+        app:layout_constraintTop_toBottomOf="@id/topBar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/ds_space_20">
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                style="@style/Text.InternalApps.Title"
+                android:layout_width="match_parent"
+                android:text="@string/ia_home_ready_title"
+                android:textAlignment="textStart" />
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                style="@style/Text.InternalApps.Body"
+                android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/ds_space_8"
+                android:text="@string/ia_home_ready_message"
+                android:textAlignment="textStart" />
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                style="@style/Text.InternalApps.Title"
+                android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/ds_space_24"
+                android:text="@string/component_preview_title"
+                android:textAlignment="textStart" />
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                style="@style/Text.InternalApps.Caption"
+                android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/ds_space_6"
+                android:text="@string/component_preview_message"
+                android:textAlignment="textStart" />
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout
+                android:id="@+id/emailInputLayout"
+                style="@style/Widget.InternalApps.InputLayout"
+                android:layout_marginTop="@dimen/ds_space_16"
+                android:hint="@string/email_hint"
+                app:endIconDrawable="@drawable/ia_ic_filter_close"
+                app:endIconMode="clear_text">
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextFieldView
+                    android:id="@+id/emailInput"
+                    style="@style/Widget.InternalApps.InputEditText"
+                    android:inputType="textEmailAddress" />
+
+            </com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout>
+
+            <com.axelliant.hris.ui.designsystem.components.AppButtonView
+                android:id="@+id/primaryButton"
+                style="@style/Widget.InternalApps.Button.Primary"
+                android:layout_marginTop="@dimen/ds_space_16"
+                android:text="@string/primary_action" />
+
+            <com.axelliant.hris.ui.designsystem.components.AppButtonView
+                android:id="@+id/secondaryButton"
+                style="@style/Widget.InternalApps.Button.Secondary"
+                android:layout_marginTop="@dimen/ds_space_8"
+                android:text="@string/secondary_action" />
+
+        </LinearLayout>
+
+    </com.axelliant.hris.ui.designsystem.components.AppCardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+

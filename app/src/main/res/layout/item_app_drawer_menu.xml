@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawerMenuRoot"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/drawer_item_height"
+    android:layout_marginBottom="@dimen/ds_space_4"
+    android:background="@drawable/bg_app_drawer_item_default"
+    android:paddingStart="@dimen/ds_space_12"
+    android:paddingEnd="@dimen/ds_space_12">
+
+    <ImageView
+        android:id="@+id/drawerMenuIcon"
+        android:layout_width="@dimen/drawer_icon_size"
+        android:layout_height="@dimen/drawer_icon_size"
+        android:contentDescription="@null"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/drawer_icon_tint" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        android:id="@+id/drawerMenuTitle"
+        style="@style/IA_TEXT_REGULAR_BLACK_12"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/ds_space_12"
+        android:textColor="@color/ds_text_secondary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/drawerMenuIcon"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+

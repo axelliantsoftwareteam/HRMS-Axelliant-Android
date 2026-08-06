@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- UI PROTOTYPE ONLY — open in Android Studio Layout Editor to preview -->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/ds_background"
+    android:fillViewport="true"
+    tools:ignore="HardcodedText">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/ds_space_16">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="@dimen/_16sdp"
+                android:layout_height="@dimen/_16sdp"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_dashboard_box"
+                app:tint="@color/ds_text_primary" />
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                style="@style/Text.InternalApps.Subheading"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/ds_space_6"
+                android:layout_weight="1"
+                android:text="@string/add_quote_products_information"
+                android:textColor="@color/ds_text_primary" />
+
+            <com.axelliant.hris.ui.designsystem.components.AppButtonView
+                style="@style/Widget.InternalApps.Button.Primary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_quote_create_button"
+                android:text="@string/add_quote_add_product"
+                android:textColor="@color/ia_white"
+                app:backgroundTint="@null"
+                android:padding="@dimen/_5sdp"
+                app:cornerRadius="@dimen/ia_ds_radius_md" />
+        </LinearLayout>
+
+        <include layout="@layout/item_preview_quote_product_line" />
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            style="@style/Text.InternalApps.Subheading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ds_space_16"
+            android:text="@string/add_quote_quote_summary"
+            android:textColor="@color/ds_text_primary" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ds_space_10"
+            android:background="@drawable/bg_quote_save_draft_button"
+            android:orientation="vertical"
+            android:padding="@dimen/ds_space_16">
+
+            <include
+                android:id="@+id/subtotalRow"
+                layout="@layout/layout_quote_preview_amount_row" />
+
+            <include
+                android:id="@+id/taxRow"
+                layout="@layout/layout_quote_preview_amount_row" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_1sdp"
+                android:layout_marginTop="@dimen/ds_space_8"
+                android:layout_marginBottom="@dimen/ds_space_8"
+                android:background="@color/ds_outline" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                    style="@style/Text.InternalApps.Subheading"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/quote_preview_grand_total"
+                    android:textColor="@color/ds_text_primary" />
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                    style="@style/Text.InternalApps.Subheading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:text="$100.00"
+                    android:textColor="@color/ds_text_primary" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>
+
+

@@ -14,7 +14,7 @@ import android.widget.Spinner
 import androidx.recyclerview.widget.RecyclerView
 import com.axelliant.hris.R
 import com.axelliant.hris.callback.AdapterItemClick
-import com.axelliant.hris.config.AppConst.SERVER_DATE_FORMAT_ATTENDANCE
+import com.axelliant.hris.core.constants.AppDateFormats
 import com.axelliant.hris.databinding.LyAddNewResourceBinding
 import com.axelliant.hris.model.resourceManage. ProjectHour
 import com.axelliant.hris.utils.Utils
@@ -128,7 +128,7 @@ class AddResourceManageAdapter(
 
                 // Format the date and update the list
                 list[position].date = Utils.getServerFormat(
-                    SERVER_DATE_FORMAT_ATTENDANCE, selectedDate.time
+                    AppDateFormats.SERVER_ATTENDANCE_DATE, selectedDate.time
                 )
                 list[position].name = selectedProjectName
 

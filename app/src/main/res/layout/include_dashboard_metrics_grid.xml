@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cardTotalProducts"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/dashboard_grid_card_height"
+        android:background="@drawable/bg_dashboard_card_navy"
+        android:padding="@dimen/ds_space_12"
+        app:layout_constraintEnd_toStartOf="@id/cardActiveQuotes"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/totalProductsIcon"
+            android:layout_width="@dimen/drawer_icon_size"
+            android:layout_height="@dimen/drawer_icon_size"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_dashboard_box"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            android:id="@+id/totalProductsBadge"
+            style="@style/IA_TEXT_REGULAR_WHITE_10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_dashboard_badge_pill"
+            android:paddingHorizontal="@dimen/ds_space_8"
+            android:paddingVertical="@dimen/ds_space_4"
+            android:text="@string/dashboard_products_change"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            android:id="@+id/totalProductsValue"
+            style="@style/IA_TEXT_BOLD_WHITE_18"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ds_space_12"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/totalProductsIcon" />
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            android:id="@+id/totalProductsLabel"
+            style="@style/IA_TEXT_REGULAR_WHITE_10"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ds_space_4"
+            android:text="@string/total_products"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/totalProductsValue"
+            app:layout_constraintVertical_bias="0" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cardActiveQuotes"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/dashboard_grid_card_height"
+        android:layout_marginStart="@dimen/ds_space_8"
+        android:background="@drawable/bg_dashboard_card_purple"
+        android:padding="@dimen/ds_space_12"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/cardTotalProducts"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/activeQuotesIcon"
+            android:layout_width="@dimen/drawer_icon_size"
+            android:layout_height="@dimen/drawer_icon_size"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_dashboard_quote"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            android:id="@+id/activeQuotesBadge"
+            style="@style/IA_TEXT_REGULAR_WHITE_10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_dashboard_badge_pill"
+            android:paddingHorizontal="@dimen/ds_space_8"
+            android:paddingVertical="@dimen/ds_space_4"
+            android:text="@string/dashboard_badge_active"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            android:id="@+id/activeQuotesValue"
+            style="@style/IA_TEXT_BOLD_WHITE_18"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ds_space_12"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/activeQuotesIcon" />
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            android:id="@+id/activeQuotesLabel"
+            style="@style/IA_TEXT_REGULAR_WHITE_10"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ds_space_4"
+            android:text="@string/active_quotes"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/activeQuotesValue"
+            app:layout_constraintVertical_bias="0" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cardAssetHealth"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/dashboard_grid_card_height"
+        android:layout_marginTop="@dimen/ds_space_8"
+        android:background="@drawable/bg_dashboard_card_green"
+        android:padding="@dimen/ds_space_12"
+        app:layout_constraintEnd_toStartOf="@id/cardOpenOrders"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cardTotalProducts">
+
+        <ImageView
+            android:id="@+id/assetHealthIcon"
+            android:layout_width="@dimen/drawer_icon_size"
+            android:layout_height="@dimen/drawer_icon_size"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_dashboard_shield"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            android:id="@+id/assetHealthBadge"
+            style="@style/IA_TEXT_REGULAR_WHITE_10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_dashboard_badge_pill"
+            android:paddingHorizontal="@dimen/ds_space_8"
+            android:paddingVertical="@dimen/ds_space_4"
+            android:text="@string/dashboard_health_percent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            android:id="@+id/assetHealthValue"
+            style="@style/IA_TEXT_BOLD_WHITE_18"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ds_space_12"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/assetHealthIcon" />
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            android:id="@+id/assetHealthLabel"
+            style="@style/IA_TEXT_REGULAR_WHITE_10"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ds_space_4"
+            android:text="@string/asset_total"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/assetHealthValue"
+            app:layout_constraintVertical_bias="0" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cardOpenOrders"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/dashboard_grid_card_height"
+        android:layout_marginStart="@dimen/ds_space_8"
+        android:layout_marginTop="@dimen/ds_space_8"
+        android:background="@drawable/bg_dashboard_card_white"
+        android:padding="@dimen/ds_space_12"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/cardAssetHealth"
+        app:layout_constraintTop_toBottomOf="@id/cardActiveQuotes">
+
+        <ImageView
+            android:id="@+id/openOrdersIcon"
+            android:layout_width="@dimen/drawer_icon_size"
+            android:layout_height="@dimen/drawer_icon_size"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_dashboard_cart"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/openOrdersChevron"
+            android:layout_width="@dimen/drawer_icon_size"
+            android:layout_height="@dimen/drawer_icon_size"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_dashboard_chevron"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            android:id="@+id/openOrdersValue"
+            style="@style/IA_TEXT_BOLD_BLACK_18"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ds_space_12"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/openOrdersIcon" />
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            android:id="@+id/openOrdersLabel"
+            style="@style/IA_TEXT_MEDIUM_BLACK_10"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ds_space_4"
+            android:text="@string/open_orders"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/openOrdersValue"
+            app:layout_constraintVertical_bias="0" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+

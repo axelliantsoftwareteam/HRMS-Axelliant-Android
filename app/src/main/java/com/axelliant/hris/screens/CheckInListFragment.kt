@@ -10,7 +10,7 @@ import com.axelliant.hris.R
 import com.axelliant.hris.base.BaseFragment
 import com.axelliant.hris.callback.AdapterItemClick
 import com.axelliant.hris.components.CheckInListComponent
-import com.axelliant.hris.config.AppConst
+import com.axelliant.hris.core.constants.AppRouteArgs
 import com.axelliant.hris.databinding.FragmentCheckInListBinding
 import com.axelliant.hris.enums.AttendanceFilter
 import com.axelliant.hris.enums.AttendanceFilter.Custom
@@ -114,9 +114,9 @@ class CheckInListFragment : BaseFragment() {
                 onRowClick = { attendanceDetail ->
                     if (attendanceDetail.requeststatus == "Pending") {
                         AppNavigator.navigateToRequest(Bundle().apply {
-                            this.putString(AppConst.RequestType, RequestFilter.ATTENDANCE.name)
+                            this.putString(AppRouteArgs.REQUEST_TYPE, RequestFilter.ATTENDANCE.name)
                             this.putString(
-                                AppConst.AttendanceRequestParam,
+                                AppRouteArgs.ATTENDANCE_REQUEST,
                                 Gson().toJson(attendanceDetail)
                             )
                         })

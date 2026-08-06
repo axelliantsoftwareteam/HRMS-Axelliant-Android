@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="AppButtonView">
+        <attr name="icon" />
+        <attr name="iconTint" />
+        <attr name="iconPadding" />
+        <attr name="iconGravity" />
+        <attr name="noBackground" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="AppTextFieldView">
+        <attr name="icon" />
+        <attr name="iconTint" />
+        <attr name="iconPadding" />
+        <attr name="iconGravity" />
+    </declare-styleable>
+
+</resources>

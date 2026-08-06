@@ -2,7 +2,7 @@ package com.axelliant.hris.repos
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import com.axelliant.hris.config.AppConst
+import com.axelliant.hris.core.auth.HrisTokenProvider
 import com.axelliant.hris.model.ImagePath
 import com.axelliant.hris.model.approval.ApprovalActionRequest
 import com.axelliant.hris.model.approval.ApprovalActionItem
@@ -35,13 +35,14 @@ import javax.inject.Inject
 import java.lang.reflect.Type
 
 class ExpenseRepo @Inject constructor(
-    private val apiInterface: ApiInterface
+    private val apiInterface: ApiInterface,
+    private val hrisTokenProvider: HrisTokenProvider
 ) {
 
     fun getMyExpenseDetail(attendanceInput: AttendanceInput): MutableLiveData<BaseApiModel<MyExpenseDetailResponse>> {
         val serverResponse = MutableLiveData<BaseApiModel<MyExpenseDetailResponse>>()
 
-        val call: Call<ResponseBody> = apiInterface.callMyExpenseDetail("token ${AppConst.TOKEN}",
+        val call: Call<ResponseBody> = apiInterface.callMyExpenseDetail(hrisTokenProvider.authorizationHeader(),
             AttRequest().apply {
                 this.start_date = attendanceInput.startDate
                 this.end_date = attendanceInput.endDate
@@ -96,7 +97,7 @@ class ExpenseRepo @Inject constructor(
     fun getDocumentDetail(attendanceInput: AttendanceInput): MutableLiveData<BaseApiModel<MyDocumentResponse>> {
         val serverResponse = MutableLiveData<BaseApiModel<MyDocumentResponse>>()
 
-        val call: Call<ResponseBody> = apiInterface.callDocumentRequestDetail("token ${AppConst.TOKEN}",
+        val call: Call<ResponseBody> = apiInterface.callDocumentRequestDetail(hrisTokenProvider.authorizationHeader(),
             AttRequest().apply {
                 this.start_date = attendanceInput.startDate
                 this.end_date = attendanceInput.endDate
@@ -154,7 +155,7 @@ class ExpenseRepo @Inject constructor(
         val isPrivate: MultipartBody.Part = MultipartBody.Part.createFormData("is_private", imagePath.is_private!!.toString())
         val folder: MultipartBody.Part = MultipartBody.Part.createFormData("docname", imagePath.folder!!)
         val doctype: MultipartBody.Part = MultipartBody.Part.createFormData("doctype", imagePath.doctype!!)
-        val call: Call<ResponseBody> = apiInterface.callMyExpensefile("token ${AppConst.TOKEN}",
+        val call: Call<ResponseBody> = apiInterface.callMyExpensefile(hrisTokenProvider.authorizationHeader(),
             imagePath.file!!,docName,isPrivate,folder,doctype)
 
         Log.e("HTTP Request", " " + call?.request().toString())
@@ -206,7 +207,7 @@ class ExpenseRepo @Inject constructor(
         val serverResponse = MutableLiveData<BaseApiModel<PostResponse>>()
 
         val call: Call<ResponseBody>?
-        call = apiInterface.callCreateDocument("token ${AppConst.TOKEN}", createDocument)
+        call = apiInterface.callCreateDocument(hrisTokenProvider.authorizationHeader(), createDocument)
         Log.e("HTTP Request", " " + call.request().toString())
 
         call.enqueue(object : BaseCallBack<ResponseBody>(call) {
@@ -260,11 +261,11 @@ class ExpenseRepo @Inject constructor(
 
         if (isUpdate) {
             call = apiInterface.callUpdateExp(
-                "token ${AppConst.TOKEN}", createExpense
+                hrisTokenProvider.authorizationHeader(), createExpense
             )
         } else {
             call = apiInterface.callCreateExp(
-                "token ${AppConst.TOKEN}", createExpense
+                hrisTokenProvider.authorizationHeader(), createExpense
             )
         }
 
@@ -318,7 +319,7 @@ class ExpenseRepo @Inject constructor(
         val serverResponse = MutableLiveData<BaseApiModel<MyExpensePostResponse>>()
 
         val call: Call<ResponseBody> = apiInterface.deleteExpenseCall(
-            "token ${AppConst.TOKEN}", createExpense
+            hrisTokenProvider.authorizationHeader(), createExpense
         )
 
 
@@ -372,7 +373,7 @@ class ExpenseRepo @Inject constructor(
         val serverResponse = MutableLiveData<BaseApiModel<MyExpensePostResponse>>()
 
         val call: Call<ResponseBody> = apiInterface.deleteExpenseAttachmentCall(
-            "token ${AppConst.TOKEN}", deleteAttachment
+            hrisTokenProvider.authorizationHeader(), deleteAttachment
         )
 
 
@@ -423,7 +424,7 @@ class ExpenseRepo @Inject constructor(
     fun getExpenseTypes(): MutableLiveData<BaseApiModel<GetExpenseResponse>> {
         val serverResponse = MutableLiveData<BaseApiModel<GetExpenseResponse>>()
 
-        val call: Call<ResponseBody> = apiInterface.getExpenseType("token ${AppConst.TOKEN}")
+        val call: Call<ResponseBody> = apiInterface.getExpenseType(hrisTokenProvider.authorizationHeader())
 
         Log.e("HTTP Request", " " + call?.request().toString())
 
@@ -473,7 +474,7 @@ class ExpenseRepo @Inject constructor(
         val serverResponse = MutableLiveData<BaseApiModel<expenseApprovalList>>()
 
         val call = apiInterface.callExpenseApproval(
-            "token ${AppConst.TOKEN}", AttRequest().apply {
+            hrisTokenProvider.authorizationHeader(), AttRequest().apply {
                 this.start_date = inputObject.startDate
                 this.end_date = inputObject.endDate
                 this.employee_list = inputObject.employeeId
@@ -532,7 +533,7 @@ class ExpenseRepo @Inject constructor(
         val serverResponse = MutableLiveData<BaseApiModel<PostResponse>>()
 
         val call = apiInterface.takeApprovalAction(
-            "token ${AppConst.TOKEN}",
+            hrisTokenProvider.authorizationHeader(),
             ApprovalActionRequest(
                 approval_type = "expense",
                 reference_name = inputObject.expense_id,
@@ -590,7 +591,7 @@ class ExpenseRepo @Inject constructor(
         val serverResponse = MutableLiveData<BaseApiModel<PostResponse>>()
 
         val call = apiInterface.bulkTakeApprovalAction(
-            "token ${AppConst.TOKEN}",
+            hrisTokenProvider.authorizationHeader(),
             BulkApprovalActionRequest(
                 actions = expenseIds.filter { it.isNotBlank() }.map {
                     ApprovalActionItem(

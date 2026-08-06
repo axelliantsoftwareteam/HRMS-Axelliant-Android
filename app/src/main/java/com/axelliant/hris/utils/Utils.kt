@@ -3,8 +3,7 @@ package com.axelliant.hris.utils
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
-import com.axelliant.hris.config.AppConst
-import com.axelliant.hris.config.AppConst.SERVER_DATE_FORMAT
+import com.axelliant.hris.core.constants.AppDateFormats
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -14,7 +13,7 @@ import java.util.Locale
 object Utils {
 
     fun getServerFormat(
-        dateFormat: String = SERVER_DATE_FORMAT,
+        dateFormat: String = AppDateFormats.SERVER_DATE,
         date: Date = getCurrentDate()
     ): String {
         val format = SimpleDateFormat(dateFormat, Locale.getDefault())
@@ -26,7 +25,7 @@ object Utils {
     }
 
     fun getCurrentTime(): String {
-        val sdf = SimpleDateFormat(AppConst.ATTENDANCE_DATE_FORMAT)
+        val sdf = SimpleDateFormat(AppDateFormats.ATTENDANCE_DATE_TIME)
         return sdf.format(Date())
 
         /*
@@ -36,7 +35,7 @@ object Utils {
 
     fun formatTitleDate(input: String): String {
         try {
-            val inputFormatter = SimpleDateFormat(AppConst.RESOURCE_DATE_FORMAT, Locale.ENGLISH)
+            val inputFormatter = SimpleDateFormat(AppDateFormats.RESOURCE_DATE_TIME, Locale.ENGLISH)
             val date = inputFormatter.parse(input)
 
             val outputFormatter = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)

@@ -24,7 +24,7 @@ class HrisAppNavigationContractAdapter @Inject constructor(
 
     override fun openLogin(workspace: WorkspaceKey) {
         if (workspace == WorkspaceKey.HRIS) {
-            navigate(R.id.loginFragment)
+            navigate(R.id.commonLoginFragment)
         }
     }
 

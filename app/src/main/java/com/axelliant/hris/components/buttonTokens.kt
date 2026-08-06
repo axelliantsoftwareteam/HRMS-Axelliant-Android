@@ -11,11 +11,11 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import com.microsoft.fluentui.theme.token.StateBrush
 import com.microsoft.fluentui.theme.token.StateColor
 import androidx.compose.ui.res.dimensionResource
 import com.axelliant.hris.R
+import androidx.compose.ui.unit.dp
 
 @Parcelize
 class CheckInButtonTokens(

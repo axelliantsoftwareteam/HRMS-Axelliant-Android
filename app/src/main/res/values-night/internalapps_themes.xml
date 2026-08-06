@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.Axelliant" parent="ActivityTheme">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+
+        <item name="colorPrimary">@color/ds_primary</item>
+        <item name="colorPrimaryVariant">@color/ds_primary_pressed</item>
+        <item name="colorSecondary">@color/ds_secondary</item>
+        <item name="colorSurface">@color/ds_surface</item>
+        <item name="colorOnPrimary">@color/ds_on_primary</item>
+        <item name="colorOnBackground">@color/ds_text_primary</item>
+        <item name="colorOnSurface">@color/ds_text_primary</item>
+        <item name="colorControlNormal">@color/ds_text_muted</item>
+        <item name="android:statusBarColor">@color/ds_background</item>
+        <item name="android:navigationBarColor">@color/ds_background</item>
+        <item name="android:windowBackground">@color/ds_background</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+    </style>
+
+    <style name="Theme.InternalApps" parent="Theme.Axelliant" />
+</resources>

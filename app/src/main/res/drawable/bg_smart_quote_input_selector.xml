@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_focused="true">
+        <shape>
+            <solid android:color="@color/smart_quote_input" />
+            <stroke
+                android:width="@dimen/_1sdp"
+                android:color="@color/ds_primary" />
+            <corners android:radius="@dimen/ia_ds_radius_md" />
+        </shape>
+    </item>
+    <item>
+        <shape>
+            <solid android:color="@color/smart_quote_input" />
+            <stroke
+                android:width="@dimen/_1sdp"
+                android:color="@color/ds_outline_strong" />
+            <corners android:radius="@dimen/ia_ds_radius_md" />
+        </shape>
+    </item>
+</selector>

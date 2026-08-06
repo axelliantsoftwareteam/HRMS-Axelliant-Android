@@ -31,7 +31,7 @@ import com.axelliant.hris.components.ExpenseEmptyState
 import com.axelliant.hris.components.ExpenseFilterChipItem
 import com.axelliant.hris.components.ExpenseListCard
 import com.axelliant.hris.components.ExpenseRow
-import com.axelliant.hris.config.AppConst
+import com.axelliant.hris.core.constants.AppRouteArgs
 import com.axelliant.hris.databinding.FragmentExpenseBinding
 import com.axelliant.hris.enums.AttendanceFilter
 import com.axelliant.hris.event.EventObserver
@@ -180,9 +180,9 @@ class ExpenseFragment : BaseFragment() {
     private fun onExpenseClicked(expense: Expense) {
         if (expense.status == "Draft") {
             AppNavigator.navigateToAddExpenseFragment(Bundle().apply {
-                putString(AppConst.ExpenseRequestIDParam, expense.name)
-                putString(AppConst.ExpenseRequestParam, Gson().toJson(expense.expenses_detail))
-                putString(AppConst.ExpenseRequestAttachments, Gson().toJson(expense.attachments))
+                putString(AppRouteArgs.EXPENSE_REQUEST_ID, expense.name)
+                putString(AppRouteArgs.EXPENSE_REQUEST, Gson().toJson(expense.expenses_detail))
+                putString(AppRouteArgs.EXPENSE_REQUEST_ATTACHMENTS, Gson().toJson(expense.attachments))
             })
         } else {
             requireContext().showErrorMsg(

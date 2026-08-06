@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.axelliant.hris.ui.designsystem.components.AppCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Widget.InternalApps.Card"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/ds_space_8"
+    app:cardElevation="@dimen/_2sdp"
+    app:strokeColor="@color/purchase_order_card_stroke"
+    app:strokeWidth="@dimen/_1sdp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/ds_space_12">
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            android:id="@+id/productNameText"
+            style="@style/Text.InternalApps.Subheading"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/ds_space_8"
+            android:ellipsize="end"
+            android:fontFamily="@font/poppins_semibold"
+            android:maxLines="2"
+            android:textColor="@color/ds_text_primary"
+            app:layout_constraintEnd_toStartOf="@id/deleteProductButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Dell UltraSharp 32&quot; 4K USB-C Hub Monitor" />
+
+        <ImageView
+            android:id="@+id/deleteProductButton"
+            android:layout_width="@dimen/_22sdp"
+            android:layout_height="@dimen/_22sdp"
+            android:contentDescription="@string/edit_po_delete_product_cd"
+            android:padding="@dimen/_2sdp"
+            android:src="@drawable/ic_delete"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/ds_error" />
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            android:id="@+id/skuText"
+            style="@style/Text.InternalApps.Caption"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ds_space_4"
+            android:textColor="@color/ds_text_muted"
+            app:layout_constraintEnd_toEndOf="@id/productNameText"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/productNameText"
+            tools:text="U3223QE | SKU: DE-MON-4K-32" />
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            android:id="@+id/qtyLabel"
+            style="@style/Text.InternalApps.Caption"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ds_space_12"
+            android:layout_marginEnd="@dimen/ds_space_8"
+            android:text="@string/edit_po_qty"
+            android:textColor="@color/ds_text_muted"
+            app:layout_constraintEnd_toStartOf="@id/unitCostLabel"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/skuText" />
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            android:id="@+id/unitCostLabel"
+            style="@style/Text.InternalApps.Caption"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/edit_po_unit_cost"
+            android:textColor="@color/ds_text_muted"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_weight="1.4"
+            app:layout_constraintStart_toEndOf="@id/qtyLabel"
+            app:layout_constraintTop_toTopOf="@id/qtyLabel" />
+
+        <EditText
+            android:id="@+id/qtyEditText"
+            style="@style/Text.InternalApps.Body"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_36sdp"
+            android:layout_marginTop="@dimen/ds_space_4"
+            android:layout_marginEnd="@dimen/ds_space_8"
+            android:background="@drawable/bg_manual_po_input"
+            android:gravity="center_vertical"
+            android:importantForAutofill="no"
+            android:inputType="number"
+            android:maxLines="1"
+            android:paddingHorizontal="@dimen/ds_space_10"
+            android:textColor="@color/ds_text_primary"
+            app:layout_constraintEnd_toStartOf="@id/unitCostEditText"
+            app:layout_constraintStart_toStartOf="@id/qtyLabel"
+            app:layout_constraintTop_toBottomOf="@id/qtyLabel"
+            tools:text="5" />
+
+        <EditText
+            android:id="@+id/unitCostEditText"
+            style="@style/Text.InternalApps.Body"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_36sdp"
+            android:background="@drawable/bg_manual_po_input"
+            android:gravity="center_vertical"
+            android:importantForAutofill="no"
+            android:inputType="numberDecimal"
+            android:maxLines="1"
+            android:paddingHorizontal="@dimen/ds_space_10"
+            android:textColor="@color/ds_text_primary"
+            app:layout_constraintEnd_toEndOf="@id/unitCostLabel"
+            app:layout_constraintStart_toStartOf="@id/unitCostLabel"
+            app:layout_constraintTop_toTopOf="@id/qtyEditText"
+            tools:text="$ 799.00" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.axelliant.hris.ui.designsystem.components.AppCardView>
+

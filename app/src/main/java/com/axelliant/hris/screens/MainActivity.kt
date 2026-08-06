@@ -10,15 +10,17 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.axelliant.hris.R
-import com.axelliant.hris.config.AppConst
+import com.axelliant.hris.core.events.AppSessionEvents
 import com.axelliant.hris.config.GlobalConfig
 import com.axelliant.hris.core.contracts.navigation.AppNavControllerStore
+import com.axelliant.hris.core.contracts.navigation.WorkspaceKey
+import com.axelliant.hris.core.contracts.session.SessionExpiryContract
 import com.axelliant.hris.extention.showErrorMsg
 import com.axelliant.hris.navigation.AppNavigator
-import com.axelliant.hris.utils.SessionManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.play.core.appupdate.AppUpdateManager
@@ -33,6 +35,7 @@ import com.microsoft.identity.client.ISingleAccountPublicClientApplication
 import com.microsoft.identity.client.exception.MsalException
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -55,9 +58,9 @@ class MainActivity : BaseActivity() {
     private var lastBackPressedTime: Long = 0
     private val exitThreshold: Long = 2000 // Time threshold in milliseconds
     @Inject
-    lateinit var sessionManager: SessionManager
-    @Inject
     lateinit var appNavControllerStore: AppNavControllerStore
+    @Inject
+    lateinit var sessionExpiryContract: SessionExpiryContract
     private var mSingleAccountApp: ISingleAccountPublicClientApplication? = null
     private var mAccount: IAccount? = null
 
@@ -90,25 +93,8 @@ class MainActivity : BaseActivity() {
         }
 
 
-        if (sessionManager.checkLogin()) {
-
-            AppConst.observableCode.observe(this) { code ->
-                if (code == 401) {
-                    mSingleAccountApp!!.signOut(object :
-                        ISingleAccountPublicClientApplication.SignOutCallback {
-                        override fun onSignOut() {
-                            mAccount = null
-                        }
-
-                        override fun onError(exception: MsalException) {
-                            this@MainActivity.showErrorMsg(exception.toString())
-                        }
-                    })
-                    AppNavigator.navigateToLogin()
-                }
-
-            }
-        }
+        observeLegacyHrisSessionExpiryCodes()
+        observeSessionExpiryEvents()
 
 
 //        R.id.homeFragment, R.id.leavesFragment, R.id.profileFragment -> {
@@ -117,12 +103,37 @@ class MainActivity : BaseActivity() {
 
         bottomNavigation.setupWithNavController(globalConfig.navController)
 
-        AppConst.observableCode.observe(this) { code ->
+        checkForAppUpdate()
+    }
+
+    private fun observeLegacyHrisSessionExpiryCodes() {
+        AppSessionEvents.sessionExpired.observe(this) { code ->
             if (code == 401) {
+                sessionExpiryContract.handleSessionExpired(WorkspaceKey.HRIS)
+            }
+        }
+    }
+
+    private fun observeSessionExpiryEvents() {
+        lifecycleScope.launch {
+            sessionExpiryContract.sessionExpiredEvents.collect { event ->
+                signOutMicrosoftAccount()
                 AppNavigator.navigateToLogin()
             }
         }
-        checkForAppUpdate()
+    }
+
+    private fun signOutMicrosoftAccount() {
+        mSingleAccountApp?.signOut(object :
+            ISingleAccountPublicClientApplication.SignOutCallback {
+            override fun onSignOut() {
+                mAccount = null
+            }
+
+            override fun onError(exception: MsalException) {
+                this@MainActivity.showErrorMsg(exception.toString())
+            }
+        })
     }
     private fun checkForAppUpdate() {
         // Returns an intent object that you use to check for an update.
