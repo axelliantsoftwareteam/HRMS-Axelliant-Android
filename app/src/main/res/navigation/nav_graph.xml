@@ -12,34 +12,287 @@
         tools:layout="@layout/fragment_splash">
 
     </fragment>
-
-
-    <fragment
-        android:id="@+id/appEntryFragment"
-        android:name="com.axelliant.hris.core.appentry.AppEntryFragment"
-        android:label="@string/app_entry_title"
-        tools:layout="@layout/fragment_app_entry">
-
-        <action
-            android:id="@+id/action_appEntryFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
-
-        <action
-            android:id="@+id/action_appEntryFragment_to_iaInternalAppsNavGraph"
-            app:destination="@id/iaInternalAppsNavGraph" />
-
-    </fragment>
-
-    <fragment
+<fragment
         android:id="@+id/commonLoginFragment"
         android:name="com.axelliant.hris.features.commonlogin.presentation.CommonLoginFragment"
         android:label="@string/ia_login"
         tools:layout="@layout/ia_fragment_login" />
 
-    <include app:graph="@navigation/ia_nav_graph" />
+
+    <fragment
+        android:id="@+id/iaDashboardFragment"
+        android:name="com.axelliant.hris.features.dashboard.presentation.DashboardFragment"
+        android:label="@string/dashboard"
+        tools:layout="@layout/fragment_dashboard" />
+
+    <fragment
+        android:id="@+id/iaHomeFragment"
+        android:name="com.axelliant.hris.screens.fragments.HomeFragment"
+        android:label="@string/ia_app_name"
+        tools:layout="@layout/ia_fragment_home" />
+
+    <fragment
+        android:id="@+id/iaProfilesFragment"
+        android:name="com.axelliant.hris.features.profiles.presentation.ProfilesFragment"
+        android:label="@string/profiles"
+        tools:layout="@layout/fragment_profiles" />
+
+    <fragment
+        android:id="@+id/iaSettingsFragment"
+        android:name="com.axelliant.hris.screens.fragments.SettingsFragment"
+        android:label="@string/drawer_settings"
+        tools:layout="@layout/fragment_placeholder" />
+
+    <fragment
+        android:id="@+id/iaProductsFragment"
+        android:name="com.axelliant.hris.features.inventory.products.presentation.ProductsFragment"
+        android:label="@string/products"
+        tools:layout="@layout/fragment_products">
+        <argument
+            android:name="selectionMode"
+            app:argType="boolean"
+            android:defaultValue="false" />
+        <argument
+            android:name="productPickerFlow"
+            app:argType="string"
+            android:defaultValue="default" />
+        <argument
+            android:name="askAiResult"
+            app:argType="android.os.Bundle"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <argument
+            android:name="preselectedProducts"
+            app:argType="android.os.Bundle"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <argument
+            android:name="initialSearchQuery"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <argument
+            android:name="compareProductSlot"
+            app:argType="integer"
+            android:defaultValue="1" />
+        <argument
+            android:name="preselectedCompareProduct"
+            app:argType="android.os.Bundle"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
 
 
     <fragment
+        android:id="@+id/iaAskAiProductSearchFragment"
+        android:name="com.axelliant.hris.features.inventory.products.presentation.AskAiProductSearchFragment"
+        android:label="@string/ask_ai"
+        tools:layout="@layout/fragment_ask_ai_product_search">
+        <argument
+            android:name="productPickerFlow"
+            app:argType="string"
+            android:defaultValue="default" />
+        <argument
+            android:name="preselectedProducts"
+            app:argType="android.os.Bundle"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <argument
+            android:name="compareProductSlot"
+            app:argType="integer"
+            android:defaultValue="1" />
+        <argument
+            android:name="preselectedCompareProduct"
+            app:argType="android.os.Bundle"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <action
+            android:id="@+id/ia_action_askAiProductSearchFragment_to_productsFragment_selection"
+            app:destination="@id/iaProductsFragment" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/iaProductCodeScannerFragment"
+        android:name="com.axelliant.hris.core.scanner.ProductCodeScannerFragment"
+        android:label="@string/ask_ai_live_scanner"
+        tools:layout="@layout/fragment_product_code_scanner" />
+
+    <fragment
+        android:id="@+id/iaDynamicCategorySelectionFragment"
+        android:name="com.axelliant.hris.features.inventory.products.presentation.dynamicfilters.DynamicCategorySelectionFragment"
+        android:label="@string/dynamic_category_specs_title" />
+
+    <fragment
+        android:id="@+id/iaDynamicCategorySpecsFragment"
+        android:name="com.axelliant.hris.features.inventory.products.presentation.dynamicfilters.DynamicCategorySpecsFragment"
+        android:label="@string/dynamic_category_specs_title" />
+
+    <fragment
+        android:id="@+id/iaProductDetailFragment"
+        android:name="com.axelliant.hris.features.inventory.products.presentation.ProductDetailFragment"
+        android:label="@string/product_details"
+        tools:layout="@layout/fragment_product_detail">
+        <argument
+            android:name="productId"
+            app:argType="string" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/iaProductComparisonFragment"
+        android:name="com.axelliant.hris.features.inventory.products.presentation.ProductComparisonFragment"
+        android:label="@string/product_compare"
+        tools:layout="@layout/fragment_product_comparison" />
+
+    <fragment
+        android:id="@+id/iaQuotesFragment"
+        android:name="com.axelliant.hris.features.quotes.presentation.QuotesFragment"
+        android:label="@string/quotes_title"
+        tools:layout="@layout/fragment_quotes" />
+
+    <fragment
+        android:id="@+id/iaSaleOrdersFragment"
+        android:name="com.axelliant.hris.features.saleorders.presentation.SaleOrdersFragment"
+        android:label="@string/sale_orders_title"
+        tools:layout="@layout/fragment_sale_orders" />
+
+    <fragment
+        android:id="@+id/iaPurchaseOrdersFragment"
+        android:name="com.axelliant.hris.features.purchaseorders.presentation.PurchaseOrdersFragment"
+        android:label="@string/purchase_orders_title"
+        tools:layout="@layout/fragment_purchase_orders" />
+
+    <fragment
+        android:id="@+id/iaAddPurchaseOrderFragment"
+        android:name="com.axelliant.hris.features.purchaseorders.presentation.AddPurchaseOrderFragment"
+        android:label="@string/add_purchase_order_title"
+        tools:layout="@layout/fragment_add_purchase_order" />
+
+    <fragment
+        android:id="@+id/iaCreateManualPurchaseOrderFragment"
+        android:name="com.axelliant.hris.features.purchaseorders.presentation.CreateManualPurchaseOrderFragment"
+        android:label="@string/create_manual_po_title"
+        tools:layout="@layout/fragment_create_manual_purchase_order" />
+
+    <fragment
+        android:id="@+id/iaViewPurchaseOrderFragment"
+        android:name="com.axelliant.hris.features.purchaseorders.presentation.ViewPurchaseOrderFragment"
+        android:label="@string/po_details_title"
+        tools:layout="@layout/fragment_view_purchase_order">
+        <argument
+            android:name="purchaseOrderId"
+            app:argType="string" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/iaEditPurchaseOrderFragment"
+        android:name="com.axelliant.hris.features.purchaseorders.presentation.EditPurchaseOrderFragment"
+        android:label="@string/edit_po_title"
+        tools:layout="@layout/fragment_edit_purchase_order">
+        <argument
+            android:name="purchaseOrderId"
+            app:argType="string" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/iaAddSaleOrderFragment"
+        android:name="com.axelliant.hris.features.saleorders.presentation.AddSaleOrderFragment"
+        android:label="@string/add_sale_order_title"
+        tools:layout="@layout/fragment_add_sale_order">
+        <argument
+            android:name="saleOrderId"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/iaViewSaleOrderFragment"
+        android:name="com.axelliant.hris.features.saleorders.presentation.ViewSaleOrderFragment"
+        android:label="@string/sale_order_details_title"
+        tools:layout="@layout/fragment_view_sale_order">
+        <argument
+            android:name="saleOrderId"
+            app:argType="string" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/iaViewQuoteFragment"
+        android:name="com.axelliant.hris.features.quotes.presentation.ViewQuoteFragment"
+        android:label="@string/quote_preview_title"
+        tools:layout="@layout/fragment_view_quote">
+        <argument
+            android:name="quoteId"
+            app:argType="string" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/iaEditQuoteFragment"
+        android:name="com.axelliant.hris.features.quotes.presentation.EditQuoteFragment"
+        android:label="@string/edit_quote"
+        tools:layout="@layout/fragment_edit_quote">
+        <argument
+            android:name="quoteId"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/iaAddQuoteProductFragment"
+        android:name="com.axelliant.hris.features.quotes.presentation.AddQuoteProductFragment"
+        android:label="@string/add_quote_product_title"
+        tools:layout="@layout/fragment_add_quote_product" />
+
+    <fragment
+        android:id="@+id/iaAddQuoteAddressFragment"
+        android:name="com.axelliant.hris.features.quotes.presentation.AddQuoteAddressFragment"
+        android:label="@string/add_quote_address_title"
+        tools:layout="@layout/fragment_add_quote_address">
+        <argument
+            android:name="addressType"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/iaAddQuoteFragment"
+        android:name="com.axelliant.hris.features.quotes.presentation.AddQuoteFragment"
+        android:label="@string/add_quote_title"
+        tools:layout="@layout/fragment_add_quote">
+        <argument
+            android:name="quoteId"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <argument
+            android:name="duplicateQuoteId"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <argument
+            android:name="reviseQuoteId"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/iaSmartQuoteFragment"
+        android:name="com.axelliant.hris.features.quotes.presentation.SmartQuoteFragment"
+        android:label="@string/smart_quote_title"
+        tools:layout="@layout/fragment_smart_quote">
+        <action
+            android:id="@+id/ia_action_smartQuoteFragment_to_askAiProductSearchFragment"
+            app:destination="@id/iaAskAiProductSearchFragment" />
+        <action
+            android:id="@+id/ia_action_smartQuoteFragment_to_productsFragment_selection"
+            app:destination="@id/iaProductsFragment" />
+    </fragment>
+<fragment
         android:id="@+id/homeFragment"
         android:name="com.axelliant.hris.screens.HomeFragment"
         android:label="Home Fragment"

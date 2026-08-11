@@ -29,9 +29,9 @@
             app:layout_constraintTop_toTopOf="parent">
 
 
-            <com.google.android.material.textview.MaterialTextView
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
                 android:id="@+id/tv_start_end"
-                style="@style/TEXT_MEDIUM_WHITE_12"
+                style="@style/Text.Fluent2.Body.Inverse.Strong"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginStart="@dimen/_5sdp"
@@ -40,9 +40,9 @@
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <com.google.android.material.textview.MaterialTextView
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/tv_total_member_txt"
-            style="@style/TEXT_SEMI_BLACK_12"
+            style="@style/Text.Fluent2.Body.Primary.Strong"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_10sdp"
@@ -53,9 +53,9 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ly_header" />
 
-        <com.google.android.material.textview.MaterialTextView
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/tv_day"
-            style="@style/TEXT_MEDIUM_BLACK_10"
+            style="@style/Text.Fluent2.Caption.Primary.Strong"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_10sdp"
@@ -66,9 +66,9 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_total_member_txt" />
 
 
-        <com.google.android.material.textview.MaterialTextView
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/tv_reason"
-            style="@style/TEXT_MEDIUM_GREY_10"
+            style="@style/Text.Fluent2.Caption.Muted.Strong"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_10sdp"
@@ -80,9 +80,9 @@
             app:layout_constraintTop_toBottomOf="@id/tv_status" />
 
 
-        <com.google.android.material.textview.MaterialTextView
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/tv_status"
-            style="@style/TEXT_SEMI_BLACK_10"
+            style="@style/Text.Fluent2.Caption.Primary.Strong"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/_10sdp"

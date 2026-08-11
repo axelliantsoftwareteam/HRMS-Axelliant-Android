@@ -79,7 +79,7 @@
             app:layout_constraintStart_toEndOf="@id/qtyLabel"
             app:layout_constraintTop_toTopOf="@id/qtyLabel" />
 
-        <EditText
+        <com.axelliant.hris.ui.designsystem.components.AppTextFieldView
             android:id="@+id/qtyEditText"
             style="@style/Text.InternalApps.Body"
             android:layout_width="0dp"
@@ -98,7 +98,7 @@
             app:layout_constraintTop_toBottomOf="@id/qtyLabel"
             tools:text="5" />
 
-        <EditText
+        <com.axelliant.hris.ui.designsystem.components.AppTextFieldView
             android:id="@+id/unitCostEditText"
             style="@style/Text.InternalApps.Body"
             android:layout_width="0dp"

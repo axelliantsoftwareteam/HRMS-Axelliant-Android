@@ -132,7 +132,7 @@ class CommonLoginFragment : Fragment() {
         errorText.isVisible = !authError.isNullOrBlank()
 
         if (state.isAuthenticated) {
-            openWorkspaceEntry()
+            openHomeDashboard()
         }
     }
 
@@ -160,11 +160,11 @@ class CommonLoginFragment : Fragment() {
         }
     }
 
-    private fun openWorkspaceEntry() {
+    private fun openHomeDashboard() {
         if (hasNavigated || findNavController().currentDestination?.id != R.id.commonLoginFragment) return
         hasNavigated = true
         findNavController().navigate(
-            R.id.appEntryFragment,
+            R.id.homeFragment,
             null,
             NavOptions.Builder()
                 .setPopUpTo(R.id.commonLoginFragment, true)

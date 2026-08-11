@@ -15,11 +15,11 @@ import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.ProgressBar
 import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -28,6 +28,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.axelliant.hris.R
+import com.axelliant.hris.ui.designsystem.components.AppProgressBarView
+import com.axelliant.hris.ui.designsystem.components.AppTextView
+import com.axelliant.hris.ui.designsystem.components.createAppBottomSheetDialog
 import com.axelliant.hris.core.extensions.enableClearTextButton
 import com.axelliant.hris.core.ui.UiState
 import com.axelliant.hris.databinding.FragmentAddPurchaseOrderBinding
@@ -47,12 +50,12 @@ class AddPurchaseOrderFragment : Fragment() {
 
     private var quoteSearchDialog: BottomSheetDialog? = null
     private var quoteOptionsContainer: LinearLayout? = null
-    private var quoteSearchProgress: ProgressBar? = null
+    private var quoteSearchProgress: AppProgressBarView? = null
     private var quoteEmptyText: TextView? = null
 
     private var saleOrderSearchDialog: BottomSheetDialog? = null
     private var saleOrderOptionsContainer: LinearLayout? = null
-    private var saleOrderSearchProgress: ProgressBar? = null
+    private var saleOrderSearchProgress: AppProgressBarView? = null
     private var saleOrderEmptyText: TextView? = null
 
     private val quantityWatchers = mutableMapOf<String, TextWatcher>()
@@ -68,7 +71,7 @@ class AddPurchaseOrderFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.backButton.setOnClickListener { findNavController().navigateUp() }
+        binding.appTopBar.setOnBackClickListener { findNavController().navigateUp() }
         binding.cancelButton.setOnClickListener { findNavController().navigateUp() }
         binding.quoteField.setOnClickListener { showQuoteSearchSheet() }
         binding.clearQuoteButton.setOnClickListener { viewModel.clearSelectedQuote() }
@@ -153,7 +156,6 @@ class AddPurchaseOrderFragment : Fragment() {
         )
 
         val info = state.saleOrderInfo
-        val hasProducts = state.selectedItemCount > 0
         val hasProductLines = info?.products?.isNotEmpty() == true
 
         binding.loadingOverlay.isVisible =
@@ -284,7 +286,7 @@ class AddPurchaseOrderFragment : Fragment() {
 
     private fun setFieldError(
         field: View,
-        errorView: TextView,
+        errorView: AppTextView,
         hasError: Boolean,
         messageRes: Int,
         isFieldEnabled: Boolean = true
@@ -337,7 +339,7 @@ class AddPurchaseOrderFragment : Fragment() {
     }
 
     private fun showQuoteSearchSheet() {
-        val dialog = BottomSheetDialog(requireContext())
+        val dialog = requireContext().createAppBottomSheetDialog()
         val container = LinearLayout(requireContext()).apply {
             orientation = LinearLayout.VERTICAL
             setBackgroundResource(R.drawable.bg_filter_sheet)
@@ -351,7 +353,7 @@ class AddPurchaseOrderFragment : Fragment() {
         val titleView = TextView(requireContext()).apply {
             text = getString(R.string.add_purchase_order_select_quote)
             setTextColor(ContextCompat.getColor(requireContext(), R.color.ds_text_primary))
-            typeface = resources.getFont(R.font.poppins_semibold)
+            typeface = ResourcesCompat.getFont(requireContext(), R.font.poppins_semibold)
             textSize = 18f
         }
         val searchInput = EditText(requireContext()).apply {
@@ -376,7 +378,7 @@ class AddPurchaseOrderFragment : Fragment() {
             setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(com.intuit.ssp.R.dimen._12ssp))
             enableClearTextButton()
         }
-        val progressBar = ProgressBar(requireContext()).apply {
+        val progressBar = AppProgressBarView(requireContext()).apply {
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
@@ -394,7 +396,7 @@ class AddPurchaseOrderFragment : Fragment() {
             }
             text = getString(R.string.add_purchase_order_no_quotes_found)
             setTextColor(ContextCompat.getColor(requireContext(), R.color.ds_text_muted))
-            typeface = resources.getFont(R.font.poppins_regular)
+            typeface = ResourcesCompat.getFont(requireContext(), R.font.poppins_regular)
             textSize = 14f
             isVisible = false
         }
@@ -455,7 +457,7 @@ class AddPurchaseOrderFragment : Fragment() {
     }
 
     private fun showSaleOrderSearchSheet() {
-        val dialog = BottomSheetDialog(requireContext())
+        val dialog = requireContext().createAppBottomSheetDialog()
         val container = LinearLayout(requireContext()).apply {
             orientation = LinearLayout.VERTICAL
             setBackgroundResource(R.drawable.bg_filter_sheet)
@@ -469,7 +471,7 @@ class AddPurchaseOrderFragment : Fragment() {
         val titleView = TextView(requireContext()).apply {
             text = getString(R.string.add_purchase_order_select_sales_orders)
             setTextColor(ContextCompat.getColor(requireContext(), R.color.ds_text_primary))
-            typeface = resources.getFont(R.font.poppins_semibold)
+            typeface = ResourcesCompat.getFont(requireContext(), R.font.poppins_semibold)
             textSize = 18f
         }
         val searchInput = EditText(requireContext()).apply {
@@ -494,7 +496,7 @@ class AddPurchaseOrderFragment : Fragment() {
             setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(com.intuit.ssp.R.dimen._12ssp))
             enableClearTextButton()
         }
-        val progressBar = ProgressBar(requireContext()).apply {
+        val progressBar = AppProgressBarView(requireContext()).apply {
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
@@ -512,7 +514,7 @@ class AddPurchaseOrderFragment : Fragment() {
             }
             text = getString(R.string.add_purchase_order_no_sales_orders_found)
             setTextColor(ContextCompat.getColor(requireContext(), R.color.ds_text_muted))
-            typeface = resources.getFont(R.font.poppins_regular)
+            typeface = ResourcesCompat.getFont(requireContext(), R.font.poppins_regular)
             textSize = 14f
             isVisible = false
         }
@@ -579,7 +581,7 @@ class AddPurchaseOrderFragment : Fragment() {
         selected: (T) -> Boolean = { false },
         onSelected: (T) -> Unit
     ) {
-        val dialog = BottomSheetDialog(requireContext())
+        val dialog = requireContext().createAppBottomSheetDialog()
         val container = LinearLayout(requireContext()).apply {
             orientation = LinearLayout.VERTICAL
             setBackgroundResource(R.drawable.bg_filter_sheet)
@@ -593,7 +595,7 @@ class AddPurchaseOrderFragment : Fragment() {
         val titleView = TextView(requireContext()).apply {
             text = title
             setTextColor(ContextCompat.getColor(requireContext(), R.color.ds_text_primary))
-            typeface = resources.getFont(R.font.poppins_semibold)
+            typeface = ResourcesCompat.getFont(requireContext(), R.font.poppins_semibold)
             textSize = 18f
         }
         container.addView(titleView)

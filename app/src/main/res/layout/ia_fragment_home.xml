@@ -7,17 +7,17 @@
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/start_guideline"
-        style="@style/ia_start_gl"
+        style="@style/Guideline.Fluent2.Start"
         android:orientation="vertical" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/end_guideline"
-        style="@style/ia_end_gl"
+        style="@style/Guideline.Fluent2.End"
         android:orientation="vertical" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/top_guideline"
-        style="@style/ia_top_gl" />
+        style="@style/Guideline.Fluent2.Top" />
 
     <com.axelliant.hris.ui.designsystem.components.AppCardView
         android:id="@+id/topBar"

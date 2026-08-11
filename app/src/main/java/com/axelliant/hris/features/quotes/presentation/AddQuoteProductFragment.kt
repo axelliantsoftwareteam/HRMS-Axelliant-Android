@@ -59,7 +59,7 @@ class AddQuoteProductFragment : Fragment() {
     }
 
     private fun setupInteractions() {
-        binding.backButton.setOnClickListener { findNavController().navigateUp() }
+        binding.appTopBar.setOnBackClickListener { findNavController().navigateUp() }
         binding.filterButton.setOnClickListener {
             Toast.makeText(requireContext(), R.string.filters, Toast.LENGTH_SHORT).show()
         }

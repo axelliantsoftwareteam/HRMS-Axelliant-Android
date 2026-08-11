@@ -30,9 +30,9 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <com.google.android.material.textview.MaterialTextView
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/tv_check_in_txt"
-            style="@style/TEXT_SEMI_WHITE_15"
+            style="@style/Text.Fluent2.Subheading.Inverse.Strong"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_6sdp"
@@ -41,9 +41,9 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <com.google.android.material.textview.MaterialTextView
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/tv_check_in"
-            style="@style/TEXT_MEDIUM_WHITE_10"
+            style="@style/Text.Fluent2.Caption.Inverse.Strong"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_2sdp"
@@ -78,9 +78,9 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <com.google.android.material.textview.MaterialTextView
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/tv_check_out_txt"
-            style="@style/TEXT_SEMI_WHITE_15"
+            style="@style/Text.Fluent2.Subheading.Inverse.Strong"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_6sdp"
@@ -89,9 +89,9 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <com.google.android.material.textview.MaterialTextView
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/tv_check_out"
-            style="@style/TEXT_MEDIUM_WHITE_10"
+            style="@style/Text.Fluent2.Caption.Inverse.Strong"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_2sdp"
@@ -103,12 +103,17 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- Full-width pill punch button -->
-    <androidx.compose.ui.platform.ComposeView
-        android:id="@+id/compose_check_in"
+    <com.axelliant.hris.ui.designsystem.components.AppButtonView
+        android:id="@+id/btn_check_in"
         android:layout_width="0dp"
         android:layout_height="@dimen/_42sdp"
         android:layout_marginTop="@dimen/_8sdp"
+        android:text="@string/check_in"
+        app:fluentButtonStyle="primary"
+        app:icon="@drawable/ic_signout_fluent"
+        app:iconGravity="textStart"
+        app:iconPadding="@dimen/_6sdp"
+        app:iconTint="@color/ds_neutral_white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/leftCard"/>

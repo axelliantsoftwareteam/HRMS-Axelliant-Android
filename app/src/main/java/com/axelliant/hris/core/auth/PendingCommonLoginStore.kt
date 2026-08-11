@@ -41,7 +41,15 @@ class PendingCommonLoginStore @Inject constructor() {
 
     fun canEnter(workspace: WorkspaceKey): Boolean = workspace in allowedWorkspaces
 
+    fun currentMethod(): PendingCommonLoginMethod = method
+
     fun pendingMicrosoftAuth(): PendingMicrosoftAuth? = microsoftAuth
+
+    fun markMicrosoftWorkspacePreparationCompleted(workspaces: Set<WorkspaceKey>) {
+        method = PendingCommonLoginMethod.NONE
+        allowedWorkspaces = workspaces
+        microsoftAuth = null
+    }
 
     fun clear() {
         method = PendingCommonLoginMethod.NONE

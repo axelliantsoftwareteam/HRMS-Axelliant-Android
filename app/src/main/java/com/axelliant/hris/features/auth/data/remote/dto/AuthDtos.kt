@@ -63,3 +63,8 @@ data class MicrosoftTokenData(
     @SerializedName("aE_expires_in")
     val aeExpiresIn: String? = null
 )
+
+data class MicrosoftTokenRequest(
+    val idToken: String,
+    val graphAccessToken: String
+)

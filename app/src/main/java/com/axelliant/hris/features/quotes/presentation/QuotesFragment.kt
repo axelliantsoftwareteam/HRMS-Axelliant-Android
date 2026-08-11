@@ -29,6 +29,7 @@ import com.axelliant.hris.core.extensions.showKeyboard
 import com.axelliant.hris.core.ui.ShimmerAnimatorHelper
 import com.axelliant.hris.core.ui.UiState
 import com.axelliant.hris.databinding.FragmentQuotesBinding
+import com.axelliant.hris.features.internalapps.navigation.InternalAppsNavigator
 import com.axelliant.hris.features.quotes.domain.model.QuoteListUiModel
 import com.axelliant.hris.features.quotes.domain.model.QuoteModel
 import com.axelliant.hris.features.quotes.domain.model.QuoteStatus
@@ -82,7 +83,7 @@ class QuotesFragment : Fragment(), QuotesAdapter.QuoteItemListener {
     private fun setupSearchUi() {
         binding.searchInputLayout.isVisible = false
         binding.searchInputLayout.alpha = 0f
-        binding.quotesTitle.alpha = 1f
+        binding.appTopBar.titleView.alpha = 1f
     }
 
     private fun setupAdapters() {
@@ -132,7 +133,9 @@ class QuotesFragment : Fragment(), QuotesAdapter.QuoteItemListener {
     }
 
     private fun setupInteractions() {
-        binding.backButton.setOnClickListener { findNavController().navigateUp() }
+        binding.appTopBar.setOnBackClickListener {
+            InternalAppsNavigator.returnToHomeShell(findNavController())
+        }
         binding.createQuoteFab.setOnClickListener { toggleQuoteActionMenu() }
         binding.quoteActionOverlay.setOnClickListener { hideQuoteActionMenu() }
         binding.createQuoteOption.setOnClickListener {
@@ -143,7 +146,7 @@ class QuotesFragment : Fragment(), QuotesAdapter.QuoteItemListener {
             hideQuoteActionMenu()
             findNavController().navigate(R.id.iaSmartQuoteFragment)
         }
-        binding.searchIconButton.setOnClickListener { toggleSearchField() }
+        binding.appTopBar.setOnSearchClickListener { toggleSearchField() }
 
         binding.standardTab.setOnClickListener {
             viewModel.onQuoteTypeSelected(QuoteType.Standard)
@@ -190,8 +193,8 @@ class QuotesFragment : Fragment(), QuotesAdapter.QuoteItemListener {
 
     private fun openSearchField() {
         isSearchVisible = true
-        binding.searchIconButton.setIconResource(R.drawable.ia_ic_filter_close)
-        binding.searchIconButton.contentDescription = getString(R.string.quotes_search_close)
+        binding.appTopBar.setSearchIconResource(R.drawable.ia_ic_filter_close)
+        binding.appTopBar.searchButton.contentDescription = getString(R.string.quotes_search_close)
 
 
         binding.searchInputLayout.isVisible = true
@@ -211,8 +214,8 @@ class QuotesFragment : Fragment(), QuotesAdapter.QuoteItemListener {
     private fun closeSearchField(clearText: Boolean, reload: Boolean) {
         isSearchVisible = false
         currentSearchQuery = ""
-        binding.searchIconButton.setIconResource(R.drawable.ia_ic_search)
-        binding.searchIconButton.contentDescription = getString(R.string.quotes_search_open)
+        binding.appTopBar.setSearchIconResource(R.drawable.ia_ic_search)
+        binding.appTopBar.searchButton.contentDescription = getString(R.string.quotes_search_open)
 
         binding.searchEditText.clearFocus()
         binding.searchEditText.hideKeyboard()
@@ -226,9 +229,9 @@ class QuotesFragment : Fragment(), QuotesAdapter.QuoteItemListener {
             }
             .start()
 
-        binding.quotesTitle.isVisible = true
-        binding.quotesTitle.alpha = 0f
-        binding.quotesTitle.animate()
+        binding.appTopBar.titleView.isVisible = true
+        binding.appTopBar.titleView.alpha = 0f
+        binding.appTopBar.titleView.animate()
             .alpha(1f)
             .setDuration(SEARCH_ANIMATION_DURATION_MS)
             .start()

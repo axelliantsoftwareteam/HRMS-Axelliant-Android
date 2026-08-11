@@ -35,7 +35,7 @@
                 android:src="@drawable/ic_quote_cancel_warning" />
         </FrameLayout>
 
-        <TextView
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/cancelConfirmMessage"
             style="@style/TextAppearance.InternalApps.Heading"
             android:layout_width="0dp"

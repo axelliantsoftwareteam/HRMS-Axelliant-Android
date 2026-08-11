@@ -70,7 +70,7 @@ class TeamLeaveDetailFragment : BaseFragment() {
                 }
             })
 
-        binding?.ivBack?.setOnClickListener {
+        binding?.appTopBar?.setOnBackClickListener {
             previousFragmentNavigation()
         }
 

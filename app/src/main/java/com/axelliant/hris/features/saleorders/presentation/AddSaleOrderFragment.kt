@@ -15,11 +15,11 @@ import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.ProgressBar
 import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -29,6 +29,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.axelliant.hris.R
+import com.axelliant.hris.ui.designsystem.components.AppProgressBarView
+import com.axelliant.hris.ui.designsystem.components.AppTextView
+import com.axelliant.hris.ui.designsystem.components.createAppBottomSheetDialog
 import com.axelliant.hris.core.extensions.enableClearTextButton
 import com.axelliant.hris.core.ui.UiState
 import com.axelliant.hris.databinding.FragmentAddSaleOrderBinding
@@ -59,7 +62,7 @@ class AddSaleOrderFragment : Fragment() {
 
     private var customerSearchDialog: BottomSheetDialog? = null
     private var customerOptionsContainer: LinearLayout? = null
-    private var customerSearchProgress: ProgressBar? = null
+    private var customerSearchProgress: AppProgressBarView? = null
     private var customerEmptyText: TextView? = null
 
     override fun onCreateView(
@@ -79,7 +82,7 @@ class AddSaleOrderFragment : Fragment() {
     }
 
     private fun setupInteractions() {
-        binding.backButton.setOnClickListener { findNavController().navigateUp() }
+        binding.appTopBar.setOnBackClickListener { findNavController().navigateUp() }
         binding.customerField.setOnClickListener { showCustomerSearchSheet() }
         binding.billingAddressField.setOnClickListener {
             if (!isCustomerReady()) return@setOnClickListener
@@ -219,7 +222,7 @@ class AddSaleOrderFragment : Fragment() {
     }
 
     private fun renderState(state: AddSaleOrderUiState) {
-        binding.screenTitle.setText(
+        binding.appTopBar.setTitle(
             if (state.isEditMode) R.string.edit_sale_order_title else R.string.add_sale_order_title
         )
         binding.saveDraftButton.setText(
@@ -350,7 +353,7 @@ class AddSaleOrderFragment : Fragment() {
 
     private fun setSelectorFieldError(
         field: View,
-        errorView: TextView,
+        errorView: AppTextView,
         hasError: Boolean,
         messageRes: Int,
         isFieldEnabled: Boolean = true
@@ -408,7 +411,7 @@ class AddSaleOrderFragment : Fragment() {
     }
 
     private fun showCustomerSearchSheet() {
-        val dialog = BottomSheetDialog(requireContext())
+        val dialog = requireContext().createAppBottomSheetDialog()
         val container = LinearLayout(requireContext()).apply {
             orientation = LinearLayout.VERTICAL
             setBackgroundResource(R.drawable.bg_filter_sheet)
@@ -422,7 +425,7 @@ class AddSaleOrderFragment : Fragment() {
         val titleView = TextView(requireContext()).apply {
             text = getString(R.string.add_quote_customer_required)
             setTextColor(ContextCompat.getColor(requireContext(), R.color.ds_text_primary))
-            typeface = resources.getFont(R.font.poppins_semibold)
+            typeface = ResourcesCompat.getFont(requireContext(), R.font.poppins_semibold)
             textSize = 18f
         }
         val searchInput = EditText(requireContext()).apply {
@@ -447,7 +450,7 @@ class AddSaleOrderFragment : Fragment() {
             setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(com.intuit.ssp.R.dimen._12ssp))
             enableClearTextButton()
         }
-        val progressBar = ProgressBar(requireContext()).apply {
+        val progressBar = AppProgressBarView(requireContext()).apply {
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
@@ -465,7 +468,7 @@ class AddSaleOrderFragment : Fragment() {
             }
             text = getString(R.string.add_quote_no_customers_found)
             setTextColor(ContextCompat.getColor(requireContext(), R.color.ds_text_muted))
-            typeface = resources.getFont(R.font.poppins_regular)
+            typeface = ResourcesCompat.getFont(requireContext(), R.font.poppins_regular)
             textSize = 14f
             isVisible = false
         }
@@ -646,7 +649,7 @@ class AddSaleOrderFragment : Fragment() {
         selected: (T) -> Boolean = { false },
         onSelected: (T) -> Unit
     ) {
-        val dialog = BottomSheetDialog(requireContext())
+        val dialog = requireContext().createAppBottomSheetDialog()
         val container = LinearLayout(requireContext()).apply {
             orientation = LinearLayout.VERTICAL
             setBackgroundResource(R.drawable.bg_filter_sheet)
@@ -660,7 +663,7 @@ class AddSaleOrderFragment : Fragment() {
         val titleView = TextView(requireContext()).apply {
             text = title
             setTextColor(ContextCompat.getColor(requireContext(), R.color.ds_text_primary))
-            typeface = resources.getFont(R.font.poppins_semibold)
+            typeface = ResourcesCompat.getFont(requireContext(), R.font.poppins_semibold)
             textSize = 18f
         }
         container.addView(titleView)

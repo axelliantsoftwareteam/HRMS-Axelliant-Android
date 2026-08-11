@@ -17,6 +17,7 @@ import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -25,6 +26,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.axelliant.hris.R
+import com.axelliant.hris.ui.designsystem.components.createAppBottomSheetDialog
 import com.axelliant.hris.core.ui.UiState
 import com.axelliant.hris.databinding.FragmentCreateManualPurchaseOrderBinding
 import com.axelliant.hris.databinding.ItemManualPoProductBinding
@@ -56,10 +58,10 @@ class CreateManualPurchaseOrderFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.backButton.setOnClickListener { findNavController().navigateUp() }
+        binding.appTopBar.setOnBackClickListener { findNavController().navigateUp() }
         binding.cancelButton.setOnClickListener { findNavController().navigateUp() }
         binding.addProductButton.setOnClickListener { openProductPicker() }
-        binding.searchButton.setOnClickListener { openProductPicker() }
+        binding.appTopBar.setOnSearchClickListener { openProductPicker() }
         binding.addMoreItemsRow.setOnClickListener { openProductPicker() }
         binding.createButton.setOnClickListener { viewModel.createPurchaseOrder() }
         observeProductResults()
@@ -224,7 +226,7 @@ class CreateManualPurchaseOrderFragment : Fragment() {
         selected: (T) -> Boolean = { false },
         onSelected: (T) -> Unit
     ) {
-        val dialog = BottomSheetDialog(requireContext())
+        val dialog = requireContext().createAppBottomSheetDialog()
         val container = LinearLayout(requireContext()).apply {
             orientation = LinearLayout.VERTICAL
             setBackgroundResource(R.drawable.bg_filter_sheet)
@@ -238,7 +240,7 @@ class CreateManualPurchaseOrderFragment : Fragment() {
         val titleView = TextView(requireContext()).apply {
             text = title
             setTextColor(ContextCompat.getColor(requireContext(), R.color.ds_text_primary))
-            typeface = resources.getFont(R.font.poppins_semibold)
+            typeface = ResourcesCompat.getFont(requireContext(), R.font.poppins_semibold)
             textSize = 18f
         }
         container.addView(titleView)

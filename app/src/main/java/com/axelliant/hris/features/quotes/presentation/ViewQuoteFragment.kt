@@ -71,7 +71,7 @@ class ViewQuoteFragment : Fragment() {
     }
 
     private fun setupInteractions() {
-        binding.backButton.setOnClickListener { findNavController().navigateUp() }
+        binding.appTopBar.setOnBackClickListener { findNavController().navigateUp() }
         binding.infoTab.setOnClickListener { selectTab(PreviewTab.Info) }
         binding.itemsTab.setOnClickListener { selectTab(PreviewTab.Items) }
         binding.detailsTab.setOnClickListener { selectTab(PreviewTab.Details) }

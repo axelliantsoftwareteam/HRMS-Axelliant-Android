@@ -2,7 +2,6 @@ package com.axelliant.hris.screens.payslip
 
 import android.os.Bundle
 import android.view.View
-import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -10,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.axelliant.hris.R
 import com.axelliant.hris.adapter.PayslipAdapter
 import com.axelliant.hris.navigation.AppNavigator
+import com.axelliant.hris.ui.designsystem.components.AppTopBarView
 import com.axelliant.hris.viewmodel.PayslipViewModel
 
 class PayslipFragment : Fragment(R.layout.fragment_payslip) {
@@ -20,7 +20,7 @@ class PayslipFragment : Fragment(R.layout.fragment_payslip) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        view.findViewById<ImageView>(R.id.iv_back).setOnClickListener {
+        view.findViewById<AppTopBarView>(R.id.appTopBar).setOnBackClickListener {
             AppNavigator.moveBackToPreviousFragment()
         }
 

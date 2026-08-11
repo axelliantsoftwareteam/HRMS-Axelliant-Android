@@ -15,11 +15,11 @@ import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.ProgressBar
 import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
@@ -30,6 +30,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.axelliant.hris.R
+import com.axelliant.hris.ui.designsystem.components.AppProgressBarView
+import com.axelliant.hris.ui.designsystem.components.AppTextView
+import com.axelliant.hris.ui.designsystem.components.createAppBottomSheetDialog
 import com.axelliant.hris.core.extensions.enableClearTextButton
 import com.axelliant.hris.core.ui.UiState
 import com.axelliant.hris.databinding.FragmentAddQuoteBinding
@@ -56,7 +59,7 @@ class AddQuoteFragment : Fragment() {
 
     private var customerSearchDialog: BottomSheetDialog? = null
     private var customerOptionsContainer: LinearLayout? = null
-    private var customerSearchProgress: ProgressBar? = null
+    private var customerSearchProgress: AppProgressBarView? = null
     private var customerEmptyText: TextView? = null
     private var isQuoteTitleWatcherActive = true
 
@@ -77,7 +80,7 @@ class AddQuoteFragment : Fragment() {
     }
 
     private fun setupInteractions() {
-        binding.backButton.setOnClickListener { findNavController().navigateUp() }
+        binding.appTopBar.setOnBackClickListener { findNavController().navigateUp() }
         binding.quoteTitleInput.addTextChangedListener { editable ->
             if (isQuoteTitleWatcherActive) {
                 viewModel.setQuoteTitle(editable?.toString().orEmpty())
@@ -209,7 +212,7 @@ class AddQuoteFragment : Fragment() {
     }
 
     private fun renderState(state: AddQuoteUiState) {
-        binding.screenTitle.setText(
+        binding.appTopBar.setTitle(
             when {
                 state.isDuplicateMode -> R.string.duplicate_quote_title
                 state.isReviseMode -> R.string.revise_quote_title
@@ -261,7 +264,7 @@ class AddQuoteFragment : Fragment() {
             }
         )
 
-        applyDuplicateReadOnlyState(state, readOnlyDuplicate)
+        applyDuplicateReadOnlyState(readOnlyDuplicate)
 
         renderCustomerDependentFields(state, isSaving, readOnlyDuplicate)
         renderCustomerSearchResults(state)
@@ -289,7 +292,7 @@ class AddQuoteFragment : Fragment() {
         return state.isDuplicateMode && !state.isEditLoading && !state.isEditLoadFailed
     }
 
-    private fun applyDuplicateReadOnlyState(state: AddQuoteUiState, readOnly: Boolean) {
+    private fun applyDuplicateReadOnlyState(readOnly: Boolean) {
         binding.quoteTitleInput.isEnabled = !readOnly
         binding.quoteTitleInput.isFocusable = !readOnly
         binding.quoteTitleInput.isFocusableInTouchMode = !readOnly
@@ -406,7 +409,7 @@ class AddQuoteFragment : Fragment() {
 
     private fun setSelectorFieldError(
         field: View,
-        errorView: TextView,
+        errorView: AppTextView,
         hasError: Boolean,
         messageRes: Int,
         isFieldEnabled: Boolean = true
@@ -464,7 +467,7 @@ class AddQuoteFragment : Fragment() {
     }
 
     private fun showCustomerSearchSheet() {
-        val dialog = BottomSheetDialog(requireContext())
+        val dialog = requireContext().createAppBottomSheetDialog()
         val container = LinearLayout(requireContext()).apply {
             orientation = LinearLayout.VERTICAL
             setBackgroundResource(R.drawable.bg_filter_sheet)
@@ -478,7 +481,7 @@ class AddQuoteFragment : Fragment() {
         val titleView = TextView(requireContext()).apply {
             text = getString(R.string.add_quote_customer_required)
             setTextColor(ContextCompat.getColor(requireContext(), R.color.ds_text_primary))
-            typeface = resources.getFont(R.font.poppins_semibold)
+            typeface = ResourcesCompat.getFont(requireContext(), R.font.poppins_semibold)
             textSize = 18f
         }
         val searchInput = EditText(requireContext()).apply {
@@ -503,7 +506,7 @@ class AddQuoteFragment : Fragment() {
             setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(com.intuit.ssp.R.dimen._12ssp))
             enableClearTextButton()
         }
-        val progressBar = ProgressBar(requireContext()).apply {
+        val progressBar = AppProgressBarView(requireContext()).apply {
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
@@ -521,7 +524,7 @@ class AddQuoteFragment : Fragment() {
             }
             text = getString(R.string.add_quote_no_customers_found)
             setTextColor(ContextCompat.getColor(requireContext(), R.color.ds_text_muted))
-            typeface = resources.getFont(R.font.poppins_regular)
+            typeface = ResourcesCompat.getFont(requireContext(), R.font.poppins_regular)
             textSize = 14f
             isVisible = false
         }
@@ -716,7 +719,7 @@ class AddQuoteFragment : Fragment() {
         selected: (T) -> Boolean = { false },
         onSelected: (T) -> Unit
     ) {
-        val dialog = BottomSheetDialog(requireContext())
+        val dialog = requireContext().createAppBottomSheetDialog()
         val container = LinearLayout(requireContext()).apply {
             orientation = LinearLayout.VERTICAL
             setBackgroundResource(R.drawable.bg_filter_sheet)
@@ -730,7 +733,7 @@ class AddQuoteFragment : Fragment() {
         val titleView = TextView(requireContext()).apply {
             text = title
             setTextColor(ContextCompat.getColor(requireContext(), R.color.ds_text_primary))
-            typeface = resources.getFont(R.font.poppins_semibold)
+            typeface = ResourcesCompat.getFont(requireContext(), R.font.poppins_semibold)
             textSize = 18f
         }
         container.addView(titleView)

@@ -19,9 +19,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tv_employe_name" />
 
-    <com.google.android.material.textview.MaterialTextView
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
         android:id="@+id/tv_employe_name"
-        style="@style/TEXT_SEMI_BLACK_15"
+        style="@style/Text.Fluent2.Subheading.Primary.Strong"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_8sdp"
@@ -35,9 +35,9 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Muhammad Zeeshan Habib" />
 
-    <com.google.android.material.textview.MaterialTextView
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
         android:id="@+id/tv_you_chip"
-        style="@style/TEXT_MEDIUM_BLACK_10"
+        style="@style/Text.Fluent2.Caption.Primary.Strong"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_8sdp"
@@ -55,9 +55,9 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_employe_name"
         tools:visibility="visible" />
 
-    <com.google.android.material.textview.MaterialTextView
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
         android:id="@+id/tv_designation"
-        style="@style/TEXT_MEDIUM_GREY_10"
+        style="@style/Text.Fluent2.Caption.Muted.Strong"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_8sdp"
@@ -70,9 +70,9 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_you_chip"
         tools:text="Mobile Solutions Engineer" />
 
-    <com.google.android.material.textview.MaterialTextView
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
         android:id="@+id/tv_available_badge"
-        style="@style/TEXT_MEDIUM_BLACK_10"
+        style="@style/Text.Fluent2.Caption.Primary.Strong"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/rounded_quota_badge"
@@ -118,9 +118,9 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.textview.MaterialTextView
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/tv_usage_header"
-            style="@style/TEXT_MEDIUM_GREY_10"
+            style="@style/Text.Fluent2.Caption.Muted.Strong"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_8sdp"

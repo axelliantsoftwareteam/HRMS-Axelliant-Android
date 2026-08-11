@@ -97,7 +97,7 @@ class ApprovalsFragment : BaseFragment() {
                 }
             })
 
-        binding.ivBack.setOnClickListener {
+        binding.appTopBar.setOnBackClickListener {
             previousFragmentNavigation()
         }
 

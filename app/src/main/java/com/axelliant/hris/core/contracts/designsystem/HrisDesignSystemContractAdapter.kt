@@ -9,7 +9,7 @@ class HrisDesignSystemContractAdapter @Inject constructor() : DesignSystemContra
 
     override fun componentFor(role: ComponentRole): DesignComponentSpec {
         val componentName = when (role) {
-            ComponentRole.BUTTON -> "RoundedButton / Fluent AppButton"
+            ComponentRole.BUTTON -> "AppButton / AppButtonView"
             ComponentRole.TEXT_FIELD -> "Widget.Axelliant.InputLayout"
             ComponentRole.BOTTOM_SHEET -> "ThemeOverlay.Axelliant.BottomSheetDialog"
             ComponentRole.CARD -> "Widget.Axelliant.Card"

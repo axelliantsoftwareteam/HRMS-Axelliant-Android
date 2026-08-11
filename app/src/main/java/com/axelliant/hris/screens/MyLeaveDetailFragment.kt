@@ -4,14 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
+import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.axelliant.hris.R
+import com.axelliant.hris.adapter.MyLeaveDetailAdapter
+import com.axelliant.hris.adapter.SubFilterAdapter
 import com.axelliant.hris.base.BaseFragment
-import com.axelliant.hris.components.LeaveDetailContent
+import com.axelliant.hris.callback.AdapterItemClick
 import com.axelliant.hris.core.constants.AppRouteArgs
 import com.axelliant.hris.databinding.FragmentMyLeaveDetailBinding
 import com.axelliant.hris.enums.AttendanceFilter
@@ -27,7 +29,6 @@ import com.axelliant.hris.utils.Utils
 import com.axelliant.hris.viewmodel.LeaveViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.gson.Gson
-import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Date
 
@@ -42,9 +43,8 @@ class MyLeaveDetailFragment : BaseFragment() {
     private var endDateString: String? = null
 
     private var filterId = ""
-
-    private var leaveListState by mutableStateOf(listOf<LeaveDetail>())
-    private var filterListState by mutableStateOf(listOf<FilterModel>())
+    private var leaveList = arrayListOf<LeaveDetail>()
+    private var filterList = arrayListOf<FilterModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -58,14 +58,14 @@ class MyLeaveDetailFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupCompose()
+        setupRecyclerViews()
 
         leaveViewModel.getIsLoading()
             .observe(viewLifecycleOwner, EventObserver { isLoading ->
                 if (isLoading) showDialog() else hideDialog()
             })
 
-        binding?.ivBack?.setOnClickListener {
+        binding?.appTopBar?.setOnBackClickListener {
             previousFragmentNavigation()
         }
 
@@ -84,46 +84,65 @@ class MyLeaveDetailFragment : BaseFragment() {
             })
     }
 
-    private fun setupCompose() {
-        binding?.composeLeaveDetail?.apply {
-            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
-            setContent {
-                LeaveDetailContent(
-                    filters = filterListState,
-                    selectedFilterId = filterId,
-                    leaveList = leaveListState,
-                    onFilterClick = { filter ->
-                        filterId = filter.id.toString()
-                        leaveViewModel.getMyLeaveDetail(getCurrentObject())
-                    },
-                    onEditClick = { leaveDetail ->
-                        if (leaveDetail.status == "Open") {
-                            AppNavigator.navigateToRequest(Bundle().apply {
-                                this.putString(AppRouteArgs.REQUEST_TYPE, RequestFilter.LEAVE.name)
-                                this.putString(AppRouteArgs.LEAVE_REQUEST, Gson().toJson(leaveDetail))
-                            })
-                        } else {
-                            requireContext().showErrorMsg(
-                                ErrorMessages.OPEN_LEAVES_ONLY.errorString.plus(leaveDetail.status)
-                            )
-                        }
-                    }
-                )
-            }
-        }
+    private fun setupRecyclerViews() {
+        binding?.rvLeaveFilters?.layoutManager =
+            LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+        binding?.rvLeaveDetail?.layoutManager = LinearLayoutManager(requireContext())
     }
 
     private fun subFilterPopulations(leaveStatus: ArrayList<FilterModel>) {
-        leaveStatus.add(0, FilterModel().apply {
-            this.id = ""
-            this.title = "All"
-            this.count = "0"
-        })
-        filterListState = leaveStatus
+        filterList = arrayListOf<FilterModel>().apply {
+            add(FilterModel().apply {
+                id = ""
+                title = "All"
+                count = "0"
+            })
+            addAll(leaveStatus)
+        }
+        renderContent()
     }
 
     private fun dataPopulate(leaves: ArrayList<LeaveDetail>?) {
-        leaveListState = leaves ?: arrayListOf()
+        leaveList = leaves ?: arrayListOf()
+        renderContent()
+    }
+
+    private fun renderContent() {
+        binding?.tvNoRecord?.isVisible = leaveList.isEmpty()
+        binding?.rvLeaveDetail?.isVisible = leaveList.isNotEmpty()
+        binding?.rvLeaveFilters?.adapter = SubFilterAdapter(
+            filterId,
+            filterList,
+            requireContext(),
+            object : AdapterItemClick {
+                override fun onItemClick(customObject: Any, position: Int) {
+                    filterId = (customObject as FilterModel).id.orEmpty()
+                    leaveViewModel.getMyLeaveDetail(getCurrentObject())
+                }
+            }
+        )
+        binding?.rvLeaveDetail?.adapter = MyLeaveDetailAdapter(
+            leaveList,
+            requireContext(),
+            object : AdapterItemClick {
+                override fun onItemClick(customObject: Any, position: Int) {
+                    openLeaveRequest(customObject as LeaveDetail)
+                }
+            }
+        )
+    }
+
+    private fun openLeaveRequest(leaveDetail: LeaveDetail) {
+        if (leaveDetail.status == "Open") {
+            AppNavigator.navigateToRequest(Bundle().apply {
+                this.putString(AppRouteArgs.REQUEST_TYPE, RequestFilter.LEAVE.name)
+                this.putString(AppRouteArgs.LEAVE_REQUEST, Gson().toJson(leaveDetail))
+            })
+        } else {
+            requireContext().showErrorMsg(
+                ErrorMessages.OPEN_LEAVES_ONLY.errorString.plus(leaveDetail.status)
+            )
+        }
     }
 
     private fun eventSelection() {
@@ -168,7 +187,6 @@ class MyLeaveDetailFragment : BaseFragment() {
                     ContextCompat.getDrawable(requireContext(), R.drawable.fluent_blue)
                 binding?.tvCustom?.setTextColor(requireContext().getColor(R.color.white))
             }
-            else -> {}
         }
     }
 
@@ -182,7 +200,7 @@ class MyLeaveDetailFragment : BaseFragment() {
                 startDateString = Utils.getServerFormat(date = Utils.getFirstDayOfMonth())
                 endDateString = Utils.getServerFormat(date = Utils.getLastDayOfMonth())
             }
-            else -> {}
+            AttendanceFilter.Custom -> {}
         }
         return AttendanceInput().apply {
             this.startDate = startDateString!!

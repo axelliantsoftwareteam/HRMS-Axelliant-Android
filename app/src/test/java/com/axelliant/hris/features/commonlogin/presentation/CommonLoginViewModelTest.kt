@@ -85,24 +85,59 @@ class CommonLoginViewModelTest {
     }
 
     @Test
-    fun acceptMicrosoftToken_defersBackendAndEnablesBothWorkspaces() {
-        val hrisRepository = FakeAuthSessionRepository(WorkspaceKey.HRIS)
-        val internalAppsRepository = FakeAuthSessionRepository(WorkspaceKey.INTERNAL_APPS)
+    fun acceptMicrosoftToken_callsBothBackendsAndEnablesSuccessfulWorkspaces() = runTestWithMain {
+        val hrisSession = AppSession(accessToken = "hris-microsoft-token")
+        val internalAppsSession = AppSession(accessToken = "internal-microsoft-token")
+        val hrisRepository = FakeAuthSessionRepository(
+            workspace = WorkspaceKey.HRIS,
+            microsoftResult = AuthSessionResult(session = hrisSession)
+        )
+        val internalAppsRepository = FakeAuthSessionRepository(
+            workspace = WorkspaceKey.INTERNAL_APPS,
+            microsoftResult = AuthSessionResult(session = internalAppsSession)
+        )
         val pendingStore = PendingCommonLoginStore()
         val viewModel = createViewModel(hrisRepository, internalAppsRepository, pendingStore)
 
         viewModel.acceptMicrosoftToken("id-token", "graph-token")
+        advanceUntilIdle()
 
         val state = viewModel.uiState.value
         assertTrue(state.isAuthenticated)
         assertEquals(setOf(WorkspaceKey.HRIS, WorkspaceKey.INTERNAL_APPS), state.allowedWorkspaces)
         assertEquals(CommonLoginMethod.MICROSOFT_TOKEN, state.loginMethod)
-        assertTrue(hrisRepository.microsoftCalls.isEmpty())
-        assertTrue(internalAppsRepository.microsoftCalls.isEmpty())
+        assertEquals(listOf("id-token" to "graph-token"), hrisRepository.microsoftCalls)
+        assertEquals(listOf("id-token" to "graph-token"), internalAppsRepository.microsoftCalls)
         assertTrue(pendingStore.canEnter(WorkspaceKey.HRIS))
         assertTrue(pendingStore.canEnter(WorkspaceKey.INTERNAL_APPS))
-        assertEquals("id-token", pendingStore.pendingMicrosoftAuth()?.idToken)
+        assertNull(pendingStore.pendingMicrosoftAuth())
     }
+
+    @Test
+    fun acceptMicrosoftToken_whenInternalAppsFails_doesNotAuthenticateAndClearsPartialSessions() =
+        runTestWithMain {
+            val hrisRepository = FakeAuthSessionRepository(
+                workspace = WorkspaceKey.HRIS,
+                microsoftResult = AuthSessionResult(session = AppSession(accessToken = "hris-token"))
+            )
+            val internalAppsRepository = FakeAuthSessionRepository(
+                workspace = WorkspaceKey.INTERNAL_APPS,
+                microsoftResult = AuthSessionResult(errorMessage = "Internal Apps failed.")
+            )
+            val pendingStore = PendingCommonLoginStore()
+            val viewModel = createViewModel(hrisRepository, internalAppsRepository, pendingStore)
+
+            viewModel.acceptMicrosoftToken("id-token", "graph-token")
+            advanceUntilIdle()
+
+            val state = viewModel.uiState.value
+            assertFalse(state.isAuthenticated)
+            assertTrue(state.allowedWorkspaces.isEmpty())
+            assertFalse(hrisRepository.hasValidSession())
+            assertFalse(internalAppsRepository.hasValidSession())
+            assertFalse(pendingStore.canEnter(WorkspaceKey.HRIS))
+            assertFalse(pendingStore.canEnter(WorkspaceKey.INTERNAL_APPS))
+        }
 
     @Test
     fun signOut_clearsBothRepositoriesAndPendingWorkspaceAccess() = runTestWithMain {

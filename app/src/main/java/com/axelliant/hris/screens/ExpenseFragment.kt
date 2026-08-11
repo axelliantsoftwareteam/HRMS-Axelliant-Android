@@ -1,36 +1,19 @@
 package com.axelliant.hris.screens
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.res.dimensionResource
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
+import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.axelliant.hris.R
+import com.axelliant.hris.adapter.MyExpenseAdapter
+import com.axelliant.hris.adapter.SubFilterAdapter
 import com.axelliant.hris.base.BaseFragment
-import com.axelliant.hris.components.DateRangeBox
-import com.axelliant.hris.components.ExpenseEmptyState
-import com.axelliant.hris.components.ExpenseFilterChipItem
-import com.axelliant.hris.components.ExpenseListCard
-import com.axelliant.hris.components.ExpenseRow
+import com.axelliant.hris.callback.AdapterItemClick
 import com.axelliant.hris.core.constants.AppRouteArgs
 import com.axelliant.hris.databinding.FragmentExpenseBinding
 import com.axelliant.hris.enums.AttendanceFilter
@@ -45,8 +28,6 @@ import com.axelliant.hris.utils.Utils
 import com.axelliant.hris.viewmodel.ExpenseViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.gson.Gson
-import com.intuit.sdp.R as SdpR
-import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Date
 
@@ -60,13 +41,9 @@ class ExpenseFragment : BaseFragment() {
     private var startDateString: String? = null
     private var endDateString: String? = null
     private var filterId = ""
-
-    // Compose-observed state
-    private var expenseListState = mutableStateOf<List<Expense>>(emptyList())
-    private var filterListState = mutableStateOf<List<FilterModel>>(emptyList())
-    private var selectedFilterIdState = mutableStateOf("")
-    private var startDateState = mutableStateOf("")
-    private var endDateState = mutableStateOf("")
+    private var selectedFilterId = ""
+    private var expenseList: List<Expense> = emptyList()
+    private var filterList: List<FilterModel> = emptyList()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -85,24 +62,19 @@ class ExpenseFragment : BaseFragment() {
                 if (isLoading) showDialog() else hideDialog()
             })
 
-        binding?.ivBack?.setOnClickListener { previousFragmentNavigation() }
+        binding?.appTopBar?.setOnBackClickListener { previousFragmentNavigation() }
 
-        setupCompose()
+        setupRecyclerViews()
         eventSelection()
         expenseViewModel.getMyExpenseDetail(getCurrentObject())
 
         expenseViewModel.expenseResponse.observe(
             viewLifecycleOwner,
             EventObserver { response ->
-                response?.expense_status?.forEach {
-                    Log.d(
-                        "ExpenseStatus",
-                        "id=${it.id}, title=${it.title}, count=${it.count}"
-                    )
-                }
                 if (response?.meta?.status == true && response.expenses != null) {
                     subFilterPopulations(response.expense_status)
-                    expenseListState.value = response.expenses ?: emptyList()
+                    expenseList = response.expenses
+                    renderContent()
                 } else {
                     requireContext().showErrorMsg(response?.meta?.message.toString())
                 }
@@ -113,68 +85,43 @@ class ExpenseFragment : BaseFragment() {
         }
     }
 
-    private fun setupCompose() {
-        binding?.composeExpenseContent?.setContent {
-            Column(Modifier.fillMaxSize()) {
+    private fun setupRecyclerViews() {
+        binding?.rvExpenseFilters?.layoutManager =
+            LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+        binding?.rvExpenses?.layoutManager = LinearLayoutManager(requireContext())
+    }
 
-                val startDate by startDateState
-                val endDate by endDateState
+    private fun renderContent() {
+        binding?.tvFromDate?.text = startDateString.orEmpty()
+        binding?.tvToDate?.text = endDateString.orEmpty()
+        binding?.tvToDate?.setOnClickListener { datePickerDialog() }
 
-                if (startDate.isNotBlank() && endDate.isNotBlank()) {
-                    Row(
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(top = dimensionResource(SdpR.dimen._8sdp)),
-                        horizontalArrangement = Arrangement.spacedBy(dimensionResource(SdpR.dimen._8sdp))
-                    ) {
-                        DateRangeBox("From", startDate, Modifier.weight(1f))
-                        DateRangeBox(
-                            "To",
-                            endDate,
-                            Modifier.weight(1f),
-                            onClick = { datePickerDialog() }
-                        )
-                    }
-                }
-
-                val filters by filterListState
-                val selectedId by selectedFilterIdState
-                LazyRow(
-                    horizontalArrangement = Arrangement.spacedBy(dimensionResource(SdpR.dimen._6sdp)),
-                    contentPadding = PaddingValues(
-                        vertical = dimensionResource(SdpR.dimen._6sdp)
-                    )
-                ) {
-                    items(filters) { filter ->
-                        ExpenseFilterChipItem(
-                            filter = filter,
-                            selected = filter.id.toString() == selectedId
-                        ) {
-                            selectedFilterIdState.value = filter.id.toString()
-                            filterId = filter.id.toString()
-                            expenseViewModel.getMyExpenseDetail(getCurrentObject())
-                        }
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(dimensionResource(SdpR.dimen._10sdp)))
-
-                val expenses by expenseListState
-                if (expenses.isEmpty()) {
-                    ExpenseEmptyState(getString(R.string.no_record_found))
-                } else {
-                    ExpenseListCard {
-                        LazyColumn {
-                            items(expenses) { expense ->
-                                ExpenseRow(item = expense) {
-                                    onExpenseClicked(expense)
-                                }
-                            }
-                        }
-                    }
+        binding?.rvExpenseFilters?.isVisible = filterList.isNotEmpty()
+        binding?.rvExpenseFilters?.adapter = SubFilterAdapter(
+            selectedFilterId,
+            filterList,
+            requireContext(),
+            object : AdapterItemClick {
+                override fun onItemClick(customObject: Any, position: Int) {
+                    val filter = customObject as FilterModel
+                    selectedFilterId = filter.id.toString()
+                    filterId = selectedFilterId
+                    expenseViewModel.getMyExpenseDetail(getCurrentObject())
                 }
             }
-        }
+        )
+
+        binding?.rvExpenses?.isVisible = expenseList.isNotEmpty()
+        binding?.tvNoRecord?.isVisible = expenseList.isEmpty()
+        binding?.rvExpenses?.adapter = MyExpenseAdapter(
+            expenseList,
+            requireContext(),
+            object : AdapterItemClick {
+                override fun onItemClick(customObject: Any, position: Int) {
+                    onExpenseClicked(customObject as Expense)
+                }
+            }
+        )
     }
 
     private fun onExpenseClicked(expense: Expense) {
@@ -211,9 +158,8 @@ class ExpenseFragment : BaseFragment() {
             eventSelection()
         }
         binding?.tvCustom?.setOnClickListener {
-            datePickerDialog()
             currentFilter = AttendanceFilter.Custom
-            expenseViewModel.getMyExpenseDetail(getCurrentObject())
+            datePickerDialog()
             eventSelection()
         }
 
@@ -230,7 +176,6 @@ class ExpenseFragment : BaseFragment() {
                 binding?.tvCustom?.background = ContextCompat.getDrawable(requireContext(), R.drawable.fluent_blue)
                 binding?.tvCustom?.setTextColor(requireContext().getColor(R.color.white))
             }
-            else -> {}
         }
     }
 
@@ -246,7 +191,7 @@ class ExpenseFragment : BaseFragment() {
                 endDateString = Utils.getServerFormat(date = Utils.getLastDayOfMonth())
                 setDateView()
             }
-            else -> {}
+            AttendanceFilter.Custom -> {}
         }
         return AttendanceInput().apply {
             this.startDate = startDateString!!
@@ -258,8 +203,8 @@ class ExpenseFragment : BaseFragment() {
 
     private fun setDateView() {
         if (startDateString != null && endDateString != null) {
-            startDateState.value = startDateString!!
-            endDateState.value = endDateString!!
+            binding?.tvFromDate?.text = startDateString.orEmpty()
+            binding?.tvToDate?.text = endDateString.orEmpty()
         }
     }
 
@@ -288,9 +233,13 @@ class ExpenseFragment : BaseFragment() {
                 this.title = "All"
                 this.count = "0"
             })
-            leaveStatus?.let { addAll(it) }
+            leaveStatus?.let {
+                addAll(it.filterNot { filter ->
+                    filter.id.orEmpty().isBlank() && filter.title.equals("All", ignoreCase = true)
+                })
+            }
         }
-        filterListState.value = list
-        if (selectedFilterIdState.value.isBlank()) selectedFilterIdState.value = ""
+        filterList = list
+        if (selectedFilterId.isBlank()) selectedFilterId = ""
     }
 }

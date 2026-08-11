@@ -46,7 +46,7 @@ class HrisAppNavigationContractAdapter @Inject constructor(
             destination,
             bundleOf(),
             NavOptions.Builder()
-                .setPopUpTo(R.id.appEntryFragment, true)
+                .setPopUpTo(R.id.main_nav_graph, false)
                 .build()
         )
     }

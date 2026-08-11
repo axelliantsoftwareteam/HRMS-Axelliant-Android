@@ -29,8 +29,11 @@ class AppTextFieldView @JvmOverloads constructor(
     init {
         layoutDirection = View.LAYOUT_DIRECTION_LTR
         textDirection = View.TEXT_DIRECTION_LTR
-        minHeight = resources.getDimensionPixelSize(R.dimen.ds_input_height)
-        setSingleLine(true)
+        applyMinHeightToken(attrs)
+        applyDefaultTextTokens(attrs)
+        if (shouldForceSingleLine(attrs)) {
+            setSingleLine(true)
+        }
         context.obtainStyledAttributes(attrs, R.styleable.AppTextFieldView, defStyleAttr, 0).use {
             iconPadding = it.getDimensionPixelSize(R.styleable.AppTextFieldView_iconPadding, iconPadding)
             iconTint = it.getColorStateList(R.styleable.AppTextFieldView_iconTint)
@@ -39,6 +42,34 @@ class AppTextFieldView @JvmOverloads constructor(
         }
         applyRawXmlIconAttributes(attrs)
         applyIcon()
+    }
+
+    private fun applyDefaultTextTokens(attrs: AttributeSet?) {
+        if (!hasExplicitTextAttribute(attrs, android.R.attr.textColor)) {
+            setTextColor(ContextCompat.getColor(context, R.color.ds_text_primary))
+        }
+        if (!hasExplicitTextAttribute(attrs, android.R.attr.textColorHint)) {
+            setHintTextColor(ContextCompat.getColor(context, R.color.ds_text_muted))
+        }
+    }
+
+    private fun hasExplicitTextAttribute(attrs: AttributeSet?, attribute: Int): Boolean {
+        if (attrs == null) return false
+        return context.obtainStyledAttributes(attrs, intArrayOf(attribute)).use { it.hasValue(0) }
+    }
+
+    private fun applyMinHeightToken(attrs: AttributeSet?) {
+        val tokenHeight = resources.getDimensionPixelSize(R.dimen.ds_input_height)
+        val fixedXmlHeight = attrs
+            ?.getAttributeResourceValue(ANDROID_NS, "layout_height", 0)
+            ?.takeIf { it != 0 }
+            ?.let { heightRes ->
+                runCatching { resources.getDimensionPixelSize(heightRes) }.getOrNull()
+            }
+
+        minHeight = fixedXmlHeight
+            ?.takeIf { it in 1 until tokenHeight }
+            ?: tokenHeight
     }
 
     override fun onRtlPropertiesChanged(layoutDirection: Int) {
@@ -89,7 +120,15 @@ class AppTextFieldView @JvmOverloads constructor(
         }
     }
 
+    private fun shouldForceSingleLine(attrs: AttributeSet?): Boolean {
+        if (attrs == null) return true
+        if (attrs.getAttributeBooleanValue(ANDROID_NS, "singleLine", true) == false) return false
+        val inputType = attrs.getAttributeValue(ANDROID_NS, "inputType").orEmpty()
+        return !inputType.contains("textMultiLine", ignoreCase = true)
+    }
+
     private companion object {
+        const val ANDROID_NS = "http://schemas.android.com/apk/res/android"
         const val AUTO_NS = "http://schemas.android.com/apk/res-auto"
         const val ICON_GRAVITY_TEXT_START = 1
         const val ICON_GRAVITY_TEXT_END = 2

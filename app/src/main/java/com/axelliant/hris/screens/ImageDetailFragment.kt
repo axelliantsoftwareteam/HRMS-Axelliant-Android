@@ -40,13 +40,13 @@ class ImageDetailFragment : BaseFragment() {
 
 
 
-        binding?.ivBack?.setOnClickListener{
+        binding?.appTopBar?.setOnBackClickListener {
             AppNavigator.moveBackToPreviousFragment()
         }
 
         val adapter = ImagePagerAdapter(requireContext(), listOfAttachments)
         binding?.viewPager?.adapter = adapter
-        binding?.tvTitle?.text = "0".plus(0 + 1).plus("/0").plus(listOfAttachments?.size)
+        binding?.appTopBar?.setTitle("0".plus(0 + 1).plus("/0").plus(listOfAttachments.size))
 
 
         binding?.viewPager?.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
@@ -61,7 +61,7 @@ class ImageDetailFragment : BaseFragment() {
             override fun onPageSelected(position: Int) {
                 // This method will be invoked when a new page becomes selected
                 mCurrentPosition = position
-                binding?.tvTitle?.text = "0".plus(position + 1).plus("/0").plus(listOfAttachments?.size)
+                binding?.appTopBar?.setTitle("0".plus(position + 1).plus("/0").plus(listOfAttachments.size))
             }
 
             override fun onPageScrollStateChanged(state: Int) {

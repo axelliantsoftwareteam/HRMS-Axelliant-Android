@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
+<com.axelliant.hris.ui.designsystem.components.AppCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -10,7 +10,7 @@
     app:cardElevation="@dimen/_4sdp"
     app:cardPreventCornerOverlap="true"
     app:cardUseCompatPadding="false"
-    app:cardBackgroundColor="@color/white">
+    app:cardBackgroundColor="@color/ds_neutral_white">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/ly_module"
@@ -42,13 +42,13 @@
 
         </FrameLayout>
 
-        <com.google.android.material.textview.MaterialTextView
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/tv_module"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_8sdp"
             android:textAlignment="textStart"
-            android:textColor="@color/white"
+            android:textColor="@color/ds_neutral_white"
             android:textSize="@dimen/_12ssp"
             android:textStyle="bold"
             android:maxLines="1"
@@ -60,14 +60,14 @@
             app:layout_constraintVertical_chainStyle="packed"
             tools:text="Attendance" />
 
-        <com.google.android.material.textview.MaterialTextView
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/tv_description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_2sdp"
             android:alpha="0.85"
             android:textAlignment="textStart"
-            android:textColor="@color/white"
+            android:textColor="@color/ds_neutral_white"
             android:textSize="@dimen/_9ssp"
             android:maxLines="2"
             android:ellipsize="end"
@@ -78,7 +78,7 @@
             tools:text="Present of this month" />
 
         <!-- Kept for data-model compatibility, never shown -->
-        <ProgressBar
+        <com.axelliant.hris.ui.designsystem.components.AppProgressBarView
             android:id="@+id/progressBar"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -86,7 +86,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <com.google.android.material.textview.MaterialTextView
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/tv_progress_count"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -96,4 +96,4 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</androidx.cardview.widget.CardView>
+</com.axelliant.hris.ui.designsystem.components.AppCardView>

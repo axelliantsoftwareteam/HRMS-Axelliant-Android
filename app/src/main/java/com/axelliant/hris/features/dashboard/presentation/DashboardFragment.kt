@@ -22,11 +22,13 @@ import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.axelliant.hris.R
 import com.axelliant.hris.core.AppDrawerAction
+import com.axelliant.hris.core.auth.GlobalLogoutCoordinator
 import com.axelliant.hris.core.contracts.session.WorkspaceSessionProvider
 import com.axelliant.hris.core.ui.BottomNavigationHost
 import com.axelliant.hris.core.ui.UiState
 import com.axelliant.hris.databinding.FragmentDashboardBinding
 import com.axelliant.hris.databinding.ItemAppDrawerMenuBinding
+import com.axelliant.hris.features.internalapps.navigation.InternalAppsNavigator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlin.math.abs
@@ -36,6 +38,8 @@ import javax.inject.Inject
 class DashboardFragment : Fragment() {
     @Inject
     lateinit var workspaceSessionProvider: WorkspaceSessionProvider
+    @Inject
+    lateinit var globalLogoutCoordinator: GlobalLogoutCoordinator
 
     private val viewModel: DashboardViewModel by viewModels()
     private var _binding: FragmentDashboardBinding? = null
@@ -208,39 +212,27 @@ class DashboardFragment : Fragment() {
     }
 
     private fun openProducts() {
-        val navController = findNavController()
-        if (navController.currentDestination?.id == R.id.iaProductsFragment) return
-        navController.navigate(R.id.iaProductsFragment)
+        InternalAppsNavigator.open(findNavController(), R.id.iaProductsFragment)
     }
 
     private fun openQuotes() {
-        val navController = findNavController()
-        if (navController.currentDestination?.id == R.id.iaQuotesFragment) return
-        navController.navigate(R.id.iaQuotesFragment)
+        InternalAppsNavigator.open(findNavController(), R.id.iaQuotesFragment)
     }
 
     private fun openSaleOrders() {
-        val navController = findNavController()
-        if (navController.currentDestination?.id == R.id.iaSaleOrdersFragment) return
-        navController.navigate(R.id.iaSaleOrdersFragment)
+        InternalAppsNavigator.open(findNavController(), R.id.iaSaleOrdersFragment)
     }
 
     private fun openPurchaseOrders() {
-        val navController = findNavController()
-        if (navController.currentDestination?.id == R.id.iaPurchaseOrdersFragment) return
-        navController.navigate(R.id.iaPurchaseOrdersFragment)
+        InternalAppsNavigator.open(findNavController(), R.id.iaPurchaseOrdersFragment)
     }
 
     private fun openProfiles() {
-        val navController = findNavController()
-        if (navController.currentDestination?.id == R.id.iaProfilesFragment) return
-        navController.navigate(R.id.iaProfilesFragment)
+        InternalAppsNavigator.open(findNavController(), R.id.iaProfilesFragment)
     }
 
     private fun openSettings() {
-        val navController = findNavController()
-        if (navController.currentDestination?.id == R.id.iaSettingsFragment) return
-        navController.navigate(R.id.iaSettingsFragment)
+        InternalAppsNavigator.open(findNavController(), R.id.iaSettingsFragment)
     }
 
     private fun handleDrawerTouch(event: MotionEvent): Boolean {
@@ -269,14 +261,17 @@ class DashboardFragment : Fragment() {
     }
 
     private fun logoutAndOpenLogin() {
-        workspaceSessionProvider.clearAllSessions()
-        findNavController().navigate(
-            R.id.commonLoginFragment,
-            null,
-            NavOptions.Builder()
-                .setPopUpTo(R.id.iaInternalAppsNavGraph, true)
-                .build()
-        )
+        viewLifecycleOwner.lifecycleScope.launch {
+            globalLogoutCoordinator.logout()
+            if (!isAdded) return@launch
+            findNavController().navigate(
+                R.id.commonLoginFragment,
+                null,
+                NavOptions.Builder()
+                    .setPopUpTo(R.id.main_nav_graph, true)
+                    .build()
+            )
+        }
     }
 
     private fun setBottomNavigationVisible(visible: Boolean) {

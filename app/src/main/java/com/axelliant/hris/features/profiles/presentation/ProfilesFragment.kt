@@ -13,6 +13,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.axelliant.hris.R
+import com.axelliant.hris.core.auth.GlobalLogoutCoordinator
 import com.axelliant.hris.core.contracts.session.WorkspaceSessionProvider
 import com.axelliant.hris.core.ui.UiState
 import com.axelliant.hris.databinding.ItemProfileInfoRowBinding
@@ -30,6 +31,8 @@ import javax.inject.Inject
 class ProfilesFragment : Fragment() {
     @Inject
     lateinit var workspaceSessionProvider: WorkspaceSessionProvider
+    @Inject
+    lateinit var globalLogoutCoordinator: GlobalLogoutCoordinator
 
     private val viewModel: ProfilesViewModel by viewModels()
     private var _binding: FragmentProfilesBinding? = null
@@ -199,14 +202,17 @@ class ProfilesFragment : Fragment() {
     }
 
     private fun logoutAndOpenLogin() {
-        workspaceSessionProvider.clearAllSessions()
-        findNavController().navigate(
-            R.id.commonLoginFragment,
-            null,
-            NavOptions.Builder()
-                .setPopUpTo(R.id.iaInternalAppsNavGraph, true)
-                .build()
-        )
+        viewLifecycleOwner.lifecycleScope.launch {
+            globalLogoutCoordinator.logout()
+            if (!isAdded) return@launch
+            findNavController().navigate(
+                R.id.commonLoginFragment,
+                null,
+                NavOptions.Builder()
+                    .setPopUpTo(R.id.main_nav_graph, true)
+                    .build()
+            )
+        }
     }
 
     private fun String?.orDash(): String = this?.takeIf { it.isNotBlank() }

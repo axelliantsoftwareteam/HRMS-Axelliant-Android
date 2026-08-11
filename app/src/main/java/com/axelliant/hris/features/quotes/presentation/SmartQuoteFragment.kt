@@ -724,7 +724,7 @@ class SmartQuoteFragment : Fragment() {
         label: String,
         selected: Boolean,
         itemWidth: Int
-    ): TextView {
+    ): AppTextView {
         return AppTextView(requireContext()).apply {
             layoutParams = LinearLayout.LayoutParams(
                 itemWidth,
@@ -1019,7 +1019,7 @@ class SmartQuoteFragment : Fragment() {
         }
     }
 
-    private fun createOptionStatusView(message: String): TextView {
+    private fun createOptionStatusView(message: String): AppTextView {
         return AppTextView(requireContext()).apply {
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,

@@ -75,7 +75,7 @@
         app:layout_constraintStart_toStartOf="@id/quantityLabel"
         app:layout_constraintTop_toBottomOf="@id/quantityLabel">
 
-        <EditText
+        <com.axelliant.hris.ui.designsystem.components.AppTextFieldView
             android:id="@+id/quantityEditText"
             style="@style/Text.InternalApps.Body"
             android:layout_width="@dimen/_48sdp"

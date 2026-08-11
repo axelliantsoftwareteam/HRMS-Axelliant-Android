@@ -73,7 +73,7 @@
             app:noBackground="true" />
     </LinearLayout>
 
-    <ProgressBar
+    <com.axelliant.hris.ui.designsystem.components.AppProgressBarView
         android:id="@+id/progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -168,6 +168,7 @@
                                 tools:text="EW MONITORPLS NBD AHR H34174" />
 
                             <androidx.constraintlayout.widget.ConstraintLayout
+    style="@style/Layout.Fluent2.Screen"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/ds_space_4"

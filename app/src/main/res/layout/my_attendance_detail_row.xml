@@ -14,9 +14,9 @@
         android:gravity="center"
         android:weightSum="10">
 
-        <com.google.android.material.textview.MaterialTextView
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/tv_date"
-            style="@style/TEXT_MEDIUM_BLACK_10"
+            style="@style/Text.Fluent2.Caption.Primary.Strong"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="3"
@@ -24,9 +24,9 @@
             android:paddingStart="@dimen/_5sdp"
             android:text="@string/_17_may_2024" />
 
-        <com.google.android.material.textview.MaterialTextView
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/tv_hour"
-            style="@style/TEXT_MEDIUM_BLACK_10"
+            style="@style/Text.Fluent2.Caption.Primary.Strong"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="3"
@@ -40,9 +40,9 @@
             android:layout_weight="3"
             android:gravity="center">
 
-            <com.google.android.material.textview.MaterialTextView
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
                 android:id="@+id/status"
-                style="@style/TEXT_SEMI_BLACK_10"
+                style="@style/Text.Fluent2.Caption.Primary.Strong"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/rounded_time_bg"
@@ -59,7 +59,7 @@
 
         <ImageView
             android:id="@+id/tv_drop_down"
-            style="@style/TEXT_SEMI_BLACK_10"
+            style="@style/Text.Fluent2.Caption.Primary.Strong"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -74,9 +74,9 @@
         android:padding="@dimen/_5sdp">
 
 
-        <com.google.android.material.textview.MaterialTextView
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/tv_attend_status"
-            style="@style/TEXT_SEMI_BLACK_10"
+            style="@style/Text.Fluent2.Caption.Primary.Strong"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_time_bg"
@@ -111,9 +111,9 @@
             app:layout_constraintStart_toStartOf="@+id/divider"
             app:layout_constraintTop_toBottomOf="@id/divider">
 
-            <com.google.android.material.textview.MaterialTextView
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
                 android:id="@+id/tv_shift"
-                style="@style/TEXT_MEDIUM_GREY_10"
+                style="@style/Text.Fluent2.Caption.Muted.Strong"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/shift"
@@ -121,9 +121,9 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <com.google.android.material.textview.MaterialTextView
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
                 android:id="@+id/tv_shift_txt"
-                style="@style/TEXT_MEDIUM_BLACK_10"
+                style="@style/Text.Fluent2.Caption.Primary.Strong"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
@@ -146,9 +146,9 @@
 
             app:layout_constraintTop_toBottomOf="@id/ly_shift">
 
-            <com.google.android.material.textview.MaterialTextView
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
                 android:id="@+id/tv_shift_time"
-                style="@style/TEXT_MEDIUM_GREY_10"
+                style="@style/Text.Fluent2.Caption.Muted.Strong"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/shift_timings"
@@ -156,9 +156,9 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <com.google.android.material.textview.MaterialTextView
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
                 android:id="@+id/tv_shift_time_txt"
-                style="@style/TEXT_MEDIUM_BLACK_10"
+                style="@style/Text.Fluent2.Caption.Primary.Strong"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
@@ -188,9 +188,9 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <com.google.android.material.textview.MaterialTextView
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
                     android:id="@+id/tv_actual_in"
-                    style="@style/TEXT_MEDIUM_GREY_10"
+                    style="@style/Text.Fluent2.Caption.Muted.Strong"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/actual_in"
@@ -198,9 +198,9 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <com.google.android.material.textview.MaterialTextView
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
                     android:id="@+id/tv_actual_in_txt"
-                    style="@style/TEXT_MEDIUM_GREY_10"
+                    style="@style/Text.Fluent2.Caption.Muted.Strong"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_5sdp"
@@ -221,9 +221,9 @@
                 app:layout_constraintStart_toEndOf="@+id/ly_actual_in"
                 app:layout_constraintTop_toTopOf="@+id/ly_actual_in">
 
-                <com.google.android.material.textview.MaterialTextView
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
                     android:id="@+id/tv_work_home"
-                    style="@style/TEXT_MEDIUM_GREY_10"
+                    style="@style/Text.Fluent2.Caption.Muted.Strong"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/expected_in"
@@ -231,9 +231,9 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <com.google.android.material.textview.MaterialTextView
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
                     android:id="@+id/tv_expected_in_txt"
-                    style="@style/TEXT_MEDIUM_BLACK_10"
+                    style="@style/Text.Fluent2.Caption.Primary.Strong"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_5sdp"
@@ -269,9 +269,9 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <com.google.android.material.textview.MaterialTextView
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
                     android:id="@+id/tv_actual_out"
-                    style="@style/TEXT_MEDIUM_GREY_10"
+                    style="@style/Text.Fluent2.Caption.Muted.Strong"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/actual_out"
@@ -279,9 +279,9 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <com.google.android.material.textview.MaterialTextView
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
                     android:id="@+id/tv_actual_out_txt"
-                    style="@style/TEXT_MEDIUM_BLACK_10"
+                    style="@style/Text.Fluent2.Caption.Primary.Strong"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_5sdp"
@@ -302,9 +302,9 @@
                 app:layout_constraintStart_toEndOf="@+id/ly_actual_out"
                 app:layout_constraintTop_toTopOf="@+id/ly_actual_out">
 
-                <com.google.android.material.textview.MaterialTextView
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
                     android:id="@+id/tv_expected_out"
-                    style="@style/TEXT_MEDIUM_GREY_10"
+                    style="@style/Text.Fluent2.Caption.Muted.Strong"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/expected_out"
@@ -312,9 +312,9 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <com.google.android.material.textview.MaterialTextView
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
                     android:id="@+id/tv_expected_out_txt"
-                    style="@style/TEXT_MEDIUM_BLACK_10"
+                    style="@style/Text.Fluent2.Caption.Primary.Strong"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_5sdp"
@@ -351,9 +351,9 @@
         app:layout_constraintTop_toTopOf="parent"
         android:weightSum="10">
 
-        <com.google.android.material.textview.MaterialTextView
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/tv_date"
-            style="@style/TEXT_MEDIUM_BLACK_10"
+            style="@style/Text.Fluent2.Caption.Primary.Strong"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:text="@string/_17_may_2024"
@@ -361,9 +361,9 @@
             android:paddingStart="@dimen/_5sdp"
            android:layout_weight="4" />
 
-        <com.google.android.material.textview.MaterialTextView
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/tv_hour"
-            style="@style/TEXT_MEDIUM_BLACK_10"
+            style="@style/Text.Fluent2.Caption.Primary.Strong"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:text="@string/_3_hr"
@@ -377,10 +377,10 @@
             android:gravity="center"
            android:layout_weight="3">
 
-            <com.google.android.material.textview.MaterialTextView
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
 
                 android:id="@+id/status"
-                style="@style/TEXT_SEMI_BLACK_10"
+                style="@style/Text.Fluent2.Caption.Primary.Strong"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/rounded_time_bg"
@@ -398,7 +398,7 @@
 
         <ImageView
             android:id="@+id/tv_drop_down"
-            style="@style/TEXT_SEMI_BLACK_10"
+            style="@style/Text.Fluent2.Caption.Primary.Strong"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="@dimen/_10sdp"

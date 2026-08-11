@@ -60,7 +60,7 @@ class ViewSaleOrderFragment : Fragment() {
     }
 
     private fun setupInteractions() {
-        binding.backButton.setOnClickListener { findNavController().navigateUp() }
+        binding.appTopBar.setOnBackClickListener { findNavController().navigateUp() }
         binding.quoteDetailHeader.setOnClickListener {
             quoteDetailExpanded = !quoteDetailExpanded
             updateQuoteDetailExpandedState()

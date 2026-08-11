@@ -25,6 +25,7 @@ import com.axelliant.hris.core.extensions.showKeyboard
 import com.axelliant.hris.core.ui.ShimmerAnimatorHelper
 import com.axelliant.hris.core.ui.UiState
 import com.axelliant.hris.databinding.FragmentSaleOrdersBinding
+import com.axelliant.hris.features.internalapps.navigation.InternalAppsNavigator
 import com.axelliant.hris.features.quotes.presentation.QuoteWorkflowBottomSheet
 import com.axelliant.hris.features.saleorders.domain.model.SaleOrderListUiModel
 import com.axelliant.hris.features.saleorders.domain.model.SaleOrderModel
@@ -69,8 +70,8 @@ class SaleOrdersFragment : Fragment() {
         isSearchVisible = false
         binding.searchInputLayout.isVisible = false
         binding.searchInputLayout.alpha = 0f
-        binding.searchIconButton.setIconResource(R.drawable.ia_ic_search)
-        binding.searchIconButton.contentDescription = getString(R.string.sale_orders_search_open)
+        binding.appTopBar.setSearchIconResource(R.drawable.ia_ic_search)
+        binding.appTopBar.searchButton.contentDescription = getString(R.string.sale_orders_search_open)
     }
 
     private fun setupAdapters() {
@@ -120,8 +121,10 @@ class SaleOrdersFragment : Fragment() {
     }
 
     private fun setupInteractions() {
-        binding.backButton.setOnClickListener { findNavController().navigateUp() }
-        binding.searchIconButton.setOnClickListener { toggleSearchField() }
+        binding.appTopBar.setOnBackClickListener {
+            InternalAppsNavigator.returnToHomeShell(findNavController())
+        }
+        binding.appTopBar.setOnSearchClickListener { toggleSearchField() }
         binding.createSaleOrderFab.setOnClickListener {
             findNavController().navigate(R.id.iaAddSaleOrderFragment)
         }
@@ -159,8 +162,8 @@ class SaleOrdersFragment : Fragment() {
 
     private fun openSearchField() {
         isSearchVisible = true
-        binding.searchIconButton.setIconResource(R.drawable.ia_ic_filter_close)
-        binding.searchIconButton.contentDescription = getString(R.string.sale_orders_search_close)
+        binding.appTopBar.setSearchIconResource(R.drawable.ia_ic_filter_close)
+        binding.appTopBar.searchButton.contentDescription = getString(R.string.sale_orders_search_close)
 
         binding.searchInputLayout.isVisible = true
         binding.searchInputLayout.alpha = 0f
@@ -178,8 +181,8 @@ class SaleOrdersFragment : Fragment() {
 
     private fun closeSearchField(clearText: Boolean, reload: Boolean) {
         isSearchVisible = false
-        binding.searchIconButton.setIconResource(R.drawable.ia_ic_search)
-        binding.searchIconButton.contentDescription = getString(R.string.sale_orders_search_open)
+        binding.appTopBar.setSearchIconResource(R.drawable.ia_ic_search)
+        binding.appTopBar.searchButton.contentDescription = getString(R.string.sale_orders_search_open)
 
         binding.searchEditText.clearFocus()
         binding.searchEditText.hideKeyboard()

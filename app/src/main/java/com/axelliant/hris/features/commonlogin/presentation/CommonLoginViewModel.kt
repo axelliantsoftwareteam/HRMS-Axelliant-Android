@@ -15,6 +15,8 @@ import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
 enum class CommonLoginMethod {
@@ -130,17 +132,48 @@ class CommonLoginViewModel @Inject constructor(
             return
         }
 
-        pendingCommonLoginStore.markMicrosoftAuthenticated(idToken, graphAccessToken)
-        _uiState.value = _uiState.value.copy(
-            loginMethod = CommonLoginMethod.MICROSOFT_TOKEN,
-            isLoading = false,
-            isMicrosoftLoading = false,
-            isAuthenticated = true,
-            session = null,
-            allowedWorkspaces = setOf(WorkspaceKey.HRIS, WorkspaceKey.INTERNAL_APPS),
-            errorMessage = null,
-            errorMessageRes = null
-        )
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(
+                loginMethod = CommonLoginMethod.MICROSOFT_TOKEN,
+                isLoading = false,
+                isMicrosoftLoading = true,
+                isAuthenticated = false,
+                session = null,
+                allowedWorkspaces = emptySet(),
+                errorMessage = null,
+                errorMessageRes = null
+            )
+
+            val results = signInMicrosoftWorkspaces(idToken, graphAccessToken)
+            val successfulWorkspaces = results
+                .filterValues { result -> result.isSuccess }
+                .keys
+            val firstSession = results.values.firstNotNullOfOrNull { result -> result.session }
+
+            if (WorkspaceKey.INTERNAL_APPS in successfulWorkspaces) {
+                pendingCommonLoginStore.markExistingSessionAuthenticated(successfulWorkspaces)
+                _uiState.value = _uiState.value.copy(
+                    isMicrosoftLoading = false,
+                    isAuthenticated = true,
+                    session = firstSession,
+                    allowedWorkspaces = successfulWorkspaces,
+                    errorMessage = null,
+                    errorMessageRes = null
+                )
+            } else {
+                authSessionRepositoryProvider.repositoryFor(WorkspaceKey.HRIS).clearSession()
+                authSessionRepositoryProvider.repositoryFor(WorkspaceKey.INTERNAL_APPS).clearSession()
+                pendingCommonLoginStore.clear()
+                _uiState.value = _uiState.value.copy(
+                    isMicrosoftLoading = false,
+                    isAuthenticated = false,
+                    session = null,
+                    allowedWorkspaces = emptySet(),
+                    errorMessage = results.toMicrosoftFailureMessage(),
+                    errorMessageRes = null
+                )
+            }
+        }
     }
 
     fun onMicrosoftLoginStarted() {
@@ -221,6 +254,34 @@ class CommonLoginViewModel @Inject constructor(
         }
     }
 
+    private suspend fun signInMicrosoftWorkspaces(
+        idToken: String,
+        graphAccessToken: String?
+    ): Map<WorkspaceKey, AuthSessionResult> = coroutineScope {
+        WorkspaceKey.values()
+            .map { workspace ->
+                async {
+                    val result = authSessionRepositoryProvider.repositoryFor(workspace)
+                        .signInWithMicrosoftToken(idToken, graphAccessToken)
+                    workspace to result
+                }
+            }
+            .associate { deferred -> deferred.await() }
+    }
+
+    private fun Map<WorkspaceKey, AuthSessionResult>.toMicrosoftFailureMessage(): String {
+        return entries.joinToString(separator = "\n") { (workspace, result) ->
+            "${workspace.displayName()}: ${result.errorMessage ?: "Login failed."}"
+        }.ifBlank { "Microsoft login failed." }
+    }
+
+    private fun WorkspaceKey.displayName(): String {
+        return when (this) {
+            WorkspaceKey.HRIS -> "HRIS"
+            WorkspaceKey.INTERNAL_APPS -> "Internal Apps"
+        }
+    }
+
     private fun AuthSessionResult.failureMessage(): String? {
         return if (isSuccess) null else "Login failed."
     }
@@ -267,7 +328,7 @@ class CommonLoginViewModel @Inject constructor(
     }
 
     private companion object {
-        val EMAIL_REGEX = Regex("^[A-Za-z0-9._%+-]+@axelliant\\.com$", RegexOption.IGNORE_CASE)
+        val EMAIL_REGEX = Regex("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$", RegexOption.IGNORE_CASE)
         val PASSWORD_REGEX = Regex("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z0-9]).{12,}$")
     }
 }

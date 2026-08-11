@@ -2,7 +2,6 @@ package com.axelliant.hris.ui.designsystem.components
 
 import android.content.Context
 import android.content.res.ColorStateList
-import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.RippleDrawable
@@ -18,6 +17,7 @@ class AppFloatingActionButtonView @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = android.R.attr.imageButtonStyle,
 ) : AppCompatImageButton(context, attrs, defStyleAttr) {
+    private var isStateReady = false
     private var fabSize: Int = FAB_SIZE_NORMAL
     private var fabBackgroundTint: ColorStateList =
         ColorStateList.valueOf(ContextCompat.getColor(context, R.color.ds_primary))
@@ -35,6 +35,29 @@ class AppFloatingActionButtonView @JvmOverloads constructor(
 
         readXmlAttributes(attrs)
         background = createCircleBackground()
+        isStateReady = true
+    }
+
+    override fun setBackgroundTintList(tint: ColorStateList?) {
+        if (!isStateReady) {
+            super.setBackgroundTintList(tint)
+            return
+        }
+        if (tint == null) {
+            super.setBackgroundTintList(null)
+            return
+        }
+        fabBackgroundTint = tint
+        background = createCircleBackground()
+    }
+
+    override fun setImageResource(resId: Int) {
+        setImageDrawable(AppCompatResources.getDrawable(context, resId))
+    }
+
+    override fun setEnabled(enabled: Boolean) {
+        super.setEnabled(enabled)
+        alpha = if (enabled) ENABLED_ALPHA else DISABLED_ALPHA
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -52,7 +75,7 @@ class AppFloatingActionButtonView @JvmOverloads constructor(
             shape = GradientDrawable.OVAL
             color = fabBackgroundTint
         }
-        val mask = ColorDrawable(Color.WHITE)
+        val mask = ColorDrawable(ContextCompat.getColor(context, R.color.ds_neutral_white))
         return RippleDrawable(fabRippleTint, oval, mask)
     }
 
@@ -68,11 +91,26 @@ class AppFloatingActionButtonView @JvmOverloads constructor(
         }
 
         val backgroundTintRes = attrs.getAttributeResourceValue(AUTO_NS, "backgroundTint", 0)
+            .takeIf { it != 0 }
+            ?: attrs.getAttributeResourceValue(ANDROID_NS, "backgroundTint", 0)
         if (backgroundTintRes != 0) {
             ContextCompat.getColorStateList(context, backgroundTintRes)?.let { fabBackgroundTint = it }
         }
 
+        val rippleTintRes = attrs.getAttributeResourceValue(AUTO_NS, "rippleColor", 0)
+        if (rippleTintRes != 0) {
+            ContextCompat.getColorStateList(context, rippleTintRes)?.let { fabRippleTint = it }
+        }
+
+        val elevationRes = attrs.getAttributeResourceValue(AUTO_NS, "elevation", 0)
+        if (elevationRes != 0) {
+            elevation = resources.getDimension(elevationRes)
+            ViewCompat.setElevation(this, elevation)
+        }
+
         val tintRes = attrs.getAttributeResourceValue(AUTO_NS, "tint", 0)
+            .takeIf { it != 0 }
+            ?: attrs.getAttributeResourceValue(ANDROID_NS, "tint", 0)
         imageTintList = if (tintRes != 0) {
             ContextCompat.getColorStateList(context, tintRes)
         } else {
@@ -94,5 +132,7 @@ class AppFloatingActionButtonView @JvmOverloads constructor(
         const val AUTO_NS = "http://schemas.android.com/apk/res-auto"
         const val FAB_SIZE_NORMAL = 0
         const val FAB_SIZE_MINI = 1
+        const val ENABLED_ALPHA = 1f
+        const val DISABLED_ALPHA = 0.45f
     }
 }

@@ -21,7 +21,7 @@
 
             <com.axelliant.hris.ui.designsystem.components.AppTextView
                 android:id="@+id/assetDistributionTitle"
-                style="@style/IA_TEXT_SEMIBOLD_BLACK_18"
+                style="@style/Text.Fluent2.Title.Primary.Strong"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/asset_distribution"
@@ -31,7 +31,7 @@
 
             <com.axelliant.hris.ui.designsystem.components.AppTextView
                 android:id="@+id/assetDistributionSubtitle"
-                style="@style/IA_TEXT_REGULAR_GREY_10"
+                style="@style/Text.Fluent2.Caption.Muted"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/ds_space_2"
@@ -52,7 +52,7 @@
 
             <com.axelliant.hris.ui.designsystem.components.AppTextView
                 android:id="@+id/hardwarePercentText"
-                style="@style/IA_TEXT_REGULAR_GREY_10"
+                style="@style/Text.Fluent2.Caption.Muted"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/ds_space_12"
@@ -63,7 +63,7 @@
 
             <com.axelliant.hris.ui.designsystem.components.AppTextView
                 android:id="@+id/edgePercentText"
-                style="@style/IA_TEXT_REGULAR_GREY_10"
+                style="@style/Text.Fluent2.Caption.Muted"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/ds_space_8"
@@ -74,7 +74,7 @@
 
             <com.axelliant.hris.ui.designsystem.components.AppTextView
                 android:id="@+id/networkPercentText"
-                style="@style/IA_TEXT_REGULAR_GREY_10"
+                style="@style/Text.Fluent2.Caption.Muted"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/ds_space_8"
@@ -85,7 +85,7 @@
 
             <com.axelliant.hris.ui.designsystem.components.AppTextView
                 android:id="@+id/otherPercentText"
-                style="@style/IA_TEXT_REGULAR_GREY_10"
+                style="@style/Text.Fluent2.Caption.Muted"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/ds_space_8"
@@ -113,7 +113,7 @@
 
             <com.axelliant.hris.ui.designsystem.components.AppTextView
                 android:id="@+id/monthlyOverviewTitle"
-                style="@style/IA_TEXT_SEMIBOLD_BLACK_18"
+                style="@style/Text.Fluent2.Title.Primary.Strong"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/monthly_overview"
@@ -123,7 +123,7 @@
 
             <com.axelliant.hris.ui.designsystem.components.AppTextView
                 android:id="@+id/monthlyOverviewSubtitle"
-                style="@style/IA_TEXT_REGULAR_GREY_10"
+                style="@style/Text.Fluent2.Caption.Muted"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/ds_space_2"
@@ -171,7 +171,7 @@
 
             <com.axelliant.hris.ui.designsystem.components.AppTextView
                 android:id="@+id/moduleOverviewTitle"
-                style="@style/IA_TEXT_SEMIBOLD_BLACK_18"
+                style="@style/Text.Fluent2.Title.Primary.Strong"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/module_overview"
@@ -181,7 +181,7 @@
 
             <com.axelliant.hris.ui.designsystem.components.AppTextView
                 android:id="@+id/moduleOverviewSubtitle"
-                style="@style/IA_TEXT_REGULAR_GREY_10"
+                style="@style/Text.Fluent2.Caption.Muted"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/ds_space_2"
@@ -192,7 +192,7 @@
 
             <com.axelliant.hris.ui.designsystem.components.AppTextView
                 android:id="@+id/productsLabel"
-                style="@style/IA_TEXT_MEDIUM_BLACK_10"
+                style="@style/Text.Fluent2.Caption.Muted.Strong"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/ds_space_16"
@@ -220,7 +220,7 @@
 
             <com.axelliant.hris.ui.designsystem.components.AppTextView
                 android:id="@+id/profilesLabel"
-                style="@style/IA_TEXT_MEDIUM_BLACK_10"
+                style="@style/Text.Fluent2.Caption.Muted.Strong"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/ds_space_12"
@@ -248,7 +248,7 @@
 
             <com.axelliant.hris.ui.designsystem.components.AppTextView
                 android:id="@+id/modulesLabel"
-                style="@style/IA_TEXT_MEDIUM_BLACK_10"
+                style="@style/Text.Fluent2.Caption.Muted.Strong"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/ds_space_12"
@@ -278,4 +278,3 @@
     </com.axelliant.hris.ui.designsystem.components.AppCardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-

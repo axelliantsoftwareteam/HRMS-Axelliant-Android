@@ -14,9 +14,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.textview.MaterialTextView
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/tv_value"
-            style="@style/TEXT_MEDIUM_BLACK_15"
+            style="@style/Text.Fluent2.Subheading.Primary.Strong"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -28,9 +28,9 @@
 
             />
 
-        <com.google.android.material.textview.MaterialTextView
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/tv_title"
-            style="@style/TEXT_MEDIUM_GREY_10"
+            style="@style/Text.Fluent2.Caption.Muted.Strong"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_5sdp"

@@ -16,6 +16,7 @@ import com.axelliant.hris.extention.showSuccessMsg
 import com.axelliant.hris.model.profile.CertificationCreateRequest
 import com.axelliant.hris.model.profile.ProfileCertification
 import com.axelliant.hris.model.profile.ProfileResponse
+import com.axelliant.hris.ui.designsystem.components.AppTextFieldView
 import com.axelliant.hris.viewmodel.ProfileViewModel
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
@@ -182,7 +183,7 @@ class ProfileFragment : BaseFragment() {
         binding.cbRenewalRequired.isChecked = true
     }
 
-    private fun openDatePicker(targetView: com.google.android.material.textfield.TextInputEditText) {
+    private fun openDatePicker(targetView: AppTextFieldView) {
         val calendar = Calendar.getInstance()
         DatePickerDialog(
             requireContext(),

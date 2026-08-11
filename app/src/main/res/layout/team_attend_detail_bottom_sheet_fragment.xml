@@ -24,9 +24,9 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <com.google.android.material.textview.MaterialTextView
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
                 android:id="@+id/tv_team_member"
-                style="@style/TEXT_MEDIUM_WHITE_15"
+                style="@style/Text.Fluent2.Subheading.Inverse.Strong"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 tools:text="@string/team_member"
@@ -35,14 +35,14 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <com.google.android.material.textview.MaterialTextView
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
                 android:id="@+id/tv_team_member_txt"
-                style="@style/TEXT_MEDIUM_WHITE_10"
+                style="@style/Text.Fluent2.Caption.Inverse.Strong"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginStart="@dimen/_5sdp"
                 android:background="@drawable/circle_no_bg"
-                android:textColor="@color/black"
+                android:textColor="@color/ds_text_primary"
                 android:padding="@dimen/_5sdp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintHorizontal_weight="3"
@@ -79,9 +79,9 @@
             tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/today_my_team_attend_row" />
 
-<!--        <com.google.android.material.textview.MaterialTextView-->
+<!--        <com.axelliant.hris.ui.designsystem.components.AppTextView-->
 <!--            android:id="@+id/tv_no_record"-->
-<!--            style="@style/TEXT_SEMI_BLACK_15"-->
+<!--            style="@style/Text.Fluent2.Subheading.Primary.Strong"-->
 <!--            android:layout_width="0dp"-->
 <!--            android:layout_height="wrap_content"-->
 <!--            android:gravity="center"-->

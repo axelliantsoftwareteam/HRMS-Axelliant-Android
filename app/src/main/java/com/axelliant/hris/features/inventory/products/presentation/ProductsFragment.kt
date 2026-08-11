@@ -14,7 +14,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -36,6 +35,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.axelliant.hris.R
+import com.axelliant.hris.core.auth.GlobalLogoutCoordinator
+import com.axelliant.hris.ui.designsystem.components.AppCheckboxView
+import com.axelliant.hris.ui.designsystem.components.AppTextView
 import com.axelliant.hris.core.extensions.enableClearTextButton
 import com.axelliant.hris.core.extensions.hideKeyboard
 import com.axelliant.hris.core.extensions.showKeyboard
@@ -46,6 +48,7 @@ import com.axelliant.hris.databinding.FragmentProductsBinding
 import com.axelliant.hris.databinding.ItemAppliedProductFilterChipBinding
 import com.axelliant.hris.databinding.ItemProductListingBinding
 import com.axelliant.hris.databinding.LayoutProductFilterSheetBinding
+import com.axelliant.hris.features.internalapps.navigation.InternalAppsNavigator
 import com.axelliant.hris.features.inventory.products.ai.ProductAiStatus
 import com.axelliant.hris.features.inventory.products.data.remote.dto.ProductSearchFilters
 import com.axelliant.hris.features.inventory.products.presentation.ProductPickerResultBundles.toProductListItem
@@ -67,6 +70,8 @@ import kotlinx.coroutines.launch
 class ProductsFragment : Fragment() {
     @Inject
     lateinit var workspaceSessionProvider: WorkspaceSessionProvider
+    @Inject
+    lateinit var globalLogoutCoordinator: GlobalLogoutCoordinator
 
     private val viewModel: ProductsViewModel by viewModels()
     private var _binding: FragmentProductsBinding? = null
@@ -275,6 +280,9 @@ class ProductsFragment : Fragment() {
     }
 
     private fun setupInteractions() {
+        binding.appTopBar.setOnBackClickListener {
+            InternalAppsNavigator.returnToHomeShell(findNavController())
+        }
         binding.allTab.setOnClickListener { updateStatusFilter(ProductStatusFilter.All) }
         binding.activeTab.setOnClickListener { updateStatusFilter(ProductStatusFilter.Active) }
         binding.inactiveTab.setOnClickListener { updateStatusFilter(ProductStatusFilter.Inactive) }
@@ -360,14 +368,17 @@ class ProductsFragment : Fragment() {
     }
 
     private fun logoutAndOpenLogin() {
-        workspaceSessionProvider.clearAllSessions()
-        findNavController().navigate(
-            R.id.commonLoginFragment,
-            null,
-            NavOptions.Builder()
-                .setPopUpTo(R.id.iaInternalAppsNavGraph, true)
-                .build()
-        )
+        viewLifecycleOwner.lifecycleScope.launch {
+            globalLogoutCoordinator.logout()
+            if (!isAdded) return@launch
+            findNavController().navigate(
+                R.id.commonLoginFragment,
+                null,
+                NavOptions.Builder()
+                    .setPopUpTo(R.id.main_nav_graph, true)
+                    .build()
+            )
+        }
     }
 
     private fun showFilterMenu(
@@ -403,8 +414,8 @@ class ProductsFragment : Fragment() {
     private fun bindFilterLookupObservers(
         sheetBinding: LayoutProductFilterSheetBinding,
         filterState: ProductFilterSheetState,
-        manufacturerFieldText: TextView?,
-        vendorFieldText: TextView?
+        manufacturerFieldText: AppTextView?,
+        vendorFieldText: AppTextView?
     ): List<Job> {
         return listOf(
             viewLifecycleOwner.lifecycleScope.launch {
@@ -470,12 +481,12 @@ class ProductsFragment : Fragment() {
         anchor: View,
         lookupState: UiState<List<FilterOptionUi>>,
         selectedOptions: LinkedHashMap<String, String>,
-        fieldText: TextView?,
+        fieldText: AppTextView?,
         chipsContainer: RecyclerView,
         placeholder: String,
         searchHint: String,
         onLoad: () -> Unit,
-        selectedCountText: TextView? = null
+        selectedCountText: AppTextView? = null
     ) {
         activeFilterPopup?.dismiss()
         val stateForPopup = lookupState.takeUnless { it is UiState.Idle } ?: UiState.Loading
@@ -638,10 +649,10 @@ class ProductsFragment : Fragment() {
         optionsScrollView: View? = null,
         state: UiState<List<FilterOptionUi>>,
         selectedOptions: LinkedHashMap<String, String>,
-        fieldText: TextView?,
+        fieldText: AppTextView?,
         chipsContainer: RecyclerView,
         placeholder: String,
-        selectedCountText: TextView? = null
+        selectedCountText: AppTextView? = null
     ) {
         container.removeAllViews()
         val visibleOptionCount = when (state) {
@@ -754,7 +765,7 @@ class ProductsFragment : Fragment() {
                 0
             )
             addView(
-                CheckBox(requireContext()).apply {
+                AppCheckboxView(requireContext()).apply {
                     layoutParams = LinearLayout.LayoutParams(
                         resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._26sdp),
                         resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._26sdp)
@@ -789,7 +800,7 @@ class ProductsFragment : Fragment() {
     }
 
     private fun updateFilterSelectionUi(
-        fieldText: TextView?,
+        fieldText: AppTextView?,
         chipsContainer: RecyclerView,
         selectedOptions: LinkedHashMap<String, String>,
         placeholder: String,
@@ -819,7 +830,7 @@ class ProductsFragment : Fragment() {
     }
 
     private fun refreshFilterSelectionUi(
-        fieldText: TextView?,
+        fieldText: AppTextView?,
         chipsContainer: RecyclerView,
         selectedOptions: LinkedHashMap<String, String>,
         placeholder: String
@@ -843,8 +854,8 @@ class ProductsFragment : Fragment() {
     private fun resetFilterSheet(
         sheetBinding: LayoutProductFilterSheetBinding,
         filterState: ProductFilterSheetState,
-        manufacturerFieldText: TextView?,
-        vendorFieldText: TextView?
+        manufacturerFieldText: AppTextView?,
+        vendorFieldText: AppTextView?
     ) {
         filterState.categories.clear()
         filterState.manufacturers.clear()
@@ -886,8 +897,8 @@ class ProductsFragment : Fragment() {
     private fun bindFilterSheetValues(
         sheetBinding: LayoutProductFilterSheetBinding,
         filterState: ProductFilterSheetState,
-        manufacturerFieldText: TextView?,
-        vendorFieldText: TextView?
+        manufacturerFieldText: AppTextView?,
+        vendorFieldText: AppTextView?
     ) {
         sheetBinding.minPriceEditText.setText(filterState.minListPrice?.toString().orEmpty())
         sheetBinding.maxPriceEditText.setText(filterState.maxListPrice?.toString().orEmpty())
@@ -1462,8 +1473,8 @@ class ProductsFragment : Fragment() {
 
     private fun updateTab(
         tab: View,
-        label: TextView,
-        count: TextView,
+        label: AppTextView,
+        count: AppTextView,
         selectedBackground: Int,
         selected: Boolean
     ) {

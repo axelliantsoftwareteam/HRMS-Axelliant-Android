@@ -24,9 +24,9 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <com.google.android.material.textview.MaterialTextView
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
                 android:id="@+id/tv_employe_name"
-                style="@style/TEXT_SEMI_BLACK_15"
+                style="@style/Text.Fluent2.Subheading.Primary.Strong"
                 android:layout_width="0dp"
                 android:layout_marginStart="@dimen/_5sdp"
                 android:text="Arslan"
@@ -37,9 +37,9 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <com.google.android.material.textview.MaterialTextView
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
                 android:id="@+id/tv_employe_designation"
-                style="@style/TEXT_MEDIUM_BLACK_10"
+                style="@style/Text.Fluent2.Caption.Primary.Strong"
                 android:layout_width="0dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_height="wrap_content"

@@ -8,7 +8,7 @@
     android:paddingStart="@dimen/_6sdp"
     android:paddingEnd="@dimen/_8sdp">
 
-    <CheckBox
+    <com.axelliant.hris.ui.designsystem.components.AppCheckboxView
         android:layout_width="@dimen/_26sdp"
         android:layout_height="@dimen/_26sdp"
         android:buttonTint="@color/ds_outline_strong" />

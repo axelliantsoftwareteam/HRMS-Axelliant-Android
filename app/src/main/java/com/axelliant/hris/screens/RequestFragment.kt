@@ -356,7 +356,7 @@ class RequestFragment : BaseFragment() {
 
         }
 
-        binding?.ivBack?.setOnClickListener {
+        binding?.appTopBar?.setOnBackClickListener {
             AppNavigator.moveBackToPreviousFragment()
         }
 

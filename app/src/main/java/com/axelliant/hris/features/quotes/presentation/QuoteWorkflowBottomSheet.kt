@@ -16,6 +16,7 @@ import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.axelliant.hris.R
+import com.axelliant.hris.ui.designsystem.components.createAppBottomSheetDialog
 import com.axelliant.hris.databinding.BottomSheetQuoteWorkflowBinding
 import com.axelliant.hris.features.quotes.domain.model.QuoteWorkflowStepState
 import com.axelliant.hris.features.quotes.domain.model.QuoteWorkflowUiModel
@@ -33,7 +34,7 @@ class QuoteWorkflowBottomSheet(
     fun show() {
         val inflater = LayoutInflater.from(fragment.requireContext())
         val binding = BottomSheetQuoteWorkflowBinding.inflate(inflater)
-        val sheetDialog = BottomSheetDialog(fragment.requireContext())
+        val sheetDialog = fragment.requireContext().createAppBottomSheetDialog()
         dialog = sheetDialog
 
         val stepAdapter = QuoteWorkflowStepAdapter(

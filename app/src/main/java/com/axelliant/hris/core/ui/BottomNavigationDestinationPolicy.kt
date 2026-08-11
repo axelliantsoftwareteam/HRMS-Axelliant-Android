@@ -10,7 +10,6 @@ import com.axelliant.hris.R
 object BottomNavigationDestinationPolicy {
 
     private val hiddenDestinationIds: Set<Int> = setOf(
-        R.id.iaInternalAppsEntryFragment,
         R.id.commonLoginFragment,
         R.id.iaSettingsFragment,
         R.id.iaViewQuoteFragment,

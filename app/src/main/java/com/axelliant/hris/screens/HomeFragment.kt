@@ -14,19 +14,25 @@ import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewConfiguration
+import android.widget.LinearLayout
 import com.axelliant.hris.extention.showShimmer
 import com.axelliant.hris.extention.hideShimmer
 import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavOptions
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.compose.ui.res.vectorResource
 import com.axelliant.hris.R
 import com.axelliant.hris.adapter.BirthdayAdapter
 
@@ -34,8 +40,12 @@ import com.axelliant.hris.adapter.ModulesAdapter
 import com.axelliant.hris.base.BaseFragment
 import com.axelliant.hris.bottomSheet.TodayTeamAttendanceDetailBottomSheet
 import com.axelliant.hris.callback.AdapterItemClick
+import com.axelliant.hris.core.AppDrawerAction
+import com.axelliant.hris.core.auth.GlobalLogoutCoordinator
+import com.axelliant.hris.core.contracts.navigation.WorkspaceKey
 import com.axelliant.hris.config.GlobalConfig
 import com.axelliant.hris.databinding.FragmentHomeBinding
+import com.axelliant.hris.databinding.ItemAppDrawerMenuBinding
 import com.axelliant.hris.enums.CheckRequestFilter
 import com.axelliant.hris.enums.HomeMenu
 import com.axelliant.hris.enums.LeaveStatus
@@ -58,31 +68,17 @@ import com.axelliant.hris.model.login.CheckInRequest
 import com.axelliant.hris.model.todayTeam.EmployTeamProfile
 import com.axelliant.hris.navigation.AppNavigator
 import com.axelliant.hris.viewmodel.HomeViewModel
-import com.microsoft.identity.client.IAccount
-import com.microsoft.identity.client.IPublicClientApplication
-import com.microsoft.identity.client.ISingleAccountPublicClientApplication
-import com.microsoft.identity.client.PublicClientApplication
-import com.microsoft.identity.client.exception.MsalException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
-import com.microsoft.fluentui.theme.FluentTheme
-import com.axelliant.hris.components.AppButton
-import com.axelliant.hris.components.CheckInButtonTokens
 import com.axelliant.hris.core.contracts.session.WorkspaceSessionProvider
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidViewBinding
 import com.axelliant.hris.databinding.LayoutTodayCardContentBinding
-import com.axelliant.hris.components.AppCard
-import com.axelliant.hris.components.TodayCardTokens
+import com.axelliant.hris.features.dashboard.presentation.AppDrawerMenuItem
+import com.axelliant.hris.features.internalapps.navigation.InternalAppsNavigator
+import kotlin.math.abs
 
 
 @AndroidEntryPoint
@@ -99,8 +95,7 @@ class HomeFragment : BaseFragment() {
     private var _binding: FragmentHomeBinding? = null
 
     private var isCheckIn: Boolean = true
-    private val isCheckInState = mutableStateOf(true)
-    private val checkInEnabledState = mutableStateOf(true)
+    private var isCheckInButtonEnabled: Boolean = true
 
     // Create an ArrayList to store the converted time strings
     private var targetLocList = ArrayList<BranchDataResponse>()
@@ -120,10 +115,22 @@ class HomeFragment : BaseFragment() {
 
     @Inject
     lateinit var workspaceSessionProvider: WorkspaceSessionProvider
+    @Inject
+    lateinit var globalLogoutCoordinator: GlobalLogoutCoordinator
 
-    /* Azure AD Variables */
-    private var mSingleAccountApp: ISingleAccountPublicClientApplication? = null
-    private var mAccount: IAccount? = null
+    private var drawerBackCallback: OnBackPressedCallback? = null
+    private var selectedDrawerAction: AppDrawerAction? = null
+    private val drawerMenuBindings = mutableMapOf<AppDrawerAction, ItemAppDrawerMenuBinding>()
+    private var drawerTouchStartX = 0f
+    private var drawerTouchStartY = 0f
+    private val drawerScrim: View?
+        get() = binding?.root?.findViewById(R.id.drawerScrim)
+    private val appDrawer: View?
+        get() = binding?.root?.findViewById(R.id.appDrawer)
+    private val drawerMenuContainer: LinearLayout?
+        get() = binding?.root?.findViewById(R.id.drawerMenuContainer)
+    private val drawerFooterMenuContainer: LinearLayout?
+        get() = binding?.root?.findViewById(R.id.drawerFooterMenuContainer)
 
 
 
@@ -165,6 +172,13 @@ class HomeFragment : BaseFragment() {
     @SuppressLint("MissingPermission")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupInternalAppsDrawer()
+        setupLogoutAction()
+
+        if (!workspaceSessionProvider.hasValidSession(WorkspaceKey.HRIS)) {
+            renderInternalAppsOnlyDashboard()
+            return
+        }
 
         locationPermissionLauncher = registerForActivityResult(
             ActivityResultContracts.RequestPermission()
@@ -382,42 +396,6 @@ class HomeFragment : BaseFragment() {
         binding?.ivQr?.setOnClickListener {
             requireContext().showSuccessMsg()
         }
-        binding?.ivNotification?.setOnClickListener {
-
-            AlertDialog.Builder(requireContext())
-                .setMessage(getString(R.string.logout_message))
-                .setTitle(getString(R.string.info))
-                .setPositiveButton(getString(R.string.yes)) { dialog, which ->
-                    if (mSingleAccountApp == null) {
-                        return@setPositiveButton
-                    }
-                    /*
-                     * Removes the signed-in account and cached tokens from this app (or device, if the device is in shared mode).
-                   */
-                    mSingleAccountApp!!.signOut(object :
-                        ISingleAccountPublicClientApplication.SignOutCallback {
-                        override fun onSignOut() {
-                            mAccount = null
-                            requireContext().showErrorMsg("Sign Out")
-                            workspaceSessionProvider.clearAllSessions()
-                            AppNavigator.navigateToLogin()
-                        }
-
-                        override fun onError(exception: MsalException) {
-                            requireContext().showErrorMsg(exception.toString())
-                            workspaceSessionProvider.clearAllSessions()
-                            AppNavigator.navigateToLogin()
-                        }
-                    })
-                }
-                .setNegativeButton(getString(R.string.no)) { dialog, which ->
-                    // Do nothing
-                }
-                .show()
-
-
-        }
-
 //        targetLocList.add(BranchDataResponse(LocationFilter.NTC_OFFICE.value, 31.5494, 74.3333))
 //        targetLocList.add(
 //            BranchDataResponse(
@@ -429,65 +407,217 @@ class HomeFragment : BaseFragment() {
 
 
         setCurrentLocationText()
-        binding?.root?.findViewById<ComposeView>(R.id.compose_today_card)?.apply {
-            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
-            setContent {
-                FluentTheme {
-                    AppCard(
-                        basicCardTokens = TodayCardTokens(
-                            cornerRadiusRes = R.dimen.ds_radius_md
-                        ),
-                        contentPadding = PaddingValues(0.dp)
-                    ) {
-                        AndroidViewBinding(
-                            factory = LayoutTodayCardContentBinding::inflate
-                        ) {
-                            _todayCardBinding = this
-                            composeCheckIn.apply {
-                                setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
-                                setContent {
-                                    FluentTheme {
-                                        AppButton(
-                                            text = if (isCheckInState.value) getString(R.string.check_in) else getString(R.string.check_out),
-                                            onClick = { onCheckInButtonClicked() },
-                                            enabled = checkInEnabledState.value,
-                                            icon = ImageVector.vectorResource(id = R.drawable.ic_signout_fluent),
-                                            buttonTokens = CheckInButtonTokens(
-                                                fontSizeDimenName = "_13sdp",
-                                                iconSizeDimenName = "_23sdp",
-                                                bgRest = 0xFF0078D4,
-                                                bgPressed = 0xFF106EBE,
-                                                bgSelected = 0xFF106EBE,
-                                                bgFocused = 0xFF272757,
-                                                bgDisabled = 0xFFACACAC,
-                                            )
-                                        )
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+        _todayCardBinding = binding?.todayCardContent
+        todayCardBinding?.btnCheckIn?.setOnClickListener {
+            onCheckInButtonClicked()
         }
-
-        PublicClientApplication.createSingleAccountPublicClientApplication(
-            requireContext(),
-            R.raw.auth_config_ciam_auth,
-            object : IPublicClientApplication.ISingleAccountApplicationCreatedListener {
-                override fun onCreated(application: ISingleAccountPublicClientApplication) {
-                    mSingleAccountApp = application
-                }
-
-                override fun onError(exception: MsalException) {
-                    // Handle the exception
-                    requireContext().showErrorMsg(exception.toString())
-                    Log.d(TAG, exception.toString())
-
-                }
-            })
+        updateCheckInButton()
 
     }
+
+    private fun setupLogoutAction() {
+        binding?.ivNotification?.setOnClickListener {
+            AlertDialog.Builder(requireContext())
+                .setMessage(getString(R.string.logout_message))
+                .setTitle(getString(R.string.info))
+                .setPositiveButton(getString(R.string.yes)) { _, _ ->
+                    logoutAndOpenLogin()
+                }
+                .setNegativeButton(getString(R.string.no)) { _, _ -> }
+                .show()
+        }
+    }
+
+    private fun renderInternalAppsOnlyDashboard() {
+        binding?.shimmerLayout?.stopShimmer()
+        binding?.shimmerLayout?.isVisible = false
+        binding?.headerBg?.isVisible = true
+        binding?.lyInfo?.isVisible = true
+        binding?.cardMain?.isVisible = false
+        binding?.tvEmployeName?.text = getString(R.string.entry_internal_apps)
+        binding?.tvEmployeDesignation?.text = getString(R.string.drawer_navigation)
+        binding?.tvEmployeId?.text = getString(R.string.menu)
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun setupInternalAppsDrawer() {
+        drawerBackCallback = object : OnBackPressedCallback(false) {
+            override fun handleOnBackPressed() {
+                closeDrawer()
+            }
+        }.also { callback ->
+            requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+        }
+
+        binding?.ivMenu?.setOnClickListener { openDrawer() }
+        drawerScrim?.setOnClickListener { closeDrawer() }
+        appDrawer?.setOnTouchListener { _, event -> handleDrawerTouch(event) }
+
+        drawerMenuBindings.clear()
+        drawerMenuContainer?.removeAllViews()
+        drawerFooterMenuContainer?.removeAllViews()
+        drawerMenuContainer?.let { bindDrawerMenu(it, primaryDrawerItems()) }
+        drawerFooterMenuContainer?.let { bindDrawerMenu(it, footerDrawerItems()) }
+        refreshDrawerSelection()
+    }
+
+    private fun bindDrawerMenu(
+        container: LinearLayout,
+        items: List<AppDrawerMenuItem>
+    ) {
+        items.forEach { item ->
+            val itemBinding = ItemAppDrawerMenuBinding.inflate(layoutInflater, container, false)
+            itemBinding.drawerMenuTitle.setText(item.titleRes)
+            itemBinding.drawerMenuIcon.setImageResource(item.iconRes)
+            itemBinding.drawerMenuRoot.setOnClickListener {
+                handleDrawerItemClick(item.action)
+            }
+            drawerMenuBindings[item.action] = itemBinding
+            container.addView(itemBinding.root)
+        }
+    }
+
+    private fun refreshDrawerSelection() {
+        drawerMenuBindings.forEach { (action, itemBinding) ->
+            val isSelected = action == selectedDrawerAction
+            val isDestructive = action == AppDrawerAction.Logout
+            val textColor = when {
+                isSelected -> R.color.ia_white
+                isDestructive -> R.color.drawer_logout
+                else -> R.color.ds_text_secondary
+            }
+            val iconColor = when {
+                isSelected -> R.color.ia_white
+                isDestructive -> R.color.drawer_logout
+                else -> R.color.drawer_icon_tint
+            }
+            itemBinding.drawerMenuRoot.setBackgroundResource(
+                if (isSelected) {
+                    R.drawable.bg_app_drawer_item_selected
+                } else {
+                    R.drawable.bg_app_drawer_item_default
+                }
+            )
+            itemBinding.drawerMenuTitle.setTextColor(ContextCompat.getColor(requireContext(), textColor))
+            itemBinding.drawerMenuIcon.setColorFilter(ContextCompat.getColor(requireContext(), iconColor))
+        }
+    }
+
+    private fun openDrawer() {
+        drawerScrim?.isVisible = true
+        appDrawer?.isVisible = true
+        drawerScrim?.bringToFront()
+        appDrawer?.bringToFront()
+        drawerBackCallback?.isEnabled = true
+        val drawerWidth = resources.getDimensionPixelSize(R.dimen.drawer_width).toFloat()
+        appDrawer?.translationX = -drawerWidth
+        appDrawer?.animate()
+            ?.translationX(0f)
+            ?.setDuration(DRAWER_ANIMATION_DURATION_MS)
+            ?.start()
+    }
+
+    private fun closeDrawer(onClosed: (() -> Unit)? = null) {
+        drawerBackCallback?.isEnabled = false
+        val drawerWidth = resources.getDimensionPixelSize(R.dimen.drawer_width).toFloat()
+        appDrawer?.animate()
+            ?.translationX(-drawerWidth)
+            ?.setDuration(DRAWER_ANIMATION_DURATION_MS)
+            ?.withEndAction {
+                appDrawer?.isVisible = false
+                drawerScrim?.isVisible = false
+                onClosed?.invoke()
+            }
+            ?.start()
+    }
+
+    private fun handleDrawerItemClick(action: AppDrawerAction) {
+        if (action != AppDrawerAction.Logout &&
+            !workspaceSessionProvider.hasValidSession(WorkspaceKey.INTERNAL_APPS)
+        ) {
+            requireContext().showErrorMsg("Internal Apps session is not available.")
+            return
+        }
+
+        if (action != AppDrawerAction.Logout) {
+            selectedDrawerAction = action
+            refreshDrawerSelection()
+        }
+
+        closeDrawer {
+            if (!isAdded) return@closeDrawer
+            when (action) {
+                AppDrawerAction.Products -> openInternalAppsDestination(R.id.iaProductsFragment)
+                AppDrawerAction.Quotes -> openInternalAppsDestination(R.id.iaQuotesFragment)
+                AppDrawerAction.SaleOrders -> openInternalAppsDestination(R.id.iaSaleOrdersFragment)
+                AppDrawerAction.PurchaseOrders -> openInternalAppsDestination(R.id.iaPurchaseOrdersFragment)
+                AppDrawerAction.Profiles -> openInternalAppsDestination(R.id.iaProfilesFragment)
+                AppDrawerAction.Settings -> openInternalAppsDestination(R.id.iaSettingsFragment)
+                AppDrawerAction.Logout -> logoutAndOpenLogin()
+            }
+        }
+    }
+
+    private fun openInternalAppsDestination(destinationId: Int) {
+        InternalAppsNavigator.open(findNavController(), destinationId)
+    }
+
+    private fun handleDrawerTouch(event: MotionEvent): Boolean {
+        return when (event.actionMasked) {
+            MotionEvent.ACTION_DOWN -> {
+                drawerTouchStartX = event.rawX
+                drawerTouchStartY = event.rawY
+                false
+            }
+
+            MotionEvent.ACTION_MOVE -> {
+                val deltaX = event.rawX - drawerTouchStartX
+                val deltaY = event.rawY - drawerTouchStartY
+                val swipeThreshold = ViewConfiguration.get(requireContext()).scaledTouchSlop * 4
+                val isLeftSwipe = deltaX < -swipeThreshold && abs(deltaX) > abs(deltaY)
+                if (isLeftSwipe) {
+                    closeDrawer()
+                    true
+                } else {
+                    false
+                }
+            }
+
+            else -> false
+        }
+    }
+
+    private fun logoutAndOpenLogin() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            globalLogoutCoordinator.logout()
+            if (!isAdded) return@launch
+            findNavController().navigate(
+                R.id.commonLoginFragment,
+                null,
+                NavOptions.Builder()
+                    .setPopUpTo(R.id.main_nav_graph, true)
+                    .build()
+            )
+        }
+    }
+
+    private fun primaryDrawerItems() = listOf(
+        AppDrawerMenuItem(R.string.products, R.drawable.ic_bt_home, AppDrawerAction.Products),
+        AppDrawerMenuItem(R.string.drawer_quotes, R.drawable.ic_document, AppDrawerAction.Quotes),
+        AppDrawerMenuItem(R.string.drawer_sale_orders, R.drawable.ic_document, AppDrawerAction.SaleOrders),
+        AppDrawerMenuItem(R.string.drawer_purchase_orders, R.drawable.ic_document, AppDrawerAction.PurchaseOrders),
+        AppDrawerMenuItem(R.string.profiles, R.drawable.ic_bt_account, AppDrawerAction.Profiles)
+    )
+
+    private fun footerDrawerItems() = listOf(
+        AppDrawerMenuItem(R.string.drawer_settings, R.drawable.ic_settings, AppDrawerAction.Settings),
+        AppDrawerMenuItem(
+            R.string.drawer_logout,
+            R.drawable.ic_logout,
+            AppDrawerAction.Logout,
+            isDestructive = true
+        )
+    )
     private fun getEmployeeList() {
         if (employeeTodayList.size > 0) {
             val todayTeamAttendance =
@@ -600,31 +730,35 @@ class HomeFragment : BaseFragment() {
 //        todayCardBinding?.tvLocation?.text = checkInInfo.location.valueQualifier()
 
         if (checkInInfo.is_check_in_button == false && checkInInfo.is_check_out_button == false) {
-            checkInEnabledState.value = false
+            isCheckInButtonEnabled = false
 
             todayCardBinding?.tvCheckInTxt?.text = checkInInfo.check_in.valueQualifier()
             todayCardBinding?.tvCheckOutTxt?.text = checkInInfo.check_out.valueQualifier()
 
         } else {
-            checkInEnabledState.value = true
+            isCheckInButtonEnabled = true
 
             if (checkInInfo.is_check_in_button == true && checkInInfo.is_check_out_button == true) {
                 isCheckIn = true
-                isCheckInState.value = true
             } else {
                 if (checkInInfo.is_check_in_button == true) {
                     isCheckIn = true
-                    isCheckInState.value = true
                     todayCardBinding?.tvCheckInTxt?.text = checkInInfo.check_in.valueQualifier()
 
                 } else if (checkInInfo.is_check_out_button == true) {
                     isCheckIn = false
-                    isCheckInState.value = false
                     todayCardBinding?.tvCheckInTxt?.text = checkInInfo.check_in.valueQualifier()
                     todayCardBinding?.tvCheckOutTxt?.text = checkInInfo.check_out.valueQualifier()
                 }
             }
         }
+        updateCheckInButton()
+    }
+
+    private fun updateCheckInButton() {
+        todayCardBinding?.btnCheckIn?.text =
+            if (isCheckIn) getString(R.string.check_in) else getString(R.string.check_out)
+        todayCardBinding?.btnCheckIn?.isEnabled = isCheckInButtonEnabled
     }
     private fun setCurrentLocationText() {
 //        binding?.tvLocTxt?.text = getLocationAddress(currentLocation)
@@ -925,5 +1059,6 @@ class HomeFragment : BaseFragment() {
     companion object {
         private val TAG = HomeFragment::class.java.simpleName
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1001
+        private const val DRAWER_ANIMATION_DURATION_MS = 180L
     }
 }

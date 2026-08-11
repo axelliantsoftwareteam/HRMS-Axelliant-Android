@@ -11,6 +11,7 @@ import com.axelliant.hris.features.auth.data.remote.AuthApiService
 import com.axelliant.hris.features.auth.data.remote.dto.LoginRequest
 import com.axelliant.hris.features.auth.data.remote.dto.LoginResponse
 import com.axelliant.hris.features.auth.data.remote.dto.MicrosoftTokenData
+import com.axelliant.hris.features.auth.data.remote.dto.MicrosoftTokenRequest
 import org.json.JSONObject
 import java.nio.charset.StandardCharsets
 import javax.inject.Inject
@@ -38,21 +39,23 @@ class AuthRepository @Inject constructor(
         idToken: String,
         graphAccessToken: String? = null
     ): ApiResult<BaseApiModel<MicrosoftTokenData>> {
-        val microsoftGraphToken = graphAccessToken?.takeIf { it.isNotBlank() }
-            ?: idToken.takeIf { it.isMicrosoftGraphAccessToken() }
         val result = safeApiExecutor.execute {
-            apiService.getMicrosoftToken(token = idToken)
+            apiService.getMicrosoftToken(
+                MicrosoftTokenRequest(
+                    idToken = idToken,
+                    graphAccessToken = graphAccessToken.orEmpty()
+                )
+            )
         }
         if (result is ApiResult.Success) {
             val tokenData = result.data.data?.data
-            val accessToken = tokenData?.accessToken
-            if (result.data.data?.success == true && !accessToken.isNullOrBlank()) {
+            val accessToken = tokenData?.resolvedAccessToken()
+            if (!accessToken.isNullOrBlank()) {
                 sessionManager.saveSession(accessToken.toMicrosoftUserSession())
-                microsoftGraphToken?.let(sessionManager::saveMicrosoftGraphToken)
+                graphAccessToken?.takeIf { it.isNotBlank() }
+                    ?.let(sessionManager::saveMicrosoftGraphToken)
             } else {
-                return ApiResult.UnknownError(result.data.message?.text.orEmpty().ifBlank {
-                    "Microsoft login failed."
-                })
+                return ApiResult.UnknownError(result.data.microsoftLoginErrorMessage())
             }
         }
         return result
@@ -87,6 +90,17 @@ class AuthRepository @Inject constructor(
             ?: "Login failed. Access token was missing from the response."
     }
 
+    private fun BaseApiModel<MicrosoftTokenData>.microsoftLoginErrorMessage(): String {
+        return data?.message
+            ?: message?.text
+            ?: "Microsoft login failed. Internal Apps token was missing from the response."
+    }
+
+    private fun MicrosoftTokenData.resolvedAccessToken(): String? {
+        return accessToken?.takeIf { it.isNotBlank() }
+            ?: aeAccessToken?.takeIf { it.isNotBlank() }
+    }
+
     private fun String.toMicrosoftUserSession(): UserSession {
         val claims = decodeJwtClaims()
         return UserSession(
@@ -109,19 +123,8 @@ class AuthRepository @Inject constructor(
         }.getOrNull()
     }
 
-    private fun String.isMicrosoftGraphAccessToken(): Boolean {
-        val claims = decodeJwtClaims() ?: return false
-        val audience = claims.optString(CLAIM_AUDIENCE)
-        val scopes = claims.optString(CLAIM_SCOPES)
-        return audience == MICROSOFT_GRAPH_AUDIENCE && scopes.contains(SCOPE_USER_READ)
-    }
-
     private companion object {
         const val JWT_PAYLOAD_INDEX = 1
-        const val MICROSOFT_GRAPH_AUDIENCE = "00000003-0000-0000-c000-000000000000"
-        const val SCOPE_USER_READ = "User.Read"
-        const val CLAIM_AUDIENCE = "aud"
-        const val CLAIM_SCOPES = "scp"
         const val CLAIM_EMAIL =
             "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
         const val CLAIM_USER_ID = "userId"

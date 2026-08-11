@@ -36,7 +36,7 @@ class EditQuoteFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.backButton.setOnClickListener { findNavController().navigateUp() }
+        binding.appTopBar.setOnBackClickListener { findNavController().navigateUp() }
         binding.saveButton.setOnClickListener { saveQuote() }
         observeQuote()
         observeSaveState()

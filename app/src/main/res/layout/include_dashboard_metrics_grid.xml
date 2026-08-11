@@ -26,7 +26,7 @@
 
         <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/totalProductsBadge"
-            style="@style/IA_TEXT_REGULAR_WHITE_10"
+            style="@style/Text.Fluent2.Caption.Inverse"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_dashboard_badge_pill"
@@ -38,7 +38,7 @@
 
         <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/totalProductsValue"
-            style="@style/IA_TEXT_BOLD_WHITE_18"
+            style="@style/Text.Fluent2.Title.Inverse.Strong"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/ds_space_12"
@@ -48,7 +48,7 @@
 
         <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/totalProductsLabel"
-            style="@style/IA_TEXT_REGULAR_WHITE_10"
+            style="@style/Text.Fluent2.Caption.Inverse"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/ds_space_4"
@@ -82,7 +82,7 @@
 
         <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/activeQuotesBadge"
-            style="@style/IA_TEXT_REGULAR_WHITE_10"
+            style="@style/Text.Fluent2.Caption.Inverse"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_dashboard_badge_pill"
@@ -94,7 +94,7 @@
 
         <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/activeQuotesValue"
-            style="@style/IA_TEXT_BOLD_WHITE_18"
+            style="@style/Text.Fluent2.Title.Inverse.Strong"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/ds_space_12"
@@ -104,7 +104,7 @@
 
         <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/activeQuotesLabel"
-            style="@style/IA_TEXT_REGULAR_WHITE_10"
+            style="@style/Text.Fluent2.Caption.Inverse"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/ds_space_4"
@@ -138,7 +138,7 @@
 
         <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/assetHealthBadge"
-            style="@style/IA_TEXT_REGULAR_WHITE_10"
+            style="@style/Text.Fluent2.Caption.Inverse"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_dashboard_badge_pill"
@@ -150,7 +150,7 @@
 
         <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/assetHealthValue"
-            style="@style/IA_TEXT_BOLD_WHITE_18"
+            style="@style/Text.Fluent2.Title.Inverse.Strong"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/ds_space_12"
@@ -160,7 +160,7 @@
 
         <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/assetHealthLabel"
-            style="@style/IA_TEXT_REGULAR_WHITE_10"
+            style="@style/Text.Fluent2.Caption.Inverse"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/ds_space_4"
@@ -204,7 +204,7 @@
 
         <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/openOrdersValue"
-            style="@style/IA_TEXT_BOLD_BLACK_18"
+            style="@style/Text.Fluent2.Title.Primary.Strong"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/ds_space_12"
@@ -214,7 +214,7 @@
 
         <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/openOrdersLabel"
-            style="@style/IA_TEXT_MEDIUM_BLACK_10"
+            style="@style/Text.Fluent2.Caption.Muted.Strong"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/ds_space_4"
@@ -227,4 +227,3 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-

@@ -4,12 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.ui.platform.ComposeView
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
+import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.axelliant.hris.R
+import com.axelliant.hris.adapter.CheckInListAdapter
+import com.axelliant.hris.adapter.SubFilterAdapter
 import com.axelliant.hris.base.BaseFragment
 import com.axelliant.hris.callback.AdapterItemClick
-import com.axelliant.hris.components.CheckInListComponent
 import com.axelliant.hris.core.constants.AppRouteArgs
 import com.axelliant.hris.databinding.FragmentCheckInListBinding
 import com.axelliant.hris.enums.AttendanceFilter
@@ -29,9 +33,11 @@ import com.axelliant.hris.utils.Utils
 import com.axelliant.hris.viewmodel.AttendanceViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.gson.Gson
-import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
+import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
+import java.util.Locale
 
 @AndroidEntryPoint
 class CheckInListFragment : BaseFragment() {
@@ -60,6 +66,7 @@ class CheckInListFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupRecyclerViews()
 
         attendanceViewModel.getIsLoading()
             .observe(viewLifecycleOwner, EventObserver { isLoading ->
@@ -73,62 +80,140 @@ class CheckInListFragment : BaseFragment() {
             viewLifecycleOwner,
             EventObserver { response ->
                 if (response?.meta?.status == true) {
-                    response.checkin_status?.let {
-                        it.add(0, FilterModel().apply {
+                    response.checkin_status?.let { filters ->
+                        subFilters = arrayListOf<FilterModel>().apply {
+                            add(FilterModel().apply {
+                                id = ""
+                                title = "All"
+                                count = "0"
+                            })
+                            addAll(filters.filterNot {
+                                it.id.orEmpty().isBlank() && it.title.equals("All", ignoreCase = true)
+                            })
+                        }
+                    } ?: run {
+                        subFilters = arrayListOf(
+                            FilterModel().apply {
                             this.id = ""
                             this.title = "All"
                             this.count = "0"
-                        })
-                        subFilters = it
+                            }
+                        )
                     }
                     checkInList = response.checkin ?: arrayListOf()
                     noRecord = checkInList.isEmpty()
-                    renderCompose()
+                    renderContent()
                 } else {
                     requireContext().showErrorMsg(response?.meta?.message.toString())
                 }
             })
 
-        binding?.ivBack?.setOnClickListener {
+        binding?.appTopBar?.setOnBackClickListener {
             previousFragmentNavigation()
         }
     }
 
-    private fun renderCompose() {
-        binding?.composeCheckInList?.setContent {
-            CheckInListComponent(
-                checkInList = checkInList,
-                subFilters = subFilters,
-                startDate = startDateString ?: "",
-                endDate = endDateString ?: "",
-                selectedChipId = selectedChipId,
-                noRecord = noRecord,
-                onChipSelected = { chip ->
+    private fun setupRecyclerViews() {
+        binding?.rvSubFilters?.layoutManager =
+            LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+        binding?.rvCheckInList?.layoutManager = LinearLayoutManager(requireContext())
+    }
+
+    private fun renderContent() {
+        binding?.tvFromDate?.text = startDateString.orEmpty()
+        binding?.tvToDate?.text = endDateString.orEmpty()
+        binding?.tvPresentCount?.text = getPresentDaysCount().toString()
+        binding?.tvWeekendCount?.text = getWeekendDaysCount().toString()
+        binding?.tvTotalHours?.text = "%.1f".format(getTotalWorkingHours())
+
+        binding?.rvSubFilters?.isVisible = subFilters.isNotEmpty()
+        binding?.rvSubFilters?.adapter = SubFilterAdapter(
+            selectedChipId,
+            subFilters,
+            requireContext(),
+            object : AdapterItemClick {
+                override fun onItemClick(customObject: Any, position: Int) {
+                    val chip = customObject as FilterModel
                     selectedChipId = chip.id.toString()
                     filterId = selectedChipId
                     if (filterIdList == null) filterIdList = ArrayList()
                     filterIdList?.clear()
                     filterIdList?.add(filterId)
                     attendanceViewModel.getCheckInList(getCurrentObject(filterId))
-                },
-                onRowClick = { attendanceDetail ->
-                    if (attendanceDetail.requeststatus == "Pending") {
-                        AppNavigator.navigateToRequest(Bundle().apply {
-                            this.putString(AppRouteArgs.REQUEST_TYPE, RequestFilter.ATTENDANCE.name)
-                            this.putString(
-                                AppRouteArgs.ATTENDANCE_REQUEST,
-                                Gson().toJson(attendanceDetail)
-                            )
-                        })
-                    } else {
-                        requireContext().showErrorMsg(
-                            ErrorMessages.CHECK_IN_PENDING_ONLY.toString().plus(" ")
-                                .plus(attendanceDetail.requeststatus)
-                        )
-                    }
                 }
+            }
+        )
+
+        binding?.rvCheckInList?.isVisible = !noRecord
+        binding?.tvNoRecord?.isVisible = noRecord
+        binding?.rvCheckInList?.adapter = CheckInListAdapter(
+            checkInList,
+            requireContext(),
+            object : AdapterItemClick {
+                override fun onItemClick(customObject: Any, position: Int) {
+                    val attendanceDetail = customObject as CheckInDetail
+                    openAttendanceRequest(attendanceDetail)
+                }
+            }
+        )
+    }
+
+    private fun openAttendanceRequest(attendanceDetail: CheckInDetail) {
+        if (attendanceDetail.requeststatus == LeaveStatus.PENDING.value) {
+            AppNavigator.navigateToRequest(Bundle().apply {
+                putString(AppRouteArgs.REQUEST_TYPE, RequestFilter.ATTENDANCE.name)
+                putString(AppRouteArgs.ATTENDANCE_REQUEST, Gson().toJson(attendanceDetail))
+            })
+        } else {
+            requireContext().showErrorMsg(
+                ErrorMessages.CHECK_IN_PENDING_ONLY.toString().plus(" ")
+                    .plus(attendanceDetail.requeststatus)
             )
         }
+    }
+
+    private fun getPresentDaysCount(): Int {
+        return checkInList.mapNotNull { it.dateKey() }.distinct().size
+    }
+
+    private fun getTotalWorkingHours(): Double {
+        return checkInList
+            .groupBy { it.dateKey().orEmpty() }
+            .values
+            .sumOf { entries -> entries.maxOfOrNull { it.working_hours } ?: 0.0 }
+    }
+
+    private fun getWeekendDaysCount(): Int {
+        val start = startDateString?.toDate() ?: return 0
+        val end = endDateString?.toDate() ?: return 0
+        val entryDates = checkInList.mapNotNull { it.dateKey() }.toSet()
+        val calendar = Calendar.getInstance().apply { time = start }
+        var count = 0
+
+        while (!calendar.time.after(end)) {
+            val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
+            val dateKey = serverDateFormat().format(calendar.time)
+            if ((dayOfWeek == Calendar.SATURDAY || dayOfWeek == Calendar.SUNDAY) &&
+                !entryDates.contains(dateKey)
+            ) {
+                count++
+            }
+            calendar.add(Calendar.DAY_OF_YEAR, 1)
+        }
+
+        return count
+    }
+
+    private fun CheckInDetail.dateKey(): String? {
+        return time.trim().split(Regex("\\s+")).firstOrNull()?.takeIf { it.isNotBlank() }
+    }
+
+    private fun String.toDate(): Date? {
+        return runCatching { serverDateFormat().parse(this) }.getOrNull()
+    }
+
+    private fun serverDateFormat(): SimpleDateFormat {
+        return SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
     }
 
     private fun eventSelection() {
@@ -175,13 +260,11 @@ class CheckInListFragment : BaseFragment() {
                     ContextCompat.getDrawable(requireContext(), R.drawable.fluent_blue)
                 binding?.tvCustom?.setTextColor(requireContext().getColor(R.color.white))
             }
-            else -> {}
         }
     }
 
     private fun getCurrentObject(
-        status: String? = null,
-        listFilter: ArrayList<String>? = null
+        status: String? = null
     ): LeaveCountInput {
 
         when (currentFilter) {

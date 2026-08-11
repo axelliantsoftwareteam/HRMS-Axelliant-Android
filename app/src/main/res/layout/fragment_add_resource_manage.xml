@@ -4,48 +4,40 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+    style="@style/Layout.Fluent2.Screen"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white">
+        android:background="@color/ds_neutral_white">
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/start_guideline"
-            style="@style/start_gl"
+            style="@style/Guideline.Fluent2.Start"
             android:orientation="vertical" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/end_guideline"
-            style="@style/end_gl"
+            style="@style/Guideline.Fluent2.End"
             android:orientation="vertical" />
 
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/bottom_guideline"
-            style="@style/bottom_gl" />
+            style="@style/Guideline.Fluent2.Bottom" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/top_guideline"
-            style="@style/top_gl" />
+            style="@style/Guideline.Fluent2.Top" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv_title"
-            style="@style/TEXT_SEMI_BLACK_15"
+        <com.axelliant.hris.ui.designsystem.components.AppTopBarView
+            android:id="@+id/appTopBar"
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:gravity="center"
-            android:text="@string/resource_hours_claim"
-            app:layout_constraintBottom_toBottomOf="@+id/iv_back"
+            android:layout_height="@dimen/_40sdp"
+            app:centerTitle="true"
+            app:showBackButton="true"
+            app:showSearchButton="false"
+            app:titleText="@string/resource_hours_claim"
             app:layout_constraintEnd_toEndOf="@id/end_guideline"
-            app:layout_constraintStart_toEndOf="@+id/iv_back"
-            app:layout_constraintTop_toTopOf="@+id/iv_back" />
-
-        <ImageView
-            android:id="@+id/iv_back"
-            android:layout_width="@dimen/_30sdp"
-            android:layout_height="@dimen/_30sdp"
-            android:importantForAccessibility="no"
-            android:src="@drawable/ic_left"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
             app:layout_constraintTop_toBottomOf="@id/top_guideline" />
 
 
@@ -60,17 +52,17 @@
             android:padding="@dimen/_8sdp"
             app:layout_constraintEnd_toStartOf="@+id/end_guideline"
             app:layout_constraintStart_toEndOf="@+id/start_guideline"
-            app:layout_constraintTop_toBottomOf="@+id/iv_back"
+            app:layout_constraintTop_toBottomOf="@id/appTopBar"
             >
 
             <ImageView
                 android:id="@+id/iv_attend_today"
-                style="@style/TEXT_REGULAR_WHITE_10"
+                style="@style/Text.Fluent2.Caption.Inverse"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_3sdp"
                 android:background="@drawable/circle_no_bg"
-                android:backgroundTint="@color/white"
+                android:backgroundTint="@color/ds_neutral_white"
                 android:padding="@dimen/_5sdp"
                 android:src="@drawable/ic_create_expense"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -78,8 +70,8 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:ignore="ContentDescription" />
 
-            <com.google.android.material.textview.MaterialTextView
-                style="@style/TEXT_MEDIUM_BLACK_10"
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                style="@style/Text.Fluent2.Caption.Primary.Strong"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginStart="@dimen/_5sdp"
@@ -92,12 +84,12 @@
 
 
             <ImageView
-                style="@style/TEXT_REGULAR_WHITE_10"
+                style="@style/Text.Fluent2.Caption.Inverse"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/_3sdp"
                 android:background="@drawable/circle_no_bg"
-                android:backgroundTint="@color/white"
+                android:backgroundTint="@color/ds_neutral_white"
                 android:padding="@dimen/_5sdp"
                 android:visibility="gone"
                 android:src="@drawable/iv_attach_file"
@@ -135,9 +127,9 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <com.google.android.material.textview.MaterialTextView
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
                     android:id="@+id/tv_actual_out"
-                    style="@style/TEXT_SEMI_BLACK_10"
+                    style="@style/Text.Fluent2.Caption.Primary.Strong"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="@string/total_hours"
@@ -147,9 +139,9 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <com.google.android.material.textview.MaterialTextView
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
                     android:id="@+id/tv_amount"
-                    style="@style/TEXT_MEDIUM_BLACK_10"
+                    style="@style/Text.Fluent2.Caption.Primary.Strong"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_5sdp"
@@ -176,9 +168,9 @@
                 app:layout_constraintStart_toEndOf="@+id/ly_actual_out"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <com.google.android.material.textview.MaterialTextView
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
                     android:id="@+id/tv_expected_out"
-                    style="@style/TEXT_SEMI_BLACK_10"
+                    style="@style/Text.Fluent2.Caption.Primary.Strong"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/posting_date"
@@ -188,9 +180,9 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <com.google.android.material.textview.MaterialTextView
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
                     android:id="@+id/tv_date"
-                    style="@style/TEXT_MEDIUM_BLACK_10"
+                    style="@style/Text.Fluent2.Caption.Primary.Strong"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_5sdp"
@@ -248,7 +240,7 @@
 
 
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
+        <com.axelliant.hris.ui.designsystem.components.AppFloatingActionButtonView
             android:id="@+id/tv_add_new"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -257,17 +249,15 @@
             android:layout_marginBottom="@dimen/_20sdp"
             app:layout_constraintEnd_toStartOf="@+id/end_guideline"
             android:src="@drawable/plus"
-            android:tint="@color/white"
+            android:tint="@color/ds_neutral_white"
             app:backgroundTint="@color/sky_blue"
             app:borderWidth="0dp"
             app:elevation="6dp"
-            app:fabSize="normal">
+            app:fabSize="normal" />
 
-        </com.google.android.material.floatingactionbutton.FloatingActionButton>
-
-        <com.google.android.material.textview.MaterialTextView
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/tv_reject"
-            style="@style/TEXT_REGULAR_BLACK_10"
+            style="@style/Text.Fluent2.Caption.Primary"
             android:layout_width="0dp"
             android:layout_height="@dimen/_40sdp"
             android:background="@drawable/rounded_leave_cancelled"
@@ -276,21 +266,18 @@
             app:layout_constraintStart_toStartOf="@id/start_guideline"
             app:layout_constraintBottom_toTopOf="@id/bottom_guideline"
             />
-        <com.axelliant.hris.components.RoundedButton
+        <com.axelliant.hris.ui.designsystem.components.AppButtonView
             android:id="@+id/btn_apply"
-            style="@style/ButtonTextStyle"
             android:layout_width="0dp"
             android:layout_height="@dimen/_40sdp"
             android:layout_marginStart="@dimen/_10sdp"
             android:layout_marginEnd="@dimen/_10sdp"
             android:visibility="visible"
-            app:buttonBg="@drawable/fluent_blue"
-            app:iconVisibility="false"
             app:layout_constraintBottom_toTopOf="@id/bottom_guideline"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/tv_reject"
-            app:text="@string/create"
-            app:textColor="@color/white" />
+            app:fluentButtonStyle="primary"
+            android:text="@string/create" />
 
 
 

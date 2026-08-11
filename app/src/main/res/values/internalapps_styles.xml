@@ -43,78 +43,6 @@
     <style name="Widget.InternalApps.Button" />
     <style name="Widget.InternalApps.Dashboard" />
 
-    <style name="IA_TEXT_REGULAR_WHITE_10">
-        <item name="android:textColor">@color/ia_white</item>
-        <item name="android:textSize">@dimen/text_size_10</item>
-        <item name="android:letterSpacing">0</item>
-        <item name="android:fontFamily">sans-serif</item>
-        <item name="fontFamily">sans-serif</item>
-    </style>
-
-    <style name="IA_TEXT_REGULAR_GREY_10">
-        <item name="android:textColor">@color/ds_text_grey</item>
-        <item name="android:textSize">@dimen/text_size_10</item>
-        <item name="android:letterSpacing">0</item>
-        <item name="android:fontFamily">sans-serif</item>
-        <item name="fontFamily">sans-serif</item>
-    </style>
-
-    <style name="IA_TEXT_REGULAR_BLACK_12">
-        <item name="android:textColor">@color/ds_text_black</item>
-        <item name="android:textSize">@dimen/text_size_12</item>
-        <item name="android:letterSpacing">0</item>
-        <item name="android:fontFamily">sans-serif</item>
-        <item name="fontFamily">sans-serif</item>
-    </style>
-
-    <style name="IA_TEXT_REGULAR_WHITE_12">
-        <item name="android:textColor">@color/ia_white</item>
-        <item name="android:textSize">@dimen/text_size_12</item>
-        <item name="android:letterSpacing">0</item>
-        <item name="android:fontFamily">sans-serif</item>
-        <item name="fontFamily">sans-serif</item>
-    </style>
-
-    <style name="IA_TEXT_MEDIUM_WHITE_10">
-        <item name="android:textColor">@color/ia_white</item>
-        <item name="android:textSize">@dimen/text_size_10</item>
-        <item name="android:letterSpacing">0</item>
-        <item name="android:fontFamily">sans-serif-medium</item>
-        <item name="fontFamily">sans-serif-medium</item>
-    </style>
-
-    <style name="IA_TEXT_MEDIUM_GREY_15">
-        <item name="android:textColor">@color/ds_text_grey</item>
-        <item name="android:textSize">@dimen/text_size_15</item>
-        <item name="android:letterSpacing">0</item>
-        <item name="android:fontFamily">sans-serif-medium</item>
-        <item name="fontFamily">sans-serif-medium</item>
-    </style>
-
-    <style name="IA_TEXT_SEMIBOLD_WHITE_12">
-        <item name="android:textColor">@color/ia_white</item>
-        <item name="android:textSize">@dimen/text_size_12</item>
-        <item name="android:letterSpacing">0</item>
-        <item name="android:fontFamily">sans-serif-medium</item>
-        <item name="fontFamily">sans-serif-medium</item>
-    </style>
-
-    <style name="IA_TEXT_SEMIBOLD_WHITE_18">
-        <item name="android:textColor">@color/ia_white</item>
-        <item name="android:textSize">@dimen/text_size_18</item>
-        <item name="android:letterSpacing">0</item>
-        <item name="android:fontFamily">sans-serif-medium</item>
-        <item name="fontFamily">sans-serif-medium</item>
-    </style>
-
-    <style name="IA_TEXT_BOLD_BLACK_24">
-        <item name="android:textColor">@color/ds_text_black</item>
-        <item name="android:textSize">@dimen/text_size_24</item>
-        <item name="android:letterSpacing">0</item>
-        <item name="android:fontFamily">sans-serif-medium</item>
-        <item name="fontFamily">sans-serif-medium</item>
-    </style>
-
     <style name="Widget.InternalApps.InputLayout" parent="@style/Widget.Axelliant.InputLayout" />
 
     <style name="Widget.InternalApps.InputEditText" parent="@style/Widget.Axelliant.InputEditText" />
@@ -128,53 +56,6 @@
     <style name="Widget.InternalApps.Card" parent="@style/Widget.Axelliant.Card" />
 
     <style name="Widget.InternalApps.Dashboard.IconButton" parent="@style/Widget.Axelliant.IconButton" />
-
-    <style name="IA_TEXT_SEMIBOLD_BLACK_18">
-        <item name="android:textColor">@color/ds_text_primary</item>
-        <item name="android:textSize">@dimen/text_size_18</item>
-        <item name="android:letterSpacing">0</item>
-        <item name="android:fontFamily">sans-serif-medium</item>
-        <item name="fontFamily">sans-serif-medium</item>
-    </style>
-
-    <style name="IA_TEXT_SEMIBOLD_BLACK_15">
-        <item name="android:textColor">@color/ds_text_primary</item>
-        <item name="android:textSize">@dimen/text_size_15</item>
-        <item name="android:letterSpacing">0</item>
-        <item name="android:fontFamily">sans-serif-medium</item>
-        <item name="fontFamily">sans-serif-medium</item>
-    </style>
-
-    <style name="IA_TEXT_MEDIUM_BLACK_10">
-        <item name="android:textColor">@color/ds_text_muted</item>
-        <item name="android:textSize">@dimen/text_size_10</item>
-        <item name="android:letterSpacing">0</item>
-        <item name="android:fontFamily">sans-serif-medium</item>
-        <item name="fontFamily">sans-serif-medium</item>
-    </style>
-
-    <style name="IA_TEXT_BOLD_BLACK_18">
-        <item name="android:textColor">@color/ds_text_primary</item>
-        <item name="android:textSize">@dimen/text_size_18</item>
-        <item name="android:letterSpacing">0</item>
-        <item name="android:fontFamily">sans-serif-medium</item>
-        <item name="fontFamily">sans-serif-medium</item>
-    </style>
-
-    <style name="IA_TEXT_BOLD_WHITE_24">
-        <item name="android:textColor">@color/ia_white</item>
-        <item name="android:textSize">@dimen/text_size_24</item>
-        <item name="android:letterSpacing">0</item>
-        <item name="android:fontFamily">sans-serif-medium</item>
-        <item name="fontFamily">sans-serif-medium</item>
-    </style>
-    <style name="IA_TEXT_BOLD_WHITE_18">
-        <item name="android:textColor">@color/ia_white</item>
-        <item name="android:textSize">@dimen/text_size_18</item>
-        <item name="android:letterSpacing">0</item>
-        <item name="android:fontFamily">sans-serif-medium</item>
-        <item name="fontFamily">sans-serif-medium</item>
-    </style>
 
     <style name="Widget.InternalApps.BottomNav.ActiveIndicator" parent="">
         <item name="android:color">@color/ds_primary_container</item>
@@ -202,28 +83,6 @@
         <item name="fontFamily">sans-serif-medium</item>
     </style>
 
-    <!-- Backward-compatible aliases for the previous template styles. -->
-    <style name="IA_TEXT_REGULAR_GREY_15">
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">@color/app_text_secondary</item>
-        <item name="android:textSize">@dimen/text_size_10</item>
-        <item name="android:letterSpacing">0</item>
-        <item name="android:gravity">center</item>
-        <item name="android:fontFamily">sans-serif</item>
-        <item name="fontFamily">sans-serif</item>
-    </style>
-
-    <style name="IA_TEXT_BOLD_BLACK_20">
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">@color/app_text_primary</item>
-        <item name="android:textSize">@dimen/text_size_12</item>
-        <item name="android:letterSpacing">0</item>
-        <item name="android:gravity">center</item>
-        <item name="android:fontFamily">sans-serif-medium</item>
-        <item name="fontFamily">sans-serif-medium</item>
-    </style>
 
 
 
@@ -237,4 +96,3 @@
 
 
 </resources>
-

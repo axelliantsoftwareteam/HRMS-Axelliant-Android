@@ -4,48 +4,40 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+    style="@style/Layout.Fluent2.Screen"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white">
+        android:background="@color/ds_neutral_white">
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/start_guideline"
-            style="@style/start_gl"
+            style="@style/Guideline.Fluent2.Start"
             android:orientation="vertical" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/end_guideline"
-            style="@style/end_gl"
+            style="@style/Guideline.Fluent2.End"
             android:orientation="vertical" />
 
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/bottom_guideline"
-            style="@style/bottom_gl" />
+            style="@style/Guideline.Fluent2.Bottom" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/top_guideline"
-            style="@style/top_gl" />
+            style="@style/Guideline.Fluent2.Top" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv_title"
-            style="@style/TEXT_SEMI_BLACK_15"
+        <com.axelliant.hris.ui.designsystem.components.AppTopBarView
+            android:id="@+id/appTopBar"
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:gravity="center"
-            android:text="@string/request_approvals"
-            app:layout_constraintBottom_toBottomOf="@+id/iv_back"
+            android:layout_height="@dimen/_40sdp"
+            app:centerTitle="true"
+            app:showBackButton="true"
+            app:showSearchButton="false"
+            app:titleText="@string/request_approvals"
             app:layout_constraintEnd_toEndOf="@id/end_guideline"
-            app:layout_constraintStart_toEndOf="@+id/iv_back"
-            app:layout_constraintTop_toTopOf="@+id/iv_back" />
-
-        <ImageView
-            android:id="@+id/iv_back"
-            android:layout_width="@dimen/_30sdp"
-            android:layout_height="@dimen/_30sdp"
-            android:importantForAccessibility="no"
-            android:src="@drawable/ic_left"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
             app:layout_constraintTop_toBottomOf="@id/top_guideline" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -59,11 +51,11 @@
             android:padding="@dimen/_3sdp"
             app:layout_constraintEnd_toEndOf="@+id/end_guideline"
             app:layout_constraintStart_toStartOf="@id/start_guideline"
-            app:layout_constraintTop_toBottomOf="@+id/iv_back">
+            app:layout_constraintTop_toBottomOf="@id/appTopBar">
 
-            <com.google.android.material.textview.MaterialTextView
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
                 android:id="@+id/tv_week"
-                style="@style/TEXT_REGULAR_WHITE_10"
+                style="@style/Text.Fluent2.Caption.Inverse"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:background="@drawable/rounded_enabled"
@@ -74,9 +66,9 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <com.google.android.material.textview.MaterialTextView
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
                 android:id="@+id/tv_month"
-                style="@style/TEXT_REGULAR_BLACK_10"
+                style="@style/Text.Fluent2.Caption.Primary"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginStart="@dimen/_5sdp"
@@ -87,9 +79,9 @@
                 app:layout_constraintEnd_toStartOf="@+id/tv_expense"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/tv_week" />
-            <com.google.android.material.textview.MaterialTextView
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
                 android:id="@+id/tv_expense"
-                style="@style/TEXT_REGULAR_BLACK_10"
+                style="@style/Text.Fluent2.Caption.Primary"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginStart="@dimen/_5sdp"
@@ -100,9 +92,9 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/tv_resources"
                 app:layout_constraintStart_toEndOf="@+id/tv_month" />
-            <com.google.android.material.textview.MaterialTextView
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
                 android:id="@+id/tv_resources"
-                style="@style/TEXT_REGULAR_BLACK_10"
+                style="@style/Text.Fluent2.Caption.Primary"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginStart="@dimen/_5sdp"
@@ -173,9 +165,9 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/ly_team_filter">
 
-                    <com.google.android.material.textview.MaterialTextView
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
                         android:id="@+id/tv_team_member"
-                        style="@style/TEXT_MEDIUM_WHITE_12"
+                        style="@style/Text.Fluent2.Body.Inverse.Strong"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:text="@string/leave_req"
@@ -184,9 +176,9 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <com.google.android.material.textview.MaterialTextView
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
                         android:id="@+id/tv_team_member_txt"
-                        style="@style/TEXT_MEDIUM_BLACK_10"
+                        style="@style/Text.Fluent2.Caption.Primary.Strong"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_marginStart="@dimen/_5sdp"
@@ -198,7 +190,7 @@
                         app:layout_constraintStart_toEndOf="@id/tv_team_member"
                         app:layout_constraintTop_toTopOf="parent"
                         tools:text="20" />
-                    <CheckBox
+                    <com.axelliant.hris.ui.designsystem.components.AppCheckboxView
                         android:id="@+id/view_expand"
                         android:layout_width="@dimen/_15sdp"
                         android:layout_height="@dimen/_20sdp"
@@ -224,19 +216,21 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/ly_header">
 
-                    <com.google.android.material.button.MaterialButton
+                    <com.axelliant.hris.ui.designsystem.components.AppButtonView
                         android:id="@+id/btn_bulk_approve"
-                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        style="@style/Widget.Fluent2.Button.Secondary"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        app:fluentButtonStyle="outline"
                         android:text="Approve All" />
 
-                    <com.google.android.material.button.MaterialButton
+                    <com.axelliant.hris.ui.designsystem.components.AppButtonView
                         android:id="@+id/btn_bulk_reject"
-                        style="@style/Widget.MaterialComponents.Button"
+                        style="@style/Widget.Fluent2.Button.Primary"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_8sdp"
+                        app:fluentButtonStyle="destructive"
                         android:text="Reject All" />
 
                 </LinearLayout>
@@ -293,9 +287,9 @@
 
 
 
-                <com.google.android.material.textview.MaterialTextView
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
                     android:id="@+id/tv_no_record"
-                    style="@style/TEXT_SEMI_BLACK_15"
+                    style="@style/Text.Fluent2.Subheading.Primary.Strong"
                     android:layout_width="0dp"
                     android:gravity="center"
                     android:text="@string/no_record_found"
@@ -316,9 +310,9 @@
             app:layout_constraintStart_toStartOf="@id/start_guideline"
             app:layout_constraintEnd_toEndOf="@id/end_guideline">
 
-            <com.google.android.material.textview.MaterialTextView
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
                 android:id="@+id/tv_reject"
-                style="@style/TEXT_REGULAR_BLACK_10"
+                style="@style/Text.Fluent2.Caption.Primary"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/rounded_leave_cancelled"
@@ -332,9 +326,9 @@
                 android:layout_marginBottom="@dimen/_5sdp"
                 />
 
-            <com.google.android.material.textview.MaterialTextView
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
                 android:id="@+id/tv_approved"
-                style="@style/TEXT_REGULAR_WHITE_10"
+                style="@style/Text.Fluent2.Caption.Inverse"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_5sdp"

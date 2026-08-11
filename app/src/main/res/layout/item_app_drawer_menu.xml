@@ -21,7 +21,7 @@
 
     <com.axelliant.hris.ui.designsystem.components.AppTextView
         android:id="@+id/drawerMenuTitle"
-        style="@style/IA_TEXT_REGULAR_BLACK_12"
+        style="@style/Text.Fluent2.Body.Secondary"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/ds_space_12"
@@ -32,4 +32,3 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-

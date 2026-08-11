@@ -10,7 +10,6 @@ import android.text.TextWatcher
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageView
@@ -28,6 +27,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.axelliant.hris.R
+import com.axelliant.hris.ui.designsystem.components.AppCheckboxView
+import com.axelliant.hris.ui.designsystem.components.AppTextView
+import com.axelliant.hris.ui.designsystem.components.createAppBottomSheetDialog
 import com.axelliant.hris.core.extensions.enableClearTextButton
 import com.axelliant.hris.core.ui.UiState
 import com.axelliant.hris.databinding.LayoutProductFilterSheetBinding
@@ -57,16 +59,16 @@ class ProductFilterSheetController(
 
     fun show() {
         val sheetBinding = LayoutProductFilterSheetBinding.inflate(fragment.layoutInflater)
-        val dialog = BottomSheetDialog(context).apply {
+        val dialog = context.createAppBottomSheetDialog().apply {
             setContentView(sheetBinding.root)
             setCancelable(false)
             setCanceledOnTouchOutside(false)
         }
         val manufacturerField = sheetBinding.root.findViewById<LinearLayout>(R.id.manufacturerField)
         val vendorField = sheetBinding.root.findViewById<LinearLayout>(R.id.vendorField)
-        val manufacturerFieldText = sheetBinding.root.findViewById<TextView>(R.id.manufacturerFieldText)
-        val vendorFieldText = sheetBinding.root.findViewById<TextView>(R.id.vendorFieldText)
-        val attributeTagFieldText = sheetBinding.root.findViewById<TextView>(R.id.attributeTagFieldText)
+        val manufacturerFieldText = sheetBinding.root.findViewById<AppTextView>(R.id.manufacturerFieldText)
+        val vendorFieldText = sheetBinding.root.findViewById<AppTextView>(R.id.vendorFieldText)
+        val attributeTagFieldText = sheetBinding.root.findViewById<AppTextView>(R.id.attributeTagFieldText)
 
         sheetBinding.filterSearchEditText.enableClearTextButton()
         sheetBinding.minPriceEditText.enableClearTextButton()
@@ -101,7 +103,7 @@ class ProductFilterSheetController(
             if (onCategorySpecsClick == null) return@setOnClickListener
             activeFilterPopup?.dismiss()
             if (capturePriceFields(sheetBinding)) {
-                onCategorySpecsClick?.invoke(filterState.copyForEditing())
+                onCategorySpecsClick.invoke(filterState.copyForEditing())
                 dialog.dismiss()
             }
         }
@@ -249,9 +251,9 @@ class ProductFilterSheetController(
 
     private fun bindFilterLookupObservers(
         sheetBinding: LayoutProductFilterSheetBinding,
-        manufacturerFieldText: TextView?,
-        vendorFieldText: TextView?,
-        attributeTagFieldText: TextView?
+        manufacturerFieldText: AppTextView?,
+        vendorFieldText: AppTextView?,
+        attributeTagFieldText: AppTextView?
     ): List<Job> {
         return listOf(
             lifecycleOwner.lifecycleScope.launch {
@@ -296,13 +298,13 @@ class ProductFilterSheetController(
         anchor: View,
         lookupState: UiState<List<FilterOptionUi>>,
         selectedOptions: LinkedHashMap<String, String>,
-        fieldText: TextView?,
+        fieldText: AppTextView?,
         chipsContainer: RecyclerView,
         placeholder: String,
         searchHint: String,
         onLoad: () -> Unit,
         allowMultipleSelection: Boolean = true,
-        selectedCountText: TextView? = null
+        selectedCountText: AppTextView? = null
     ) {
         activeFilterPopup?.dismiss()
         val stateForPopup = lookupState.takeUnless { it is UiState.Idle } ?: UiState.Loading
@@ -491,7 +493,7 @@ class ProductFilterSheetController(
             )
             if (showCheckbox) {
                 addView(
-                    CheckBox(context).apply {
+                    AppCheckboxView(context).apply {
                         layoutParams = LinearLayout.LayoutParams(
                             resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._26sdp),
                             resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._26sdp)
@@ -533,7 +535,7 @@ class ProductFilterSheetController(
     }
 
     private fun updateFilterSelectionUi(
-        fieldText: TextView?,
+        fieldText: AppTextView?,
         chipsContainer: RecyclerView,
         selectedOptions: LinkedHashMap<String, String>,
         placeholder: String,
@@ -564,7 +566,7 @@ class ProductFilterSheetController(
     }
 
     private fun refreshFilterSelectionUi(
-        fieldText: TextView?,
+        fieldText: AppTextView?,
         chipsContainer: RecyclerView,
         selectedOptions: LinkedHashMap<String, String>,
         placeholder: String,
@@ -584,9 +586,9 @@ class ProductFilterSheetController(
 
     private fun resetFilterSheet(
         sheetBinding: LayoutProductFilterSheetBinding,
-        manufacturerFieldText: TextView?,
-        vendorFieldText: TextView?,
-        attributeTagFieldText: TextView?
+        manufacturerFieldText: AppTextView?,
+        vendorFieldText: AppTextView?,
+        attributeTagFieldText: AppTextView?
     ) {
         filterState.categories.clear()
         filterState.manufacturers.clear()
@@ -611,9 +613,9 @@ class ProductFilterSheetController(
 
     private fun bindFilterSheetValues(
         sheetBinding: LayoutProductFilterSheetBinding,
-        manufacturerFieldText: TextView?,
-        vendorFieldText: TextView?,
-        attributeTagFieldText: TextView?
+        manufacturerFieldText: AppTextView?,
+        vendorFieldText: AppTextView?,
+        attributeTagFieldText: AppTextView?
     ) {
         sheetBinding.filterSearchEditText.setText(filterState.searchText)
         sheetBinding.minPriceEditText.setText(filterState.minListPrice?.toString().orEmpty())

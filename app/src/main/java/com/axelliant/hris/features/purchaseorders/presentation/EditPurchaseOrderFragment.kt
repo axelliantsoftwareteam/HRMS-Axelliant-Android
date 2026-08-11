@@ -16,6 +16,7 @@ import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -25,6 +26,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.axelliant.hris.R
+import com.axelliant.hris.ui.designsystem.components.AppTextView
+import com.axelliant.hris.ui.designsystem.components.createAppBottomSheetDialog
 import com.axelliant.hris.core.ui.UiState
 import com.axelliant.hris.databinding.FragmentEditPurchaseOrderBinding
 import com.axelliant.hris.databinding.ItemEditPoProductBinding
@@ -63,7 +66,6 @@ class EditPurchaseOrderFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.avatarText.text = getString(R.string.ia_app_name).toInitials()
         setupInteractions()
         observeAddressResults()
         observeProductResults()
@@ -71,7 +73,7 @@ class EditPurchaseOrderFragment : Fragment() {
     }
 
     private fun setupInteractions() {
-        binding.backButton.setOnClickListener { findNavController().navigateUp() }
+        binding.appTopBar.setOnBackClickListener { findNavController().navigateUp() }
         binding.cancelButton.setOnClickListener { findNavController().navigateUp() }
         binding.vendorField.setOnClickListener {
             val vendors = viewModel.uiState.value.vendors
@@ -289,7 +291,7 @@ class EditPurchaseOrderFragment : Fragment() {
         }
     }
 
-    private fun bindDropdown(textView: TextView, value: String?, placeholder: String) {
+    private fun bindDropdown(textView: AppTextView, value: String?, placeholder: String) {
         val hasValue = !value.isNullOrBlank()
         textView.text = if (hasValue) value else placeholder
         textView.setTextColor(
@@ -314,7 +316,7 @@ class EditPurchaseOrderFragment : Fragment() {
         selected: (T) -> Boolean = { false },
         onSelected: (T) -> Unit
     ) {
-        val dialog = BottomSheetDialog(requireContext())
+        val dialog = requireContext().createAppBottomSheetDialog()
         val container = LinearLayout(requireContext()).apply {
             orientation = LinearLayout.VERTICAL
             setBackgroundResource(R.drawable.bg_filter_sheet)
@@ -328,7 +330,7 @@ class EditPurchaseOrderFragment : Fragment() {
         val titleView = TextView(requireContext()).apply {
             text = title
             setTextColor(ContextCompat.getColor(requireContext(), R.color.ds_text_primary))
-            typeface = resources.getFont(R.font.poppins_semibold)
+            typeface = ResourcesCompat.getFont(requireContext(), R.font.poppins_semibold)
             textSize = 18f
         }
         container.addView(titleView)
@@ -422,15 +424,6 @@ class EditPurchaseOrderFragment : Fragment() {
             city = getString(AddQuoteAddressFragment.KEY_CITY).orEmpty(),
             zipCode = getString(AddQuoteAddressFragment.KEY_ZIP).orEmpty()
         )
-    }
-
-    private fun String.toInitials(): String {
-        val parts = trim().split(Regex("\\s+")).filter { it.isNotBlank() }
-        return when {
-            parts.isEmpty() -> "?"
-            parts.size == 1 -> parts[0].take(1).uppercase()
-            else -> "${parts.first().take(1)}${parts.last().take(1)}".uppercase()
-        }
     }
 
     override fun onDestroyView() {

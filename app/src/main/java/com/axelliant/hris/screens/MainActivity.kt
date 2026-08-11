@@ -14,12 +14,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.axelliant.hris.R
+import com.axelliant.hris.core.auth.GlobalLogoutCoordinator
 import com.axelliant.hris.core.events.AppSessionEvents
 import com.axelliant.hris.config.GlobalConfig
 import com.axelliant.hris.core.contracts.navigation.AppNavControllerStore
 import com.axelliant.hris.core.contracts.navigation.WorkspaceKey
 import com.axelliant.hris.core.contracts.session.SessionExpiryContract
-import com.axelliant.hris.extention.showErrorMsg
 import com.axelliant.hris.navigation.AppNavigator
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
@@ -30,9 +30,6 @@ import com.google.android.play.core.install.InstallStateUpdatedListener
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.InstallStatus
 import com.google.android.play.core.install.model.UpdateAvailability
-import com.microsoft.identity.client.IAccount
-import com.microsoft.identity.client.ISingleAccountPublicClientApplication
-import com.microsoft.identity.client.exception.MsalException
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import kotlinx.coroutines.launch
@@ -61,8 +58,8 @@ class MainActivity : BaseActivity() {
     lateinit var appNavControllerStore: AppNavControllerStore
     @Inject
     lateinit var sessionExpiryContract: SessionExpiryContract
-    private var mSingleAccountApp: ISingleAccountPublicClientApplication? = null
-    private var mAccount: IAccount? = null
+    @Inject
+    lateinit var globalLogoutCoordinator: GlobalLogoutCoordinator
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -117,23 +114,10 @@ class MainActivity : BaseActivity() {
     private fun observeSessionExpiryEvents() {
         lifecycleScope.launch {
             sessionExpiryContract.sessionExpiredEvents.collect { event ->
-                signOutMicrosoftAccount()
+                globalLogoutCoordinator.logout()
                 AppNavigator.navigateToLogin()
             }
         }
-    }
-
-    private fun signOutMicrosoftAccount() {
-        mSingleAccountApp?.signOut(object :
-            ISingleAccountPublicClientApplication.SignOutCallback {
-            override fun onSignOut() {
-                mAccount = null
-            }
-
-            override fun onError(exception: MsalException) {
-                this@MainActivity.showErrorMsg(exception.toString())
-            }
-        })
     }
     private fun checkForAppUpdate() {
         // Returns an intent object that you use to check for an update.

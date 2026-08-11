@@ -26,9 +26,9 @@
             app:layout_constraintTop_toTopOf="parent">
         </ImageView>
 
-        <com.google.android.material.textview.MaterialTextView
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/tv_attend"
-            style="@style/TEXT_MEDIUM_GREY_10"
+            style="@style/Text.Fluent2.Caption.Muted.Strong"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:gravity="center"
@@ -43,15 +43,15 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.textview.MaterialTextView
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/tv_present_txt"
-            style="@style/TEXT_MEDIUM_WHITE_10"
+            style="@style/Text.Fluent2.Caption.Inverse.Strong"
             android:layout_width="@dimen/_15sdp"
             android:layout_height="@dimen/_15sdp"
             android:background="@drawable/circle_no_bg"
             android:gravity="center"
             android:textSize="@dimen/_6ssp"
-            android:backgroundTint="@color/colorApp"
+            android:backgroundTint="@color/ds_primary"
             android:text="20"
             app:layout_constraintBottom_toBottomOf="@+id/tv_attend"
             app:layout_constraintEnd_toEndOf="parent"

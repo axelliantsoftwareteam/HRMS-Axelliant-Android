@@ -223,7 +223,7 @@ class AddResourceManageFragment : BaseFragment(), AddResourceManageAdapter.OnUpd
 
         }
 
-        binding?.ivBack?.setOnClickListener {
+        binding?.appTopBar?.setOnBackClickListener {
             AppNavigator.moveBackToPreviousFragment()
         }
 

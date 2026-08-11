@@ -189,7 +189,7 @@
                         android:text="@string/ask_ai_upload_file_support"
                         android:textColor="@color/ds_text_secondary" />
 
-                    <ProgressBar
+                    <com.axelliant.hris.ui.designsystem.components.AppProgressBarView
                         android:id="@+id/uploadFileProgress"
                         style="?android:attr/progressBarStyleHorizontal"
                         android:layout_width="match_parent"
@@ -212,7 +212,7 @@
                     android:textColor="@color/ds_text_secondary"
                     tools:text="@string/ask_ai_listening" />
 
-                <ProgressBar
+                <com.axelliant.hris.ui.designsystem.components.AppProgressBarView
                     android:id="@+id/inputMethodProgress"
                     style="?android:attr/progressBarStyleHorizontal"
                     android:layout_width="match_parent"
@@ -324,7 +324,7 @@
                     android:text="@string/ask_ai_extracting_details"
                     android:textColor="@color/ds_text_secondary" />
 
-                <ProgressBar
+                <com.axelliant.hris.ui.designsystem.components.AppProgressBarView
                     style="?android:attr/progressBarStyleHorizontal"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_4sdp"

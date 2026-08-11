@@ -8,6 +8,7 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -15,6 +16,7 @@ import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import com.axelliant.hris.R
+import com.axelliant.hris.ui.designsystem.components.createAppBottomSheetDialog
 import com.axelliant.hris.databinding.BottomSheetQuoteProductActionsBinding
 import com.axelliant.hris.databinding.ItemQuoteDeliveryScheduleRowBinding
 import com.axelliant.hris.features.quotes.domain.model.QuoteAddressUi
@@ -49,7 +51,7 @@ class QuoteProductActionsBottomSheet(
         workingProduct = prepareWorkingProduct(initialProduct)
         val inflater = LayoutInflater.from(fragment.requireContext())
         binding = BottomSheetQuoteProductActionsBinding.inflate(inflater)
-        val sheetDialog = BottomSheetDialog(fragment.requireContext())
+        val sheetDialog = fragment.requireContext().createAppBottomSheetDialog()
         dialog = sheetDialog
 
         bindHeader()
@@ -265,7 +267,7 @@ class QuoteProductActionsBottomSheet(
 
     private fun showAddressPicker(scheduleIndex: Int) {
         if (shippingAddresses.isEmpty()) return
-        val pickerDialog = BottomSheetDialog(fragment.requireContext())
+        val pickerDialog = fragment.requireContext().createAppBottomSheetDialog()
         val container = LinearLayout(fragment.requireContext()).apply {
             orientation = LinearLayout.VERTICAL
             setBackgroundResource(R.drawable.bg_filter_sheet)
@@ -279,7 +281,7 @@ class QuoteProductActionsBottomSheet(
         val titleView = TextView(fragment.requireContext()).apply {
             text = fragment.getString(R.string.add_quote_shipping_address_label)
             setTextColor(ContextCompat.getColor(fragment.requireContext(), R.color.ds_text_primary))
-            typeface = fragment.resources.getFont(R.font.poppins_semibold)
+            typeface = ResourcesCompat.getFont(fragment.requireContext(), R.font.poppins_semibold)
             textSize = 16f
         }
         container.addView(titleView)
@@ -287,7 +289,7 @@ class QuoteProductActionsBottomSheet(
             val row = TextView(fragment.requireContext()).apply {
                 text = address.displayTextWithLocation
                 setTextColor(ContextCompat.getColor(fragment.requireContext(), R.color.ds_text_primary))
-                typeface = fragment.resources.getFont(R.font.poppins_regular)
+                typeface = ResourcesCompat.getFont(fragment.requireContext(), R.font.poppins_regular)
                 textSize = 12f
                 gravity = android.view.Gravity.CENTER_VERTICAL
                 background = ContextCompat.getDrawable(fragment.requireContext(), R.drawable.bg_filter_field)

@@ -43,9 +43,9 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_delete">
 
-            <com.google.android.material.textview.MaterialTextView
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
                 android:id="@+id/tv_attend_type"
-                style="@style/TEXT_MEDIUM_BLACK_10"
+                style="@style/Text.Fluent2.Caption.Primary.Strong"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
@@ -107,9 +107,9 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <com.google.android.material.textview.MaterialTextView
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
                     android:id="@+id/tv_date"
-                    style="@style/TEXT_MEDIUM_BLACK_10"
+                    style="@style/Text.Fluent2.Caption.Primary.Strong"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/due_date"
@@ -123,9 +123,9 @@
                     android:orientation="vertical">
 
 
-                    <com.google.android.material.textview.MaterialTextView
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
                         android:id="@+id/tv_date_txt"
-                        style="@style/TEXT_MEDIUM_BLACK_10"
+                        style="@style/Text.Fluent2.Caption.Primary.Strong"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:hint="@string/date"
@@ -156,9 +156,9 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <com.google.android.material.textview.MaterialTextView
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
                     android:id="@+id/tv_time"
-                    style="@style/TEXT_MEDIUM_BLACK_10"
+                    style="@style/Text.Fluent2.Caption.Primary.Strong"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_5sdp"
@@ -166,9 +166,9 @@
                     android:textAlignment="textStart" />
 
 
-                <com.google.android.material.textfield.TextInputLayout
+                <com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout
                     android:id="@+id/til_amount"
-                    style="@style/OutlinedTextInputLayoutReason"
+                    style="@style/Widget.Fluent2.InputLayout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/_5sdp"
@@ -177,19 +177,19 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <com.axelliant.hris.ui.designsystem.components.AppTextFieldView
                         android:id="@+id/et_amount"
-                        style="@style/TEXT_MEDIUM_BLACK_10"
+                        style="@style/Text.Fluent2.Caption.Primary.Strong"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:hint="@string/amount"
                         android:textAlignment="textStart"
                         android:inputType="numberDecimal"
                         tools:text="asdsa"
-                        android:textColorHint="@color/grey"
+                        android:textColorHint="@color/ds_text_muted"
                         />
 
-                </com.google.android.material.textfield.TextInputLayout>
+                </com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout>
             </LinearLayout>
 
         </LinearLayout>
@@ -206,17 +206,17 @@
             app:layout_constraintTop_toBottomOf="@id/ly_amount">
 
 
-            <com.google.android.material.textview.MaterialTextView
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
                 android:id="@+id/tv_attend_reason_header"
-                style="@style/TEXT_MEDIUM_BLACK_10"
+                style="@style/Text.Fluent2.Caption.Primary.Strong"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="start|center"
                 android:text="@string/description" />
 
-            <com.google.android.material.textfield.TextInputLayout
+            <com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout
                 android:id="@+id/til_attendance_reason"
-                style="@style/OutlinedTextInputLayoutReason"
+                style="@style/Widget.Fluent2.InputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginTop="@dimen/_2sdp"
@@ -228,9 +228,9 @@
                 app:layout_constraintStart_toStartOf="@+id/tv_attend_reason_header"
                 app:layout_constraintTop_toBottomOf="@+id/tv_attend_reason_header">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <com.axelliant.hris.ui.designsystem.components.AppTextFieldView
                     android:id="@+id/et_attendance_reason"
-                    style="@style/TEXT_MEDIUM_BLACK_10"
+                    style="@style/Text.Fluent2.Caption.Primary.Strong"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start|top"
@@ -239,10 +239,10 @@
                     android:maxLines="3"
                     android:minLines="2"
                     android:singleLine="false"
-                    android:textColorHint="@color/grey"
+                    android:textColorHint="@color/ds_text_muted"
                     tools:text="" />
 
-            </com.google.android.material.textfield.TextInputLayout>
+            </com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout>
 
 
         </LinearLayout>
@@ -292,9 +292,9 @@
 <!--            app:layout_constraintStart_toStartOf="parent"-->
 <!--            app:layout_constraintTop_toTopOf="parent">-->
 
-<!--            <com.google.android.material.textview.MaterialTextView-->
+<!--            <com.axelliant.hris.ui.designsystem.components.AppTextView-->
 <!--                android:id="@+id/tv_attend_type"-->
-<!--                style="@style/TEXT_MEDIUM_BLACK_10"-->
+<!--                style="@style/Text.Fluent2.Caption.Primary.Strong"-->
 <!--                android:layout_width="0dp"-->
 <!--                android:layout_height="wrap_content"-->
 <!--                android:layout_weight="3"-->
@@ -304,9 +304,9 @@
 <!--                app:layout_constraintTop_toBottomOf="@id/ly_attend_header" />-->
 
 
-<!--            <com.google.android.material.textview.MaterialTextView-->
+<!--            <com.axelliant.hris.ui.designsystem.components.AppTextView-->
 <!--                android:id="@+id/tv_date"-->
-<!--                style="@style/TEXT_MEDIUM_BLACK_10"-->
+<!--                style="@style/Text.Fluent2.Caption.Primary.Strong"-->
 <!--                android:layout_width="0dp"-->
 <!--                android:layout_height="wrap_content"-->
 <!--                android:layout_marginStart="@dimen/_5sdp"-->
@@ -314,9 +314,9 @@
 <!--                android:text="@string/due_date"-->
 <!--                android:textAlignment="textStart" />-->
 
-<!--            <com.google.android.material.textview.MaterialTextView-->
+<!--            <com.axelliant.hris.ui.designsystem.components.AppTextView-->
 <!--                android:id="@+id/tv_time"-->
-<!--                style="@style/TEXT_MEDIUM_BLACK_10"-->
+<!--                style="@style/Text.Fluent2.Caption.Primary.Strong"-->
 <!--                android:layout_width="0dp"-->
 <!--                android:layout_height="wrap_content"-->
 <!--                android:layout_marginStart="@dimen/_5sdp"-->
@@ -395,9 +395,9 @@
 <!--                android:paddingStart="@dimen/_2sdp">-->
 
 
-<!--                <com.google.android.material.textview.MaterialTextView-->
+<!--                <com.axelliant.hris.ui.designsystem.components.AppTextView-->
 <!--                    android:id="@+id/tv_date_txt"-->
-<!--                    style="@style/TEXT_MEDIUM_BLACK_10"-->
+<!--                    style="@style/Text.Fluent2.Caption.Primary.Strong"-->
 <!--                    android:layout_width="0dp"-->
 <!--                    android:layout_height="wrap_content"-->
 <!--                    android:hint="@string/date"-->
@@ -423,9 +423,9 @@
 <!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
 
 
-<!--            <com.google.android.material.textfield.TextInputLayout-->
+<!--            <com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout-->
 <!--                android:id="@+id/til_amount"-->
-<!--                style="@style/OutlinedTextInputLayoutReason"-->
+<!--                style="@style/Widget.Fluent2.InputLayout"-->
 <!--                android:layout_width="0dp"-->
 <!--                android:layout_height="match_parent"-->
 <!--                android:layout_marginStart="@dimen/_5sdp"-->
@@ -435,9 +435,9 @@
 <!--                app:layout_constraintStart_toStartOf="parent"-->
 <!--                app:layout_constraintTop_toTopOf="parent">-->
 
-<!--                <com.google.android.material.textfield.TextInputEditText-->
+<!--                <com.axelliant.hris.ui.designsystem.components.AppTextFieldView-->
 <!--                    android:id="@+id/et_amount"-->
-<!--                    style="@style/TEXT_MEDIUM_BLACK_10"-->
+<!--                    style="@style/Text.Fluent2.Caption.Primary.Strong"-->
 <!--                    android:layout_width="match_parent"-->
 <!--                    android:layout_height="match_parent"-->
 <!--                    android:hint="@string/amount"-->
@@ -445,11 +445,11 @@
 <!--                    android:maxLines="1"-->
 <!--                    android:minLines="1"-->
 <!--                    android:singleLine="true"-->
-<!--                    android:textColorHint="@color/grey"-->
+<!--                    android:textColorHint="@color/ds_text_muted"-->
 <!--                    android:textSize="@dimen/_7ssp"-->
 <!--                    tools:text="" />-->
 
-<!--            </com.google.android.material.textfield.TextInputLayout>-->
+<!--            </com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout>-->
 
 
 <!--        </LinearLayout>-->
@@ -466,17 +466,17 @@
 <!--            app:layout_constraintTop_toBottomOf="@id/ll_dd">-->
 
 
-<!--            <com.google.android.material.textview.MaterialTextView-->
+<!--            <com.axelliant.hris.ui.designsystem.components.AppTextView-->
 <!--                android:id="@+id/tv_attend_reason_header"-->
-<!--                style="@style/TEXT_MEDIUM_BLACK_10"-->
+<!--                style="@style/Text.Fluent2.Caption.Primary.Strong"-->
 <!--                android:layout_width="match_parent"-->
 <!--                android:layout_height="wrap_content"-->
 <!--                android:gravity="start|center"-->
 <!--                android:text="@string/description" />-->
 
-<!--            <com.google.android.material.textfield.TextInputLayout-->
+<!--            <com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout-->
 <!--                android:id="@+id/til_attendance_reason"-->
-<!--                style="@style/OutlinedTextInputLayoutReason"-->
+<!--                style="@style/Widget.Fluent2.InputLayout"-->
 <!--                android:layout_width="match_parent"-->
 <!--                android:layout_height="0dp"-->
 <!--                android:layout_marginTop="@dimen/_2sdp"-->
@@ -488,9 +488,9 @@
 <!--                app:layout_constraintStart_toStartOf="@+id/tv_attend_reason_header"-->
 <!--                app:layout_constraintTop_toBottomOf="@+id/tv_attend_reason_header">-->
 
-<!--                <com.google.android.material.textfield.TextInputEditText-->
+<!--                <com.axelliant.hris.ui.designsystem.components.AppTextFieldView-->
 <!--                    android:id="@+id/et_attendance_reason"-->
-<!--                    style="@style/TEXT_MEDIUM_BLACK_10"-->
+<!--                    style="@style/Text.Fluent2.Caption.Primary.Strong"-->
 <!--                    android:layout_width="match_parent"-->
 <!--                    android:layout_height="wrap_content"-->
 <!--                    android:gravity="start|top"-->
@@ -499,10 +499,10 @@
 <!--                    android:maxLines="3"-->
 <!--                    android:minLines="2"-->
 <!--                    android:singleLine="false"-->
-<!--                    android:textColorHint="@color/grey"-->
+<!--                    android:textColorHint="@color/ds_text_muted"-->
 <!--                    tools:text="" />-->
 
-<!--            </com.google.android.material.textfield.TextInputLayout>-->
+<!--            </com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout>-->
 
 
 <!--        </LinearLayout>-->

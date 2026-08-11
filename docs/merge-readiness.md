@@ -92,7 +92,7 @@ Renamed Internal Apps values:
 - `black` -> `ia_black`
 - `white` -> `ia_white`
 - `ds_radius_sm`, `ds_radius_md`, `ds_radius_lg`, `ds_radius_xl` -> `ia_ds_radius_*`
-- Generic legacy `TEXT_*` styles -> `IA_TEXT_*`
+- Internal Apps legacy `IA_TEXT_*` styles -> canonical `Text.Fluent2.*` styles
 - Guideline styles `start_gl`, `end_gl`, `bottom_gl`, `top_gl` -> `ia_start_gl`, `ia_end_gl`, `ia_bottom_gl`, `ia_top_gl`
 
 After this pass, the scanner reports no value-resource name collisions. Remaining scanner findings are expected file-level/app-shell collisions and duplicate class names that should be resolved during feature import.
@@ -150,4 +150,19 @@ Run from the HRIS repo:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\tools\scan-android-merge-collisions.ps1 -HrisRoot "D:\gitAxelliant\HRIS\HRMS-Axelliant-Android" -InternalAppsRoot "D:\gitAxelliant\Android-ERP\InternalAppsAndroid"
+```
+
+## UI Architecture Migration
+
+The merged app should use XML screens and RecyclerView/ListAdapter feature rows while hiding Fluent2 Compose internals behind generic `ui/designsystem` bridge components.
+
+See:
+
+- `docs/ui-architecture-migration.md`
+- `tools/scan-ui-architecture.ps1`
+
+Run the UI scanner from the HRIS repo:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\tools\scan-ui-architecture.ps1
 ```

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    style="@style/Layout.Fluent2.Screen" xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -10,22 +11,22 @@
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/startGuideline"
-        style="@style/ia_start_gl"
+        style="@style/Guideline.Fluent2.Start"
         android:orientation="vertical" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/endGuideline"
-        style="@style/ia_end_gl"
+        style="@style/Guideline.Fluent2.End"
         android:orientation="vertical" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/topGuideline"
-        style="@style/ia_top_gl"
+        style="@style/Guideline.Fluent2.Top"
         android:orientation="horizontal" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/bottomGuideline"
-        style="@style/ia_bottom_gl"
+        style="@style/Guideline.Fluent2.Bottom"
         android:orientation="horizontal" />
 
     <com.axelliant.hris.ui.designsystem.components.AppButtonView

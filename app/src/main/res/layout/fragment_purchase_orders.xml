@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    style="@style/Layout.Fluent2.Screen" xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/purchase_order_fluent_background">
+    android:background="@color/ds_background">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/contentContainer"
@@ -16,78 +17,34 @@
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/startGuideline"
-            style="@style/ia_start_gl"
+            style="@style/Guideline.Fluent2.Start"
             android:orientation="vertical" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/endGuideline"
-            style="@style/ia_end_gl"
+            style="@style/Guideline.Fluent2.End"
             android:orientation="vertical" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/topGuideline"
-            style="@style/ia_top_gl"
+            style="@style/Guideline.Fluent2.Top"
             android:orientation="horizontal" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/bottomGuideline"
-            style="@style/ia_bottom_gl"
+            style="@style/Guideline.Fluent2.Bottom"
             android:orientation="horizontal" />
 
-        <View
-            android:id="@+id/topBarBackground"
+        <com.axelliant.hris.ui.designsystem.components.AppTopBarView
+            android:id="@+id/appTopBar"
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@color/purchase_order_fluent_surface"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@id/toolbarBarrier"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <com.axelliant.hris.ui.designsystem.components.AppButtonView
-            android:id="@+id/backButton"
-            style="@style/Widget.InternalApps.Dashboard.IconButton"
-            android:contentDescription="@string/purchase_orders_title"
-            app:icon="@drawable/ic_arrow_back"
-            app:noBackground="true"
-            app:layout_constraintBottom_toBottomOf="@id/searchIconButton"
-            app:layout_constraintStart_toStartOf="@id/startGuideline"
-            app:layout_constraintTop_toTopOf="@id/searchIconButton" />
-
-        <com.axelliant.hris.ui.designsystem.components.AppTextView
-            android:id="@+id/toolbarTitle"
-            style="@style/Text.InternalApps.Heading"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/ds_space_8"
-            android:layout_marginEnd="@dimen/ds_space_8"
-            android:fontFamily="sans-serif-medium"
-            android:text="@string/purchase_orders_title"
-            android:textColor="@color/purchase_order_fluent_text_primary"
-            app:layout_constraintBottom_toBottomOf="@id/searchIconButton"
-            app:layout_constraintEnd_toStartOf="@id/searchIconButton"
-            app:layout_constraintStart_toEndOf="@id/backButton"
-            app:layout_constraintTop_toTopOf="@id/searchIconButton" />
-
-        <com.axelliant.hris.ui.designsystem.components.AppButtonView
-            android:id="@+id/searchIconButton"
-            style="@style/Widget.InternalApps.Dashboard.IconButton"
-            android:layout_width="@dimen/_40sdp"
             android:layout_height="@dimen/_40sdp"
-            app:noBackground="true"
-            app:icon="@drawable/ia_ic_search"
-            android:contentDescription="@string/purchase_orders_search_open"
+            app:titleText="@string/purchase_orders_title"
+            app:showSearchButton="true"
+            app:searchIcon="@drawable/ia_ic_search"
             app:layout_constraintEnd_toEndOf="@id/endGuideline"
+            app:layout_constraintStart_toStartOf="@id/startGuideline"
             app:layout_constraintTop_toBottomOf="@id/topGuideline"/>
-
-        <androidx.constraintlayout.widget.Barrier
-            android:id="@+id/toolbarBarrier"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:barrierDirection="bottom"
-            app:barrierMargin="@dimen/ds_space_8"
-            app:constraint_referenced_ids="backButton,toolbarTitle,searchIconButton" />
 
         <com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout
             android:id="@+id/searchInputLayout"
@@ -102,7 +59,7 @@
             app:hintEnabled="false"
             app:layout_constraintEnd_toEndOf="@id/endGuideline"
             app:layout_constraintStart_toStartOf="@id/startGuideline"
-            app:layout_constraintTop_toBottomOf="@id/toolbarBarrier"
+            app:layout_constraintTop_toBottomOf="@id/appTopBar"
             app:startIconDrawable="@drawable/ia_ic_search">
 
             <com.axelliant.hris.ui.designsystem.components.AppTextFieldView

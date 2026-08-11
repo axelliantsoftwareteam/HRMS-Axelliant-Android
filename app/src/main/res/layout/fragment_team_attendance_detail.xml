@@ -4,47 +4,40 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+    style="@style/Layout.Fluent2.Screen"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/start_guideline"
-            style="@style/start_gl"
+            style="@style/Guideline.Fluent2.Start"
             android:orientation="vertical" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/end_guideline"
-            style="@style/end_gl"
+            style="@style/Guideline.Fluent2.End"
             android:orientation="vertical" />
 
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/bottom_guideline"
-            style="@style/bottom_gl" />
+            style="@style/Guideline.Fluent2.Bottom" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/top_guideline"
-            style="@style/top_gl" />
+            style="@style/Guideline.Fluent2.Top" />
 
-        <ImageView
-            android:id="@+id/iv_back"
-            android:layout_width="@dimen/_30sdp"
-            android:layout_height="@dimen/_30sdp"
-            android:layout_marginEnd="@dimen/_5sdp"
-            android:contentDescription="@string/todo"
-            android:src="@drawable/ic_left"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/top_guideline" />
-
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv_title"
-            style="@style/TEXT_SEMI_BLACK_15"
-            android:gravity="center"
-            android:text="@string/my_team"
-            app:layout_constraintBottom_toBottomOf="@+id/iv_back"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/iv_back" />
+        <com.axelliant.hris.ui.designsystem.components.AppTopBarView
+            android:id="@+id/appTopBar"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_40sdp"
+            app:centerTitle="true"
+            app:showBackButton="true"
+            app:showSearchButton="false"
+            app:titleText="@string/my_team"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintTop_toBottomOf="@id/top_guideline" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
@@ -53,7 +46,7 @@
             app:layout_constraintBottom_toBottomOf="@id/bottom_guideline"
             app:layout_constraintEnd_toEndOf="@id/end_guideline"
             app:layout_constraintStart_toStartOf="@id/start_guideline"
-            app:layout_constraintTop_toBottomOf="@+id/iv_back">
+            app:layout_constraintTop_toBottomOf="@id/appTopBar">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/ly_action_btn"
@@ -68,9 +61,9 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <com.google.android.material.textview.MaterialTextView
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
                     android:id="@+id/tv_week"
-                    style="@style/TEXT_REGULAR_WHITE_10"
+                    style="@style/Text.Fluent2.Caption.Inverse"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:background="@drawable/rounded_enabled"
@@ -81,9 +74,9 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <com.google.android.material.textview.MaterialTextView
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
                     android:id="@+id/tv_month"
-                    style="@style/TEXT_REGULAR_BLACK_10"
+                    style="@style/Text.Fluent2.Caption.Primary"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/_5sdp"
@@ -94,9 +87,9 @@
                     app:layout_constraintEnd_toStartOf="@+id/tv_custom"
                     app:layout_constraintStart_toEndOf="@+id/tv_week" />
 
-                <com.google.android.material.textview.MaterialTextView
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
                     android:id="@+id/tv_custom"
-                    style="@style/TEXT_REGULAR_BLACK_10"
+                    style="@style/Text.Fluent2.Caption.Primary"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/_5sdp"
@@ -117,9 +110,9 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ly_action_btn">
 
-                <com.google.android.material.textview.MaterialTextView
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
                     android:id="@+id/tv_start_date"
-                    style="@style/TEXT_MEDIUM_BLACK_10"
+                    style="@style/Text.Fluent2.Caption.Primary.Strong"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/_5sdp"
@@ -144,9 +137,9 @@
                     app:layout_constraintTop_toTopOf="parent">
 
 
-                    <com.google.android.material.textview.MaterialTextView
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
                         android:id="@+id/tv_start_date_txt"
-                        style="@style/TEXT_MEDIUM_GREY_10"
+                        style="@style/Text.Fluent2.Caption.Muted.Strong"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_5sdp"
@@ -183,9 +176,9 @@
                     app:layout_constraintTop_toTopOf="@+id/ly_end_date" />
 
 
-                <com.google.android.material.textview.MaterialTextView
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
                     android:id="@+id/tv_end_date"
-                    style="@style/TEXT_MEDIUM_BLACK_10"
+                    style="@style/Text.Fluent2.Caption.Primary.Strong"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_5sdp"
@@ -211,9 +204,9 @@
                     app:layout_constraintTop_toBottomOf="@+id/tv_end_date">
 
 
-                    <com.google.android.material.textview.MaterialTextView
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
                         android:id="@+id/tv_end_date_txt"
-                        style="@style/TEXT_MEDIUM_GREY_10"
+                        style="@style/Text.Fluent2.Caption.Muted.Strong"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_5sdp"
@@ -291,9 +284,9 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
-                    <com.google.android.material.textview.MaterialTextView
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
                         android:id="@+id/tv_team_member"
-                        style="@style/TEXT_MEDIUM_WHITE_15"
+                        style="@style/Text.Fluent2.Subheading.Inverse.Strong"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:text="@string/team_member"
@@ -302,9 +295,9 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <com.google.android.material.textview.MaterialTextView
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
                         android:id="@+id/tv_team_member_txt"
-                        style="@style/TEXT_MEDIUM_BLACK_12"
+                        style="@style/Text.Fluent2.Body.Primary.Strong"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_marginStart="@dimen/_5sdp"
@@ -334,9 +327,9 @@
                     tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:listitem="@layout/my_team_attend_row" />
 
-                <com.google.android.material.textview.MaterialTextView
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
                     android:id="@+id/tv_no_record"
-                    style="@style/TEXT_SEMI_BLACK_15"
+                    style="@style/Text.Fluent2.Subheading.Primary.Strong"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"

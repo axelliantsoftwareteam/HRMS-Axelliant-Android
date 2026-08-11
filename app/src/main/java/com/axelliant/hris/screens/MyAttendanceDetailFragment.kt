@@ -4,14 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import com.axelliant.hris.R
+import com.axelliant.hris.adapter.MyAttendanceDetailAdapter
+import com.axelliant.hris.adapter.SubFilterAdapter
 import com.axelliant.hris.base.BaseFragment
-import com.axelliant.hris.components.AttendanceDetailContent
+import com.axelliant.hris.callback.AdapterItemClick
 import com.axelliant.hris.config.GlobalConfig
 import com.axelliant.hris.core.constants.AppRouteArgs
 import com.axelliant.hris.databinding.FragmentMyAttendanceDetailBinding
@@ -28,6 +27,8 @@ import com.axelliant.hris.utils.Utils
 import com.axelliant.hris.viewmodel.AttendanceViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Date
 
@@ -43,12 +44,8 @@ class MyAttendanceDetailFragment : BaseFragment() {
 
     private var emplId = ""
     private var filterId = ""
-
-    // Compose-observable state
-    private var attendanceListState by mutableStateOf(listOf<AttendanceDetail>())
-    private var filterListState by mutableStateOf(listOf<FilterModel>())
-    private var startDateDisplay by mutableStateOf("")
-    private var endDateDisplay by mutableStateOf("")
+    private var attendanceList = arrayListOf<AttendanceDetail>()
+    private var filterList = arrayListOf<FilterModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -67,7 +64,7 @@ class MyAttendanceDetailFragment : BaseFragment() {
             emplId = bundle.getString(AppRouteArgs.EMPLOYEE_ID, GlobalConfig.currentEmployeeId())
         }
 
-        setupCompose()
+        setupRecyclerViews()
 
         attendanceViewModel.getIsLoading()
             .observe(viewLifecycleOwner, EventObserver { isLoading ->
@@ -94,43 +91,57 @@ class MyAttendanceDetailFragment : BaseFragment() {
 
             })
 
-        binding?.ivBack?.setOnClickListener {
+        binding?.appTopBar?.setOnBackClickListener {
             previousFragmentNavigation()
         }
     }
 
-    private fun setupCompose() {
-        binding?.composeAttendanceDetail?.apply {
-            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
-            setContent {
-                AttendanceDetailContent(
-                    startDate = startDateDisplay,
-                    endDate = endDateDisplay,
-                    filters = filterListState,
-                    selectedFilterId = filterId,
-                    attendanceList = attendanceListState,
-                    onFilterClick = { filter ->
-                        filterId = filter.id.toString()
-                        attendanceViewModel.getAttendanceDetail(getCurrentObject())
-                    },
-                    onStartDateClick = { datePickerDialog() },
-                    onEndDateClick = { datePickerDialog() }
-                )
-            }
-        }
+    private fun setupRecyclerViews() {
+        binding?.rvAttendanceFilters?.layoutManager =
+            LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+        binding?.rvAttendanceDetail?.layoutManager = LinearLayoutManager(requireContext())
+        binding?.tvFromDate?.setOnClickListener { datePickerDialog() }
+        binding?.tvToDate?.setOnClickListener { datePickerDialog() }
     }
 
     private fun dataPopulate(attendanceData: ArrayList<AttendanceDetail>) {
-        attendanceListState = attendanceData
+        attendanceList = attendanceData
+        renderContent()
     }
 
     private fun subFilterPopulations(attendanceStatusList: ArrayList<FilterModel>) {
-        attendanceStatusList.add(0, FilterModel().apply {
-            this.id = ""
-            this.title = "All"
-            this.count = "0"
-        })
-        filterListState = attendanceStatusList
+        filterList = arrayListOf<FilterModel>().apply {
+            add(FilterModel().apply {
+                id = ""
+                title = "All"
+                count = "0"
+            })
+            addAll(attendanceStatusList)
+        }
+        renderContent()
+    }
+
+    private fun renderContent() {
+        binding?.tvNoRecord?.isVisible = attendanceList.isEmpty()
+        binding?.rvAttendanceDetail?.isVisible = attendanceList.isNotEmpty()
+        binding?.rvAttendanceFilters?.adapter = SubFilterAdapter(
+            filterId,
+            filterList,
+            requireContext(),
+            object : AdapterItemClick {
+                override fun onItemClick(customObject: Any, position: Int) {
+                    filterId = (customObject as FilterModel).id.orEmpty()
+                    attendanceViewModel.getAttendanceDetail(getCurrentObject())
+                }
+            }
+        )
+        binding?.rvAttendanceDetail?.adapter = MyAttendanceDetailAdapter(
+            attendanceList,
+            requireContext(),
+            object : AdapterItemClick {
+                override fun onItemClick(customObject: Any, position: Int) = Unit
+            }
+        )
     }
 
     private fun eventSelection() {
@@ -181,8 +192,6 @@ class MyAttendanceDetailFragment : BaseFragment() {
                     ContextCompat.getDrawable(requireContext(), R.drawable.fluent_blue)
                 binding?.tvCustom?.setTextColor(requireContext().getColor(R.color.white))
             }
-
-            else -> {}
         }
     }
 
@@ -214,8 +223,8 @@ class MyAttendanceDetailFragment : BaseFragment() {
 
     private fun setDateView() {
         if (startDateString != null && endDateString != null) {
-            startDateDisplay = startDateString!!
-            endDateDisplay = endDateString!!
+            binding?.tvFromDate?.text = startDateString
+            binding?.tvToDate?.text = endDateString
         }
     }
 

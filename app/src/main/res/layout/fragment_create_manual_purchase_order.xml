@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    style="@style/Layout.Fluent2.Screen" xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,54 +9,35 @@
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/startGuideline"
-        style="@style/ia_start_gl"
+        style="@style/Guideline.Fluent2.Start"
         android:orientation="vertical" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/endGuideline"
-        style="@style/ia_end_gl"
+        style="@style/Guideline.Fluent2.End"
         android:orientation="vertical" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/topGuideline"
-        style="@style/ia_top_gl"
+        style="@style/Guideline.Fluent2.Top"
         android:orientation="horizontal" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/bottomGuideline"
-        style="@style/ia_bottom_gl"
+        style="@style/Guideline.Fluent2.Bottom"
         android:orientation="horizontal" />
 
-    <com.axelliant.hris.ui.designsystem.components.AppButtonView
-        android:id="@+id/backButton"
-        style="@style/Widget.InternalApps.Dashboard.IconButton"
-        app:icon="@drawable/ic_arrow_back"
+    <com.axelliant.hris.ui.designsystem.components.AppTopBarView
+        android:id="@+id/appTopBar"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_40sdp"
+        app:searchIcon="@drawable/ia_ic_search"
+        app:showBackButton="true"
+        app:showSearchButton="true"
+        app:titleText="@string/create_manual_po_title"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
         app:layout_constraintStart_toStartOf="@id/startGuideline"
         app:layout_constraintTop_toBottomOf="@id/topGuideline" />
-
-    <com.axelliant.hris.ui.designsystem.components.AppTextView
-        android:id="@+id/screenTitle"
-        style="@style/Text.InternalApps.Heading"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/ds_space_8"
-        android:fontFamily="@font/poppins_semibold"
-        android:gravity="center"
-        android:text="@string/create_manual_po_title"
-        android:textColor="@color/quotes_navy"
-        app:layout_constraintBottom_toBottomOf="@id/backButton"
-        app:layout_constraintEnd_toStartOf="@id/searchButton"
-        app:layout_constraintStart_toEndOf="@id/backButton"
-        app:layout_constraintTop_toTopOf="@id/backButton" />
-
-    <com.axelliant.hris.ui.designsystem.components.AppButtonView
-        android:id="@+id/searchButton"
-        style="@style/Widget.InternalApps.Dashboard.IconButton"
-        android:contentDescription="@string/create_manual_po_search_cd"
-        app:icon="@drawable/ia_ic_search"
-        app:layout_constraintBottom_toBottomOf="@id/backButton"
-        app:layout_constraintEnd_toEndOf="@id/endGuideline"
-        app:layout_constraintTop_toTopOf="@id/backButton" />
 
     <View
         android:id="@+id/headerDivider"
@@ -65,7 +47,7 @@
         android:background="@color/ds_outline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/backButton" />
+        app:layout_constraintTop_toBottomOf="@id/appTopBar" />
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/contentScroll"
@@ -397,7 +379,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ProgressBar
+        <com.axelliant.hris.ui.designsystem.components.AppProgressBarView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center" />

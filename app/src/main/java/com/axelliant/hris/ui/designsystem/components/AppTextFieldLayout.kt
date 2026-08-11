@@ -11,7 +11,6 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.LinearLayout
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import com.axelliant.hris.R
@@ -33,14 +32,31 @@ class AppTextFieldLayout @JvmOverloads constructor(
             editText?.hint = value
         }
     var isErrorEnabled: Boolean = false
+        set(value) {
+            field = value
+            updateErrorText()
+        }
     var isEndIconVisible: Boolean = false
+        set(value) {
+            field = value
+            applyEndIcon()
+        }
     var endIconMode: Int = END_ICON_NONE
+        set(value) {
+            field = value
+            applyEndIcon()
+        }
     var endIconDrawable: Drawable? = null
+        set(value) {
+            field = value
+            applyEndIcon()
+        }
     var isEndIconCheckable: Boolean = false
     private var endIconTint: Int? = null
     private var errorTextColor: ColorStateList? = null
     private var passwordVisible = false
-    private val errorTextView = AppCompatTextView(context)
+    private var endIconClickListener: OnClickListener? = null
+    private val errorTextView = AppTextView(context)
     val editText: AppTextFieldView?
         get() = (0 until childCount).map { getChildAt(it) }.filterIsInstance<AppTextFieldView>().firstOrNull()
 
@@ -67,7 +83,8 @@ class AppTextFieldLayout @JvmOverloads constructor(
     }
 
     fun setEndIconOnClickListener(listener: OnClickListener?) {
-        editText?.setOnClickListener(listener)
+        endIconClickListener = listener
+        applyEndIcon()
     }
 
     private fun applyDefaultBackground(attrs: AttributeSet?) {
@@ -90,6 +107,10 @@ class AppTextFieldLayout @JvmOverloads constructor(
             "custom" -> endIconMode = END_ICON_CUSTOM
         }
 
+        attrs.getAttributeResourceValue(AUTO_NS, "endIconDrawable", 0)
+            .takeIf { it != 0 }
+            ?.let { endIconDrawable = AppCompatResources.getDrawable(context, it)?.mutate() }
+
         attrs.getAttributeResourceValue(AUTO_NS, "endIconTint", 0)
             .takeIf { it != 0 }
             ?.let { endIconTint = ContextCompat.getColor(context, it) }
@@ -102,9 +123,9 @@ class AppTextFieldLayout @JvmOverloads constructor(
     private fun setupErrorText() {
         errorTextView.visibility = GONE
         errorTextView.includeFontPadding = false
-        errorTextView.textSize = 11f
+        errorTextView.setTextAppearance(R.style.TextAppearance_Fluent2_Caption)
         errorTextView.setTextColor(
-            errorTextColor ?: ContextCompat.getColorStateList(context, R.color.login_error)
+            errorTextColor ?: ContextCompat.getColorStateList(context, R.color.ds_error)
         )
         errorTextView.layoutParams = LayoutParams(
             LayoutParams.MATCH_PARENT,
@@ -128,28 +149,75 @@ class AppTextFieldLayout @JvmOverloads constructor(
 
     private fun applyEndIcon() {
         val field = editText ?: return
-        if (endIconMode != END_ICON_PASSWORD_TOGGLE) return
+        when (endIconMode) {
+            END_ICON_PASSWORD_TOGGLE -> applyPasswordToggle(field)
+            END_ICON_CLEAR_TEXT -> applyClearTextIcon(field)
+            END_ICON_CUSTOM -> applyCustomEndIcon(field)
+            else -> clearEndIcon(field)
+        }
+    }
 
-        endIconDrawable = AppCompatResources.getDrawable(context, R.drawable.ic_login_eye)?.mutate()?.let {
+    private fun applyPasswordToggle(field: AppTextFieldView) {
+        val icon = AppCompatResources.getDrawable(context, R.drawable.ic_login_eye)?.mutate()?.let {
             DrawableCompat.wrap(it).also { wrapped ->
                 endIconTint?.let { tint -> DrawableCompat.setTint(wrapped, tint) }
                 wrapped.setBounds(0, 0, wrapped.intrinsicWidth, wrapped.intrinsicHeight)
             }
         }
 
-        updatePasswordToggle(field)
+        updatePasswordToggle(field, icon)
         field.setOnTouchListener { _, event ->
             if (event.action != MotionEvent.ACTION_UP || !isTouchOnEndIcon(field, event)) return@setOnTouchListener false
             passwordVisible = !passwordVisible
-            updatePasswordToggle(field)
+            updatePasswordToggle(field, icon)
             field.setSelection(field.text?.length ?: 0)
             true
         }
     }
 
-    private fun updatePasswordToggle(field: AppTextFieldView) {
+    private fun applyClearTextIcon(field: AppTextFieldView) {
+        val icon = tintedEndIcon()
+            ?: AppCompatResources.getDrawable(context, R.drawable.ia_ic_filter_close)?.mutate()
+        setEndDrawable(field, icon)
+        field.setOnTouchListener { _, event ->
+            if (event.action != MotionEvent.ACTION_UP || !isTouchOnEndIcon(field, event)) return@setOnTouchListener false
+            field.text?.clear()
+            endIconClickListener?.onClick(this)
+            true
+        }
+    }
+
+    private fun applyCustomEndIcon(field: AppTextFieldView) {
+        setEndDrawable(field, tintedEndIcon())
+        field.setOnTouchListener { _, event ->
+            if (event.action != MotionEvent.ACTION_UP || !isTouchOnEndIcon(field, event)) return@setOnTouchListener false
+            endIconClickListener?.onClick(this)
+            true
+        }
+    }
+
+    private fun clearEndIcon(field: AppTextFieldView) {
         val drawables = field.compoundDrawables
-        field.setCompoundDrawables(drawables[0], drawables[1], endIconDrawable, drawables[3])
+        field.setCompoundDrawables(drawables[0], drawables[1], null, drawables[3])
+        field.setOnTouchListener(null)
+    }
+
+    private fun setEndDrawable(field: AppTextFieldView, drawable: Drawable?) {
+        val drawables = field.compoundDrawables
+        drawable?.setBounds(0, 0, drawable.intrinsicWidth, drawable.intrinsicHeight)
+        field.setCompoundDrawables(drawables[0], drawables[1], drawable, drawables[3])
+    }
+
+    private fun tintedEndIcon(): Drawable? {
+        return endIconDrawable?.mutate()?.let { source ->
+            DrawableCompat.wrap(source).also { wrapped ->
+                endIconTint?.let { tint -> DrawableCompat.setTint(wrapped, tint) }
+            }
+        }
+    }
+
+    private fun updatePasswordToggle(field: AppTextFieldView, icon: Drawable?) {
+        setEndDrawable(field, icon)
         field.transformationMethod = if (passwordVisible) {
             SingleLineTransformationMethod.getInstance()
         } else {

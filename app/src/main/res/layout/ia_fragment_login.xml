@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/Layout.Fluent2.Screen"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_login_screen"
@@ -9,21 +10,21 @@
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/start_guideline"
-        style="@style/ia_start_gl"
+        style="@style/Guideline.Fluent2.Start"
         android:orientation="vertical" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/end_guideline"
-        style="@style/ia_end_gl"
+        style="@style/Guideline.Fluent2.End"
         android:orientation="vertical" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/top_guideline"
-        style="@style/ia_top_gl" />
+        style="@style/Guideline.Fluent2.Top" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/bottom_guideline"
-        style="@style/ia_bottom_gl" />
+        style="@style/Guideline.Fluent2.Bottom" />
 
     <ImageView
         android:id="@+id/loginPatternImage"
@@ -83,7 +84,7 @@
 
             <com.axelliant.hris.ui.designsystem.components.AppTextView
                 android:id="@+id/loginTitle"
-                style="@style/IA_TEXT_SEMIBOLD_WHITE_18"
+                style="@style/Text.Fluent2.Title.Inverse.Strong"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/ds_space_16"
@@ -95,7 +96,7 @@
 
             <com.axelliant.hris.ui.designsystem.components.AppTextView
                 android:id="@+id/loginSubtitle"
-                style="@style/IA_TEXT_REGULAR_GREY_10"
+                style="@style/Text.Fluent2.Caption.Muted"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/ds_space_8"
@@ -119,7 +120,7 @@
 
             <com.axelliant.hris.ui.designsystem.components.AppTextView
                 android:id="@+id/emailLabel"
-                style="@style/IA_TEXT_MEDIUM_WHITE_10"
+                style="@style/Text.Fluent2.Caption.Inverse.Strong"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/login_panel_padding"
@@ -143,7 +144,7 @@
 
                 <com.axelliant.hris.ui.designsystem.components.AppTextFieldView
                     android:id="@+id/emailInput"
-                    style="@style/IA_TEXT_REGULAR_WHITE_12"
+                    style="@style/Text.Fluent2.Body.Inverse"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/login_field_height"
                     android:background="@drawable/bg_login_input"
@@ -162,7 +163,7 @@
 
             <com.axelliant.hris.ui.designsystem.components.AppTextView
                 android:id="@+id/passwordLabel"
-                style="@style/IA_TEXT_MEDIUM_WHITE_10"
+                style="@style/Text.Fluent2.Caption.Inverse.Strong"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/ds_space_16"
@@ -186,7 +187,7 @@
 
                 <com.axelliant.hris.ui.designsystem.components.AppTextFieldView
                     android:id="@+id/passwordInput"
-                    style="@style/IA_TEXT_REGULAR_WHITE_12"
+                    style="@style/Text.Fluent2.Body.Inverse"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/login_field_height"
                     android:background="@drawable/bg_login_input"
@@ -217,7 +218,7 @@
 
             <com.axelliant.hris.ui.designsystem.components.AppTextView
                 android:id="@+id/rememberMeText"
-                style="@style/IA_TEXT_REGULAR_WHITE_10"
+                style="@style/Text.Fluent2.Caption.Inverse"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/ds_space_6"
@@ -230,7 +231,7 @@
 
             <com.axelliant.hris.ui.designsystem.components.AppTextView
                 android:id="@+id/forgotPasswordText"
-                style="@style/IA_TEXT_REGULAR_WHITE_10"
+                style="@style/Text.Fluent2.Caption.Inverse"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/forgot_password"
@@ -239,7 +240,7 @@
                 app:layout_constraintTop_toTopOf="@+id/rememberMeText"
                 />
 
-            <ProgressBar
+            <com.axelliant.hris.ui.designsystem.components.AppProgressBarView
                 android:id="@+id/loginProgress"
                 android:layout_width="@dimen/_28sdp"
                 android:layout_height="@dimen/_28sdp"
@@ -252,7 +253,7 @@
 
             <com.axelliant.hris.ui.designsystem.components.AppTextView
                 android:id="@+id/errorText"
-                style="@style/IA_TEXT_REGULAR_WHITE_10"
+                style="@style/Text.Fluent2.Caption.Inverse"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/ds_space_8"
@@ -265,7 +266,7 @@
 
             <com.axelliant.hris.ui.designsystem.components.AppButtonView
                 android:id="@+id/loginButton"
-                style="@style/IA_TEXT_SEMIBOLD_WHITE_12"
+                style="@style/Text.Fluent2.Body.Inverse.Strong"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/ds_button_height"
                 android:layout_marginTop="@dimen/ds_space_12"
@@ -273,7 +274,7 @@
                 android:enabled="false"
                 android:text="@string/ia_login_action"
                 android:textAllCaps="false"
-                android:textAppearance="@style/IA_TEXT_SEMIBOLD_WHITE_12"
+                android:textAppearance="@style/TextAppearance.Fluent2.Body.Inverse.Strong"
                 app:backgroundTint="@null"
                 app:icon="@drawable/ic_login_arrow_right"
                 app:iconGravity="textStart"
@@ -294,7 +295,7 @@
 
             <com.axelliant.hris.ui.designsystem.components.AppTextView
                 android:id="@+id/orText"
-                style="@style/IA_TEXT_REGULAR_WHITE_10"
+                style="@style/Text.Fluent2.Caption.Inverse"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/ds_space_12"
@@ -317,7 +318,7 @@
 
             <com.axelliant.hris.ui.designsystem.components.AppButtonView
                 android:id="@+id/microsoftButton"
-                style="@style/IA_TEXT_SEMIBOLD_BLACK_15"
+                style="@style/Text.Fluent2.Subheading.Primary.Strong"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/login_microsoft_button_height"
                 android:layout_marginTop="@dimen/ds_space_16"
@@ -340,7 +341,7 @@
 
             <com.axelliant.hris.ui.designsystem.components.AppTextView
                 android:id="@+id/contactAdminPrompt"
-                style="@style/IA_TEXT_REGULAR_WHITE_10"
+                style="@style/Text.Fluent2.Caption.Inverse"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/ds_space_24"
@@ -353,7 +354,7 @@
 
             <com.axelliant.hris.ui.designsystem.components.AppTextView
                 android:id="@+id/contactAdminAction"
-                style="@style/IA_TEXT_REGULAR_WHITE_10"
+                style="@style/Text.Fluent2.Caption.Inverse"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/ds_space_4"
@@ -366,5 +367,3 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
-
-

@@ -6,13 +6,54 @@
         <attr name="iconPadding" />
         <attr name="iconGravity" />
         <attr name="noBackground" format="boolean" />
+        <attr name="fluentButtonStyle" />
     </declare-styleable>
+
+    <attr name="fluentButtonStyle" format="enum">
+        <enum name="primary" value="0" />
+        <enum name="outline" value="1" />
+        <enum name="subtle" value="2" />
+        <enum name="destructive" value="3" />
+    </attr>
 
     <declare-styleable name="AppTextFieldView">
         <attr name="icon" />
         <attr name="iconTint" />
         <attr name="iconPadding" />
         <attr name="iconGravity" />
+    </declare-styleable>
+
+    <attr name="fluentTextStyle" format="enum">
+        <enum name="display" value="0" />
+        <enum name="heading" value="1" />
+        <enum name="title" value="2" />
+        <enum name="subheading" value="3" />
+        <enum name="body" value="4" />
+        <enum name="caption" value="5" />
+        <enum name="formLabel" value="6" />
+    </attr>
+
+    <attr name="fluentTextTone" format="enum">
+        <enum name="primary" value="0" />
+        <enum name="secondary" value="1" />
+        <enum name="muted" value="2" />
+        <enum name="inverse" value="3" />
+        <enum name="accent" value="4" />
+        <enum name="danger" value="5" />
+    </attr>
+
+    <declare-styleable name="AppTextView">
+        <attr name="fluentTextStyle" />
+        <attr name="fluentTextTone" />
+    </declare-styleable>
+
+    <declare-styleable name="AppTopBarView">
+        <attr name="titleText" format="string|reference" />
+        <attr name="centerTitle" format="boolean" />
+        <attr name="inverseColors" format="boolean" />
+        <attr name="showBackButton" format="boolean" />
+        <attr name="showSearchButton" format="boolean" />
+        <attr name="searchIcon" format="reference" />
     </declare-styleable>
 
 </resources>

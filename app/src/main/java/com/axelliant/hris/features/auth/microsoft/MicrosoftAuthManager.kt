@@ -92,6 +92,32 @@ class MicrosoftAuthManager @Inject constructor(
         }
     }
 
+    suspend fun signOut(): MicrosoftSignOutResult {
+        val application = runCatching { createApplication() }.getOrElse { exception ->
+            Log.e(TAG, "Microsoft sign-out app creation failed.", exception)
+            return MicrosoftSignOutResult.Error(exception.message)
+        }
+
+        loadCurrentAccount(application) ?: return MicrosoftSignOutResult.Success
+
+        return suspendCancellableCoroutine { continuation ->
+            application.signOut(object : ISingleAccountPublicClientApplication.SignOutCallback {
+                override fun onSignOut() {
+                    if (continuation.isActive) {
+                        continuation.resume(MicrosoftSignOutResult.Success)
+                    }
+                }
+
+                override fun onError(exception: MsalException) {
+                    Log.e(TAG, "Microsoft sign-out failed.", exception)
+                    if (continuation.isActive) {
+                        continuation.resume(MicrosoftSignOutResult.Error(exception.userSafeMessage()))
+                    }
+                }
+            })
+        }
+    }
+
     private suspend fun loadCurrentAccount(
         application: ISingleAccountPublicClientApplication
     ): IAccount? {
@@ -158,6 +184,11 @@ sealed interface MicrosoftAuthResult {
     ) : MicrosoftAuthResult
     data object Cancelled : MicrosoftAuthResult
     data class Error(val message: String? = null) : MicrosoftAuthResult
+}
+
+sealed interface MicrosoftSignOutResult {
+    data object Success : MicrosoftSignOutResult
+    data class Error(val message: String? = null) : MicrosoftSignOutResult
 }
 
 private fun MsalException.userSafeMessage(): String {

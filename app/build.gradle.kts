@@ -57,6 +57,11 @@ android {
     }
 
     buildTypes {
+        debug {
+//            buildConfigField("String", "API_BASE_URL", "\"https://internalsoftware.axelliant.dev/\"")
+            buildConfigField("String", "API_BASE_URL", "\"https://10.10.202.4/api/\"")
+            buildConfigField("boolean", "TRUST_SELF_SIGNED_SSL", "true")
+        }
         release {
             isMinifyEnabled = false
             if (hasReleaseSigning) {
