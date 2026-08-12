@@ -81,17 +81,23 @@
             app:layout_constraintTop_toTopOf="parent"
             app:tint="@color/ds_text_primary" />
 
-        <ImageView
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/moreButton"
-            android:layout_width="@dimen/_24sdp"
-            android:layout_height="@dimen/_24sdp"
-            android:contentDescription="@null"
-            android:padding="@dimen/ds_space_4"
-            android:src="@drawable/ic_more_vert"
+            style="@style/Text.Fluent2.Body.Primary.Strong"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_32sdp"
+            android:background="@drawable/bg_agent_outline_pill"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:minWidth="@dimen/_56sdp"
+            android:paddingStart="@dimen/ds_space_12"
+            android:paddingEnd="@dimen/ds_space_12"
+            android:text="@string/agent_clear"
+            android:textColor="@color/ds_primary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/ds_text_primary" />
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <HorizontalScrollView

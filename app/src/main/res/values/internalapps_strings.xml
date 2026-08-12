@@ -76,6 +76,7 @@
     <string name="agent_checkpoint">Checkpoint created · 1:36 AM</string>
     <string name="agent_input_hint">Complete the confirmation to continue</string>
     <string name="agent_chat_input_hint">Ask about products, quotes, vendors...</string>
+    <string name="agent_clear">Clear</string>
     <string name="drawer_navigation">Navigation</string>
     <string name="drawer_accounts">Accounts</string>
     <string name="drawer_quotes">Quotes</string>
