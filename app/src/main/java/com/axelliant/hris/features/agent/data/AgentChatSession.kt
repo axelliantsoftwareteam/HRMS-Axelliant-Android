@@ -4,5 +4,6 @@ data class AgentChatSession(
     val negotiateUrl: String,
     val accessToken: String,
     val connectionId: String,
-    val connectionToken: String
+    val connectionToken: String,
+    val runId: String? = null
 )

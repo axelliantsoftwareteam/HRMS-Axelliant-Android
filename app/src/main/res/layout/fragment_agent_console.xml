@@ -110,13 +110,13 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingStart="@dimen/ds_space_12"
-            android:paddingEnd="@dimen/ds_space_12">
+            android:paddingStart="@dimen/ds_space_8"
+            android:paddingEnd="@dimen/ds_space_8">
 
             <com.axelliant.hris.ui.designsystem.components.AppTextView
                 style="@style/Text.Fluent2.Body.Inverse.Strong"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/_36sdp"
+                android:layout_height="@dimen/_30sdp"
                 android:background="@drawable/bg_agent_primary_pill"
                 android:gravity="center"
                 android:paddingStart="@dimen/ds_space_16"
@@ -126,7 +126,7 @@
             <com.axelliant.hris.ui.designsystem.components.AppTextView
                 style="@style/Text.Fluent2.Body.Primary.Strong"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/_36sdp"
+                android:layout_height="@dimen/_30sdp"
                 android:layout_marginStart="@dimen/ds_space_8"
                 android:background="@drawable/bg_agent_outline_pill"
                 android:gravity="center"
@@ -137,7 +137,7 @@
             <com.axelliant.hris.ui.designsystem.components.AppTextView
                 style="@style/Text.Fluent2.Body.Primary.Strong"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/_36sdp"
+                android:layout_height="@dimen/_30sdp"
                 android:layout_marginStart="@dimen/ds_space_8"
                 android:background="@drawable/bg_agent_outline_pill"
                 android:gravity="center"
@@ -148,7 +148,7 @@
             <com.axelliant.hris.ui.designsystem.components.AppTextView
                 style="@style/Text.Fluent2.Body.Primary.Strong"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/_36sdp"
+                android:layout_height="@dimen/_30sdp"
                 android:layout_marginStart="@dimen/ds_space_8"
                 android:background="@drawable/bg_agent_outline_pill"
                 android:gravity="center"
@@ -165,7 +165,7 @@
         android:clipToPadding="false"
         android:fillViewport="false"
         android:overScrollMode="never"
-        android:padding="@dimen/ds_space_16"
+        android:padding="@dimen/ds_space_12"
         app:layout_constraintBottom_toTopOf="@id/agentInputContainer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -184,13 +184,13 @@
                 android:orientation="horizontal">
 
                 <FrameLayout
-                    android:layout_width="@dimen/_34sdp"
-                    android:layout_height="@dimen/_34sdp"
+                    android:layout_width="@dimen/_24sdp"
+                    android:layout_height="@dimen/_24sdp"
                     android:background="@drawable/bg_agent_avatar">
 
                     <ImageView
-                        android:layout_width="@dimen/_22sdp"
-                        android:layout_height="@dimen/_22sdp"
+                        android:layout_width="@dimen/_12sdp"
+                        android:layout_height="@dimen/_12sdp"
                         android:layout_gravity="center"
                         android:src="@drawable/ic_ai_sparkles"
                         app:tint="@color/ds_neutral_white" />
@@ -200,11 +200,11 @@
                     style="@style/Text.Fluent2.Body.Primary.Strong"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/ds_space_14"
+                    android:layout_marginStart="@dimen/ds_space_8"
                     android:layout_weight="1"
                     android:background="@drawable/bg_agent_bubble_incoming"
-                    android:lineSpacingExtra="@dimen/ds_space_4"
-                    android:padding="@dimen/ds_space_16"
+                    android:lineSpacingExtra="@dimen/ds_space_2"
+                    android:padding="@dimen/ds_space_8"
                     android:text="@string/agent_welcome_message" />
             </LinearLayout>
         </LinearLayout>
@@ -213,7 +213,7 @@
     <LinearLayout
         android:id="@+id/agentInputContainer"
         android:layout_width="0dp"
-        android:layout_height="@dimen/_78sdp"
+        android:layout_height="@dimen/_60sdp"
         android:background="@color/ds_surface"
         android:gravity="center_vertical"
         android:orientation="horizontal"
@@ -225,7 +225,7 @@
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="@dimen/_52sdp"
+            android:layout_height="@dimen/_45sdp"
             android:layout_weight="1"
             android:background="@drawable/bg_agent_input_bar"
             android:gravity="center_vertical"
@@ -237,13 +237,14 @@
                 android:layout_width="@dimen/_24sdp"
                 android:layout_height="@dimen/_24sdp"
                 android:src="@drawable/ic_add"
+                android:visibility="gone"
                 app:tint="@color/ds_text_muted" />
 
             <EditText
                 android:id="@+id/messageInput"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/ds_space_12"
+                android:layout_marginStart="@dimen/ds_space_4"
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
                 android:ellipsize="end"
@@ -258,24 +259,28 @@
                 android:layout_width="@dimen/_24sdp"
                 android:layout_height="@dimen/_24sdp"
                 android:src="@drawable/ic_bt_message"
+                android:visibility="gone"
                 app:tint="@color/ds_text_muted" />
         </LinearLayout>
 
         <FrameLayout
             android:id="@+id/sendButton"
-            android:layout_width="@dimen/_50sdp"
-            android:layout_height="@dimen/_50sdp"
+            android:layout_width="@dimen/_35sdp"
+            android:layout_height="@dimen/_35sdp"
             android:layout_marginStart="@dimen/ds_space_8"
+            android:alpha="0.45"
             android:background="@drawable/bg_agent_avatar"
             android:clickable="true"
+            android:enabled="false"
             android:focusable="true">
 
             <ImageView
-                android:layout_width="@dimen/_26sdp"
-                android:layout_height="@dimen/_26sdp"
+                android:id="@+id/sendIcon"
+                android:layout_width="@dimen/_16sdp"
+                android:layout_height="@dimen/_16sdp"
                 android:layout_gravity="center"
                 android:src="@drawable/ic_login_arrow_right"
-                app:tint="@color/ds_neutral_white" />
+                app:tint="@color/ds_text_muted" />
         </FrameLayout>
     </LinearLayout>
 
