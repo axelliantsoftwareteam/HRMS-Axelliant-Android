@@ -91,7 +91,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_6sdp"
-        android:contentDescription="@string/todo"
+        android:contentDescription="@string/accessibility_expand_details"
         android:src="@drawable/ic_down"
         app:layout_constraintBottom_toBottomOf="@+id/tv_available_badge"
         app:layout_constraintEnd_toEndOf="parent"

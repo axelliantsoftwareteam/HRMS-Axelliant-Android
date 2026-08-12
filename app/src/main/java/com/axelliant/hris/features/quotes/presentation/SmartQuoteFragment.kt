@@ -149,14 +149,14 @@ class SmartQuoteFragment : Fragment() {
     }
 
     private fun setupInteractions() {
-        binding.backButton.setOnClickListener {
+        binding.appTopBar.setOnBackClickListener {
             if (viewModel.uiState.value.canGoBack) {
                 movePrevious()
             } else {
                 findNavController().navigateUp()
             }
         }
-        binding.saveText.setOnClickListener { showSavePlaceholder() }
+        binding.appTopBar.setOnActionClickListener { showSavePlaceholder() }
         binding.quoteStepBackButton.setOnClickListener { movePrevious() }
         binding.nextButton.setOnClickListener { moveNext() }
         binding.micButton.setOnClickListener {
@@ -214,12 +214,14 @@ class SmartQuoteFragment : Fragment() {
         binding.progressText.text = state.progressText
         binding.stepProgressIndicator.progress = state.progressPercent
         val isReview = state.step == SmartQuoteStep.Review
-        binding.topTitleText.text = if (state.step == SmartQuoteStep.Review) {
-            getString(R.string.quote_preview_title)
-        } else {
-            getString(R.string.smart_quote_title)
-        }
-        binding.saveText.isVisible = true
+        binding.appTopBar.setTitle(
+            if (state.step == SmartQuoteStep.Review) {
+                getString(R.string.quote_preview_title)
+            } else {
+                getString(R.string.smart_quote_title)
+            }
+        )
+        binding.appTopBar.setActionVisible(true)
         binding.progressContainer.isVisible = true
         binding.stepTitleText.isVisible = true
         binding.nextStepText.isVisible = true

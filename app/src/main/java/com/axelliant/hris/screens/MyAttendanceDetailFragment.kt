@@ -178,19 +178,19 @@ class MyAttendanceDetailFragment : BaseFragment() {
             WEEK -> {
                 binding?.tvWeek?.background =
                     ContextCompat.getDrawable(requireContext(), R.drawable.fluent_blue)
-                binding?.tvWeek?.setTextColor(requireContext().getColor(R.color.white))
+                binding?.tvWeek?.setTextColor(requireContext().getColor(R.color.ds_neutral_white))
             }
 
             MONTH -> {
                 binding?.tvMonth?.background =
                     ContextCompat.getDrawable(requireContext(), R.drawable.fluent_blue)
-                binding?.tvMonth?.setTextColor(requireContext().getColor(R.color.white))
+                binding?.tvMonth?.setTextColor(requireContext().getColor(R.color.ds_neutral_white))
             }
 
             Custom -> {
                 binding?.tvCustom?.background =
                     ContextCompat.getDrawable(requireContext(), R.drawable.fluent_blue)
-                binding?.tvCustom?.setTextColor(requireContext().getColor(R.color.white))
+                binding?.tvCustom?.setTextColor(requireContext().getColor(R.color.ds_neutral_white))
             }
         }
     }

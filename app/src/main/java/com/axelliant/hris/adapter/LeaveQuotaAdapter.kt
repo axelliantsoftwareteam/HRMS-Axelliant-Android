@@ -45,7 +45,7 @@ class LeaveQuotaAdapter(
         )
 
         holder.binding.root.setOnClickListener {
-            val pos = holder.adapterPosition
+            val pos = holder.bindingAdapterPosition
             if (pos == RecyclerView.NO_POSITION) return@setOnClickListener
             val k = employees[pos].employee ?: pos.toString()
             if (expanded.contains(k)) expanded.remove(k) else expanded.add(k)

@@ -104,7 +104,7 @@
 
             <com.axelliant.hris.ui.designsystem.components.AppTextView
                 android:id="@+id/tv_employe_name"
-                style="@style/Heading_1"
+                style="@style/Text.Fluent2.Title.Inverse.Strong"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_12sdp"

@@ -448,7 +448,7 @@
                     android:id="@+id/iv_search"
                     android:layout_width="@dimen/_18sdp"
                     android:layout_height="@dimen/_18sdp"
-                    android:contentDescription="@string/todo"
+                    android:contentDescription="@string/accessibility_search"
                     android:src="@drawable/ic_search"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

@@ -4,13 +4,12 @@ import com.axelliant.hris.core.contracts.navigation.WorkspaceKey
 import com.axelliant.hris.core.contracts.session.AppSession
 import com.axelliant.hris.core.contracts.session.WorkspaceSessionProvider
 import com.axelliant.hris.core.session.SessionManager as InternalAppsSessionManager
-import com.axelliant.hris.utils.SessionManager as HrisSessionManager
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class DefaultWorkspaceSessionProvider @Inject constructor(
-    private val hrisSessionManager: HrisSessionManager,
+    private val hrisSessionStore: HrisSessionStore,
     private val internalAppsSessionManager: InternalAppsSessionManager
 ) : WorkspaceSessionProvider {
 
@@ -23,7 +22,7 @@ class DefaultWorkspaceSessionProvider @Inject constructor(
 
     override fun hasValidSession(workspace: WorkspaceKey): Boolean {
         return when (workspace) {
-            WorkspaceKey.HRIS -> hrisSessionManager.checkLogin()
+            WorkspaceKey.HRIS -> hrisSessionStore.hasValidSession()
             WorkspaceKey.INTERNAL_APPS -> internalAppsSessionManager.isLoggedIn()
         }
     }
@@ -32,11 +31,7 @@ class DefaultWorkspaceSessionProvider @Inject constructor(
         if (!hasValidSession(workspace)) return null
 
         return when (workspace) {
-            WorkspaceKey.HRIS -> AppSession(
-                email = hrisSessionManager.getUserEmail(),
-                displayName = hrisSessionManager.getFirstName(),
-                accessToken = hrisSessionManager.getToken()
-            )
+            WorkspaceKey.HRIS -> hrisSessionStore.currentSession()
 
             WorkspaceKey.INTERNAL_APPS -> AppSession(
                 accessToken = internalAppsSessionManager.getAccessToken()
@@ -46,13 +41,13 @@ class DefaultWorkspaceSessionProvider @Inject constructor(
 
     override fun clearSession(workspace: WorkspaceKey) {
         when (workspace) {
-            WorkspaceKey.HRIS -> hrisSessionManager.logoutUser()
+            WorkspaceKey.HRIS -> hrisSessionStore.clearSession()
             WorkspaceKey.INTERNAL_APPS -> internalAppsSessionManager.clearSession()
         }
     }
 
     override fun clearAllSessions() {
-        hrisSessionManager.logoutUser()
+        hrisSessionStore.clearSession()
         internalAppsSessionManager.clearSession()
     }
 }

@@ -274,7 +274,7 @@ class ApprovalsFragment : BaseFragment() {
     }
 
     private fun actionStatus(): Boolean {
-        resourceHours?.forEachIndexed { index, documentHour ->
+        resourceHours?.forEach { documentHour ->
             if (documentHour.docstatus == ResourceStatus.DRAFT.value) {
                 return true
             }
@@ -355,7 +355,7 @@ class ApprovalsFragment : BaseFragment() {
             RequestFilter.LEAVE -> {
                 binding.tvWeek.background =
                     ContextCompat.getDrawable(requireContext(), R.drawable.rounded_enabled)
-                binding.tvWeek.setTextColor(requireContext().getColor(R.color.white))
+                binding.tvWeek.setTextColor(requireContext().getColor(R.color.ds_neutral_white))
 
             }
 
@@ -363,23 +363,20 @@ class ApprovalsFragment : BaseFragment() {
 
                 binding.tvMonth.background =
                     ContextCompat.getDrawable(requireContext(), R.drawable.rounded_enabled)
-                binding.tvMonth.setTextColor(requireContext().getColor(R.color.white))
+                binding.tvMonth.setTextColor(requireContext().getColor(R.color.ds_neutral_white))
             }
 
             RequestFilter.EXPENSE -> {
                 binding.tvExpense.background =
                     ContextCompat.getDrawable(requireContext(), R.drawable.rounded_enabled)
-                binding.tvExpense.setTextColor(requireContext().getColor(R.color.white))
+                binding.tvExpense.setTextColor(requireContext().getColor(R.color.ds_neutral_white))
             }
 
             RequestFilter.RESOURCES -> {
                 binding.tvResources.background =
                     ContextCompat.getDrawable(requireContext(), R.drawable.rounded_enabled)
-                binding.tvResources.setTextColor(requireContext().getColor(R.color.white))
+                binding.tvResources.setTextColor(requireContext().getColor(R.color.ds_neutral_white))
             }
-
-
-            else -> {}
         }
 
 

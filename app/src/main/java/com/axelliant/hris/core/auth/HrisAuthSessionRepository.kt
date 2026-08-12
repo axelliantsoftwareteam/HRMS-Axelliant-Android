@@ -5,11 +5,11 @@ import com.axelliant.hris.core.contracts.auth.AuthSessionRepository
 import com.axelliant.hris.core.contracts.auth.AuthSessionResult
 import com.axelliant.hris.core.contracts.navigation.WorkspaceKey
 import com.axelliant.hris.core.contracts.session.AppSession
+import com.axelliant.hris.core.session.HrisSessionStore
 import com.axelliant.hris.model.base.BaseApiModel
 import com.axelliant.hris.model.login.LoginRequest
 import com.axelliant.hris.model.login.UserLoginResponse
 import com.axelliant.hris.repos.LoginRepo
-import com.axelliant.hris.utils.SessionManager
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.coroutines.resume
@@ -18,22 +18,17 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 @Singleton
 class HrisAuthSessionRepository @Inject constructor(
     private val loginRepo: LoginRepo,
-    private val sessionManager: SessionManager,
+    private val hrisSessionStore: HrisSessionStore,
     private val hrisTokenProvider: HrisTokenProvider
 ) : AuthSessionRepository {
     override val workspace: WorkspaceKey = WorkspaceKey.HRIS
 
     override fun hasValidSession(): Boolean {
-        return sessionManager.checkLogin()
+        return hrisSessionStore.hasValidSession()
     }
 
     override fun currentSession(): AppSession? {
-        if (!hasValidSession()) return null
-        return AppSession(
-            email = sessionManager.getUserEmail(),
-            displayName = sessionManager.getFirstName(),
-            accessToken = sessionManager.getToken()
-        )
+        return hrisSessionStore.currentSession()
     }
 
     override suspend fun signInWithPassword(
@@ -88,19 +83,12 @@ class HrisAuthSessionRepository @Inject constructor(
     }
 
     override fun clearSession() {
-        sessionManager.logoutUser()
+        hrisSessionStore.clearSession()
     }
 
     private fun saveSession(response: UserLoginResponse, token: String) {
         val email = response.access_token?.email
-        sessionManager.saveUserEmail(email)
-        sessionManager.saveToken(token)
-        sessionManager.createLoginSession(
-            username = email,
-            userPass = null,
-            accessToken = token,
-            lastRemember = true
-        )
+        hrisSessionStore.saveMicrosoftSession(email, token)
         hrisTokenProvider.saveToken(token)
     }
 

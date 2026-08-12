@@ -48,11 +48,22 @@ class AppTopBarView @JvmOverloads constructor(
         minWidth = 0
     }
 
+    val actionButton: AppButtonView = AppButtonView(context).apply {
+        id = View.generateViewId()
+        setIconResource(R.drawable.ic_more_vertical)
+        noBackground = true
+        text = ""
+        minimumWidth = 0
+        minWidth = 0
+        visibility = GONE
+    }
+
     init {
         minHeight = resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._40sdp)
         addView(backButton)
         addView(titleView)
         addView(searchButton)
+        addView(actionButton)
         applyAttributes(attrs)
         applyToolbarColors()
         bindLayout()
@@ -72,10 +83,28 @@ class AppTopBarView @JvmOverloads constructor(
 
     fun setSearchVisible(visible: Boolean) {
         searchButton.visibility = if (visible) VISIBLE else GONE
+        bindLayout()
     }
 
     fun setSearchIconResource(resId: Int) {
         searchButton.setIconResource(resId)
+    }
+
+    fun setActionVisible(visible: Boolean) {
+        actionButton.visibility = if (visible) VISIBLE else GONE
+        bindLayout()
+    }
+
+    fun setActionIconResource(resId: Int) {
+        actionButton.setIconResource(resId)
+    }
+
+    fun setActionText(text: CharSequence?) {
+        actionButton.text = text
+        if (!text.isNullOrBlank()) {
+            actionButton.clearIcon()
+        }
+        bindLayout()
     }
 
     fun setCenterTitle(center: Boolean) {
@@ -96,6 +125,10 @@ class AppTopBarView @JvmOverloads constructor(
         searchButton.setOnClickListener(listener)
     }
 
+    fun setOnActionClickListener(listener: OnClickListener?) {
+        actionButton.setOnClickListener(listener)
+    }
+
     private fun bindLayout() {
         val buttonSize = resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._40sdp)
         val titleMargin = resources.getDimensionPixelSize(R.dimen.ds_space_8)
@@ -106,12 +139,31 @@ class AppTopBarView @JvmOverloads constructor(
             bottomToBottom = LayoutParams.PARENT_ID
         }
 
-        searchButton.layoutParams = LayoutParams(buttonSize, buttonSize).apply {
+        val actionHasText = !actionButton.text.isNullOrBlank()
+        actionButton.layoutParams = LayoutParams(
+            if (actionHasText) LayoutParams.WRAP_CONTENT else buttonSize,
+            buttonSize
+        ).apply {
             endToEnd = LayoutParams.PARENT_ID
             topToTop = LayoutParams.PARENT_ID
             bottomToBottom = LayoutParams.PARENT_ID
         }
 
+        searchButton.layoutParams = LayoutParams(buttonSize, buttonSize).apply {
+            if (actionButton.visibility == VISIBLE) {
+                endToStart = actionButton.id
+            } else {
+                endToEnd = LayoutParams.PARENT_ID
+            }
+            topToTop = LayoutParams.PARENT_ID
+            bottomToBottom = LayoutParams.PARENT_ID
+        }
+
+        val titleEndTarget = when {
+            searchButton.visibility == VISIBLE -> searchButton.id
+            actionButton.visibility == VISIBLE -> actionButton.id
+            else -> LayoutParams.PARENT_ID
+        }
         titleView.gravity = if (centerTitle) {
             Gravity.CENTER
         } else {
@@ -129,7 +181,11 @@ class AppTopBarView @JvmOverloads constructor(
                 marginStart = titleMargin
                 marginEnd = titleMargin
                 startToEnd = backButton.id
-                endToStart = searchButton.id
+                if (titleEndTarget == LayoutParams.PARENT_ID) {
+                    endToEnd = LayoutParams.PARENT_ID
+                } else {
+                    endToStart = titleEndTarget
+                }
             }
         }
     }
@@ -150,6 +206,13 @@ class AppTopBarView @JvmOverloads constructor(
                 R.drawable.ia_ic_search
             )
             setSearchIconResource(searchIcon)
+            setActionVisible(typedArray.getBoolean(R.styleable.AppTopBarView_showActionButton, false))
+            val actionIcon = typedArray.getResourceId(
+                R.styleable.AppTopBarView_actionIcon,
+                R.drawable.ic_more_vertical
+            )
+            setActionIconResource(actionIcon)
+            setActionText(typedArray.getText(R.styleable.AppTopBarView_actionText))
         }
     }
 
@@ -162,5 +225,6 @@ class AppTopBarView @JvmOverloads constructor(
         titleView.setTextColor(color)
         backButton.iconTint = tint
         searchButton.iconTint = tint
+        actionButton.iconTint = tint
     }
 }

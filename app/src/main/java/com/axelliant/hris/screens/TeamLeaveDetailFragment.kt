@@ -144,7 +144,7 @@ class TeamLeaveDetailFragment : BaseFragment() {
 
         val selected = ContextCompat.getDrawable(requireContext(), R.drawable.rounded_enabled)
         val unselected = ContextCompat.getDrawable(requireContext(), R.drawable.rounded_disabled)
-        val selectedText = requireContext().getColor(R.color.white)
+        val selectedText = requireContext().getColor(R.color.ds_neutral_white)
         val unselectedText = requireContext().getColor(R.color.btn_text_color)
 
         if (showQuota) {
@@ -276,7 +276,7 @@ class TeamLeaveDetailFragment : BaseFragment() {
             AttendanceFilter.WEEK -> {
                 binding?.tvWeek?.background =
                     ContextCompat.getDrawable(requireContext(), R.drawable.rounded_enabled)
-                binding?.tvWeek?.setTextColor(requireContext().getColor(R.color.white))
+                binding?.tvWeek?.setTextColor(requireContext().getColor(R.color.ds_neutral_white))
 
             }
 
@@ -284,17 +284,15 @@ class TeamLeaveDetailFragment : BaseFragment() {
 
                 binding?.tvMonth?.background =
                     ContextCompat.getDrawable(requireContext(), R.drawable.rounded_enabled)
-                binding?.tvMonth?.setTextColor(requireContext().getColor(R.color.white))
+                binding?.tvMonth?.setTextColor(requireContext().getColor(R.color.ds_neutral_white))
             }
 
             AttendanceFilter.Custom -> {
 
                 binding?.tvCustom?.background =
                     ContextCompat.getDrawable(requireContext(), R.drawable.rounded_enabled)
-                binding?.tvCustom?.setTextColor(requireContext().getColor(R.color.white))
+                binding?.tvCustom?.setTextColor(requireContext().getColor(R.color.ds_neutral_white))
             }
-
-            else -> {}
         }
     }
 

@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.axelliant.hris.adapter.ProfileCertificationAdapter
 import com.axelliant.hris.base.BaseFragment
@@ -61,6 +62,7 @@ class ProfileFragment : BaseFragment() {
     }
 
     private fun setupActions() {
+        binding.appTopBar.setOnBackClickListener { findNavController().navigateUp() }
         binding.etIssueDate.setOnClickListener { openDatePicker(binding.etIssueDate) }
         binding.etExpiryDate.setOnClickListener { openDatePicker(binding.etExpiryDate) }
         binding.btnAddCertification.setOnClickListener { submitCertification() }

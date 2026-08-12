@@ -146,9 +146,8 @@ class RequestFragment : BaseFragment() {
                 )
                 checkInId = checkInDetail.name
                 val dateTimeParts = checkInDetail.time
-                    ?.trim()
-                    ?.split(Regex("\\s+"), limit = 2)
-                    .orEmpty()
+                    .trim()
+                    .split(Regex("\\s+"), limit = 2)
 
                 currentDateString = dateTimeParts.getOrNull(0)
                 currentTimeString = dateTimeParts.getOrNull(1)
@@ -509,9 +508,9 @@ class RequestFragment : BaseFragment() {
         val day = c.get(Calendar.DAY_OF_MONTH)
         val datePickerDialog = DatePickerDialog(
             requireActivity(), R.style.my_dialog_theme, // Apply the theme here
-            { view, year, monthOfYear, dayOfMonth ->
+            { _, selectedYear, monthOfYear, dayOfMonth ->
                 val selectedDate = Calendar.getInstance()
-                selectedDate.set(year, monthOfYear, dayOfMonth)
+                selectedDate.set(selectedYear, monthOfYear, dayOfMonth)
 
                 // Format the date using SimpleDateFormat
                 currentDateString = Utils.getServerFormat(
@@ -535,7 +534,7 @@ class RequestFragment : BaseFragment() {
         val minutes = c[Calendar.MINUTE]
         val timePickerDialog = TimePickerDialog(
             requireActivity(), R.style.my_dialog_theme,
-            { view, hourOfDay, minute ->
+            { _, hourOfDay, minute ->
 
                 currentTimeString =
                     hourOfDay.toString().plus(":").plus(minute)
@@ -673,7 +672,7 @@ class RequestFragment : BaseFragment() {
             RequestFilter.LEAVE -> {
                 binding?.tvWeek?.background =
                     ContextCompat.getDrawable(requireContext(), R.drawable.fluent_blue)
-                binding?.tvWeek?.setTextColor(requireContext().getColor(R.color.white))
+                binding?.tvWeek?.setTextColor(requireContext().getColor(R.color.ds_neutral_white))
                 binding?.lyCreateLeave!!.visibility = View.VISIBLE
                 binding?.lyCreateAttend!!.visibility = View.GONE
 
@@ -683,12 +682,13 @@ class RequestFragment : BaseFragment() {
 
                 binding?.tvMonth?.background =
                     ContextCompat.getDrawable(requireContext(), R.drawable.fluent_blue)
-                binding?.tvMonth?.setTextColor(requireContext().getColor(R.color.white))
+                binding?.tvMonth?.setTextColor(requireContext().getColor(R.color.ds_neutral_white))
                 binding?.lyCreateAttend!!.visibility = View.VISIBLE
                 binding?.lyCreateLeave!!.visibility = View.GONE
             }
 
-            else -> {}
+            RequestFilter.EXPENSE,
+            RequestFilter.RESOURCES -> Unit
         }
     }
 

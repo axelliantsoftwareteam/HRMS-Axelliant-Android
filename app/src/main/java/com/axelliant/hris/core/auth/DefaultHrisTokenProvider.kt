@@ -1,15 +1,15 @@
 package com.axelliant.hris.core.auth
 
-import com.axelliant.hris.utils.SessionManager
+import com.axelliant.hris.core.session.HrisSessionStore
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class DefaultHrisTokenProvider @Inject constructor(
-    private val sessionManager: SessionManager
+    private val hrisSessionStore: HrisSessionStore
 ) : HrisTokenProvider {
     override fun rawToken(): String {
-        return sessionManager.getToken().orEmpty()
+        return hrisSessionStore.rawToken()
     }
 
     override fun authorizationHeader(): String {
@@ -17,10 +17,10 @@ class DefaultHrisTokenProvider @Inject constructor(
     }
 
     override fun saveToken(token: String) {
-        sessionManager.saveToken(token)
+        hrisSessionStore.saveToken(token)
     }
 
     override fun clearToken() {
-        sessionManager.logoutUser()
+        hrisSessionStore.clearSession()
     }
 }

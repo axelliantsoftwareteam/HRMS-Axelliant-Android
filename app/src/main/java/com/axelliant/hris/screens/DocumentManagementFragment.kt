@@ -158,8 +158,6 @@ class DocumentManagementFragment : BaseFragment() {
         val expenseAdapter = DocumentRequestAdapter(
             expenseList!!, requireContext(), object : AdapterItemClick {
                 override fun onItemClick(customObject: Any, position: Int) {
-
-                    val expense = customObject as DocumentForm
 //                    if (expense.status == "Draft") {
 //                        AppNavigator.navigateToAddExpenseFragment(Bundle().apply {
 //                            this.putString(AppRouteArgs.EXPENSE_REQUEST_ID, expense.name)
@@ -225,7 +223,7 @@ class DocumentManagementFragment : BaseFragment() {
             AttendanceFilter.WEEK -> {
                 binding?.tvWeek?.background =
                     ContextCompat.getDrawable(requireContext(), R.drawable.fluent_blue)
-                binding?.tvWeek?.setTextColor(requireContext().getColor(R.color.white))
+                binding?.tvWeek?.setTextColor(requireContext().getColor(R.color.ds_neutral_white))
 
             }
 
@@ -233,14 +231,14 @@ class DocumentManagementFragment : BaseFragment() {
 
                 binding?.tvMonth?.background =
                     ContextCompat.getDrawable(requireContext(), R.drawable.fluent_blue)
-                binding?.tvMonth?.setTextColor(requireContext().getColor(R.color.white))
+                binding?.tvMonth?.setTextColor(requireContext().getColor(R.color.ds_neutral_white))
             }
 
             AttendanceFilter.Custom -> {
 
                 binding?.tvCustom?.background =
                     ContextCompat.getDrawable(requireContext(), R.drawable.fluent_blue)
-                binding?.tvCustom?.setTextColor(requireContext().getColor(R.color.white))
+                binding?.tvCustom?.setTextColor(requireContext().getColor(R.color.ds_neutral_white))
             }
 
         }

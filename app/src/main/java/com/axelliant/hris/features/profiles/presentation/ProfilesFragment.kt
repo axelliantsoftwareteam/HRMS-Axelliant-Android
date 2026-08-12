@@ -19,6 +19,7 @@ import com.axelliant.hris.core.ui.UiState
 import com.axelliant.hris.databinding.ItemProfileInfoRowBinding
 import com.axelliant.hris.databinding.ItemProfileSettingRowBinding
 import com.axelliant.hris.databinding.FragmentProfilesBinding
+import com.axelliant.hris.features.internalapps.navigation.InternalAppsNavigator
 import com.axelliant.hris.features.profiles.data.local.ProfileSettingsStore
 import com.axelliant.hris.features.profiles.data.remote.dto.MicrosoftProfileResponse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -58,6 +59,9 @@ class ProfilesFragment : Fragment() {
     }
 
     private fun setupInteractions() = with(binding) {
+        appTopBar.setOnBackClickListener {
+            InternalAppsNavigator.returnToHomeShell(findNavController())
+        }
         logoutRow.setOnClickListener { logoutAndOpenLogin() }
         timeZoneRow.root.setOnClickListener {
             showChoiceDialog(

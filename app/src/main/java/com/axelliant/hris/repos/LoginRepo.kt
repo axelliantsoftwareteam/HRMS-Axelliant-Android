@@ -23,9 +23,9 @@ class LoginRepo @Inject constructor(
     fun userLoginApiCall(loginRequest: LoginRequest): MutableLiveData<BaseApiModel<UserLoginResponse>?> {
         val userLoginResponse = MutableLiveData<BaseApiModel<UserLoginResponse>?>()
         val call = apiInterface.userLoginCall(loginRequest)
-        Log.e("HTTP Request", " " + call?.request().toString())
+        Log.e("HTTP Request", " " + call.request().toString())
 
-        call?.enqueue(object : BaseCallBack<ResponseBody>(call) {
+        call.enqueue(object : BaseCallBack<ResponseBody>(call) {
             override fun onFinalSuccess(
                 call: Call<ResponseBody>,
                 response: Response<ResponseBody>

@@ -163,7 +163,7 @@ class MainActivity : BaseActivity() {
             "An update has just been downloaded.",
             Snackbar.LENGTH_INDEFINITE)
         snackbar.setAction("RESTART") { appUpdateManager.completeUpdate() }
-        snackbar.setActionTextColor(ContextCompat.getColor(this, R.color.colorApp))
+        snackbar.setActionTextColor(ContextCompat.getColor(this, R.color.ds_primary))
         snackbar.show()
     }
     override fun onResume() {

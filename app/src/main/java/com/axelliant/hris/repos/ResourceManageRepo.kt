@@ -49,7 +49,7 @@ class ResourceManageRepo @Inject constructor(
 
         )
 
-        Log.e("HTTP Request", " " + call?.request().toString())
+        Log.e("HTTP Request", " " + call.request().toString())
 
         call.enqueue(object : BaseCallBack<ResponseBody>(call) {
             override fun onFinalSuccess(
@@ -104,7 +104,7 @@ class ResourceManageRepo @Inject constructor(
 
         )
 
-        Log.e("HTTP Request", " " + call?.request().toString())
+        Log.e("HTTP Request", " " + call.request().toString())
 
         call.enqueue(object : BaseCallBack<ResponseBody>(call) {
             override fun onFinalSuccess(
@@ -202,8 +202,8 @@ class ResourceManageRepo @Inject constructor(
     fun createDocument(createDocument: CreateDocument): MutableLiveData<BaseApiModel<PostResponse>> {
         val serverResponse = MutableLiveData<BaseApiModel<PostResponse>>()
 
-        val call: Call<ResponseBody>?
-        call = apiInterface.callCreateDocument(hrisTokenProvider.authorizationHeader(), createDocument)
+        val call: Call<ResponseBody> =
+            apiInterface.callCreateDocument(hrisTokenProvider.authorizationHeader(), createDocument)
         Log.e("HTTP Request", " " + call.request().toString())
 
         call.enqueue(object : BaseCallBack<ResponseBody>(call) {

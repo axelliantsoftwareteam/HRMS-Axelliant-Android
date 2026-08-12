@@ -39,7 +39,7 @@ class AddResourceManageAdapter(
     }
 
     override fun onBindViewHolder(holder: AccountsVH, @SuppressLint("RecyclerView") position: Int) {
-        holder.bind(list[position], mContext)
+        holder.bind(list[position])
         Log.d("updatedListJson", Gson().toJson(list[position]))
         // Populate spinner for expense types
         spinnerLeavePopulations(mContext, holder.binding.spAttendType, position)
@@ -106,7 +106,7 @@ class AddResourceManageAdapter(
         var reasonTextWatcher: TextWatcher? = null
         var amountTextWatcher: TextWatcher? = null
 
-        fun bind(item:  ProjectHour, mContext: Context) {
+        fun bind(item: ProjectHour) {
             binding.tvDateTxt.text = item.date ?: ""
 //            binding.etAmount.setText(item.amount?.toString() ?: "")
         }
@@ -120,9 +120,9 @@ class AddResourceManageAdapter(
 
         val datePickerDialog = DatePickerDialog(
             mContext, R.style.my_dialog_theme,
-            { _, year, monthOfYear, dayOfMonth ->
+            { _, selectedYear, monthOfYear, dayOfMonth ->
                 val selectedDate = Calendar.getInstance()
-                selectedDate.set(year, monthOfYear, dayOfMonth)
+                selectedDate.set(selectedYear, monthOfYear, dayOfMonth)
 
                 val selectedProjectName = list[position].name
 

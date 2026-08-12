@@ -21,10 +21,8 @@ class WeeklyAdapter(
     }
 
     override fun onBindViewHolder(holder: AccountsVH, position: Int) {
-        holder.bind(list[position])
-
         holder.binding.lyModule.setOnClickListener {
-            val adapterPosition = holder.adapterPosition
+            val adapterPosition = holder.bindingAdapterPosition
             if (adapterPosition != RecyclerView.NO_POSITION) {
                 itemClick.onItemClick(list[adapterPosition], adapterPosition)
             }
@@ -36,11 +34,6 @@ class WeeklyAdapter(
     }
 
     class AccountsVH(val binding: ModulesRowBinding) : RecyclerView.ViewHolder(binding.root) {
-
-        fun bind(item: Test) {
-//            binding.tvTitle.text = item.title.toString()
-
-        }
     }
 
 }

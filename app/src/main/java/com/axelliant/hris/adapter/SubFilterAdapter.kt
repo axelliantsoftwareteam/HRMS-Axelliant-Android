@@ -3,6 +3,7 @@ package com.axelliant.hris.adapter
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.axelliant.hris.R
@@ -27,9 +28,8 @@ class SubFilterAdapter(
 
     override fun onBindViewHolder(holder: AccountsVH, position: Int) {
         val item = list[position]
-        holder.bind(item, position, context)
         holder.binding.lyWorkHome.setOnClickListener {
-            val adapterPosition = holder.adapterPosition
+            val adapterPosition = holder.bindingAdapterPosition
             if (adapterPosition != RecyclerView.NO_POSITION) {
                 val currentItem = list[adapterPosition]
                 filterId = currentItem.id.toString()
@@ -43,14 +43,14 @@ class SubFilterAdapter(
 
         if (filterId == item.id)
         {
-            holder.binding.tvWorkFrom.setTextColor(context.getColor(R.color.white))
+            holder.binding.tvWorkFrom.setTextColor(context.getColor(R.color.ds_neutral_white))
             holder.binding.lyWorkHome.background =
-                context.resources.getDrawable(R.drawable.fluent_blue)
+                ContextCompat.getDrawable(context, R.drawable.fluent_blue)
         } else {
-            holder.binding.tvWorkFrom.setTextColor(context.getColor(R.color.black))
+            holder.binding.tvWorkFrom.setTextColor(context.getColor(R.color.ds_text_primary))
 
             holder.binding.lyWorkHome.background =
-                context.resources.getDrawable(R.drawable.rounded_bgg)
+                ContextCompat.getDrawable(context, R.drawable.rounded_bgg)
         }
 
         holder.binding.tvWorkFrom.text = item.title
@@ -66,7 +66,6 @@ class SubFilterAdapter(
     class AccountsVH(val binding: SubFilterRowBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: FilterModel, position: Int, context: Context) {}
     }
 
 }

@@ -54,6 +54,9 @@
         <attr name="showBackButton" format="boolean" />
         <attr name="showSearchButton" format="boolean" />
         <attr name="searchIcon" format="reference" />
+        <attr name="showActionButton" format="boolean" />
+        <attr name="actionIcon" format="reference" />
+        <attr name="actionText" format="string|reference" />
     </declare-styleable>
 
 </resources>

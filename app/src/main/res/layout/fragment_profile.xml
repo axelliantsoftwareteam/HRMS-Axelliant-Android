@@ -3,25 +3,57 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.core.widget.NestedScrollView
+    <androidx.constraintlayout.widget.ConstraintLayout
+        style="@style/Layout.Fluent2.Screen"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/ds_neutral_white"
-        android:fillViewport="true">
+        android:background="@color/ds_background">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/startGuideline"
+            style="@style/Guideline.Fluent2.Start"
+            android:orientation="vertical" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/endGuideline"
+            style="@style/Guideline.Fluent2.End"
+            android:orientation="vertical" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/topGuideline"
+            style="@style/Guideline.Fluent2.Top"
+            android:orientation="horizontal" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/bottomGuideline"
+            style="@style/Guideline.Fluent2.Bottom"
+            android:orientation="horizontal" />
+
+        <com.axelliant.hris.ui.designsystem.components.AppTopBarView
+            android:id="@+id/appTopBar"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_40sdp"
+            app:titleText="@string/my_profile"
+            app:layout_constraintEnd_toEndOf="@id/endGuideline"
+            app:layout_constraintStart_toStartOf="@id/startGuideline"
+            app:layout_constraintTop_toBottomOf="@id/topGuideline" />
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:clipToPadding="false"
+            android:fillViewport="true"
+            android:paddingTop="@dimen/ds_space_10"
+            app:layout_constraintBottom_toTopOf="@id/bottomGuideline"
+            app:layout_constraintEnd_toEndOf="@id/endGuideline"
+            app:layout_constraintStart_toStartOf="@id/startGuideline"
+            app:layout_constraintTop_toBottomOf="@id/appTopBar">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="20dp">
-
-            <com.axelliant.hris.ui.designsystem.components.AppTextView
-                android:id="@+id/tv_profile_title"
-                style="@style/Text.Fluent2.Subheading.Primary.Strong"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="start"
-                android:text="My Profile" />
+            android:paddingBottom="@dimen/ds_space_24">
 
             <com.axelliant.hris.ui.designsystem.components.AppTextView
                 android:id="@+id/tv_profile_subtitle"
@@ -334,7 +366,7 @@
 
                     <com.axelliant.hris.ui.designsystem.components.AppButtonView
                         android:id="@+id/btn_add_certification"
-                        style="@style/ButtonTextStyle"
+                        style="@style/Widget.Fluent2.Button.Primary"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
@@ -342,5 +374,6 @@
                 </LinearLayout>
             </com.axelliant.hris.ui.designsystem.components.AppCardView>
         </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

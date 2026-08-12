@@ -229,6 +229,11 @@ class AppButtonView @JvmOverloads constructor(
         icon = AppCompatResources.getDrawable(context, resId)
     }
 
+    fun clearIcon() {
+        iconResId = 0
+        icon = null
+    }
+
     @Composable
     override fun Content() {
         AppFluentTheme {

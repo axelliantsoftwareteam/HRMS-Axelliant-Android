@@ -52,8 +52,13 @@
     <string name="start_date">Start Date</string>
     <string name="end_date">End Date</string>
     <string name="reason_for_leave">Reason for Leave</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="accessibility_remove_attachment">Remove attachment</string>
+    <string name="accessibility_attachment_preview">Attachment preview</string>
+    <string name="accessibility_image_preview">Image preview</string>
+    <string name="accessibility_expand_details">Expand details</string>
+    <string name="accessibility_date_picker">Open date picker</string>
+    <string name="accessibility_search">Search</string>
+    <string name="position_string">Item %1$d in list of %2$d</string>
     <string name="save">Save</string>
     <string name="favourite">Favourites</string>
     <string name="modules">Modules</string>
@@ -111,7 +116,6 @@
     <string name="expected_out">Expected out</string>
     <string name="working_from_home">Working From Home</string>
     <string name="team_member">Team Members</string>
-    <string name="todo">TODO</string>
     <string name="_17_may_2024">17 May 2024</string>
     <string name="_3_hr">3 Hr</string>
     <string name="my_team_leave">My Team Leaves</string>

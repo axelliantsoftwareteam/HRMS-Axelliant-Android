@@ -6,8 +6,12 @@ import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
 import androidx.core.content.pm.PackageInfoCompat
-import com.axelliant.hris.utils.SessionManager
+import com.axelliant.hris.core.session.HrisSessionStore
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.EntryPoint
+import dagger.hilt.InstallIn
+import dagger.hilt.android.EntryPointAccessors
+import dagger.hilt.components.SingletonComponent
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -19,6 +23,12 @@ private data class UserErrorPresentation(
     val rawMessage: String,
     val shouldOfferSupport: Boolean
 )
+
+@EntryPoint
+@InstallIn(SingletonComponent::class)
+private interface AppUiFeedbackEntryPoint {
+    fun hrisSessionStore(): HrisSessionStore
+}
 
 fun Context.showAppSuccessMessage(message: String? = "Feature in progress") {
     Toast.makeText(this, message ?: "Feature in progress", Toast.LENGTH_SHORT).show()
@@ -112,13 +122,15 @@ private fun String?.toUserErrorPresentation(): UserErrorPresentation {
 }
 
 private fun Context.buildIssueReportBody(screenName: String?, presentation: UserErrorPresentation): String {
-    val sessionManager = SessionManager(applicationContext)
+    val hrisSessionStore = EntryPointAccessors.fromApplication(
+        applicationContext,
+        AppUiFeedbackEntryPoint::class.java
+    ).hrisSessionStore()
     val packageInfo = packageManager.getPackageInfo(packageName, 0)
     val versionName = packageInfo.versionName ?: "Unknown"
     val versionCode = PackageInfoCompat.getLongVersionCode(packageInfo)
-    val userIdentifier = sessionManager.getUserEmail()
+    val userIdentifier = hrisSessionStore.currentSession()?.email
         ?.takeIf { it.isNotBlank() }
-        ?: sessionManager.getRememberUserName().takeIf { it.isNotBlank() }
         ?: "Unknown"
     val timestamp = SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z", Locale.US).format(Date())
 

@@ -29,35 +29,16 @@
         style="@style/Guideline.Fluent2.Bottom"
         android:orientation="horizontal" />
 
-    <com.axelliant.hris.ui.designsystem.components.AppButtonView
-        android:id="@+id/backButton"
-        style="@style/Widget.InternalApps.Dashboard.IconButton"
-        app:icon="@drawable/ic_arrow_back"
+    <com.axelliant.hris.ui.designsystem.components.AppTopBarView
+        android:id="@+id/appTopBar"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_40sdp"
+        app:actionText="@string/smart_quote_save"
+        app:showActionButton="true"
+        app:titleText="@string/smart_quote_title"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
         app:layout_constraintStart_toStartOf="@id/startGuideline"
         app:layout_constraintTop_toBottomOf="@id/topGuideline" />
-
-    <com.axelliant.hris.ui.designsystem.components.AppTextView
-        android:id="@+id/topTitleText"
-        style="@style/Text.InternalApps.Heading"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/ds_space_8"
-        android:text="@string/smart_quote_title"
-        app:layout_constraintBottom_toBottomOf="@id/backButton"
-        app:layout_constraintEnd_toStartOf="@id/saveText"
-        app:layout_constraintStart_toEndOf="@id/backButton"
-        app:layout_constraintTop_toTopOf="@id/backButton" />
-
-    <com.axelliant.hris.ui.designsystem.components.AppTextView
-        android:id="@+id/saveText"
-        style="@style/Text.InternalApps.Subheading"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/smart_quote_save"
-        android:textColor="@color/ds_primary"
-        app:layout_constraintBottom_toBottomOf="@id/backButton"
-        app:layout_constraintEnd_toEndOf="@id/endGuideline"
-        app:layout_constraintTop_toTopOf="@id/backButton" />
 
     <LinearLayout
         android:id="@+id/insightLabelRow"
@@ -69,7 +50,7 @@
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="@id/endGuideline"
         app:layout_constraintStart_toStartOf="@id/startGuideline"
-        app:layout_constraintTop_toBottomOf="@id/backButton">
+        app:layout_constraintTop_toBottomOf="@id/appTopBar">
 
         <ImageView
             android:layout_width="@dimen/_26sdp"
@@ -135,7 +116,7 @@
         app:layout_constraintBottom_toTopOf="@id/bottomGuideline"
         app:layout_constraintEnd_toEndOf="@id/endGuideline"
         app:layout_constraintStart_toStartOf="@id/startGuideline"
-        app:layout_constraintTop_toBottomOf="@id/backButton">
+        app:layout_constraintTop_toBottomOf="@id/appTopBar">
 
         <FrameLayout
             android:id="@+id/cardStackContainer"

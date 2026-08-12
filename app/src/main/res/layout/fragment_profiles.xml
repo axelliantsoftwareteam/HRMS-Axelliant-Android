@@ -1,46 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    style="@style/Layout.Fluent2.Screen"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/ds_background"
-    android:orientation="vertical">
+    android:background="@color/ds_background">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-    style="@style/Layout.Fluent2.Screen"
-        android:id="@+id/topBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingStart="@dimen/ds_space_10"
-        android:paddingTop="@dimen/ds_space_12"
-        android:paddingEnd="@dimen/ds_space_10"
-        android:paddingBottom="@dimen/ds_space_6">
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/startGuideline"
+        style="@style/Guideline.Fluent2.Start"
+        android:orientation="vertical" />
 
-        <com.axelliant.hris.ui.designsystem.components.AppTextView
-            style="@style/Text.InternalApps.Heading"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:text="@string/my_profile"
-            android:textColor="@color/ds_text_primary"
-            android:textSize="@dimen/ds_text_heading"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/endGuideline"
+        style="@style/Guideline.Fluent2.End"
+        android:orientation="vertical" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/topGuideline"
+        style="@style/Guideline.Fluent2.Top"
+        android:orientation="horizontal" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/bottomGuideline"
+        style="@style/Guideline.Fluent2.Bottom"
+        android:orientation="horizontal" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppTopBarView
+        android:id="@+id/appTopBar"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_40sdp"
+        app:titleText="@string/my_profile"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/topGuideline" />
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollContent"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_weight="1"
         android:clipToPadding="false"
         android:fillViewport="true"
-        android:paddingStart="@dimen/ds_space_10"
         android:paddingTop="@dimen/ds_space_10"
-        android:paddingEnd="@dimen/ds_space_10"
-        android:paddingBottom="@dimen/bottom_nav_content_padding">
+        android:paddingBottom="@dimen/bottom_nav_content_padding"
+        app:layout_constraintBottom_toTopOf="@id/bottomGuideline"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/appTopBar">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -410,5 +417,4 @@
             </com.axelliant.hris.ui.designsystem.components.AppCardView>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
-</LinearLayout>
-
+</androidx.constraintlayout.widget.ConstraintLayout>

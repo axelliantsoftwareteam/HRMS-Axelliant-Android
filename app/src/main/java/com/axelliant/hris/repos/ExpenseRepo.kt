@@ -51,7 +51,7 @@ class ExpenseRepo @Inject constructor(
 
         )
 
-        Log.e("HTTP Request", " " + call?.request().toString())
+        Log.e("HTTP Request", " " + call.request().toString())
 
         call.enqueue(object : BaseCallBack<ResponseBody>(call) {
             override fun onFinalSuccess(
@@ -106,7 +106,7 @@ class ExpenseRepo @Inject constructor(
 
         )
 
-        Log.e("HTTP Request", " " + call?.request().toString())
+        Log.e("HTTP Request", " " + call.request().toString())
 
         call.enqueue(object : BaseCallBack<ResponseBody>(call) {
             override fun onFinalSuccess(
@@ -158,7 +158,7 @@ class ExpenseRepo @Inject constructor(
         val call: Call<ResponseBody> = apiInterface.callMyExpensefile(hrisTokenProvider.authorizationHeader(),
             imagePath.file!!,docName,isPrivate,folder,doctype)
 
-        Log.e("HTTP Request", " " + call?.request().toString())
+        Log.e("HTTP Request", " " + call.request().toString())
 
         call.enqueue(object : BaseCallBack<ResponseBody>(call) {
             override fun onFinalSuccess(
@@ -206,8 +206,8 @@ class ExpenseRepo @Inject constructor(
     ): MutableLiveData<BaseApiModel<PostResponse>> {
         val serverResponse = MutableLiveData<BaseApiModel<PostResponse>>()
 
-        val call: Call<ResponseBody>?
-        call = apiInterface.callCreateDocument(hrisTokenProvider.authorizationHeader(), createDocument)
+        val call: Call<ResponseBody> =
+            apiInterface.callCreateDocument(hrisTokenProvider.authorizationHeader(), createDocument)
         Log.e("HTTP Request", " " + call.request().toString())
 
         call.enqueue(object : BaseCallBack<ResponseBody>(call) {
@@ -257,20 +257,18 @@ class ExpenseRepo @Inject constructor(
     ): MutableLiveData<BaseApiModel<MyExpensePostResponse>> {
         val serverResponse = MutableLiveData<BaseApiModel<MyExpensePostResponse>>()
 
-        val call: Call<ResponseBody>?
-
-        if (isUpdate) {
-            call = apiInterface.callUpdateExp(
+        val call: Call<ResponseBody> = if (isUpdate) {
+            apiInterface.callUpdateExp(
                 hrisTokenProvider.authorizationHeader(), createExpense
             )
         } else {
-            call = apiInterface.callCreateExp(
+            apiInterface.callCreateExp(
                 hrisTokenProvider.authorizationHeader(), createExpense
             )
         }
 
 
-        Log.e("HTTP Request", " " + call?.request().toString())
+        Log.e("HTTP Request", " " + call.request().toString())
 
         call.enqueue(object : BaseCallBack<ResponseBody>(call) {
             override fun onFinalSuccess(
@@ -323,7 +321,7 @@ class ExpenseRepo @Inject constructor(
         )
 
 
-        Log.e("HTTP Request", " " + call?.request().toString())
+        Log.e("HTTP Request", " " + call.request().toString())
 
         call.enqueue(object : BaseCallBack<ResponseBody>(call) {
             override fun onFinalSuccess(
@@ -377,7 +375,7 @@ class ExpenseRepo @Inject constructor(
         )
 
 
-        Log.e("HTTP Request", " " + call?.request().toString())
+        Log.e("HTTP Request", " " + call.request().toString())
 
         call.enqueue(object : BaseCallBack<ResponseBody>(call) {
             override fun onFinalSuccess(
@@ -426,7 +424,7 @@ class ExpenseRepo @Inject constructor(
 
         val call: Call<ResponseBody> = apiInterface.getExpenseType(hrisTokenProvider.authorizationHeader())
 
-        Log.e("HTTP Request", " " + call?.request().toString())
+        Log.e("HTTP Request", " " + call.request().toString())
 
         call.enqueue(object : BaseCallBack<ResponseBody>(call) {
             override fun onFinalSuccess(

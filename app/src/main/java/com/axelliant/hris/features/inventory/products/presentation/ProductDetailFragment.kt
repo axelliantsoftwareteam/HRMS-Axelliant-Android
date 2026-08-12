@@ -69,11 +69,14 @@ class ProductDetailFragment : Fragment() {
     }
 
     private fun setupActions() {
-        binding.backButton.setOnClickListener { findNavController().navigateUp() }
-        binding.searchButton.setOnClickListener {
+        binding.appTopBar.backButton.contentDescription = getString(R.string.back)
+        binding.appTopBar.searchButton.contentDescription = getString(R.string.product_search_hint)
+        binding.appTopBar.actionButton.contentDescription = getString(R.string.more)
+        binding.appTopBar.setOnBackClickListener { findNavController().navigateUp() }
+        binding.appTopBar.setOnSearchClickListener {
             Toast.makeText(requireContext(), R.string.coming_soon, Toast.LENGTH_SHORT).show()
         }
-        binding.moreButton.setOnClickListener {
+        binding.appTopBar.setOnActionClickListener {
             Toast.makeText(requireContext(), R.string.coming_soon, Toast.LENGTH_SHORT).show()
         }
         binding.detailSectionHeader.setOnClickListener {

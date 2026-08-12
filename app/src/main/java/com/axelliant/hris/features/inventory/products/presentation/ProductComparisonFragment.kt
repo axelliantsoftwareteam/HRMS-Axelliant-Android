@@ -50,8 +50,9 @@ class ProductComparisonFragment : Fragment() {
     }
 
     private fun setupInteractions() {
-        binding.backButton.setOnClickListener { findNavController().navigateUp() }
-        binding.resetComparisonButton.setOnClickListener { viewModel.resetComparison() }
+        binding.appTopBar.actionButton.contentDescription = getString(R.string.product_compare_reset)
+        binding.appTopBar.setOnBackClickListener { findNavController().navigateUp() }
+        binding.appTopBar.setOnActionClickListener { viewModel.resetComparison() }
         binding.productOneCard.setOnClickListener {
             openProductPicker(ProductComparisonFlow.SLOT_ONE, viewModel.uiState.value.productOne)
         }
@@ -122,7 +123,7 @@ class ProductComparisonFragment : Fragment() {
     }
 
     private fun renderState(state: ProductComparisonUiState) {
-        binding.titleText.text = getString(R.string.product_compare_title_format, state.selectedCount)
+        binding.appTopBar.setTitle(getString(R.string.product_compare_title_format, state.selectedCount))
         renderProductCard(
             slot = ProductComparisonFlow.SLOT_ONE,
             product = state.productOne

@@ -1,6 +1,5 @@
 package com.axelliant.hris.di
 
-import android.content.Context
 import com.axelliant.hris.config.GlobalConfig
 import com.axelliant.hris.core.contracts.auth.AuthContract
 import com.axelliant.hris.core.contracts.auth.HrisAuthContractAdapter
@@ -12,12 +11,10 @@ import com.axelliant.hris.core.contracts.session.AppSessionContractAdapter
 import com.axelliant.hris.core.contracts.session.SessionContract
 import com.axelliant.hris.network.ApiHandler
 import com.axelliant.hris.network.ApiInterface
-import com.axelliant.hris.utils.SessionManager
 import com.axelliant.hris.utils.Validator
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -29,11 +26,6 @@ object HrisCoreModule {
     @Singleton
     fun provideApiInterface(): ApiInterface =
         requireNotNull(ApiHandler.getApiInterface())
-
-    @Provides
-    @Singleton
-    fun provideSessionManager(@ApplicationContext context: Context): SessionManager =
-        SessionManager(context)
 
     @Provides
     @Singleton

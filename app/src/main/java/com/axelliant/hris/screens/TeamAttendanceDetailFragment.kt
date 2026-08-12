@@ -226,7 +226,7 @@ class TeamAttendanceDetailFragment : BaseFragment() {
             AttendanceFilter.WEEK -> {
                 binding?.tvWeek?.background =
                     ContextCompat.getDrawable(requireContext(), R.drawable.rounded_enabled)
-                binding?.tvWeek?.setTextColor(requireContext().getColor(R.color.white))
+                binding?.tvWeek?.setTextColor(requireContext().getColor(R.color.ds_neutral_white))
 
             }
 
@@ -234,17 +234,15 @@ class TeamAttendanceDetailFragment : BaseFragment() {
 
                 binding?.tvMonth?.background =
                     ContextCompat.getDrawable(requireContext(), R.drawable.rounded_enabled)
-                binding?.tvMonth?.setTextColor(requireContext().getColor(R.color.white))
+                binding?.tvMonth?.setTextColor(requireContext().getColor(R.color.ds_neutral_white))
             }
 
             AttendanceFilter.Custom -> {
 
                 binding?.tvCustom?.background =
                     ContextCompat.getDrawable(requireContext(), R.drawable.rounded_enabled)
-                binding?.tvCustom?.setTextColor(requireContext().getColor(R.color.white))
+                binding?.tvCustom?.setTextColor(requireContext().getColor(R.color.ds_neutral_white))
             }
-
-            else -> {}
         }
     }
 
