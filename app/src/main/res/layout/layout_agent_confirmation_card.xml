@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_agent_confirmation_card"
+    android:orientation="vertical"
+    android:padding="@dimen/ds_space_16">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <FrameLayout
+            android:layout_width="@dimen/_48sdp"
+            android:layout_height="@dimen/_48sdp"
+            android:background="@drawable/bg_agent_shield_tile">
+
+            <ImageView
+                android:layout_width="@dimen/_30sdp"
+                android:layout_height="@dimen/_30sdp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_dashboard_shield"
+                app:tint="@color/ds_primary" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/ds_space_14"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                style="@style/Text.Fluent2.Subheading.Primary.Strong"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/agent_confirmation_required" />
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                style="@style/Text.Fluent2.Body.Muted"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ds_space_4"
+                android:text="@string/agent_confirmation_subtitle" />
+        </LinearLayout>
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            style="@style/Text.Fluent2.Caption.Primary.Strong"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_28sdp"
+            android:background="@drawable/bg_agent_pending_badge"
+            android:gravity="center"
+            android:paddingStart="@dimen/ds_space_10"
+            android:paddingEnd="@dimen/ds_space_10"
+            android:text="@string/agent_confirmation_pending"
+            android:textColor="#A56800" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1sdp"
+        android:layout_marginTop="@dimen/ds_space_16"
+        android:background="@color/ds_outline" />
+
+    <include layout="@layout/layout_agent_confirmation_row_action" />
+    <include layout="@layout/layout_agent_confirmation_row_customer" />
+    <include layout="@layout/layout_agent_confirmation_row_product" />
+    <include layout="@layout/layout_agent_confirmation_row_quantity" />
+    <include layout="@layout/layout_agent_confirmation_row_total" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_44sdp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            style="@style/Text.Fluent2.Body.Primary.Strong"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/agent_view_details"
+            android:textColor="@color/ds_primary" />
+
+        <ImageView
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:src="@drawable/ic_down"
+            app:tint="@color/ds_primary" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1sdp"
+        android:background="@color/ds_outline" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_52sdp"
+        android:layout_marginTop="@dimen/ds_space_14"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            style="@style/Text.Fluent2.Body.Primary.Strong"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/bg_agent_outline_pill"
+            android:gravity="center"
+            android:text="@string/agent_cancel"
+            android:textColor="@color/ds_primary" />
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            style="@style/Text.Fluent2.Body.Inverse.Strong"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/ds_space_10"
+            android:layout_weight="1"
+            android:background="@drawable/bg_agent_primary_pill"
+            android:gravity="center"
+            android:text="@string/agent_confirm_continue" />
+    </LinearLayout>
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        style="@style/Text.Fluent2.Body.Muted"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ds_space_12"
+        android:gravity="center"
+        android:text="@string/agent_confirmation_note" />
+</LinearLayout>

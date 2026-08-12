@@ -26,6 +26,12 @@
         tools:layout="@layout/fragment_dashboard" />
 
     <fragment
+        android:id="@+id/iaAgentConsoleFragment"
+        android:name="com.axelliant.hris.features.dashboard.presentation.AgentConsoleFragment"
+        android:label="@string/agent_console_title"
+        tools:layout="@layout/fragment_agent_console" />
+
+    <fragment
         android:id="@+id/iaHomeFragment"
         android:name="com.axelliant.hris.screens.fragments.HomeFragment"
         android:label="@string/ia_app_name"

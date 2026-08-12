@@ -160,6 +160,45 @@
                         app:tint="@color/drawer_icon_tint" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/agentConsoleButton"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/drawer_item_height"
+                    android:layout_marginTop="@dimen/ds_space_8"
+                    android:background="@drawable/bg_app_drawer_item_default"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:paddingStart="@dimen/ds_space_12"
+                    android:paddingEnd="@dimen/ds_space_12"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/workspaceCard">
+
+                    <ImageView
+                        android:id="@+id/agentConsoleIcon"
+                        android:layout_width="@dimen/drawer_icon_size"
+                        android:layout_height="@dimen/drawer_icon_size"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_ai_sparkles"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="@color/drawer_icon_tint" />
+
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
+                        android:id="@+id/agentConsoleTitle"
+                        style="@style/Text.Fluent2.Body.Secondary"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/ds_space_12"
+                        android:text="@string/agent_console_title"
+                        android:textColor="@color/ds_text_secondary"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/agentConsoleIcon"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
                 <com.axelliant.hris.ui.designsystem.components.AppTextView
                     android:id="@+id/navigationLabel"
                     style="@style/Text.InternalApps.Caption"
@@ -169,7 +208,7 @@
                     android:text="@string/drawer_navigation"
                     android:textAllCaps="true"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/workspaceCard" />
+                    app:layout_constraintTop_toBottomOf="@id/agentConsoleButton" />
 
                 <LinearLayout
                     android:id="@+id/drawerMenuContainer"

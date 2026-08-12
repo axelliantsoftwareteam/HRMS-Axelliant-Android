@@ -131,6 +131,8 @@ class HomeFragment : BaseFragment() {
         get() = binding?.root?.findViewById(R.id.drawerScrim)
     private val appDrawer: View?
         get() = binding?.root?.findViewById(R.id.appDrawer)
+    private val agentConsoleButton: View?
+        get() = binding?.root?.findViewById(R.id.agentConsoleButton)
     private val drawerMenuContainer: LinearLayout?
         get() = binding?.root?.findViewById(R.id.drawerMenuContainer)
     private val drawerFooterMenuContainer: LinearLayout?
@@ -456,6 +458,11 @@ class HomeFragment : BaseFragment() {
         }
 
         binding?.ivMenu?.setOnClickListener { openDrawer() }
+        agentConsoleButton?.setOnClickListener {
+            closeDrawer {
+                if (isAdded) openInternalAppsDestination(R.id.iaAgentConsoleFragment)
+            }
+        }
         drawerScrim?.setOnClickListener { closeDrawer() }
         appDrawer?.setOnTouchListener { _, event -> handleDrawerTouch(event) }
 
