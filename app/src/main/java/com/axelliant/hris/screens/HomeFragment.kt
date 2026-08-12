@@ -27,7 +27,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -44,6 +46,7 @@ import com.axelliant.hris.core.AppDrawerAction
 import com.axelliant.hris.core.auth.GlobalLogoutCoordinator
 import com.axelliant.hris.core.contracts.navigation.WorkspaceKey
 import com.axelliant.hris.config.GlobalConfig
+import com.axelliant.hris.core.ui.UiState
 import com.axelliant.hris.databinding.FragmentHomeBinding
 import com.axelliant.hris.databinding.ItemAppDrawerMenuBinding
 import com.axelliant.hris.enums.CheckRequestFilter
@@ -123,6 +126,7 @@ class HomeFragment : BaseFragment() {
     private val drawerMenuBindings = mutableMapOf<AppDrawerAction, ItemAppDrawerMenuBinding>()
     private var drawerTouchStartX = 0f
     private var drawerTouchStartY = 0f
+    private var allowedDrawerActions: Set<AppDrawerAction> = AppDrawerAction.entries.toSet()
     private val drawerScrim: View?
         get() = binding?.root?.findViewById(R.id.drawerScrim)
     private val appDrawer: View?
@@ -174,6 +178,8 @@ class HomeFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         setupInternalAppsDrawer()
         setupLogoutAction()
+        observeDrawerPermissions()
+        homeViewModel.loadDrawerPermissions()
 
         if (!workspaceSessionProvider.hasValidSession(WorkspaceKey.HRIS)) {
             renderInternalAppsOnlyDashboard()
@@ -456,7 +462,7 @@ class HomeFragment : BaseFragment() {
         drawerMenuBindings.clear()
         drawerMenuContainer?.removeAllViews()
         drawerFooterMenuContainer?.removeAllViews()
-        drawerMenuContainer?.let { bindDrawerMenu(it, primaryDrawerItems()) }
+        drawerMenuContainer?.let { bindDrawerMenu(it, primaryDrawerItems(allowedDrawerActions)) }
         drawerFooterMenuContainer?.let { bindDrawerMenu(it, footerDrawerItems()) }
         refreshDrawerSelection()
     }
@@ -478,6 +484,11 @@ class HomeFragment : BaseFragment() {
     }
 
     private fun refreshDrawerSelection() {
+        selectedDrawerAction?.let { selectedAction ->
+            if (selectedAction !in allowedDrawerActions) {
+                selectedDrawerAction = primaryDrawerItems(allowedDrawerActions).firstOrNull()?.action
+            }
+        }
         drawerMenuBindings.forEach { (action, itemBinding) ->
             val isSelected = action == selectedDrawerAction
             val isDestructive = action == AppDrawerAction.Logout
@@ -558,6 +569,19 @@ class HomeFragment : BaseFragment() {
         }
     }
 
+    private fun observeDrawerPermissions() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                homeViewModel.drawerPermissionState.collect { state ->
+                    if (state is UiState.Success) {
+                        allowedDrawerActions = state.data + footerActions
+                        setupInternalAppsDrawer()
+                    }
+                }
+            }
+        }
+    }
+
     private fun openInternalAppsDestination(destinationId: Int) {
         InternalAppsNavigator.open(findNavController(), destinationId)
     }
@@ -601,13 +625,20 @@ class HomeFragment : BaseFragment() {
         }
     }
 
-    private fun primaryDrawerItems() = listOf(
+    private fun primaryDrawerItems(
+        allowedActions: Set<AppDrawerAction> = allowedDrawerActions
+    ) = allPrimaryDrawerItems.filter { it.action in allowedActions }
+
+    private val allPrimaryDrawerItems
+        get() = listOf(
         AppDrawerMenuItem(R.string.products, R.drawable.ic_bt_home, AppDrawerAction.Products),
         AppDrawerMenuItem(R.string.drawer_quotes, R.drawable.ic_document, AppDrawerAction.Quotes),
         AppDrawerMenuItem(R.string.drawer_sale_orders, R.drawable.ic_document, AppDrawerAction.SaleOrders),
         AppDrawerMenuItem(R.string.drawer_purchase_orders, R.drawable.ic_document, AppDrawerAction.PurchaseOrders),
         AppDrawerMenuItem(R.string.profiles, R.drawable.ic_bt_account, AppDrawerAction.Profiles)
     )
+
+    private val footerActions = setOf(AppDrawerAction.Settings, AppDrawerAction.Logout)
 
     private fun footerDrawerItems() = listOf(
         AppDrawerMenuItem(R.string.drawer_settings, R.drawable.ic_settings, AppDrawerAction.Settings),

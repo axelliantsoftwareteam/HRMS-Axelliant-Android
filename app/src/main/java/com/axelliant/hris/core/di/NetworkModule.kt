@@ -8,6 +8,7 @@ import com.axelliant.hris.core.network.DefaultApiErrorMapper
 import com.axelliant.hris.core.network.DevSslConfigurator
 import com.axelliant.hris.core.network.NetworkMonitor
 import com.axelliant.hris.features.auth.data.remote.AuthApiService
+import com.axelliant.hris.features.dashboard.data.remote.UserPermissionApiService
 import com.axelliant.hris.features.inventory.assets.data.remote.AssetsApiService
 import com.axelliant.hris.features.inventory.products.data.remote.ProductsApiService
 import com.axelliant.hris.features.profiles.data.remote.ProfilesApiService
@@ -85,6 +86,11 @@ object NetworkModule {
     @Singleton
     fun provideAuthApiService(retrofit: Retrofit): AuthApiService =
         retrofit.create(AuthApiService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideUserPermissionApiService(retrofit: Retrofit): UserPermissionApiService =
+        retrofit.create(UserPermissionApiService::class.java)
 
     @Provides
     @Singleton
