@@ -83,6 +83,7 @@ class AppButtonView @JvmOverloads constructor(
     private var textColorOverride by mutableStateOf<Long?>(null)
     private var iconTintOverride by mutableStateOf<Long?>(null)
     private var backgroundTintOverride: Long? = null
+    private var usesAndroidBackground by mutableStateOf(false)
     private var textSizeSpOverride by mutableStateOf<Float?>(null)
     private var ellipsizeMode by mutableStateOf<TextUtils.TruncateAt?>(null)
 
@@ -160,9 +161,22 @@ class AppButtonView @JvmOverloads constructor(
         readAndroidViewAttributes(attrs, defStyleAttr)
         context.obtainStyledAttributes(attrs, R.styleable.AppButtonView, defStyleAttr, 0).use {
             iconPadding = it.getDimensionPixelSize(R.styleable.AppButtonView_iconPadding, iconPadding)
+            iconSizePx = it.getDimensionPixelSize(R.styleable.AppButtonView_iconSize, iconSizePx)
             iconTint = it.getColorStateList(R.styleable.AppButtonView_iconTint)
             iconGravity = it.getInt(R.styleable.AppButtonView_iconGravity, iconGravity)
             noBackground = it.getBoolean(R.styleable.AppButtonView_noBackground, noBackground)
+            if (it.hasValue(R.styleable.AppButtonView_backgroundTint)) {
+                backgroundTintList = it.getColorStateList(R.styleable.AppButtonView_backgroundTint)
+            }
+            cornerRadius = it.getDimensionPixelSize(
+                R.styleable.AppButtonView_cornerRadius,
+                cornerRadius
+            )
+            strokeColor = it.getColorStateList(R.styleable.AppButtonView_strokeColor)
+            strokeWidth = it.getDimensionPixelSize(
+                R.styleable.AppButtonView_strokeWidth,
+                strokeWidth
+            )
             fluentButtonStyle = it.getInt(
                 R.styleable.AppButtonView_fluentButtonStyle,
                 fluentButtonStyle
@@ -239,6 +253,7 @@ class AppButtonView @JvmOverloads constructor(
         AppFluentTheme {
             stateVersion
             val effectiveNoBackground = noBackground ||
+                usesAndroidBackground ||
                 (
                     buttonText.isBlank() &&
                         iconResId != 0 &&
@@ -269,6 +284,8 @@ class AppButtonView @JvmOverloads constructor(
                     iconSizePx = iconSizePx,
                     cornerRadiusPx = cornerRadius.takeIf { it > 0 },
                     textSizeSp = textSizeSpOverride,
+                    transparentBackground = usesAndroidBackground,
+                    preserveIconColors = iconTintOverride == null,
                 )
             }
 
@@ -311,6 +328,7 @@ class AppButtonView @JvmOverloads constructor(
                 android.R.attr.textColor,
                 android.R.attr.textSize,
                 android.R.attr.textAllCaps,
+                android.R.attr.background,
             ),
             defStyleAttr,
             0
@@ -325,6 +343,7 @@ class AppButtonView @JvmOverloads constructor(
                     ?.let { size -> size / scaledFontDensity() }
             }
             isAllCaps = it.getBoolean(5, isAllCaps)
+            usesAndroidBackground = it.hasValue(6)
         }
     }
 
@@ -336,6 +355,16 @@ class AppButtonView @JvmOverloads constructor(
 
     private fun applyRawXmlAttributes(attrs: AttributeSet?) {
         if (attrs == null) return
+
+        val rawBackgroundValue = attrs.getAttributeValue(ANDROID_NS, "background")
+        if (rawBackgroundValue == "@null") {
+            usesAndroidBackground = false
+        } else if (
+            rawBackgroundValue != null ||
+            attrs.getAttributeResourceValue(ANDROID_NS, "background", 0) != 0
+        ) {
+            usesAndroidBackground = true
+        }
 
         val rawIconResId = attrs.getAttributeResourceValue(AUTO_NS, "icon", 0)
         if (rawIconResId != 0) {
@@ -448,6 +477,8 @@ private class AppButtonViewTokens(
     private val iconSizePx: Int = 0,
     private val cornerRadiusPx: Int? = null,
     private val textSizeSp: Float? = null,
+    private val transparentBackground: Boolean = false,
+    private val preserveIconColors: Boolean = true,
 ) : ButtonTokens() {
 
     @Composable
@@ -457,21 +488,25 @@ private class AppButtonViewTokens(
 
     @Composable
     override fun iconColor(buttonInfo: ButtonInfo): StateColor {
+        if (preserveIconColors) return stateColor(Color.Unspecified)
         return iconColor?.let { stateColor(it) } ?: super.iconColor(buttonInfo)
     }
 
     @Composable
     override fun trailingIconColor(buttonInfo: ButtonInfo): StateColor {
+        if (preserveIconColors) return stateColor(Color.Unspecified)
         return iconColor?.let { stateColor(it) } ?: super.trailingIconColor(buttonInfo)
     }
 
     @Composable
     override fun backgroundBrush(buttonInfo: ButtonInfo): StateBrush {
+        if (transparentBackground) return transparentStateBrush()
         return backgroundColor?.let { stateBrush(it) } ?: super.backgroundBrush(buttonInfo)
     }
 
     @Composable
     override fun borderStroke(buttonInfo: ButtonInfo): StateBorderStroke {
+        if (transparentBackground) return transparentBorderStroke()
         val color = strokeColor ?: return super.borderStroke(buttonInfo)
         if (strokeWidthPx <= 0) return super.borderStroke(buttonInfo)
         val stroke = with(LocalDensity.current) {
@@ -525,29 +560,59 @@ private class AppButtonViewTokens(
     @Composable
     override fun cornerRadius(buttonInfo: ButtonInfo): Dp {
         return cornerRadiusPx?.let { with(LocalDensity.current) { it.toDp() } }
-            ?: dimensionResource(R.dimen.ds_radius_md)
+            ?: dimensionResource(R.dimen.ds_radius_xs)
     }
 
     private fun stateColor(color: Long): StateColor {
-        val composeColor = Color(color)
+        return stateColor(Color(color.toInt()))
+    }
+
+    private fun stateColor(composeColor: Color): StateColor {
         return StateColor(
             rest = composeColor,
             pressed = composeColor,
             selected = composeColor,
             focused = composeColor,
-            disabled = composeColor.copy(alpha = 0.45f),
+            disabled = if (composeColor == Color.Unspecified) {
+                Color.Unspecified
+            } else {
+                composeColor.copy(alpha = 0.45f)
+            },
         )
     }
 
     private fun stateBrush(color: Long): StateBrush {
-        val brush = SolidColor(Color(color))
-        val disabledBrush = SolidColor(Color(color).copy(alpha = 0.45f))
+        val composeColor = Color(color.toInt())
+        val brush = SolidColor(composeColor)
+        val disabledBrush = SolidColor(composeColor.copy(alpha = 0.45f))
         return StateBrush(
             rest = brush,
             pressed = brush,
             selected = brush,
             focused = brush,
             disabled = disabledBrush,
+        )
+    }
+
+    private fun transparentStateBrush(): StateBrush {
+        val brush = SolidColor(Color.Transparent)
+        return StateBrush(
+            rest = brush,
+            pressed = brush,
+            selected = brush,
+            focused = brush,
+            disabled = brush,
+        )
+    }
+
+    private fun transparentBorderStroke(): StateBorderStroke {
+        val stroke = BorderStroke(0.dp, SolidColor(Color.Transparent))
+        return StateBorderStroke(
+            rest = listOf(stroke),
+            pressed = listOf(stroke),
+            selected = listOf(stroke),
+            focused = listOf(stroke),
+            disabled = listOf(stroke),
         )
     }
 }

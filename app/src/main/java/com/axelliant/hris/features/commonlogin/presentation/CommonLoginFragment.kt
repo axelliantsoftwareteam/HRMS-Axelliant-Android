@@ -1,10 +1,12 @@
 package com.axelliant.hris.features.commonlogin.presentation
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
@@ -119,11 +121,12 @@ class CommonLoginFragment : Fragment() {
         passwordLayout.error = state.validation.passwordErrorRes?.let(::getString)
 
         val isBusy = state.isLoading || state.isMicrosoftLoading
+        val canLogin = state.isLoginEnabled && !isBusy
         emailInput.isEnabled = !isBusy
         passwordInput.isEnabled = !isBusy
         rememberCheckBox.isEnabled = !isBusy
         rememberMeText.isEnabled = !isBusy
-        loginButton.isEnabled = state.isLoginEnabled && !isBusy
+        bindLoginButton(canLogin)
         microsoftButton.isEnabled = !isBusy
         loginProgress.isVisible = isBusy
 
@@ -134,6 +137,17 @@ class CommonLoginFragment : Fragment() {
         if (state.isAuthenticated) {
             openHomeDashboard()
         }
+    }
+
+    private fun IaFragmentLoginBinding.bindLoginButton(canLogin: Boolean) {
+        val color = ContextCompat.getColor(
+            requireContext(),
+            if (canLogin) R.color.ia_white else R.color.ds_disabled_text
+        )
+        loginButton.isEnabled = canLogin
+        loginButton.setText(R.string.ia_login_action)
+        loginButton.setTextColor(color)
+        loginButton.iconTint = ColorStateList.valueOf(color)
     }
 
     private fun submitLogin() {

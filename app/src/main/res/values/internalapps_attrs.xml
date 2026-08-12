@@ -4,9 +4,14 @@
         <attr name="icon" />
         <attr name="iconTint" />
         <attr name="iconPadding" />
+        <attr name="iconSize" />
         <attr name="iconGravity" />
         <attr name="noBackground" format="boolean" />
         <attr name="fluentButtonStyle" />
+        <attr name="backgroundTint" />
+        <attr name="cornerRadius" />
+        <attr name="strokeColor" />
+        <attr name="strokeWidth" />
     </declare-styleable>
 
     <attr name="fluentButtonStyle" format="enum">
