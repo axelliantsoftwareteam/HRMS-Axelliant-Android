@@ -183,11 +183,6 @@ class HomeFragment : BaseFragment() {
         observeDrawerPermissions()
         homeViewModel.loadDrawerPermissions()
 
-        if (!workspaceSessionProvider.hasValidSession(WorkspaceKey.HRIS)) {
-            renderInternalAppsOnlyDashboard()
-            return
-        }
-
         locationPermissionLauncher = registerForActivityResult(
             ActivityResultContracts.RequestPermission()
         ) { isGranted ->
@@ -851,20 +846,6 @@ class HomeFragment : BaseFragment() {
 
 
     private fun dataPopulate() {
-
-        if (isManager) {
-            homeViewModel.getTodayTeamInfo()
-            gridList?.add(
-                Modules(
-                    id = 3,
-                    name = HomeMenu.Approval.gridName,
-                    description = HomeMenu.Approval.description,
-                    color = ContextCompat.getDrawable(requireContext(), R.drawable.gradient_bg),
-                    drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_approv)
-                )
-            )
-        }
-
         gridList = arrayListOf(
             Modules(
                 id = 0,
@@ -1003,6 +984,13 @@ class HomeFragment : BaseFragment() {
 
         binding?.tvShiftNote?.text =
             "Your shift ${shiftData.name} is ${shiftData.location}"
+        binding?.lyMyShift?.isVisible = true
+        binding?.tvShiftNameTxt?.text = shiftData.name ?: getString(R.string.not_specified)
+        binding?.tvShiftPremiss?.text = listOfNotNull(
+            shiftData.actual_start,
+            shiftData.actual_end
+        ).joinToString(" - ").ifBlank { getString(R.string.not_specified) }
+        binding?.tvWorkFrom?.text = shiftData.location ?: getString(R.string.not_specified)
     }
 
 

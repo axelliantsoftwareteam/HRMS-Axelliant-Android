@@ -53,7 +53,7 @@
     <string name="agent_tab_vendors">Vendors</string>
     <string name="agent_tab_availability">Availability</string>
     <string name="agent_confirmation_banner">Actions require your confirmation</string>
-    <string name="agent_welcome_message">Hi Arslan - I can help with products, quotes, vendors, sales orders, and availability.\n\nWhat would you like to do?</string>
+    <string name="agent_welcome_message">Agent Console is ready. This frontend route uses the existing .NET agent chat boundary and supports human confirmation when the backend asks for it.</string>
     <string name="agent_user_quote_request">Create a quote for 10 Surface Laptops.</string>
     <string name="agent_quote_ready">I prepared the quote. Please review the details before I continue.</string>
     <string name="agent_confirmation_required">Confirmation required</string>
@@ -75,6 +75,7 @@
     <string name="agent_confirmation_note">Nothing will be submitted until you confirm.</string>
     <string name="agent_checkpoint">Checkpoint created · 1:36 AM</string>
     <string name="agent_input_hint">Complete the confirmation to continue</string>
+    <string name="agent_chat_input_hint">Ask about products, quotes, vendors...</string>
     <string name="drawer_navigation">Navigation</string>
     <string name="drawer_accounts">Accounts</string>
     <string name="drawer_quotes">Quotes</string>

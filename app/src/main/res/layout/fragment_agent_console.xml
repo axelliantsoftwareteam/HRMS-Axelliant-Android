@@ -9,7 +9,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/agentTopBar"
         android:layout_width="0dp"
-        android:layout_height="@dimen/_72sdp"
+        android:layout_height="@dimen/_62sdp"
         android:background="@color/ds_surface"
         android:elevation="@dimen/_2sdp"
         android:paddingStart="@dimen/ds_space_16"
@@ -61,17 +61,18 @@
                 android:background="@drawable/bg_agent_status_dot" />
 
             <com.axelliant.hris.ui.designsystem.components.AppTextView
+                android:id="@+id/agentStatusText"
                 style="@style/Text.Fluent2.Body.Muted"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/ds_space_6"
-                android:text="@string/agent_status_waiting" />
+                android:text="@string/agent_status_ready" />
         </LinearLayout>
 
         <ImageView
             android:id="@+id/historyButton"
-            android:layout_width="@dimen/_34sdp"
-            android:layout_height="@dimen/_34sdp"
+            android:layout_width="@dimen/_24sdp"
+            android:layout_height="@dimen/_24sdp"
             android:contentDescription="@null"
             android:padding="@dimen/ds_space_4"
             android:src="@drawable/ic_calendar"
@@ -82,8 +83,8 @@
 
         <ImageView
             android:id="@+id/moreButton"
-            android:layout_width="@dimen/_34sdp"
-            android:layout_height="@dimen/_34sdp"
+            android:layout_width="@dimen/_24sdp"
+            android:layout_height="@dimen/_24sdp"
             android:contentDescription="@null"
             android:padding="@dimen/ds_space_4"
             android:src="@drawable/ic_more_vert"
@@ -109,8 +110,8 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingStart="@dimen/ds_space_16"
-            android:paddingEnd="@dimen/ds_space_16">
+            android:paddingStart="@dimen/ds_space_12"
+            android:paddingEnd="@dimen/ds_space_12">
 
             <com.axelliant.hris.ui.designsystem.components.AppTextView
                 style="@style/Text.Fluent2.Body.Inverse.Strong"
@@ -171,37 +172,14 @@
         app:layout_constraintTop_toBottomOf="@id/agentTabsScroll">
 
         <LinearLayout
+            android:id="@+id/messageContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_42sdp"
-                android:background="@drawable/bg_agent_bubble_incoming"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:paddingStart="@dimen/ds_space_16"
-                android:paddingEnd="@dimen/ds_space_16">
-
-                <ImageView
-                    android:layout_width="@dimen/_24sdp"
-                    android:layout_height="@dimen/_24sdp"
-                    android:src="@drawable/ic_dashboard_shield"
-                    app:tint="@color/ds_primary" />
-
-                <com.axelliant.hris.ui.designsystem.components.AppTextView
-                    style="@style/Text.Fluent2.Body.Primary.Strong"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/ds_space_12"
-                    android:text="@string/agent_confirmation_banner" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/ds_space_24"
                 android:gravity="top"
                 android:orientation="horizontal">
 
@@ -229,40 +207,6 @@
                     android:padding="@dimen/ds_space_16"
                     android:text="@string/agent_welcome_message" />
             </LinearLayout>
-
-            <com.axelliant.hris.ui.designsystem.components.AppTextView
-                style="@style/Text.Fluent2.Body.Inverse"
-                android:layout_width="@dimen/_210sdp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_marginTop="@dimen/ds_space_20"
-                android:background="@drawable/bg_agent_bubble_outgoing"
-                android:lineSpacingExtra="@dimen/ds_space_4"
-                android:padding="@dimen/ds_space_16"
-                android:text="@string/agent_user_quote_request" />
-
-            <com.axelliant.hris.ui.designsystem.components.AppTextView
-                style="@style/Text.Fluent2.Body.Primary.Strong"
-                android:layout_width="@dimen/_260sdp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/ds_space_16"
-                android:background="@drawable/bg_agent_bubble_incoming"
-                android:lineSpacingExtra="@dimen/ds_space_4"
-                android:padding="@dimen/ds_space_16"
-                android:text="@string/agent_quote_ready" />
-
-            <include
-                layout="@layout/layout_agent_confirmation_card"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/ds_space_16" />
-
-            <com.axelliant.hris.ui.designsystem.components.AppTextView
-                style="@style/Text.Fluent2.Body.Muted"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/ds_space_14"
-                android:text="@string/agent_checkpoint" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
@@ -286,8 +230,8 @@
             android:background="@drawable/bg_agent_input_bar"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingStart="@dimen/ds_space_14"
-            android:paddingEnd="@dimen/ds_space_14">
+            android:paddingStart="@dimen/ds_space_8"
+            android:paddingEnd="@dimen/ds_space_8">
 
             <ImageView
                 android:layout_width="@dimen/_24sdp"
@@ -295,15 +239,20 @@
                 android:src="@drawable/ic_add"
                 app:tint="@color/ds_text_muted" />
 
-            <com.axelliant.hris.ui.designsystem.components.AppTextView
-                style="@style/Text.Fluent2.Body.Muted"
+            <EditText
+                android:id="@+id/messageInput"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/ds_space_12"
                 android:layout_weight="1"
+                android:background="@android:color/transparent"
                 android:ellipsize="end"
+                android:hint="@string/agent_chat_input_hint"
+                android:inputType="textCapSentences|textMultiLine"
                 android:maxLines="1"
-                android:text="@string/agent_input_hint" />
+                android:textColor="@color/ds_text_primary"
+                android:textColorHint="@color/ds_text_muted"
+                android:textSize="@dimen/ds_text_body" />
 
             <ImageView
                 android:layout_width="@dimen/_24sdp"
@@ -313,11 +262,13 @@
         </LinearLayout>
 
         <FrameLayout
+            android:id="@+id/sendButton"
             android:layout_width="@dimen/_50sdp"
             android:layout_height="@dimen/_50sdp"
             android:layout_marginStart="@dimen/ds_space_8"
             android:background="@drawable/bg_agent_avatar"
-            android:alpha="0.35">
+            android:clickable="true"
+            android:focusable="true">
 
             <ImageView
                 android:layout_width="@dimen/_26sdp"
