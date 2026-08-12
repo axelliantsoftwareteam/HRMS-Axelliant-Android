@@ -91,7 +91,8 @@
                     app:iconTint="@color/ds_primary"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@id/compareButton"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    />
 
                 <com.axelliant.hris.ui.designsystem.components.AppButtonView
                     android:id="@+id/searchIconButton"
