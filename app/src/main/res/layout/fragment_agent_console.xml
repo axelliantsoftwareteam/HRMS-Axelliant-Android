@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/Layout.Fluent2.Screen"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/ds_background">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/agentTopBar"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_62sdp"
+        android:background="@color/ds_surface"
+        android:elevation="@dimen/_2sdp"
+        android:paddingStart="@dimen/ds_space_16"
+        android:paddingEnd="@dimen/ds_space_16"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/backButton"
+            android:layout_width="@dimen/_32sdp"
+            android:layout_height="@dimen/_32sdp"
+            android:contentDescription="@null"
+            android:padding="@dimen/ds_space_4"
+            android:src="@drawable/ic_arrow_back"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/ds_text_primary" />
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            android:id="@+id/agentTitle"
+            style="@style/Text.Fluent2.Title.Primary.Strong"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/ds_space_16"
+            android:text="@string/agent_title"
+            app:layout_constraintBottom_toTopOf="@id/statusRow"
+            app:layout_constraintEnd_toStartOf="@id/historyButton"
+            app:layout_constraintStart_toEndOf="@id/backButton"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <LinearLayout
+            android:id="@+id/statusRow"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/ds_space_16"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/historyButton"
+            app:layout_constraintStart_toEndOf="@id/backButton"
+            app:layout_constraintTop_toBottomOf="@id/agentTitle">
+
+            <View
+                android:layout_width="@dimen/_9sdp"
+                android:layout_height="@dimen/_9sdp"
+                android:background="@drawable/bg_agent_status_dot" />
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                android:id="@+id/agentStatusText"
+                style="@style/Text.Fluent2.Body.Muted"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/ds_space_6"
+                android:text="@string/agent_status_ready" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/historyButton"
+            android:layout_width="@dimen/_24sdp"
+            android:layout_height="@dimen/_24sdp"
+            android:contentDescription="@null"
+            android:padding="@dimen/ds_space_4"
+            android:src="@drawable/ic_calendar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/moreButton"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/ds_text_primary" />
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            android:id="@+id/moreButton"
+            style="@style/Text.Fluent2.Body.Primary.Strong"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_32sdp"
+            android:background="@drawable/bg_agent_outline_pill"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:minWidth="@dimen/_56sdp"
+            android:paddingStart="@dimen/ds_space_12"
+            android:paddingEnd="@dimen/ds_space_12"
+            android:text="@string/agent_clear"
+            android:textColor="@color/ds_primary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <HorizontalScrollView
+        android:id="@+id/agentTabsScroll"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_54sdp"
+        android:background="@color/ds_surface"
+        android:overScrollMode="never"
+        android:scrollbars="none"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/agentTopBar">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="@dimen/ds_space_8"
+            android:paddingEnd="@dimen/ds_space_8">
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                style="@style/Text.Fluent2.Body.Inverse.Strong"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/_30sdp"
+                android:background="@drawable/bg_agent_primary_pill"
+                android:gravity="center"
+                android:paddingStart="@dimen/ds_space_16"
+                android:paddingEnd="@dimen/ds_space_16"
+                android:text="@string/agent_tab_general" />
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                style="@style/Text.Fluent2.Body.Primary.Strong"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/_30sdp"
+                android:layout_marginStart="@dimen/ds_space_8"
+                android:background="@drawable/bg_agent_outline_pill"
+                android:gravity="center"
+                android:paddingStart="@dimen/ds_space_16"
+                android:paddingEnd="@dimen/ds_space_16"
+                android:text="@string/agent_tab_quotes_products" />
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                style="@style/Text.Fluent2.Body.Primary.Strong"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/_30sdp"
+                android:layout_marginStart="@dimen/ds_space_8"
+                android:background="@drawable/bg_agent_outline_pill"
+                android:gravity="center"
+                android:paddingStart="@dimen/ds_space_16"
+                android:paddingEnd="@dimen/ds_space_16"
+                android:text="@string/agent_tab_vendors" />
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                style="@style/Text.Fluent2.Body.Primary.Strong"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/_30sdp"
+                android:layout_marginStart="@dimen/ds_space_8"
+                android:background="@drawable/bg_agent_outline_pill"
+                android:gravity="center"
+                android:paddingStart="@dimen/ds_space_16"
+                android:paddingEnd="@dimen/ds_space_16"
+                android:text="@string/agent_tab_availability" />
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/agentConversationScroll"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:fillViewport="false"
+        android:overScrollMode="never"
+        android:padding="@dimen/ds_space_12"
+        app:layout_constraintBottom_toTopOf="@id/agentInputContainer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/agentTabsScroll">
+
+        <LinearLayout
+            android:id="@+id/messageContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="top"
+                android:orientation="horizontal">
+
+                <FrameLayout
+                    android:layout_width="@dimen/_24sdp"
+                    android:layout_height="@dimen/_24sdp"
+                    android:background="@drawable/bg_agent_avatar">
+
+                    <ImageView
+                        android:layout_width="@dimen/_12sdp"
+                        android:layout_height="@dimen/_12sdp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_ai_sparkles"
+                        app:tint="@color/ds_neutral_white" />
+                </FrameLayout>
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                    style="@style/Text.Fluent2.Body.Primary.Strong"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/ds_space_8"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_agent_bubble_incoming"
+                    android:lineSpacingExtra="@dimen/ds_space_2"
+                    android:padding="@dimen/ds_space_8"
+                    android:text="@string/agent_welcome_message" />
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <LinearLayout
+        android:id="@+id/agentInputContainer"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_60sdp"
+        android:background="@color/ds_surface"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/ds_space_12"
+        android:paddingEnd="@dimen/ds_space_12"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_45sdp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_agent_input_bar"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="@dimen/ds_space_8"
+            android:paddingEnd="@dimen/ds_space_8">
+
+            <ImageView
+                android:layout_width="@dimen/_24sdp"
+                android:layout_height="@dimen/_24sdp"
+                android:src="@drawable/ic_add"
+                android:visibility="gone"
+                app:tint="@color/ds_text_muted" />
+
+            <EditText
+                android:id="@+id/messageInput"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/ds_space_4"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:ellipsize="end"
+                android:hint="@string/agent_chat_input_hint"
+                android:inputType="textCapSentences|textMultiLine"
+                android:maxLines="1"
+                android:textColor="@color/ds_text_primary"
+                android:textColorHint="@color/ds_text_muted"
+                android:textSize="@dimen/ds_text_body" />
+
+            <ImageView
+                android:layout_width="@dimen/_24sdp"
+                android:layout_height="@dimen/_24sdp"
+                android:src="@drawable/ic_bt_message"
+                android:visibility="gone"
+                app:tint="@color/ds_text_muted" />
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/sendButton"
+            android:layout_width="@dimen/_35sdp"
+            android:layout_height="@dimen/_35sdp"
+            android:layout_marginStart="@dimen/ds_space_8"
+            android:alpha="0.45"
+            android:background="@drawable/bg_agent_avatar"
+            android:clickable="true"
+            android:enabled="false"
+            android:focusable="true">
+
+            <ImageView
+                android:id="@+id/sendIcon"
+                android:layout_width="@dimen/_16sdp"
+                android:layout_height="@dimen/_16sdp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_login_arrow_right"
+                app:tint="@color/ds_text_muted" />
+        </FrameLayout>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

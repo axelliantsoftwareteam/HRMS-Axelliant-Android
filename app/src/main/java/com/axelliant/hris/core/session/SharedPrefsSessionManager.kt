@@ -41,6 +41,8 @@ class SharedPrefsSessionManager @Inject constructor(
 
     override fun getRefreshToken(): String? = prefs.getString(KEY_REFRESH_TOKEN, null)
 
+    override fun getUserId(): String? = prefs.getString(KEY_USER_ID, null)
+
     override fun getMicrosoftGraphToken(): String? =
         prefs.getString(KEY_MICROSOFT_GRAPH_TOKEN, null)
 

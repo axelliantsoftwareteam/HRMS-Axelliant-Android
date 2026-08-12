@@ -6,6 +6,7 @@ interface SessionManager {
     fun clearMicrosoftGraphToken()
     fun getAccessToken(): String?
     fun getRefreshToken(): String?
+    fun getUserId(): String?
     fun getMicrosoftGraphToken(): String?
     fun isLoggedIn(): Boolean
     fun clearSession()
