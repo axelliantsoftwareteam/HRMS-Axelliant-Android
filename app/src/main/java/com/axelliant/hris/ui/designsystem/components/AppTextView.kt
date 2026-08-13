@@ -2,6 +2,7 @@ package com.axelliant.hris.ui.designsystem.components
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.Gravity
 import android.view.View
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
@@ -91,4 +92,33 @@ class AppTextView @JvmOverloads constructor(
         const val TEXT_TONE_ACCENT = 4
         const val TEXT_TONE_DANGER = 5
     }
+
+    init {
+        layoutDirection = View.LAYOUT_DIRECTION_LTR
+        textDirection = View.TEXT_DIRECTION_LTR
+        includeFontPadding = false
+
+        gravity = Gravity.CENTER
+
+        context.obtainStyledAttributes(
+            attrs,
+            R.styleable.AppTextView,
+            defStyleAttr,
+            0
+        ).use {
+            applyTextStyle(
+                it.getInt(
+                    R.styleable.AppTextView_fluentTextStyle,
+                    TEXT_STYLE_UNSET
+                )
+            )
+            applyTextTone(
+                it.getInt(
+                    R.styleable.AppTextView_fluentTextTone,
+                    TEXT_TONE_UNSET
+                )
+            )
+        }
+    }
+
 }
