@@ -33,39 +33,43 @@
             android:layout_height="wrap_content"
             app:constraint_referenced_ids="header_bg,ly_info,card_main"/>
 
-        <!-- ============================================================ -->
-        <!-- NEW: full-bleed blue header background                       -->
-        <!-- Extends to the true top/left/right edges of the screen       -->
-        <!-- (ignores the guidelines on purpose so it goes edge-to-edge)   -->
-        <!-- ============================================================ -->
         <View
             android:id="@+id/header_bg"
             android:layout_width="0dp"
-            android:layout_height="@dimen/_200sdp"
-            android:background="@color/sky_blue"
+            android:layout_height="@dimen/_70sdp"
+            android:background="@color/ds_surface"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/header_divider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@color/ds_outline"
+            app:layout_constraintBottom_toBottomOf="@id/header_bg"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/ly_info"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_10sdp"
             app:layout_constraintLeft_toRightOf="@id/start_guideline"
             app:layout_constraintRight_toLeftOf="@id/end_guideline"
             app:layout_constraintTop_toBottomOf="@id/top_guideline">
 
             <ImageView
                 android:id="@+id/iv_menu"
-                android:layout_width="@dimen/_25sdp"
-                android:layout_height="@dimen/_25sdp"
-                android:padding="@dimen/_5sdp"
+                android:layout_width="@dimen/_36sdp"
+                android:layout_height="@dimen/_36sdp"
+                android:background="@drawable/bg_home_menu_button"
+                android:padding="@dimen/_8sdp"
                 android:src="@drawable/ic_menu"
                 app:layout_constraintBottom_toBottomOf="@id/profile_img"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@id/profile_img"
-                app:tint="@color/ds_neutral_white" />
+                app:tint="@color/ds_text_primary" />
 
             <ImageView
                 android:id="@+id/iv_notification"
@@ -73,7 +77,8 @@
                 android:layout_height="@dimen/_25sdp"
                 android:layout_marginEnd="0dp"
                 android:src="@drawable/fluent_sign_out"
-                app:tint="@color/ds_neutral_white"
+                android:visibility="gone"
+                app:tint="@color/ds_text_primary"
                 android:padding="@dimen/_5sdp"
                 app:layout_constraintTop_toTopOf="@id/profile_img"
                 app:layout_constraintBottom_toBottomOf="@id/profile_img"
@@ -93,26 +98,26 @@
 
             <com.microsoft.fluentui.persona.AvatarView
                 android:id="@id/profile_img"
-                android:layout_width="@dimen/_40sdp"
-                android:layout_height="@dimen/_40sdp"
-                android:layout_marginStart="@dimen/_8sdp"
-                app:fluentui_name="Muhammad Umer Azhar"
-                app:fluentui_avatarSize="xxlarge"
+                android:layout_width="@dimen/_42sdp"
+                android:layout_height="@dimen/_42sdp"
+                android:layout_marginStart="@dimen/_12sdp"
+                app:fluentui_name="Muhammad Arslan"
+                app:fluentui_avatarSize="xlarge"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/iv_menu" />
 
             <com.axelliant.hris.ui.designsystem.components.AppTextView
                 android:id="@+id/tv_employe_name"
-                style="@style/Text.Fluent2.Title.Inverse.Strong"
+                style="@style/Text.Fluent2.Title.Primary.Strong"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_12sdp"
-                android:textColor="@color/ds_neutral_white"
-                tools:text="Muhammad Umer Azhar"
+                android:layout_marginStart="@dimen/_14sdp"
+                android:textColor="@color/ds_text_primary"
+                tools:text="Muhammad Arslan"
                 android:textAlignment="textStart"
                 android:gravity="start"
-                android:textSize="@dimen/_13ssp"
+                android:textSize="@dimen/_12ssp"
                 app:layout_constraintStart_toEndOf="@id/profile_img"
                 app:layout_constraintEnd_toStartOf="@id/iv_qr"
                 app:layout_constraintTop_toTopOf="@id/profile_img"
@@ -125,10 +130,11 @@
                 style="@style/Text.Fluent2.Caption.Primary.Strong"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_12sdp"
+                android:layout_marginStart="@dimen/_14sdp"
                 android:layout_marginTop="@dimen/_1sdp"
-                android:textColor="@color/ds_neutral_white"
-                android:alpha="0.85"
+                android:textColor="@color/ds_text_secondary"
+                android:alpha="1"
+                android:textSize="@dimen/_9ssp"
                 tools:text="Mobile Application Internee"
                 android:textAlignment="textStart"
                 android:gravity="start"
@@ -142,10 +148,11 @@
                 style="@style/Text.Fluent2.Caption.Primary.Strong"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_12sdp"
+                android:layout_marginStart="@dimen/_14sdp"
                 android:layout_marginTop="@dimen/_1sdp"
-                android:textColor="@color/ds_neutral_white"
-                android:alpha="0.85"
+                android:textColor="@color/ds_text_secondary"
+                android:alpha="1"
+                android:textSize="@dimen/_9ssp"
                 tools:text="Emp ID: 224"
                 android:textAlignment="textStart"
                 android:gravity="start"
@@ -159,27 +166,22 @@
                 style="@style/Text.Fluent2.Caption.Primary.Strong"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:textColor="@color/ds_neutral_white"
+                android:textColor="@color/ds_text_secondary"
                 android:visibility="gone"
                 tools:text="MM Tower lahore"
                 app:layout_constraintStart_toEndOf="@id/profile_img"
                 app:layout_constraintTop_toBottomOf="@id/tv_employe_id" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-        <!-- ============================================================ -->
-        <!-- NEW: main rounded-top white card that overlaps the header    -->
-        <!-- Everything that used to sit directly on the root now lives   -->
-        <!-- inside this card, clipped with rounded top corners.          -->
-        <!-- ============================================================ -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/card_main"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:clipChildren="false"
             android:clipToPadding="false"
-            android:background="@drawable/bg_card_top_rounded"
+            android:background="@color/ds_surface"
             app:layout_constraintTop_toBottomOf="@id/ly_info"
-            android:layout_marginTop="@dimen/_20sdp"
+            android:layout_marginTop="@dimen/_8sdp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent">
@@ -189,7 +191,7 @@
                 android:layout_height="0dp"
                 android:clipToPadding="false"
                 android:clipChildren="false"
-                android:paddingTop="@dimen/_20sdp"
+                android:paddingTop="@dimen/_8sdp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -198,8 +200,8 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingStart="@dimen/_18sdp"
-                    android:paddingEnd="@dimen/_18sdp"
+                    android:paddingStart="@dimen/_12sdp"
+                    android:paddingEnd="@dimen/_12sdp"
                     android:clipChildren="false"
                     android:clipToPadding="false">
 
@@ -210,6 +212,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/today_attend"
                         android:textAlignment="textStart"
+                        android:textSize="@dimen/_13ssp"
                         app:layout_constraintEnd_toStartOf="@+id/tv_current_locs"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -226,8 +229,8 @@
                         app:chipIconTint="@color/ds_text_primary"
                         app:chipBackgroundColor="@color/chip_color"
                         app:chipStrokeWidth="0dp"
-                        app:chipCornerRadius="2dp"
-                        app:chipMinHeight="32dp"
+                        app:chipCornerRadius="@dimen/ds_radius_sm"
+                        app:chipMinHeight="@dimen/_24sdp"
                         app:chipStartPadding="8dp"
                         app:chipEndPadding="8dp"
                         app:iconStartPadding="0dp"
@@ -250,6 +253,10 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_8sdp"
+                        app:cardCornerRadius="@dimen/ds_radius_sm"
+                        app:cardElevation="0dp"
+                        app:strokeColor="@color/ds_outline"
+                        app:strokeWidth="1dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/tv_today_title">
@@ -286,6 +293,7 @@
                             android:layout_height="wrap_content"
                             android:background="@drawable/fluent_blue"
                             android:backgroundTint="@color/light_gray"
+                            android:visibility="visible"
                             android:minHeight="@dimen/_40sdp">
 
                             <!-- left accent bar -->
@@ -854,15 +862,61 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <com.axelliant.hris.ui.designsystem.components.AppTextView
+                        android:id="@+id/tv_business_modules"
+                        style="@style/Text.Fluent2.Subheading.Primary.Strong"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:text="@string/home_business_modules"
+                        android:textAlignment="textStart"
+                        android:textSize="@dimen/_13ssp"
+                        android:visibility="gone"
+                        app:layout_constraintEnd_toStartOf="@id/tv_business_view_all"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/ly_my_shift" />
+
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
+                        android:id="@+id/tv_business_view_all"
+                        style="@style/Text.Fluent2.Subheading.Primary.Strong"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/view_all"
+                        android:textColor="@color/ds_primary"
+                        android:textSize="@dimen/_10ssp"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="@id/tv_business_modules"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/tv_business_modules" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_business_module"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:clipChildren="false"
+                        android:clipToPadding="false"
+                        android:nestedScrollingEnabled="false"
+                        android:orientation="vertical"
+                        android:visibility="gone"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_business_modules"
+                        app:spanCount="2"
+                        tools:itemCount="4"
+                        tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                        tools:listitem="@layout/modules_row" />
+
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
                         android:id="@+id/tv_weekly"
                         style="@style/Text.Fluent2.Subheading.Primary.Strong"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_10sdp"
-                        android:text="@string/my_actions"
+                        android:text="@string/home_hris_employee_services"
                         android:textAlignment="textStart"
+                        android:textSize="@dimen/_13ssp"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/ly_my_team" />
+                        app:layout_constraintTop_toBottomOf="@+id/rv_business_module" />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rv_module"
@@ -880,36 +934,10 @@
                         tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                         tools:listitem="@layout/modules_row" />
 
-                    <com.axelliant.hris.ui.designsystem.components.AppTextView
-                        android:id="@+id/tv_birthdays"
-                        style="@style/Text.Fluent2.Subheading.Primary.Strong"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        android:text="@string/birthday"
-                        android:visibility="gone"
-                        android:textAlignment="textStart"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/rv_module" />
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rv_birthdays"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:orientation="vertical"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_birthdays"
-                        tools:itemCount="2"
-                        tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        tools:listitem="@layout/birthday_row"
-                        tools:orientation="horizontal" />
-
                     <View
-                        app:layout_constraintTop_toBottomOf="@+id/rv_birthdays"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/_50sdp" />
+                        android:layout_height="@dimen/_50sdp"
+                        app:layout_constraintTop_toBottomOf="@+id/rv_module" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -923,6 +951,7 @@
             android:id="@+id/shimmer_layout"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:visibility="visible"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -932,41 +961,49 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <!-- blue header, matches header_bg -->
                 <View
                     android:id="@+id/shimmer_header_bg"
                     android:layout_width="0dp"
-                    android:layout_height="@dimen/_215sdp"
-                    android:background="#E0E0E0"
+                    android:layout_height="@dimen/_70sdp"
+                    android:background="@color/ds_surface"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <!-- profile row, matches ly_info -->
+                <View
+                    android:id="@+id/shimmer_menu"
+                    android:layout_width="@dimen/_36sdp"
+                    android:layout_height="@dimen/_36sdp"
+                    android:layout_marginStart="@dimen/_12sdp"
+                    android:background="@drawable/shimmer_rect_light"
+                    app:layout_constraintBottom_toBottomOf="@id/shimmer_avatar"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/shimmer_avatar" />
+
                 <View
                     android:id="@+id/shimmer_avatar"
-                    android:layout_width="@dimen/_40sdp"
-                    android:layout_height="@dimen/_40sdp"
-                    android:layout_marginStart="@dimen/_15sdp"
-                    android:layout_marginTop="@dimen/_35sdp"
+                    android:layout_width="@dimen/_42sdp"
+                    android:layout_height="@dimen/_42sdp"
+                    android:layout_marginStart="@dimen/_12sdp"
+                    android:layout_marginTop="@dimen/_14sdp"
                     android:background="@drawable/shimmer_circle_light"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/shimmer_menu"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <View
                     android:id="@+id/shimmer_name"
-                    android:layout_width="@dimen/_120sdp"
+                    android:layout_width="@dimen/_105sdp"
                     android:layout_height="@dimen/_10sdp"
-                    android:layout_marginStart="@dimen/_12sdp"
+                    android:layout_marginStart="@dimen/_14sdp"
                     android:background="@drawable/shimmer_rect_light"
                     app:layout_constraintStart_toEndOf="@id/shimmer_avatar"
                     app:layout_constraintTop_toTopOf="@id/shimmer_avatar" />
 
                 <View
                     android:id="@+id/shimmer_designation"
-                    android:layout_width="@dimen/_90sdp"
-                    android:layout_height="@dimen/_8sdp"
-                    android:layout_marginStart="@dimen/_12sdp"
+                    android:layout_width="@dimen/_95sdp"
+                    android:layout_height="@dimen/_7sdp"
+                    android:layout_marginStart="@dimen/_14sdp"
                     android:layout_marginTop="@dimen/_6sdp"
                     android:background="@drawable/shimmer_rect_light"
                     app:layout_constraintStart_toEndOf="@id/shimmer_avatar"
@@ -975,81 +1012,75 @@
                 <View
                     android:id="@+id/shimmer_empid"
                     android:layout_width="@dimen/_70sdp"
-                    android:layout_height="@dimen/_8sdp"
-                    android:layout_marginStart="@dimen/_12sdp"
+                    android:layout_height="@dimen/_7sdp"
+                    android:layout_marginStart="@dimen/_14sdp"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:background="@drawable/shimmer_rect_light"
                     app:layout_constraintStart_toEndOf="@id/shimmer_avatar"
                     app:layout_constraintTop_toBottomOf="@id/shimmer_designation" />
 
-                <!-- white rounded card, matches card_main -->
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:background="@drawable/bg_card_top_rounded"
-                    android:paddingStart="@dimen/_15sdp"
-                    android:paddingEnd="@dimen/_15sdp"
-                    android:paddingTop="@dimen/_20sdp"
+                    android:background="@color/ds_surface"
+                    android:paddingStart="@dimen/_12sdp"
+                    android:paddingTop="@dimen/_8sdp"
+                    android:paddingEnd="@dimen/_12sdp"
                     app:layout_constraintTop_toBottomOf="@id/shimmer_header_bg"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent">
 
-                    <!-- "Today's attendance" title + location chip, matches tv_today_title / tv_current_locs -->
                     <View
                         android:id="@+id/shimmer_today_title"
                         android:layout_width="@dimen/_100sdp"
-                        android:layout_height="@dimen/_12sdp"
+                        android:layout_height="@dimen/_14sdp"
                         android:background="@drawable/shimmer_rect"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <View
                         android:id="@+id/shimmer_loc_chip"
-                        android:layout_width="@dimen/_70sdp"
-                        android:layout_height="@dimen/_12sdp"
+                        android:layout_width="@dimen/_96sdp"
+                        android:layout_height="@dimen/_24sdp"
                         android:background="@drawable/shimmer_rect"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@id/shimmer_today_title" />
 
-                    <!-- attendance card, matches card_today -->
                     <View
                         android:id="@+id/shimmer_attend_card"
                         android:layout_width="0dp"
-                        android:layout_height="@dimen/_160sdp"
+                        android:layout_height="@dimen/_184sdp"
                         android:layout_marginTop="@dimen/_8sdp"
                         android:background="@drawable/shimmer_rect"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/shimmer_today_title" />
 
-                    <!-- note card, matches card_note -->
                     <View
                         android:id="@+id/shimmer_note_card"
                         android:layout_width="0dp"
-                        android:layout_height="@dimen/_54sdp"
+                        android:layout_height="@dimen/_42sdp"
                         android:layout_marginTop="@dimen/_10sdp"
                         android:background="@drawable/shimmer_rect"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/shimmer_attend_card" />
 
-                    <!-- "My actions" title, matches tv_weekly -->
                     <View
                         android:id="@+id/shimmer_actions_title"
-                        android:layout_width="@dimen/_90sdp"
-                        android:layout_height="@dimen/_12sdp"
+                        android:layout_width="@dimen/_118sdp"
+                        android:layout_height="@dimen/_13sdp"
                         android:layout_marginTop="@dimen/_14sdp"
                         android:background="@drawable/shimmer_rect"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/shimmer_note_card" />
 
-                    <!-- module grid, matches rv_module (2 columns) -->
                     <LinearLayout
                         android:id="@+id/shimmer_module_grid"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_8sdp"
+                        android:layout_marginTop="@dimen/_6sdp"
                         android:orientation="vertical"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -1062,14 +1093,42 @@
 
                             <View
                                 android:layout_width="0dp"
-                                android:layout_height="@dimen/_90sdp"
+                                android:layout_height="@dimen/_54sdp"
                                 android:layout_weight="1"
                                 android:layout_margin="@dimen/_4sdp"
                                 android:background="@drawable/shimmer_rect" />
 
                             <View
                                 android:layout_width="0dp"
-                                android:layout_height="@dimen/_90sdp"
+                                android:layout_height="@dimen/_54sdp"
+                                android:layout_weight="1"
+                                android:layout_margin="@dimen/_4sdp"
+                                android:background="@drawable/shimmer_rect" />
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="@dimen/_128sdp"
+                            android:layout_height="@dimen/_13sdp"
+                            android:layout_marginStart="@dimen/_4sdp"
+                            android:layout_marginTop="@dimen/_10sdp"
+                            android:layout_marginBottom="@dimen/_6sdp"
+                            android:background="@drawable/shimmer_rect" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <View
+                                android:layout_width="0dp"
+                                android:layout_height="@dimen/_54sdp"
+                                android:layout_weight="1"
+                                android:layout_margin="@dimen/_4sdp"
+                                android:background="@drawable/shimmer_rect" />
+
+                            <View
+                                android:layout_width="0dp"
+                                android:layout_height="@dimen/_54sdp"
                                 android:layout_weight="1"
                                 android:layout_margin="@dimen/_4sdp"
                                 android:background="@drawable/shimmer_rect" />
@@ -1082,34 +1141,14 @@
 
                             <View
                                 android:layout_width="0dp"
-                                android:layout_height="@dimen/_90sdp"
+                                android:layout_height="@dimen/_54sdp"
                                 android:layout_weight="1"
                                 android:layout_margin="@dimen/_4sdp"
                                 android:background="@drawable/shimmer_rect" />
 
                             <View
                                 android:layout_width="0dp"
-                                android:layout_height="@dimen/_90sdp"
-                                android:layout_weight="1"
-                                android:layout_margin="@dimen/_4sdp"
-                                android:background="@drawable/shimmer_rect" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-                            <View
-                                android:layout_width="0dp"
-                                android:layout_height="@dimen/_90sdp"
-                                android:layout_weight="1"
-                                android:layout_margin="@dimen/_4sdp"
-                                android:background="@drawable/shimmer_rect" />
-
-                            <View
-                                android:layout_width="0dp"
-                                android:layout_height="@dimen/_90sdp"
+                                android:layout_height="@dimen/_54sdp"
                                 android:layout_weight="1"
                                 android:layout_margin="@dimen/_4sdp"
                                 android:background="@drawable/shimmer_rect" />
@@ -1122,14 +1161,14 @@
 
                             <View
                                 android:layout_width="0dp"
-                                android:layout_height="@dimen/_90sdp"
+                                android:layout_height="@dimen/_54sdp"
                                 android:layout_weight="1"
                                 android:layout_margin="@dimen/_4sdp"
                                 android:background="@drawable/shimmer_rect" />
 
                             <View
                                 android:layout_width="0dp"
-                                android:layout_height="@dimen/_90sdp"
+                                android:layout_height="@dimen/_54sdp"
                                 android:layout_weight="1"
                                 android:layout_margin="@dimen/_4sdp"
                                 android:background="@drawable/shimmer_rect" />

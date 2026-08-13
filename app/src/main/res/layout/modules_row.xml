@@ -4,12 +4,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/_80sdp"
-    app:cardCornerRadius="@dimen/ds_radius_md"
-    android:layout_margin="@dimen/_3sdp"
-    app:cardElevation="@dimen/_4sdp"
+    android:layout_height="@dimen/_54sdp"
+    android:layout_marginStart="@dimen/_3sdp"
+    android:layout_marginTop="@dimen/_4sdp"
+    android:layout_marginEnd="@dimen/_3sdp"
+    android:layout_marginBottom="@dimen/_4sdp"
+    app:cardCornerRadius="@dimen/ds_radius_sm"
+    app:cardElevation="0dp"
     app:cardPreventCornerOverlap="true"
     app:cardUseCompatPadding="false"
+    app:strokeColor="@color/ds_outline"
+    app:strokeWidth="@dimen/_1sdp"
     app:cardBackgroundColor="@color/ds_neutral_white">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -19,24 +24,24 @@
         android:foreground="?attr/selectableItemBackground"
         android:clickable="true"
         android:focusable="true"
-        android:paddingStart="@dimen/_10sdp"
-        android:paddingTop="@dimen/_8sdp"
-        android:paddingEnd="@dimen/_10sdp"
-        android:paddingBottom="@dimen/_8sdp">
+        android:paddingStart="@dimen/_7sdp"
+        android:paddingTop="@dimen/_6sdp"
+        android:paddingEnd="@dimen/_7sdp"
+        android:paddingBottom="@dimen/_6sdp">
 
         <FrameLayout
             android:id="@+id/icon_badge"
-            android:layout_width="@dimen/_18sdp"
+            android:layout_width="@dimen/_30sdp"
             android:layout_height="@dimen/_30sdp"
-            android:backgroundTint="#26FFFFFF"
+            android:background="@drawable/bg_home_module_icon_tile"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
             <ImageView
                 android:id="@+id/iv_loc"
-                android:layout_width="@dimen/_16sdp"
-                android:layout_height="@dimen/_16sdp"
+                android:layout_width="@dimen/_17sdp"
+                android:layout_height="@dimen/_17sdp"
                 android:layout_gravity="center"
                 tools:src="@drawable/ic_calendar" />
 
@@ -48,15 +53,15 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_8sdp"
             android:textAlignment="textStart"
-            android:textColor="@color/ds_neutral_white"
-            android:textSize="@dimen/_12ssp"
+            android:textColor="@color/ds_text_primary"
+            android:textSize="@dimen/_10ssp"
             android:textStyle="bold"
             android:maxLines="1"
             android:ellipsize="end"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/tv_description"
             app:layout_constraintStart_toEndOf="@id/icon_badge"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/iv_chevron"
             app:layout_constraintVertical_chainStyle="packed"
             tools:text="Attendance" />
 
@@ -67,15 +72,25 @@
             android:layout_marginTop="@dimen/_2sdp"
             android:alpha="0.85"
             android:textAlignment="textStart"
-            android:textColor="@color/ds_neutral_white"
-            android:textSize="@dimen/_9ssp"
+            android:textColor="@color/ds_text_secondary"
+            android:textSize="@dimen/_8ssp"
             android:maxLines="2"
             android:ellipsize="end"
             app:layout_constraintTop_toBottomOf="@id/tv_module"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@id/tv_module"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/iv_chevron"
             tools:text="Present of this month" />
+
+        <ImageView
+            android:id="@+id/iv_chevron"
+            android:layout_width="@dimen/_14sdp"
+            android:layout_height="@dimen/_14sdp"
+            android:src="@drawable/ic_chevron_right"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/ds_text_muted" />
 
         <!-- Kept for data-model compatibility, never shown -->
         <com.axelliant.hris.ui.designsystem.components.AppProgressBarView

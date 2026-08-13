@@ -1,114 +1,264 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="@dimen/_10sdp">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:paddingStart="@dimen/_10sdp"
+    android:paddingTop="@dimen/_10sdp"
+    android:paddingEnd="@dimen/_10sdp"
+    android:paddingBottom="@dimen/_8sdp">
 
-    <!-- LEFT CARD -->
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/leftCard"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/_4sdp"
-        android:background="@drawable/bg_today_card"
-        android:paddingVertical="@dimen/_8sdp"
+    <FrameLayout
+        android:id="@+id/status_dot_holder"
+        android:layout_width="@dimen/_26sdp"
+        android:layout_height="@dimen/_26sdp"
+        android:background="@drawable/bg_home_status_ring"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/rightCard"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHorizontal_weight="1">
+        app:layout_constraintTop_toTopOf="parent">
 
-        <FrameLayout
-            android:id="@+id/badge_check_in"
-            android:layout_width="@dimen/_24sdp"
-            android:layout_height="@dimen/_24sdp"
-            android:background="@drawable/fluent__timer_start"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+        <View
+            android:layout_width="@dimen/_10sdp"
+            android:layout_height="@dimen/_10sdp"
+            android:layout_gravity="center"
+            android:background="@drawable/bg_home_status_dot" />
+    </FrameLayout>
 
-        <com.axelliant.hris.ui.designsystem.components.AppTextView
-            android:id="@+id/tv_check_in_txt"
-            style="@style/Text.Fluent2.Subheading.Inverse.Strong"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_6sdp"
-            android:text="--:--"
-            app:layout_constraintTop_toBottomOf="@id/badge_check_in"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-
-        <com.axelliant.hris.ui.designsystem.components.AppTextView
-            android:id="@+id/tv_check_in"
-            style="@style/Text.Fluent2.Caption.Inverse.Strong"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_2sdp"
-            android:alpha="0.7"
-            android:text="@string/check_in"
-            app:layout_constraintTop_toBottomOf="@id/tv_check_in_txt"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <!-- RIGHT CARD -->
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/rightCard"
-        android:layout_width="0dp"
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        android:id="@+id/tv_office_status"
+        style="@style/Text.Fluent2.Body.Primary.Strong"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_4sdp"
-        android:background="@drawable/bg_today_card"
-        android:paddingVertical="@dimen/_8sdp"
-        app:layout_constraintStart_toEndOf="@id/leftCard"
+        android:layout_marginStart="@dimen/_6sdp"
+        android:text="--"
+        android:textColor="@color/ds_text_primary"
+        android:textSize="@dimen/_10ssp"
+        app:layout_constraintBottom_toBottomOf="@id/status_dot_holder"
+        app:layout_constraintStart_toEndOf="@id/status_dot_holder"
+        app:layout_constraintTop_toTopOf="@id/status_dot_holder" />
+
+    <TextView
+        android:id="@+id/tv_shift_chip"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/_26sdp"
+        android:background="@drawable/bg_home_shift_chip"
+        android:drawablePadding="@dimen/_5sdp"
+        android:gravity="center"
+        android:paddingStart="@dimen/_8sdp"
+        android:paddingEnd="@dimen/_8sdp"
+        android:text="Shift -- - --"
+        android:textColor="@color/ds_primary"
+        android:textSize="@dimen/_10ssp"
+        android:drawableTint="@color/ds_primary"
+        app:drawableStartCompat="@drawable/ic_calendar"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHorizontal_weight="1">
+        app:layout_constraintTop_toTopOf="@id/status_dot_holder" />
 
-        <FrameLayout
-            android:id="@+id/badge_check_out"
-            android:layout_width="@dimen/_24sdp"
-            android:layout_height="@dimen/_24sdp"
-            android:background="@drawable/fluent__timer_end"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+    <ImageView
+        android:id="@+id/iv_working_clock"
+        android:layout_width="@dimen/_46sdp"
+        android:layout_height="@dimen/_46sdp"
+        android:layout_marginTop="@dimen/_16sdp"
+        android:padding="@dimen/_4sdp"
+        android:src="@drawable/ic_check_in_timer_start"
+        app:layout_constraintEnd_toStartOf="@id/working_time_group"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/status_dot_holder" />
+
+    <LinearLayout
+        android:id="@+id/working_time_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="@id/iv_working_clock"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/iv_working_clock"
+        app:layout_constraintTop_toTopOf="@id/iv_working_clock">
 
         <com.axelliant.hris.ui.designsystem.components.AppTextView
-            android:id="@+id/tv_check_out_txt"
-            style="@style/Text.Fluent2.Subheading.Inverse.Strong"
+            style="@style/Text.Fluent2.Caption.Primary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_6sdp"
-            android:text="--:--"
-            app:layout_constraintTop_toBottomOf="@id/badge_check_out"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            android:text="Working time"
+            android:textColor="@color/ds_text_muted"
+            android:textSize="@dimen/_10ssp" />
 
         <com.axelliant.hris.ui.designsystem.components.AppTextView
-            android:id="@+id/tv_check_out"
-            style="@style/Text.Fluent2.Caption.Inverse.Strong"
+            android:id="@+id/tv_working_time"
+            style="@style/Text.Fluent2.Title.Primary.Strong"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_2sdp"
-            android:alpha="0.7"
-            android:text="@string/check_out"
-            app:layout_constraintTop_toBottomOf="@id/tv_check_out_txt"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            android:text="00:00:00"
+            android:textColor="@color/ds_text_primary"
+            android:textSize="@dimen/_18ssp" />
+    </LinearLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    <ProgressBar
+        android:id="@+id/progress_shift"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_6sdp"
+        android:layout_marginStart="@dimen/_26sdp"
+        android:layout_marginTop="@dimen/_14sdp"
+        android:layout_marginEnd="@dimen/_18sdp"
+        android:max="100"
+        android:progress="0"
+        android:progressDrawable="@drawable/bg_home_shift_progress"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_working_clock" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        android:id="@+id/tv_check_in_txt"
+        style="@style/Text.Fluent2.Caption.Primary.Strong"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_4sdp"
+        tools:text="12:46 Check in"
+        android:textColor="@color/ds_text_primary"
+        android:textSize="@dimen/_9ssp"
+        app:layout_constraintStart_toStartOf="@id/progress_shift"
+        app:layout_constraintTop_toBottomOf="@id/progress_shift" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        android:id="@+id/tv_check_out_txt"
+        style="@style/Text.Fluent2.Caption.Primary.Strong"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="20:00 Shift end"
+        android:textColor="@color/ds_text_primary"
+        android:textSize="@dimen/_9ssp"
+        app:layout_constraintEnd_toEndOf="@id/progress_shift"
+        app:layout_constraintTop_toTopOf="@id/tv_check_in_txt" />
+
+    <View
+        android:id="@+id/divider_attendance"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/_12sdp"
+        android:background="@color/ds_outline"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_check_in_txt" />
+
+    <LinearLayout
+        android:id="@+id/details_row"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_40sdp"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/divider_attendance">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:src="@drawable/ic_home_detail_clock" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_7sdp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Check in"
+                    android:textColor="@color/ds_text_primary"
+                    android:textSize="@dimen/_8ssp"
+                    android:includeFontPadding="false" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="12:46"
+                    android:textColor="@color/ds_text_primary"
+                    android:textSize="@dimen/_10ssp"
+                    android:textStyle="bold"
+                    android:includeFontPadding="false" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="@dimen/_30sdp"
+            android:layout_gravity="center_vertical"
+            android:background="@color/ds_outline" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingStart="@dimen/_18sdp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:src="@drawable/ic_home_detail_shift" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_8sdp"
+                android:text="AXE shift"
+                android:textColor="@color/ds_text_primary"
+                android:textSize="@dimen/_9ssp"
+                android:includeFontPadding="false" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="@dimen/_30sdp"
+            android:layout_gravity="center_vertical"
+            android:background="@color/ds_outline" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingStart="@dimen/_18sdp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:src="@drawable/ic_home_detail_location" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_8sdp"
+                android:maxLines="1"
+                android:text="MM Tower Lahore"
+                android:textColor="@color/ds_text_primary"
+                android:textSize="@dimen/_9ssp"
+                android:includeFontPadding="false" />
+        </LinearLayout>
+    </LinearLayout>
 
     <com.axelliant.hris.ui.designsystem.components.AppButtonView
         android:id="@+id/btn_check_in"
         android:layout_width="0dp"
-        android:layout_height="@dimen/_42sdp"
-        android:layout_marginTop="@dimen/_8sdp"
-        android:text="@string/check_in"
+        android:layout_height="@dimen/_34sdp"
+        android:layout_marginTop="@dimen/_6sdp"
+        android:text="@string/check_out"
+        android:textAllCaps="false"
+        app:cornerRadius="@dimen/ds_radius_sm"
         app:fluentButtonStyle="primary"
         app:icon="@drawable/ic_signout_fluent"
         app:iconGravity="textStart"
@@ -116,7 +266,19 @@
         app:iconTint="@color/ds_neutral_white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/leftCard"/>
+        app:layout_constraintTop_toBottomOf="@id/details_row" />
 
+    <TextView
+        android:id="@+id/tv_shift_end_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_6sdp"
+        tools:text="Your shift ends at --"
+        android:textColor="@color/ds_text_muted"
+        android:textSize="@dimen/_9ssp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_check_in" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

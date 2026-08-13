@@ -33,10 +33,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.axelliant.hris.R
-import com.axelliant.hris.adapter.BirthdayAdapter
 
 import com.axelliant.hris.adapter.ModulesAdapter
 import com.axelliant.hris.base.BaseFragment
@@ -64,7 +61,6 @@ import com.axelliant.hris.model.Modules
 import com.axelliant.hris.model.todayTeam.TodayTeamResponse
 import com.axelliant.hris.model.attendance.ShiftData
 import com.axelliant.hris.model.dashboard.BranchDataResponse
-import com.axelliant.hris.model.dashboard.Birthday
 import com.axelliant.hris.model.dashboard.CheckInInfoResponse
 import com.axelliant.hris.model.dashboard.EmployProfile
 import com.axelliant.hris.model.login.CheckInRequest
@@ -81,7 +77,13 @@ import com.axelliant.hris.core.contracts.session.WorkspaceSessionProvider
 import com.axelliant.hris.databinding.LayoutTodayCardContentBinding
 import com.axelliant.hris.features.dashboard.presentation.AppDrawerMenuItem
 import com.axelliant.hris.features.internalapps.navigation.InternalAppsNavigator
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlin.math.abs
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 
 @AndroidEntryPoint
@@ -127,6 +129,11 @@ class HomeFragment : BaseFragment() {
     private var drawerTouchStartX = 0f
     private var drawerTouchStartY = 0f
     private var allowedDrawerActions: Set<AppDrawerAction> = AppDrawerAction.entries.toSet()
+    private var businessModulesAdapter: ModulesAdapter? = null
+    private var hasHrisHomeAccess: Boolean = true
+    private var workingTimeJob: Job? = null
+    private var currentShiftStartTime: Date? = null
+    private var currentShiftEndTime: Date? = null
     private val drawerScrim: View?
         get() = binding?.root?.findViewById(R.id.drawerScrim)
     private val appDrawer: View?
@@ -265,7 +272,6 @@ class HomeFragment : BaseFragment() {
                     employProfileResponse?.let { GlobalConfig.setCurrentEmployee(it) }
                     isManager = GlobalConfig.isCurrentManager()
 
-                    birthdayPopulate(response.birthday_data!!)
                     response.shift_detail?.let { dashBoardShiftPopulate(it) }
                     checkInInfoPopulate(response.checkin_info!!)
                     checkInInfoResponse = response.checkin_info
@@ -578,6 +584,7 @@ class HomeFragment : BaseFragment() {
                     if (state is UiState.Success) {
                         allowedDrawerActions = state.data + footerActions
                         setupInternalAppsDrawer()
+                        renderHomePermissionSections()
                     }
                 }
             }
@@ -586,6 +593,84 @@ class HomeFragment : BaseFragment() {
 
     private fun openInternalAppsDestination(destinationId: Int) {
         InternalAppsNavigator.open(findNavController(), destinationId)
+    }
+
+    private fun renderHomePermissionSections() {
+        val hasHrisAccess = workspaceSessionProvider.hasValidSession(WorkspaceKey.HRIS)
+        val businessActions = primaryDrawerItems(allowedDrawerActions).map { it.action }
+        val hasBusinessAccess = businessActions.isNotEmpty()
+        hasHrisHomeAccess = hasHrisAccess
+
+        binding?.tvTodayTitle?.isVisible = hasHrisAccess
+        binding?.tvCurrentLocs?.isVisible = hasHrisAccess
+        binding?.composeTodayCard?.isVisible = hasHrisAccess
+        binding?.cardNote?.isVisible = hasHrisAccess
+        binding?.tvShift?.isVisible = hasHrisAccess && isManager
+        binding?.lyMyTeam?.isVisible = hasHrisAccess && isManager
+        if (!hasHrisAccess) {
+            binding?.lyMyShift?.isVisible = false
+        }
+
+        binding?.tvBusinessModules?.isVisible = hasBusinessAccess
+        binding?.tvBusinessViewAll?.isVisible = hasBusinessAccess
+        binding?.rvBusinessModule?.isVisible = hasBusinessAccess
+        binding?.tvWeekly?.isVisible = hasHrisAccess
+        binding?.rvModule?.isVisible = hasHrisAccess
+        if (hasBusinessAccess) {
+            bindBusinessModules(businessActions)
+        }
+    }
+
+    private fun bindBusinessModules(actions: List<AppDrawerAction>) {
+        val modules = actions.mapNotNull { action -> action.toBusinessModule() }
+        val adapter = ModulesAdapter(modules, object : AdapterItemClick {
+            override fun onItemClick(customObject: Any, position: Int) {
+                when ((customObject as Modules).id) {
+                    BUSINESS_MODULE_SALES_ORDERS -> openInternalAppsDestination(R.id.iaSaleOrdersFragment)
+                    BUSINESS_MODULE_QUOTES -> openInternalAppsDestination(R.id.iaQuotesFragment)
+                    BUSINESS_MODULE_PRODUCTS -> openInternalAppsDestination(R.id.iaProductsFragment)
+                    BUSINESS_MODULE_PURCHASE_ORDERS -> openInternalAppsDestination(R.id.iaPurchaseOrdersFragment)
+                }
+            }
+        })
+        businessModulesAdapter = adapter
+        binding?.rvBusinessModule?.layoutManager = GridLayoutManager(requireContext(), 2)
+        binding?.rvBusinessModule?.adapter = adapter
+        binding?.rvBusinessModule?.isNestedScrollingEnabled = false
+    }
+
+    private fun AppDrawerAction.toBusinessModule(): Modules? {
+        return when (this) {
+            AppDrawerAction.SaleOrders -> Modules(
+                id = BUSINESS_MODULE_SALES_ORDERS,
+                name = getString(R.string.drawer_sale_orders),
+                description = "Manage sales orders",
+                color = null,
+                drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_home_sales_orders)
+            )
+            AppDrawerAction.Quotes -> Modules(
+                id = BUSINESS_MODULE_QUOTES,
+                name = getString(R.string.drawer_quotes),
+                description = "Create and track quotes",
+                color = null,
+                drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_home_quotes)
+            )
+            AppDrawerAction.Products -> Modules(
+                id = BUSINESS_MODULE_PRODUCTS,
+                name = getString(R.string.products),
+                description = "Manage product catalog",
+                color = null,
+                drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_home_products)
+            )
+            AppDrawerAction.PurchaseOrders -> Modules(
+                id = BUSINESS_MODULE_PURCHASE_ORDERS,
+                name = getString(R.string.drawer_purchase_orders),
+                description = "Manage purchase orders",
+                color = null,
+                drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_home_purchase_orders)
+            )
+            else -> null
+        }
     }
 
     private fun handleDrawerTouch(event: MotionEvent): Boolean {
@@ -761,12 +846,12 @@ class HomeFragment : BaseFragment() {
     private fun checkInInfoPopulate(checkInInfo: CheckInInfoResponse) {
 
 //        todayCardBinding?.tvLocation?.text = checkInInfo.location.valueQualifier()
+        todayCardBinding?.tvOfficeStatus?.text = checkInInfo.location.valueQualifier()
+        bindAttendanceTimes(checkInInfo)
+        bindWorkingTime(checkInInfo)
 
         if (checkInInfo.is_check_in_button == false && checkInInfo.is_check_out_button == false) {
             isCheckInButtonEnabled = false
-
-            todayCardBinding?.tvCheckInTxt?.text = checkInInfo.check_in.valueQualifier()
-            todayCardBinding?.tvCheckOutTxt?.text = checkInInfo.check_out.valueQualifier()
 
         } else {
             isCheckInButtonEnabled = true
@@ -776,16 +861,125 @@ class HomeFragment : BaseFragment() {
             } else {
                 if (checkInInfo.is_check_in_button == true) {
                     isCheckIn = true
-                    todayCardBinding?.tvCheckInTxt?.text = checkInInfo.check_in.valueQualifier()
 
                 } else if (checkInInfo.is_check_out_button == true) {
                     isCheckIn = false
-                    todayCardBinding?.tvCheckInTxt?.text = checkInInfo.check_in.valueQualifier()
-                    todayCardBinding?.tvCheckOutTxt?.text = checkInInfo.check_out.valueQualifier()
                 }
             }
         }
         updateCheckInButton()
+    }
+
+    private fun bindAttendanceTimes(checkInInfo: CheckInInfoResponse) {
+        todayCardBinding?.tvCheckInTxt?.text = "${checkInInfo.check_in.valueQualifier()} Check in"
+        todayCardBinding?.tvCheckOutTxt?.text = "${checkInInfo.check_out.valueQualifier()} Shift end"
+    }
+
+    private fun bindWorkingTime(checkInInfo: CheckInInfoResponse) {
+        workingTimeJob?.cancel()
+        val checkInTime = parseAttendanceTime(checkInInfo.check_in)
+        val checkOutTime = parseAttendanceTime(checkInInfo.check_out)
+
+        if (checkInTime == null) {
+            todayCardBinding?.tvWorkingTime?.text = formatWorkingDuration(0L)
+            updateShiftProgress(null)
+            return
+        }
+
+        if (checkOutTime != null) {
+            val duration = if (checkOutTime.time >= checkInTime.time) {
+                checkOutTime.time - checkInTime.time
+            } else {
+                checkOutTime.time + ONE_DAY_IN_MILLIS - checkInTime.time
+            }
+            todayCardBinding?.tvWorkingTime?.text = formatWorkingDuration(duration)
+            updateShiftProgress(checkOutTime)
+            return
+        }
+
+        todayCardBinding?.tvWorkingTime?.text =
+            formatWorkingDuration(System.currentTimeMillis() - checkInTime.time)
+        updateShiftProgress(Date())
+        workingTimeJob = viewLifecycleOwner.lifecycleScope.launch {
+            while (true) {
+                todayCardBinding?.tvWorkingTime?.text =
+                    formatWorkingDuration(System.currentTimeMillis() - checkInTime.time)
+                updateShiftProgress(Date())
+                delay(1000L)
+            }
+        }
+    }
+
+    private fun parseAttendanceTime(value: String?): Date? {
+        val timeText = value?.trim().orEmpty()
+        if (timeText.isBlank() || timeText == "--" || timeText.equals("null", ignoreCase = true)) {
+            return null
+        }
+
+        val dateTimeFormats = listOf(
+            "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
+            "yyyy-MM-dd'T'HH:mm:ss",
+            "yyyy-MM-dd HH:mm:ss",
+            "yyyy-MM-dd HH:mm",
+            "dd-MM-yyyy HH:mm:ss",
+            "dd-MM-yyyy HH:mm"
+        )
+        dateTimeFormats.forEach { pattern ->
+            parseDate(timeText, pattern)?.let { return it }
+        }
+
+        val today = Calendar.getInstance()
+        val timeFormats = listOf("HH:mm:ss", "HH:mm", "hh:mm:ss a", "hh:mm a")
+        timeFormats.forEach { pattern ->
+            parseDate(timeText, pattern)?.let { parsed ->
+                return Calendar.getInstance().apply {
+                    time = parsed
+                    set(Calendar.YEAR, today.get(Calendar.YEAR))
+                    set(Calendar.MONTH, today.get(Calendar.MONTH))
+                    set(Calendar.DAY_OF_MONTH, today.get(Calendar.DAY_OF_MONTH))
+                }.time
+            }
+        }
+        return null
+    }
+
+    private fun parseDate(value: String, pattern: String): Date? {
+        return runCatching {
+            SimpleDateFormat(pattern, Locale.US).apply {
+                isLenient = false
+            }.parse(value)
+        }.getOrNull()
+    }
+
+    private fun formatWorkingDuration(durationMillis: Long): String {
+        val totalSeconds = durationMillis.coerceAtLeast(0L) / 1000L
+        val hours = totalSeconds / 3600L
+        val minutes = (totalSeconds % 3600L) / 60L
+        val seconds = totalSeconds % 60L
+        return String.format(Locale.US, "%02d:%02d:%02d", hours, minutes, seconds)
+    }
+
+    private fun updateShiftProgress(referenceTime: Date?) {
+        val shiftStart = currentShiftStartTime
+        val shiftEnd = currentShiftEndTime
+        if (referenceTime == null || shiftStart == null || shiftEnd == null) {
+            todayCardBinding?.progressShift?.progress = 0
+            return
+        }
+
+        val normalizedEnd = if (shiftEnd.time >= shiftStart.time) {
+            shiftEnd.time
+        } else {
+            shiftEnd.time + ONE_DAY_IN_MILLIS
+        }
+        val normalizedReference = if (referenceTime.time >= shiftStart.time) {
+            referenceTime.time
+        } else {
+            referenceTime.time + ONE_DAY_IN_MILLIS
+        }
+        val shiftDuration = (normalizedEnd - shiftStart.time).coerceAtLeast(1L)
+        val elapsed = (normalizedReference - shiftStart.time).coerceIn(0L, shiftDuration)
+        todayCardBinding?.progressShift?.progress = ((elapsed * 100L) / shiftDuration).toInt()
     }
 
     private fun updateCheckInButton() {
@@ -851,15 +1045,15 @@ class HomeFragment : BaseFragment() {
                 id = 0,
                 name = HomeMenu.Attendance.gridName,
                 description = HomeMenu.Attendance.description,
-                color = ContextCompat.getDrawable(requireContext(), R.drawable.attend_gradient),
-                drawable = ContextCompat.getDrawable(requireContext(), R.drawable.fluent_attendance)
+                color = null,
+                drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_home_attendance)
             ),
             Modules(
                 id = 1,
                 name = HomeMenu.Request.gridName,
                 description = HomeMenu.Request.description,
-                color = ContextCompat.getDrawable(requireContext(), R.drawable.request_gradient),
-                drawable = ContextCompat.getDrawable(requireContext(), R.drawable.fluent_requests),
+                color = null,
+                drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_home_sales_orders),
                 progressValue = 2,
                 progressMax = 5
             ),
@@ -867,8 +1061,8 @@ class HomeFragment : BaseFragment() {
                 id = 2,
                 name = HomeMenu.Leaves.gridName,
                 description = HomeMenu.Leaves.description,
-                color = ContextCompat.getDrawable(requireContext(), R.drawable.leaves_gradient),
-                drawable = ContextCompat.getDrawable(requireContext(), R.drawable.fluent_leaves),
+                color = null,
+                drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_home_leave),
                 progressValue = 4,
                 progressMax = 10
 
@@ -877,8 +1071,8 @@ class HomeFragment : BaseFragment() {
                 id = 4,
                 name = HomeMenu.CheckIN.gridName,
                 description = HomeMenu.CheckIN.description,
-                color = ContextCompat.getDrawable(requireContext(), R.drawable.checkin_gradient),
-                drawable = ContextCompat.getDrawable(requireContext(), R.drawable.fluent_check_in)
+                color = null,
+                drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_home_check_requests)
 
 
             ),
@@ -886,18 +1080,22 @@ class HomeFragment : BaseFragment() {
                 id = 5,
                 name = HomeMenu.Expense.gridName,
                 description = HomeMenu.Expense.description,
-                color = ContextCompat.getDrawable(requireContext(), R.drawable.expense_gradient),
-                drawable = ContextCompat.getDrawable(requireContext(), R.drawable.fluent_expense)
+                color = null,
+                drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_home_expenses)
             ),
             Modules(
                 id = 6,
-                name = HomeMenu.PaySlips.gridName,
-                description = HomeMenu.PaySlips.description,
-                color = ContextCompat.getDrawable(requireContext(), R.drawable.payslips_gradient),
-                drawable = ContextCompat.getDrawable(requireContext(), R.drawable.fluent_pay),
-                progressValue = 4,
-                progressMax = 10
-
+                name = HomeMenu.DocumentManagement.gridName,
+                description = HomeMenu.DocumentManagement.description,
+                color = null,
+                drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_home_document_vault)
+            ),
+            Modules(
+                id = 7,
+                name = HomeMenu.ResourceManagement.gridName,
+                description = HomeMenu.ResourceManagement.description,
+                color = null,
+                drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_home_resource_management)
             ),
         )
         if (isManager) {
@@ -907,10 +1105,7 @@ class HomeFragment : BaseFragment() {
                     id = 3,
                     name = HomeMenu.Approval.gridName,
                     description = HomeMenu.Approval.description,
-                    color = ContextCompat.getDrawable(
-                        requireContext(),
-                        R.drawable.approval_gradient
-                    ),
+                    color = null,
                     drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_approv)
                 )
             )
@@ -976,6 +1171,7 @@ class HomeFragment : BaseFragment() {
             })
         binding?.rvModule?.adapter = modulesAdapter
         binding?.rvModule?.isNestedScrollingEnabled = false
+        renderHomePermissionSections()
 
 
     }
@@ -984,13 +1180,21 @@ class HomeFragment : BaseFragment() {
 
         binding?.tvShiftNote?.text =
             "Your shift ${shiftData.name} is ${shiftData.location}"
-        binding?.lyMyShift?.isVisible = true
-        binding?.tvShiftNameTxt?.text = shiftData.name ?: getString(R.string.not_specified)
-        binding?.tvShiftPremiss?.text = listOfNotNull(
-            shiftData.actual_start,
-            shiftData.actual_end
-        ).joinToString(" - ").ifBlank { getString(R.string.not_specified) }
-        binding?.tvWorkFrom?.text = shiftData.location ?: getString(R.string.not_specified)
+        currentShiftStartTime = parseAttendanceTime(shiftData.actual_start)
+        currentShiftEndTime = parseAttendanceTime(shiftData.actual_end)
+        todayCardBinding?.tvShiftChip?.text = buildShiftChipText(shiftData)
+        todayCardBinding?.tvShiftEndHint?.text = buildShiftEndHintText(shiftData)
+        updateShiftProgress(Date())
+    }
+
+    private fun buildShiftChipText(shiftData: ShiftData): String {
+        val shiftStart = shiftData.actual_start.valueQualifier()
+        val shiftEnd = shiftData.actual_end.valueQualifier()
+        return "Shift $shiftStart - $shiftEnd"
+    }
+
+    private fun buildShiftEndHintText(shiftData: ShiftData): String {
+        return "Your shift ends at ${shiftData.actual_end.valueQualifier()}"
     }
 
 
@@ -999,39 +1203,6 @@ class HomeFragment : BaseFragment() {
         binding?.tvEmployeDesignation?.text = employProfile.designation
         binding?.tvEmployeId?.text = "Emp ID: ${employProfile.custom_employee_code}"
         binding?.profileImg?.setUrlImage(employProfile.image, requireContext())
-
-
-    }
-
-    private fun birthdayPopulate(birthdayList: List<Birthday>) {
-
-        val manager = GlobalConfig.isCurrentManager()
-        binding?.rvBirthdays?.isVisible = manager
-        binding?.tvBirthdays?.isVisible = manager
-
-        if (birthdayList.isEmpty()) {
-            binding?.rvBirthdays?.visibility = View.GONE
-            binding?.tvBirthdays?.visibility = View.GONE
-        }
-
-
-
-        binding?.rvBirthdays?.layoutManager =
-            LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
-        val birthdayAdapter = BirthdayAdapter(
-            requireContext(),
-            birthdayList,
-            object : AdapterItemClick {
-                override fun onItemClick(customObject: Any, position: Int) {
-                    val currentObject = customObject as Birthday
-                    requireContext().showSuccessMsg(
-                        currentObject.name
-                    )
-
-                }
-
-            })
-        binding?.rvBirthdays?.adapter = birthdayAdapter
 
 
     }
@@ -1077,6 +1248,8 @@ class HomeFragment : BaseFragment() {
         }
     }
     override fun onDestroyView() {
+        workingTimeJob?.cancel()
+        workingTimeJob = null
         binding?.shimmerLayout?.stopShimmer()
         super.onDestroyView()
         _binding = null
@@ -1086,5 +1259,10 @@ class HomeFragment : BaseFragment() {
         private val TAG = HomeFragment::class.java.simpleName
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1001
         private const val DRAWER_ANIMATION_DURATION_MS = 180L
+        private const val BUSINESS_MODULE_PRODUCTS = 100
+        private const val BUSINESS_MODULE_QUOTES = 101
+        private const val BUSINESS_MODULE_SALES_ORDERS = 102
+        private const val BUSINESS_MODULE_PURCHASE_ORDERS = 103
+        private const val ONE_DAY_IN_MILLIS = 24 * 60 * 60 * 1000L
     }
 }

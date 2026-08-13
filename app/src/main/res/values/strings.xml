@@ -162,6 +162,8 @@
     <string name="attend_type">Attendance Type</string>
     <string name="leaves_days">Leaves Days</string>
     <string name="my_actions">My Actions</string>
+    <string name="home_business_modules">Business modules</string>
+    <string name="home_hris_employee_services">HRIS employee services</string>
     <string name="remote">Remote</string>
     <string name="write_reason">Write a reason</string>
     <string name="approvals">Approvals</string>
