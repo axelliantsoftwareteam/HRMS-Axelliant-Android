@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="@dimen/_30sdp"
-    android:paddingEnd="@dimen/_10sdp"
-   >
+    xmlns:tools="http://schemas.android.com/tools"
+    android:paddingEnd="@dimen/_10sdp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/ly_work_home"
@@ -13,7 +13,9 @@
         android:background="@drawable/rounded_bgg"
         android:padding="@dimen/_5sdp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        >
 
         <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/tv_work_from"
@@ -33,7 +35,7 @@
             android:layout_height="@dimen/_20sdp"
             android:layout_marginStart="@dimen/_10sdp"
             android:background="@drawable/circle_no_bg"
-            android:text="10"
+            tools:text="10"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:textSize="@dimen/_8sdp"
