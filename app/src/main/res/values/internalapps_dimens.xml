@@ -29,6 +29,9 @@
     <dimen name="ds_input_height">@dimen/_42sdp</dimen>
     <dimen name="ds_button_height">@dimen/_42sdp</dimen>
     <dimen name="ds_touch_target">@dimen/_48sdp</dimen>
+    <dimen name="ds_icon_button_icon_size">@dimen/_22sdp</dimen>
+    <dimen name="ds_button_inline_icon_size">@dimen/_18sdp</dimen>
+    <dimen name="ds_filter_chip_close_icon_size">@dimen/_18sdp</dimen>
     <dimen name="ds_card_elevation">@dimen/_1sdp</dimen>
 
     <!-- Responsive typography using SSP -->

@@ -52,7 +52,7 @@
 
         <com.axelliant.hris.ui.designsystem.components.AppButtonView
             android:id="@+id/menuButton"
-            style="@style/Widget.InternalApps.Button.Text"
+            style="@style/Widget.Fluent2.Button.Text"
             android:layout_width="@dimen/_36sdp"
             android:layout_height="@dimen/_36sdp"
             android:background="@android:color/transparent"

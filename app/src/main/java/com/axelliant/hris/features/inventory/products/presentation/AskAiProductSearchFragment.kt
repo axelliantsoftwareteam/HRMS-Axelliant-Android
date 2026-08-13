@@ -999,9 +999,10 @@ class AskAiProductSearchFragment : Fragment() {
         val showRemove = editing || value != getString(R.string.ask_ai_not_detected)
         if (showRemove) {
             row.addView(ImageView(requireContext()).apply {
+                val iconSize = resources.getDimensionPixelSize(R.dimen.ds_filter_chip_close_icon_size)
                 layoutParams = LinearLayout.LayoutParams(
-                    resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._18sdp),
-                    resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._18sdp)
+                    iconSize,
+                    iconSize
                 )
                 setImageResource(R.drawable.ia_ic_filter_chip_close)
                 contentDescription = getString(R.string.close)
@@ -1145,9 +1146,10 @@ class AskAiProductSearchFragment : Fragment() {
                     text = getString(R.string.ask_ai_refine_chip_label, label, value)
                 })
                 addView(ImageView(requireContext()).apply {
+                    val iconSize = resources.getDimensionPixelSize(R.dimen.ds_filter_chip_close_icon_size)
                     layoutParams = LinearLayout.LayoutParams(
-                        resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._18sdp),
-                        resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._18sdp)
+                        iconSize,
+                        iconSize
                     )
                     contentDescription = getString(R.string.close)
                     setImageResource(R.drawable.ia_ic_filter_chip_close)
@@ -1211,13 +1213,14 @@ class AskAiProductSearchFragment : Fragment() {
             insetTop = 0
             insetBottom = 0
             iconPadding = resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._4sdp)
+            iconSize = resources.getDimensionPixelSize(R.dimen.ds_filter_chip_close_icon_size)
             if (selected) {
                 backgroundTintList = ContextCompat.getColorStateList(context, R.color.ds_primary)
             } else {
                 backgroundTintList = ContextCompat.getColorStateList(context, R.color.ds_primary_container)
             }
             if (removable) {
-                icon = ContextCompat.getDrawable(context, R.drawable.ia_ic_filter_chip_close)
+                setIconResource(R.drawable.ia_ic_filter_chip_close)
             }
             setOnClickListener { onClick() }
         }

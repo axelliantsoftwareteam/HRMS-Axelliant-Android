@@ -492,7 +492,7 @@
 
                         <com.axelliant.hris.ui.designsystem.components.AppButtonView
                             android:id="@+id/quoteStepBackButton"
-                            style="@style/Widget.InternalApps.Button.Secondary"
+                            style="@style/Widget.Fluent2.Button.Secondary"
                             android:layout_width="0dp"
                             android:layout_height="@dimen/_36sdp"
                             android:layout_weight="1"
@@ -524,7 +524,7 @@
 
                         <com.axelliant.hris.ui.designsystem.components.AppButtonView
                             android:id="@+id/nextButton"
-                            style="@style/Widget.InternalApps.Button.Primary"
+                            style="@style/Widget.Fluent2.Button.Primary"
                             android:layout_width="0dp"
                             android:layout_height="@dimen/_36sdp"
                             android:layout_weight="1.2"

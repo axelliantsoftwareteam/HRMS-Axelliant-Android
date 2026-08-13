@@ -53,6 +53,10 @@
 
     <style name="Widget.InternalApps.Button.Text" parent="@style/Widget.Axelliant.Button.Text" />
 
+    <style name="Widget.InternalApps.Button.Icon" parent="@style/Widget.Axelliant.Button.Icon" />
+
+    <style name="Widget.InternalApps.Button.Destructive" parent="@style/Widget.Axelliant.Button.Destructive" />
+
     <style name="Widget.InternalApps.Card" parent="@style/Widget.Axelliant.Card" />
 
     <style name="Widget.InternalApps.Dashboard.IconButton" parent="@style/Widget.Axelliant.IconButton" />

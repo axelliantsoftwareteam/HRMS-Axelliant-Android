@@ -98,7 +98,7 @@
 
         <com.axelliant.hris.ui.designsystem.components.AppButtonView
             android:id="@+id/detailButton"
-            style="@style/Widget.InternalApps.Button.Text"
+            style="@style/Widget.Fluent2.Button.Icon"
             android:layout_width="@dimen/_36sdp"
             android:layout_height="@dimen/_44sdp"
             android:insetLeft="0dp"

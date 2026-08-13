@@ -10,10 +10,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -21,7 +26,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.AbstractComposeView
@@ -29,6 +36,9 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -83,7 +93,7 @@ class AppButtonView @JvmOverloads constructor(
     private var textColorOverride by mutableStateOf<Long?>(null)
     private var iconTintOverride by mutableStateOf<Long?>(null)
     private var backgroundTintOverride: Long? = null
-    private var usesAndroidBackground by mutableStateOf(false)
+    private var usesExplicitAndroidBackground by mutableStateOf(false)
     private var textSizeSpOverride by mutableStateOf<Float?>(null)
     private var ellipsizeMode by mutableStateOf<TextUtils.TruncateAt?>(null)
 
@@ -96,6 +106,7 @@ class AppButtonView @JvmOverloads constructor(
     var isAllCaps: Boolean = false
         set(value) {
             field = value
+            notifyStateChanged()
         }
 
     var minWidth: Int
@@ -122,14 +133,22 @@ class AppButtonView @JvmOverloads constructor(
             iconTintOverride = value?.defaultColor?.toComposeColorLong()
         }
 
+    var iconSize: Int
+        get() = iconSizePx
+        set(value) {
+            iconSizePx = value.coerceAtLeast(0)
+        }
+
     var iconPadding: Int = 0
         set(value) {
             field = value
+            notifyStateChanged()
         }
 
     var iconGravity: Int = ICON_GRAVITY_TEXT_START
         set(value) {
             field = value
+            notifyStateChanged()
         }
 
     var icon: Drawable? = null
@@ -143,11 +162,13 @@ class AppButtonView @JvmOverloads constructor(
     var noBackground: Boolean = false
         set(value) {
             field = value
+            notifyStateChanged()
         }
 
     var fluentButtonStyle: Int = FLUENT_STYLE_PRIMARY
         set(value) {
             field = value
+            notifyStateChanged()
         }
 
     init {
@@ -252,15 +273,15 @@ class AppButtonView @JvmOverloads constructor(
     override fun Content() {
         AppFluentTheme {
             stateVersion
+            val hasText = buttonText.isNotBlank()
+            val hasIcon = iconResId != 0
+            val isIconOnly = !hasText && hasIcon
+            val hasCustomFluentSurface = backgroundTintOverride != null ||
+                strokeColor != null ||
+                strokeWidth > 0
             val effectiveNoBackground = noBackground ||
-                usesAndroidBackground ||
-                (
-                    buttonText.isBlank() &&
-                        iconResId != 0 &&
-                        iconPadding == 0 &&
-                        backgroundTintOverride == null &&
-                        strokeColor == null
-                    )
+                usesExplicitAndroidBackground ||
+                (isIconOnly && !hasCustomFluentSurface)
             val style = when {
                 effectiveNoBackground -> ButtonStyle.TextButton
                 fluentButtonStyle == FLUENT_STYLE_OUTLINE -> ButtonStyle.OutlinedButton
@@ -272,6 +293,15 @@ class AppButtonView @JvmOverloads constructor(
             val text = buttonText
                 .let { if (isAllCaps) it.uppercase() else it }
                 .takeUnless { it.isBlank() }
+
+            if (isIconOnly) {
+                IconOnlyContent(
+                    transparentBackground = effectiveNoBackground,
+                    iconVector = iconVectorOrNull(),
+                )
+                return@AppFluentTheme
+            }
+
             val tokens = when (fluentButtonStyle) {
                 FLUENT_STYLE_DESTRUCTIVE -> DestructiveButtonTokens()
                 else -> AppButtonViewTokens(
@@ -280,12 +310,13 @@ class AppButtonView @JvmOverloads constructor(
                     backgroundColor = backgroundTintOverride,
                     strokeColor = strokeColor?.defaultColor?.toComposeColorLong(),
                     strokeWidthPx = strokeWidth,
-                    iconPaddingPx = iconPadding,
+                    iconPaddingPx = if (isIconOnly) 0 else iconPadding,
                     iconSizePx = iconSizePx,
                     cornerRadiusPx = cornerRadius.takeIf { it > 0 },
                     textSizeSp = textSizeSpOverride,
-                    transparentBackground = usesAndroidBackground,
+                    transparentBackground = usesExplicitAndroidBackground,
                     preserveIconColors = iconTintOverride == null,
+                    forceIconOnly = isIconOnly,
                 )
             }
 
@@ -328,7 +359,8 @@ class AppButtonView @JvmOverloads constructor(
                 android.R.attr.textColor,
                 android.R.attr.textSize,
                 android.R.attr.textAllCaps,
-                android.R.attr.background,
+                android.R.attr.minWidth,
+                android.R.attr.minHeight,
             ),
             defStyleAttr,
             0
@@ -343,7 +375,69 @@ class AppButtonView @JvmOverloads constructor(
                     ?.let { size -> size / scaledFontDensity() }
             }
             isAllCaps = it.getBoolean(5, isAllCaps)
-            usesAndroidBackground = it.hasValue(6)
+            minimumWidth = it.getDimensionPixelSize(6, minimumWidth)
+            minimumHeight = it.getDimensionPixelSize(7, minimumHeight)
+        }
+    }
+
+    @Composable
+    private fun IconOnlyContent(
+        transparentBackground: Boolean,
+        iconVector: ImageVector?,
+    ) {
+        val icon = iconVector ?: return
+        val shape = RoundedCornerShape(
+            cornerRadius.takeIf { it > 0 }?.let {
+                with(LocalDensity.current) { it.toDp() }
+            } ?: dimensionResource(R.dimen.ds_radius_xs)
+        )
+        val backgroundColor = backgroundTintOverride?.let { Color(it.toInt()) }
+            ?: Color.Transparent
+        val borderColor = strokeColor?.defaultColor?.let { Color(it) }
+        val borderWidth = with(LocalDensity.current) { strokeWidth.toDp() }
+        val tintColor = iconTintOverride?.let { Color(it.toInt()) }
+        val standardIconSize = with(LocalDensity.current) {
+            (iconSizePx.takeIf { it > 0 }
+                ?: resources.getDimensionPixelSize(R.dimen.ds_icon_button_icon_size)).toDp()
+        }
+        val disabledAlpha = if (buttonEnabled) 1f else 0.45f
+        val semanticsDescription = contentDescriptionText?.takeIf { it.isNotBlank() }
+            ?: buttonText.takeIf { it.isNotBlank() }
+
+        val containerModifier = buttonContainerModifier()
+            .clip(shape)
+            .then(
+                if (!transparentBackground && backgroundColor != Color.Transparent) {
+                    Modifier.background(backgroundColor, shape)
+                } else {
+                    Modifier
+                }
+            )
+            .then(
+                if (!transparentBackground && borderColor != null && strokeWidth > 0) {
+                    Modifier.border(BorderStroke(borderWidth, borderColor), shape)
+                } else {
+                    Modifier
+                }
+            )
+            .then(
+                semanticsDescription?.let {
+                    Modifier.semantics { contentDescription = it }
+                } ?: Modifier
+            )
+            .clickable(enabled = buttonEnabled) { performClick() }
+
+        Box(
+            modifier = containerModifier,
+            contentAlignment = Alignment.Center,
+        ) {
+            Image(
+                imageVector = icon,
+                contentDescription = null,
+                modifier = Modifier.size(standardIconSize),
+                colorFilter = tintColor?.let { ColorFilter.tint(it.copy(alpha = disabledAlpha)) },
+                alpha = if (tintColor == null) disabledAlpha else 1f,
+            )
         }
     }
 
@@ -358,12 +452,12 @@ class AppButtonView @JvmOverloads constructor(
 
         val rawBackgroundValue = attrs.getAttributeValue(ANDROID_NS, "background")
         if (rawBackgroundValue == "@null") {
-            usesAndroidBackground = false
+            usesExplicitAndroidBackground = false
         } else if (
             rawBackgroundValue != null ||
             attrs.getAttributeResourceValue(ANDROID_NS, "background", 0) != 0
         ) {
-            usesAndroidBackground = true
+            usesExplicitAndroidBackground = true
         }
 
         val rawIconResId = attrs.getAttributeResourceValue(AUTO_NS, "icon", 0)
@@ -424,12 +518,13 @@ class AppButtonView @JvmOverloads constructor(
         val height = params?.height ?: ViewGroup.LayoutParams.WRAP_CONTENT
         val fillWidth = width != ViewGroup.LayoutParams.WRAP_CONTENT
         val fillHeight = height != ViewGroup.LayoutParams.WRAP_CONTENT
-        return when {
+        val fillModifier = when {
             fillWidth && fillHeight -> Modifier.fillMaxSize()
             fillWidth -> Modifier.fillMaxWidth()
             fillHeight -> Modifier.fillMaxHeight()
             else -> Modifier
         }
+        return fillModifier
     }
 
     private fun buttonContainerModifier(): Modifier {
@@ -479,6 +574,7 @@ private class AppButtonViewTokens(
     private val textSizeSp: Float? = null,
     private val transparentBackground: Boolean = false,
     private val preserveIconColors: Boolean = true,
+    private val forceIconOnly: Boolean = false,
 ) : ButtonTokens() {
 
     @Composable
@@ -532,6 +628,7 @@ private class AppButtonViewTokens(
 
     @Composable
     override fun spacing(buttonInfo: ButtonInfo): Dp {
+        if (forceIconOnly) return 0.dp
         return if (iconPaddingPx > 0) {
             with(LocalDensity.current) { iconPaddingPx.toDp() }
         } else {

@@ -34,7 +34,7 @@
 
             <com.axelliant.hris.ui.designsystem.components.AppButtonView
                 android:id="@+id/deleteDeliveryButton"
-                style="@style/Widget.InternalApps.Dashboard.IconButton"
+                style="@style/Widget.Fluent2.IconButton"
                 android:layout_width="@dimen/_32sdp"
                 android:layout_height="@dimen/_32sdp"
                 android:contentDescription="@string/add_quote_delete_delivery"

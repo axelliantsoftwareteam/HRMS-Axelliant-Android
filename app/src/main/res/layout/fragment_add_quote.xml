@@ -304,14 +304,14 @@
 
                         <com.axelliant.hris.ui.designsystem.components.AppButtonView
                             android:id="@+id/addBillingAddressButton"
-                            style="@style/Widget.InternalApps.Button.Text"
+                            style="@style/Widget.Fluent2.Button.Text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/add_quote_add_new"
                             android:textAllCaps="false"
                             android:textSize="@dimen/_9ssp"
                             app:icon="@drawable/ia_ic_add"
-                            app:iconSize="@dimen/_8sdp"
+                            app:iconSize="@dimen/ds_button_inline_icon_size"
                             />
                     </LinearLayout>
 
@@ -372,7 +372,7 @@
 
                         <com.axelliant.hris.ui.designsystem.components.AppButtonView
                             android:id="@+id/addShippingAddressButton"
-                            style="@style/Widget.InternalApps.Button.Text"
+                            style="@style/Widget.Fluent2.Button.Text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_semibold"
@@ -380,7 +380,7 @@
                             android:textAllCaps="false"
                             android:textSize="@dimen/_9ssp"
                             app:icon="@drawable/ia_ic_add"
-                            app:iconSize="@dimen/_8sdp" />
+                            app:iconSize="@dimen/ds_button_inline_icon_size" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -565,7 +565,7 @@
 
                 <com.axelliant.hris.ui.designsystem.components.AppButtonView
                     android:id="@+id/addProductButton"
-                    style="@style/Widget.InternalApps.Button.Secondary"
+                    style="@style/Widget.Fluent2.Button.Secondary"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/add_quote_add_product"
@@ -686,7 +686,7 @@
 
                 <com.axelliant.hris.ui.designsystem.components.AppButtonView
                     android:id="@+id/createQuoteButton"
-                    style="@style/Widget.InternalApps.Button.Primary"
+                    style="@style/Widget.Fluent2.Button.Primary"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/ds_button_height"
                     android:layout_marginTop="@dimen/ds_space_8"

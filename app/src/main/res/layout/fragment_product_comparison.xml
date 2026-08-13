@@ -106,7 +106,7 @@
 
                             <com.axelliant.hris.ui.designsystem.components.AppButtonView
                                 android:id="@+id/productOneEditButton"
-                                style="@style/Widget.InternalApps.Dashboard.IconButton"
+                                style="@style/Widget.Fluent2.IconButton"
                                 android:layout_width="@dimen/_28sdp"
                                 android:layout_height="@dimen/_28sdp"
                                 android:contentDescription="@string/product_compare_edit_product"
@@ -115,11 +115,11 @@
                                 app:icon="@drawable/ic_review_edit"
                                 app:iconGravity="textStart"
                                 app:noBackground="true"
-                                app:iconSize="@dimen/_14sdp" />
+                                app:iconSize="@dimen/ds_icon_button_icon_size" />
 
                             <com.axelliant.hris.ui.designsystem.components.AppButtonView
                                 android:id="@+id/productOneDeleteButton"
-                                style="@style/Widget.InternalApps.Dashboard.IconButton"
+                                style="@style/Widget.Fluent2.IconButton"
                                 android:layout_width="@dimen/_28sdp"
                                 android:layout_height="@dimen/_28sdp"
                                 android:contentDescription="@string/product_compare_remove_product"
@@ -128,7 +128,7 @@
                                 app:icon="@drawable/ic_delete"
                                 app:iconGravity="textStart"
                                 app:noBackground="true"
-                                app:iconSize="@dimen/_14sdp" />
+                                app:iconSize="@dimen/ds_icon_button_icon_size" />
                         </LinearLayout>
 
                         <FrameLayout
@@ -266,7 +266,7 @@
 
                             <com.axelliant.hris.ui.designsystem.components.AppButtonView
                                 android:id="@+id/productTwoEditButton"
-                                style="@style/Widget.InternalApps.Dashboard.IconButton"
+                                style="@style/Widget.Fluent2.IconButton"
                                 android:layout_width="@dimen/_28sdp"
                                 android:layout_height="@dimen/_28sdp"
                                 android:contentDescription="@string/product_compare_edit_product"
@@ -275,11 +275,11 @@
                                 app:icon="@drawable/ic_review_edit"
                                 app:iconGravity="textStart"
                                 app:noBackground="true"
-                                app:iconSize="@dimen/_14sdp" />
+                                app:iconSize="@dimen/ds_icon_button_icon_size" />
 
                             <com.axelliant.hris.ui.designsystem.components.AppButtonView
                                 android:id="@+id/productTwoDeleteButton"
-                                style="@style/Widget.InternalApps.Dashboard.IconButton"
+                                style="@style/Widget.Fluent2.IconButton"
                                 android:layout_width="@dimen/_28sdp"
                                 android:layout_height="@dimen/_28sdp"
                                 android:contentDescription="@string/product_compare_remove_product"
@@ -288,7 +288,7 @@
                                 app:icon="@drawable/ic_delete"
                                 app:iconGravity="textStart"
                                 app:noBackground="true"
-                                app:iconSize="@dimen/_14sdp" />
+                                app:iconSize="@dimen/ds_icon_button_icon_size" />
                         </LinearLayout>
 
                         <FrameLayout
@@ -385,7 +385,7 @@
 
             <com.axelliant.hris.ui.designsystem.components.AppButtonView
                 android:id="@+id/compareNowButton"
-                style="@style/Widget.InternalApps.Button.Primary"
+                style="@style/Widget.Fluent2.Button.Primary"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/_34sdp"
                 android:layout_gravity="end"
@@ -403,7 +403,7 @@
                 app:iconTint="@color/ia_white"
                 app:iconGravity="textStart"
                 app:iconPadding="@dimen/ds_space_4"
-                app:iconSize="@dimen/_14sdp"
+                app:iconSize="@dimen/ds_button_inline_icon_size"
                 tools:visibility="visible" />
 
             <LinearLayout
@@ -616,7 +616,7 @@
 
                 <com.axelliant.hris.ui.designsystem.components.AppButtonView
                     android:id="@+id/saveComparisonButton"
-                    style="@style/Widget.InternalApps.Button.Secondary"
+                    style="@style/Widget.Fluent2.Button.Secondary"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/_40sdp"
                     android:layout_marginEnd="@dimen/ds_space_6"
@@ -630,7 +630,7 @@
 
                 <com.axelliant.hris.ui.designsystem.components.AppButtonView
                     android:id="@+id/shareComparisonButton"
-                    style="@style/Widget.InternalApps.Button.Secondary"
+                    style="@style/Widget.Fluent2.Button.Secondary"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/_40sdp"
                     android:layout_marginStart="@dimen/ds_space_4"
@@ -645,7 +645,7 @@
 
                 <com.axelliant.hris.ui.designsystem.components.AppButtonView
                     android:id="@+id/doneButton"
-                    style="@style/Widget.InternalApps.Button.Primary"
+                    style="@style/Widget.Fluent2.Button.Primary"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/_40sdp"
                     android:layout_marginStart="@dimen/ds_space_6"

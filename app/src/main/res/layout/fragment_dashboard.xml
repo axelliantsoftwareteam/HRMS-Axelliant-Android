@@ -35,7 +35,7 @@
         app:layout_constraintTop_toBottomOf="@id/topGuideline">
         <com.axelliant.hris.ui.designsystem.components.AppButtonView
             android:id="@+id/menuButton"
-            style="@style/Widget.InternalApps.Dashboard.IconButton"
+            style="@style/Widget.Fluent2.IconButton"
             app:icon="@drawable/ic_menu"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -59,7 +59,7 @@
 
             <com.axelliant.hris.ui.designsystem.components.AppButtonView
                 android:id="@+id/notificationButton"
-                style="@style/Widget.InternalApps.Dashboard.IconButton"
+                style="@style/Widget.Fluent2.IconButton"
                 android:layout_gravity="center"
                 app:icon="@drawable/ic_bell" />
 
@@ -153,7 +153,7 @@
 
                 <com.axelliant.hris.ui.designsystem.components.AppButtonView
                     android:id="@+id/chartButton"
-                    style="@style/Widget.InternalApps.Button.Text"
+                    style="@style/Widget.Fluent2.Button.Text"
                     android:layout_width="@dimen/_40sdp"
                     android:layout_height="@dimen/_40sdp"
                     android:background="@drawable/bg_dashboard_icon_button"

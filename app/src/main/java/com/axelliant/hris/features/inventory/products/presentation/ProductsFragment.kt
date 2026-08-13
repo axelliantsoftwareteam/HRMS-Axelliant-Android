@@ -1724,9 +1724,10 @@ private class SelectedFilterChipAdapter(
             setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(com.intuit.ssp.R.dimen._11ssp))
         }
         val removeIcon = ImageView(parent.context).apply {
+            val iconSize = resources.getDimensionPixelSize(R.dimen.ds_filter_chip_close_icon_size)
             layoutParams = LinearLayout.LayoutParams(
-                resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._18sdp),
-                resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._18sdp)
+                iconSize,
+                iconSize
             ).apply {
                 marginStart = resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._8sdp)
             }

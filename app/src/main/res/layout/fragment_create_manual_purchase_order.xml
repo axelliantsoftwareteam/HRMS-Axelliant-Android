@@ -84,7 +84,7 @@
 
                 <com.axelliant.hris.ui.designsystem.components.AppButtonView
                     android:id="@+id/addProductButton"
-                    style="@style/Widget.InternalApps.Button.Primary"
+                    style="@style/Widget.Fluent2.Button.Primary"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/_32sdp"
                     android:background="@drawable/bg_manual_po_add_product_button"
@@ -102,7 +102,7 @@
                     app:backgroundTint="@null"
                     app:icon="@drawable/ia_ic_add"
                     app:iconPadding="@dimen/_4sdp"
-                    app:iconSize="@dimen/_14sdp"
+                    app:iconSize="@dimen/ds_button_inline_icon_size"
                     app:iconTint="@color/ds_on_primary" />
             </LinearLayout>
 
@@ -337,7 +337,7 @@
 
             <com.axelliant.hris.ui.designsystem.components.AppButtonView
                 android:id="@+id/cancelButton"
-                style="@style/Widget.InternalApps.Button.Secondary"
+                style="@style/Widget.Fluent2.Button.Secondary"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/ds_button_height"
                 android:layout_marginEnd="@dimen/ds_space_8"
@@ -351,7 +351,7 @@
 
             <com.axelliant.hris.ui.designsystem.components.AppButtonView
                 android:id="@+id/createButton"
-                style="@style/Widget.InternalApps.Button.Primary"
+                style="@style/Widget.Fluent2.Button.Primary"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/ds_button_height"
                 android:layout_weight="1"

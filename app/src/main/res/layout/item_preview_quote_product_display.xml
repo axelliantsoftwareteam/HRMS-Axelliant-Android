@@ -45,7 +45,7 @@
 
             <com.axelliant.hris.ui.designsystem.components.AppButtonView
                 android:id="@+id/deleteProductButton"
-                style="@style/Widget.InternalApps.Dashboard.IconButton"
+                style="@style/Widget.Fluent2.IconButton"
                 android:layout_width="@dimen/_32sdp"
                 android:layout_height="@dimen/_32sdp"
                 android:minHeight="0dp"

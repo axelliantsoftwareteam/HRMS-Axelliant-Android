@@ -66,7 +66,7 @@
 
         <com.axelliant.hris.ui.designsystem.components.AppButtonView
             android:id="@+id/productMenuButton"
-            style="@style/Widget.InternalApps.Dashboard.IconButton"
+            style="@style/Widget.Fluent2.IconButton"
             android:layout_width="@dimen/_36sdp"
             android:layout_height="@dimen/_36sdp"
             android:layout_marginStart="@dimen/ds_space_4"

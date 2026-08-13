@@ -113,13 +113,13 @@
 
             <com.axelliant.hris.ui.designsystem.components.AppButtonView
                 android:id="@+id/primaryButton"
-                style="@style/Widget.InternalApps.Button.Primary"
+                style="@style/Widget.Fluent2.Button.Primary"
                 android:layout_marginTop="@dimen/ds_space_16"
                 android:text="@string/primary_action" />
 
             <com.axelliant.hris.ui.designsystem.components.AppButtonView
                 android:id="@+id/secondaryButton"
-                style="@style/Widget.InternalApps.Button.Secondary"
+                style="@style/Widget.Fluent2.Button.Secondary"
                 android:layout_marginTop="@dimen/ds_space_8"
                 android:text="@string/secondary_action" />
 

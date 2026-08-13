@@ -542,7 +542,7 @@
 
         <com.axelliant.hris.ui.designsystem.components.AppButtonView
             android:id="@+id/resetFiltersButton"
-            style="@style/Widget.InternalApps.Button.Text"
+            style="@style/Widget.Fluent2.Button.Text"
             android:layout_width="0dp"
             android:layout_height="@dimen/_44sdp"
             android:layout_weight="1"
@@ -557,7 +557,7 @@
 
         <com.axelliant.hris.ui.designsystem.components.AppButtonView
             android:id="@+id/applyFiltersButton"
-            style="@style/Widget.InternalApps.Button.Primary"
+            style="@style/Widget.Fluent2.Button.Primary"
             android:layout_width="0dp"
             android:layout_height="@dimen/_46sdp"
             android:layout_weight="1.6"

@@ -50,7 +50,7 @@
 
         <com.axelliant.hris.ui.designsystem.components.AppButtonView
             android:id="@+id/deleteProductButton"
-            style="@style/Widget.InternalApps.Dashboard.IconButton"
+            style="@style/Widget.Fluent2.IconButton"
             android:layout_width="@dimen/_32sdp"
             android:layout_height="@dimen/_32sdp"
             android:layout_marginEnd="@dimen/ds_space_4"
@@ -60,11 +60,11 @@
             app:icon="@drawable/ic_delete"
             app:iconGravity="textStart"
             app:noBackground="true"
-            app:iconSize="@dimen/_18sdp" />
+            app:iconSize="@dimen/ds_icon_button_icon_size" />
 
         <com.axelliant.hris.ui.designsystem.components.AppButtonView
             android:id="@+id/closeSheetButton"
-            style="@style/Widget.InternalApps.Dashboard.IconButton"
+            style="@style/Widget.Fluent2.IconButton"
             android:layout_width="@dimen/_36sdp"
             android:layout_height="@dimen/_36sdp"
             android:minHeight="0dp"
@@ -214,7 +214,7 @@
 
                         <com.axelliant.hris.ui.designsystem.components.AppButtonView
                             android:id="@+id/decreaseQtyButton"
-                            style="@style/Widget.InternalApps.Dashboard.IconButton"
+                            style="@style/Widget.Fluent2.IconButton"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -250,7 +250,7 @@
 
                         <com.axelliant.hris.ui.designsystem.components.AppButtonView
                             android:id="@+id/increaseQtyButton"
-                            style="@style/Widget.InternalApps.Dashboard.IconButton"
+                            style="@style/Widget.Fluent2.IconButton"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -319,7 +319,7 @@
 
             <com.axelliant.hris.ui.designsystem.components.AppButtonView
                 android:id="@+id/addDeliveryScheduleButton"
-                style="@style/Widget.InternalApps.Button.Secondary"
+                style="@style/Widget.Fluent2.Button.Secondary"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_38sdp"
                 android:layout_marginTop="@dimen/ds_space_4"
@@ -334,7 +334,7 @@
 
     <com.axelliant.hris.ui.designsystem.components.AppButtonView
         android:id="@+id/applyProductActionsButton"
-        style="@style/Widget.InternalApps.Button.Primary"
+        style="@style/Widget.Fluent2.Button.Primary"
         android:layout_width="match_parent"
         android:layout_height="@dimen/ds_button_height"
         android:layout_marginStart="@dimen/ds_space_16"

@@ -16,8 +16,8 @@
         android:textColor="@color/ds_primary"
         android:textSize="@dimen/_11ssp" />
     <ImageView
-        android:layout_width="@dimen/_18sdp"
-        android:layout_height="@dimen/_18sdp"
+        android:layout_width="@dimen/ds_filter_chip_close_icon_size"
+        android:layout_height="@dimen/ds_filter_chip_close_icon_size"
         android:layout_marginStart="@dimen/_8sdp"
         android:contentDescription="@null"
         android:src="@drawable/ia_ic_filter_chip_close" />

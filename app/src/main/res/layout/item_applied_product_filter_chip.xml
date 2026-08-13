@@ -9,7 +9,7 @@
     android:gravity="center_vertical"
     android:orientation="horizontal"
     android:paddingStart="@dimen/_9sdp"
-    android:paddingEnd="@dimen/_7sdp">
+    android:paddingEnd="@dimen/_8sdp">
 
     <com.axelliant.hris.ui.designsystem.components.AppTextView
         android:id="@+id/appliedFilterText"
@@ -26,9 +26,9 @@
 
     <ImageView
         android:id="@+id/removeFilterIcon"
-        android:layout_width="@dimen/_16sdp"
-        android:layout_height="@dimen/_16sdp"
-        android:layout_marginStart="@dimen/_4sdp"
+        android:layout_width="@dimen/ds_filter_chip_close_icon_size"
+        android:layout_height="@dimen/ds_filter_chip_close_icon_size"
+        android:layout_marginStart="@dimen/_6sdp"
         android:contentDescription="@string/close"
         android:src="@drawable/ia_ic_filter_chip_close" />
 </LinearLayout>
