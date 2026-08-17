@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    style="@style/Layout.Fluent2.Screen" xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout style="@style/Layout.Fluent2.Screen"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/ds_background">
+    android:background="@color/ds_background"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/startGuideline"
@@ -47,6 +48,8 @@
         android:textSize="@dimen/text_size_18"
         android:textColor="@color/ds_text_muted"
         android:fontFamily="@font/poppins_bold"
+        android:textAlignment="textStart"
+        tools:text="0 Total Entries"
         app:layout_constraintEnd_toEndOf="@id/endGuideline"
         app:layout_constraintStart_toStartOf="@id/startGuideline"
         app:layout_constraintTop_toBottomOf="@id/searchInputLayout" />
@@ -173,7 +176,7 @@
         android:layout_marginBottom="@dimen/ds_space_16"
         android:contentDescription="@string/sale_orders_create"
         android:src="@drawable/ia_ic_add"
-        app:backgroundTint="@color/quotes_navy"
+        app:backgroundTint="@color/ds_primary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/endGuideline"
         app:tint="@color/ds_on_primary" />

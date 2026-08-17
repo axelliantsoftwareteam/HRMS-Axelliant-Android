@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    style="@style/Layout.Fluent2.Screen" xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout style="@style/Layout.Fluent2.Screen"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/ds_surface">
+    android:background="@color/ds_surface"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/startGuideline"
@@ -66,6 +67,8 @@
                     android:fontFamily="@font/poppins_bold"
                     android:textColor="@color/ds_text_primary"
                     android:textSize="@dimen/text_size_18"
+                    tools:text="Title"
+                    android:textAlignment="textStart"
                     app:layout_constraintEnd_toStartOf="@id/statusBadge"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -91,6 +94,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/ds_space_4"
+                    tools:text="Title"
+                    android:textAlignment="textStart"
                     android:textColor="@color/ds_text_muted"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -126,6 +131,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/ds_space_8"
                         android:layout_weight="1"
+                        tools:text="Title"
+                        android:textAlignment="textStart"
                         android:fontFamily="@font/poppins_semibold"
                         android:textColor="@color/ds_text_primary" />
                 </LinearLayout>
@@ -167,6 +174,8 @@
                             android:layout_marginStart="@dimen/ds_space_8"
                             android:fontFamily="@font/poppins_semibold"
                             android:text="@string/sale_order_customer_information"
+                            tools:text="Title"
+                            android:textAlignment="textStart"
                             android:textColor="@color/ds_text_primary" />
                     </LinearLayout>
 
@@ -177,6 +186,7 @@
                         android:layout_marginTop="@dimen/ds_space_12"
                         android:text="@string/sale_order_customer_name"
                         android:textAllCaps="true"
+                        android:textAlignment="textStart"
                         android:textColor="@color/ds_text_muted" />
 
                     <com.axelliant.hris.ui.designsystem.components.AppTextView
@@ -185,6 +195,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/ds_space_2"
+                        android:textAlignment="textStart"
                         android:fontFamily="@font/poppins_semibold"
                         android:textColor="@color/ds_text_primary" />
 
@@ -194,6 +205,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/ds_space_10"
                         android:text="@string/sale_order_payment_terms"
+                        android:textAlignment="textStart"
                         android:textAllCaps="true"
                         android:textColor="@color/ds_text_muted" />
 
@@ -203,6 +215,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/ds_space_2"
+                        android:textAlignment="textStart"
                         android:fontFamily="@font/poppins_semibold"
                         android:textColor="@color/ds_text_primary" />
 
@@ -212,6 +225,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/ds_space_10"
                         android:text="@string/sale_order_billing_address"
+                        android:textAlignment="textStart"
                         android:textAllCaps="true"
                         android:textColor="@color/ds_text_muted" />
 
@@ -221,6 +235,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/ds_space_2"
+                        android:textAlignment="textStart"
                         android:fontFamily="@font/poppins_semibold"
                         android:textColor="@color/ds_text_primary" />
 
@@ -230,6 +245,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/ds_space_10"
                         android:text="@string/sale_order_shipping_address"
+                        android:textAlignment="textStart"
                         android:textAllCaps="true"
                         android:textColor="@color/ds_text_muted" />
 
@@ -253,6 +269,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/ds_space_6"
+                            android:textAlignment="textStart"
                             android:layout_weight="1"
                             android:fontFamily="@font/poppins_semibold"
                             android:textColor="@color/ds_text_primary" />
@@ -274,6 +291,7 @@
                     android:layout_weight="1"
                     android:fontFamily="@font/poppins_medium"
                     android:text="@string/sale_order_products"
+                    android:textAlignment="textStart"
                     android:textColor="@color/ds_text_muted" />
 
                 <com.axelliant.hris.ui.designsystem.components.AppTextView
@@ -323,6 +341,7 @@
                         android:layout_weight="1"
                         android:fontFamily="@font/poppins_semibold"
                         android:text="@string/sale_order_quote_detail"
+                        android:textAlignment="textStart"
                         android:textColor="@color/ds_text_primary" />
 
                     <ImageView
@@ -349,6 +368,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/sale_order_delivery_date_label"
                         android:textAllCaps="true"
+                        android:textAlignment="textStart"
                         android:textColor="@color/ds_text_muted" />
 
                     <com.axelliant.hris.ui.designsystem.components.AppTextView
@@ -357,6 +377,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/ds_space_2"
+                        android:textAlignment="textStart"
                         android:fontFamily="@font/poppins_semibold"
                         android:textColor="@color/ds_text_primary" />
 
@@ -366,6 +387,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/ds_space_10"
                         android:text="@string/sale_order_validity"
+                        android:textAlignment="textStart"
                         android:textAllCaps="true"
                         android:textColor="@color/ds_text_muted" />
 
@@ -375,6 +397,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/ds_space_2"
+                        android:textAlignment="textStart"
                         android:fontFamily="@font/poppins_semibold"
                         android:textColor="@color/ds_text_primary" />
 
@@ -385,6 +408,7 @@
                         android:layout_marginTop="@dimen/ds_space_10"
                         android:text="@string/sale_order_expires_on"
                         android:textAllCaps="true"
+                        android:textAlignment="textStart"
                         android:textColor="@color/ds_text_muted" />
 
                     <com.axelliant.hris.ui.designsystem.components.AppTextView
@@ -393,6 +417,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/ds_space_2"
+                        android:textAlignment="textStart"
                         android:fontFamily="@font/poppins_semibold"
                         android:textColor="@color/ds_error" />
                 </LinearLayout>
@@ -429,6 +454,7 @@
                         android:layout_weight="1"
                         android:fontFamily="@font/poppins_semibold"
                         android:text="@string/sale_order_deal_registration"
+                        android:textAlignment="textStart"
                         android:textColor="@color/ds_text_primary" />
 
                     <ImageView
@@ -454,6 +480,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/sale_order_registration_id"
+                        android:textAlignment="textStart"
                         android:textColor="@color/ds_text_muted" />
 
                     <com.axelliant.hris.ui.designsystem.components.AppTextView
@@ -462,6 +489,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/ds_space_2"
+                        android:textAlignment="textStart"
                         android:fontFamily="@font/poppins_semibold"
                         android:textColor="@color/ds_text_primary" />
 
@@ -471,6 +499,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/ds_space_10"
                         android:text="@string/sale_order_deal_status"
+                        android:textAlignment="textStart"
                         android:textColor="@color/ds_text_muted" />
 
                     <com.axelliant.hris.ui.designsystem.components.AppTextView
@@ -479,6 +508,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/ds_space_2"
+                        android:textAlignment="textStart"
                         android:fontFamily="@font/poppins_semibold"
                         android:textColor="@color/ds_text_primary" />
 
@@ -488,6 +518,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/ds_space_10"
                         android:text="@string/sale_order_document"
+                        android:textAlignment="textStart"
                         android:textColor="@color/ds_text_muted" />
 
                     <com.axelliant.hris.ui.designsystem.components.AppTextView
@@ -496,6 +527,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/ds_space_2"
+                        android:textAlignment="textStart"
                         android:fontFamily="@font/poppins_semibold"
                         android:textColor="@color/ds_text_primary" />
                 </LinearLayout>
@@ -519,6 +551,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/sale_order_subtotal"
+                        android:textAlignment="textStart"
                         android:textColor="@color/ds_text_secondary" />
 
                     <com.axelliant.hris.ui.designsystem.components.AppTextView
@@ -526,6 +559,7 @@
                         style="@style/Text.InternalApps.Subheading"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textAlignment="textStart"
                         android:fontFamily="@font/poppins_semibold"
                         android:textColor="@color/ds_text_primary" />
                 </LinearLayout>
@@ -562,6 +596,7 @@
                         style="@style/Text.InternalApps.Subheading"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textAlignment="textStart"
                         android:fontFamily="@font/poppins_semibold"
                         android:textColor="@color/ds_text_primary" />
                 </LinearLayout>
@@ -579,6 +614,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/sale_order_shipping"
+                        android:textAlignment="textStart"
                         android:textColor="@color/ds_text_secondary" />
 
                     <com.axelliant.hris.ui.designsystem.components.AppTextView
@@ -586,6 +622,7 @@
                         style="@style/Text.InternalApps.Subheading"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textAlignment="textStart"
                         android:fontFamily="@font/poppins_semibold"
                         android:textColor="@color/ds_text_primary" />
                 </LinearLayout>
@@ -604,6 +641,7 @@
                         android:layout_weight="1"
                         android:fontFamily="@font/poppins_bold"
                         android:text="@string/sale_order_grand_total_label"
+                        android:textAlignment="textStart"
                         android:textColor="@color/ds_text_primary" />
 
                     <com.axelliant.hris.ui.designsystem.components.AppTextView
@@ -613,6 +651,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_bold"
                         android:textColor="@color/ds_text_primary"
+                        android:textAlignment="textStart"
                         android:textSize="@dimen/text_size_18" />
                 </LinearLayout>
             </LinearLayout>

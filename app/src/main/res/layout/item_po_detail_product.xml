@@ -41,6 +41,7 @@
             android:ellipsize="end"
             android:fontFamily="@font/poppins_bold"
             android:maxLines="2"
+            android:textAlignment="textStart"
             android:textColor="@color/ds_text_primary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/productThumbnail"
@@ -58,7 +59,9 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/productThumbnail"
             app:layout_constraintTop_toBottomOf="@id/productNameText"
-            tools:text="Part No: DELL-LAT-5440" />
+            tools:text="Part No: DELL-LAT-5440"
+            android:textAlignment="textStart"
+            />
 
         <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/qtyText"
@@ -82,7 +85,10 @@
             app:layout_constraintBaseline_toBaselineOf="@id/qtyText"
             app:layout_constraintEnd_toStartOf="@id/lineTotalValue"
             app:layout_constraintStart_toEndOf="@id/qtyText"
-            tools:text="$89.99 / unit" />
+            tools:text="$89.99 / unit"
+            android:textAlignment="textStart"
+
+            />
 
         <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/lineTotalValue"
@@ -93,7 +99,9 @@
             android:textColor="@color/ds_primary"
             app:layout_constraintBaseline_toBaselineOf="@id/qtyText"
             app:layout_constraintEnd_toEndOf="parent"
-            tools:text="$89.99" />
+            tools:text="$89.99"
+            android:textAlignment="textStart"
+            />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.axelliant.hris.ui.designsystem.components.AppCardView>
 

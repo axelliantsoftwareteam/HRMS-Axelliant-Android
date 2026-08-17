@@ -15,7 +15,7 @@
     app:cardUseCompatPadding="false"
     app:strokeColor="@color/ds_outline"
     app:strokeWidth="@dimen/_1sdp"
-    app:cardBackgroundColor="@color/ds_neutral_white">
+    app:cardBackgroundColor="@color/home_card_surface">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/ly_module"

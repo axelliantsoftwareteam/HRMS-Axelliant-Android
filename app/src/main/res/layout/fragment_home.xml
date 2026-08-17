@@ -6,7 +6,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         style="@style/Layout.Fluent2.Screen"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/home_screen_background">
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/start_guideline"
@@ -37,7 +38,7 @@
             android:id="@+id/header_bg"
             android:layout_width="0dp"
             android:layout_height="@dimen/_70sdp"
-            android:background="@color/ds_surface"
+            android:background="@color/home_header_surface"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -180,7 +181,7 @@
             android:layout_height="0dp"
             android:clipChildren="false"
             android:clipToPadding="false"
-            android:background="@color/ds_surface"
+            android:background="@color/home_content_surface"
             app:layout_constraintTop_toBottomOf="@id/ly_info"
             android:layout_marginTop="@dimen/_8sdp"
             app:layout_constraintStart_toStartOf="parent"
@@ -228,7 +229,7 @@
                         android:textAlignment="textEnd"
                         app:chipIcon="@drawable/ic_location_tick"
                         app:chipIconTint="@color/ds_text_primary"
-                        app:chipBackgroundColor="@color/chip_color"
+                        app:chipBackgroundColor="@color/home_location_chip"
                         app:chipStrokeWidth="0dp"
                         app:chipCornerRadius="@dimen/ds_radius_sm"
                         app:chipMinHeight="@dimen/_24sdp"
@@ -254,6 +255,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_8sdp"
+                        app:cardBackgroundColor="@color/home_card_surface"
                         app:cardCornerRadius="@dimen/ds_radius_sm"
                         app:cardElevation="0dp"
                         app:strokeColor="@color/ds_outline"
@@ -293,7 +295,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@drawable/fluent_blue"
-                            android:backgroundTint="@color/light_gray"
+                            android:backgroundTint="@color/home_note_surface"
                             android:visibility="visible"
                             android:minHeight="@dimen/_40sdp">
 

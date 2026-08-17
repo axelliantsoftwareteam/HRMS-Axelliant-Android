@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.axelliant.hris.ui.designsystem.components.AppCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/saleOrderCard"
     style="@style/Widget.InternalApps.Card"
     android:layout_marginBottom="@dimen/ds_space_8"
@@ -79,6 +80,8 @@
             android:ellipsize="end"
             android:fontFamily="@font/poppins_semibold"
             android:maxLines="1"
+            android:textAlignment="textStart"
+            tools:text="Title"
             android:textColor="@color/ds_text_primary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -93,6 +96,7 @@
             android:fontFamily="@font/poppins_medium"
             android:text="@string/sale_orders_grand_total"
             android:textAllCaps="true"
+            android:textAlignment="textStart"
             android:textColor="@color/ds_text_muted"
             app:layout_constraintEnd_toStartOf="@id/deliveryDateLabel"
             app:layout_constraintHorizontal_weight="1"
@@ -107,6 +111,7 @@
             android:fontFamily="@font/poppins_medium"
             android:text="@string/sale_orders_delivery_date"
             android:textAllCaps="true"
+            android:textAlignment="textStart"
             android:textColor="@color/ds_text_muted"
             app:layout_constraintBaseline_toBaselineOf="@id/grandTotalLabel"
             app:layout_constraintEnd_toEndOf="parent"
@@ -122,6 +127,7 @@
             android:fontFamily="@font/poppins_bold"
             android:textColor="@color/ds_text_primary"
             android:textSize="@dimen/_11ssp"
+            android:textAlignment="textStart"
             app:layout_constraintEnd_toEndOf="@id/grandTotalLabel"
             app:layout_constraintStart_toStartOf="@id/grandTotalLabel"
             app:layout_constraintTop_toBottomOf="@id/grandTotalLabel" />
@@ -134,6 +140,7 @@
             android:fontFamily="@font/poppins_medium"
             android:textColor="@color/ds_text_primary"
             android:textSize="@dimen/_11ssp"
+            android:textAlignment="textStart"
             app:layout_constraintBaseline_toBaselineOf="@id/grandTotalValue"
             app:layout_constraintEnd_toEndOf="@id/deliveryDateLabel"
             app:layout_constraintStart_toStartOf="@id/deliveryDateLabel" />

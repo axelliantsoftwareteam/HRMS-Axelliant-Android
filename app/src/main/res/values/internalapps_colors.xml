@@ -50,6 +50,15 @@
     <color name="drawer_icon_tint">#6B7280</color>
     <color name="drawer_logout">#FF2D6F</color>
     <color name="drawer_role_dot">#0EA5E9</color>
+    <color name="home_screen_background">@color/ds_background</color>
+    <color name="home_header_surface">@color/ds_surface</color>
+    <color name="home_content_surface">@color/ds_surface</color>
+    <color name="home_card_surface">@color/ds_surface</color>
+    <color name="home_module_icon_tile">#EEF6FF</color>
+    <color name="home_shift_chip_stroke">#D6E7FA</color>
+    <color name="home_progress_track">#E5E5E5</color>
+    <color name="home_note_surface">@color/light_gray</color>
+    <color name="home_location_chip">@color/chip_color</color>
     <color name="login_input_background">#0A3157</color>
     <color name="login_input_stroke">#2A5B86</color>
     <color name="login_input_hint">#9AB0C7</color>
