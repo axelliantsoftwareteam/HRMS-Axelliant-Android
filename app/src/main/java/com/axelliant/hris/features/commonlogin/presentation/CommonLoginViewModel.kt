@@ -3,6 +3,7 @@ package com.axelliant.hris.features.commonlogin.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.axelliant.hris.R
+import com.axelliant.hris.core.auth.GlobalLogoutCoordinator
 import com.axelliant.hris.core.auth.PendingCommonLoginStore
 import com.axelliant.hris.core.contracts.auth.AuthSessionResult
 import com.axelliant.hris.core.contracts.auth.WorkspaceAuthSessionRepositoryProvider
@@ -10,6 +11,7 @@ import com.axelliant.hris.core.contracts.navigation.WorkspaceKey
 import com.axelliant.hris.core.contracts.session.AppSession
 import com.axelliant.hris.features.auth.data.local.LoginCredentialStore
 import com.axelliant.hris.features.auth.data.remote.dto.LoginValidationState
+import com.axelliant.hris.features.auth.microsoft.MicrosoftAuthManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -45,7 +47,9 @@ data class CommonLoginUiState(
 class CommonLoginViewModel @Inject constructor(
     private val authSessionRepositoryProvider: WorkspaceAuthSessionRepositoryProvider,
     private val pendingCommonLoginStore: PendingCommonLoginStore,
-    private val loginPreferences: LoginCredentialStore
+    private val loginPreferences: LoginCredentialStore,
+    private val microsoftAuthManager: MicrosoftAuthManager,
+    private val globalLogoutCoordinator: GlobalLogoutCoordinator
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(
@@ -164,6 +168,7 @@ class CommonLoginViewModel @Inject constructor(
                 authSessionRepositoryProvider.repositoryFor(WorkspaceKey.HRIS).clearSession()
                 authSessionRepositoryProvider.repositoryFor(WorkspaceKey.INTERNAL_APPS).clearSession()
                 pendingCommonLoginStore.clear()
+                microsoftAuthManager.signOut()
                 _uiState.value = _uiState.value.copy(
                     isMicrosoftLoading = false,
                     isAuthenticated = false,
@@ -206,9 +211,7 @@ class CommonLoginViewModel @Inject constructor(
     fun signOut() {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
-            authSessionRepositoryProvider.repositoryFor(WorkspaceKey.HRIS).clearSession()
-            authSessionRepositoryProvider.repositoryFor(WorkspaceKey.INTERNAL_APPS).clearSession()
-            pendingCommonLoginStore.clear()
+            globalLogoutCoordinator.logout()
             _uiState.value = _uiState.value.copy(
                 isLoading = false,
                 isMicrosoftLoading = false,

@@ -27,6 +27,7 @@ class MicrosoftAuthManager @Inject constructor(
 
     suspend fun signIn(activity: Activity): MicrosoftAuthResult {
         val application = createApplication()
+        signOutCurrentAccount(application)
         return suspendCancellableCoroutine { continuation ->
             application.signIn(
                 activity,
@@ -143,6 +144,28 @@ class MicrosoftAuthManager @Inject constructor(
                     }
                 }
             )
+        }
+    }
+
+    private suspend fun signOutCurrentAccount(
+        application: ISingleAccountPublicClientApplication
+    ) {
+        loadCurrentAccount(application) ?: return
+        suspendCancellableCoroutine<Unit> { continuation ->
+            application.signOut(object : ISingleAccountPublicClientApplication.SignOutCallback {
+                override fun onSignOut() {
+                    if (continuation.isActive) {
+                        continuation.resume(Unit)
+                    }
+                }
+
+                override fun onError(exception: MsalException) {
+                    Log.e(TAG, "Microsoft pre sign-in cleanup failed.", exception)
+                    if (continuation.isActive) {
+                        continuation.resume(Unit)
+                    }
+                }
+            })
         }
     }
 
