@@ -57,6 +57,15 @@ class UserPermissionRepository @Inject constructor(
             AppDrawerAction.SaleOrders -> "salesorder"
             AppDrawerAction.PurchaseOrders -> "purchaseorder"
             AppDrawerAction.Profiles -> "user"
+            AppDrawerAction.Home,
+            AppDrawerAction.AgentConsole,
+            AppDrawerAction.Attendance,
+            AppDrawerAction.Requests,
+            AppDrawerAction.Leaves,
+            AppDrawerAction.CheckInRequests,
+            AppDrawerAction.Expenses,
+            AppDrawerAction.DocumentVault,
+            AppDrawerAction.ResourceManagement,
             AppDrawerAction.Settings,
             AppDrawerAction.Logout -> null
         }

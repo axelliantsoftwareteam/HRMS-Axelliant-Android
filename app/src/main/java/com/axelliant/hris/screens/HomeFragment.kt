@@ -18,7 +18,9 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewConfiguration
+import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.TextView
 import com.axelliant.hris.extention.showShimmer
 import com.axelliant.hris.extention.hideShimmer
 import androidx.activity.result.ActivityResultLauncher
@@ -84,6 +86,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import java.util.TimeZone
 
 
 @AndroidEntryPoint
@@ -138,10 +141,14 @@ class HomeFragment : BaseFragment() {
         get() = binding?.root?.findViewById(R.id.drawerScrim)
     private val appDrawer: View?
         get() = binding?.root?.findViewById(R.id.appDrawer)
-    private val agentConsoleButton: View?
-        get() = binding?.root?.findViewById(R.id.agentConsoleButton)
     private val drawerMenuContainer: LinearLayout?
         get() = binding?.root?.findViewById(R.id.drawerMenuContainer)
+    private val drawerHomeContainer: LinearLayout?
+        get() = binding?.root?.findViewById(R.id.drawerHomeContainer)
+    private val drawerHrisMenuContainer: LinearLayout?
+        get() = binding?.root?.findViewById(R.id.drawerHrisMenuContainer)
+    private val drawerCommonMenuContainer: LinearLayout?
+        get() = binding?.root?.findViewById(R.id.drawerCommonMenuContainer)
     private val drawerFooterMenuContainer: LinearLayout?
         get() = binding?.root?.findViewById(R.id.drawerFooterMenuContainer)
 
@@ -459,20 +466,51 @@ class HomeFragment : BaseFragment() {
         }
 
         binding?.ivMenu?.setOnClickListener { openDrawer() }
-        agentConsoleButton?.setOnClickListener {
-            closeDrawer {
-                if (isAdded) openInternalAppsDestination(R.id.iaAgentConsoleFragment)
-            }
-        }
         drawerScrim?.setOnClickListener { closeDrawer() }
         appDrawer?.setOnTouchListener { _, event -> handleDrawerTouch(event) }
 
         drawerMenuBindings.clear()
+        drawerHomeContainer?.removeAllViews()
+        drawerHrisMenuContainer?.removeAllViews()
         drawerMenuContainer?.removeAllViews()
+        drawerCommonMenuContainer?.removeAllViews()
         drawerFooterMenuContainer?.removeAllViews()
+        bindDrawerProfileHeader()
+        drawerHomeContainer?.let { bindDrawerMenu(it, homeDrawerItems()) }
+        drawerHrisMenuContainer?.let { bindDrawerMenu(it, hrisDrawerItems()) }
         drawerMenuContainer?.let { bindDrawerMenu(it, primaryDrawerItems(allowedDrawerActions)) }
+        drawerCommonMenuContainer?.let { bindDrawerMenu(it, commonDrawerItems()) }
         drawerFooterMenuContainer?.let { bindDrawerMenu(it, footerDrawerItems()) }
+        updateDrawerSectionVisibility()
+        if (selectedDrawerAction == null) {
+            selectedDrawerAction = AppDrawerAction.Home
+        }
         refreshDrawerSelection()
+    }
+
+    private fun bindDrawerProfileHeader() {
+        binding?.root?.findViewById<TextView>(R.id.drawerUserName)?.text =
+            employProfileResponse?.employee_name ?: getString(R.string.drawer_user_name)
+        binding?.root?.findViewById<TextView>(R.id.drawerUserRole)?.text =
+            employProfileResponse?.designation ?: getString(R.string.drawer_user_role)
+        binding?.root?.findViewById<TextView>(R.id.drawerUserEmpId)?.text =
+            employProfileResponse?.custom_employee_code?.let { "Emp ID: $it" } ?: "Emp ID: --"
+        binding?.root?.findViewById<ImageView>(R.id.drawerProfileImage)?.let { imageView ->
+            imageView.setUrlImage(employProfileResponse?.image, requireContext())
+        }
+        binding?.root?.findViewById<View>(R.id.drawerViewProfile)?.setOnClickListener {
+            handleDrawerItemClick(AppDrawerAction.Profiles)
+        }
+    }
+
+    private fun updateDrawerSectionVisibility() {
+        val hasHrisAccess = workspaceSessionProvider.hasValidSession(WorkspaceKey.HRIS)
+        val hasBusinessAccess = primaryDrawerItems(allowedDrawerActions).isNotEmpty()
+        binding?.root?.findViewById<View>(R.id.drawerHrisLabel)?.isVisible = hasHrisAccess
+        drawerHrisMenuContainer?.isVisible = hasHrisAccess
+        binding?.root?.findViewById<View>(R.id.drawerBusinessDivider)?.isVisible = hasBusinessAccess
+        binding?.root?.findViewById<View>(R.id.drawerBusinessLabel)?.isVisible = hasBusinessAccess
+        drawerMenuContainer?.isVisible = hasBusinessAccess
     }
 
     private fun bindDrawerMenu(
@@ -493,22 +531,20 @@ class HomeFragment : BaseFragment() {
 
     private fun refreshDrawerSelection() {
         selectedDrawerAction?.let { selectedAction ->
-            if (selectedAction !in allowedDrawerActions) {
-                selectedDrawerAction = primaryDrawerItems(allowedDrawerActions).firstOrNull()?.action
+            if (selectedAction !in visibleDrawerActions()) {
+                selectedDrawerAction = AppDrawerAction.Home
             }
         }
         drawerMenuBindings.forEach { (action, itemBinding) ->
             val isSelected = action == selectedDrawerAction
-            val isDestructive = action == AppDrawerAction.Logout
             val textColor = when {
-                isSelected -> R.color.ia_white
-                isDestructive -> R.color.drawer_logout
-                else -> R.color.ds_text_secondary
+                isSelected -> R.color.ds_primary
+                else -> R.color.ds_text_primary
             }
             val iconColor = when {
-                isSelected -> R.color.ia_white
-                isDestructive -> R.color.drawer_logout
-                else -> R.color.drawer_icon_tint
+                isSelected -> R.color.ds_primary
+                action == AppDrawerAction.Settings || action == AppDrawerAction.Logout -> R.color.ds_text_primary
+                else -> R.color.ds_primary
             }
             itemBinding.drawerMenuRoot.setBackgroundResource(
                 if (isSelected) {
@@ -519,6 +555,18 @@ class HomeFragment : BaseFragment() {
             )
             itemBinding.drawerMenuTitle.setTextColor(ContextCompat.getColor(requireContext(), textColor))
             itemBinding.drawerMenuIcon.setColorFilter(ContextCompat.getColor(requireContext(), iconColor))
+        }
+    }
+
+    private fun visibleDrawerActions(): Set<AppDrawerAction> {
+        return buildSet {
+            addAll(homeDrawerItems().map { it.action })
+            if (workspaceSessionProvider.hasValidSession(WorkspaceKey.HRIS)) {
+                addAll(hrisDrawerItems().map { it.action })
+            }
+            addAll(primaryDrawerItems(allowedDrawerActions).map { it.action })
+            addAll(commonDrawerItems().map { it.action })
+            addAll(footerDrawerItems().map { it.action })
         }
     }
 
@@ -551,7 +599,14 @@ class HomeFragment : BaseFragment() {
     }
 
     private fun handleDrawerItemClick(action: AppDrawerAction) {
-        if (action != AppDrawerAction.Logout &&
+        val requiresInternalAppsSession = action in setOf(
+            AppDrawerAction.Products,
+            AppDrawerAction.Quotes,
+            AppDrawerAction.SaleOrders,
+            AppDrawerAction.PurchaseOrders,
+            AppDrawerAction.Settings
+        )
+        if (requiresInternalAppsSession &&
             !workspaceSessionProvider.hasValidSession(WorkspaceKey.INTERNAL_APPS)
         ) {
             requireContext().showErrorMsg("Internal Apps session is not available.")
@@ -566,11 +621,20 @@ class HomeFragment : BaseFragment() {
         closeDrawer {
             if (!isAdded) return@closeDrawer
             when (action) {
+                AppDrawerAction.Home -> Unit
+                AppDrawerAction.AgentConsole -> openInternalAppsDestination(R.id.iaAgentConsoleFragment)
+                AppDrawerAction.Attendance -> AppNavigator.navigateToAttendanceStats()
+                AppDrawerAction.Requests -> AppNavigator.navigateToRequest()
+                AppDrawerAction.Leaves -> AppNavigator.navigateToLeaves()
+                AppDrawerAction.CheckInRequests -> AppNavigator.navigateToCheckInFragment()
+                AppDrawerAction.Expenses -> AppNavigator.navigateToExpenseFragment()
+                AppDrawerAction.DocumentVault -> AppNavigator.navigateToDocumentManageFragment()
+                AppDrawerAction.ResourceManagement -> AppNavigator.navigateToResourceManageFragment()
                 AppDrawerAction.Products -> openInternalAppsDestination(R.id.iaProductsFragment)
                 AppDrawerAction.Quotes -> openInternalAppsDestination(R.id.iaQuotesFragment)
                 AppDrawerAction.SaleOrders -> openInternalAppsDestination(R.id.iaSaleOrdersFragment)
                 AppDrawerAction.PurchaseOrders -> openInternalAppsDestination(R.id.iaPurchaseOrdersFragment)
-                AppDrawerAction.Profiles -> openInternalAppsDestination(R.id.iaProfilesFragment)
+                AppDrawerAction.Profiles -> AppNavigator.navigateToProfile()
                 AppDrawerAction.Settings -> openInternalAppsDestination(R.id.iaSettingsFragment)
                 AppDrawerAction.Logout -> logoutAndOpenLogin()
             }
@@ -716,24 +780,41 @@ class HomeFragment : BaseFragment() {
         allowedActions: Set<AppDrawerAction> = allowedDrawerActions
     ) = allPrimaryDrawerItems.filter { it.action in allowedActions }
 
+    private fun homeDrawerItems() = listOf(
+        AppDrawerMenuItem(R.string.drawer_home, R.drawable.ic_bt_home, AppDrawerAction.Home),
+        AppDrawerMenuItem(R.string.agent_console_title, R.drawable.ic_ai_sparkles, AppDrawerAction.AgentConsole)
+    )
+
+    private fun hrisDrawerItems() = listOf(
+        AppDrawerMenuItem(R.string.drawer_attendance, R.drawable.ic_home_detail_clock, AppDrawerAction.Attendance),
+        AppDrawerMenuItem(R.string.drawer_requests, R.drawable.ic_home_sales_orders, AppDrawerAction.Requests),
+        AppDrawerMenuItem(R.string.leaves, R.drawable.ic_home_leave, AppDrawerAction.Leaves),
+        AppDrawerMenuItem(R.string.drawer_check_in_requests, R.drawable.ic_home_check_requests, AppDrawerAction.CheckInRequests),
+        AppDrawerMenuItem(R.string.drawer_expenses, R.drawable.ic_home_expenses, AppDrawerAction.Expenses),
+        AppDrawerMenuItem(R.string.drawer_document_vault, R.drawable.ic_home_document_vault, AppDrawerAction.DocumentVault),
+        AppDrawerMenuItem(R.string.drawer_resource_management, R.drawable.ic_home_resource_management, AppDrawerAction.ResourceManagement)
+    )
+
     private val allPrimaryDrawerItems
         get() = listOf(
-        AppDrawerMenuItem(R.string.products, R.drawable.ic_bt_home, AppDrawerAction.Products),
-        AppDrawerMenuItem(R.string.drawer_quotes, R.drawable.ic_document, AppDrawerAction.Quotes),
-        AppDrawerMenuItem(R.string.drawer_sale_orders, R.drawable.ic_document, AppDrawerAction.SaleOrders),
-        AppDrawerMenuItem(R.string.drawer_purchase_orders, R.drawable.ic_document, AppDrawerAction.PurchaseOrders),
-        AppDrawerMenuItem(R.string.profiles, R.drawable.ic_bt_account, AppDrawerAction.Profiles)
+        AppDrawerMenuItem(R.string.drawer_sale_orders, R.drawable.ic_home_purchase_orders, AppDrawerAction.SaleOrders),
+        AppDrawerMenuItem(R.string.drawer_quotes, R.drawable.ic_home_quotes, AppDrawerAction.Quotes),
+        AppDrawerMenuItem(R.string.products, R.drawable.ic_home_products, AppDrawerAction.Products),
+        AppDrawerMenuItem(R.string.drawer_purchase_orders, R.drawable.ic_home_sales_orders, AppDrawerAction.PurchaseOrders)
     )
 
     private val footerActions = setOf(AppDrawerAction.Settings, AppDrawerAction.Logout)
 
+    private fun commonDrawerItems() = listOf(
+        AppDrawerMenuItem(R.string.drawer_profile, R.drawable.ic_home_check_requests, AppDrawerAction.Profiles)
+    )
+
     private fun footerDrawerItems() = listOf(
         AppDrawerMenuItem(R.string.drawer_settings, R.drawable.ic_settings, AppDrawerAction.Settings),
         AppDrawerMenuItem(
-            R.string.drawer_logout,
+            R.string.drawer_sign_out,
             R.drawable.ic_logout,
-            AppDrawerAction.Logout,
-            isDestructive = true
+            AppDrawerAction.Logout
         )
     )
     private fun getEmployeeList() {
@@ -909,8 +990,51 @@ class HomeFragment : BaseFragment() {
             }
         }
     }
-
     private fun parseAttendanceTime(value: String?): Date? {
+        val timeText = value?.trim().orEmpty()
+        if (timeText.isBlank() || timeText == "--" || timeText.equals("null", ignoreCase = true)) {
+            return null
+        }
+
+        val zone = TimeZone.getTimeZone("Asia/Karachi")
+
+        val dateTimeFormats = listOf(
+            "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
+            "yyyy-MM-dd'T'HH:mm:ss",
+            "yyyy-MM-dd HH:mm:ss",
+            "yyyy-MM-dd HH:mm",
+            "dd-MM-yyyy HH:mm:ss",
+            "dd-MM-yyyy HH:mm"
+        )
+        dateTimeFormats.forEach { pattern ->
+            parseDate(timeText, pattern)?.let { return it }
+        }
+
+        val today = Calendar.getInstance(zone)
+        val timeFormats = listOf("HH:mm:ss", "HH:mm", "hh:mm:ss a", "hh:mm a")
+        timeFormats.forEach { pattern ->
+            parseDate(timeText, pattern)?.let { parsed ->
+                return Calendar.getInstance(zone).apply {
+                    time = parsed
+                    set(Calendar.YEAR, today.get(Calendar.YEAR))
+                    set(Calendar.MONTH, today.get(Calendar.MONTH))
+                    set(Calendar.DAY_OF_MONTH, today.get(Calendar.DAY_OF_MONTH))
+                }.time
+            }
+        }
+        return null
+    }
+    private fun parseDate(value: String, pattern: String): Date? {
+        return runCatching {
+            SimpleDateFormat(pattern, Locale.US).apply {
+                isLenient = false
+                timeZone = TimeZone.getTimeZone("Asia/Karachi") // match backend/office timezone
+            }.parse(value)
+        }.getOrNull()
+    }
+
+
+    /*private fun parseAttendanceTime(value: String?): Date? {
         val timeText = value?.trim().orEmpty()
         if (timeText.isBlank() || timeText == "--" || timeText.equals("null", ignoreCase = true)) {
             return null
@@ -949,7 +1073,7 @@ class HomeFragment : BaseFragment() {
                 isLenient = false
             }.parse(value)
         }.getOrNull()
-    }
+    }*/
 
     private fun formatWorkingDuration(durationMillis: Long): String {
         val totalSeconds = durationMillis.coerceAtLeast(0L) / 1000L
@@ -1203,6 +1327,7 @@ class HomeFragment : BaseFragment() {
         binding?.tvEmployeDesignation?.text = employProfile.designation
         binding?.tvEmployeId?.text = "Emp ID: ${employProfile.custom_employee_code}"
         binding?.profileImg?.setUrlImage(employProfile.image, requireContext())
+        bindDrawerProfileHeader()
 
 
     }

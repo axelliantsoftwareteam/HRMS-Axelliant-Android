@@ -75,10 +75,10 @@
     <dimen name="login_microsoft_icon_size">@dimen/_16sdp</dimen>
 
     <!-- Drawer/dashboard -->
-    <dimen name="drawer_width">@dimen/_280sdp</dimen>
-    <dimen name="drawer_item_height">@dimen/_48sdp</dimen>
+    <dimen name="drawer_width">@dimen/_250sdp</dimen>
+    <dimen name="drawer_item_height">@dimen/_40sdp</dimen>
     <dimen name="drawer_icon_size">@dimen/_20sdp</dimen>
-    <dimen name="drawer_avatar_size">@dimen/_42sdp</dimen>
+    <dimen name="drawer_avatar_size">@dimen/_30sdp</dimen>
     <dimen name="dashboard_grid_card_height">@dimen/_110sdp</dimen>
 
     <!-- Launcher -->

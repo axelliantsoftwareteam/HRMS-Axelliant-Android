@@ -207,6 +207,15 @@ class DashboardFragment : Fragment() {
                 AppDrawerAction.Profiles -> openProfiles()
                 AppDrawerAction.Settings -> openSettings()
                 AppDrawerAction.Logout -> logoutAndOpenLogin()
+                AppDrawerAction.Home,
+                AppDrawerAction.AgentConsole,
+                AppDrawerAction.Attendance,
+                AppDrawerAction.Requests,
+                AppDrawerAction.Leaves,
+                AppDrawerAction.CheckInRequests,
+                AppDrawerAction.Expenses,
+                AppDrawerAction.DocumentVault,
+                AppDrawerAction.ResourceManagement -> Unit
             }
         }
     }
