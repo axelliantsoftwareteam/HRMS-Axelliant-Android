@@ -59,6 +59,7 @@ class UserPermissionRepository @Inject constructor(
             AppDrawerAction.Profiles -> "user"
             AppDrawerAction.Home,
             AppDrawerAction.AgentConsole,
+            AppDrawerAction.Calendar,
             AppDrawerAction.Attendance,
             AppDrawerAction.Requests,
             AppDrawerAction.Leaves,

@@ -209,6 +209,7 @@ class DashboardFragment : Fragment() {
                 AppDrawerAction.Logout -> logoutAndOpenLogin()
                 AppDrawerAction.Home,
                 AppDrawerAction.AgentConsole,
+                AppDrawerAction.Calendar,
                 AppDrawerAction.Attendance,
                 AppDrawerAction.Requests,
                 AppDrawerAction.Leaves,

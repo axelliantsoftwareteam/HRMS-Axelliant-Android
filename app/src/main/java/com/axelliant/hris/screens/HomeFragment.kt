@@ -623,6 +623,7 @@ class HomeFragment : BaseFragment() {
             when (action) {
                 AppDrawerAction.Home -> Unit
                 AppDrawerAction.AgentConsole -> openInternalAppsDestination(R.id.iaAgentConsoleFragment)
+                AppDrawerAction.Calendar -> openInternalAppsDestination(R.id.iaCalendarFragment)
                 AppDrawerAction.Attendance -> AppNavigator.navigateToAttendanceStats()
                 AppDrawerAction.Requests -> AppNavigator.navigateToRequest()
                 AppDrawerAction.Leaves -> AppNavigator.navigateToLeaves()
@@ -806,7 +807,8 @@ class HomeFragment : BaseFragment() {
     private val footerActions = setOf(AppDrawerAction.Settings, AppDrawerAction.Logout)
 
     private fun commonDrawerItems() = listOf(
-        AppDrawerMenuItem(R.string.drawer_profile, R.drawable.ic_home_check_requests, AppDrawerAction.Profiles)
+        AppDrawerMenuItem(R.string.drawer_profile, R.drawable.ic_home_check_requests, AppDrawerAction.Profiles),
+        AppDrawerMenuItem(R.string.calendar_title, R.drawable.ic_calendar, AppDrawerAction.Calendar)
     )
 
     private fun footerDrawerItems() = listOf(

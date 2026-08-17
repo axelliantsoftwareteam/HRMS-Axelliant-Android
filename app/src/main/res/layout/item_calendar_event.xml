@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/_66sdp"
+    android:layout_marginBottom="@dimen/_6sdp"
+    android:background="@drawable/bg_calendar_card"
+    android:paddingEnd="@dimen/_10sdp"
+    >
+
+    <View
+        android:id="@+id/eventAccent"
+        android:layout_width="@dimen/_4sdp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/_1sdp"
+        android:layout_marginBottom="@dimen/_1sdp"
+        android:background="@drawable/bg_calendar_accent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        android:id="@+id/eventDay"
+        style="@style/Text.Fluent2.Body.Secondary"
+        android:layout_width="@dimen/_68sdp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textColor="@color/ds_text_primary"
+        android:textSize="@dimen/_10ssp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/eventAccent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Tue\nAug 18" />
+
+    <View
+        android:id="@+id/eventDivider"
+        android:layout_width="@dimen/_1sdp"
+        android:layout_height="@dimen/_38sdp"
+        android:background="@color/ds_border"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/eventDay"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        android:id="@+id/eventTitle"
+        style="@style/Text.Fluent2.Body.Primary.Strong"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_16sdp"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="@color/ds_text_primary"
+        android:textSize="@dimen/_11ssp"
+        app:layout_constraintEnd_toStartOf="@id/chevronIcon"
+        app:layout_constraintStart_toEndOf="@id/eventDivider"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Project Discussion" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        android:id="@+id/eventTime"
+        style="@style/Text.Fluent2.Body.Secondary"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_2sdp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="@color/ds_text_secondary"
+        android:textSize="@dimen/_10ssp"
+        app:layout_constraintEnd_toStartOf="@id/chevronIcon"
+        app:layout_constraintStart_toStartOf="@id/eventTitle"
+        app:layout_constraintTop_toBottomOf="@id/eventTitle"
+        tools:text="9:00 AM - 10:00 AM" />
+
+    <ImageView
+        android:id="@+id/teamsIcon"
+        android:layout_width="@dimen/_15sdp"
+        android:layout_height="@dimen/_15sdp"
+        android:layout_marginTop="@dimen/_2sdp"
+        android:contentDescription="@null"
+        android:src="@drawable/ia_ic_microsoft"
+        app:layout_constraintStart_toStartOf="@id/eventTitle"
+        app:layout_constraintTop_toBottomOf="@id/eventTime" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        android:id="@+id/eventSubtitle"
+        style="@style/Text.Fluent2.Body.Secondary"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_7sdp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="@color/ds_text_muted"
+        android:textSize="@dimen/_9ssp"
+        app:layout_constraintBottom_toBottomOf="@id/teamsIcon"
+        app:layout_constraintEnd_toStartOf="@id/chevronIcon"
+        app:layout_constraintStart_toEndOf="@id/teamsIcon"
+        app:layout_constraintTop_toTopOf="@id/teamsIcon"
+        tools:text="Microsoft Teams Meeting" />
+
+    <ImageView
+        android:id="@+id/chevronIcon"
+        android:layout_width="@dimen/_18sdp"
+        android:layout_height="@dimen/_18sdp"
+        android:contentDescription="@null"
+        android:src="@drawable/ic_chevron_right"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/ds_text_secondary" />
+</androidx.constraintlayout.widget.ConstraintLayout>

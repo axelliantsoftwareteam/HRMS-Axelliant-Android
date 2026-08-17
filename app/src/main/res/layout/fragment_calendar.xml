@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/ds_background">
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/startGuideline"
+        style="@style/Guideline.Fluent2.Start"
+        android:orientation="vertical" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/endGuideline"
+        style="@style/Guideline.Fluent2.End"
+        android:orientation="vertical" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/topGuideline"
+        style="@style/Guideline.Fluent2.Top"
+        android:orientation="horizontal" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/bottomGuideline"
+        style="@style/Guideline.Fluent2.Bottom"
+        android:orientation="horizontal" />
+
+
+    <com.axelliant.hris.ui.designsystem.components.AppTopBarView
+        android:id="@+id/appTopBar"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_40sdp"
+        app:showSearchButton="true"
+        app:titleText="@string/calendar_title"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/topGuideline" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_3sdp"
+        android:indeterminate="true"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appTopBar" />
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/contentScroll"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="false"
+        android:paddingStart="@dimen/_16sdp"
+        android:paddingEnd="@dimen/_16sdp"
+        app:layout_constraintBottom_toTopOf="@id/syncFooter"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appTopBar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="@dimen/_10sdp"
+            android:paddingBottom="@dimen/_12sdp">
+
+            <EditText
+                android:id="@+id/searchInput"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_38sdp"
+                android:background="@drawable/rounded_search_bg"
+                android:drawableStart="@drawable/ia_ic_search"
+                android:drawablePadding="@dimen/_10sdp"
+                android:hint="@string/calendar_search_events"
+                android:imeOptions="actionSearch"
+                android:inputType="text"
+                android:paddingStart="@dimen/_14sdp"
+                android:paddingEnd="@dimen/_14sdp"
+                android:singleLine="true"
+                android:textColor="@color/ds_text_primary"
+                android:textColorHint="@color/ds_text_muted"
+                android:textSize="@dimen/_11ssp" />
+
+            <LinearLayout
+                android:id="@+id/segmentControl"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_36sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:background="@drawable/bg_calendar_segment_default"
+                android:orientation="horizontal">
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                    android:id="@+id/monthButton"
+                    style="@style/Text.Fluent2.Body.Primary.Strong"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/calendar_month"
+                    android:textSize="@dimen/_11ssp" />
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                    android:id="@+id/weekButton"
+                    style="@style/Text.Fluent2.Body.Primary.Strong"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/calendar_week"
+                    android:textSize="@dimen/_11ssp" />
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                    android:id="@+id/dayButton"
+                    style="@style/Text.Fluent2.Body.Primary.Strong"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/calendar_day"
+                    android:textSize="@dimen/_11ssp" />
+            </LinearLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/errorBanner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:background="@drawable/bg_calendar_error"
+                android:padding="@dimen/_12sdp"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/errorIcon"
+                    android:layout_width="@dimen/_22sdp"
+                    android:layout_height="@dimen/_22sdp"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_quote_cancel_warning"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                    android:id="@+id/errorTitle"
+                    style="@style/Text.Fluent2.Body.Primary.Strong"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:text="@string/calendar_could_not_sync"
+                    android:textColor="#B00020"
+                    android:textSize="@dimen/_12ssp"
+                    app:layout_constraintEnd_toStartOf="@id/retryButton"
+                    app:layout_constraintStart_toEndOf="@id/errorIcon"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                    android:id="@+id/errorMessage"
+                    style="@style/Text.Fluent2.Body.Secondary"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_4sdp"
+                    android:textColor="@color/ds_text_secondary"
+                    android:textSize="@dimen/_9ssp"
+                    app:layout_constraintEnd_toEndOf="@id/errorTitle"
+                    app:layout_constraintStart_toStartOf="@id/errorTitle"
+                    app:layout_constraintTop_toBottomOf="@id/errorTitle"
+                    tools:text="Showing events updated at 9:45 AM." />
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                    android:id="@+id/retryButton"
+                    style="@style/Text.Fluent2.Body.Primary.Strong"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/retry"
+                    android:textColor="@color/ds_primary"
+                    android:textSize="@dimen/_11ssp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/errorTitle" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40sdp"
+                android:layout_marginTop="@dimen/_10sdp">
+
+                <ImageButton
+                    android:id="@+id/previousMonthButton"
+                    android:layout_width="@dimen/_32sdp"
+                    android:layout_height="@dimen/_32sdp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/calendar_previous_month"
+                    android:rotation="180"
+                    android:src="@drawable/ic_chevron_right"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/ds_text_primary" />
+
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                    android:id="@+id/headerDate"
+                    style="@style/Text.Fluent2.Title.Primary.Strong"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_8sdp"
+                    android:layout_marginEnd="@dimen/_8sdp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textColor="@color/ds_text_primary"
+                    android:textSize="@dimen/_15ssp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/todayButton"
+                    app:layout_constraintStart_toEndOf="@id/previousMonthButton"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="August 2026" />
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                    android:id="@+id/todayButton"
+                    style="@style/Text.Fluent2.Body.Primary.Strong"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/today"
+                    android:textColor="@color/ds_primary"
+                    android:textSize="@dimen/_11ssp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/nextMonthButton"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageButton
+                    android:id="@+id/nextMonthButton"
+                    android:layout_width="@dimen/_32sdp"
+                    android:layout_height="@dimen/_32sdp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/calendar_next_month"
+                    android:src="@drawable/ic_chevron_right"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/ds_text_primary" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <LinearLayout
+                android:id="@+id/weekLabels"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_22sdp"
+                android:orientation="horizontal">
+
+                <TextView style="@style/Text.Fluent2.Body.Secondary" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:gravity="center" android:text="SUN" android:textSize="@dimen/_10ssp" />
+                <TextView style="@style/Text.Fluent2.Body.Secondary" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:gravity="center" android:text="MON" android:textSize="@dimen/_10ssp" />
+                <TextView style="@style/Text.Fluent2.Body.Secondary" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:gravity="center" android:text="TUE" android:textSize="@dimen/_10ssp" />
+                <TextView style="@style/Text.Fluent2.Body.Secondary" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:gravity="center" android:text="WED" android:textSize="@dimen/_10ssp" />
+                <TextView style="@style/Text.Fluent2.Body.Secondary" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:gravity="center" android:text="THU" android:textSize="@dimen/_10ssp" />
+                <TextView style="@style/Text.Fluent2.Body.Secondary" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:gravity="center" android:text="FRI" android:textSize="@dimen/_10ssp" />
+                <TextView style="@style/Text.Fluent2.Body.Secondary" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:gravity="center" android:text="SAT" android:textSize="@dimen/_10ssp" />
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/monthDaysRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_252sdp"
+                android:nestedScrollingEnabled="false" />
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                android:id="@+id/selectedDateTitle"
+                style="@style/Text.Fluent2.Body.Primary.Strong"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_6sdp"
+                android:textColor="@color/ds_text_primary"
+                android:textSize="@dimen/_12ssp"
+                tools:text="Tuesday, August 18, 2026" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/eventsRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:nestedScrollingEnabled="false" />
+
+            <LinearLayout
+                android:id="@+id/emptyState"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_220sdp"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:background="@drawable/bg_calendar_card"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="@dimen/_18sdp"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="@dimen/_46sdp"
+                    android:layout_height="@dimen/_46sdp"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_calendar"
+                    app:tint="@color/ds_text_muted" />
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                    style="@style/Text.Fluent2.Title.Primary.Strong"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_18sdp"
+                    android:text="@string/calendar_no_events_today"
+                    android:textColor="@color/ds_text_primary"
+                    android:textSize="@dimen/_15ssp" />
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                    style="@style/Text.Fluent2.Body.Secondary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:gravity="center"
+                    android:text="@string/calendar_clear_day"
+                    android:textColor="@color/ds_text_secondary"
+                    android:textSize="@dimen/_10ssp" />
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/syncFooter"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_40sdp"
+        android:background="@color/ds_surface"
+        app:layout_constraintBottom_toBottomOf="@id/bottomGuideline"
+        app:layout_constraintEnd_toStartOf="@+id/endGuideline"
+        app:layout_constraintStart_toEndOf="@+id/startGuideline">
+
+        <ImageView
+            android:id="@+id/syncIcon"
+            android:layout_width="@dimen/_18sdp"
+            android:layout_height="@dimen/_18sdp"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_check_small"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            android:id="@+id/syncStatusText"
+            style="@style/Text.Fluent2.Body.Secondary"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:text="@string/calendar_synced_outlook"
+            android:textColor="@color/ds_text_primary"
+            android:textSize="@dimen/_11ssp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/updatedText"
+            app:layout_constraintStart_toEndOf="@id/syncIcon"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            android:id="@+id/updatedText"
+            style="@style/Text.Fluent2.Body.Secondary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:textColor="@color/ds_text_secondary"
+            android:textSize="@dimen/_11ssp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/refreshButton"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Updated 10:28 AM" />
+
+        <ImageButton
+            android:id="@+id/refreshButton"
+            android:layout_width="@dimen/_24sdp"
+            android:layout_height="@dimen/_24sdp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/retry"
+            android:src="@drawable/ic_calendar_refresh"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

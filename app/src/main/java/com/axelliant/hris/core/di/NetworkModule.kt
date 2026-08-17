@@ -9,6 +9,7 @@ import com.axelliant.hris.core.network.DevSslConfigurator
 import com.axelliant.hris.core.network.NetworkMonitor
 import com.axelliant.hris.features.agent.data.remote.AgentChatApiService
 import com.axelliant.hris.features.auth.data.remote.AuthApiService
+import com.axelliant.hris.features.calendar.data.remote.GraphCalendarApiService
 import com.axelliant.hris.features.dashboard.data.remote.UserPermissionApiService
 import com.axelliant.hris.features.inventory.assets.data.remote.AssetsApiService
 import com.axelliant.hris.features.inventory.products.data.remote.ProductsApiService
@@ -29,6 +30,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -85,8 +87,48 @@ object NetworkModule {
 
     @Provides
     @Singleton
+    @Named("graphOkHttpClient")
+    fun provideGraphOkHttpClient(): OkHttpClient {
+        val loggingInterceptor = HttpLoggingInterceptor().apply {
+            level = if (BuildConfig.DEBUG) {
+                HttpLoggingInterceptor.Level.BODY
+            } else {
+                HttpLoggingInterceptor.Level.NONE
+            }
+        }
+
+        return OkHttpClient.Builder()
+            .connectTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS)
+            .readTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS)
+            .writeTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS)
+            .addInterceptor(loggingInterceptor)
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    @Named("graphRetrofit")
+    fun provideGraphRetrofit(
+        @Named("graphOkHttpClient") okHttpClient: OkHttpClient,
+        gson: Gson
+    ): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl("https://graph.microsoft.com/")
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .build()
+    }
+
+    @Provides
+    @Singleton
     fun provideAuthApiService(retrofit: Retrofit): AuthApiService =
         retrofit.create(AuthApiService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideGraphCalendarApiService(
+        @Named("graphRetrofit") retrofit: Retrofit
+    ): GraphCalendarApiService = retrofit.create(GraphCalendarApiService::class.java)
 
     @Provides
     @Singleton

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="@dimen/_14sdp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <View
+            android:id="@+id/eventAccent"
+            android:layout_width="@dimen/_18sdp"
+            android:layout_height="@dimen/_18sdp"
+            android:background="@drawable/bg_calendar_accent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/eventTitle" />
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            android:id="@+id/eventTitle"
+            style="@style/Text.Fluent2.Title.Primary.Strong"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_14sdp"
+            android:textColor="@color/ds_text_primary"
+            android:textSize="@dimen/_17ssp"
+            app:layout_constraintEnd_toStartOf="@id/closeButton"
+            app:layout_constraintStart_toEndOf="@id/eventAccent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Project Discussion" />
+
+        <ImageButton
+            android:id="@+id/closeButton"
+            android:layout_width="@dimen/_34sdp"
+            android:layout_height="@dimen/_34sdp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/close"
+            android:src="@drawable/ic_close"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            android:id="@+id/teamsBadge"
+            style="@style/Text.Fluent2.Body.Secondary"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_28sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:background="@drawable/bg_calendar_card"
+            android:drawableStart="@drawable/ia_ic_microsoft"
+            android:drawablePadding="@dimen/_7sdp"
+            android:gravity="center"
+            android:paddingStart="@dimen/_10sdp"
+            android:paddingEnd="@dimen/_10sdp"
+            android:text="@string/calendar_teams_meeting"
+            android:textColor="@color/ds_primary"
+            android:textSize="@dimen/_11ssp"
+            app:layout_constraintStart_toStartOf="@id/eventTitle"
+            app:layout_constraintTop_toBottomOf="@id/eventTitle" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        android:id="@+id/eventSubtitle"
+        style="@style/Text.Fluent2.Body.Secondary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_14sdp"
+        android:textColor="@color/ds_text_secondary"
+        android:textSize="@dimen/_10ssp"
+        tools:text="Microsoft Teams Meeting" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        android:id="@+id/dateValue"
+        style="@style/Text.Fluent2.Body.Primary.Strong"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/ic_calendar"
+        android:drawablePadding="@dimen/_12sdp"
+        android:paddingTop="@dimen/_10sdp"
+        android:textColor="@color/ds_text_primary"
+        android:textSize="@dimen/_11ssp"
+        tools:text="Tuesday, August 18, 2026" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        android:id="@+id/timeValue"
+        style="@style/Text.Fluent2.Body.Primary.Strong"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/ic_home_detail_clock"
+        android:drawablePadding="@dimen/_12sdp"
+        android:paddingTop="@dimen/_10sdp"
+        android:textColor="@color/ds_text_primary"
+        android:textSize="@dimen/_11ssp"
+        tools:text="9:00 AM - 10:00 AM" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        android:id="@+id/locationValue"
+        style="@style/Text.Fluent2.Body.Primary.Strong"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/ic_home_detail_location"
+        android:drawablePadding="@dimen/_12sdp"
+        android:paddingTop="@dimen/_10sdp"
+        android:textColor="@color/ds_text_primary"
+        android:textSize="@dimen/_11ssp"
+        tools:text="Microsoft Teams Meeting" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        android:id="@+id/organizerValue"
+        style="@style/Text.Fluent2.Body.Primary.Strong"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/_10sdp"
+        android:textColor="@color/ds_text_primary"
+        android:textSize="@dimen/_11ssp"
+        tools:text="Adele Vance" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        android:id="@+id/attendeesValue"
+        style="@style/Text.Fluent2.Body.Secondary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/_8sdp"
+        android:textColor="@color/ds_text_secondary"
+        android:textSize="@dimen/_10ssp"
+        tools:text="6 accepted, 1 tentative" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        android:id="@+id/descriptionValue"
+        style="@style/Text.Fluent2.Body.Secondary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/_8sdp"
+        android:paddingBottom="@dimen/_8sdp"
+        android:textColor="@color/ds_text_secondary"
+        android:textSize="@dimen/_10ssp"
+        tools:text="Discuss project status, timeline, and next steps." />
+
+    <com.axelliant.hris.ui.designsystem.components.AppButtonView
+        android:id="@+id/joinTeamsButton"
+        style="@style/Widget.Fluent2.Button.Primary"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_44sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:text="@string/calendar_join_teams"
+        android:textAllCaps="false"
+        app:icon="@drawable/ia_ic_microsoft"
+        app:iconGravity="start"
+        app:iconPadding="@dimen/_8sdp"
+        app:iconTint="@color/ds_neutral_white" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppButtonView
+        android:id="@+id/openOutlookButton"
+        style="@style/Widget.Fluent2.Button.Secondary"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_44sdp"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:text="@string/calendar_open_outlook"
+        android:textAllCaps="false"
+        android:textColor="@color/ds_primary"
+        app:icon="@drawable/ia_ic_microsoft"
+        app:iconGravity="start"
+        app:iconPadding="@dimen/_8sdp"
+        app:iconTint="@color/ds_primary" />
+</LinearLayout>

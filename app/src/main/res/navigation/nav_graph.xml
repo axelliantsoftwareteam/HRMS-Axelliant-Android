@@ -32,6 +32,12 @@
         tools:layout="@layout/fragment_agent_console" />
 
     <fragment
+        android:id="@+id/iaCalendarFragment"
+        android:name="com.axelliant.hris.features.calendar.presentation.CalendarFragment"
+        android:label="@string/calendar_title"
+        tools:layout="@layout/fragment_calendar" />
+
+    <fragment
         android:id="@+id/iaHomeFragment"
         android:name="com.axelliant.hris.screens.fragments.HomeFragment"
         android:label="@string/ia_app_name"
