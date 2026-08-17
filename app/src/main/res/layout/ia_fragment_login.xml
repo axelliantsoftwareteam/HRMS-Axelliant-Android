@@ -127,6 +127,7 @@
                 android:layout_marginTop="@dimen/ds_space_20"
                 android:layout_marginEnd="@dimen/login_panel_padding"
                 android:text="@string/email_hint"
+                android:textAlignment="textStart"
                 android:textSize="@dimen/_12sdp"
                 app:layout_constraintEnd_toEndOf="@id/loginPanelBackground"
                 app:layout_constraintStart_toStartOf="@id/loginPanelBackground"
@@ -169,6 +170,7 @@
                 android:layout_marginTop="@dimen/ds_space_16"
                 android:text="@string/password_hint"
                 android:textSize="@dimen/_12sdp"
+                android:textAlignment="textStart"
                 app:layout_constraintEnd_toEndOf="@id/emailLabel"
                 app:layout_constraintStart_toStartOf="@id/emailLabel"
                 app:layout_constraintTop_toBottomOf="@id/emailLayout" />
@@ -224,6 +226,7 @@
                 android:layout_marginStart="@dimen/ds_space_6"
                 android:layout_marginEnd="@dimen/ds_space_8"
                 android:text="@string/ia_remember_me"
+                android:textAlignment="textStart"
                 app:layout_constraintBottom_toBottomOf="@id/rememberCheckBox"
                 app:layout_constraintEnd_toStartOf="@id/forgotPasswordText"
                 app:layout_constraintStart_toEndOf="@id/rememberCheckBox"

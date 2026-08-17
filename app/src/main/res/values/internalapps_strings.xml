@@ -911,4 +911,5 @@
         <item quantity="one">%1$d offer</item>
         <item quantity="other">%1$d offers</item>
     </plurals>
+
 </resources>
