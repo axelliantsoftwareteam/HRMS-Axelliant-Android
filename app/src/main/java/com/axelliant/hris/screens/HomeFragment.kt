@@ -961,7 +961,12 @@ class HomeFragment : BaseFragment() {
     private fun bindWorkingTime(checkInInfo: CheckInInfoResponse) {
         workingTimeJob?.cancel()
         val checkInTime = parseAttendanceTime(checkInInfo.check_in)
-        val checkOutTime = parseAttendanceTime(checkInInfo.check_out)
+        val isCurrentlyCheckedIn = checkInInfo.is_check_out_button == true
+        val checkOutTime = if (isCurrentlyCheckedIn) {
+            null
+        } else {
+            parseAttendanceTime(checkInInfo.check_out)
+        }
 
         if (checkInTime == null) {
             todayCardBinding?.tvWorkingTime?.text = formatWorkingDuration(0L)
