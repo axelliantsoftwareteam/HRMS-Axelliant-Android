@@ -1,5 +1,7 @@
 package com.axelliant.hris.core.auth
 
+import android.util.Base64
+import android.util.Log
 import androidx.lifecycle.Observer
 import com.axelliant.hris.core.contracts.auth.AuthSessionRepository
 import com.axelliant.hris.core.contracts.auth.AuthSessionResult
@@ -14,6 +16,8 @@ import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.coroutines.resume
 import kotlinx.coroutines.suspendCancellableCoroutine
+import org.json.JSONObject
+import java.nio.charset.StandardCharsets
 
 @Singleton
 class HrisAuthSessionRepository @Inject constructor(
@@ -44,7 +48,9 @@ class HrisAuthSessionRepository @Inject constructor(
         idToken: String,
         graphAccessToken: String?
     ): AuthSessionResult {
+        logMicrosoftTokenDiagnostics(idToken)
         return suspendCancellableCoroutine { continuation ->
+            Log.i(TAG, "POST https://hris.axelliant.com/api/method/hrms.api.mobile_v1.get_set_user_token (microsoft_token omitted)")
             val liveData = loginRepo.userLoginApiCall(LoginRequest(microsoft_token = idToken))
             val observer = object : Observer<BaseApiModel<UserLoginResponse>?> {
                 override fun onChanged(value: BaseApiModel<UserLoginResponse>?) {
@@ -53,6 +59,7 @@ class HrisAuthSessionRepository @Inject constructor(
 
                     val response = value?.message?.data
                     if (response?.meta?.status == true) {
+                        Log.i(TAG, "HRIS Microsoft login result=success")
                         val token = response.toHrisAccessToken()
                         if (token.isNullOrBlank()) {
                             continuation.resume(
@@ -63,6 +70,7 @@ class HrisAuthSessionRepository @Inject constructor(
                         saveSession(response, token)
                         continuation.resume(AuthSessionResult(session = currentSession()))
                     } else {
+                        Log.w(TAG, "HRIS Microsoft login result=failure message=${response?.meta?.message ?: "HRIS login failed."}")
                         continuation.resume(
                             AuthSessionResult(
                                 errorMessage = response?.meta?.message ?: "HRIS login failed."
@@ -74,6 +82,46 @@ class HrisAuthSessionRepository @Inject constructor(
 
             liveData.observeForever(observer)
             continuation.invokeOnCancellation { liveData.removeObserver(observer) }
+        }
+    }
+
+    private fun logMicrosoftTokenDiagnostics(idToken: String) {
+        val claims = idToken.decodeJwtClaims()
+        if (claims == null) {
+            Log.w(TAG, "Microsoft idToken diagnostics: tokenFormat=unreadable_jwt")
+            return
+        }
+        val claimSummary = listOf(
+            "aud=${claims.optString("aud").maskLongClaim()}",
+            "iss=${claims.optString("iss").maskLongClaim()}",
+            "tid=${claims.optString("tid")}",
+            "oid=${claims.optString("oid")}",
+            "sub=${claims.optString("sub").maskLongClaim()}",
+            "preferred_username=${claims.optString("preferred_username")}",
+            "email=${claims.optString("email").ifBlank { claims.optString(CLAIM_EMAIL) }}",
+            "upn=${claims.optString("upn")}",
+            "name=${claims.optString("name")}",
+            "exp=${claims.optLong("exp", 0L)}"
+        ).joinToString(separator = ", ")
+        Log.i(TAG, "Microsoft idToken diagnostics: $claimSummary")
+    }
+
+    private fun String.decodeJwtClaims(): JSONObject? {
+        return runCatching {
+            val payload = split(".").getOrNull(JWT_PAYLOAD_INDEX).orEmpty()
+            val decodedBytes = Base64.decode(
+                payload,
+                Base64.URL_SAFE or Base64.NO_PADDING or Base64.NO_WRAP
+            )
+            JSONObject(String(decodedBytes, StandardCharsets.UTF_8))
+        }.getOrNull()
+    }
+
+    private fun String.maskLongClaim(): String {
+        return when {
+            isBlank() -> ""
+            length <= CLAIM_VISIBLE_PREFIX -> this
+            else -> take(CLAIM_VISIBLE_PREFIX) + "..."
         }
     }
 
@@ -101,5 +149,13 @@ class HrisAuthSessionRepository @Inject constructor(
         } else {
             token?.takeIf { it.isNotBlank() }
         }
+    }
+
+    private companion object {
+        const val TAG = "HrisAuthSessionRepository"
+        const val JWT_PAYLOAD_INDEX = 1
+        const val CLAIM_VISIBLE_PREFIX = 12
+        const val CLAIM_EMAIL =
+            "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
     }
 }

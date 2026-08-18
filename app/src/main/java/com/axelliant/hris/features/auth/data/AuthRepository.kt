@@ -1,6 +1,8 @@
 package com.axelliant.hris.features.auth.data
 
 import android.util.Base64
+import android.util.Log
+import com.axelliant.hris.BuildConfig
 import com.axelliant.hris.core.network.ApiResult
 import com.axelliant.hris.core.network.BaseApiModel
 import com.axelliant.hris.core.network.SafeApiExecutor
@@ -39,6 +41,7 @@ class AuthRepository @Inject constructor(
         idToken: String,
         graphAccessToken: String? = null
     ): ApiResult<BaseApiModel<MicrosoftTokenData>> {
+        Log.i(TAG, "POST ${BuildConfig.API_BASE_URL}auth/GetToken (tokens omitted)")
         val result = safeApiExecutor.execute {
             apiService.getMicrosoftToken(
                 MicrosoftTokenRequest(
@@ -47,6 +50,7 @@ class AuthRepository @Inject constructor(
                 )
             )
         }
+        Log.i(TAG, "auth/GetToken result=${result.toAuthLogName()}")
         if (result is ApiResult.Success) {
             val tokenData = result.data.data?.data
             val accessToken = tokenData?.resolvedAccessToken()
@@ -123,7 +127,19 @@ class AuthRepository @Inject constructor(
         }.getOrNull()
     }
 
+    private fun ApiResult<*>.toAuthLogName(): String {
+        return when (this) {
+            is ApiResult.Success -> "success"
+            ApiResult.Empty -> "empty"
+            is ApiResult.HttpError -> "http_error_$code"
+            is ApiResult.NetworkError -> "network_error"
+            is ApiResult.UnknownError -> "unknown_error"
+            ApiResult.Unauthorized -> "unauthorized"
+        }
+    }
+
     private companion object {
+        const val TAG = "AuthRepository"
         const val JWT_PAYLOAD_INDEX = 1
         const val CLAIM_EMAIL =
             "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
