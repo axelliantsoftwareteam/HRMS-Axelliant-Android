@@ -1,80 +1,724 @@
-<resources>
-
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Merged from styles.xml -->
     <style name="start_gl" parent="@style/Guideline.Axelliant.Start" />
 
-    <style name="end_gl" parent="@style/Guideline.Axelliant.End" />
+        <style name="end_gl" parent="@style/Guideline.Axelliant.End" />
 
-    <style name="bottom_gl" parent="@style/Guideline.Axelliant.Bottom" />
+        <style name="bottom_gl" parent="@style/Guideline.Axelliant.Bottom" />
 
-    <style name="gl_bott">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:orientation">horizontal</item>
-        <item name="layout_constraintGuide_percent">@integer/gl_bott</item>
+        <style name="gl_bott">
+            <item name="android:layout_width">wrap_content</item>
+            <item name="android:layout_height">wrap_content</item>
+            <item name="android:orientation">horizontal</item>
+            <item name="layout_constraintGuide_percent">@integer/gl_bott</item>
+        </style>
+
+        <style name="top_gl" parent="@style/Guideline.Axelliant.Top" />
+
+        <style name="Theme.App" parent="Theme.AppCompat.Light.NoActionBar">
+            <item name="colorSecondary">@color/ds_primary</item>
+            <item name="colorOnSecondary">@color/ds_primary</item>
+            <item name="colorOnSurface">@color/ds_primary</item>
+        </style>
+
+        <style name="ShapeAppearanceOverlay.Demo" parent="@style/ShapeAppearance.Fluent2.BottomSheet">
+            <item name="cornerSize">@dimen/ds_radius_md</item>
+            <item name="cornerFamily">rounded</item>
+        </style>
+        <style name="CheckBoxStyle" parent="@style/Widget.Fluent2.CheckBox">
+            <item name="android:layout_width">wrap_content</item>
+            <item name="android:layout_height">wrap_content</item>
+            <item name="titleTextStyle">@style/Text.Fluent2.Caption.Primary</item>
+            <item name="buttonTint">@color/ds_text_primary</item>
+        </style>
+        <style name="ShapeAppearanceOverlay.App.CornerSize10Percent" parent="">
+            <item name="cornerSize">2%</item>
+        </style>
+
+        <style name="CustomDatePickerDialog" parent="Theme.AppCompat.Light.Dialog">
+            <!-- Customize your theme -->
+            <item name="android:datePickerDialogTheme">@style/CustomDatePicker</item>
+        </style>
+
+        <style name="CustomDatePicker" parent="android:Widget.Material.DatePicker">
+            <item name="android:headerBackground">@color/sky_blue</item>
+            <item name="android:calendarTextColor">@color/ds_text_primary</item>
+        </style>
+
+        <style name="my_dialog_theme" parent="ThemeOverlay.AppCompat.Dialog">
+            <item name="colorAccent">@color/ds_primary</item>                   <!--header background-->
+            <item name="android:windowBackground">@color/ds_neutral_white</item>     <!--calendar background-->
+            <item name="android:colorControlActivated">@color/ds_primary</item> <!--selected day-->
+            <item name="android:textColorPrimary">@color/ds_text_primary</item> <!--days of the month-->
+            <item name="android:textColorSecondary">@color/ds_primary</item>    <!--days of the week-->
+        </style>
+
+        <style name="ThemeOverlay_Demo_BottomSheetDialog" parent="@style/ThemeOverlay.Fluent2.BottomSheetDialog" />
+        <style name="Widget.Demo.BottomSheet" parent="@style/Widget.Fluent2.BottomSheet" />
+
+        <!-- this is for your dialog. To make round corners -->
+        <style name="alert_dialog_round_corners" parent="@style/Theme.AppCompat.Light.Dialog.Alert">
+            <item name="android:windowBackground">@drawable/dialog_background</item>
+            <item name="android:buttonBarButtonStyle">@style/alert_dialog_button_style</item>
+        </style>
+        <!-- this one is for your buttons. To make them NOT TRANSPARENT -->
+        <style name="alert_dialog_button_style" parent="">
+            <item name="android:textColor">@color/ds_text_primary</item>
+            <item name="android:layout_margin">8dp</item>
+            <item name="android:layout_marginTop">20dp</item>
+            <item name="android:background">@drawable/alert_dialog_button_background</item>
+            <item name="android:layout_gravity">center</item>
+        </style>
+    <style name="MyDatePickerTheme"
+            parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
+
+            <item name="colorPrimary">@color/sky_blue</item>
+            <item name="colorOnPrimary">@android:color/white</item>
+
+        </style>
+
+    <!-- Merged from design_system_styles.xml -->
+    <style name="TextAppearance.Axelliant" parent="TextAppearance.MaterialComponents.Subtitle1">
+            <item name="android:textColor">@color/ds_text_primary</item>
+            <item name="android:letterSpacing">0</item>
+            <item name="android:includeFontPadding">false</item>
+            <item name="android:fontFamily">sans-serif</item>
+        </style>
+
+        <style name="TextAppearance.Axelliant.Display" parent="@style/TextAppearance.Axelliant">
+            <item name="android:textSize">@dimen/ds_text_display</item>
+            <item name="android:fontFamily">sans-serif-medium</item>
+        </style>
+
+        <style name="TextAppearance.Axelliant.Heading" parent="@style/TextAppearance.Axelliant">
+            <item name="android:textSize">@dimen/ds_text_heading</item>
+            <item name="android:fontFamily">sans-serif-medium</item>
+        </style>
+
+        <style name="TextAppearance.Axelliant.Title" parent="@style/TextAppearance.Axelliant">
+            <item name="android:textSize">@dimen/ds_text_title</item>
+            <item name="android:fontFamily">sans-serif-medium</item>
+        </style>
+
+        <style name="TextAppearance.Axelliant.Subheading" parent="@style/TextAppearance.Axelliant">
+            <item name="android:textColor">@color/ds_text_secondary</item>
+            <item name="android:textSize">@dimen/ds_text_subheading</item>
+            <item name="android:fontFamily">sans-serif-medium</item>
+        </style>
+
+        <style name="TextAppearance.Axelliant.Body" parent="@style/TextAppearance.Axelliant">
+            <item name="android:textColor">@color/ds_text_secondary</item>
+            <item name="android:textSize">@dimen/ds_text_body</item>
+            <item name="android:fontFamily">sans-serif</item>
+        </style>
+
+        <style name="TextAppearance.Axelliant.Caption" parent="@style/TextAppearance.Axelliant">
+            <item name="android:textColor">@color/ds_text_muted</item>
+            <item name="android:textSize">@dimen/ds_text_caption</item>
+            <item name="android:fontFamily">sans-serif</item>
+        </style>
+
+        <style name="TextAppearance.Fluent2" parent="@style/TextAppearance.Axelliant" />
+        <style name="TextAppearance.Fluent2.Display" parent="@style/TextAppearance.Axelliant.Display" />
+        <style name="TextAppearance.Fluent2.Heading" parent="@style/TextAppearance.Axelliant.Heading" />
+        <style name="TextAppearance.Fluent2.Title" parent="@style/TextAppearance.Axelliant.Title" />
+        <style name="TextAppearance.Fluent2.Subheading" parent="@style/TextAppearance.Axelliant.Subheading" />
+        <style name="TextAppearance.Fluent2.Body" parent="@style/TextAppearance.Axelliant.Body" />
+        <style name="TextAppearance.Fluent2.Caption" parent="@style/TextAppearance.Axelliant.Caption" />
+        <style name="TextAppearance.Fluent2.FormLabel" parent="@style/TextAppearance.Axelliant.Subheading" />
+
+        <style name="TextAppearance.Fluent2.Body.Inverse.Strong" parent="@style/TextAppearance.Fluent2.Body">
+            <item name="android:textColor">@color/ds_neutral_white</item>
+            <item name="android:textSize">@dimen/text_size_12</item>
+            <item name="android:fontFamily">sans-serif-medium</item>
+            <item name="fontFamily">sans-serif-medium</item>
+        </style>
+
+        <style name="TextAppearance.Fluent2.Caption.Primary.Strong" parent="@style/TextAppearance.Fluent2.Caption">
+            <item name="android:textColor">@color/ds_text_primary</item>
+            <item name="android:textSize">@dimen/text_size_10</item>
+            <item name="android:fontFamily">sans-serif-medium</item>
+            <item name="fontFamily">sans-serif-medium</item>
+        </style>
+
+        <style name="Text.Axelliant">
+            <item name="android:layout_width">wrap_content</item>
+            <item name="android:layout_height">wrap_content</item>
+        </style>
+
+        <style name="Text.Axelliant.Display" parent="@style/Text.Axelliant">
+            <item name="android:textAppearance">@style/TextAppearance.Axelliant.Display</item>
+        </style>
+
+        <style name="Text.Axelliant.Heading" parent="@style/Text.Axelliant">
+            <item name="android:textAppearance">@style/TextAppearance.Axelliant.Heading</item>
+        </style>
+
+        <style name="Text.Axelliant.Title" parent="@style/Text.Axelliant">
+            <item name="android:textAppearance">@style/TextAppearance.Axelliant.Title</item>
+        </style>
+
+        <style name="Text.Axelliant.Subheading" parent="@style/Text.Axelliant">
+            <item name="android:textAppearance">@style/TextAppearance.Axelliant.Subheading</item>
+        </style>
+
+        <style name="Text.Axelliant.Body" parent="@style/Text.Axelliant">
+            <item name="android:textAppearance">@style/TextAppearance.Axelliant.Body</item>
+        </style>
+
+        <style name="Text.Axelliant.Caption" parent="@style/Text.Axelliant">
+            <item name="android:textAppearance">@style/TextAppearance.Axelliant.Caption</item>
+        </style>
+
+        <style name="Text.Axelliant.FormLabel" parent="@style/Text.Axelliant.Subheading">
+            <item name="android:textColor">@color/ds_text_secondary</item>
+        </style>
+
+        <style name="Text.Fluent2" parent="@style/Text.Axelliant" />
+        <style name="Text.Fluent2.Display" parent="@style/Text.Axelliant.Display" />
+        <style name="Text.Fluent2.Heading" parent="@style/Text.Axelliant.Heading" />
+        <style name="Text.Fluent2.Title" parent="@style/Text.Axelliant.Title" />
+        <style name="Text.Fluent2.Subheading" parent="@style/Text.Axelliant.Subheading" />
+        <style name="Text.Fluent2.Body" parent="@style/Text.Axelliant.Body" />
+        <style name="Text.Fluent2.Caption" parent="@style/Text.Axelliant.Caption" />
+        <style name="Text.Fluent2.FormLabel" parent="@style/Text.Axelliant.FormLabel" />
+
+        <style name="Text.Fluent2.Caption.Inverse" parent="@style/Text.Fluent2.Caption">
+            <item name="android:textColor">@color/ds_neutral_white</item>
+            <item name="android:textSize">@dimen/text_size_10</item>
+        </style>
+
+        <style name="Text.Fluent2.Caption.Inverse.Strong" parent="@style/Text.Fluent2.Caption.Inverse">
+            <item name="android:fontFamily">sans-serif-medium</item>
+            <item name="fontFamily">sans-serif-medium</item>
+        </style>
+
+        <style name="Text.Fluent2.Caption.Muted" parent="@style/Text.Fluent2.Caption">
+            <item name="android:textColor">@color/ds_text_muted</item>
+            <item name="android:textSize">@dimen/text_size_10</item>
+        </style>
+
+        <style name="Text.Fluent2.Caption.Muted.Strong" parent="@style/Text.Fluent2.Caption.Muted">
+            <item name="android:fontFamily">sans-serif-medium</item>
+            <item name="fontFamily">sans-serif-medium</item>
+        </style>
+
+        <style name="Text.Fluent2.Caption.Primary.Strong" parent="@style/Text.Fluent2.Caption">
+            <item name="android:textColor">@color/ds_text_primary</item>
+            <item name="android:textSize">@dimen/text_size_10</item>
+            <item name="android:fontFamily">sans-serif-medium</item>
+            <item name="fontFamily">sans-serif-medium</item>
+        </style>
+
+        <style name="Text.Fluent2.Caption.Primary" parent="@style/Text.Fluent2.Caption">
+            <item name="android:textColor">@color/ds_text_primary</item>
+            <item name="android:textSize">@dimen/text_size_10</item>
+        </style>
+
+        <style name="Text.Fluent2.Body.Inverse" parent="@style/Text.Fluent2.Body">
+            <item name="android:textColor">@color/ds_neutral_white</item>
+            <item name="android:textSize">@dimen/text_size_12</item>
+        </style>
+
+        <style name="Text.Fluent2.Body.Inverse.Strong" parent="@style/Text.Fluent2.Body.Inverse">
+            <item name="android:fontFamily">sans-serif-medium</item>
+            <item name="fontFamily">sans-serif-medium</item>
+        </style>
+
+        <style name="Text.Fluent2.Body.Secondary" parent="@style/Text.Fluent2.Body">
+            <item name="android:textColor">@color/ds_text_secondary</item>
+            <item name="android:textSize">@dimen/text_size_12</item>
+        </style>
+
+        <style name="Text.Fluent2.Body.Primary.Strong" parent="@style/Text.Fluent2.Body">
+            <item name="android:textColor">@color/ds_text_primary</item>
+            <item name="android:textSize">@dimen/text_size_12</item>
+            <item name="android:fontFamily">sans-serif-medium</item>
+            <item name="fontFamily">sans-serif-medium</item>
+        </style>
+
+        <style name="Text.Fluent2.Body.Muted" parent="@style/Text.Fluent2.Body">
+            <item name="android:textColor">@color/ds_text_muted</item>
+            <item name="android:textSize">@dimen/_13ssp</item>
+        </style>
+
+        <style name="Text.Fluent2.Subheading.Primary.Strong" parent="@style/Text.Fluent2.Subheading">
+            <item name="android:textColor">@color/ds_text_primary</item>
+            <item name="android:textSize">@dimen/text_size_15</item>
+            <item name="android:fontFamily">sans-serif-medium</item>
+            <item name="fontFamily">sans-serif-medium</item>
+        </style>
+
+        <style name="Text.Fluent2.Subheading.Inverse.Strong" parent="@style/Text.Fluent2.Subheading">
+            <item name="android:textColor">@color/ds_neutral_white</item>
+            <item name="android:textSize">@dimen/text_size_15</item>
+            <item name="android:fontFamily">sans-serif-medium</item>
+            <item name="fontFamily">sans-serif-medium</item>
+        </style>
+
+        <style name="Text.Fluent2.Title.Inverse.Strong" parent="@style/Text.Fluent2.Title">
+            <item name="android:textColor">@color/ds_neutral_white</item>
+            <item name="android:textSize">@dimen/text_size_18</item>
+            <item name="android:fontFamily">sans-serif-medium</item>
+            <item name="fontFamily">sans-serif-medium</item>
+        </style>
+
+        <style name="Text.Fluent2.Title.Primary.Strong" parent="@style/Text.Fluent2.Title">
+            <item name="android:textColor">@color/ds_text_primary</item>
+            <item name="android:textSize">@dimen/text_size_18</item>
+            <item name="android:fontFamily">sans-serif-medium</item>
+            <item name="fontFamily">sans-serif-medium</item>
+        </style>
+
+        <style name="Widget.Fluent2.TextView">
+            <item name="android:textAppearance">@style/TextAppearance.Fluent2.Body</item>
+            <item name="android:textColor">@color/ds_text_primary</item>
+            <item name="android:includeFontPadding">false</item>
+            <item name="android:letterSpacing">0</item>
+        </style>
+
+        <style name="Layout" />
+        <style name="Layout.Axelliant" />
+
+        <style name="Layout.Axelliant.Screen">
+            <item name="android:background">@color/ds_background</item>
+            <item name="android:layoutDirection">ltr</item>
+            <item name="android:textDirection">ltr</item>
+        </style>
+
+        <style name="Layout.Fluent2" parent="@style/Layout.Axelliant" />
+        <style name="Layout.Fluent2.Screen" parent="@style/Layout.Axelliant.Screen" />
+
+        <style name="Guideline" />
+        <style name="Guideline.Axelliant" />
+
+        <style name="Guideline.Axelliant.Start">
+            <item name="android:layout_width">wrap_content</item>
+            <item name="android:layout_height">wrap_content</item>
+            <item name="android:orientation">vertical</item>
+            <item name="layout_constraintGuide_percent">@integer/app_gl_left</item>
+        </style>
+
+        <style name="Guideline.Axelliant.End">
+            <item name="android:layout_width">wrap_content</item>
+            <item name="android:layout_height">wrap_content</item>
+            <item name="android:orientation">vertical</item>
+            <item name="layout_constraintGuide_percent">@integer/app_gl_right</item>
+        </style>
+
+        <style name="Guideline.Axelliant.Top">
+            <item name="android:layout_width">wrap_content</item>
+            <item name="android:layout_height">wrap_content</item>
+            <item name="android:orientation">horizontal</item>
+            <item name="layout_constraintGuide_percent">@integer/app_gl_top</item>
+        </style>
+
+        <style name="Guideline.Axelliant.Bottom">
+            <item name="android:layout_width">wrap_content</item>
+            <item name="android:layout_height">wrap_content</item>
+            <item name="android:orientation">horizontal</item>
+            <item name="layout_constraintGuide_percent">@integer/app_gl_bottom</item>
+        </style>
+
+        <style name="Guideline.Fluent2" parent="@style/Guideline.Axelliant" />
+        <style name="Guideline.Fluent2.Start" parent="@style/Guideline.Axelliant.Start" />
+        <style name="Guideline.Fluent2.End" parent="@style/Guideline.Axelliant.End" />
+        <style name="Guideline.Fluent2.Top" parent="@style/Guideline.Axelliant.Top" />
+        <style name="Guideline.Fluent2.Bottom" parent="@style/Guideline.Axelliant.Bottom" />
+
+        <style name="Widget.Axelliant" />
+        <style name="Widget.Axelliant.Button" />
+
+        <style name="Widget.Axelliant.InputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+            <item name="android:layout_width">match_parent</item>
+            <item name="android:layout_height">wrap_content</item>
+            <item name="boxBackgroundColor">@color/ds_surface</item>
+            <item name="boxCornerRadiusTopStart">@dimen/ds_radius_lg</item>
+            <item name="boxCornerRadiusTopEnd">@dimen/ds_radius_lg</item>
+            <item name="boxCornerRadiusBottomStart">@dimen/ds_radius_lg</item>
+            <item name="boxCornerRadiusBottomEnd">@dimen/ds_radius_lg</item>
+            <item name="boxStrokeColor">@color/ds_input_stroke</item>
+            <item name="boxStrokeWidth">@dimen/_1sdp</item>
+            <item name="boxStrokeWidthFocused">@dimen/_1sdp</item>
+            <item name="hintTextColor">@color/ds_input_hint</item>
+            <item name="errorTextColor">@color/ds_error</item>
+            <item name="startIconTint">@color/ds_text_muted</item>
+            <item name="endIconTint">@color/ds_text_muted</item>
+        </style>
+
+        <style name="Widget.Axelliant.InputEditText">
+            <item name="android:layout_width">match_parent</item>
+            <item name="android:layout_height">wrap_content</item>
+            <item name="android:minHeight">@dimen/ds_input_height</item>
+            <item name="android:paddingStart">@dimen/ds_space_12</item>
+            <item name="android:paddingEnd">@dimen/ds_space_12</item>
+            <item name="android:textAppearance">@style/TextAppearance.Axelliant.Body</item>
+            <item name="android:textColor">@color/ds_text_primary</item>
+            <item name="android:textColorHint">@color/ds_text_muted</item>
+            <item name="android:singleLine">true</item>
+        </style>
+
+        <style name="Widget.Axelliant.Button.Primary" parent="Widget.MaterialComponents.Button">
+            <item name="android:layout_width">match_parent</item>
+            <item name="android:layout_height">@dimen/ds_button_height</item>
+            <item name="android:minHeight">@dimen/ds_button_height</item>
+            <item name="fluentButtonStyle">primary</item>
+            <item name="android:textAppearance">@style/TextAppearance.Axelliant.Subheading</item>
+            <item name="android:textColor">@color/ds_button_primary_text</item>
+            <item name="android:textAllCaps">false</item>
+            <item name="textAllCaps">false</item>
+            <item name="backgroundTint">@color/ds_button_primary_background</item>
+            <item name="cornerRadius">@dimen/ds_radius_lg</item>
+            <item name="iconTint">@color/ds_button_primary_text</item>
+            <item name="rippleColor">@color/ds_primary_pressed</item>
+        </style>
+
+        <style name="Widget.Axelliant.Button.Secondary" parent="Widget.MaterialComponents.Button.OutlinedButton">
+            <item name="android:layout_width">match_parent</item>
+            <item name="android:layout_height">@dimen/ds_button_height</item>
+            <item name="android:minHeight">@dimen/ds_button_height</item>
+            <item name="fluentButtonStyle">outline</item>
+            <item name="android:textAppearance">@style/TextAppearance.Axelliant.Subheading</item>
+            <item name="android:textColor">@color/ds_button_secondary_text</item>
+            <item name="android:textAllCaps">false</item>
+            <item name="textAllCaps">false</item>
+            <item name="backgroundTint">@color/ds_button_secondary_background</item>
+            <item name="cornerRadius">@dimen/ds_radius_lg</item>
+            <item name="strokeColor">@color/ds_outline</item>
+            <item name="strokeWidth">@dimen/_1sdp</item>
+            <item name="iconTint">@color/ds_button_secondary_text</item>
+        </style>
+
+        <style name="Widget.Axelliant.Button.Text" parent="Widget.MaterialComponents.Button.TextButton">
+            <item name="android:layout_width">wrap_content</item>
+            <item name="android:layout_height">@dimen/ds_button_height</item>
+            <item name="fluentButtonStyle">subtle</item>
+            <item name="android:textAppearance">@style/TextAppearance.Axelliant.Subheading</item>
+            <item name="android:textColor">@color/ds_primary</item>
+            <item name="android:fontFamily">sans-serif-medium</item>
+            <item name="android:textAllCaps">false</item>
+            <item name="textAllCaps">false</item>
+            <item name="iconSize">@dimen/ds_button_inline_icon_size</item>
+            <item name="iconTint">@color/ds_primary</item>
+        </style>
+
+        <style name="Widget.Axelliant.Button.Icon" parent="@style/Widget.Axelliant.Button.Text">
+            <item name="android:layout_width">@dimen/_40sdp</item>
+            <item name="android:layout_height">@dimen/_40sdp</item>
+            <item name="android:minWidth">0dp</item>
+            <item name="android:minHeight">0dp</item>
+            <item name="fluentButtonStyle">subtle</item>
+            <item name="iconSize">@dimen/ds_icon_button_icon_size</item>
+            <item name="iconTint">@color/ds_text_primary</item>
+        </style>
+
+        <style name="Widget.Axelliant.Button.Destructive" parent="@style/Widget.Axelliant.Button.Primary">
+            <item name="fluentButtonStyle">destructive</item>
+            <item name="android:textColor">@color/ds_neutral_white</item>
+            <item name="iconTint">@color/ds_neutral_white</item>
+        </style>
+
+        <style name="Widget.Fluent2" parent="@style/Widget.Axelliant" />
+        <style name="Widget.Fluent2.InputLayout" parent="@style/Widget.Axelliant.InputLayout" />
+        <style name="Widget.Fluent2.InputEditText" parent="@style/Widget.Axelliant.InputEditText" />
+        <style name="Widget.Fluent2.Button" parent="@style/Widget.Axelliant.Button" />
+        <style name="Widget.Fluent2.Button.Primary" parent="@style/Widget.Axelliant.Button.Primary" />
+        <style name="Widget.Fluent2.Button.Secondary" parent="@style/Widget.Axelliant.Button.Secondary" />
+        <style name="Widget.Fluent2.Button.Text" parent="@style/Widget.Axelliant.Button.Text" />
+        <style name="Widget.Fluent2.Button.Icon" parent="@style/Widget.Axelliant.Button.Icon" />
+        <style name="Widget.Fluent2.Button.Destructive" parent="@style/Widget.Axelliant.Button.Destructive" />
+
+        <style name="Widget.Axelliant.ProgressBar">
+            <item name="android:indeterminateTint">@color/ds_primary</item>
+            <item name="android:progressTint">@color/ds_primary</item>
+            <item name="android:secondaryProgressTint">@color/ds_primary_container</item>
+        </style>
+
+        <style name="Widget.Fluent2.ProgressBar" parent="@style/Widget.Axelliant.ProgressBar" />
+
+        <style name="Widget.Axelliant.CheckBox" parent="Base.Widget.AppCompat.CompoundButton.CheckBox">
+            <item name="android:textAppearance">@style/TextAppearance.Fluent2.Body</item>
+            <item name="android:textColor">@color/ds_text_primary</item>
+            <item name="android:buttonTint">@color/ds_primary</item>
+            <item name="buttonTint">@color/ds_primary</item>
+        </style>
+
+        <style name="Widget.Fluent2.CheckBox" parent="@style/Widget.Axelliant.CheckBox" />
+
+        <style name="Widget.Axelliant.Card" parent="Widget.MaterialComponents.CardView">
+            <item name="android:layout_width">match_parent</item>
+            <item name="android:layout_height">wrap_content</item>
+            <item name="cardBackgroundColor">@color/ds_surface</item>
+            <item name="cardCornerRadius">@dimen/ds_radius_lg</item>
+            <item name="cardElevation">@dimen/ds_card_elevation</item>
+            <item name="strokeColor">@color/ds_outline</item>
+            <item name="strokeWidth">@dimen/_1sdp</item>
+        </style>
+
+        <style name="Widget.Axelliant.IconButton" parent="@style/Widget.Axelliant.Button.Icon">
+            <item name="android:layout_width">@dimen/_36sdp</item>
+            <item name="android:layout_height">@dimen/_36sdp</item>
+            <item name="android:insetLeft">0dp</item>
+            <item name="android:insetTop">0dp</item>
+            <item name="android:insetRight">0dp</item>
+            <item name="android:insetBottom">0dp</item>
+            <item name="android:minWidth">0dp</item>
+            <item name="android:text"></item>
+            <item name="iconGravity">textStart</item>
+            <item name="iconPadding">0dp</item>
+            <item name="iconSize">@dimen/ds_icon_button_icon_size</item>
+            <item name="iconTint">@color/ds_text_primary</item>
+        </style>
+
+        <style name="ShapeAppearance" />
+        <style name="ShapeAppearance.Axelliant" />
+
+        <style name="ShapeAppearance.Axelliant.BottomSheet" parent="">
+            <item name="cornerFamily">rounded</item>
+            <item name="cornerSize">@dimen/ds_radius_md</item>
+        </style>
+
+        <style name="Widget.Axelliant.BottomSheet" parent="Widget.MaterialComponents.BottomSheet">
+            <item name="shapeAppearanceOverlay">@style/ShapeAppearance.Axelliant.BottomSheet</item>
+        </style>
+
+        <style name="Widget.Fluent2.Card" parent="@style/Widget.Axelliant.Card" />
+        <style name="Widget.Fluent2.IconButton" parent="@style/Widget.Axelliant.IconButton" />
+        <style name="ShapeAppearance.Fluent2.BottomSheet" parent="@style/ShapeAppearance.Axelliant.BottomSheet" />
+        <style name="Widget.Fluent2.BottomSheet" parent="@style/Widget.Axelliant.BottomSheet" />
+
+        <style name="ThemeOverlay.Axelliant.BottomSheetDialog" parent="ThemeOverlay.MaterialComponents.BottomSheetDialog">
+            <item name="bottomSheetStyle">@style/Widget.Axelliant.BottomSheet</item>
+        </style>
+
+        <style name="ThemeOverlay.Fluent2.BottomSheetDialog" parent="@style/ThemeOverlay.Axelliant.BottomSheetDialog" />
+
+    <!-- Merged from internalapps_styles.xml -->
+    <style name="TextAppearance" />
+        <style name="TextAppearance.InternalApps" parent="@style/TextAppearance.Axelliant" />
+        <style name="TextAppearance.InternalApps.BottomNav">
+            <item name="android:textSize">@dimen/_8ssp</item>
+            <item name="android:letterSpacing">0</item>
+            <item name="android:fontFamily">@font/poppins_medium</item>
+            <item name="fontFamily">@font/poppins_medium</item>
+        </style>
+
+        <style name="TextAppearance.InternalApps.Display" parent="@style/TextAppearance.Axelliant.Display" />
+
+        <style name="TextAppearance.InternalApps.Heading" parent="@style/TextAppearance.Axelliant.Heading" />
+
+        <style name="TextAppearance.InternalApps.Title" parent="@style/TextAppearance.Axelliant.Title" />
+
+        <style name="TextAppearance.InternalApps.Subheading" parent="@style/TextAppearance.Axelliant.Subheading" />
+
+        <style name="TextAppearance.InternalApps.Body" parent="@style/TextAppearance.Axelliant.Body" />
+
+        <style name="TextAppearance.InternalApps.Caption" parent="@style/TextAppearance.Axelliant.Caption" />
+
+        <style name="Text" />
+        <style name="Text.InternalApps" parent="@style/Text.Axelliant" />
+
+        <style name="Text.InternalApps.Display" parent="@style/Text.Axelliant.Display" />
+
+        <style name="Text.InternalApps.Heading" parent="@style/Text.Axelliant.Heading" />
+
+        <style name="Text.InternalApps.Title" parent="@style/Text.Axelliant.Title" />
+
+        <style name="Text.InternalApps.Subheading" parent="@style/Text.Axelliant.Subheading" />
+
+        <style name="Text.InternalApps.Body" parent="@style/Text.Axelliant.Body" />
+
+        <style name="Text.InternalApps.Caption" parent="@style/Text.Axelliant.Caption" />
+
+        <style name="Text.InternalApps.FormLabel" parent="@style/Text.Axelliant.FormLabel" />
+
+        <style name="Widget" />
+        <style name="Widget.InternalApps" />
+        <style name="Widget.InternalApps.Button" />
+        <style name="Widget.InternalApps.Dashboard" />
+
+        <style name="Widget.InternalApps.InputLayout" parent="@style/Widget.Axelliant.InputLayout" />
+
+        <style name="Widget.InternalApps.InputEditText" parent="@style/Widget.Axelliant.InputEditText" />
+
+        <style name="Widget.InternalApps.Button.Primary" parent="@style/Widget.Axelliant.Button.Primary" />
+
+        <style name="Widget.InternalApps.Button.Secondary" parent="@style/Widget.Axelliant.Button.Secondary" />
+
+        <style name="Widget.InternalApps.Button.Text" parent="@style/Widget.Axelliant.Button.Text" />
+
+        <style name="Widget.InternalApps.Button.Icon" parent="@style/Widget.Axelliant.Button.Icon" />
+
+        <style name="Widget.InternalApps.Button.Destructive" parent="@style/Widget.Axelliant.Button.Destructive" />
+
+        <style name="Widget.InternalApps.Card" parent="@style/Widget.Axelliant.Card" />
+
+        <style name="Widget.InternalApps.Dashboard.IconButton" parent="@style/Widget.Axelliant.IconButton" />
+
+        <style name="Widget.InternalApps.BottomNav.ActiveIndicator" parent="">
+            <item name="android:color">@color/ds_primary_container</item>
+            <item name="android:width">@dimen/_52sdp</item>
+            <item name="android:height">@dimen/_28sdp</item>
+            <item name="shapeAppearance">@style/ShapeAppearance.InternalApps.BottomNavIndicator</item>
+        </style>
+
+        <style name="ShapeAppearance.InternalApps.BottomNavIndicator" parent="">
+            <item name="cornerFamily">rounded</item>
+            <item name="cornerSize">@dimen/_14sdp</item>
+        </style>
+
+        <style name="TextAppearance.InternalApps.BottomNav.Active">
+            <item name="android:textSize">@dimen/ds_text_caption</item>
+            <item name="android:letterSpacing">0</item>
+            <item name="android:fontFamily">sans-serif-medium</item>
+            <item name="fontFamily">sans-serif-medium</item>
+        </style>
+
+        <style name="TextAppearance.InternalApps.BottomNav.Inactive">
+            <item name="android:textSize">@dimen/ds_text_caption</item>
+            <item name="android:letterSpacing">0</item>
+            <item name="android:fontFamily">sans-serif-medium</item>
+            <item name="fontFamily">sans-serif-medium</item>
+        </style>
+
+
+
+
+        <style name="ia_start_gl" parent="@style/Guideline.Axelliant.Start" />
+
+        <style name="ia_end_gl" parent="@style/Guideline.Axelliant.End" />
+
+        <style name="ia_bottom_gl" parent="@style/Guideline.Axelliant.Bottom" />
+        <style name="ia_top_gl" parent="@style/Guideline.Axelliant.Top" />
+
+    <!-- Merged from themes.xml -->
+    <style name="ActivityTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/ds_primary</item>
+        <item name="colorPrimaryDark">@color/ds_primary_pressed</item>
+        <item name="colorPrimaryVariant">@color/ds_primary_pressed</item>
+        <item name="colorSecondary">@color/ds_secondary</item>
+        <item name="colorOnPrimary">@color/ds_on_primary</item>
+        <item name="colorOnSecondary">@color/ds_text_primary</item>
+        <item name="colorOnBackground">@color/ds_text_primary</item>
+        <item name="colorOnSurface">@color/ds_text_primary</item>
+        <item name="colorSurface">@color/ds_surface</item>
+        <item name="android:statusBarColor">@color/ds_background</item>
+        <item name="android:navigationBarColor">@color/ds_background</item>
+        <item name="android:windowBackground">@color/ds_background</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
+        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearanceOverlay.Demo</item>
+        <item name="background">@color/ds_background</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="textInputStyle">@style/Widget.Fluent2.InputLayout</item>
+        <item name="materialButtonStyle">@style/Widget.Fluent2.Button.Primary</item>
     </style>
 
-    <style name="top_gl" parent="@style/Guideline.Axelliant.Top" />
+    <!-- Merged from internalapps_themes.xml -->
+    <style name="Theme.MyApp.Splash" parent="Theme.Axelliant" />
 
-    <style name="Theme.App" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorSecondary">@color/ds_primary</item>
-        <item name="colorOnSecondary">@color/ds_primary</item>
-        <item name="colorOnSurface">@color/ds_primary</item>
-    </style>
+        <style name="Theme.Axelliant" parent="ActivityTheme">
+            <item name="windowActionBar">false</item>
+            <item name="windowNoTitle">true</item>
+            <item name="android:windowActionBar">false</item>
+            <item name="android:windowNoTitle">true</item>
 
-    <style name="ShapeAppearanceOverlay.Demo" parent="@style/ShapeAppearance.Fluent2.BottomSheet">
-        <item name="cornerSize">@dimen/ds_radius_md</item>
-        <item name="cornerFamily">rounded</item>
-    </style>
-    <style name="CheckBoxStyle" parent="@style/Widget.Fluent2.CheckBox">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="titleTextStyle">@style/Text.Fluent2.Caption.Primary</item>
-        <item name="buttonTint">@color/ds_text_primary</item>
-    </style>
-    <style name="ShapeAppearanceOverlay.App.CornerSize10Percent" parent="">
-        <item name="cornerSize">2%</item>
-    </style>
+            <item name="colorPrimary">@color/ds_primary</item>
+            <item name="colorPrimaryVariant">@color/ds_primary_pressed</item>
+            <item name="colorSecondary">@color/ds_secondary</item>
+            <item name="colorSecondaryVariant">@color/ds_secondary</item>
 
-    <style name="CustomDatePickerDialog" parent="Theme.AppCompat.Light.Dialog">
-        <!-- Customize your theme -->
-        <item name="android:datePickerDialogTheme">@style/CustomDatePicker</item>
-    </style>
+            <item name="android:fontFamily">sans-serif</item>
 
-    <style name="CustomDatePicker" parent="android:Widget.Material.DatePicker">
-        <item name="android:headerBackground">@color/sky_blue</item>
-        <item name="android:calendarTextColor">@color/ds_text_primary</item>
-    </style>
+            <item name="android:statusBarColor">@color/ds_background</item>
+            <item name="android:navigationBarColor">@color/ds_background</item>
+            <item name="android:windowBackground">@color/ds_background</item>
+            <item name="colorSurface">@color/ds_surface</item>
 
-    <style name="my_dialog_theme" parent="ThemeOverlay.AppCompat.Dialog">
-        <item name="colorAccent">@color/ds_primary</item>                   <!--header background-->
-        <item name="android:windowBackground">@color/ds_neutral_white</item>     <!--calendar background-->
-        <item name="android:colorControlActivated">@color/ds_primary</item> <!--selected day-->
-        <item name="android:textColorPrimary">@color/ds_text_primary</item> <!--days of the month-->
-        <item name="android:textColorSecondary">@color/ds_primary</item>    <!--days of the week-->
-    </style>
+            <item name="colorOnPrimary">@color/ds_on_primary</item>
+            <item name="colorOnSecondary">@color/ds_text_primary</item>
+            <item name="colorOnBackground">@color/ds_text_primary</item>
+            <item name="colorOnSurface">@color/ds_text_primary</item>
+            <item name="colorControlNormal">@color/ds_text_muted</item>
+            <item name="textInputStyle">@style/Widget.Fluent2.InputLayout</item>
+            <item name="materialButtonStyle">@style/Widget.Fluent2.Button.Primary</item>
 
-    <style name="ThemeOverlay_Demo_BottomSheetDialog" parent="@style/ThemeOverlay.Fluent2.BottomSheetDialog" />
-    <style name="Widget.Demo.BottomSheet" parent="@style/Widget.Fluent2.BottomSheet" />
+            <item name="android:windowLightStatusBar">true</item>
+            <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
+        </style>
 
-    <!-- this is for your dialog. To make round corners -->
-    <style name="alert_dialog_round_corners" parent="@style/Theme.AppCompat.Light.Dialog.Alert">
-        <item name="android:windowBackground">@drawable/dialog_background</item>
-        <item name="android:buttonBarButtonStyle">@style/alert_dialog_button_style</item>
-    </style>
-    <!-- this one is for your buttons. To make them NOT TRANSPARENT -->
-    <style name="alert_dialog_button_style" parent="">
-        <item name="android:textColor">@color/ds_text_primary</item>
-        <item name="android:layout_margin">8dp</item>
-        <item name="android:layout_marginTop">20dp</item>
-        <item name="android:background">@drawable/alert_dialog_button_background</item>
-        <item name="android:layout_gravity">center</item>
-    </style>
-<style name="MyDatePickerTheme"
-        parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
+        <style name="Theme.InternalApps" parent="Theme.Axelliant" />
 
-        <item name="colorPrimary">@color/sky_blue</item>
-        <item name="colorOnPrimary">@android:color/white</item>
+        <style name="App.Custom.Indicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+            <item name="android:color">@color/button_bg_color</item>
+            <item name="android:width">@dimen/_50sdp</item>
+            <item name="android:height">@dimen/_25sdp</item>
+            <item name="fabCradleRoundedCornerRadius">@dimen/_10sdp</item>
+        </style>
 
-    </style>
+    <!-- Merged from internalapps_attrs.xml -->
+    <declare-styleable name="AppButtonView">
+            <attr name="icon" />
+            <attr name="iconTint" />
+            <attr name="iconPadding" />
+            <attr name="iconSize" />
+            <attr name="iconGravity" />
+            <attr name="noBackground" format="boolean" />
+            <attr name="fluentButtonStyle" />
+            <attr name="backgroundTint" />
+            <attr name="cornerRadius" />
+            <attr name="strokeColor" />
+            <attr name="strokeWidth" />
+        </declare-styleable>
 
+        <attr name="fluentButtonStyle" format="enum">
+            <enum name="primary" value="0" />
+            <enum name="outline" value="1" />
+            <enum name="subtle" value="2" />
+            <enum name="destructive" value="3" />
+        </attr>
+
+        <declare-styleable name="AppTextFieldView">
+            <attr name="icon" />
+            <attr name="iconTint" />
+            <attr name="iconPadding" />
+            <attr name="iconGravity" />
+        </declare-styleable>
+
+        <attr name="fluentTextStyle" format="enum">
+            <enum name="display" value="0" />
+            <enum name="heading" value="1" />
+            <enum name="title" value="2" />
+            <enum name="subheading" value="3" />
+            <enum name="body" value="4" />
+            <enum name="caption" value="5" />
+            <enum name="formLabel" value="6" />
+        </attr>
+
+        <attr name="fluentTextTone" format="enum">
+            <enum name="primary" value="0" />
+            <enum name="secondary" value="1" />
+            <enum name="muted" value="2" />
+            <enum name="inverse" value="3" />
+            <enum name="accent" value="4" />
+            <enum name="danger" value="5" />
+        </attr>
+
+        <declare-styleable name="AppTextView">
+            <attr name="fluentTextStyle" />
+            <attr name="fluentTextTone" />
+        </declare-styleable>
+
+        <declare-styleable name="AppTopBarView">
+            <attr name="titleText" format="string|reference" />
+            <attr name="centerTitle" format="boolean" />
+            <attr name="inverseColors" format="boolean" />
+            <attr name="showBackButton" format="boolean" />
+            <attr name="showSearchButton" format="boolean" />
+            <attr name="searchIcon" format="reference" />
+            <attr name="showActionButton" format="boolean" />
+            <attr name="actionIcon" format="reference" />
+            <attr name="actionText" format="string|reference" />
+        </declare-styleable>
 </resources>
