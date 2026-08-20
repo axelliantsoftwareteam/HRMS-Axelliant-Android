@@ -6,7 +6,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         style="@style/Layout.Fluent2.Screen"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        >
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/start_guideline"
@@ -92,55 +93,31 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_my_team">
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/ly_action_btn"
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_attendance_filters"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="@dimen/_30sdp"
+                        android:layout_marginTop="@dimen/_10sdp"
                         android:background="@drawable/rounded_bgg"
-                        android:gravity="center"
-                        android:orientation="horizontal"
                         android:padding="@dimen/_3sdp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
-
-                        <com.axelliant.hris.ui.designsystem.components.AppTextView
-                            android:id="@+id/tv_week"
-                            style="@style/Text.Fluent2.Caption.Inverse"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:background="@drawable/fluent_blue"
-                            android:paddingTop="@dimen/_6sdp"
-                            android:paddingBottom="@dimen/_6sdp"
-                            android:text="@string/last_seven"
-                            app:layout_constraintEnd_toStartOf="@+id/tv_month"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <com.axelliant.hris.ui.designsystem.components.AppTextView
-                            android:id="@+id/tv_month"
-                            style="@style/Text.Fluent2.Caption.Primary"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_marginStart="@dimen/_5sdp"
-                            android:background="@drawable/rounded_disabled"
-                            android:paddingTop="@dimen/_6sdp"
-                            android:paddingBottom="@dimen/_6sdp"
-                            android:text="@string/this_month"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/tv_week" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:itemCount="2"
+                        tools:listitem="@layout/item_filter_pill" />
 
                     <LinearLayout
                         android:id="@+id/my_attendance_stats_container"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_10sdp"
+                        app:cardElevation="0dp"
                         android:orientation="vertical"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/ly_action_btn">
+                        app:layout_constraintTop_toBottomOf="@id/rv_attendance_filters">
 
+                        <!-- Row 1: Present, Absent, Missed Punch-outs -->
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -150,7 +127,41 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="@dimen/_5sdp"
-                                android:layout_weight="1">
+                                android:layout_weight="1"
+                                app:cardCornerRadius="@dimen/ds_radius_md"
+                                app:cardElevation="0dp">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:orientation="vertical"
+                                    android:padding="@dimen/_10sdp">
+
+                                    <com.axelliant.hris.ui.designsystem.components.AppTextView
+                                        android:id="@+id/tv_present_count"
+                                        style="@style/Text.Fluent2.Title"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="0"
+                                        android:textColor="@color/sky_blue" />
+
+                                    <com.axelliant.hris.ui.designsystem.components.AppTextView
+                                        style="@style/Text.Fluent2.Caption.Muted.Strong"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="@dimen/_4sdp"
+                                        android:text="Present" />
+                                </LinearLayout>
+                            </com.axelliant.hris.ui.designsystem.components.AppCardView>
+
+                            <com.axelliant.hris.ui.designsystem.components.AppCardView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginHorizontal="@dimen/_5sdp"
+                                android:layout_weight="1"
+                                app:cardCornerRadius="@dimen/ds_radius_md"
+                                app:cardElevation="0dp">
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
@@ -180,44 +191,9 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/_5sdp"
-                                android:layout_weight="1">
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:gravity="center"
-                                    android:orientation="vertical"
-                                    android:padding="@dimen/_10sdp">
-
-                                    <com.axelliant.hris.ui.designsystem.components.AppTextView
-                                        android:id="@+id/tv_present_count"
-                                        style="@style/Text.Fluent2.Title"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="0"
-                                        android:textColor="@color/sky_blue" />
-
-                                    <com.axelliant.hris.ui.designsystem.components.AppTextView
-                                        style="@style/Text.Fluent2.Caption.Muted.Strong"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginTop="@dimen/_4sdp"
-                                        android:text="Present" />
-                                </LinearLayout>
-                            </com.axelliant.hris.ui.designsystem.components.AppCardView>
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_8sdp"
-                            android:orientation="horizontal">
-
-                            <com.axelliant.hris.ui.designsystem.components.AppCardView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginEnd="@dimen/_5sdp"
-                                android:layout_weight="1">
+                                android:layout_weight="1"
+                                app:cardCornerRadius="@dimen/ds_radius_md"
+                                app:cardElevation="0dp">
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
@@ -237,16 +213,27 @@
                                         style="@style/Text.Fluent2.Caption.Muted.Strong"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
+                                        android:textAlignment="center"
                                         android:layout_marginTop="@dimen/_4sdp"
                                         android:text="Missed punch-outs" />
                                 </LinearLayout>
                             </com.axelliant.hris.ui.designsystem.components.AppCardView>
+                        </LinearLayout>
+
+                        <!-- Row 2: Leaves, Holiday, Weekly off -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:orientation="horizontal">
 
                             <com.axelliant.hris.ui.designsystem.components.AppCardView
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/_5sdp"
-                                android:layout_weight="1">
+                                android:layout_marginEnd="@dimen/_5sdp"
+                                app:cardCornerRadius="@dimen/ds_radius_md"
+                                android:layout_weight="1"
+                                app:cardElevation="0dp">
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
@@ -270,19 +257,14 @@
                                         android:text="Leaves" />
                                 </LinearLayout>
                             </com.axelliant.hris.ui.designsystem.components.AppCardView>
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_8sdp"
-                            android:orientation="horizontal">
 
                             <com.axelliant.hris.ui.designsystem.components.AppCardView
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginEnd="@dimen/_5sdp"
-                                android:layout_weight="1">
+                                android:layout_marginHorizontal="@dimen/_5sdp"
+                                app:cardCornerRadius="@dimen/ds_radius_md"
+                                android:layout_weight="1"
+                                app:cardElevation="0dp">
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
@@ -311,7 +293,9 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/_5sdp"
-                                android:layout_weight="1">
+                                app:cardCornerRadius="@dimen/ds_radius_md"
+                                android:layout_weight="1"
+                                app:cardElevation="0dp">
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
@@ -336,31 +320,10 @@
                                 </LinearLayout>
                             </com.axelliant.hris.ui.designsystem.components.AppCardView>
                         </LinearLayout>
+
                     </LinearLayout>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <com.axelliant.hris.ui.designsystem.components.AppTextView
-                    android:id="@+id/tv_my_team_stat"
-                    style="@style/Text.Fluent2.Subheading.Primary.Strong"
-                    android:text="@string/my_team"
-                    android:layout_marginTop="@dimen/_20sdp"
-                    android:textAlignment="textStart"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/ly_attend"
-                    />
-
-                <com.axelliant.hris.ui.designsystem.components.AppTextView
-                    android:id="@+id/tv_my_team_view"
-                    style="@style/Text.Fluent2.Caption.Primary.Strong"
-                    android:text="@string/view"
-                    android:textAlignment="textStart"
-                    android:textSize="@dimen/_12sdp"
-                    android:padding="@dimen/_5sdp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/tv_my_team_stat"
-                    app:layout_constraintBottom_toBottomOf="@+id/tv_my_team_stat"
-                    />
 
                 <!--
                     ================= MY TEAM STATS CARD =================
@@ -370,10 +333,10 @@
                     android:id="@+id/ly_myteam_attend"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_20sdp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_my_team_view">
+                    app:layout_constraintTop_toBottomOf="@+id/ly_attend">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/ly_header"
@@ -388,7 +351,7 @@
                             android:layout_width="@dimen/_26sdp"
                             android:layout_height="@dimen/_26sdp"
                             android:padding="@dimen/_2sdp"
-                            android:src="@drawable/fluent_shift_details"
+                            android:src="@drawable/ic_my_shift"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
@@ -406,138 +369,311 @@
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
                     <com.axelliant.hris.ui.designsystem.components.AppCardView
                         android:id="@+id/my_team_stats_card"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_10sdp"
+                        app:cardCornerRadius="@dimen/ds_radius_md"
+                        app:cardElevation="0dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/ly_header">
 
-                        <LinearLayout
+                        <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:padding="@dimen/_12sdp">
+                            android:padding="@dimen/_14sdp">
 
-                            <com.axelliant.hris.ui.designsystem.components.AppTextView
-                                android:id="@+id/tv_team_total_count"
-                                style="@style/Text.Fluent2.Title"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="0" />
 
-                            <com.axelliant.hris.ui.designsystem.components.AppTextView
-                                style="@style/Text.Fluent2.Caption.Muted.Strong"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/_4sdp"
-                                android:text="Total Members" />
-
+                            <!-- ===== DONUT CHART ===== -->
                             <LinearLayout
-                                android:layout_width="match_parent"
+                                android:id="@+id/team_donut_section"
+                                android:layout_width="@dimen/_90sdp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/_12sdp"
-                                android:orientation="horizontal">
+                                android:gravity="center_horizontal"
+                                android:orientation="vertical"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent">
 
-                                <LinearLayout
-                                    android:layout_width="0dp"
+                                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                                    android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:orientation="vertical">
+                                    style="@style/Text.Fluent2.Body.Primary.Muted"
+                                    android:text="Total Members" />
+
+                                <FrameLayout
+                                    android:id="@+id/fl_donut"
+                                    android:layout_width="@dimen/_90sdp"
+                                    android:layout_height="@dimen/_90sdp"
+                                    android:layout_marginTop="@dimen/_6sdp">
+
+                                    <com.github.mikephil.charting.charts.PieChart
+                                        android:id="@+id/pie_team_stats"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent" />
+
+                                    <LinearLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:gravity="center"
+                                        android:orientation="vertical">
+
+                                        <com.axelliant.hris.ui.designsystem.components.AppTextView
+                                            android:id="@+id/tv_team_total_count"
+                                            style="@style/Text.Fluent2.Title.Primary.Strong"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="0"
+                                            android:textSize="@dimen/_18ssp" />
+
+                                    </LinearLayout>
+
+                                </FrameLayout>
+
+                            </LinearLayout>
+                            <!-- ===== LEGEND ROWS ===== -->
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/_14sdp"
+                                android:orientation="vertical"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent">
+
+                                <!-- Present on Site -->
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
+
+                                    <ImageView
+                                        android:layout_width="@dimen/_16sdp"
+                                        android:layout_height="@dimen/_16sdp"
+                                        android:src="@drawable/ic_person_check"
+                                        app:tint="@color/green" />
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="@dimen/_8sdp"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                        <com.axelliant.hris.ui.designsystem.components.AppTextView
+                                            style="@style/Text.Fluent2.Caption.Primary.Strong"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="Present On Site" />
+
+                                        <ProgressBar
+                                            android:id="@+id/pb_present"
+                                            style="?android:attr/progressBarStyleHorizontal"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="@dimen/_4sdp"
+                                            android:layout_marginTop="@dimen/_4sdp"
+                                            android:max="100"
+                                            android:progress="0"
+                                            android:progressBackgroundTint="@color/ds_outline"
+                                            android:progressTint="@color/green" />
+                                    </LinearLayout>
 
                                     <com.axelliant.hris.ui.designsystem.components.AppTextView
                                         android:id="@+id/tv_team_present_count"
-                                        style="@style/Text.Fluent2.Body.Primary.Strong"
+                                        style="@style/Text.Fluent2.Caption.Primary.Strong"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
+                                        android:layout_marginStart="@dimen/_6sdp"
                                         android:text="0" />
 
                                     <com.axelliant.hris.ui.designsystem.components.AppTextView
-                                        style="@style/Text.Fluent2.Caption.Muted.Strong"
+                                        android:id="@+id/tv_present_percent"
+                                        style="@style/Text.Fluent2.Caption.Muted"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginTop="@dimen/_4sdp"
-                                        android:text="Present on Site" />
+                                        android:layout_marginStart="@dimen/_2sdp"
+                                        android:text="(0%)" />
                                 </LinearLayout>
 
+                                <!-- Work From Home -->
                                 <LinearLayout
-                                    android:layout_width="0dp"
+                                    android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:orientation="vertical">
+                                    android:layout_marginTop="@dimen/_8sdp"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
+
+                                    <ImageView
+                                        android:layout_width="@dimen/_11sdp"
+                                        android:layout_height="@dimen/_11sdp"
+                                        android:src="@drawable/ic_home"
+                                        app:tint="@color/sky_blue" />
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="@dimen/_8sdp"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                        <com.axelliant.hris.ui.designsystem.components.AppTextView
+                                            style="@style/Text.Fluent2.Caption.Primary.Strong"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="Work From Home" />
+
+                                        <ProgressBar
+                                            android:id="@+id/pb_wfh"
+                                            style="?android:attr/progressBarStyleHorizontal"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="@dimen/_4sdp"
+                                            android:layout_marginTop="@dimen/_4sdp"
+                                            android:max="100"
+                                            android:progress="0"
+                                            android:progressBackgroundTint="@color/ds_outline"
+                                            android:progressTint="@color/sky_blue" />
+                                    </LinearLayout>
 
                                     <com.axelliant.hris.ui.designsystem.components.AppTextView
                                         android:id="@+id/tv_team_wfh_count"
-                                        style="@style/Text.Fluent2.Body.Primary.Strong"
+                                        style="@style/Text.Fluent2.Caption.Primary.Strong"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
+                                        android:layout_marginStart="@dimen/_6sdp"
                                         android:text="0" />
 
                                     <com.axelliant.hris.ui.designsystem.components.AppTextView
-                                        style="@style/Text.Fluent2.Caption.Muted.Strong"
+                                        android:id="@+id/tv_wfh_percent"
+                                        style="@style/Text.Fluent2.Caption.Muted"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginTop="@dimen/_4sdp"
-                                        android:text="Work From Home" />
+                                        android:layout_marginStart="@dimen/_2sdp"
+                                        android:text="(0%)" />
                                 </LinearLayout>
-                            </LinearLayout>
 
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/_12sdp"
-                                android:orientation="horizontal">
-
+                                <!-- Absent -->
                                 <LinearLayout
-                                    android:layout_width="0dp"
+                                    android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:orientation="vertical">
+                                    android:layout_marginTop="@dimen/_8sdp"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
+
+                                    <ImageView
+                                        android:layout_width="@dimen/_16sdp"
+                                        android:layout_height="@dimen/_16sdp"
+                                        android:src="@drawable/ic_person_x"
+                                        app:tint="@color/pure_red" />
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="@dimen/_8sdp"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                        <com.axelliant.hris.ui.designsystem.components.AppTextView
+                                            style="@style/Text.Fluent2.Caption.Primary.Strong"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="Absent" />
+
+                                        <ProgressBar
+                                            android:id="@+id/pb_absent"
+                                            style="?android:attr/progressBarStyleHorizontal"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="@dimen/_4sdp"
+                                            android:layout_marginTop="@dimen/_4sdp"
+                                            android:max="100"
+                                            android:progress="0"
+                                            android:progressBackgroundTint="@color/ds_outline"
+                                            android:progressTint="@color/pure_red" />
+                                    </LinearLayout>
 
                                     <com.axelliant.hris.ui.designsystem.components.AppTextView
                                         android:id="@+id/tv_team_absent_count"
-                                        style="@style/Text.Fluent2.Body.Primary.Strong"
+                                        style="@style/Text.Fluent2.Caption.Primary.Strong"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
+                                        android:layout_marginStart="@dimen/_6sdp"
                                         android:text="0" />
 
                                     <com.axelliant.hris.ui.designsystem.components.AppTextView
-                                        style="@style/Text.Fluent2.Caption.Muted.Strong"
+                                        android:id="@+id/tv_absent_percent"
+                                        style="@style/Text.Fluent2.Caption.Muted"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginTop="@dimen/_4sdp"
-                                        android:text="Absent" />
+                                        android:layout_marginStart="@dimen/_2sdp"
+                                        android:text="(0%)" />
                                 </LinearLayout>
 
+                                <!-- On Leave -->
                                 <LinearLayout
-                                    android:layout_width="0dp"
+                                    android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:orientation="vertical">
+                                    android:layout_marginTop="@dimen/_8sdp"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
+
+                                    <ImageView
+                                        android:layout_width="@dimen/_13sdp"
+                                        android:layout_height="@dimen/_13sdp"
+                                        android:src="@drawable/ic_calendar"
+                                        app:tint="@color/purple" />
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="@dimen/_8sdp"
+                                        android:layout_weight="1"
+                                        android:orientation="vertical">
+
+                                        <com.axelliant.hris.ui.designsystem.components.AppTextView
+                                            style="@style/Text.Fluent2.Caption.Primary.Strong"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="On Leave" />
+
+                                        <ProgressBar
+                                            android:id="@+id/pb_leave"
+                                            style="?android:attr/progressBarStyleHorizontal"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="@dimen/_4sdp"
+                                            android:layout_marginTop="@dimen/_4sdp"
+                                            android:max="100"
+                                            android:progress="0"
+                                            android:progressBackgroundTint="@color/ds_outline"
+                                            android:progressTint="@color/purple" />
+                                    </LinearLayout>
 
                                     <com.axelliant.hris.ui.designsystem.components.AppTextView
                                         android:id="@+id/tv_team_on_leave_count"
-                                        style="@style/Text.Fluent2.Body.Primary.Strong"
+                                        style="@style/Text.Fluent2.Caption.Primary.Strong"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
+                                        android:layout_marginStart="@dimen/_6sdp"
                                         android:text="0" />
 
                                     <com.axelliant.hris.ui.designsystem.components.AppTextView
-                                        style="@style/Text.Fluent2.Caption.Muted.Strong"
+                                        android:id="@+id/tv_leave_percent"
+                                        style="@style/Text.Fluent2.Caption.Muted"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginTop="@dimen/_4sdp"
-                                        android:text="On Leave" />
+                                        android:layout_marginStart="@dimen/_2sdp"
+                                        android:text="(0%)" />
                                 </LinearLayout>
+
                             </LinearLayout>
-                        </LinearLayout>
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
                     </com.axelliant.hris.ui.designsystem.components.AppCardView>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
-
                 <!--
                     ================= MY SHIFT DETAILS =================
 
@@ -551,6 +687,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/ly_myteam_attend">
 
+                    <!-- Header: icon + "My shift" title only, no view schedule link -->
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/ly_shift_header"
                         android:layout_width="0dp"
@@ -564,7 +701,7 @@
                             android:layout_width="@dimen/_26sdp"
                             android:layout_height="@dimen/_26sdp"
                             android:padding="@dimen/_2sdp"
-                            android:src="@drawable/fluent_shift_details"
+                            android:src="@drawable/ic_my_shift"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
@@ -581,15 +718,15 @@
                             app:layout_constraintBottom_toBottomOf="@+id/iv_shift" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <!--
-                        Shift details card
-                    -->
+                    <!-- Shift details card -->
                     <com.axelliant.hris.ui.designsystem.components.AppCardView
                         android:id="@+id/my_shift_details_card"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_10sdp"
                         android:layout_marginBottom="@dimen/_15sdp"
+                        app:cardCornerRadius="@dimen/ds_radius_md"
+                        app:cardElevation="0dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/ly_shift_header">
@@ -597,77 +734,124 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:padding="@dimen/_12sdp">
+                            android:orientation="horizontal"
+                            android:paddingVertical="@dimen/_14sdp"
+                            android:paddingHorizontal="@dimen/_8sdp">
 
-                            <com.axelliant.hris.ui.designsystem.components.AppTextView
-                                style="@style/Text.Fluent2.Caption.Muted.Strong"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Shift Name" />
-
-                            <com.axelliant.hris.ui.designsystem.components.AppTextView
-                                android:id="@+id/tv_shift_name"
-                                style="@style/Text.Fluent2.Body.Primary.Strong"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/_4sdp"
-                                tools:text="General Shift" />
-
+                            <!-- Shift column -->
                             <LinearLayout
-                                android:layout_width="match_parent"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/_12sdp"
-                                android:orientation="horizontal">
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:orientation="vertical">
 
-                                <LinearLayout
-                                    android:layout_width="0dp"
+                                <ImageView
+                                    android:layout_width="@dimen/_20sdp"
+                                    android:layout_height="@dimen/_20sdp"
+                                    android:src="@drawable/ic_shift_badge"
+                                    app:tint="@color/sky_blue"
+                                    tools:ignore="ContentDescription" />
+
+                                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                                    style="@style/Text.Fluent2.Caption.Muted"
+                                    android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_weight="1.7"
-                                    android:orientation="vertical">
+                                    android:layout_marginTop="@dimen/_6sdp"
+                                    android:text="Shift" />
 
-                                    <com.axelliant.hris.ui.designsystem.components.AppTextView
-                                        style="@style/Text.Fluent2.Caption.Muted.Strong"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="Shift Timings" />
-
-                                    <com.axelliant.hris.ui.designsystem.components.AppTextView
-                                        android:id="@+id/tv_shift_timings"
-                                        style="@style/Text.Fluent2.Body.Primary.Strong"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginTop="@dimen/_4sdp"
-                                        tools:text="09:00 - 18:00" />
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:layout_width="0dp"
+                                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                                    android:id="@+id/tv_shift_name"
+                                    style="@style/Text.Fluent2.Caption.Primary.Strong"
+                                    android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginStart="@dimen/_15sdp"
-                                    android:layout_weight="1"
-                                    android:orientation="vertical">
-
-                                    <com.axelliant.hris.ui.designsystem.components.AppTextView
-                                        style="@style/Text.Fluent2.Caption.Muted.Strong"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="Working From" />
-
-                                    <com.axelliant.hris.ui.designsystem.components.AppTextView
-                                        android:id="@+id/tv_work_from"
-                                        style="@style/Text.Fluent2.Body.Primary.Strong"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginTop="@dimen/_4sdp"
-                                        tools:text="Office" />
-                                </LinearLayout>
+                                    android:layout_marginTop="@dimen/_2sdp"
+                                    android:gravity="center"
+                                    tools:text="Morning Shift" />
                             </LinearLayout>
+
+                            <!-- Divider -->
+                            <View
+                                android:layout_width="1dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginVertical="@dimen/_4sdp"
+                                android:background="@color/divider_grey" />
+
+                            <!-- Time column -->
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <ImageView
+                                    android:layout_width="@dimen/_20sdp"
+                                    android:layout_height="@dimen/_20sdp"
+                                    android:src="@drawable/ic_clock"
+                                    app:tint="@color/sky_blue"
+                                    tools:ignore="ContentDescription" />
+
+                                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                                    style="@style/Text.Fluent2.Caption.Muted"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/_6sdp"
+                                    android:text="Time" />
+
+                                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                                    android:id="@+id/tv_shift_timings"
+                                    style="@style/Text.Fluent2.Caption.Primary.Strong"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/_2sdp"
+                                    android:gravity="center"
+                                    tools:text="09:00 AM –\n06:00 PM" />
+                            </LinearLayout>
+
+                            <!-- Divider -->
+                            <View
+                                android:layout_width="1dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginVertical="@dimen/_4sdp"
+                                android:background="@color/divider_grey" />
+
+                            <!-- Working From column -->
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <ImageView
+                                    android:layout_width="@dimen/_20sdp"
+                                    android:layout_height="@dimen/_20sdp"
+                                    android:src="@drawable/ic_location_pin"
+                                    app:tint="@color/sky_blue"
+                                    tools:ignore="ContentDescription" />
+
+                                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                                    style="@style/Text.Fluent2.Caption.Muted"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/_6sdp"
+                                    android:text="Working From" />
+
+                                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                                    android:id="@+id/tv_work_from"
+                                    style="@style/Text.Fluent2.Caption.Primary.Strong"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/_2sdp"
+                                    android:gravity="center"
+                                    tools:text="Office\n(Main Branch)" />
+                            </LinearLayout>
+
                         </LinearLayout>
                     </com.axelliant.hris.ui.designsystem.components.AppCardView>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
-
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

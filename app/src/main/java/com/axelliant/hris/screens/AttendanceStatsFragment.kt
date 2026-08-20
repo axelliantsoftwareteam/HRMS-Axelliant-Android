@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.axelliant.hris.R
@@ -23,12 +24,16 @@ import com.axelliant.hris.navigation.AppNavigator
 import com.axelliant.hris.utils.Utils
 import com.axelliant.hris.viewmodel.AttendanceViewModel
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import com.axelliant.hris.extention.showShimmer
 import com.axelliant.hris.extention.hideShimmer
-
-
-
+import com.axelliant.hris.ui.designsystem.adapters.FilterAdapter
+import com.axelliant.hris.ui.designsystem.adapters.FilterItem
+import com.github.mikephil.charting.data.PieData
+import com.github.mikephil.charting.data.PieDataSet
+import com.github.mikephil.charting.data.PieEntry
 
 
 @AndroidEntryPoint
@@ -40,6 +45,8 @@ class AttendanceStatsFragment : BaseFragment() {
     private val binding get() = _binding
 
     private val attendanceViewModel: AttendanceViewModel by viewModels()
+    private lateinit var filterAdapter: FilterAdapter
+
 
 
     override fun onCreateView(
@@ -63,14 +70,12 @@ class AttendanceStatsFragment : BaseFragment() {
 
         val isManager = GlobalConfig.isCurrentManager()
 
-        binding?.tvMyTeamStat?.isVisible = isManager
-        binding?.tvMyTeamView?.isVisible = isManager
         binding?.lyMyteamAttend?.isVisible = isManager
         if (!isDataLoaded) {
             binding?.shimmerLayout?.showShimmer(binding?.contentGroup!!)
         }
         attendanceViewModel.getAttendanceStats(getCurrentObject())
-        eventSelection()
+        setupFilterBar()
 
         attendanceViewModel.attendanceResponse.observe(
             viewLifecycleOwner,
@@ -81,8 +86,7 @@ class AttendanceStatsFragment : BaseFragment() {
 
                     selfAttendanceStats(response.self_attendance_counts!!)
 
-                    if(currentFilter == AttendanceFilter.WEEK)
-                        teamAttendanceStats(response.team_attendance_counts!!)
+                    teamAttendanceStats(response.team_attendance_counts!!)
 
                     setShiftTimings(response.shift_detail!!)
 
@@ -103,12 +107,6 @@ class AttendanceStatsFragment : BaseFragment() {
 
         }
 
-        binding?.tvMyTeamView?.setOnClickListener {
-            showDialog()
-            AppNavigator.navigateToTeamAttendanceDetail()
-
-        }
-
     }
     override fun onDestroyView() {
         binding?.shimmerLayout?.stopShimmer()
@@ -122,47 +120,22 @@ class AttendanceStatsFragment : BaseFragment() {
             shiftDetails.actual_start.plus(" - ").plus(shiftDetails.actual_end).valueQualifier()
     }
 
-    private fun eventSelection() {
-
-        binding?.tvWeek?.background =
-            ContextCompat.getDrawable(requireContext(), R.drawable.rounded_disabled)
-
-        binding?.tvMonth?.background =
-            ContextCompat.getDrawable(requireContext(), R.drawable.rounded_disabled)
-
-        binding?.tvWeek?.setTextColor(requireContext().getColor(R.color.btn_text_color))
-        binding?.tvMonth?.setTextColor(requireContext().getColor(R.color.btn_text_color))
-
-
-        binding?.tvWeek?.setOnClickListener {
-            currentFilter = AttendanceFilter.WEEK
+    private fun setupFilterBar() {
+        val items = listOf(
+            FilterItem(getString(R.string.last_seven), 0),
+            FilterItem(getString(R.string.this_month), 1)
+        )
+        filterAdapter = FilterAdapter(items, selectedPosition = 0) { position, _ ->
+            currentFilter = if (position == 0) AttendanceFilter.WEEK else AttendanceFilter.MONTH
+            filterAdapter.setSelected(position)
             attendanceViewModel.getAttendanceStats(getCurrentObject())
-            eventSelection()
         }
-        binding?.tvMonth?.setOnClickListener {
-            currentFilter = AttendanceFilter.MONTH
-            attendanceViewModel.getAttendanceStats(getCurrentObject())
-            eventSelection()
-        }
-
-        when (currentFilter) {
-            AttendanceFilter.WEEK -> {
-                binding?.tvWeek?.background =
-                    ContextCompat.getDrawable(requireContext(), R.drawable.fluent_blue)
-                binding?.tvWeek?.setTextColor(requireContext().getColor(R.color.ds_neutral_white))
-
-            }
-
-            AttendanceFilter.MONTH -> {
-
-                binding?.tvMonth?.background =
-                    ContextCompat.getDrawable(requireContext(), R.drawable.fluent_blue)
-                binding?.tvMonth?.setTextColor(requireContext().getColor(R.color.ds_neutral_white))
-            }
-            AttendanceFilter.Custom -> {}
+        binding?.rvAttendanceFilters?.apply {
+            layoutManager =
+                GridLayoutManager(requireContext(), items.size) // spanCount = item count
+            adapter = filterAdapter
         }
     }
-
 
     private fun selfAttendanceStats(selfAttendanceStats: SelfAttendanceStats){
         binding?.tvAbsentCount?.text = selfAttendanceStats.absent_count.toString()
@@ -173,13 +146,66 @@ class AttendanceStatsFragment : BaseFragment() {
         binding?.tvWeeklyOffCount?.text = selfAttendanceStats.week_count.toString()
 
     }
-    private fun teamAttendanceStats(teamAttendanceStats: TeamAttendanceStats){
-        binding?.tvTeamTotalCount?.text = teamAttendanceStats.team_count.toString()
-        binding?.tvTeamPresentCount?.text = teamAttendanceStats.present.toString()
-        binding?.tvTeamWfhCount?.text = teamAttendanceStats.work_from_home.toString()
-        binding?.tvTeamOnLeaveCount?.text = teamAttendanceStats.leave_count.toString()
-        binding?.tvTeamAbsentCount?.text = teamAttendanceStats.absent_count.toString()
+    private fun teamAttendanceStats(teamAttendanceStats: TeamAttendanceStats) {
+        val teamCount = teamAttendanceStats.team_count      // headcount — for center label only
+        val present = teamAttendanceStats.present
+        val wfh = teamAttendanceStats.work_from_home
+        val absent = teamAttendanceStats.absent_count
+        val onLeave = teamAttendanceStats.leave_count
 
+        val recordTotal = present + wfh + absent + onLeave   // denominator for %, pie, bars
+
+        binding?.tvTeamTotalCount?.text = teamCount.toString()   // still shows real headcount
+        binding?.tvTeamPresentCount?.text = present.toString()
+        binding?.tvTeamWfhCount?.text = wfh.toString()
+        binding?.tvTeamOnLeaveCount?.text = onLeave.toString()
+        binding?.tvTeamAbsentCount?.text = absent.toString()
+
+        setRowStat(binding?.pbPresent, binding?.tvPresentPercent, present, recordTotal)
+        setRowStat(binding?.pbWfh, binding?.tvWfhPercent, wfh, recordTotal)
+        setRowStat(binding?.pbAbsent, binding?.tvAbsentPercent, absent, recordTotal)
+        setRowStat(binding?.pbLeave, binding?.tvLeavePercent, onLeave, recordTotal)
+
+        setupDonutChart(present, wfh, absent, onLeave)
+    }
+
+    private fun setRowStat(progressBar: ProgressBar?, percentView: com.axelliant.hris.ui.designsystem.components.AppTextView?, count: Int, total: Int) {
+        val pct = if (total > 0) (count * 100 / total) else 0
+        progressBar?.progress = pct
+        percentView?.text = "($pct%)"
+    }
+
+    private fun setupDonutChart(present: Int, wfh: Int, absent: Int, onLeave: Int) {
+        val entries = listOf(
+            PieEntry(present.toFloat()),
+            PieEntry(wfh.toFloat()),
+            PieEntry(absent.toFloat()),
+            PieEntry(onLeave.toFloat())
+        )
+        val colors = listOf(
+            ContextCompat.getColor(requireContext(), R.color.green),
+            ContextCompat.getColor(requireContext(), R.color.sky_blue),
+            ContextCompat.getColor(requireContext(), R.color.pure_red),
+            ContextCompat.getColor(requireContext(), R.color.purple)
+        )
+        val dataSet = PieDataSet(entries, "").apply {
+            this.colors = colors
+            sliceSpace = 3f
+            setDrawValues(false)
+        }
+        binding?.pieTeamStats?.apply {
+            data = PieData(dataSet)
+            description.isEnabled = false
+            legend.isEnabled = false
+            setDrawEntryLabels(false)
+            isDrawHoleEnabled = true
+            holeRadius = 72f
+            transparentCircleRadius = 0f
+            setTouchEnabled(false)
+            setDrawCenterText(false)
+            animateY(600)
+            invalidate()
+        }
     }
     private fun getCurrentObject(): AttendanceInput {
 

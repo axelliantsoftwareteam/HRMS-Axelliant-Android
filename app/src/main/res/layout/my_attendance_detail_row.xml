@@ -20,7 +20,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="3"
-            android:gravity="start|center"
+            android:gravity="center"
             android:paddingStart="@dimen/_5sdp"
             android:text="@string/_17_may_2024" />
 
@@ -30,7 +30,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="3"
-
+            android:gravity="center"
             android:text="@string/_3_hr" />
 
         <LinearLayout

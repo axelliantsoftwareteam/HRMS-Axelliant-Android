@@ -124,7 +124,6 @@ class RequestFragment : BaseFragment() {
                 )
                 startDateString = leaveDetail.from_date
                 endDateString = leaveDetail.to_date
-
                 binding?.etLeaveReason?.setText(leaveDetail.leave_reason.nullToEmpty())
                 preLeaveType = leaveDetail.leave_type
                 leaveId = leaveDetail.name
@@ -298,12 +297,9 @@ class RequestFragment : BaseFragment() {
 
                 if (response?.meta?.status == true) {
 //                    spinnerLeavePopulations(response.leaves)
-
                     spinnerAttendTypePopulations(response.checkin)
                     spinnerLocTypePopulations(response.location)
                     //parse leave spinner here
-
-
                 } else {
                     requireContext().showErrorMsg(response?.meta?.message.toString())
                 }
@@ -395,7 +391,6 @@ class RequestFragment : BaseFragment() {
                     requireContext().showErrorMsg("Requested leave exceeds your remaining quota for this leave type")
                 } else {
                     val leaveItem = binding?.spLeaveType?.selectedItem as LeaveAllocation
-
                     if (isUpdate) {
                         requestViewModel.updateLeaveQuest(LeaveRequest().apply {
                             this.start_date = startDateString
@@ -406,7 +401,6 @@ class RequestFragment : BaseFragment() {
                             this.leave_id = leaveId
                             this.half_day_date = halfDateString
                             this.half_day = ishalfday
-
                         })
                     } else {
                         requestViewModel.postLeaveQuest(LeaveRequest().apply {
@@ -420,12 +414,8 @@ class RequestFragment : BaseFragment() {
 
                         })
                     }
-
-
                 }
-
             }
-
             RequestFilter.ATTENDANCE -> {
 
                 if (binding?.spAttendType?.selectedItemPosition == 0) {
@@ -910,3 +900,6 @@ class RequestFragment : BaseFragment() {
 
     }
 }
+
+
+

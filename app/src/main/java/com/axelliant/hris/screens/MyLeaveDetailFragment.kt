@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.axelliant.hris.R
@@ -25,7 +26,10 @@ import com.axelliant.hris.model.dashboard.FilterModel
 import com.axelliant.hris.model.leave.LeaveDetail
 import com.axelliant.hris.navigation.AppNavigator
 import com.axelliant.hris.network.ErrorMessages
+import com.axelliant.hris.ui.designsystem.adapters.FilterAdapter
+import com.axelliant.hris.ui.designsystem.adapters.FilterItem
 import com.axelliant.hris.utils.Utils
+import com.axelliant.hris.utils.Utils.utcToLocalDate
 import com.axelliant.hris.viewmodel.LeaveViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.gson.Gson
@@ -45,6 +49,9 @@ class MyLeaveDetailFragment : BaseFragment() {
     private var filterId = ""
     private var leaveList = arrayListOf<LeaveDetail>()
     private var filterList = arrayListOf<FilterModel>()
+
+    private lateinit var dateFilterAdapter: FilterAdapter
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -70,7 +77,7 @@ class MyLeaveDetailFragment : BaseFragment() {
         }
 
         leaveViewModel.getMyLeaveDetail(getCurrentObject())
-        eventSelection()
+        setupDateFilterBar()
 
         leaveViewModel.myLeaveDetailResponse.observe(
             viewLifecycleOwner,
@@ -145,48 +152,30 @@ class MyLeaveDetailFragment : BaseFragment() {
         }
     }
 
-    private fun eventSelection() {
-        binding?.tvWeek?.background =
-            ContextCompat.getDrawable(requireContext(), R.drawable.rounded_disabled)
-        binding?.tvMonth?.background =
-            ContextCompat.getDrawable(requireContext(), R.drawable.rounded_disabled)
-        binding?.tvCustom?.background =
-            ContextCompat.getDrawable(requireContext(), R.drawable.rounded_disabled)
-
-        binding?.tvWeek?.setTextColor(requireContext().getColor(R.color.btn_text_color))
-        binding?.tvMonth?.setTextColor(requireContext().getColor(R.color.btn_text_color))
-        binding?.tvCustom?.setTextColor(requireContext().getColor(R.color.btn_text_color))
-
-        binding?.tvWeek?.setOnClickListener {
-            currentFilter = AttendanceFilter.WEEK
-            leaveViewModel.getMyLeaveDetail(getCurrentObject())
-            eventSelection()
-        }
-        binding?.tvMonth?.setOnClickListener {
-            currentFilter = AttendanceFilter.MONTH
-            leaveViewModel.getMyLeaveDetail(getCurrentObject())
-            eventSelection()
-        }
-        binding?.tvCustom?.setOnClickListener {
-            datePickerDialog()
-        }
-
-        when (currentFilter) {
-            AttendanceFilter.WEEK -> {
-                binding?.tvWeek?.background =
-                    ContextCompat.getDrawable(requireContext(), R.drawable.fluent_blue)
-                binding?.tvWeek?.setTextColor(requireContext().getColor(R.color.ds_neutral_white))
+    private fun setupDateFilterBar() {
+        val items = listOf(
+            FilterItem(getString(R.string.last_seven), 0),
+            FilterItem(getString(R.string.this_month), 1),
+            FilterItem(getString(R.string.custom), 2)
+        )
+        dateFilterAdapter = FilterAdapter(items, selectedPosition = 0) { position, _ ->
+            when (position) {
+                0 -> {
+                    currentFilter = AttendanceFilter.WEEK
+                    dateFilterAdapter.setSelected(position)
+                    leaveViewModel.getMyLeaveDetail(getCurrentObject())
+                }
+                1 -> {
+                    currentFilter = AttendanceFilter.MONTH
+                    dateFilterAdapter.setSelected(position)
+                    leaveViewModel.getMyLeaveDetail(getCurrentObject())
+                }
+                2 -> datePickerDialog() // don't setSelected here — only on actual date confirmation
             }
-            AttendanceFilter.MONTH -> {
-                binding?.tvMonth?.background =
-                    ContextCompat.getDrawable(requireContext(), R.drawable.fluent_blue)
-                binding?.tvMonth?.setTextColor(requireContext().getColor(R.color.ds_neutral_white))
-            }
-            AttendanceFilter.Custom -> {
-                binding?.tvCustom?.background =
-                    ContextCompat.getDrawable(requireContext(), R.drawable.fluent_blue)
-                binding?.tvCustom?.setTextColor(requireContext().getColor(R.color.ds_neutral_white))
-            }
+        }
+        binding?.rvDateFilters?.apply {
+            layoutManager = GridLayoutManager(requireContext(), items.size)
+            adapter = dateFilterAdapter
         }
     }
 
@@ -216,13 +205,13 @@ class MyLeaveDetailFragment : BaseFragment() {
         builder.setTheme(R.style.MyDatePickerTheme)
         val datePicker = builder.build()
         datePicker.addOnPositiveButtonClickListener { selection ->
-            val startDate = selection.first
-            val endDate = selection.second
-            startDateString = Utils.getServerFormat(date = Date(startDate))
-            endDateString = Utils.getServerFormat(date = Date(endDate))
+            val startDate = utcToLocalDate(selection.first)
+            val endDate = utcToLocalDate(selection.second)
+            startDateString = Utils.getServerFormat(date = startDate)
+            endDateString = Utils.getServerFormat(date = endDate)
             currentFilter = AttendanceFilter.Custom
+            dateFilterAdapter.setSelected(2)
             leaveViewModel.getMyLeaveDetail(getCurrentObject())
-            eventSelection()
         }
         datePicker.show(activity?.supportFragmentManager!!, "DATE_PICKER")
     }

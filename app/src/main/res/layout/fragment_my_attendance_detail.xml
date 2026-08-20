@@ -51,52 +51,15 @@
             app:layout_constraintTop_toBottomOf="@id/appTopBar">
 
 
-            <LinearLayout
-                android:id="@+id/ly_action_btn"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_date_filters"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/_30sdp"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:background="@drawable/rounded_bgg"
-                android:gravity="center"
-                android:orientation="horizontal"
                 android:padding="@dimen/_3sdp"
-                android:weightSum="9">
-
-                <com.axelliant.hris.ui.designsystem.components.AppTextView
-                    android:id="@+id/tv_week"
-                    style="@style/Text.Fluent2.Caption.Inverse"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="3"
-                    android:background="@drawable/fluent_blue"
-                    android:paddingTop="@dimen/_6sdp"
-                    android:paddingBottom="@dimen/_6sdp"
-                    android:text="@string/last_seven" />
-
-                <com.axelliant.hris.ui.designsystem.components.AppTextView
-                    android:id="@+id/tv_month"
-                    style="@style/Text.Fluent2.Caption.Primary"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_5sdp"
-                    android:layout_weight="3"
-                    android:background="@drawable/rounded_disabled"
-                    android:paddingTop="@dimen/_6sdp"
-                    android:paddingBottom="@dimen/_6sdp"
-                    android:text="@string/this_month" />
-
-                <com.axelliant.hris.ui.designsystem.components.AppTextView
-                    android:id="@+id/tv_custom"
-                    style="@style/Text.Fluent2.Caption.Primary"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_5sdp"
-                    android:layout_weight="3"
-                    android:background="@drawable/rounded_disabled"
-                    android:paddingTop="@dimen/_6sdp"
-                    android:paddingBottom="@dimen/_6sdp"
-                    android:text="@string/custom" />
-            </LinearLayout>
+                tools:itemCount="3"
+                tools:listitem="@layout/item_filter_pill" />
 
             <LinearLayout
                 android:id="@+id/date_range_container"
@@ -178,13 +141,14 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="3"
-                    android:gravity="start|center"
+                    android:gravity="center"
                     android:paddingStart="@dimen/_5sdp"
                     android:text="Date" />
 
                 <com.axelliant.hris.ui.designsystem.components.AppTextView
                     style="@style/Text.Fluent2.Caption.Muted.Strong"
                     android:layout_width="0dp"
+                    android:gravity="center"
                     android:layout_height="match_parent"
                     android:layout_weight="3"
                     android:text="Hrs" />
@@ -194,6 +158,8 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="4"
+                    android:gravity="center"
+                    android:paddingEnd="@dimen/_37sdp"
                     android:text="@string/status" />
             </LinearLayout>
 
