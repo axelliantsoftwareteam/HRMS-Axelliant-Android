@@ -7,7 +7,7 @@
         android:color="@color/ds_primary" />
     <corners
         android:bottomLeftRadius="0dp"
-        android:bottomRightRadius="@dimen/ia_ds_radius_md"
+        android:bottomRightRadius="@dimen/ds_radius_sm"
         android:topLeftRadius="0dp"
-        android:topRightRadius="@dimen/ia_ds_radius_md" />
+        android:topRightRadius="@dimen/ds_radius_sm" />
 </shape>

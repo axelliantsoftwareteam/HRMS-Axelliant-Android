@@ -6,7 +6,7 @@
         android:endColor="#F4F8FF"
         android:startColor="#FFFFFF"
         android:type="linear" />
-    <corners android:radius="@dimen/ds_radius_xs" />
+    <corners android:radius="@dimen/ds_radius_sm" />
     <stroke
         android:width="@dimen/_1sdp"
         android:color="@color/login_microsoft_button_stroke" />

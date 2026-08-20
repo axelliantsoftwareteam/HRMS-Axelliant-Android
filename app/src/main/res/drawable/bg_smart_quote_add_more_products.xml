@@ -6,5 +6,5 @@
         android:color="@color/ds_outline"
         android:dashWidth="@dimen/ds_space_6"
         android:dashGap="@dimen/ds_space_4" />
-    <corners android:radius="@dimen/ia_ds_radius_lg" />
+    <corners android:radius="@dimen/ds_radius_lg" />
 </shape>

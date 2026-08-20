@@ -6,7 +6,7 @@
             <stroke
                 android:width="@dimen/_1sdp"
                 android:color="@color/ds_primary" />
-            <corners android:radius="@dimen/ia_ds_radius_md" />
+            <corners android:radius="@dimen/ds_radius_md" />
         </shape>
     </item>
     <item>
@@ -15,7 +15,7 @@
             <stroke
                 android:width="@dimen/_1sdp"
                 android:color="@color/ds_outline_strong" />
-            <corners android:radius="@dimen/ia_ds_radius_md" />
+            <corners android:radius="@dimen/ds_radius_md" />
         </shape>
     </item>
 </selector>

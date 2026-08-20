@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/rounded_bg"
-    >
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/ly_expense"
@@ -32,7 +31,7 @@
             style="@style/Text.Fluent2.Caption.Primary.Strong"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="HR-EXP-224-0013"
+            tools:text="HR-EXP-224-0013"
             android:textAlignment="textStart"
             app:layout_constraintTop_toBottomOf="@+id/tv_id"
             app:layout_constraintStart_toStartOf="parent"/>
@@ -53,7 +52,7 @@
             style="@style/Text.Fluent2.Caption.Primary.Strong"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="HR-EXP-224-0013"
+            tools:text="HR-EXP-224-0013"
             android:textAlignment="textStart"
             app:layout_constraintTop_toBottomOf="@+id/tv_date"
             app:layout_constraintBottom_toTopOf="@+id/divider"
@@ -65,7 +64,7 @@
             style="@style/Text.Fluent2.Caption.Primary.Strong"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Approved"
+            tools:text="Approved"
             android:textColor="@color/approved"
             android:padding="@dimen/_5sdp"
             android:background="@drawable/rounded_time_bg"
@@ -117,7 +116,7 @@
                     style="@style/Text.Fluent2.Caption.Primary.Strong"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="1000000000" />
+                    tools:text="1000000000" />
 
             </LinearLayout>
 
@@ -137,7 +136,7 @@
                     style="@style/Text.Fluent2.Caption.Primary.Strong"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="No"
+                    tools:text="No"
                     />
 
             </LinearLayout>
@@ -162,7 +161,7 @@
                     android:ellipsize="end"
                     android:singleLine="true"
                     android:maxLines="1"
-                    android:text="Muhammad arslan" />
+                    tools:text="Muhammad arslan" />
 
             </LinearLayout>
         </LinearLayout>

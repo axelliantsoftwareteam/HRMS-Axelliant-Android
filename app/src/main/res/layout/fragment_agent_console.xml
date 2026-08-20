@@ -1,27 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     style="@style/Layout.Fluent2.Screen"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/ds_background">
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/startGuideline"
+        style="@style/Guideline.Fluent2.Start"
+        android:orientation="vertical" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/endGuideline"
+        style="@style/Guideline.Fluent2.End"
+        android:orientation="vertical" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/topGuideline"
+        style="@style/Guideline.Fluent2.Top"
+        android:orientation="horizontal" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/bottomGuideline"
+        style="@style/Guideline.Fluent2.Bottom"
+        android:orientation="horizontal" />
+
+
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/agentTopBar"
         android:layout_width="0dp"
-        android:layout_height="@dimen/_62sdp"
-        android:background="@color/ds_surface"
+        android:layout_height="@dimen/_40sdp"
         android:elevation="@dimen/_2sdp"
-        android:paddingStart="@dimen/ds_space_16"
-        android:paddingEnd="@dimen/ds_space_16"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintStart_toEndOf="@id/startGuideline"
+        app:layout_constraintEnd_toStartOf="@+id/endGuideline"
+        app:layout_constraintTop_toBottomOf="@+id/topGuideline">
 
         <ImageView
             android:id="@+id/backButton"
-            android:layout_width="@dimen/_32sdp"
-            android:layout_height="@dimen/_32sdp"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_30sdp"
             android:contentDescription="@null"
             android:padding="@dimen/ds_space_4"
             android:src="@drawable/ic_arrow_back"
@@ -37,8 +58,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/ds_space_16"
             android:text="@string/agent_title"
+            android:textAlignment="textStart"
             app:layout_constraintBottom_toTopOf="@id/statusRow"
-            app:layout_constraintEnd_toStartOf="@id/historyButton"
+            app:layout_constraintEnd_toStartOf="@id/moreButton"
             app:layout_constraintStart_toEndOf="@id/backButton"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="packed" />
@@ -51,7 +73,7 @@
             android:gravity="center_vertical"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/historyButton"
+            app:layout_constraintEnd_toStartOf="@id/moreButton"
             app:layout_constraintStart_toEndOf="@id/backButton"
             app:layout_constraintTop_toBottomOf="@id/agentTitle">
 
@@ -66,20 +88,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/ds_space_6"
-                android:text="@string/agent_status_ready" />
+                tools:text="@string/agent_status_ready" />
         </LinearLayout>
-
-        <ImageView
-            android:id="@+id/historyButton"
-            android:layout_width="@dimen/_24sdp"
-            android:layout_height="@dimen/_24sdp"
-            android:contentDescription="@null"
-            android:padding="@dimen/ds_space_4"
-            android:src="@drawable/ic_calendar"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/moreButton"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/ds_text_primary" />
 
         <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/moreButton"
@@ -104,20 +114,17 @@
         android:id="@+id/agentTabsScroll"
         android:layout_width="0dp"
         android:layout_height="@dimen/_54sdp"
-        android:background="@color/ds_surface"
         android:overScrollMode="never"
         android:scrollbars="none"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/endGuideline"
+        app:layout_constraintStart_toEndOf="@+id/startGuideline"
         app:layout_constraintTop_toBottomOf="@id/agentTopBar">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingStart="@dimen/ds_space_8"
-            android:paddingEnd="@dimen/ds_space_8">
+            android:orientation="horizontal">
 
             <com.axelliant.hris.ui.designsystem.components.AppTextView
                 style="@style/Text.Fluent2.Body.Inverse.Strong"
@@ -171,10 +178,9 @@
         android:clipToPadding="false"
         android:fillViewport="false"
         android:overScrollMode="never"
-        android:padding="@dimen/ds_space_12"
         app:layout_constraintBottom_toTopOf="@id/agentInputContainer"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/endGuideline"
+        app:layout_constraintStart_toEndOf="@id/startGuideline"
         app:layout_constraintTop_toBottomOf="@id/agentTabsScroll">
 
         <LinearLayout
@@ -219,19 +225,16 @@
     <LinearLayout
         android:id="@+id/agentInputContainer"
         android:layout_width="0dp"
-        android:layout_height="@dimen/_60sdp"
-        android:background="@color/ds_surface"
+        android:layout_height="@dimen/_50sdp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingStart="@dimen/ds_space_12"
-        android:paddingEnd="@dimen/ds_space_12"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintBottom_toTopOf="@id/bottomGuideline"
+        app:layout_constraintEnd_toStartOf="@id/endGuideline"
+        app:layout_constraintStart_toEndOf="@+id/startGuideline">
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="@dimen/_45sdp"
+            android:layout_height="@dimen/_40sdp"
             android:layout_weight="1"
             android:background="@drawable/bg_agent_input_bar"
             android:gravity="center_vertical"

@@ -5,5 +5,5 @@
     <stroke
         android:width="@dimen/_1sdp"
         android:color="@color/purchase_order_card_stroke" />
-    <corners android:radius="@dimen/ia_ds_radius_md" />
+    <corners android:radius="@dimen/ds_radius_md" />
 </shape>

@@ -289,7 +289,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 app:cardBackgroundColor="@color/ds_surface"
-                app:cardCornerRadius="@dimen/ia_ds_radius_md"
+                app:cardCornerRadius="@dimen/ds_radius_md"
                 app:cardElevation="@dimen/_3sdp"
                 app:cardUseCompatPadding="false"
                 app:cardPreventCornerOverlap="false"
@@ -514,7 +514,7 @@
                             android:text=""
                             android:visibility="gone"
                             app:backgroundTint="@null"
-                            app:cornerRadius="@dimen/ia_ds_radius_md"
+                            app:cornerRadius="@dimen/ds_radius_md"
                             app:icon="@drawable/ia_ic_mic"
                             app:iconGravity="textStart"
                             app:noBackground="true"
@@ -531,7 +531,7 @@
                             android:stateListAnimator="@null"
                             android:textAllCaps="false"
                             android:textSize="@dimen/_9ssp"
-                            app:cornerRadius="@dimen/ia_ds_radius_md"
+                            app:cornerRadius="@dimen/ds_radius_md"
                             app:icon="@drawable/ic_chevron_right"
                             app:iconGravity="textEnd" />
                     </LinearLayout>

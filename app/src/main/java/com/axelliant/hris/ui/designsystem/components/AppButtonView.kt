@@ -389,7 +389,7 @@ class AppButtonView @JvmOverloads constructor(
         val shape = RoundedCornerShape(
             cornerRadius.takeIf { it > 0 }?.let {
                 with(LocalDensity.current) { it.toDp() }
-            } ?: dimensionResource(R.dimen.ds_radius_xs)
+            } ?: dimensionResource(R.dimen.ds_radius_sm)
         )
         val backgroundColor = backgroundTintOverride?.let { Color(it.toInt()) }
             ?: Color.Transparent
@@ -657,7 +657,7 @@ private class AppButtonViewTokens(
     @Composable
     override fun cornerRadius(buttonInfo: ButtonInfo): Dp {
         return cornerRadiusPx?.let { with(LocalDensity.current) { it.toDp() } }
-            ?: dimensionResource(R.dimen.ds_radius_xs)
+            ?: dimensionResource(R.dimen.ds_radius_sm)
     }
 
     private fun stateColor(color: Long): StateColor {

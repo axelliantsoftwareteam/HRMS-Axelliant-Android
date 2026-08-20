@@ -218,7 +218,7 @@
             android:layout_marginEnd="@dimen/ds_space_8"
             android:visibility="gone"
             app:cardBackgroundColor="@color/purchase_order_fluent_surface"
-            app:cardCornerRadius="@dimen/ia_ds_radius_sm"
+            app:cardCornerRadius="@dimen/ds_radius_sm"
             app:cardElevation="@dimen/_1sdp"
             app:layout_constraintEnd_toEndOf="@id/endGuideline"
             app:layout_constraintStart_toStartOf="@id/startGuideline"
@@ -394,7 +394,7 @@
                 android:fontFamily="sans-serif-medium"
                 android:text="@string/add_purchase_order_create"
                 app:backgroundTint="@color/ds_primary"
-                app:cornerRadius="@dimen/ia_ds_radius_md"
+                app:cornerRadius="@dimen/ds_radius_md"
                 app:icon="@drawable/ia_ic_add"
                 app:iconGravity="textStart"
                 app:iconTint="@color/ds_on_primary" />
@@ -453,7 +453,7 @@
                 android:fontFamily="sans-serif-medium"
                 android:text="@string/purchase_orders_try_again"
                 app:backgroundTint="@color/ds_primary"
-                app:cornerRadius="@dimen/ia_ds_radius_md"
+                app:cornerRadius="@dimen/ds_radius_md"
                 app:icon="@drawable/ic_retry"
                 app:iconGravity="textStart"
                 app:iconTint="@color/ds_on_primary" />

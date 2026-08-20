@@ -6,7 +6,7 @@
     android:layout_marginBottom="@dimen/ds_space_12"
     android:foreground="?attr/selectableItemBackground"
     app:cardBackgroundColor="@color/purchase_order_fluent_surface"
-    app:cardCornerRadius="@dimen/ia_ds_radius_sm"
+    app:cardCornerRadius="@dimen/ds_radius_sm"
     app:cardElevation="@dimen/_1sdp"
     app:strokeColor="@color/purchase_order_fluent_stroke"
     app:strokeWidth="@dimen/_1sdp">

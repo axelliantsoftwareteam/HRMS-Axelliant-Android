@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/ds_space_8"
     app:cardBackgroundColor="@color/ds_surface"
-    app:cardCornerRadius="@dimen/ia_ds_radius_md"
+    app:cardCornerRadius="@dimen/ds_radius_md"
     app:cardElevation="@dimen/_1sdp"
     app:strokeColor="@color/purchase_order_card_stroke"
     app:strokeWidth="@dimen/_1sdp">

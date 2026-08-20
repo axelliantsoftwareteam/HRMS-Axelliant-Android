@@ -720,7 +720,7 @@
             android:textColor="@color/ds_primary"
             android:visibility="gone"
             app:backgroundTint="@color/ds_surface"
-            app:cornerRadius="@dimen/ia_ds_radius_md"
+            app:cornerRadius="@dimen/ds_radius_md"
             app:strokeColor="@color/ds_outline"
             app:strokeWidth="@dimen/_1sdp" />
 
@@ -735,7 +735,7 @@
             android:textAllCaps="false"
             android:textColor="@color/ds_text_primary"
             app:backgroundTint="@color/ds_surface"
-            app:cornerRadius="@dimen/ia_ds_radius_md"
+            app:cornerRadius="@dimen/ds_radius_md"
             app:strokeColor="@color/ds_outline"
             app:strokeWidth="@dimen/_1sdp" />
     </LinearLayout>

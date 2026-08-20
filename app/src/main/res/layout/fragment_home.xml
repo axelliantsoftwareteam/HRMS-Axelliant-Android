@@ -102,7 +102,7 @@
                 android:layout_width="@dimen/_42sdp"
                 android:layout_height="@dimen/_42sdp"
                 android:layout_marginStart="@dimen/_12sdp"
-                app:fluentui_name="Muhammad Arslan"
+                app:fluentui_name="Axelliant"
                 app:fluentui_avatarSize="xlarge"
                 app:civ_border_width="1dp"
                 app:layout_constraintTop_toTopOf="parent"

@@ -508,7 +508,7 @@
                         android:visibility="gone"
                         android:textColor="@color/quotes_navy"
                         app:backgroundTint="@null"
-                        app:cornerRadius="@dimen/ia_ds_radius_md" />
+                        app:cornerRadius="@dimen/ds_radius_md" />
 
                     <com.axelliant.hris.ui.designsystem.components.AppButtonView
                         android:id="@+id/submitQuoteButton"
@@ -521,7 +521,7 @@
                         android:text="@string/quote_preview_submit"
                         android:textColor="@color/ia_white"
                         app:backgroundTint="@null"
-                        app:cornerRadius="@dimen/ia_ds_radius_md" />
+                        app:cornerRadius="@dimen/ds_radius_md" />
                 </LinearLayout>
             </LinearLayout>
 

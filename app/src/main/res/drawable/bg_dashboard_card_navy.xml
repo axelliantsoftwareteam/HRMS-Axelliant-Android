@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
     <solid android:color="@color/dashboard_card_navy" />
-    <corners android:radius="@dimen/ia_ds_radius_lg" />
+    <corners android:radius="@dimen/ds_radius_lg" />
 </shape>

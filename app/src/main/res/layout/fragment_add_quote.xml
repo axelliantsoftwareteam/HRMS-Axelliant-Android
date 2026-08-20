@@ -571,7 +571,7 @@
                     android:text="@string/add_quote_add_product"
                     android:textAllCaps="false"
                     android:textSize="@dimen/_9ssp"
-                    app:cornerRadius="@dimen/ia_ds_radius_md"
+                    app:cornerRadius="@dimen/ds_radius_md"
                     app:icon="@drawable/ia_ic_add"
                     />
             </LinearLayout>
@@ -692,7 +692,7 @@
                     android:layout_marginTop="@dimen/ds_space_8"
                     android:text="@string/add_quote_create_quote"
                     android:textAllCaps="false"
-                    app:cornerRadius="@dimen/ia_ds_radius_md" />
+                    app:cornerRadius="@dimen/ds_radius_md" />
             </LinearLayout>
 
         </LinearLayout>

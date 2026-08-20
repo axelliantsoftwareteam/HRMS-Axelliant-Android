@@ -2,6 +2,6 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
     <solid android:color="@color/drawer_surface" />
     <corners
-        android:bottomRightRadius="@dimen/ds_radius_2xl"
-        android:topRightRadius="@dimen/ds_radius_2xl" />
+        android:bottomRightRadius="@dimen/ds_radius_xl"
+        android:topRightRadius="@dimen/ds_radius_xl" />
 </shape>

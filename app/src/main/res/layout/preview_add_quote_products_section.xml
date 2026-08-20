@@ -46,7 +46,7 @@
                 android:textColor="@color/ia_white"
                 app:backgroundTint="@null"
                 android:padding="@dimen/_5sdp"
-                app:cornerRadius="@dimen/ia_ds_radius_md" />
+                app:cornerRadius="@dimen/ds_radius_md" />
         </LinearLayout>
 
         <include layout="@layout/item_preview_quote_product_line" />

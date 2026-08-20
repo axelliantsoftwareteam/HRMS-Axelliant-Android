@@ -8,5 +8,5 @@
     <stroke
         android:width="@dimen/_1sdp"
         android:color="#D5E2FF" />
-    <corners android:radius="@dimen/ia_ds_radius_lg" />
+    <corners android:radius="@dimen/ds_radius_lg" />
 </shape>

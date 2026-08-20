@@ -342,7 +342,7 @@
         android:layout_marginEnd="@dimen/ds_space_16"
         android:text="@string/add_quote_apply_changes"
         android:textAllCaps="false"
-        app:cornerRadius="@dimen/ia_ds_radius_md" />
+        app:cornerRadius="@dimen/ds_radius_md" />
 </LinearLayout>
 
 
