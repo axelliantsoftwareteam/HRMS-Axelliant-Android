@@ -1,6 +1,7 @@
 package com.axelliant.hris.ui.designsystem.components
 
 import android.content.Context
+import android.content.ContextWrapper
 import android.content.res.ColorStateList
 import android.graphics.drawable.Drawable
 import android.text.TextUtils
@@ -45,6 +46,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.use
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.findViewTreeLifecycleOwner
+import androidx.lifecycle.runtime.R as LifecycleRuntimeR
+import androidx.lifecycle.viewmodel.R as LifecycleViewModelR
+import androidx.savedstate.SavedStateRegistryOwner
+import androidx.savedstate.R as SavedStateR
 import com.axelliant.hris.R
 import com.axelliant.hris.ui.designsystem.theme.AppFluentTheme
 import com.axelliant.hris.ui.designsystem.tokens.DestructiveButtonTokens
@@ -213,6 +221,11 @@ class AppButtonView @JvmOverloads constructor(
         super.onRtlPropertiesChanged(View.LAYOUT_DIRECTION_LTR)
         this.layoutDirection = View.LAYOUT_DIRECTION_LTR
         textDirection = View.TEXT_DIRECTION_LTR
+    }
+
+    override fun onAttachedToWindow() {
+        ensureViewTreeOwners()
+        super.onAttachedToWindow()
     }
 
     override fun setEnabled(enabled: Boolean) {
@@ -547,6 +560,29 @@ class AppButtonView @JvmOverloads constructor(
         val density = resources.displayMetrics.density.takeIf { it > 0f } ?: 1f
         val fontScale = resources.configuration.fontScale.takeIf { it > 0f } ?: 1f
         return density * fontScale
+    }
+
+    private fun ensureViewTreeOwners() {
+        if (findViewTreeLifecycleOwner() != null) return
+
+        context.findOwner<LifecycleOwner>()?.let { owner ->
+            setTag(LifecycleRuntimeR.id.view_tree_lifecycle_owner, owner)
+        }
+        context.findOwner<ViewModelStoreOwner>()?.let { owner ->
+            setTag(LifecycleViewModelR.id.view_tree_view_model_store_owner, owner)
+        }
+        context.findOwner<SavedStateRegistryOwner>()?.let { owner ->
+            setTag(SavedStateR.id.view_tree_saved_state_registry_owner, owner)
+        }
+    }
+
+    private inline fun <reified T> Context.findOwner(): T? {
+        var current: Context? = this
+        while (current != null) {
+            if (current is T) return current
+            current = (current as? ContextWrapper)?.baseContext
+        }
+        return null
     }
 
     private companion object {
