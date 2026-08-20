@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import java.util.TimeZone
 
 object Utils {
 
@@ -93,5 +94,27 @@ object Utils {
             this.animate().setDuration(200).rotation(0f)
             false
         }
+    }
+
+    /**
+     * MaterialDatePicker returns selection millis at UTC midnight for the
+     * calendar day the user tapped. Converting that directly to a Date and
+     * formatting in local timezone can roll the day back (e.g. Jul 1 -> Jun 30
+     * for timezones ahead of UTC). This pulls out the year/month/day fields
+     * the picker visually showed and reconstructs them at local midnight.
+     */
+    fun utcToLocalDate(utcMillis: Long): Date {
+        val utcCalendar = Calendar.getInstance(TimeZone.getTimeZone("UTC")).apply {
+            timeInMillis = utcMillis
+        }
+        return Calendar.getInstance().apply {
+            set(
+                utcCalendar.get(Calendar.YEAR),
+                utcCalendar.get(Calendar.MONTH),
+                utcCalendar.get(Calendar.DAY_OF_MONTH),
+                0, 0, 0
+            )
+            set(Calendar.MILLISECOND, 0)
+        }.time
     }
 }

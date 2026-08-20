@@ -1,0 +1,58 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <!-- Badge -->
+    <path
+        android:fillColor="@android:color/transparent"
+        android:strokeColor="#0057FF"
+        android:strokeWidth="1.7"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M5,6.5
+                         C5,5.67 5.67,5 6.5,5
+                         H17.5
+                         C18.33,5 19,5.67 19,6.5
+                         V18
+                         C19,18.83 18.33,19.5 17.5,19.5
+                         H6.5
+                         C5.67,19.5 5,18.83 5,18
+                         Z" />
+
+    <!-- Badge clip -->
+    <path
+        android:fillColor="@android:color/transparent"
+        android:strokeColor="#0057FF"
+        android:strokeWidth="1.7"
+        android:strokeLineCap="round"
+        android:pathData="M9,5
+                         V3.8
+                         C9,3.25 9.45,2.8 10,2.8
+                         H14
+                         C14.55,2.8 15,3.25 15,3.8
+                         V5" />
+
+    <!-- Person -->
+    <path
+        android:fillColor="@android:color/transparent"
+        android:strokeColor="#0057FF"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:pathData="M12,9
+                         A2,2 0,1 0,12 13
+                         A2,2 0,0 0,12 9" />
+
+    <path
+        android:fillColor="@android:color/transparent"
+        android:strokeColor="#0057FF"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M8.5,17
+                         C8.8,14.8 10.1,14
+                         12,14
+                         C13.9,14 15.2,14.8 15.5,17" />
+
+</vector>

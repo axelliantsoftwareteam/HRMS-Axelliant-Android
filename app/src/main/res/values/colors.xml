@@ -26,6 +26,7 @@
         <color name="accent_total_leave">#2F6FED</color>
         <color name="accent_remaining_leave">#12B76A</color>
         <color name="card_bg_grey">#F7F5F3</color>
+    <color name="divider_grey">#E5E7EB</color>
 
         <!-- colors!-->
         <color name="colorApp">#09589B</color>

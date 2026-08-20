@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="@dimen/_30sdp"
-    xmlns:tools="http://schemas.android.com/tools"
     android:paddingEnd="@dimen/_10sdp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/ly_work_home"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:minWidth="@dimen/_60sdp"
         android:background="@drawable/rounded_bgg"
-        android:padding="@dimen/_5sdp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:paddingHorizontal="@dimen/_8sdp"
         app:layout_constraintBottom_toBottomOf="parent"
-        >
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/tv_work_from"
@@ -23,26 +23,31 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/pending"
+            android:textAlignment="center"
             android:textColor="@color/ds_text_primary"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintEnd_toStartOf="@+id/tv_work_txt"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_goneMarginEnd="0dp" />
 
         <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/tv_work_txt"
             style="@style/Text.Fluent2.Caption.Primary.Strong"
             android:layout_width="@dimen/_20sdp"
             android:layout_height="@dimen/_20sdp"
-            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginStart="@dimen/_6sdp"
             android:background="@drawable/circle_no_bg"
-            tools:text="10"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            android:gravity="center"
+            android:textAlignment="center"
             android:textSize="@dimen/_8sdp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/tv_work_from"
-   />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="10" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

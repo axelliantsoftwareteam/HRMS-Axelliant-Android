@@ -30,6 +30,8 @@ import com.axelliant.hris.navigation.AppNavigator
 import com.axelliant.hris.utils.Utils
 import com.axelliant.hris.viewmodel.LeaveViewModel
 import androidx.fragment.app.viewModels
+import com.axelliant.hris.ui.designsystem.adapters.FilterAdapter
+import com.axelliant.hris.ui.designsystem.adapters.FilterItem
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -43,6 +45,10 @@ class LeavesFragment : BaseFragment() {
     private var _binding: FragmentLeavesBinding? = null
     private val binding get() = _binding
     private val leaveViewModel: LeaveViewModel by viewModels()
+
+    private lateinit var dateFilterAdapter: FilterAdapter
+
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -70,7 +76,7 @@ class LeavesFragment : BaseFragment() {
         binding?.lyMyteamAttend?.isVisible = isManager
 
         leaveViewModel.getLeaveStats(getCurrentObject())
-        eventSelection()
+        setupDateFilterBar()
 
         leaveViewModel.leaveStatResponse.observe(
             viewLifecycleOwner,
@@ -139,43 +145,18 @@ class LeavesFragment : BaseFragment() {
             })
     }
 
-    private fun eventSelection() {
-        binding?.tvWeek?.background =
-            ContextCompat.getDrawable(requireContext(), R.drawable.rounded_disabled)
-
-        binding?.tvMonth?.background =
-            ContextCompat.getDrawable(requireContext(), R.drawable.rounded_disabled)
-
-        binding?.tvWeek?.setTextColor(requireContext().getColor(R.color.btn_text_color))
-        binding?.tvMonth?.setTextColor(requireContext().getColor(R.color.btn_text_color))
-
-        binding?.tvWeek?.setOnClickListener {
-            currentFilter = AttendanceFilter.WEEK
-            leaveViewModel.getLeaveStats(getCurrentObject())
-            eventSelection()
+    private fun setupDateFilterBar() {
+        val items = listOf(
+            FilterItem(getString(R.string.last_seven), 0),
+            FilterItem(getString(R.string.this_month), 1)
+        )
+        dateFilterAdapter = FilterAdapter(items, selectedPosition = 0) { position, _ ->
+            currentFilter = if (position == 0) AttendanceFilter.WEEK else AttendanceFilter.MONTH
+            dateFilterAdapter.setSelected(position)
         }
-
-        binding?.tvMonth?.setOnClickListener {
-            currentFilter = AttendanceFilter.MONTH
-            leaveViewModel.getLeaveStats(getCurrentObject())
-            eventSelection()
-        }
-
-        when (currentFilter) {
-            AttendanceFilter.WEEK -> {
-                binding?.tvWeek?.background =
-                    ContextCompat.getDrawable(requireContext(), R.drawable.fluent_blue)
-                binding?.tvWeek?.setTextColor(requireContext().getColor(R.color.ds_neutral_white))
-
-            }
-
-            AttendanceFilter.MONTH -> {
-
-                binding?.tvMonth?.background =
-                    ContextCompat.getDrawable(requireContext(), R.drawable.fluent_blue)
-                binding?.tvMonth?.setTextColor(requireContext().getColor(R.color.ds_neutral_white))
-            }
-            AttendanceFilter.Custom -> {}
+        binding?.rvDateFilters?.apply {
+            layoutManager = GridLayoutManager(requireContext(), items.size)
+            adapter = dateFilterAdapter
         }
     }
 
