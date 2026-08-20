@@ -196,6 +196,7 @@ class HomeFragment : BaseFragment() {
         setupLogoutAction()
         observeDrawerPermissions()
         homeViewModel.loadDrawerPermissions()
+        hasHrisHomeAccess = workspaceSessionProvider.hasValidSession(WorkspaceKey.HRIS)
 
         locationPermissionLauncher = registerForActivityResult(
             ActivityResultContracts.RequestPermission()
@@ -261,12 +262,19 @@ class HomeFragment : BaseFragment() {
             Manifest.permission.ACCESS_COARSE_LOCATION,
             Manifest.permission.ACCESS_FINE_LOCATION
         )
-        activityResultLauncher.launch(appPerms)
+        if (hasHrisHomeAccess) {
+            activityResultLauncher.launch(appPerms)
+        }
 
-        if (employProfileResponse == null) {
+        if (employProfileResponse == null && hasHrisHomeAccess) {
             binding?.shimmerLayout?.showShimmer(binding?.contentGroup!!)
         }
-        homeViewModel.getDashboardInformation()
+        if (hasHrisHomeAccess) {
+            homeViewModel.getDashboardInformation()
+        } else {
+            renderInternalAppsOnlyDashboard()
+            renderHomePermissionSections()
+        }
         // data population
         homeViewModel.dashboardResponse.observe(
             viewLifecycleOwner,
@@ -303,7 +311,9 @@ class HomeFragment : BaseFragment() {
 
                 if (response?.meta?.status == true) {
                     requireContext().showSuccessMsg(response.status_message)
-                    homeViewModel.getDashboardInformation()
+                    if (workspaceSessionProvider.hasValidSession(WorkspaceKey.HRIS)) {
+                        homeViewModel.getDashboardInformation()
+                    }
 
                 } else {
                     requireContext().showErrorMsg(response?.meta?.message.toString())
