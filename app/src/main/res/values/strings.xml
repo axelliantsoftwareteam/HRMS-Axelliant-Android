@@ -344,7 +344,7 @@
         <string name="drawer_purchase_orders">Purchase Orders</string>
         <string name="drawer_subscriptions">Subscriptions</string>
         <string name="subscriptions_coming_soon">Subscriptions module is coming soon.</string>
-        <string name="subscription_commerce_title">Subscription commerce</string>
+        <string name="subscription_commerce_title">Subscriptions</string>
         <string name="subscription_subtitle">Track customer subscriptions and renewals.</string>
         <string name="subscription_plans">Plans</string>
         <string name="subscription_invoices">Invoices</string>
