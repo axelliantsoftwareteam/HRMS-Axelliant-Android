@@ -1,5 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/_12sdp" android:orientation="vertical">
-    <com.axelliant.hris.ui.designsystem.components.AppCardView android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="@dimen/_14sdp"><LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical"><com.axelliant.hris.ui.designsystem.components.AppTextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Pricing tiers                                      Manage  ›" android:textColor="@color/ds_text_primary" android:textStyle="bold"/><com.axelliant.hris.ui.designsystem.components.AppTextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/_3sdp" android:text="@string/subscription_tiers_configured" android:textColor="@color/ds_text_secondary"/><View android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginVertical="@dimen/_10sdp" android:background="@color/ds_outline"/><com.axelliant.hris.ui.designsystem.components.AppTextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Plan features                                    Manage  ›" android:textColor="@color/ds_text_primary" android:textStyle="bold"/><com.axelliant.hris.ui.designsystem.components.AppTextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/_3sdp" android:text="@string/subscription_features_included" android:textColor="@color/ds_text_secondary"/><View android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginVertical="@dimen/_10sdp" android:background="@color/ds_outline"/><com.axelliant.hris.ui.designsystem.components.AppTextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Vendor mapping                                      Add  ›" android:textColor="@color/ds_text_primary" android:textStyle="bold"/><com.axelliant.hris.ui.designsystem.components.AppTextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/_3sdp" android:text="@string/subscription_vendor_mapping_description" android:textColor="@color/ds_text_secondary"/></LinearLayout></com.axelliant.hris.ui.designsystem.components.AppCardView>
-    <com.axelliant.hris.ui.designsystem.components.AppCardView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/_12sdp" android:layout_marginBottom="@dimen/_12sdp" android:padding="@dimen/_14sdp"><LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical"><com.axelliant.hris.ui.designsystem.components.AppTextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Additional settings                                     ⌄" android:textColor="@color/ds_text_primary" android:textStyle="bold"/><com.axelliant.hris.ui.designsystem.components.AppTextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/_3sdp" android:text="@string/subscription_additional_settings_description" android:textColor="@color/ds_text_secondary"/></LinearLayout></com.axelliant.hris.ui.designsystem.components.AppCardView>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/_10sdp"
+    android:layout_marginBottom="@dimen/_12sdp"
+    android:orientation="vertical">
+
+    <com.axelliant.hris.ui.designsystem.components.AppCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="@dimen/ds_radius_lg">
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="@dimen/_52sdp" android:gravity="center_vertical" android:paddingStart="@dimen/_12sdp" android:paddingEnd="@dimen/_10sdp">
+                <ImageView android:layout_width="@dimen/_20sdp" android:layout_height="@dimen/_20sdp" android:contentDescription="@null" android:src="@drawable/ic_subscription_layers" app:tint="@color/ds_text_primary" />
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="@dimen/_10sdp" android:layout_weight="1" android:orientation="vertical">
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView style="@style/Text.InternalApps.Subheading" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/subscription_pricing_tiers" android:textColor="@color/ds_text_primary" android:textSize="@dimen/_10ssp" />
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView style="@style/Text.InternalApps.Caption" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/subscription_tiers_configured" android:textColor="@color/ds_text_secondary" android:textSize="@dimen/_9ssp" />
+                </LinearLayout>
+                <com.axelliant.hris.ui.designsystem.components.AppTextView style="@style/Text.InternalApps.Subheading" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/subscription_manage" android:textColor="@color/ds_primary" android:textSize="@dimen/_10ssp" />
+                <ImageView android:layout_width="@dimen/_16sdp" android:layout_height="@dimen/_16sdp" android:layout_marginStart="@dimen/_6sdp" android:contentDescription="@null" android:src="@drawable/ic_chevron_right" app:tint="@color/ds_text_primary" />
+            </LinearLayout>
+            <View android:layout_width="match_parent" android:layout_height="@dimen/_1sdp" android:background="@color/ds_outline" />
+            <LinearLayout android:layout_width="match_parent" android:layout_height="@dimen/_52sdp" android:gravity="center_vertical" android:paddingStart="@dimen/_12sdp" android:paddingEnd="@dimen/_10sdp">
+                <ImageView android:layout_width="@dimen/_20sdp" android:layout_height="@dimen/_20sdp" android:contentDescription="@null" android:src="@drawable/ic_dashboard_box" app:tint="@color/ds_text_primary" />
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="@dimen/_10sdp" android:layout_weight="1" android:orientation="vertical">
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView style="@style/Text.InternalApps.Subheading" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/subscription_plan_features" android:textColor="@color/ds_text_primary" android:textSize="@dimen/_10ssp" />
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView style="@style/Text.InternalApps.Caption" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/subscription_features_included" android:textColor="@color/ds_text_secondary" android:textSize="@dimen/_9ssp" />
+                </LinearLayout>
+                <com.axelliant.hris.ui.designsystem.components.AppTextView style="@style/Text.InternalApps.Subheading" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/subscription_manage" android:textColor="@color/ds_primary" android:textSize="@dimen/_10ssp" />
+                <ImageView android:layout_width="@dimen/_16sdp" android:layout_height="@dimen/_16sdp" android:layout_marginStart="@dimen/_6sdp" android:contentDescription="@null" android:src="@drawable/ic_chevron_right" app:tint="@color/ds_text_primary" />
+            </LinearLayout>
+            <View android:layout_width="match_parent" android:layout_height="@dimen/_1sdp" android:background="@color/ds_outline" />
+            <LinearLayout android:layout_width="match_parent" android:layout_height="@dimen/_52sdp" android:gravity="center_vertical" android:paddingStart="@dimen/_12sdp" android:paddingEnd="@dimen/_10sdp">
+                <ImageView android:layout_width="@dimen/_20sdp" android:layout_height="@dimen/_20sdp" android:contentDescription="@null" android:src="@drawable/ic_detail_building" app:tint="@color/ds_text_primary" />
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="@dimen/_10sdp" android:layout_weight="1" android:orientation="vertical">
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView style="@style/Text.InternalApps.Subheading" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/subscription_vendor_mapping" android:textColor="@color/ds_text_primary" android:textSize="@dimen/_10ssp" />
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView style="@style/Text.InternalApps.Caption" android:layout_width="match_parent" android:layout_height="wrap_content" android:maxLines="1" android:text="@string/subscription_vendor_mapping_description" android:textColor="@color/ds_text_secondary" android:textSize="@dimen/_9ssp" />
+                </LinearLayout>
+                <com.axelliant.hris.ui.designsystem.components.AppTextView style="@style/Text.InternalApps.Subheading" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/subscription_add" android:textColor="@color/ds_primary" android:textSize="@dimen/_10ssp" />
+                <ImageView android:layout_width="@dimen/_16sdp" android:layout_height="@dimen/_16sdp" android:layout_marginStart="@dimen/_6sdp" android:contentDescription="@null" android:src="@drawable/ic_chevron_right" app:tint="@color/ds_text_primary" />
+            </LinearLayout>
+        </LinearLayout>
+    </com.axelliant.hris.ui.designsystem.components.AppCardView>
+
+    <com.axelliant.hris.ui.designsystem.components.AppCardView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/_10sdp" app:cardCornerRadius="@dimen/ds_radius_lg">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="@dimen/_52sdp" android:gravity="center_vertical" android:paddingStart="@dimen/_12sdp" android:paddingEnd="@dimen/_10sdp">
+            <ImageView android:layout_width="@dimen/_20sdp" android:layout_height="@dimen/_20sdp" android:contentDescription="@null" android:src="@drawable/ic_settings" app:tint="@color/ds_text_primary" />
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="@dimen/_10sdp" android:layout_weight="1" android:orientation="vertical">
+                <com.axelliant.hris.ui.designsystem.components.AppTextView style="@style/Text.InternalApps.Subheading" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/subscription_additional_settings" android:textColor="@color/ds_text_primary" android:textSize="@dimen/_10ssp" />
+                <com.axelliant.hris.ui.designsystem.components.AppTextView style="@style/Text.InternalApps.Caption" android:layout_width="match_parent" android:layout_height="wrap_content" android:maxLines="1" android:text="@string/subscription_additional_settings_description" android:textColor="@color/ds_text_secondary" android:textSize="@dimen/_9ssp" />
+            </LinearLayout>
+            <ImageView android:layout_width="@dimen/_16sdp" android:layout_height="@dimen/_16sdp" android:contentDescription="@null" android:src="@drawable/ic_down" app:tint="@color/ds_text_primary" />
+        </LinearLayout>
+    </com.axelliant.hris.ui.designsystem.components.AppCardView>
 </LinearLayout>
