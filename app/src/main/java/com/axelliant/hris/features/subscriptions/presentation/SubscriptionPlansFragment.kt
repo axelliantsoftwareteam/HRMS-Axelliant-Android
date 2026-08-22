@@ -4,12 +4,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import androidx.core.content.getSystemService
+import androidx.core.view.isVisible
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.transition.AutoTransition
+import androidx.transition.TransitionManager
 import com.axelliant.hris.R
 import com.axelliant.hris.databinding.FragmentSubscriptionPlansBinding
 import com.axelliant.hris.extention.showSuccessMsg
+import com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout
 
 class SubscriptionPlansFragment : Fragment() {
     private var _binding: FragmentSubscriptionPlansBinding? = null
@@ -44,8 +51,15 @@ class SubscriptionPlansFragment : Fragment() {
             )
         )
         appTopBar.setOnBackClickListener { findNavController().navigateUp() }
-        appTopBar.setOnSearchClickListener { searchInputLayout.requestFocus() }
-        appTopBar.setOnActionClickListener { requireContext().showSuccessMsg(getString(R.string.subscriptions_more_actions_coming_soon)) }
+        appTopBar.setOnSearchClickListener { toggleSearchField() }
+        searchInputLayout.endIconMode = AppTextFieldLayout.END_ICON_NONE
+        searchEditText.doAfterTextChanged { text ->
+            searchInputLayout.endIconMode = if (text.isNullOrEmpty()) {
+                AppTextFieldLayout.END_ICON_NONE
+            } else {
+                AppTextFieldLayout.END_ICON_CLEAR_TEXT
+            }
+        }
         filterButton.setOnClickListener { requireContext().showSuccessMsg(getString(R.string.subscriptions_filter_coming_soon)) }
         newPlanButton.setOnClickListener { findNavController().navigate(R.id.iaNewSubscriptionPlanFragment) }
     }
@@ -58,6 +72,26 @@ class SubscriptionPlansFragment : Fragment() {
 
     private fun onFilterTabSelected(tab: SubscriptionFilterTab) {
         selectedFilterId = tab.id
+    }
+
+    private fun toggleSearchField() {
+        val showSearch = !binding.searchInputLayout.isVisible
+        TransitionManager.beginDelayedTransition(
+            binding.root,
+            AutoTransition().setDuration(180L),
+        )
+        binding.searchInputLayout.isVisible = showSearch
+        if (showSearch) {
+            binding.searchEditText.requestFocus()
+            binding.searchEditText.post {
+                requireContext().getSystemService<InputMethodManager>()
+                    ?.showSoftInput(binding.searchEditText, InputMethodManager.SHOW_IMPLICIT)
+            }
+        } else {
+            binding.searchEditText.clearFocus()
+            requireContext().getSystemService<InputMethodManager>()
+                ?.hideSoftInputFromWindow(binding.searchEditText.windowToken, 0)
+        }
     }
 
     override fun onDestroyView() {
