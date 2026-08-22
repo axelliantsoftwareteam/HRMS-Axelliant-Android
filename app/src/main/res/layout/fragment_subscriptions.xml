@@ -77,24 +77,24 @@
             <com.google.android.material.tabs.TabItem android:icon="@drawable/ic_subscription_renew" android:text="@string/subscription_reconciliation" />-->
         </com.google.android.material.tabs.TabLayout>
 
-        <View
+    <!--    <View
             android:id="@+id/tabsDivider"
             android:layout_width="0dp"
             android:layout_height="@dimen/_1sdp"
             android:background="@color/ds_outline"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/commerceTabs" />
+            app:layout_constraintTop_toBottomOf="@id/commerceTabs" />-->
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:clipToPadding="false"
-            android:paddingBottom="@dimen/_86sdp"
+            android:paddingBottom="@dimen/_10sdp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tabsDivider">
+            app:layout_constraintTop_toBottomOf="@id/commerceTabs">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -175,14 +175,14 @@
 
     <LinearLayout
         android:id="@+id/newSubscriptionButton"
-        android:layout_width="@dimen/_120sdp"
-        android:layout_height="@dimen/_44sdp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/_5sdp"
         android:layout_marginBottom="@dimen/_10sdp"
+        android:padding="@dimen/_10sdp"
         android:background="@drawable/bg_subscription_new_button"
         android:clickable="true"
         android:elevation="@dimen/_8sdp"
-        android:paddingStart="@dimen/_2sdp"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground"
         android:gravity="center"
