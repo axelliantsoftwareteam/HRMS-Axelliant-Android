@@ -8,21 +8,69 @@
     android:orientation="vertical"
     android:padding="@dimen/_14sdp">
 
-    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical" android:orientation="horizontal">
-        <com.axelliant.hris.ui.designsystem.components.AppTextView style="@style/Text.InternalApps.Heading" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="SUB-1047" android:textColor="@color/ds_text_primary" android:textSize="@dimen/_16ssp" />
-        <com.axelliant.hris.ui.designsystem.components.AppTextView style="@style/Text.InternalApps.Caption" android:layout_width="@dimen/_72sdp" android:layout_height="@dimen/_26sdp" android:background="@drawable/bg_subscription_status_trial" android:gravity="center" android:text="@string/subscription_status_trial" android:textColor="@color/ds_primary" android:textSize="@dimen/_10ssp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            style="@style/Text.InternalApps.Heading"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="SUB-1047"
+            android:textColor="@color/ds_text_primary"
+            android:textSize="@dimen/_12ssp" />
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            style="@style/Text.InternalApps.Caption"
+            android:layout_width="@dimen/_72sdp"
+            android:layout_height="@dimen/_26sdp"
+            android:background="@drawable/bg_subscription_status_trial"
+            android:gravity="center"
+            android:text="@string/subscription_status_trial"
+            android:textColor="@color/ds_primary"
+            android:textSize="@dimen/_10ssp" />
     </LinearLayout>
 
-    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/_18sdp" android:baselineAligned="false" android:orientation="horizontal">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_18sdp"
+        android:baselineAligned="false"
+        android:orientation="horizontal">
+
         <include layout="@layout/layout_subscription_info_account_northwind" />
+
         <include layout="@layout/layout_subscription_info_plan_team" />
+
         <include layout="@layout/layout_subscription_info_price_team" />
     </LinearLayout>
 
-    <View android:layout_width="match_parent" android:layout_height="@dimen/_1sdp" android:layout_marginTop="@dimen/_14sdp" android:background="@color/ds_outline" />
-    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/_12sdp" android:orientation="horizontal">
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1sdp"
+        android:layout_marginTop="@dimen/_14sdp"
+        android:background="@color/ds_outline" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_12sdp"
+        android:orientation="horizontal">
+
         <include layout="@layout/layout_subscription_billing_trial" />
+
         <include layout="@layout/layout_subscription_auto_on" />
     </LinearLayout>
-    <com.axelliant.hris.ui.designsystem.components.AppTextView style="@style/Text.InternalApps.Subheading" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/_16sdp" android:text="@string/subscription_view_details" android:textColor="@color/ds_primary" android:textSize="@dimen/_12ssp" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        style="@style/Text.InternalApps.Subheading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_16sdp"
+        android:text="@string/subscription_view_details"
+        android:textColor="@color/ds_primary"
+        android:textSize="@dimen/_12ssp" />
 </LinearLayout>

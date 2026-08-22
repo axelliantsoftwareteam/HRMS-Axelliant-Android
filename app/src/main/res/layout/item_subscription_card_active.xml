@@ -22,15 +22,17 @@
             android:layout_weight="1"
             android:text="SUB-1048"
             android:textColor="@color/ds_text_primary"
-            android:textSize="@dimen/_16ssp" />
+            android:textSize="@dimen/_12ssp" />
 
         <com.axelliant.hris.ui.designsystem.components.AppTextView
             style="@style/Text.InternalApps.Caption"
-            android:layout_width="@dimen/_72sdp"
+            android:layout_width="wrap_content"
             android:layout_height="@dimen/_26sdp"
             android:background="@drawable/bg_subscription_status_active"
             android:gravity="center"
             android:text="@string/subscription_status_active"
+            android:paddingStart="@dimen/_12sdp"
+            android:paddingEnd="@dimen/_12sdp"
             android:textColor="@color/subscription_active_text"
             android:textSize="@dimen/_10ssp" />
     </LinearLayout>

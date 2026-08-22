@@ -1,5 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
-    <com.axelliant.hris.ui.designsystem.components.AppTextView style="@style/Text.InternalApps.Caption" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/subscription_account" android:textColor="@color/ds_text_secondary" android:textSize="@dimen/_10ssp" />
-    <com.axelliant.hris.ui.designsystem.components.AppTextView style="@style/Text.InternalApps.Body" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/_6sdp" android:text="Contoso Ltd" android:textColor="@color/ds_text_primary" android:textSize="@dimen/_12ssp" />
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:orientation="vertical">
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        style="@style/Text.InternalApps.Caption"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/subscription_account"
+        android:textColor="@color/ds_text_secondary"
+        android:textSize="@dimen/_8ssp" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        style="@style/Text.InternalApps.Body"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_6sdp"
+        android:text="Contoso Ltd"
+        android:textColor="@color/ds_text_primary"
+        android:textSize="@dimen/_10ssp" />
 </LinearLayout>
