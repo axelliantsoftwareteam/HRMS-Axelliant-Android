@@ -66,8 +66,8 @@
         <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/detailsStepCircle"
             style="@style/Text.InternalApps.Subheading"
-            android:layout_width="@dimen/_36sdp"
-            android:layout_height="@dimen/_36sdp"
+            android:layout_width="@dimen/_26sdp"
+            android:layout_height="@dimen/_26sdp"
             android:background="@drawable/bg_subscription_step_circle_active"
             android:gravity="center"
             android:text="1"
@@ -92,8 +92,8 @@
         <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/itemsStepCircle"
             style="@style/Text.InternalApps.Subheading"
-            android:layout_width="@dimen/_36sdp"
-            android:layout_height="@dimen/_36sdp"
+            android:layout_width="@dimen/_26sdp"
+            android:layout_height="@dimen/_26sdp"
             android:background="@drawable/bg_subscription_step_circle_inactive"
             android:gravity="center"
             android:text="2"
@@ -118,8 +118,8 @@
         <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/reviewStepCircle"
             style="@style/Text.InternalApps.Subheading"
-            android:layout_width="@dimen/_36sdp"
-            android:layout_height="@dimen/_36sdp"
+            android:layout_width="@dimen/_26sdp"
+            android:layout_height="@dimen/_26sdp"
             android:background="@drawable/bg_subscription_step_circle_inactive"
             android:gravity="center"
             android:text="3"
@@ -273,10 +273,11 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/_46sdp"
             android:layout_marginTop="@dimen/_10sdp"
-            android:background="@drawable/bg_subscription_new_button"
             android:text="@string/subscription_continue_items"
             android:textAllCaps="false"
             android:textColor="@color/ds_on_primary"
-            app:backgroundTint="@null" />
+            android:textSize="@dimen/_10ssp"
+            app:backgroundTint="@color/ds_primary"
+            app:cornerRadius="@dimen/_10sdp" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
