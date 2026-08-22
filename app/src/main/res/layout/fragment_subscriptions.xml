@@ -100,33 +100,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingTop="@dimen/_20sdp">
-
-                <com.axelliant.hris.ui.designsystem.components.AppTextView
-                    style="@style/Text.InternalApps.Heading"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/drawer_subscriptions"
-                    android:visibility="gone"
-                    android:textColor="@color/ds_text_primary"
-                    android:textSize="@dimen/_18ssp" />
-
-                <com.axelliant.hris.ui.designsystem.components.AppTextView
-                    style="@style/Text.InternalApps.Body"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_6sdp"
-                    android:text="@string/subscription_subtitle"
-                    android:textColor="@color/ds_text_secondary"
-                    android:visibility="gone"
-                    android:textSize="@dimen/_10ssp" />
+                android:paddingTop="@dimen/_5sdp">
 
                 <com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout
                     android:id="@+id/searchInputLayout"
                     style="@style/Widget.InternalApps.InputLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_18sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
                     android:hint="@string/subscription_search_hint"
                     android:visibility="gone"
                     app:startIconDrawable="@drawable/ia_ic_search"
