@@ -15,6 +15,7 @@ enum class AppDrawerAction {
     Quotes,
     SaleOrders,
     PurchaseOrders,
+    Subscriptions,
     Profiles,
     Settings,
     Logout

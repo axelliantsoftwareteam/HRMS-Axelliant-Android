@@ -422,6 +422,13 @@ class HomeFragment : BaseFragment() {
         binding?.ivQr?.setOnClickListener {
             requireContext().showSuccessMsg()
         }
+        binding?.askAiFloatingButton?.setOnClickListener {
+            if (!workspaceSessionProvider.hasValidSession(WorkspaceKey.INTERNAL_APPS)) {
+                requireContext().showErrorMsg("Internal Apps session is not available.")
+                return@setOnClickListener
+            }
+            openInternalAppsDestination(R.id.iaAskAiProductSearchFragment)
+        }
 //        targetLocList.add(BranchDataResponse(LocationFilter.NTC_OFFICE.value, 31.5494, 74.3333))
 //        targetLocList.add(
 //            BranchDataResponse(
@@ -614,6 +621,7 @@ class HomeFragment : BaseFragment() {
             AppDrawerAction.Quotes,
             AppDrawerAction.SaleOrders,
             AppDrawerAction.PurchaseOrders,
+            AppDrawerAction.Subscriptions,
             AppDrawerAction.Settings
         )
         if (requiresInternalAppsSession &&
@@ -645,6 +653,7 @@ class HomeFragment : BaseFragment() {
                 AppDrawerAction.Quotes -> openInternalAppsDestination(R.id.iaQuotesFragment)
                 AppDrawerAction.SaleOrders -> openInternalAppsDestination(R.id.iaSaleOrdersFragment)
                 AppDrawerAction.PurchaseOrders -> openInternalAppsDestination(R.id.iaPurchaseOrdersFragment)
+                AppDrawerAction.Subscriptions -> openInternalAppsDestination(R.id.iaSubscriptionsFragment)
                 AppDrawerAction.Profiles -> AppNavigator.navigateToProfile()
                 AppDrawerAction.Settings -> openInternalAppsDestination(R.id.iaSettingsFragment)
                 AppDrawerAction.Logout -> logoutAndOpenLogin()
@@ -705,6 +714,7 @@ class HomeFragment : BaseFragment() {
                     BUSINESS_MODULE_QUOTES -> openInternalAppsDestination(R.id.iaQuotesFragment)
                     BUSINESS_MODULE_PRODUCTS -> openInternalAppsDestination(R.id.iaProductsFragment)
                     BUSINESS_MODULE_PURCHASE_ORDERS -> openInternalAppsDestination(R.id.iaPurchaseOrdersFragment)
+                    BUSINESS_MODULE_SUBSCRIPTIONS -> openInternalAppsDestination(R.id.iaSubscriptionsFragment)
                 }
             }
         })
@@ -743,6 +753,13 @@ class HomeFragment : BaseFragment() {
                 description = "Manage purchase orders",
                 color = null,
                 drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_home_purchase_orders)
+            )
+            AppDrawerAction.Subscriptions -> Modules(
+                id = BUSINESS_MODULE_SUBSCRIPTIONS,
+                name = getString(R.string.drawer_subscriptions),
+                description = "Manage subscriptions",
+                color = null,
+                drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_dashboard_box)
             )
             else -> null
         }
@@ -811,7 +828,8 @@ class HomeFragment : BaseFragment() {
         AppDrawerMenuItem(R.string.drawer_sale_orders, R.drawable.ic_home_purchase_orders, AppDrawerAction.SaleOrders),
         AppDrawerMenuItem(R.string.drawer_quotes, R.drawable.ic_home_quotes, AppDrawerAction.Quotes),
         AppDrawerMenuItem(R.string.products, R.drawable.ic_home_products, AppDrawerAction.Products),
-        AppDrawerMenuItem(R.string.drawer_purchase_orders, R.drawable.ic_home_sales_orders, AppDrawerAction.PurchaseOrders)
+        AppDrawerMenuItem(R.string.drawer_purchase_orders, R.drawable.ic_home_sales_orders, AppDrawerAction.PurchaseOrders),
+        AppDrawerMenuItem(R.string.drawer_subscriptions, R.drawable.ic_dashboard_box, AppDrawerAction.Subscriptions)
     )
 
     private val footerActions = setOf(AppDrawerAction.Settings, AppDrawerAction.Logout)
@@ -1405,6 +1423,7 @@ class HomeFragment : BaseFragment() {
         private const val BUSINESS_MODULE_QUOTES = 101
         private const val BUSINESS_MODULE_SALES_ORDERS = 102
         private const val BUSINESS_MODULE_PURCHASE_ORDERS = 103
+        private const val BUSINESS_MODULE_SUBSCRIPTIONS = 104
         private const val ONE_DAY_IN_MILLIS = 24 * 60 * 60 * 1000L
     }
 }

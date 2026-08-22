@@ -56,6 +56,7 @@ class UserPermissionRepository @Inject constructor(
             AppDrawerAction.Quotes -> "quote"
             AppDrawerAction.SaleOrders -> "salesorder"
             AppDrawerAction.PurchaseOrders -> "purchaseorder"
+            AppDrawerAction.Subscriptions -> "subscription"
             AppDrawerAction.Profiles -> "user"
             AppDrawerAction.Home,
             AppDrawerAction.AgentConsole,
