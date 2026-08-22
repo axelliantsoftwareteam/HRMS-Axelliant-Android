@@ -544,6 +544,16 @@
 
         <style name="Widget.InternalApps.InputEditText" parent="@style/Widget.Axelliant.InputEditText" />
 
+        <style name="Widget.InternalApps.SubscriptionInputEditText" parent="@style/Widget.InternalApps.InputEditText">
+            <item name="android:background">@null</item>
+            <item name="android:minHeight">@dimen/_36sdp</item>
+            <item name="android:textSize">@dimen/_10ssp</item>
+            <item name="android:paddingStart">@dimen/_10sdp</item>
+            <item name="android:paddingEnd">@dimen/_10sdp</item>
+            <item name="android:paddingTop">@dimen/_4sdp</item>
+            <item name="android:paddingBottom">@dimen/_4sdp</item>
+        </style>
+
         <style name="Widget.InternalApps.Button.Primary" parent="@style/Widget.Axelliant.Button.Primary" />
 
         <style name="Widget.InternalApps.Button.Secondary" parent="@style/Widget.Axelliant.Button.Secondary" />
