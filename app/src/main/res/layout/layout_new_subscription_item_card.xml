@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.axelliant.hris.ui.designsystem.components.AppCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/Widget.InternalApps.Card"
+    android:layout_marginTop="@dimen/_14sdp"
+    app:cardBackgroundColor="@color/subscription_card_surface">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="@dimen/_14sdp">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical" android:orientation="horizontal">
+            <com.axelliant.hris.ui.designsystem.components.AppTextView style="@style/Text.InternalApps.Heading" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Item 1" android:textColor="@color/ds_text_primary" android:textSize="@dimen/_15ssp" />
+            <ImageView android:layout_width="@dimen/_22sdp" android:layout_height="@dimen/_22sdp" android:src="@drawable/ic_delete" app:tint="@color/ds_error" />
+        </LinearLayout>
+        <com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout style="@style/Widget.InternalApps.InputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/_12sdp" android:hint="@string/subscription_item_name">
+            <com.axelliant.hris.ui.designsystem.components.AppTextFieldView style="@style/Widget.InternalApps.InputEditText" android:text="Cloud service license" />
+        </com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout>
+        <com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout style="@style/Widget.InternalApps.InputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/_10sdp" android:hint="@string/subscription_type" app:endIconDrawable="@drawable/ic_down">
+            <com.axelliant.hris.ui.designsystem.components.AppTextFieldView style="@style/Widget.InternalApps.InputEditText" android:text="Base plan" />
+        </com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:baselineAligned="false" android:orientation="horizontal">
+            <com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout style="@style/Widget.InternalApps.InputLayout" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginTop="@dimen/_10sdp" android:layout_marginEnd="@dimen/_6sdp" android:layout_weight="1" android:hint="@string/subscription_quantity"><com.axelliant.hris.ui.designsystem.components.AppTextFieldView style="@style/Widget.InternalApps.InputEditText" android:text="1" /></com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout>
+            <com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout style="@style/Widget.InternalApps.InputLayout" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="@dimen/_6sdp" android:layout_marginTop="@dimen/_10sdp" android:layout_weight="1" android:hint="@string/subscription_unit_price"><com.axelliant.hris.ui.designsystem.components.AppTextFieldView style="@style/Widget.InternalApps.InputEditText" android:text="20.00" /></com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout>
+        </LinearLayout>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:baselineAligned="false" android:orientation="horizontal">
+            <com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout style="@style/Widget.InternalApps.InputLayout" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginTop="@dimen/_10sdp" android:layout_marginEnd="@dimen/_6sdp" android:layout_weight="1" android:hint="@string/subscription_cost_price"><com.axelliant.hris.ui.designsystem.components.AppTextFieldView style="@style/Widget.InternalApps.InputEditText" android:text="12.00" /></com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout>
+            <com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout style="@style/Widget.InternalApps.InputLayout" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="@dimen/_6sdp" android:layout_marginTop="@dimen/_10sdp" android:layout_weight="1" android:hint="@string/subscription_vendor_sku"><com.axelliant.hris.ui.designsystem.components.AppTextFieldView style="@style/Widget.InternalApps.InputEditText" android:text="SKU-1001" /></com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout>
+        </LinearLayout>
+        <com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout style="@style/Widget.InternalApps.InputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/_10sdp" android:hint="@string/subscription_vendor_subscription_id">
+            <com.axelliant.hris.ui.designsystem.components.AppTextFieldView style="@style/Widget.InternalApps.InputEditText" android:text="VS-2048" />
+        </com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout>
+        <com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout style="@style/Widget.InternalApps.InputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/_10sdp" android:hint="@string/subscription_item_notes" app:endIconDrawable="@drawable/ic_down">
+            <com.axelliant.hris.ui.designsystem.components.AppTextFieldView style="@style/Widget.InternalApps.InputEditText" android:hint="Optional notes" />
+        </com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout>
+    </LinearLayout>
+</com.axelliant.hris.ui.designsystem.components.AppCardView>
