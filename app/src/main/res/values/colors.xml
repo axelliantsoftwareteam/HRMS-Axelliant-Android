@@ -240,4 +240,18 @@
         <color name="purchase_order_orange_text">#D75600</color>
         <color name="purchase_order_illustration_blue">#9CB6E0</color>
         <color name="purchase_order_illustration_red">#EA6A79</color>
+        <color name="subscription_card_surface">@color/ds_surface</color>
+        <color name="subscription_soft_surface">@color/ds_surface_variant</color>
+        <color name="subscription_active_bg">#E5F5E8</color>
+        <color name="subscription_active_stroke">#B7E1BE</color>
+        <color name="subscription_active_text">#137333</color>
+        <color name="subscription_trial_bg">#E8F2FF</color>
+        <color name="subscription_trial_stroke">#BBD8FF</color>
+        <color name="subscription_past_due_bg">#FFF0EA</color>
+        <color name="subscription_past_due_stroke">#FFC7B7</color>
+        <color name="subscription_notice_bg">#EEF6FF</color>
+        <color name="subscription_notice_stroke">#BBD8FF</color>
+        <color name="subscription_draft_bg">#FFF0D5</color>
+        <color name="subscription_draft_stroke">#FFD69A</color>
+        <color name="subscription_draft_text">#A75B00</color>
 </resources>

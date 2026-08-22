@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Layout.Fluent2.Screen"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/ds_background">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/startGuideline"
+        style="@style/Guideline.Fluent2.Start"
+        android:orientation="vertical" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/endGuideline"
+        style="@style/Guideline.Fluent2.End"
+        android:orientation="vertical" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/topGuideline"
+        style="@style/Guideline.Fluent2.Top"
+        android:orientation="horizontal" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/bottomGuideline"
+        style="@style/Guideline.Fluent2.Bottom"
+        android:orientation="horizontal" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/subscriptionsContent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/bottomGuideline"
+        app:layout_constraintEnd_toStartOf="@id/endGuideline"
+        app:layout_constraintStart_toEndOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/topGuideline">
+
+        <com.axelliant.hris.ui.designsystem.components.AppTopBarView
+            android:id="@+id/appTopBar"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_40sdp"
+            app:actionIcon="@drawable/ic_more_vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:showActionButton="true"
+            app:showSearchButton="true"
+            app:titleText="@string/subscription_commerce_title" />
+
+        <HorizontalScrollView
+            android:id="@+id/tabsScroll"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_48sdp"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:fillViewport="false"
+            android:overScrollMode="never"
+            android:scrollbars="none"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/appTopBar">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/plansTab"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:drawablePadding="@dimen/_8sdp"
+                    android:gravity="center"
+                    android:paddingEnd="@dimen/_24sdp"
+                    android:text="@string/drawer_subscriptions"
+                    android:textColor="@color/ds_primary"
+                    android:textSize="@dimen/_13ssp"
+                    android:textStyle="bold"
+                    app:drawableStartCompat="@drawable/ic_subscription_box" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:drawablePadding="@dimen/_8sdp"
+                    android:gravity="center"
+                    android:paddingEnd="@dimen/_24sdp"
+                    android:text="@string/subscription_plans"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:textColor="@color/ds_text_secondary"
+                    android:textSize="@dimen/_13ssp"
+                    app:drawableStartCompat="@drawable/ic_dashboard_box" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:drawablePadding="@dimen/_8sdp"
+                    android:gravity="center"
+                    android:paddingEnd="@dimen/_24sdp"
+                    android:text="@string/subscription_invoices"
+                    android:textColor="@color/ds_text_secondary"
+                    android:textSize="@dimen/_13ssp"
+                    app:drawableStartCompat="@drawable/ic_subscription_invoice" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:drawablePadding="@dimen/_8sdp"
+                    android:gravity="center"
+                    android:text="@string/subscription_reconciliation"
+                    android:textColor="@color/ds_text_secondary"
+                    android:textSize="@dimen/_13ssp"
+                    app:drawableStartCompat="@drawable/ic_subscription_renew" />
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <View
+            android:id="@+id/activeTabIndicator"
+            android:layout_width="@dimen/_128sdp"
+            android:layout_height="@dimen/_2sdp"
+            android:background="@color/ds_primary"
+            app:layout_constraintStart_toStartOf="@id/tabsScroll"
+            app:layout_constraintTop_toBottomOf="@id/tabsScroll" />
+
+        <View
+            android:id="@+id/tabsDivider"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_1sdp"
+            android:background="@color/ds_outline"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tabsScroll" />
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:clipToPadding="false"
+            android:paddingBottom="@dimen/_86sdp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tabsDivider">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="@dimen/_20sdp">
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                    style="@style/Text.InternalApps.Heading"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/drawer_subscriptions"
+                    android:textColor="@color/ds_text_primary"
+                    android:textSize="@dimen/_20ssp" />
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                    style="@style/Text.InternalApps.Body"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_6sdp"
+                    android:text="@string/subscription_subtitle"
+                    android:textColor="@color/ds_text_secondary"
+                    android:textSize="@dimen/_12ssp" />
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout
+                    android:id="@+id/searchInputLayout"
+                    style="@style/Widget.InternalApps.InputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_18sdp"
+                    android:hint="@string/subscription_search_hint"
+                    app:startIconDrawable="@drawable/ia_ic_search"
+                    app:startIconTint="@color/ds_text_secondary">
+
+                    <com.axelliant.hris.ui.designsystem.components.AppTextFieldView
+                        android:id="@+id/searchEditText"
+                        style="@style/Widget.InternalApps.InputEditText"
+                        android:inputType="text" />
+                </com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_44sdp"
+                    android:layout_marginTop="@dimen/_16sdp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
+                        style="@style/Text.InternalApps.Subheading"
+                        android:layout_width="@dimen/_72sdp"
+                        android:layout_height="@dimen/_36sdp"
+                        android:background="@drawable/bg_subscription_filter_chip_selected"
+                        android:gravity="center"
+                        android:text="@string/subscription_filter_all"
+                        android:textColor="@color/ds_on_primary"
+                        android:textSize="@dimen/_12ssp" />
+
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
+                        style="@style/Text.InternalApps.Subheading"
+                        android:layout_width="@dimen/_86sdp"
+                        android:layout_height="@dimen/_36sdp"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        android:background="@drawable/bg_subscription_filter_chip"
+                        android:gravity="center"
+                        android:text="@string/subscription_status_active"
+                        android:textColor="@color/ds_text_primary"
+                        android:textSize="@dimen/_12ssp" />
+
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
+                        style="@style/Text.InternalApps.Subheading"
+                        android:layout_width="@dimen/_76sdp"
+                        android:layout_height="@dimen/_36sdp"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        android:background="@drawable/bg_subscription_filter_chip"
+                        android:gravity="center"
+                        android:text="@string/subscription_status_trial"
+                        android:textColor="@color/ds_text_primary"
+                        android:textSize="@dimen/_12ssp" />
+
+                    <com.axelliant.hris.ui.designsystem.components.AppButtonView
+                        android:id="@+id/filterButton"
+                        style="@style/Widget.Fluent2.Button.Icon"
+                        android:layout_width="@dimen/_44sdp"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_marginStart="0dp"
+                        android:background="@drawable/bg_subscription_filter_chip"
+                        android:text=""
+                        app:backgroundTint="@null"
+                        app:icon="@drawable/ic_subscription_filter"
+                        app:iconGravity="textStart"
+                        app:iconSize="@dimen/_18sdp"
+                        app:noBackground="true" />
+                </LinearLayout>
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                    style="@style/Text.InternalApps.Caption"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:text="@string/subscription_count"
+                    android:textColor="@color/ds_text_secondary"
+                    android:textSize="@dimen/_11ssp" />
+
+                <include layout="@layout/item_subscription_card_active" />
+                <include layout="@layout/item_subscription_card_trial" />
+                <include layout="@layout/item_subscription_card_past_due" />
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/newSubscriptionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/_44sdp"
+        android:layout_marginEnd="@dimen/_5sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:background="@drawable/bg_subscription_new_button"
+        android:clickable="true"
+        android:elevation="@dimen/_8sdp"
+        android:paddingStart="@dimen/_2sdp"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="@id/bottomGuideline"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline">
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            style="@style/Text.InternalApps.Heading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+"
+            android:textColor="@color/ds_on_primary"
+            android:textSize="@dimen/_16ssp" />
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            style="@style/Text.InternalApps.Subheading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_4sdp"
+            android:text="@string/subscription_new"
+            android:textColor="@color/ds_on_primary"
+            android:textSize="@dimen/_12ssp" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
