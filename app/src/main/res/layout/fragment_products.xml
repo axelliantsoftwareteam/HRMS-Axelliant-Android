@@ -560,7 +560,7 @@
             android:background="@drawable/bg_quote_create_button"
             android:enabled="false"
             android:text="@string/add_quote_confirm_selection"
-            android:textColor="@color/ia_white"
+            android:textColor="@color/white"
             app:backgroundTint="@null"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
