@@ -335,7 +335,6 @@
         android:elevation="@dimen/_6sdp"
         android:gravity="center"
         android:orientation="horizontal"
-        android:padding="@dimen/_5sdp"
         app:layout_constraintBottom_toTopOf="@id/bottomGuideline"
         app:layout_constraintEnd_toStartOf="@id/endGuideline"
         app:layout_constraintStart_toEndOf="@id/startGuideline">
