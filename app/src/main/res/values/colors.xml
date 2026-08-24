@@ -5,7 +5,9 @@
         <color name="button_bg_color_shadow">#FF053553</color>
         <color name="button_bg_color_shadow_light">#FF386D8E</color>
         <color name="button_disable_color">#CCCCCC</color>
-
+    <!--TEST -->
+    <color name="badge_ring_bg">#DBE6FC</color>
+    <!--TEST -->
         <color name="purple_200">#FFBB86FC</color>
         <color name="purple_500">#FF6200EE</color>
         <color name="purple_700">#FF3700B3</color>

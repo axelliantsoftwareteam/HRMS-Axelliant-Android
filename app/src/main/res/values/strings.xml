@@ -10,6 +10,11 @@
         <string name="current_shift_time">CURRENT SHIFT TIME</string>
         <string name="shift_timer_placeholder">--:--:--</string>
 
+    <string name="leave_balance_details">Leave Balance Details</string>
+    <string name="balance_update_note">* Balance will update after leave approval.</string>
+    <string name="half_day_description">Select this option if you are taking leave for half day</string>
+    <string name="attendance_summary_desc">Mark your attendance by providing the details below.</string>
+    <string name="timezone_note">Note: All times are based on your local time zone.</string>
 
         <string name="home">Home</string>
         <string name="leaves">Leaves</string>
@@ -52,6 +57,7 @@
         <string name="apply_leave">Apply Leave</string>
         <string name="leave_type">Leave Type</string>
         <string name="start_date">Start Date</string>
+        <string name="date_hint">yyyy/MM/dd</string>
         <string name="end_date">End Date</string>
         <string name="reason_for_leave">Reason for Leave</string>
         <string name="accessibility_remove_attachment">Remove attachment</string>

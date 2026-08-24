@@ -283,7 +283,7 @@
         <style name="Layout.Axelliant" />
 
         <style name="Layout.Axelliant.Screen">
-            <item name="android:background">@color/ds_background</item>
+            <item name="android:background">@color/ds_surface</item>
             <item name="android:layoutDirection">ltr</item>
             <item name="android:textDirection">ltr</item>
         </style>

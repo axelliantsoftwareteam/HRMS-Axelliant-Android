@@ -1,8 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Merged from internalapps_colors.xml -->
+
+    <!--TEST -->
+    <color name="quota_badge_bg">@color/ds_primary_container</color>
+    <color name="border">@color/ds_outline</color>
+    <color name="light_green">#1F4A3B</color>
+    <color name="ds_neutral_white">#1E1E1E</color>
+    <color name="ds_neutral_black">#FFFFFF</color>
+    <color name="btn_text_color">@color/ds_text_primary</color>
+    <color name="sky_blue">@color/ds_primary</color>
+    <color name="grey">@color/ds_text_muted</color>
+    <color name="light_gray">@color/ds_surface_variant</color>
+    <color name="line_divider">@color/ds_outline</color>
+    <color name="accent_remaining_leave">@color/ds_success</color>
     <color name="ia_black">@color/ds_neutral_black</color>
-        <color name="ia_white">@color/ds_neutral_white</color>
+    <color name="badge_ring_bg">@color/ds_primary_container</color>
+    <!--TEST -->
+
+    <color name="ia_white">@color/ds_neutral_white</color>
         <color name="app_background">#1F1F1F</color>
         <color name="app_surface">#292929</color>
         <color name="app_surface_alt">#333333</color>
@@ -20,7 +36,7 @@
         <color name="ds_pending">#FFB300</color>
         <color name="ds_error">#F87171</color>
         <color name="ds_background">#1F1F1F</color>
-        <color name="ds_surface">#292929</color>
+        <color name="ds_surface">#111111</color> <!--TEST!-->
         <color name="ds_surface_variant">#333333</color>
         <color name="ds_on_primary">#0F0F0F</color>
         <color name="ds_text_primary">#FFFFFF</color>
