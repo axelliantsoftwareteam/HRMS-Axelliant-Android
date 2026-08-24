@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/_14sdp"
+    android:background="@drawable/bg_subscription_card"
+    android:elevation="@dimen/_2sdp"
+    android:orientation="vertical"
+    android:padding="@dimen/_14sdp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            style="@style/Text.InternalApps.Heading"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="SUB-1042"
+            android:textColor="@color/ds_text_primary"
+            android:textSize="@dimen/_12ssp" />
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            style="@style/Text.InternalApps.Caption"
+            android:layout_width="@dimen/_82sdp"
+            android:layout_height="@dimen/_26sdp"
+            android:background="@drawable/bg_subscription_status_past_due"
+            android:gravity="center"
+            android:text="@string/subscription_status_past_due"
+            android:textColor="@color/ds_error"
+            android:textSize="@dimen/_10ssp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_18sdp"
+        android:baselineAligned="false"
+        android:orientation="horizontal">
+
+        <include layout="@layout/layout_subscription_info_account_fabrikam" />
+
+        <include layout="@layout/layout_subscription_info_plan_enterprise" />
+
+        <include layout="@layout/layout_subscription_info_price_enterprise" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1sdp"
+        android:layout_marginTop="@dimen/_14sdp"
+        android:background="@color/ds_outline" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_12sdp"
+        android:orientation="horizontal">
+
+        <include layout="@layout/layout_subscription_billing_overdue" />
+
+        <include layout="@layout/layout_subscription_auto_off" />
+    </LinearLayout>
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        style="@style/Text.InternalApps.Subheading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_16sdp"
+        android:text="@string/subscription_view_details"
+        android:textColor="@color/ds_primary"
+        android:textSize="@dimen/_12ssp" />
+</LinearLayout>

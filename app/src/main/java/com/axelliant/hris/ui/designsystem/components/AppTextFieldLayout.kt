@@ -56,7 +56,10 @@ class AppTextFieldLayout @JvmOverloads constructor(
     private var errorTextColor: ColorStateList? = null
     private var passwordVisible = false
     private var endIconClickListener: OnClickListener? = null
+    private var startIconDrawable: Drawable? = null
+    private var startIconTint: Int? = null
     private val errorTextView = AppTextView(context)
+    private val hintTextView = AppTextView(context)
     val editText: AppTextFieldView?
         get() = (0 until childCount).map { getChildAt(it) }.filterIsInstance<AppTextFieldView>().firstOrNull()
 
@@ -71,8 +74,12 @@ class AppTextFieldLayout @JvmOverloads constructor(
 
     override fun onFinishInflate() {
         super.onFinishInflate()
+        editText?.background = null
+        applyHintPresentation()
         ensureErrorTextView()
+        applyStartIcon()
         applyEndIcon()
+        post { applyHintPresentation() }
     }
 
     override fun onRtlPropertiesChanged(layoutDirection: Int) {
@@ -109,7 +116,31 @@ class AppTextFieldLayout @JvmOverloads constructor(
 
         attrs.getAttributeResourceValue(AUTO_NS, "endIconDrawable", 0)
             .takeIf { it != 0 }
-            ?.let { endIconDrawable = AppCompatResources.getDrawable(context, it)?.mutate() }
+            ?.let {
+                endIconDrawable = AppCompatResources.getDrawable(context, it)?.mutate()
+                endIconMode = END_ICON_CUSTOM
+                isEndIconVisible = true
+            }
+
+        attrs.getAttributeResourceValue(AUTO_NS, "startIconDrawable", 0)
+            .takeIf { it != 0 }
+            ?.let { startIconDrawable = AppCompatResources.getDrawable(context, it)?.mutate() }
+
+        attrs.getAttributeResourceValue(AUTO_NS, "startIconTint", 0)
+            .takeIf { it != 0 }
+            ?.let { startIconTint = ContextCompat.getColor(context, it) }
+
+        attrs.getAttributeValue(ANDROID_NS, "hint")
+            ?.let { rawHint ->
+                hint = if (rawHint.startsWith("@")) {
+                    attrs.getAttributeResourceValue(ANDROID_NS, "hint", 0)
+                        .takeIf { it != 0 }
+                        ?.let(context::getText)
+                        ?: rawHint
+                } else {
+                    rawHint
+                }
+            }
 
         attrs.getAttributeResourceValue(AUTO_NS, "endIconTint", 0)
             .takeIf { it != 0 }
@@ -133,6 +164,51 @@ class AppTextFieldLayout @JvmOverloads constructor(
         ).apply {
             topMargin = resources.getDimensionPixelSize(R.dimen.ds_space_4)
         }
+    }
+
+    private fun applyHintPresentation() {
+        val field = editText ?: return
+        val fieldHint = hint ?: field.hint
+        if (fieldHint.isNullOrBlank()) return
+
+        if (field.text.isNullOrBlank()) {
+            field.hint = fieldHint
+            return
+        }
+
+        hintTextView.text = fieldHint
+        hintTextView.includeFontPadding = false
+        hintTextView.setTextAppearance(R.style.TextAppearance_Fluent2_Caption)
+        hintTextView.setTextColor(ContextCompat.getColor(context, R.color.ds_input_hint))
+        hintTextView.setBackgroundColor(ContextCompat.getColor(context, R.color.ds_surface))
+        hintTextView.setPadding(
+            resources.getDimensionPixelSize(R.dimen.ds_space_4),
+            0,
+            resources.getDimensionPixelSize(R.dimen.ds_space_4),
+            0,
+        )
+        hintTextView.layoutParams = LayoutParams(
+            LayoutParams.WRAP_CONTENT,
+            LayoutParams.WRAP_CONTENT,
+        ).apply {
+            marginStart = resources.getDimensionPixelSize(R.dimen.ds_space_8)
+            bottomMargin = -resources.getDimensionPixelSize(R.dimen.ds_space_4)
+        }
+        if (hintTextView.parent == null) addView(hintTextView, 0)
+        field.hint = null
+    }
+
+    private fun applyStartIcon() {
+        val field = editText ?: return
+        val icon = startIconDrawable?.mutate()?.let { source ->
+            DrawableCompat.wrap(source).also { wrapped ->
+                startIconTint?.let { DrawableCompat.setTint(wrapped, it) }
+                wrapped.setBounds(0, 0, wrapped.intrinsicWidth, wrapped.intrinsicHeight)
+            }
+        }
+        val drawables = field.compoundDrawables
+        field.setCompoundDrawables(icon, drawables[1], drawables[2], drawables[3])
+        field.compoundDrawablePadding = resources.getDimensionPixelSize(R.dimen.ds_space_8)
     }
 
     private fun updateErrorText() {

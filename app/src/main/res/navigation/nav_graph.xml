@@ -176,6 +176,30 @@
         tools:layout="@layout/fragment_purchase_orders" />
 
     <fragment
+        android:id="@+id/iaSubscriptionsFragment"
+        android:name="com.axelliant.hris.features.subscriptions.presentation.SubscriptionsFragment"
+        android:label="@string/subscription_commerce_title"
+        tools:layout="@layout/fragment_subscriptions" />
+
+    <fragment
+        android:id="@+id/iaNewSubscriptionFragment"
+        android:name="com.axelliant.hris.features.subscriptions.presentation.NewSubscriptionFragment"
+        android:label="@string/new_subscription_title"
+        tools:layout="@layout/fragment_new_subscription" />
+
+    <fragment
+        android:id="@+id/iaSubscriptionPlansFragment"
+        android:name="com.axelliant.hris.features.subscriptions.presentation.SubscriptionPlansFragment"
+        android:label="@string/subscription_plans"
+        tools:layout="@layout/fragment_subscription_plans" />
+
+    <fragment
+        android:id="@+id/iaNewSubscriptionPlanFragment"
+        android:name="com.axelliant.hris.features.subscriptions.presentation.NewSubscriptionPlanFragment"
+        android:label="@string/subscription_new_plan_title"
+        tools:layout="@layout/fragment_new_subscription_plan" />
+
+    <fragment
         android:id="@+id/iaAddPurchaseOrderFragment"
         android:name="com.axelliant.hris.features.purchaseorders.presentation.AddPurchaseOrderFragment"
         android:label="@string/add_purchase_order_title"

@@ -1196,32 +1196,42 @@ class AskAiProductSearchFragment : Fragment() {
         selected: Boolean,
         removable: Boolean,
         onClick: () -> Unit
-    ): AppButtonView {
-        return AppButtonView(requireContext()).apply {
+    ): AppTextView {
+        return AppTextView(requireContext()).apply {
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._32sdp)
             ).apply {
                 marginEnd = resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._6sdp)
             }
-            setBackgroundResource(R.drawable.bg_filter_chip)
-            setText(text)
+            this.text = text
             setTextColor(ContextCompat.getColor(context, if (selected) R.color.ds_on_primary else R.color.ds_primary))
             setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(com.intuit.ssp.R.dimen._9ssp))
-            isAllCaps = false
-            minWidth = 0
-            insetTop = 0
-            insetBottom = 0
-            iconPadding = resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._4sdp)
-            iconSize = resources.getDimensionPixelSize(R.dimen.ds_filter_chip_close_icon_size)
-            if (selected) {
-                backgroundTintList = ContextCompat.getColorStateList(context, R.color.ds_primary)
-            } else {
-                backgroundTintList = ContextCompat.getColorStateList(context, R.color.ds_primary_container)
-            }
+            gravity = android.view.Gravity.CENTER
+            includeFontPadding = false
+            minWidth = resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._48sdp)
+            setPadding(
+                resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._10sdp),
+                0,
+                resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._10sdp),
+                0
+            )
+            setBackgroundResource(R.drawable.bg_filter_chip)
+            backgroundTintList = ContextCompat.getColorStateList(
+                context,
+                if (selected) R.color.ds_primary else R.color.ds_primary_container
+            )
             if (removable) {
-                setIconResource(R.drawable.ia_ic_filter_chip_close)
+                setCompoundDrawablesRelativeWithIntrinsicBounds(
+                    0,
+                    0,
+                    R.drawable.ia_ic_filter_chip_close,
+                    0
+                )
+                compoundDrawablePadding = resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._4sdp)
             }
+            isClickable = true
+            isFocusable = true
             setOnClickListener { onClick() }
         }
     }
@@ -1808,6 +1818,7 @@ class AskAiProductSearchFragment : Fragment() {
             AskAiInputMode.UploadFile -> R.string.ask_ai_input_hint_upload
         }
         binding.inputSubtitleText.setText(subtitleRes)
+        binding.queryEditText.setHint(hintRes)
         binding.voiceStatusText.setText(hintRes)
         binding.voiceStatusText.setTextColor(ContextCompat.getColor(requireContext(), R.color.ds_text_secondary))
         binding.selectedInputModeText.isVisible = selectedInputMode != AskAiInputMode.Default

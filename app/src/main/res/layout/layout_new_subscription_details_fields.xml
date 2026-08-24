@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout
+        style="@style/Widget.InternalApps.InputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_12sdp"
+        android:hint="Account *"
+        app:endIconDrawable="@drawable/ic_down">
+        <com.axelliant.hris.ui.designsystem.components.AppTextFieldView
+            style="@style/Widget.InternalApps.InputEditText"
+            android:text="Contoso Ltd" />
+    </com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout>
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout
+        style="@style/Widget.InternalApps.InputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:hint="Plan *"
+        app:endIconDrawable="@drawable/ic_down">
+        <com.axelliant.hris.ui.designsystem.components.AppTextFieldView
+            style="@style/Widget.InternalApps.InputEditText"
+            android:text="Business Monthly" />
+    </com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout>
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout
+        style="@style/Widget.InternalApps.InputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:hint="Tier *"
+        app:endIconDrawable="@drawable/ic_down">
+        <com.axelliant.hris.ui.designsystem.components.AppTextFieldView
+            style="@style/Widget.InternalApps.InputEditText"
+            android:text="Standard" />
+    </com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout>
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        style="@style/Text.InternalApps.Caption"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_6sdp"
+        android:text="Auto-fills price and billing frequency"
+        android:textColor="@color/ds_text_secondary"
+        android:textSize="@dimen/_10ssp" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        style="@style/Text.InternalApps.Heading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_26sdp"
+        android:text="@string/subscription_billing"
+        android:textColor="@color/ds_text_primary"
+        android:textSize="@dimen/_15ssp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:baselineAligned="false"
+        android:orientation="horizontal">
+        <include layout="@layout/layout_new_subscription_field_monthly" />
+        <include layout="@layout/layout_new_subscription_field_currency" />
+    </LinearLayout>
+
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:baselineAligned="false" android:orientation="horizontal">
+        <include layout="@layout/layout_new_subscription_field_unit_price" />
+        <include layout="@layout/layout_new_subscription_field_quantity" />
+    </LinearLayout>
+
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:baselineAligned="false" android:orientation="horizontal">
+        <include layout="@layout/layout_new_subscription_field_discount" />
+        <include layout="@layout/layout_new_subscription_field_tax" />
+    </LinearLayout>
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        style="@style/Text.InternalApps.Heading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_22sdp"
+        android:text="@string/subscription_schedule"
+        android:textColor="@color/ds_text_primary"
+        android:textSize="@dimen/_15ssp" />
+
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:baselineAligned="false" android:orientation="horizontal">
+        <include layout="@layout/layout_new_subscription_field_start_date" />
+        <include layout="@layout/layout_new_subscription_field_end_date" />
+    </LinearLayout>
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/_42sdp"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:checked="true"
+        android:text="  Auto renew"
+        android:textColor="@color/ds_text_primary"
+        android:textSize="@dimen/_12ssp" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppCardView
+        style="@style/Widget.InternalApps.Card"
+        android:layout_marginTop="@dimen/_8sdp"
+        app:cardBackgroundColor="@color/subscription_card_surface">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical" android:orientation="horizontal" android:padding="@dimen/_12sdp">
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
+                <com.axelliant.hris.ui.designsystem.components.AppTextView style="@style/Text.InternalApps.Subheading" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/subscription_additional_details" android:textColor="@color/ds_text_primary" />
+                <com.axelliant.hris.ui.designsystem.components.AppTextView style="@style/Text.InternalApps.Caption" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Notes and external reference" android:textColor="@color/ds_text_secondary" />
+            </LinearLayout>
+            <ImageView android:layout_width="@dimen/_18sdp" android:layout_height="@dimen/_18sdp" android:src="@drawable/ic_down" app:tint="@color/ds_text_primary" />
+        </LinearLayout>
+    </com.axelliant.hris.ui.designsystem.components.AppCardView>
+</LinearLayout>

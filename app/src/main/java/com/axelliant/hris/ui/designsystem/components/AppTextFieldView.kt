@@ -29,6 +29,7 @@ class AppTextFieldView @JvmOverloads constructor(
     init {
         layoutDirection = View.LAYOUT_DIRECTION_LTR
         textDirection = View.TEXT_DIRECTION_LTR
+        applyDefaultBackground(attrs)
         applyMinHeightToken(attrs)
         applyDefaultTextTokens(attrs)
         if (shouldForceSingleLine(attrs)) {
@@ -42,6 +43,19 @@ class AppTextFieldView @JvmOverloads constructor(
         }
         applyRawXmlIconAttributes(attrs)
         applyIcon()
+    }
+
+    private fun applyDefaultBackground(attrs: AttributeSet?) {
+        val hasXmlBackground = attrs?.getAttributeValue(ANDROID_NS, "background") != null
+        if (!hasXmlBackground) {
+            background = null
+        }
+        setPadding(
+            resources.getDimensionPixelSize(R.dimen.ds_space_12),
+            resources.getDimensionPixelSize(R.dimen.ds_space_6),
+            resources.getDimensionPixelSize(R.dimen.ds_space_12),
+            resources.getDimensionPixelSize(R.dimen.ds_space_6),
+        )
     }
 
     private fun applyDefaultTextTokens(attrs: AttributeSet?) {

@@ -236,11 +236,11 @@
 
                     <com.axelliant.hris.ui.designsystem.components.AppTextFieldView
                         android:id="@+id/queryEditText"
-                        style="@style/Widget.InternalApps.InputEditText"
+                        style="@style/Widget.InternalApps.SubscriptionInputEditText"
+                        android:hint="@string/ask_ai_query_hint"
                         android:imeOptions="actionDone"
                         android:inputType="textCapSentences"
                         android:maxLines="1"
-                        android:minHeight="@dimen/_56sdp"
                         android:singleLine="true"
                         tools:text="Dell laptops from TD Synnex under 500" />
                 </com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout>

@@ -204,6 +204,7 @@ class DashboardFragment : Fragment() {
                 AppDrawerAction.Quotes -> openQuotes()
                 AppDrawerAction.SaleOrders -> openSaleOrders()
                 AppDrawerAction.PurchaseOrders -> openPurchaseOrders()
+                AppDrawerAction.Subscriptions -> openSubscriptions()
                 AppDrawerAction.Profiles -> openProfiles()
                 AppDrawerAction.Settings -> openSettings()
                 AppDrawerAction.Logout -> logoutAndOpenLogin()
@@ -235,6 +236,10 @@ class DashboardFragment : Fragment() {
 
     private fun openPurchaseOrders() {
         InternalAppsNavigator.open(findNavController(), R.id.iaPurchaseOrdersFragment)
+    }
+
+    private fun openSubscriptions() {
+        InternalAppsNavigator.open(findNavController(), R.id.iaSubscriptionsFragment)
     }
 
     private fun openProfiles() {
@@ -353,6 +358,7 @@ class DashboardFragment : Fragment() {
         AppDrawerMenuItem(R.string.drawer_quotes, R.drawable.ic_document, AppDrawerAction.Quotes),
         AppDrawerMenuItem(R.string.drawer_sale_orders, R.drawable.ic_document, AppDrawerAction.SaleOrders),
         AppDrawerMenuItem(R.string.drawer_purchase_orders, R.drawable.ic_document, AppDrawerAction.PurchaseOrders),
+        AppDrawerMenuItem(R.string.drawer_subscriptions, R.drawable.ic_dashboard_box, AppDrawerAction.Subscriptions),
         AppDrawerMenuItem(R.string.profiles, R.drawable.ic_bt_account, AppDrawerAction.Profiles)
     )
 
