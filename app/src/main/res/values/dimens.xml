@@ -65,7 +65,7 @@
         <!-- Login -->
         <dimen name="login_logo_width">@dimen/_110sdp</dimen>
         <dimen name="login_logo_height">@dimen/_40sdp</dimen>
-        <dimen name="login_field_height">@dimen/_48sdp</dimen>
+        <dimen name="login_field_height">@dimen/_42sdp</dimen>
         <dimen name="login_screen_padding">@dimen/_20sdp</dimen>
         <dimen name="login_top_spacing">@dimen/_28sdp</dimen>
         <dimen name="login_pattern_height">@dimen/_180sdp</dimen>
