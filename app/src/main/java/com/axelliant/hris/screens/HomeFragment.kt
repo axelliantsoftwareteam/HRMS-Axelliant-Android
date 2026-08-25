@@ -21,6 +21,7 @@ import android.view.ViewConfiguration
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import kotlinx.coroutines.isActive
 import com.axelliant.hris.extention.showShimmer
 import com.axelliant.hris.extention.hideShimmer
 import androidx.activity.result.ActivityResultLauncher
@@ -104,6 +105,19 @@ class HomeFragment : BaseFragment() {
 
     private var isCheckIn: Boolean = true
     private var isCheckInButtonEnabled: Boolean = true
+
+    //animations
+    private var statusEchoAnimatorSet: android.animation.AnimatorSet? = null
+    private var statusEchoAnimatorSet2: android.animation.AnimatorSet? = null
+
+    //fab state
+    private var isFabCollapsed = false
+    private var isDraggingFab = false
+    private var isFabRightEdge = true
+    private var fabWiggleJob: Job? = null
+    private var autoCollapseJob: Job? = null
+    private var fabBubbleJob: Job? = null
+
 
     // Create an ArrayList to store the converted time strings
     private var targetLocList = ArrayList<BranchDataResponse>()
@@ -192,7 +206,9 @@ class HomeFragment : BaseFragment() {
     @SuppressLint("MissingPermission")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupDraggableFab()
         setupInternalAppsDrawer()
+        startStatusEchoAnimation()
         setupLogoutAction()
         observeDrawerPermissions()
         homeViewModel.loadDrawerPermissions()
@@ -291,8 +307,7 @@ class HomeFragment : BaseFragment() {
                     checkInInfoPopulate(response.checkin_info!!)
                     checkInInfoResponse = response.checkin_info
 
-                    if (response.branch_data != null)
-                    {
+                    if (response.branch_data != null) {
                         targetLocList = response.branch_data
 
                     }
@@ -330,7 +345,7 @@ class HomeFragment : BaseFragment() {
                     if (response != null) {
                         binding?.tvShift?.isVisible = true
                         binding?.lyMyTeam?.isVisible = true
-                        teamattend=response
+                        teamattend = response
                         teamsToday(response)
 
                     }
@@ -422,12 +437,12 @@ class HomeFragment : BaseFragment() {
         binding?.ivQr?.setOnClickListener {
             requireContext().showSuccessMsg()
         }
-        binding?.askAiFloatingButton?.setOnClickListener {
+        binding?.askAiOrb?.setOnClickListener {
             if (!workspaceSessionProvider.hasValidSession(WorkspaceKey.INTERNAL_APPS)) {
                 requireContext().showErrorMsg("Internal Apps session is not available.")
                 return@setOnClickListener
             }
-            openInternalAppsDestination(R.id.iaAskAiProductSearchFragment)
+            openInternalAppsDestination(R.id.iaAgentConsoleFragment)
         }
 //        targetLocList.add(BranchDataResponse(LocationFilter.NTC_OFFICE.value, 31.5494, 74.3333))
 //        targetLocList.add(
@@ -446,6 +461,17 @@ class HomeFragment : BaseFragment() {
         }
         updateCheckInButton()
 
+        binding?.askAiOrb?.apply {
+            clipToOutline = true
+            outlineProvider = object : android.view.ViewOutlineProvider() {
+                override fun getOutline(view: View, outline: android.graphics.Outline) {
+                    outline.setRoundRect(
+                        0, 0, view.width, view.height,
+                        resources.getDimension(R.dimen.ds_radius_xl)
+                    )
+                }
+            }
+        }
     }
 
     private fun setupLogoutAction() {
@@ -1392,6 +1418,269 @@ class HomeFragment : BaseFragment() {
         }
     }
 
+
+    private fun startStatusEchoAnimation() {
+        val echoView1 = binding?.root?.findViewById<View>(R.id.status_dot_echo) ?: return
+        val echoView2 = binding?.root?.findViewById<View>(R.id.status_dot_echo2)
+
+        echoView1.post {
+            if (!isAdded || _binding == null) return@post
+            statusEchoAnimatorSet = buildEchoAnimator(echoView1, startDelay = 0L)
+            statusEchoAnimatorSet?.start()
+
+            echoView2?.let {
+                statusEchoAnimatorSet2 = buildEchoAnimator(it, startDelay = 750L)
+                statusEchoAnimatorSet2?.start()
+            }
+        }
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun setupDraggableFab() {
+        val fabContainer = binding?.askAiFloatingButton ?: return
+        val fabOrb = binding?.askAiOrb ?: return
+
+        var dX = 0f
+        var dY = 0f
+        var downRawX = 0f
+        var downRawY = 0f
+        val clickSlop = ViewConfiguration.get(requireContext()).scaledTouchSlop
+
+        fabOrb.setOnTouchListener { _, event ->
+            val parent = fabContainer.parent as? ViewGroup ?: return@setOnTouchListener false
+
+            when (event.actionMasked) {
+                MotionEvent.ACTION_DOWN -> {
+                    if (isFabCollapsed) {
+                        return@setOnTouchListener false
+                    }
+                    isDraggingFab = false
+                    dX = fabContainer.x - event.rawX
+                    dY = fabContainer.y - event.rawY
+                    downRawX = event.rawX
+                    downRawY = event.rawY
+                    parent.requestDisallowInterceptTouchEvent(true)
+                    true
+                }
+
+                MotionEvent.ACTION_MOVE -> {
+                    if (isFabCollapsed) return@setOnTouchListener false
+
+                    val movedX = abs(event.rawX - downRawX)
+                    val movedY = abs(event.rawY - downRawY)
+                    if (movedX > clickSlop || movedY > clickSlop) isDraggingFab = true
+
+                    var newX = event.rawX + dX
+                    var newY = event.rawY + dY
+                    newX = newX.coerceIn(0f, (parent.width - fabContainer.width).toFloat())
+                    newY = newY.coerceIn(0f, (parent.height - fabContainer.height).toFloat())
+
+                    fabContainer.x = newX
+                    fabContainer.y = newY
+                    true
+                }
+
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    parent.requestDisallowInterceptTouchEvent(false)
+
+                    if (isFabCollapsed) {
+                        if (event.actionMasked == MotionEvent.ACTION_UP) {
+                            expandFab()
+                        }
+                        return@setOnTouchListener true
+                    }
+
+                    val wasDragging = isDraggingFab
+                    isDraggingFab = false // reset immediately so auto-collapse isn't stuck blocked
+
+                    if (!wasDragging) {
+                        fabOrb.performClick()
+                    } else {
+                        // dropped after a drag — stays put, auto-collapses after a delay
+                        scheduleAutoCollapse()
+                    }
+                    true
+                }
+
+                else -> false
+            }
+        }
+
+        // on screen load: visible first, then auto-collapse after a delay
+        fabContainer.post {
+            if (isAdded && _binding != null) {
+                scheduleAutoCollapse()
+            }
+        }
+    }
+
+    private fun scheduleAutoCollapse() {
+        val fabContainer = binding?.askAiFloatingButton ?: return
+
+        isFabCollapsed = false
+        fabContainer.alpha = 1f
+
+        autoCollapseJob?.cancel()
+        autoCollapseJob = viewLifecycleOwner.lifecycleScope.launch {
+            delay(1800L)
+            if (!isAdded || _binding == null) return@launch
+            if (isDraggingFab) return@launch
+            val parent = fabContainer.parent as? ViewGroup ?: return@launch
+            snapAndCollapseFab(parent)
+        }
+    }
+
+    private fun snapAndCollapseFab(parent: ViewGroup) {
+        val fabContainer = binding?.askAiFloatingButton ?: return
+        val screenMid = parent.width / 2f
+        val fabCenter = fabContainer.x + fabContainer.width / 2f
+        val goRight = fabCenter > screenMid
+
+        val edgeX = if (goRight) (parent.width - fabContainer.width).toFloat() else 0f
+
+        fabContainer.animate()
+            .x(edgeX)
+            .setDuration(200L)
+            .withEndAction {
+                collapseFab(goRight)
+            }
+            .start()
+    }
+
+    private fun collapseFab(isRightEdge: Boolean, animate: Boolean = true) {
+        val fabContainer = binding?.askAiFloatingButton ?: return
+        val arrow = binding?.root?.findViewById<ImageView>(R.id.ivFabArrow)
+        val parent = fabContainer.parent as? ViewGroup
+
+        isFabCollapsed = true
+        isFabRightEdge = isRightEdge
+
+        val peekPx = 26 * resources.displayMetrics.density
+        val hiddenOffset = fabContainer.width - peekPx
+
+        val baseX = if (isRightEdge) {
+            (parent?.width ?: 0) - fabContainer.width
+        } else {
+            0
+        }.toFloat()
+
+        val targetX = if (isRightEdge) baseX + hiddenOffset else baseX - hiddenOffset
+
+        arrow?.apply {
+            isVisible = true
+            scaleX = if (isRightEdge) 1f else -1f
+        }
+
+        if (animate) {
+            fabContainer.animate()
+                .x(targetX)
+                .alpha(0.9f)
+                .setDuration(220L)
+                .start()
+        } else {
+            fabContainer.x = targetX
+            fabContainer.alpha = 0.9f
+        }
+
+        startFabWiggle()
+    }
+
+    private fun expandFab() {
+        val fabContainer = binding?.askAiFloatingButton ?: return
+        val arrow = binding?.root?.findViewById<ImageView>(R.id.ivFabArrow)
+        val parent = fabContainer.parent as? ViewGroup ?: return
+
+        autoCollapseJob?.cancel()
+        isFabCollapsed = false
+        stopFabWiggle()
+
+        val targetX = if (isFabRightEdge) {
+            (parent.width - fabContainer.width).toFloat()
+        } else {
+            0f
+        }
+
+        arrow?.isVisible = false
+        fabContainer.animate()
+            .x(targetX)
+            .alpha(1f)
+            .setDuration(220L)
+            .start()
+
+        // re-collapse automatically if left untouched
+        scheduleAutoCollapse()
+    }
+
+    private fun startFabWiggle() {
+        fabWiggleJob?.cancel()
+        val fabContainer = binding?.askAiFloatingButton ?: return
+
+        fabWiggleJob = viewLifecycleOwner.lifecycleScope.launch {
+            while (isActive) {
+                delay(3500L)
+                if (!isFabCollapsed || _binding == null) continue
+                playWiggle(fabContainer)
+            }
+        }
+    }
+
+    private fun stopFabWiggle() {
+        fabWiggleJob?.cancel()
+        fabWiggleJob = null
+        binding?.askAiFloatingButton?.rotation = 0f
+    }
+
+    private fun playWiggle(view: View) {
+        val pivotAdjust = if (isFabRightEdge) 1f else 0f
+        view.pivotX = view.width * pivotAdjust
+        view.pivotY = view.height / 2f
+
+        val tiltAngle = if (isFabRightEdge) -12f else 12f
+
+        android.animation.ObjectAnimator.ofFloat(
+            view, "rotation", 0f, tiltAngle, 0f, tiltAngle * 0.6f, 0f
+        ).apply {
+            duration = 500L
+            interpolator = android.view.animation.DecelerateInterpolator()
+            start()
+        }
+    }
+
+
+    private fun buildEchoAnimator(
+        echoView: View,
+        startDelay: Long
+    ): android.animation.AnimatorSet {
+        val scaleX = android.animation.ObjectAnimator.ofFloat(echoView, "scaleX", 1f, 2.6f)
+        val scaleY = android.animation.ObjectAnimator.ofFloat(echoView, "scaleY", 1f, 2.6f)
+        val alpha = android.animation.ObjectAnimator.ofFloat(echoView, "alpha", 0.55f, 0f)
+
+        return android.animation.AnimatorSet().apply {
+            playTogether(scaleX, scaleY, alpha)
+            duration = 1500L
+            this.startDelay = startDelay
+            interpolator = android.view.animation.DecelerateInterpolator()
+            addListener(object : android.animation.AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: android.animation.Animator) {
+                    echoView.scaleX = 1f
+                    echoView.scaleY = 1f
+                    echoView.alpha = 0.55f
+                    if (isAdded && _binding != null) {
+                        this@apply.startDelay = 0L
+                        start()
+                    }
+                }
+            })
+        }
+    }
+
+    private fun stopStatusEchoAnimation() {
+        statusEchoAnimatorSet?.cancel()
+        statusEchoAnimatorSet2?.cancel()
+        statusEchoAnimatorSet = null
+        statusEchoAnimatorSet2 = null
+    }
+
     // Handle permission result
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -1410,8 +1699,13 @@ class HomeFragment : BaseFragment() {
     override fun onDestroyView() {
         workingTimeJob?.cancel()
         workingTimeJob = null
+        fabWiggleJob?.cancel()
+        fabWiggleJob = null
+        autoCollapseJob?.cancel()
+        autoCollapseJob = null
         binding?.shimmerLayout?.stopShimmer()
         super.onDestroyView()
+        stopStatusEchoAnimation()
         _binding = null
         _todayCardBinding = null
     }

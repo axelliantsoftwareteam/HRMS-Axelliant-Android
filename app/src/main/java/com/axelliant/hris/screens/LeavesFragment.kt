@@ -153,6 +153,7 @@ class LeavesFragment : BaseFragment() {
         dateFilterAdapter = FilterAdapter(items, selectedPosition = 0) { position, _ ->
             currentFilter = if (position == 0) AttendanceFilter.WEEK else AttendanceFilter.MONTH
             dateFilterAdapter.setSelected(position)
+            leaveViewModel.getLeaveStats(getCurrentObject())
         }
         binding?.rvDateFilters?.apply {
             layoutManager = GridLayoutManager(requireContext(), items.size)
@@ -162,7 +163,7 @@ class LeavesFragment : BaseFragment() {
 
 
     private fun remainingLeaveDataPopulate(leaves: ArrayList<LeaveType>) {
-        binding?.rvRemaining?.layoutManager = GridLayoutManager(requireContext(), 3)
+        binding?.rvRemaining?.layoutManager = GridLayoutManager(requireContext(), 2)
         val modulesAdapter = RemainingLeaveAdapter(
             leaves
         )
@@ -199,7 +200,31 @@ class LeavesFragment : BaseFragment() {
         binding?.tvTeamApprovedValue?.text = teamLeaveStats.team_approved.toString()
         binding?.tvTeamRejectedValue?.text = teamLeaveStats.team_reject.toString()
         binding?.tvTeamPendingValue?.text = teamLeaveStats.team_pending.toString()
+
+        updateTeamPresentProgress(teamLeaveStats)
     }
+
+    private fun updateTeamPresentProgress(teamLeaveStats: TeamLeaveStats) {
+        val total = (teamLeaveStats.total_team_members as? Number)?.toInt() ?: 0
+        val present = (teamLeaveStats.all_leaves as? Number)?.toInt() ?: 0
+        val percent = if (total > 0) present.toFloat() / total.toFloat() else 0f
+
+        val progressView = binding?.progressTeamPresent ?: return
+        (progressView.parent as? View)?.let { track ->
+            track.viewTreeObserver.addOnGlobalLayoutListener(object :
+                android.view.ViewTreeObserver.OnGlobalLayoutListener {
+                override fun onGlobalLayout() {
+                    track.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                    val params = progressView.layoutParams
+                    params.width = (track.width * percent).toInt()
+                    progressView.layoutParams = params
+                }
+            })
+        }
+
+        binding?.tvTeamPresentSummary?.text = "$present of $total present"
+    }
+
     private fun getCurrentObject(): AttendanceInput {
 
         var localStart = ""

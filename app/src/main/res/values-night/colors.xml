@@ -68,6 +68,7 @@
         <color name="home_progress_track">#303030</color>
         <color name="home_note_surface">#1B1B1B</color>
         <color name="home_location_chip">#242424</color>
+        <color name="home_status_ring_bg">#1F4A3B</color>
         <color name="login_input_background">#0A3157</color>
         <color name="login_input_stroke">#2A5B86</color>
         <color name="login_input_hint">#9AB0C7</color>

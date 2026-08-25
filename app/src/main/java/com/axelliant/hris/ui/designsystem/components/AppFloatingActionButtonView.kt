@@ -72,7 +72,8 @@ class AppFloatingActionButtonView @JvmOverloads constructor(
 
     private fun createCircleBackground(): RippleDrawable {
         val oval = GradientDrawable().apply {
-            shape = GradientDrawable.OVAL
+            shape = GradientDrawable.RECTANGLE
+            cornerRadius = resources.getDimension(R.dimen.ds_radius_xl)
             color = fabBackgroundTint
         }
         val mask = ColorDrawable(ContextCompat.getColor(context, R.color.ds_neutral_white))

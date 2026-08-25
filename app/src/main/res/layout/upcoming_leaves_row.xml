@@ -4,37 +4,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:paddingEnd="@dimen/_5sdp">
+    android:paddingEnd="@dimen/_8sdp">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/ly_myteam_attend"
         android:layout_width="@dimen/_170sdp"
-        android:layout_height="@dimen/_140sdp"
-        android:background="@drawable/rounded_leave_cancelled"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_card_rounded"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <!-- ly_header kept as id anchor for adapter safety, restyled to a plain
+             muted date pill instead of the red banner -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/ly_header"
-            android:layout_width="@dimen/_170sdp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/rounded_shifts"
-            android:backgroundTint="@color/color_third"
-            android:gravity="start"
-            android:orientation="horizontal"
-            android:padding="@dimen/_5sdp"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_margin="@dimen/_10sdp"
+            android:background="@color/ds_primary_container"
+            android:padding="@dimen/_6sdp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-
             <com.axelliant.hris.ui.designsystem.components.AppTextView
                 android:id="@+id/tv_start_end"
-                style="@style/Text.Fluent2.Body.Inverse.Strong"
+                style="@style/Text.Fluent2.Caption.Primary.Strong"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/ds_primary"
                 tools:text="29 May -30 May"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -46,46 +44,32 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginTop="@dimen/_8sdp"
             tools:text="Bank Holiday"
             android:textAlignment="textStart"
-            android:textColor="@color/blue"
+            android:textColor="@color/ds_text_primary"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ly_header" />
 
         <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/tv_day"
-            style="@style/Text.Fluent2.Caption.Primary.Strong"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_5sdp"
-            tools:text="Out of City"
-            android:textAlignment="textStart"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_total_member_txt" />
-
-
-        <com.axelliant.hris.ui.designsystem.components.AppTextView
-            android:id="@+id/tv_reason"
             style="@style/Text.Fluent2.Caption.Muted.Strong"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_5sdp"
-            android:paddingBottom="@dimen/_5sdp"
-            tools:text="Its a public holiday"
+            android:layout_marginTop="@dimen/_4sdp"
+            tools:text="Out of City"
             android:textAlignment="textStart"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_status" />
-
+            app:layout_constraintTop_toBottomOf="@+id/tv_total_member_txt" />
 
         <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/tv_status"
             style="@style/Text.Fluent2.Caption.Primary.Strong"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/_10sdp"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_8sdp"
             android:background="@drawable/rounded_time_bg"
             android:gravity="center"
             android:paddingStart="@dimen/_10sdp"
@@ -96,6 +80,20 @@
             android:textColor="@color/green"
             app:layout_constraintTop_toBottomOf="@id/tv_day"
             app:layout_constraintStart_toStartOf="parent" />
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            android:id="@+id/tv_reason"
+            style="@style/Text.Fluent2.Caption.Muted.Strong"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_6sdp"
+            android:paddingBottom="@dimen/_10sdp"
+            tools:text="Its a public holiday"
+            android:textAlignment="textStart"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_status" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

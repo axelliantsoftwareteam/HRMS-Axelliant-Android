@@ -1,0 +1,32 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24"
+    android:tint="?attr/colorControlNormal">
+
+    <!-- back (left, smaller) person -->
+    <path
+        android:fillColor="@android:color/white"
+        android:pathData="M5.5,8.25 C6.74,8.25 7.75,7.24 7.75,6 C7.75,4.76 6.74,3.75 5.5,3.75 C4.26,3.75 3.25,4.76 3.25,6 C3.25,7.24 4.26,8.25 5.5,8.25 Z" />
+    <path
+        android:fillColor="@android:color/white"
+        android:pathData="M5.5,9.5 C3.5,9.5 0,10.5 0,12.5 L0,14.25 L4,14.25 L4,12.5 C4,11.3 4.55,10.28 5.4,9.55 C5.43,9.53 5.47,9.51 5.5,9.5 Z" />
+
+    <!-- front (right, smaller) person -->
+    <path
+        android:fillColor="@android:color/white"
+        android:pathData="M18.5,8.25 C19.74,8.25 20.75,7.24 20.75,6 C20.75,4.76 19.74,3.75 18.5,3.75 C17.26,3.75 16.25,4.76 16.25,6 C16.25,7.24 17.26,8.25 18.5,8.25 Z" />
+    <path
+        android:fillColor="@android:color/white"
+        android:pathData="M18.5,9.5 C18.53,9.51 18.57,9.53 18.6,9.55 C19.45,10.28 20,11.3 20,12.5 L20,14.25 L24,14.25 L24,12.5 C24,10.5 20.5,9.5 18.5,9.5 Z" />
+
+    <!-- center (main, larger) person -->
+    <path
+        android:fillColor="@android:color/white"
+        android:pathData="M12,12 C13.93,12 15.5,10.43 15.5,8.5 C15.5,6.57 13.93,5 12,5 C10.07,5 8.5,6.57 8.5,8.5 C8.5,10.43 10.07,12 12,12 Z" />
+    <path
+        android:fillColor="@android:color/white"
+        android:pathData="M12,13.5 C9.66,13.5 5,14.67 5,17 L5,19.5 L19,19.5 L19,17 C19,14.67 14.34,13.5 12,13.5 Z" />
+
+</vector>

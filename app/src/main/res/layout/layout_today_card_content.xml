@@ -13,9 +13,24 @@
         android:id="@+id/status_dot_holder"
         android:layout_width="@dimen/_26sdp"
         android:layout_height="@dimen/_26sdp"
-        android:background="@drawable/bg_home_status_ring"
+        android:clipChildren="false"
+        android:clipToPadding="false"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
+        <View
+            android:id="@+id/status_dot_echo2"
+            android:layout_width="@dimen/_10sdp"
+            android:layout_height="@dimen/_10sdp"
+            android:layout_gravity="center"
+            android:background="@drawable/bg_home_status_dot" />
+
+        <View
+            android:id="@+id/status_dot_echo"
+            android:layout_width="@dimen/_10sdp"
+            android:layout_height="@dimen/_10sdp"
+            android:layout_gravity="center"
+            android:background="@drawable/bg_home_status_dot" />
 
         <View
             android:layout_width="@dimen/_10sdp"
@@ -23,13 +38,12 @@
             android:layout_gravity="center"
             android:background="@drawable/bg_home_status_dot" />
     </FrameLayout>
-
     <com.axelliant.hris.ui.designsystem.components.AppTextView
         android:id="@+id/tv_office_status"
         style="@style/Text.Fluent2.Body.Primary.Strong"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_6sdp"
+        android:layout_marginStart="@dimen/_2sdp"
         android:text="--"
         android:textColor="@color/ds_text_primary"
         android:textSize="@dimen/_10ssp"

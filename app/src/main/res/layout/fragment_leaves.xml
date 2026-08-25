@@ -55,6 +55,7 @@
                 android:clipChildren="false"
                 android:clipToPadding="false">
 
+                <!-- ================= TITLE ================= -->
                 <com.axelliant.hris.ui.designsystem.components.AppTextView
                     android:id="@+id/tv_title"
                     style="@style/Text.Fluent2.Subheading.Primary.Strong"
@@ -65,17 +66,20 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
+                <!-- tv_view: kept (id + click listener unchanged), hidden here since
+                     screenshot shows no "View" link next to this header -->
                 <com.axelliant.hris.ui.designsystem.components.AppTextView
                     android:id="@+id/tv_view"
                     style="@style/Text.Fluent2.Body.Primary.Strong"
                     android:padding="@dimen/_5sdp"
                     android:text="@string/view"
                     android:textAlignment="textStart"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_title"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/tv_title" />
 
-                <!-- ================= SELF LEAVE SECTION ================= -->
+                <!-- ================= SELF LEAVE SECTION (filter bar untouched) ================= -->
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/ly_attend"
                     android:layout_width="0dp"
@@ -85,9 +89,9 @@
                     android:clipToPadding="false"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_view">
+                    app:layout_constraintTop_toBottomOf="@+id/tv_title">
 
-                    <!-- Week / Month toggle (unchanged, still XML/View based) -->
+                    <!-- Week / Month toggle - UNCHANGED -->
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rv_date_filters"
                         android:layout_width="0dp"
@@ -101,98 +105,78 @@
                         tools:itemCount="2"
                         tools:listitem="@layout/item_filter_pill" />
 
-                    <LinearLayout
-                        android:id="@+id/self_leave_stats_container"
+                    <!-- ===== "My statistics" single card, 4-column with dividers ===== -->
+                    <com.axelliant.hris.ui.designsystem.components.AppCardView
+                        android:id="@+id/card_my_statistics"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:layout_marginStart="@dimen/_5sdp"
-                        android:layout_marginEnd="@dimen/_5sdp"
-                        android:orientation="vertical"
+                        android:layout_marginTop="@dimen/_10sdp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/rv_date_filters">
 
-                        <com.axelliant.hris.ui.designsystem.components.AppCardView
+                        <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="@dimen/_12sdp">
+
+                            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                                style="@style/Text.Fluent2.Body.Primary.Strong"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/_8sdp"
+                                android:text="@string/my_statistics" />
 
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:padding="@dimen/_10sdp">
+                                android:orientation="horizontal"
+                                android:gravity="center_vertical">
 
-                                <com.axelliant.hris.ui.designsystem.components.AppTextView
-                                    android:id="@+id/tv_self_total_value"
-                                    style="@style/Text.Fluent2.Title"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="0"
-                                    android:textColor="@color/ds_primary" />
-
-                                <com.axelliant.hris.ui.designsystem.components.AppTextView
-                                    style="@style/Text.Fluent2.Caption.Muted.Strong"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_4sdp"
-                                    android:text="Total Leaves" />
-                            </LinearLayout>
-                        </com.axelliant.hris.ui.designsystem.components.AppCardView>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_8sdp"
-                            android:orientation="horizontal">
-
-                            <com.axelliant.hris.ui.designsystem.components.AppCardView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginEnd="@dimen/_4sdp"
-                                android:layout_weight="1">
-
+                                <!-- Total leaves -->
                                 <LinearLayout
-                                    android:layout_width="match_parent"
+                                    android:layout_width="0dp"
                                     android:layout_height="wrap_content"
-                                    android:orientation="vertical"
-                                    android:padding="@dimen/_10sdp">
+                                    android:layout_weight="1.3"
+                                    android:orientation="vertical">
 
                                     <com.axelliant.hris.ui.designsystem.components.AppTextView
-                                        android:id="@+id/tv_self_pending_value"
-                                        style="@style/Text.Fluent2.Title"
+                                        android:id="@+id/tv_self_total_value"
+                                        style="@style/Text.Fluent2.Title.Primary.Strong"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
+                                        android:textSize="@dimen/_20ssp"
                                         android:text="0"
-                                        android:textColor="@color/yellow" />
+                                        android:textColor="@color/accent_total_leave" />
 
                                     <com.axelliant.hris.ui.designsystem.components.AppTextView
                                         style="@style/Text.Fluent2.Caption.Muted.Strong"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginTop="@dimen/_4sdp"
-                                        android:text="Pending" />
+                                        android:layout_marginTop="@dimen/_2sdp"
+                                        android:text="Total leaves" />
                                 </LinearLayout>
-                            </com.axelliant.hris.ui.designsystem.components.AppCardView>
 
-                            <com.axelliant.hris.ui.designsystem.components.AppCardView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/_4sdp"
-                                android:layout_marginEnd="@dimen/_4sdp"
-                                android:layout_weight="1">
+                                <View
+                                    android:layout_width="@dimen/_1sdp"
+                                    android:layout_height="@dimen/_30sdp"
+                                    android:background="@color/divider_grey" />
 
+                                <!-- Approved -->
                                 <LinearLayout
-                                    android:layout_width="match_parent"
+                                    android:layout_width="0dp"
                                     android:layout_height="wrap_content"
-                                    android:orientation="vertical"
-                                    android:padding="@dimen/_10sdp">
+                                    android:layout_weight="1"
+                                    android:layout_marginStart="@dimen/_8sdp"
+                                    android:orientation="vertical">
 
                                     <com.axelliant.hris.ui.designsystem.components.AppTextView
                                         android:id="@+id/tv_self_approved_value"
-                                        style="@style/Text.Fluent2.Title"
+                                        style="@style/Text.Fluent2.Title.Primary.Strong"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
+                                        android:textSize="@dimen/_18ssp"
                                         android:text="0"
                                         android:textColor="@color/green" />
 
@@ -200,28 +184,59 @@
                                         style="@style/Text.Fluent2.Caption.Muted.Strong"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginTop="@dimen/_4sdp"
+                                        android:layout_marginTop="@dimen/_2sdp"
                                         android:text="Approved" />
                                 </LinearLayout>
-                            </com.axelliant.hris.ui.designsystem.components.AppCardView>
 
-                            <com.axelliant.hris.ui.designsystem.components.AppCardView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/_4sdp"
-                                android:layout_weight="1">
+                                <View
+                                    android:layout_width="@dimen/_1sdp"
+                                    android:layout_height="@dimen/_30sdp"
+                                    android:background="@color/divider_grey" />
 
+                                <!-- Pending -->
                                 <LinearLayout
-                                    android:layout_width="match_parent"
+                                    android:layout_width="0dp"
                                     android:layout_height="wrap_content"
-                                    android:orientation="vertical"
-                                    android:padding="@dimen/_10sdp">
+                                    android:layout_weight="1"
+                                    android:layout_marginStart="@dimen/_8sdp"
+                                    android:orientation="vertical">
+
+                                    <com.axelliant.hris.ui.designsystem.components.AppTextView
+                                        android:id="@+id/tv_self_pending_value"
+                                        style="@style/Text.Fluent2.Title.Primary.Strong"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textSize="@dimen/_18ssp"
+                                        android:text="0"
+                                        android:textColor="@color/yellow" />
+
+                                    <com.axelliant.hris.ui.designsystem.components.AppTextView
+                                        style="@style/Text.Fluent2.Caption.Muted.Strong"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="@dimen/_2sdp"
+                                        android:text="Pending" />
+                                </LinearLayout>
+
+                                <View
+                                    android:layout_width="@dimen/_1sdp"
+                                    android:layout_height="@dimen/_30sdp"
+                                    android:background="@color/divider_grey" />
+
+                                <!-- Rejected -->
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:layout_marginStart="@dimen/_8sdp"
+                                    android:orientation="vertical">
 
                                     <com.axelliant.hris.ui.designsystem.components.AppTextView
                                         android:id="@+id/tv_self_rejected_value"
-                                        style="@style/Text.Fluent2.Title"
+                                        style="@style/Text.Fluent2.Title.Primary.Strong"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
+                                        android:textSize="@dimen/_18ssp"
                                         android:text="0"
                                         android:textColor="@color/red" />
 
@@ -229,56 +244,59 @@
                                         style="@style/Text.Fluent2.Caption.Muted.Strong"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginTop="@dimen/_4sdp"
+                                        android:layout_marginTop="@dimen/_2sdp"
                                         android:text="Rejected" />
                                 </LinearLayout>
-                            </com.axelliant.hris.ui.designsystem.components.AppCardView>
-                        </LinearLayout>
-
-                        <com.axelliant.hris.ui.designsystem.components.AppCardView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_8sdp">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:padding="@dimen/_10sdp">
-
-                                <com.axelliant.hris.ui.designsystem.components.AppTextView
-                                    android:id="@+id/tv_self_remaining_value"
-                                    style="@style/Text.Fluent2.Title"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="0"
-                                    android:textColor="@color/ds_primary" />
-
-                                <com.axelliant.hris.ui.designsystem.components.AppTextView
-                                    style="@style/Text.Fluent2.Caption.Muted.Strong"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_4sdp"
-                                    android:text="Remaining" />
                             </LinearLayout>
-                        </com.axelliant.hris.ui.designsystem.components.AppCardView>
-                    </LinearLayout>
+
+                        </LinearLayout>
+                    </com.axelliant.hris.ui.designsystem.components.AppCardView>
+
+                    <!-- tv_self_remaining_value kept off-screen (not shown in this design)
+                         so nothing in Kotlin referencing it breaks -->
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
+                        android:id="@+id/tv_self_remaining_value"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:text="0"
+                        android:visibility="gone"
+                        app:layout_constraintTop_toBottomOf="@id/card_my_statistics"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <!-- ===== "My remaining leaves" header ===== -->
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
+                        android:id="@+id/tv_remaining_header"
+                        style="@style/Text.Fluent2.Subheading.Primary.Strong"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_16sdp"
+                        android:text="My remaining leaves"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/card_my_statistics" />
+
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
+                        android:id="@+id/tv_leave_types_count"
+                        style="@style/Text.Fluent2.Caption.Muted.Strong"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="4 leave types"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_remaining_header" />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rv_remaining"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_10sdp"
-                        android:layout_marginStart="@dimen/_6sdp"
-                        app:layout_constraintTop_toBottomOf="@+id/self_leave_stats_container"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_leave_types_count"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
                         android:clipChildren="false"
                         android:clipToPadding="false"
                         tools:listitem="@layout/remaning_leave_row"
-                        tools:itemCount="3"
-                        app:spanCount="3"
+                        tools:itemCount="4"
+                        app:spanCount="2"
                         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -289,8 +307,9 @@
                     style="@style/Text.Fluent2.Subheading.Primary.Strong"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_16sdp"
                     android:text="@string/my_team"
+                    android:gravity="center_vertical"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/ly_attend" />
 
@@ -298,7 +317,7 @@
                     android:id="@+id/tv_my_team_view"
                     style="@style/Text.Fluent2.Body.Primary.Strong"
                     android:padding="@dimen/_5sdp"
-                    android:text="@string/view"
+                    android:text="View team"
                     android:textAlignment="textStart"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_my_team"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -311,45 +330,21 @@
                     android:layout_marginTop="@dimen/_10sdp"
                     android:clipChildren="false"
                     android:clipToPadding="false"
-                    android:background="@drawable/rounded_leave_cancelled"
+                    android:background="@drawable/bg_card_rounded"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_my_team_view">
 
-                    <!-- Header row (unchanged) -->
+                    <!-- header row (iv_today/red pill) kept but hidden — no longer in design -->
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/ly_header"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/rounded_shifts"
-                        android:backgroundTint="@color/color_third"
-                        android:gravity="center"
-                        android:orientation="horizontal"
-                        android:padding="@dimen/_5sdp"
+                        android:layout_height="0dp"
+                        android:visibility="gone"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
 
-                        <ImageView
-                            android:id="@+id/iv_today"
-                            style="@style/Text.Fluent2.Caption.Inverse"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/_5sdp"
-                            android:src="@drawable/ic_line_chart"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:tint="@color/ds_neutral_white" />
-
-                        <com.axelliant.hris.ui.designsystem.components.AppTextView
-                            style="@style/Text.Fluent2.Body.Inverse.Strong"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_marginStart="@dimen/_5sdp"
-                            android:text="@string/last_week"
-                            app:layout_constraintStart_toEndOf="@+id/iv_today"
-                            app:layout_constraintTop_toTopOf="parent" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -357,92 +352,85 @@
                         android:id="@+id/team_leave_stats_container"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/_5sdp"
+                        android:layout_margin="@dimen/_12sdp"
                         android:orientation="vertical"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/ly_header">
+                        app:layout_constraintTop_toTopOf="parent">
 
-                        <com.axelliant.hris.ui.designsystem.components.AppCardView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:padding="@dimen/_10sdp">
-
-                                <com.axelliant.hris.ui.designsystem.components.AppTextView
-                                    android:id="@+id/tv_team_total_value"
-                                    style="@style/Text.Fluent2.Title"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="0"
-                                    android:textColor="@color/blue" />
-
-                                <com.axelliant.hris.ui.designsystem.components.AppTextView
-                                    style="@style/Text.Fluent2.Caption.Muted.Strong"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_4sdp"
-                                    android:text="Total Members" />
-                            </LinearLayout>
-                        </com.axelliant.hris.ui.designsystem.components.AppCardView>
-
+                        <!-- Total members + Present, icon chips -->
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_8sdp"
                             android:orientation="horizontal">
 
-                            <com.axelliant.hris.ui.designsystem.components.AppCardView
+                            <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginEnd="@dimen/_4sdp"
-                                android:layout_weight="1">
+                                android:layout_weight="1"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:layout_width="@dimen/_34sdp"
+                                    android:layout_height="@dimen/_34sdp"
+                                    android:background="@drawable/ic_bg_circle_blue"
+                                    android:padding="@dimen/_7sdp"
+                                    android:src="@drawable/ic_people_group"
+                                    app:tint="@color/ds_primary" />
 
                                 <LinearLayout
-                                    android:layout_width="match_parent"
+                                    android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:orientation="vertical"
-                                    android:padding="@dimen/_10sdp">
+                                    android:layout_marginStart="@dimen/_8sdp"
+                                    android:orientation="vertical">
 
                                     <com.axelliant.hris.ui.designsystem.components.AppTextView
-                                        android:id="@+id/tv_team_present_value"
-                                        style="@style/Text.Fluent2.Title"
+                                        android:id="@+id/tv_team_total_value"
+                                        style="@style/Text.Fluent2.Title.Primary.Strong"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
+                                        android:textSize="@dimen/_18ssp"
                                         android:text="0"
-                                        android:textColor="@color/ds_primary" />
+                                        android:textColor="@color/blue" />
 
                                     <com.axelliant.hris.ui.designsystem.components.AppTextView
                                         style="@style/Text.Fluent2.Caption.Muted.Strong"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginTop="@dimen/_4sdp"
-                                        android:text="Present" />
+                                        android:text="Total members" />
                                 </LinearLayout>
-                            </com.axelliant.hris.ui.designsystem.components.AppCardView>
+                            </LinearLayout>
 
-                            <com.axelliant.hris.ui.designsystem.components.AppCardView
+                            <LinearLayout
                                 android:layout_width="0dp"
+                                android:layout_marginStart="@dimen/_50sdp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/_4sdp"
-                                android:layout_weight="1">
+                                android:layout_weight="1"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:layout_width="@dimen/_34sdp"
+                                    android:layout_height="@dimen/_34sdp"
+                                    android:background="@drawable/ic_bg_circle_green"
+                                    android:padding="@dimen/_7sdp"
+                                    android:src="@drawable/ic_person_check"
+                                    app:tint="@color/green" />
 
                                 <LinearLayout
-                                    android:layout_width="match_parent"
+                                    android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:orientation="vertical"
-                                    android:padding="@dimen/_10sdp">
+                                    android:layout_marginStart="@dimen/_8sdp"
+                                    android:orientation="vertical">
 
                                     <com.axelliant.hris.ui.designsystem.components.AppTextView
-                                        android:id="@+id/tv_team_approved_value"
-                                        style="@style/Text.Fluent2.Title"
+                                        android:id="@+id/tv_team_present_value"
+                                        style="@style/Text.Fluent2.Title.Primary.Strong"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
+                                        android:textSize="@dimen/_18ssp"
                                         android:text="0"
                                         android:textColor="@color/green" />
 
@@ -450,85 +438,129 @@
                                         style="@style/Text.Fluent2.Caption.Muted.Strong"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginTop="@dimen/_4sdp"
-                                        android:text="Approved" />
+                                        android:text="Present" />
                                 </LinearLayout>
-                            </com.axelliant.hris.ui.designsystem.components.AppCardView>
+                            </LinearLayout>
                         </LinearLayout>
 
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_6sdp"
+                            android:layout_marginTop="@dimen/_12sdp"
+                            android:background="@drawable/bg_progress_track">
+
+                            <View
+                                android:id="@+id/progress_team_present"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="start"
+                                android:background="@drawable/bg_progress_fill_green" />
+                        </FrameLayout>
+
+                        <com.axelliant.hris.ui.designsystem.components.AppTextView
+                            android:id="@+id/tv_team_present_summary"
+                            style="@style/Text.Fluent2.Caption.Muted.Strong"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_6sdp"
+                            android:layout_gravity="center_horizontal"
+                            android:textColor="@color/green"
+                            android:text="" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_1sdp"
+                            android:layout_marginTop="@dimen/_1sdp"
+                            android:background="@color/divider_grey" />
+
+                        <!-- Approved / Pending / Rejected -->
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_8sdp"
+                            android:layout_marginTop="@dimen/_12sdp"
                             android:orientation="horizontal">
 
-                            <com.axelliant.hris.ui.designsystem.components.AppCardView
+                            <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginEnd="@dimen/_4sdp"
-                                android:layout_weight="1">
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:orientation="vertical">
 
-                                <LinearLayout
-                                    android:layout_width="match_parent"
+                                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                                    android:id="@+id/tv_team_approved_value"
+                                    style="@style/Text.Fluent2.Title.Primary.Strong"
+                                    android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:orientation="vertical"
-                                    android:padding="@dimen/_10sdp">
+                                    android:textSize="@dimen/_18ssp"
+                                    android:text="0"
+                                    android:textColor="@color/green" />
 
-                                    <com.axelliant.hris.ui.designsystem.components.AppTextView
-                                        android:id="@+id/tv_team_rejected_value"
-                                        style="@style/Text.Fluent2.Title"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="0"
-                                        android:textColor="@color/red" />
+                                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                                    style="@style/Text.Fluent2.Caption.Muted.Strong"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/_2sdp"
+                                    android:text="Approved" />
+                            </LinearLayout>
 
-                                    <com.axelliant.hris.ui.designsystem.components.AppTextView
-                                        style="@style/Text.Fluent2.Caption.Muted.Strong"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginTop="@dimen/_4sdp"
-                                        android:text="Rejected" />
-                                </LinearLayout>
-                            </com.axelliant.hris.ui.designsystem.components.AppCardView>
-
-                            <com.axelliant.hris.ui.designsystem.components.AppCardView
+                            <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/_4sdp"
-                                android:layout_weight="1">
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:orientation="vertical">
 
-                                <LinearLayout
-                                    android:layout_width="match_parent"
+                                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                                    android:id="@+id/tv_team_pending_value"
+                                    style="@style/Text.Fluent2.Title.Primary.Strong"
+                                    android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:orientation="vertical"
-                                    android:padding="@dimen/_10sdp">
+                                    android:textSize="@dimen/_18ssp"
+                                    android:text="0"
+                                    android:textColor="@color/yellow" />
 
-                                    <com.axelliant.hris.ui.designsystem.components.AppTextView
-                                        android:id="@+id/tv_team_pending_value"
-                                        style="@style/Text.Fluent2.Title"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="0"
-                                        android:textColor="@color/yellow" />
+                                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                                    style="@style/Text.Fluent2.Caption.Muted.Strong"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/_2sdp"
+                                    android:text="Pending" />
+                            </LinearLayout>
 
-                                    <com.axelliant.hris.ui.designsystem.components.AppTextView
-                                        style="@style/Text.Fluent2.Caption.Muted.Strong"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginTop="@dimen/_4sdp"
-                                        android:text="Pending" />
-                                </LinearLayout>
-                            </com.axelliant.hris.ui.designsystem.components.AppCardView>
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                                    android:id="@+id/tv_team_rejected_value"
+                                    style="@style/Text.Fluent2.Title.Primary.Strong"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="@dimen/_18ssp"
+                                    android:text="0"
+                                    android:textColor="@color/red" />
+
+                                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                                    style="@style/Text.Fluent2.Caption.Muted.Strong"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/_2sdp"
+                                    android:text="Rejected" />
+                            </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <!-- ================= UPCOMING LEAVES SECTION ================= -->
+                <!-- ================= UPCOMING LEAVES (untouched, no equivalent in screenshot crop) ================= -->
                 <com.axelliant.hris.ui.designsystem.components.AppTextView
                     android:id="@+id/tv_my_shift"
                     style="@style/Text.Fluent2.Subheading.Primary.Strong"
-                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_16sdp"
                     android:text="@string/upcoming_leavs"
                     android:textAlignment="textStart"
                     app:layout_constraintStart_toStartOf="parent"
@@ -538,6 +570,7 @@
                     android:id="@+id/rv_upcoming_leaves"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/_10sdp"
                     android:orientation="horizontal"
                     android:clipChildren="false"
                     android:clipToPadding="false"
