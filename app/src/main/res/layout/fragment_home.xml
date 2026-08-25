@@ -950,48 +950,46 @@
         <!-- END: card_main                                                -->
         <!-- ============================================================ -->
 
-        <LinearLayout
+        <FrameLayout
             android:id="@+id/askAiFloatingButton"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/_54sdp"
             android:layout_height="@dimen/_54sdp"
+            android:layout_marginEnd="@dimen/_8sdp"
             android:layout_marginBottom="@dimen/_12sdp"
+            android:background="@drawable/bg_home_ask_ai_fab"
+            android:clickable="true"
+            android:contentDescription="@string/ask_ai"
             android:elevation="@dimen/_4sdp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
             app:layout_constraintBottom_toBottomOf="@id/bottom_guideline"
             app:layout_constraintEnd_toEndOf="@id/end_guideline">
 
             <FrameLayout
-                android:id="@+id/askAiOrb"
-                android:layout_width="@dimen/_55sdp"
-                android:layout_height="@dimen/_55sdp"
-                android:background="@drawable/bg_home_ask_ai_orb"
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?attr/selectableItemBackgroundBorderless">
+                android:layout_width="@dimen/_40sdp"
+                android:layout_height="@dimen/_40sdp"
+                android:layout_gravity="center"
+                android:background="@drawable/bg_home_ask_ai_orb">
 
                 <ImageView
-                    android:layout_width="@dimen/_20sdp"
+                    android:layout_width="19dp"
                     android:layout_height="@dimen/_20sdp"
                     android:layout_gravity="center"
                     android:contentDescription="@null"
                     android:src="@drawable/ic_ai_sparkles"
                     app:tint="@color/ds_neutral_white" />
-
-                <ImageView
-                    android:id="@+id/ivFabArrow"
-                    android:layout_width="@dimen/_14sdp"
-                    android:layout_height="@dimen/_14sdp"
-                    android:layout_gravity="center_vertical|start"
-                    android:layout_marginStart="@dimen/_2sdp"
-                    android:src="@drawable/ic_chevron_left"
-                    android:visibility="gone"
-                    app:tint="@color/ds_neutral_white" />
-
             </FrameLayout>
 
-        </LinearLayout>
+            <ImageView
+                android:id="@+id/ivFabArrow"
+                android:layout_width="@dimen/_14sdp"
+                android:layout_height="@dimen/_14sdp"
+                android:layout_gravity="center_vertical|start"
+                android:src="@drawable/ic_chevron_left"
+                android:visibility="gone"
+                app:tint="@color/ds_neutral_white" />
 
+        </FrameLayout>
         <com.facebook.shimmer.ShimmerFrameLayout
             android:id="@+id/shimmer_layout"
             android:layout_width="0dp"

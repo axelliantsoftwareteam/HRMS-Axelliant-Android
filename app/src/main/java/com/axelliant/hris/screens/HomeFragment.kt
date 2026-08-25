@@ -437,7 +437,7 @@ class HomeFragment : BaseFragment() {
         binding?.ivQr?.setOnClickListener {
             requireContext().showSuccessMsg()
         }
-        binding?.askAiOrb?.setOnClickListener {
+        binding?.askAiFloatingButton?.setOnClickListener {
             if (!workspaceSessionProvider.hasValidSession(WorkspaceKey.INTERNAL_APPS)) {
                 requireContext().showErrorMsg("Internal Apps session is not available.")
                 return@setOnClickListener
@@ -461,7 +461,7 @@ class HomeFragment : BaseFragment() {
         }
         updateCheckInButton()
 
-        binding?.askAiOrb?.apply {
+        binding?.askAiFloatingButton?.apply {
             clipToOutline = true
             outlineProvider = object : android.view.ViewOutlineProvider() {
                 override fun getOutline(view: View, outline: android.graphics.Outline) {
@@ -1438,7 +1438,7 @@ class HomeFragment : BaseFragment() {
     @SuppressLint("ClickableViewAccessibility")
     private fun setupDraggableFab() {
         val fabContainer = binding?.askAiFloatingButton ?: return
-        val fabOrb = binding?.askAiOrb ?: return
+        val fabOrb = binding?.askAiFloatingButton ?: return
 
         var dX = 0f
         var dY = 0f
@@ -1555,7 +1555,7 @@ class HomeFragment : BaseFragment() {
         isFabCollapsed = true
         isFabRightEdge = isRightEdge
 
-        val peekPx = 26 * resources.displayMetrics.density
+        val peekPx = 22 * resources.displayMetrics.density
         val hiddenOffset = fabContainer.width - peekPx
 
         val baseX = if (isRightEdge) {
@@ -1594,10 +1594,11 @@ class HomeFragment : BaseFragment() {
         isFabCollapsed = false
         stopFabWiggle()
 
+        val edgeGap = 16 * resources.displayMetrics.density
         val targetX = if (isFabRightEdge) {
-            (parent.width - fabContainer.width).toFloat()
+            (parent.width - fabContainer.width) - edgeGap
         } else {
-            0f
+            edgeGap
         }
 
         arrow?.isVisible = false
