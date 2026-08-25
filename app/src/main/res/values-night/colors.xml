@@ -72,6 +72,10 @@
         <color name="login_input_background">#0A3157</color>
         <color name="login_input_stroke">#2A5B86</color>
         <color name="login_input_hint">#9AB0C7</color>
+        <color name="login_input_text">#FFFFFFFF</color>
+        <color name="login_label_text">#FFFFFFFF</color>
+        <color name="login_button_text_enabled">#FFFFFFFF</color>
+        <color name="login_button_text_disabled">#C2D7EA</color>
         <color name="login_subtitle">#C2D7EA</color>
         <color name="login_error">#FFB4AB</color>
         <color name="dashboard_card_navy">#102B4A</color>

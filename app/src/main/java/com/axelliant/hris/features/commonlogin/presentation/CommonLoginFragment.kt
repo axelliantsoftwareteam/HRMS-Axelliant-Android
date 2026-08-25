@@ -142,7 +142,7 @@ class CommonLoginFragment : Fragment() {
     private fun IaFragmentLoginBinding.bindLoginButton(canLogin: Boolean) {
         val color = ContextCompat.getColor(
             requireContext(),
-            if (canLogin) R.color.ia_white else R.color.ds_disabled_text
+            if (canLogin) R.color.login_button_text_enabled else R.color.login_button_text_disabled
         )
         loginButton.isEnabled = canLogin
         loginButton.setText(R.string.ia_login_action)

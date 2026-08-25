@@ -45,19 +45,19 @@ class UserPermissionRepository @Inject constructor(
 
         return AppDrawerAction.entries
             .filter { action ->
-                action.permissionEntity == null || action.permissionEntity in visibleEntities
+                action.permissionEntities.isEmpty() || action.permissionEntities.any { it in visibleEntities }
             }
             .toSet()
     }
 
-    private val AppDrawerAction.permissionEntity: String?
+    private val AppDrawerAction.permissionEntities: Set<String>
         get() = when (this) {
-            AppDrawerAction.Products -> "product"
-            AppDrawerAction.Quotes -> "quote"
-            AppDrawerAction.SaleOrders -> "salesorder"
-            AppDrawerAction.PurchaseOrders -> "purchaseorder"
-            AppDrawerAction.Subscriptions -> "subscription"
-            AppDrawerAction.Profiles -> "user"
+            AppDrawerAction.Products -> setOf("product")
+            AppDrawerAction.Quotes -> setOf("quote")
+            AppDrawerAction.SaleOrders -> setOf("salesorder")
+            AppDrawerAction.PurchaseOrders -> setOf("purchaseorder")
+            AppDrawerAction.Subscriptions -> setOf("subscription", "managedsubscription")
+            AppDrawerAction.Profiles -> setOf("user")
             AppDrawerAction.Home,
             AppDrawerAction.AgentConsole,
             AppDrawerAction.Calendar,
@@ -69,7 +69,7 @@ class UserPermissionRepository @Inject constructor(
             AppDrawerAction.DocumentVault,
             AppDrawerAction.ResourceManagement,
             AppDrawerAction.Settings,
-            AppDrawerAction.Logout -> null
+            AppDrawerAction.Logout -> emptySet()
         }
 
     private companion object {

@@ -698,6 +698,15 @@
             <attr name="iconGravity" />
         </declare-styleable>
 
+        <declare-styleable name="AppTextFieldLayout">
+            <attr name="endIconMode" />
+            <attr name="endIconDrawable" />
+            <attr name="endIconTint" />
+            <attr name="startIconDrawable" />
+            <attr name="startIconTint" />
+            <attr name="errorTextColor" />
+        </declare-styleable>
+
         <attr name="fluentTextStyle" format="enum">
             <enum name="display" value="0" />
             <enum name="heading" value="1" />

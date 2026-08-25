@@ -90,6 +90,7 @@
                 android:layout_marginTop="@dimen/ds_space_16"
                 android:gravity="center"
                 android:text="@string/ia_login_title"
+                android:textColor="@color/login_label_text"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/appLogo" />
@@ -128,7 +129,8 @@
                 android:layout_marginEnd="@dimen/login_panel_padding"
                 android:text="@string/email_hint"
                 android:textAlignment="textStart"
-                android:textSize="@dimen/_12sdp"
+                android:textColor="@color/login_label_text"
+                android:textSize="@dimen/text_size_10"
                 app:layout_constraintEnd_toEndOf="@id/loginPanelBackground"
                 app:layout_constraintStart_toStartOf="@id/loginPanelBackground"
                 app:layout_constraintTop_toTopOf="@id/loginPanelBackground" />
@@ -138,7 +140,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/ds_space_6"
-                android:background="@android:color/transparent"
+                android:background="@drawable/bg_login_input"
+                android:hint=""
+                app:errorTextColor="@color/login_error"
                 app:layout_constraintEnd_toEndOf="@id/emailLabel"
                 app:layout_constraintStart_toStartOf="@id/emailLabel"
                 app:layout_constraintTop_toBottomOf="@id/emailLabel">
@@ -148,18 +152,20 @@
                     style="@style/Text.Fluent2.Body.Inverse"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/login_field_height"
-                    android:background="@drawable/bg_login_input"
-                    android:backgroundTint="@null"
+                    android:background="@android:color/transparent"
                     android:hint="@string/email_placeholder"
                     android:imeOptions="actionNext"
                     android:inputType="textEmailAddress"
-                    android:paddingStart="@dimen/ds_space_20"
+                    android:paddingStart="@dimen/ds_space_14"
                     android:paddingEnd="@dimen/ds_space_12"
                     android:singleLine="true"
+                    android:textColor="@color/login_input_text"
+                    android:textColorHint="@color/login_input_hint"
+                    android:textSize="@dimen/text_size_10"
                     app:icon="@drawable/ic_login_email"
                     app:iconGravity="start"
-                    app:iconPadding="@dimen/ds_space_14"
-                    android:textColorHint="@color/login_input_hint" />
+                    app:iconPadding="@dimen/ds_space_10"
+                    app:iconTint="@color/login_icon_tint" />
             </com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout>
 
             <com.axelliant.hris.ui.designsystem.components.AppTextView
@@ -169,8 +175,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/ds_space_16"
                 android:text="@string/password_hint"
-                android:textSize="@dimen/_12sdp"
                 android:textAlignment="textStart"
+                android:textColor="@color/login_label_text"
+                android:textSize="@dimen/text_size_10"
                 app:layout_constraintEnd_toEndOf="@id/emailLabel"
                 app:layout_constraintStart_toStartOf="@id/emailLabel"
                 app:layout_constraintTop_toBottomOf="@id/emailLayout" />
@@ -180,9 +187,11 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/ds_space_6"
-                android:background="@android:color/transparent"
+                android:background="@drawable/bg_login_input"
+                android:hint=""
                 app:endIconMode="password_toggle"
                 app:endIconTint="@color/login_subtitle"
+                app:errorTextColor="@color/login_error"
                 app:layout_constraintEnd_toEndOf="@id/emailLabel"
                 app:layout_constraintStart_toStartOf="@id/emailLabel"
                 app:layout_constraintTop_toBottomOf="@id/passwordLabel">
@@ -192,18 +201,20 @@
                     style="@style/Text.Fluent2.Body.Inverse"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/login_field_height"
-                    android:background="@drawable/bg_login_input"
-                    android:backgroundTint="@null"
+                    android:background="@android:color/transparent"
                     android:hint="@string/password_hint"
                     android:imeOptions="actionDone"
                     android:inputType="textPassword"
-                    android:paddingStart="@dimen/ds_space_20"
+                    android:paddingStart="@dimen/ds_space_14"
                     android:paddingEnd="@dimen/_42sdp"
                     android:singleLine="true"
+                    android:textColor="@color/login_input_text"
+                    android:textColorHint="@color/login_input_hint"
+                    android:textSize="@dimen/text_size_10"
                     app:icon="@drawable/ic_login_lock"
                     app:iconGravity="start"
-                    app:iconPadding="@dimen/ds_space_14"
-                    android:textColorHint="@color/login_input_hint" />
+                    app:iconPadding="@dimen/ds_space_10"
+                    app:iconTint="@color/login_icon_tint" />
             </com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout>
 
             <com.axelliant.hris.ui.designsystem.components.AppCheckboxView
@@ -227,6 +238,7 @@
                 android:layout_marginEnd="@dimen/ds_space_8"
                 android:text="@string/ia_remember_me"
                 android:textAlignment="textStart"
+                android:textColor="@color/login_label_text"
                 app:layout_constraintBottom_toBottomOf="@id/rememberCheckBox"
                 app:layout_constraintEnd_toStartOf="@id/forgotPasswordText"
                 app:layout_constraintStart_toEndOf="@id/rememberCheckBox"
@@ -278,10 +290,12 @@
                 android:text="@string/ia_login_action"
                 android:textAllCaps="false"
                 android:textAppearance="@style/TextAppearance.Fluent2.Body.Inverse.Strong"
+                android:textColor="@color/login_button_text_disabled"
                 app:backgroundTint="@null"
                 app:icon="@drawable/ic_login_arrow_right"
                 app:iconGravity="textStart"
                 app:iconPadding="@dimen/ds_space_12"
+                app:iconTint="@color/login_button_text_disabled"
                 app:layout_constraintEnd_toEndOf="@id/emailLabel"
                 app:layout_constraintStart_toStartOf="@id/emailLabel"
                 app:layout_constraintTop_toBottomOf="@id/errorText" />
@@ -305,6 +319,7 @@
                 android:layout_marginTop="@dimen/ds_space_16"
                 android:layout_marginEnd="@dimen/ds_space_12"
                 android:text="@string/or"
+                android:textColor="@color/login_label_text"
                 app:layout_constraintEnd_toStartOf="@id/endDivider"
                 app:layout_constraintStart_toEndOf="@id/startDivider"
                 app:layout_constraintTop_toBottomOf="@id/loginButton" />
