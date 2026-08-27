@@ -14,6 +14,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.axelliant.hris.R
 import com.axelliant.hris.core.ui.ShimmerAnimatorHelper
@@ -23,6 +24,9 @@ import com.axelliant.hris.databinding.LayoutQuotePreviewFieldRowBinding
 import com.axelliant.hris.databinding.LayoutQuotePreviewLabeledCellBinding
 import com.axelliant.hris.features.quotes.domain.model.QuotePreviewUiModel
 import com.axelliant.hris.features.quotes.domain.model.QuoteStatus
+import com.axelliant.hris.features.quotes.domain.model.QuoteType
+import com.axelliant.hris.ui.designsystem.adapters.FilterAdapter
+import com.axelliant.hris.ui.designsystem.adapters.FilterItem
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -36,6 +40,9 @@ class ViewQuoteFragment : Fragment() {
 
     private val shimmerHelper = ShimmerAnimatorHelper()
     private val productAdapter = QuotePreviewProductAdapter()
+
+    private lateinit var dateFilterAdapter: FilterAdapter
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -49,6 +56,8 @@ class ViewQuoteFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
         setupInteractions()
+        setupDateFilterBar()
+
         setupAmountRows()
         observePreview()
         observeSubmitState()
@@ -72,13 +81,42 @@ class ViewQuoteFragment : Fragment() {
 
     private fun setupInteractions() {
         binding.appTopBar.setOnBackClickListener { findNavController().navigateUp() }
-        binding.infoTab.setOnClickListener { selectTab(PreviewTab.Info) }
+       /* binding.infoTab.setOnClickListener { selectTab(PreviewTab.Info) }
         binding.itemsTab.setOnClickListener { selectTab(PreviewTab.Items) }
-        binding.detailsTab.setOnClickListener { selectTab(PreviewTab.Details) }
+        binding.detailsTab.setOnClickListener { selectTab(PreviewTab.Details) }*/
         binding.viewAllButton.setOnClickListener { showComingSoon() }
         binding.saveDraftButton.setOnClickListener { showComingSoon() }
         binding.submitQuoteButton.setOnClickListener { viewModel.onPrimaryAction() }
     }
+
+    private fun setupDateFilterBar() {
+        val items = listOf(
+            FilterItem(getString(R.string.quote_preview_tab_info), 0),
+            FilterItem(getString(R.string.quote_preview_tab_items), 1),
+            FilterItem(getString(R.string.quote_preview_tab_details), 2)
+        )
+
+        dateFilterAdapter = FilterAdapter(
+            items,
+            selectedPosition = 0
+        ) { position, _ ->
+
+            when (position) {
+             /*   0 -> viewModel.onQuoteTypeSelected(QuoteType.Standard)
+                1 -> viewModel.onQuoteTypeSelected(QuoteType.Quick) */
+
+            }
+
+            dateFilterAdapter.setSelected(position)
+        }
+
+
+        binding.rvDateFilters.apply {
+            layoutManager = GridLayoutManager(requireContext(), items.size)
+            adapter = dateFilterAdapter
+        }
+    }
+
 
     private fun observeWorkflowState() {
         viewLifecycleOwner.lifecycleScope.launch {
@@ -298,6 +336,7 @@ class ViewQuoteFragment : Fragment() {
         field.fieldDivider.isVisible = showDivider
     }
 
+/*
     private fun selectTab(tab: PreviewTab) {
         val context = requireContext()
         binding.infoTab.apply {
@@ -328,6 +367,7 @@ class ViewQuoteFragment : Fragment() {
             )
         }
     }
+*/
 
     private fun showComingSoon() {
         Toast.makeText(requireContext(), R.string.coming_soon, Toast.LENGTH_SHORT).show()

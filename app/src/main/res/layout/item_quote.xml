@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.axelliant.hris.ui.designsystem.components.AppCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.axelliant.hris.ui.designsystem.components.AppCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/quoteCard"
     style="@style/Widget.InternalApps.Card"
-    android:layout_marginBottom="@dimen/ds_space_8"
-    android:foreground="?attr/selectableItemBackground"
-    app:cardElevation="@dimen/_1sdp"
-    app:strokeColor="#EEF3F8"
-    app:strokeWidth="@dimen/_1sdp">
+    android:layout_marginBottom="@dimen/ds_space_8">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -21,11 +18,12 @@
         <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/quoteIdText"
             style="@style/Text.InternalApps.Caption"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins_medium"
             android:textColor="@color/dashboard_card_purple"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/statusBadge"
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.axelliant.hris.ui.designsystem.components.AppTextView
