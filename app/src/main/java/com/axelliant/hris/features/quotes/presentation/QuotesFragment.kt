@@ -1,7 +1,10 @@
 package com.axelliant.hris.features.quotes.presentation
 
 import android.graphics.Color
+import android.graphics.RenderEffect
+import android.graphics.Shader
 import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -21,6 +24,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.axelliant.hris.R
@@ -29,12 +33,15 @@ import com.axelliant.hris.core.extensions.showKeyboard
 import com.axelliant.hris.core.ui.ShimmerAnimatorHelper
 import com.axelliant.hris.core.ui.UiState
 import com.axelliant.hris.databinding.FragmentQuotesBinding
+import com.axelliant.hris.enums.AttendanceFilter
 import com.axelliant.hris.features.internalapps.navigation.InternalAppsNavigator
 import com.axelliant.hris.features.quotes.domain.model.QuoteListUiModel
 import com.axelliant.hris.features.quotes.domain.model.QuoteModel
 import com.axelliant.hris.features.quotes.domain.model.QuoteStatus
 import com.axelliant.hris.features.quotes.domain.model.QuotesEmptyStateUi
 import com.axelliant.hris.features.quotes.domain.model.QuoteType
+import com.axelliant.hris.ui.designsystem.adapters.FilterAdapter
+import com.axelliant.hris.ui.designsystem.adapters.FilterItem
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -55,6 +62,10 @@ class QuotesFragment : Fragment(), QuotesAdapter.QuoteItemListener {
     private var currentSearchQuery = ""
     private var isQuoteActionMenuVisible = false
     private var cancelProgressDialog: androidx.appcompat.app.AlertDialog? = null
+
+
+    private lateinit var dateFilterAdapter: FilterAdapter
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -77,7 +88,35 @@ class QuotesFragment : Fragment(), QuotesAdapter.QuoteItemListener {
         observeQuoteWorkflow()
         observeQuoteCancel()
         renderQuoteTypeTabs()
+        setupDateFilterBar()
+
         viewModel.loadQuotesIfNeeded()
+    }
+
+    private fun setupDateFilterBar() {
+        val items = listOf(
+            FilterItem(getString(R.string.quotes_tab_standard), 0),
+            FilterItem(getString(R.string.quotes_tab_quick), 1)
+        )
+
+        dateFilterAdapter = FilterAdapter(
+            items,
+            selectedPosition = 0
+        ) { position, _ ->
+
+            when (position) {
+                0 -> viewModel.onQuoteTypeSelected(QuoteType.Standard)
+                1 -> viewModel.onQuoteTypeSelected(QuoteType.Quick)
+            }
+
+            dateFilterAdapter.setSelected(position)
+        }
+
+
+        binding.rvDateFilters.apply {
+            layoutManager = GridLayoutManager(requireContext(), items.size)
+            adapter = dateFilterAdapter
+        }
     }
 
     private fun setupSearchUi() {
@@ -95,6 +134,7 @@ class QuotesFragment : Fragment(), QuotesAdapter.QuoteItemListener {
                 R.id.action_quote_duplicate -> navigateToDuplicateQuote(quote)
                 R.id.action_quote_submit_workflow,
                 R.id.action_quote_view_workflow -> openQuoteWorkflow(quote)
+
                 R.id.action_quote_cancel -> showCancelQuoteConfirmation(quote)
                 else -> showComingSoon()
             }
@@ -113,7 +153,8 @@ class QuotesFragment : Fragment(), QuotesAdapter.QuoteItemListener {
             viewModel.onFilterChipSelected(chip)
         }
         binding.statusFilterRecycler.apply {
-            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            layoutManager =
+                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             adapter = filterChipAdapter
         }
     }
@@ -137,6 +178,7 @@ class QuotesFragment : Fragment(), QuotesAdapter.QuoteItemListener {
             InternalAppsNavigator.returnToHomeShell(findNavController())
         }
         binding.createQuoteFab.setOnClickListener { toggleQuoteActionMenu() }
+
         binding.quoteActionOverlay.setOnClickListener { hideQuoteActionMenu() }
         binding.createQuoteOption.setOnClickListener {
             hideQuoteActionMenu()
@@ -148,17 +190,19 @@ class QuotesFragment : Fragment(), QuotesAdapter.QuoteItemListener {
         }
         binding.appTopBar.setOnSearchClickListener { toggleSearchField() }
 
-        binding.standardTab.setOnClickListener {
-            viewModel.onQuoteTypeSelected(QuoteType.Standard)
-            renderQuoteTypeTabs()
-        }
-        binding.quickTab.setOnClickListener {
-            viewModel.onQuoteTypeSelected(QuoteType.Quick)
-            renderQuoteTypeTabs()
-        }
+        /*  binding.standardTab.setOnClickListener {
+              viewModel.onQuoteTypeSelected(QuoteType.Standard)
+              renderQuoteTypeTabs()
+          }
+          binding.quickTab.setOnClickListener {
+              viewModel.onQuoteTypeSelected(QuoteType.Quick)
+              renderQuoteTypeTabs()
+          }*/
 
         binding.searchEditText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) =
+                Unit
+
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
             override fun afterTextChanged(editable: Editable?) {
                 if (!isSearchVisible) return
@@ -169,9 +213,9 @@ class QuotesFragment : Fragment(), QuotesAdapter.QuoteItemListener {
 
         binding.searchEditText.setOnEditorActionListener { _, actionId, event ->
             val isSubmitAction = actionId == EditorInfo.IME_ACTION_SEARCH ||
-                actionId == EditorInfo.IME_ACTION_DONE
+                    actionId == EditorInfo.IME_ACTION_DONE
             val isEnterKey = event?.keyCode == KeyEvent.KEYCODE_ENTER &&
-                event.action == KeyEvent.ACTION_UP
+                    event.action == KeyEvent.ACTION_UP
 
             if (isSubmitAction || isEnterKey) {
                 submitSearch()
@@ -291,9 +335,27 @@ class QuotesFragment : Fragment(), QuotesAdapter.QuoteItemListener {
         }
     }
 
+    private fun applyContentBlur(enabled: Boolean) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            binding.contentContainer.setRenderEffect(
+                if (enabled) {
+                    RenderEffect.createBlurEffect(
+                        CONTENT_BLUR_RADIUS,
+                        CONTENT_BLUR_RADIUS,
+                        Shader.TileMode.CLAMP
+                    )
+                } else {
+                    null
+                }
+            )
+        }
+    }
+
+
     private fun showQuoteActionMenu() {
         if (isQuoteActionMenuVisible) return
         isQuoteActionMenuVisible = true
+        applyContentBlur(true)
         binding.quoteActionOverlay.isVisible = true
         binding.quoteActionOverlay.alpha = 0f
         binding.quoteActionOverlay.animate()
@@ -320,9 +382,16 @@ class QuotesFragment : Fragment(), QuotesAdapter.QuoteItemListener {
                 .start()
         }
 
-        binding.createQuoteFab.animate()
+    /*    binding.createQuoteFab.animate()
             .rotation(45f)
             .setDuration(QUOTE_ACTION_MENU_DURATION_MS)
+            .start()*/
+
+        binding.createQuoteFab.setImageResource(R.drawable.ic_close)
+        binding.createQuoteFab.contentDescription = getString(R.string.purchase_orders_fab_close)
+        binding.createQuoteFab.animate()
+            .rotation(90f)
+            .setDuration(FAB_MENU_ANIMATION_MS)
             .start()
     }
 
@@ -335,6 +404,7 @@ class QuotesFragment : Fragment(), QuotesAdapter.QuoteItemListener {
             .withEndAction {
                 if (_binding == null) return@withEndAction
                 binding.quoteActionOverlay.isVisible = false
+                applyContentBlur(false)
             }
             .start()
         binding.quoteActionMenuCard.animate()
@@ -348,9 +418,16 @@ class QuotesFragment : Fragment(), QuotesAdapter.QuoteItemListener {
                 binding.quoteActionMenuCard.isVisible = false
             }
             .start()
-        binding.createQuoteFab.animate()
+       /* binding.createQuoteFab.animate()
             .rotation(0f)
             .setDuration(QUOTE_ACTION_MENU_DURATION_MS)
+            .start()*/
+
+        binding.createQuoteFab.setImageResource(R.drawable.ia_ic_add)
+        binding.createQuoteFab.contentDescription = getString(R.string.purchase_orders_fab_open)
+        binding.createQuoteFab.animate()
+            .rotation(0f)
+            .setDuration(FAB_MENU_ANIMATION_MS)
             .start()
     }
 
@@ -506,6 +583,7 @@ class QuotesFragment : Fragment(), QuotesAdapter.QuoteItemListener {
                             ).show()
                             viewModel.resetWorkflowState()
                         }
+
                         is UiState.Error -> {
                             Toast.makeText(
                                 requireContext(),
@@ -516,6 +594,7 @@ class QuotesFragment : Fragment(), QuotesAdapter.QuoteItemListener {
                             ).show()
                             viewModel.resetWorkflowState()
                         }
+
                         UiState.Unauthorized -> {
                             Toast.makeText(
                                 requireContext(),
@@ -524,6 +603,7 @@ class QuotesFragment : Fragment(), QuotesAdapter.QuoteItemListener {
                             ).show()
                             viewModel.resetWorkflowState()
                         }
+
                         else -> Unit
                     }
                 }
@@ -567,6 +647,7 @@ class QuotesFragment : Fragment(), QuotesAdapter.QuoteItemListener {
                                 isSuccess = true
                             )
                         }
+
                         is UiState.Error -> {
                             dismissCancelProgressDialog()
                             showCancelResultDialog(
@@ -576,6 +657,7 @@ class QuotesFragment : Fragment(), QuotesAdapter.QuoteItemListener {
                                 isSuccess = false
                             )
                         }
+
                         UiState.Unauthorized -> {
                             dismissCancelProgressDialog()
                             showCancelResultDialog(
@@ -583,6 +665,7 @@ class QuotesFragment : Fragment(), QuotesAdapter.QuoteItemListener {
                                 isSuccess = false
                             )
                         }
+
                         else -> dismissCancelProgressDialog()
                     }
                 }
@@ -655,6 +738,9 @@ class QuotesFragment : Fragment(), QuotesAdapter.QuoteItemListener {
     }
 
     override fun onDestroyView() {
+        if (_binding != null) {
+            applyContentBlur(false)
+        }
         dismissCancelProgressDialog()
         shimmerHelper.release()
         super.onDestroyView()
@@ -670,6 +756,11 @@ class QuotesFragment : Fragment(), QuotesAdapter.QuoteItemListener {
         private const val QUOTE_ACTION_MENU_DIM_DURATION_MS = 140L
         private const val QUOTE_ACTION_MENU_START_SCALE = 0.88f
         private const val QUOTE_ACTION_MENU_OVERSHOOT = 1.05f
+
+        private const val CONTENT_BLUR_RADIUS = 28f
+        private const val FAB_MENU_ANIMATION_MS = 220L
+
+
     }
 }
 
