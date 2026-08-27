@@ -58,7 +58,7 @@
 
         <!-- Existing navigation/layout values -->
         <dimen name="bottom_nav_fab_clearance">@dimen/_92sdp</dimen>
-        <dimen name="bottom_nav_content_padding">@dimen/_116sdp</dimen>
+        <dimen name="bottom_nav_content_padding">@dimen/_50sdp</dimen>
         <dimen name="quote_workflow_step_width">@dimen/_168sdp</dimen>
         <dimen name="quote_workflow_step_min_height">@dimen/_220sdp</dimen>
 
