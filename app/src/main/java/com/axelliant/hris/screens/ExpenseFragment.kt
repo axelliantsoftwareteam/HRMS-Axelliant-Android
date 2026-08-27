@@ -1,10 +1,14 @@
 package com.axelliant.hris.screens
 
+import android.graphics.RenderEffect
+import android.graphics.Shader
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
+import android.view.animation.DecelerateInterpolator
+import androidx.activity.OnBackPressedCallback
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
@@ -32,7 +36,6 @@ import com.axelliant.hris.viewmodel.ExpenseViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.Date
 
 @AndroidEntryPoint
 class ExpenseFragment : BaseFragment() {
@@ -50,6 +53,9 @@ class ExpenseFragment : BaseFragment() {
 
     private lateinit var dateFilterAdapter: FilterAdapter
 
+    // --- FAB menu state ---
+    private var isFabMenuOpen = false
+    private lateinit var fabMenuBackCallback: OnBackPressedCallback
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -68,10 +74,13 @@ class ExpenseFragment : BaseFragment() {
                 if (isLoading) showDialog() else hideDialog()
             })
 
-        binding?.appTopBar?.setOnBackClickListener { previousFragmentNavigation() }
+        binding?.appTopBar?.setOnBackClickListener {
+            if (isFabMenuOpen) closeFabMenu() else previousFragmentNavigation()
+        }
 
         setupRecyclerViews()
         setupDateFilterBar()
+        setupFabMenu()
         expenseViewModel.getMyExpenseDetail(getCurrentObject())
 
         expenseViewModel.expenseResponse.observe(
@@ -85,11 +94,140 @@ class ExpenseFragment : BaseFragment() {
                     requireContext().showErrorMsg(response?.meta?.message.toString())
                 }
             })
+    }
 
-        binding?.addExpense?.setOnClickListener {
+    // --- FAB menu setup ---
+
+    private fun setupFabMenu() {
+        binding?.fabMenuScrim?.isVisible = false
+        binding?.fabMenuScrim?.alpha = 0f
+        binding?.addExpenseActionRow?.isVisible = false
+        prepareClosedFabAction()
+
+        fabMenuBackCallback = object : OnBackPressedCallback(false) {
+            override fun handleOnBackPressed() {
+                closeFabMenu()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, fabMenuBackCallback)
+
+        binding?.addExpense?.setOnClickListener { toggleFabMenu() }
+        binding?.fabMenuScrim?.setOnClickListener { closeFabMenu() }
+        binding?.addExpenseSubFab?.setOnClickListener {
+            closeFabMenu()
             AppNavigator.navigateToAddExpenseFragment()
         }
+        binding?.addExpenseLabel?.setOnClickListener { binding?.addExpenseSubFab?.performClick() }
     }
+
+    private fun toggleFabMenu() {
+        if (isFabMenuOpen) closeFabMenu() else openFabMenu()
+    }
+
+    private fun openFabMenu() {
+        if (isFabMenuOpen) return
+        isFabMenuOpen = true
+        fabMenuBackCallback.isEnabled = true
+
+        applyContentBlur(true)
+
+        binding?.fabMenuScrim?.isVisible = true
+        binding?.fabMenuScrim?.animate()
+            ?.alpha(1f)
+            ?.setDuration(FAB_MENU_ANIMATION_MS)
+            ?.setInterpolator(DecelerateInterpolator())
+            ?.start()
+
+        binding?.addExpense?.setImageResource(R.drawable.ic_close)
+        binding?.addExpense?.animate()
+            ?.rotation(90f)
+            ?.setDuration(FAB_MENU_ANIMATION_MS)
+            ?.start()
+
+        showFabAction()
+    }
+
+    private fun closeFabMenu() {
+        if (!isFabMenuOpen) return
+        isFabMenuOpen = false
+        fabMenuBackCallback.isEnabled = false
+
+        binding?.addExpense?.setImageResource(R.drawable.plus)
+        binding?.addExpense?.animate()
+            ?.rotation(0f)
+            ?.setDuration(FAB_MENU_ANIMATION_MS)
+            ?.start()
+
+        hideFabAction()
+
+        binding?.fabMenuScrim?.animate()
+            ?.alpha(0f)
+            ?.setDuration(FAB_MENU_ANIMATION_MS)
+            ?.withEndAction {
+                if (_binding == null) return@withEndAction
+                binding?.fabMenuScrim?.isVisible = false
+                applyContentBlur(false)
+            }
+            ?.start()
+    }
+
+    private fun prepareClosedFabAction() {
+        binding?.addExpenseActionRow?.apply {
+            alpha = 0f
+            translationY = FAB_ACTION_TRANSLATION_Y
+            scaleX = 0.85f
+            scaleY = 0.85f
+        }
+    }
+
+    private fun showFabAction() {
+        val row = binding?.addExpenseActionRow ?: return
+        row.animate().cancel()
+        prepareClosedFabAction()
+        row.isVisible = true
+        row.animate()
+            .alpha(1f)
+            .translationY(0f)
+            .scaleX(1f)
+            .scaleY(1f)
+            .setDuration(FAB_MENU_ANIMATION_MS)
+            .setInterpolator(DecelerateInterpolator())
+            .start()
+    }
+
+    private fun hideFabAction() {
+        val row = binding?.addExpenseActionRow ?: return
+        row.animate().cancel()
+        row.animate()
+            .alpha(0f)
+            .translationY(FAB_ACTION_TRANSLATION_Y)
+            .scaleX(0.85f)
+            .scaleY(0.85f)
+            .setDuration(FAB_MENU_ANIMATION_MS)
+            .withEndAction {
+                if (_binding == null) return@withEndAction
+                row.isVisible = false
+            }
+            .start()
+    }
+
+    private fun applyContentBlur(enabled: Boolean) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            binding?.contentContainer?.setRenderEffect(
+                if (enabled) {
+                    RenderEffect.createBlurEffect(
+                        CONTENT_BLUR_RADIUS,
+                        CONTENT_BLUR_RADIUS,
+                        Shader.TileMode.CLAMP
+                    )
+                } else {
+                    null
+                }
+            )
+        }
+    }
+
+    // --- existing screen logic (unchanged) ---
 
     private fun setupRecyclerViews() {
         binding?.rvExpenseFilters?.layoutManager =
@@ -220,6 +358,7 @@ class ExpenseFragment : BaseFragment() {
         }
         datePicker.show(activity?.supportFragmentManager!!, "DATE_PICKER")
     }
+
     private fun subFilterPopulations(leaveStatus: ArrayList<FilterModel>?) {
         val list = ArrayList<FilterModel>().apply {
             add(FilterModel().apply {
@@ -235,5 +374,19 @@ class ExpenseFragment : BaseFragment() {
         }
         filterList = list
         if (selectedFilterId.isBlank()) selectedFilterId = ""
+    }
+
+    override fun onDestroyView() {
+        if (_binding != null) {
+            applyContentBlur(false)
+        }
+        super.onDestroyView()
+        _binding = null
+    }
+
+    companion object {
+        private const val FAB_MENU_ANIMATION_MS = 220L
+        private const val FAB_ACTION_TRANSLATION_Y = 28f
+        private const val CONTENT_BLUR_RADIUS = 28f
     }
 }

@@ -9,7 +9,7 @@
         android:layout_height="match_parent"
         >
 
-        <androidx.constraintlayout.widget.Guideline
+        <androidx.constraibntlayout.widget.Guideline
             android:id="@+id/start_guideline"
             style="@style/Guideline.Fluent2.Start"
             android:orientation="vertical" />
@@ -872,38 +872,188 @@
                 android:orientation="vertical"
                 android:layout_marginTop="@dimen/_5sdp">
 
-                <!-- fake "My Attendance" title row -->
-                <View
-                    android:layout_width="@dimen/_100sdp"
-                    android:layout_height="@dimen/_14sdp"
-                    android:background="@drawable/shimmer_rect" />
+                <!-- fake "My Attendance" + "View" row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
-                <!-- fake ly_attend card -->
+                    <View
+                        android:layout_width="@dimen/_100sdp"
+                        android:layout_height="@dimen/_14sdp"
+                        android:background="@drawable/shimmer_rect" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                    <View
+                        android:layout_width="@dimen/_36sdp"
+                        android:layout_height="@dimen/_12sdp"
+                        android:background="@drawable/shimmer_rect" />
+                </LinearLayout>
+
+                <!-- fake filter pills bar -->
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_180sdp"
+                    android:layout_height="@dimen/_30sdp"
                     android:layout_marginTop="@dimen/_10sdp"
                     android:background="@drawable/shimmer_rect" />
 
-                <!-- fake "My Team" title row -->
-                <View
-                    android:layout_width="@dimen/_90sdp"
-                    android:layout_height="@dimen/_14sdp"
-                    android:layout_marginTop="@dimen/_15sdp"
-                    android:background="@drawable/shimmer_rect" />
-
-                <!-- fake ly_myteam_attend card -->
-                <View
+                <!-- fake stats row 1: Present, Absent, Missed punch-outs -->
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_150sdp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_10sdp"
-                    android:background="@drawable/shimmer_rect" />
+                    android:orientation="horizontal">
 
-                <!-- fake ly_my_shift card -->
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/_62sdp"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="@dimen/_5sdp"
+                        android:background="@drawable/shimmer_rect" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/_62sdp"
+                        android:layout_weight="1"
+                        android:layout_marginHorizontal="@dimen/_5sdp"
+                        android:background="@drawable/shimmer_rect" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/_62sdp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        android:background="@drawable/shimmer_rect" />
+                </LinearLayout>
+
+                <!-- fake stats row 2: Leaves, Holiday, Weekly off -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:orientation="horizontal">
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/_62sdp"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="@dimen/_5sdp"
+                        android:background="@drawable/shimmer_rect" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/_62sdp"
+                        android:layout_weight="1"
+                        android:layout_marginHorizontal="@dimen/_5sdp"
+                        android:background="@drawable/shimmer_rect" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/_62sdp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        android:background="@drawable/shimmer_rect" />
+                </LinearLayout>
+
+                <!-- fake "My Team Stats" title row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_20sdp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <View
+                        android:layout_width="@dimen/_26sdp"
+                        android:layout_height="@dimen/_26sdp"
+                        android:background="@drawable/shimmer_rect" />
+
+                    <View
+                        android:layout_width="@dimen/_90sdp"
+                        android:layout_height="@dimen/_14sdp"
+                        android:layout_marginStart="@dimen/_4sdp"
+                        android:background="@drawable/shimmer_rect" />
+                </LinearLayout>
+
+                <!-- fake my_team_stats_card: donut + legend -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/_14sdp">
+
+                    <!-- fake donut -->
+                    <View
+                        android:layout_width="@dimen/_90sdp"
+                        android:layout_height="@dimen/_90sdp"
+                        android:background="@drawable/shimmer_circle" />
+
+                    <!-- fake legend rows -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="@dimen/_14sdp"
+                        android:orientation="vertical"
+                        android:gravity="center_vertical">
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_14sdp"
+                            android:background="@drawable/shimmer_rect" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_14sdp"
+                            android:layout_marginTop="@dimen/_10sdp"
+                            android:background="@drawable/shimmer_rect" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_14sdp"
+                            android:layout_marginTop="@dimen/_10sdp"
+                            android:background="@drawable/shimmer_rect" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_14sdp"
+                            android:layout_marginTop="@dimen/_10sdp"
+                            android:background="@drawable/shimmer_rect" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- fake "My Shift Details" title row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_20sdp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <View
+                        android:layout_width="@dimen/_26sdp"
+                        android:layout_height="@dimen/_26sdp"
+                        android:background="@drawable/shimmer_rect" />
+
+                    <View
+                        android:layout_width="@dimen/_100sdp"
+                        android:layout_height="@dimen/_14sdp"
+                        android:layout_marginStart="@dimen/_4sdp"
+                        android:background="@drawable/shimmer_rect" />
+                </LinearLayout>
+
+                <!-- fake my_shift_details_card -->
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_120sdp"
-                    android:layout_marginTop="@dimen/_15sdp"
+                    android:layout_height="@dimen/_90sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginBottom="@dimen/_15sdp"
                     android:background="@drawable/shimmer_rect" />
 
             </LinearLayout>

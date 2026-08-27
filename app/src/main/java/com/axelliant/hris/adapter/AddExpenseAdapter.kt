@@ -19,6 +19,7 @@ import com.axelliant.hris.model.expense.AddExpense
 import com.axelliant.hris.utils.Utils
 import com.google.gson.Gson
 import java.util.Calendar
+import androidx.core.view.doOnLayout
 
 class AddExpenseAdapter(
     private val list: ArrayList<AddExpense>,
@@ -45,7 +46,7 @@ class AddExpenseAdapter(
         spinnerLeavePopulations(mContext, holder.binding.spAttendType, currentItem, holder)
 
         // Show/Hide delete button for the first item
-        holder.binding.ivDelete.visibility = if (position == 0) View.GONE else View.VISIBLE
+        holder.binding.tvDelete.visibility = if (position == 0) View.GONE else View.VISIBLE
 
         // Remove any previous TextWatchers before adding new ones
         holder.binding.etAttendanceReason.removeTextChangedListener(holder.reasonTextWatcher)
