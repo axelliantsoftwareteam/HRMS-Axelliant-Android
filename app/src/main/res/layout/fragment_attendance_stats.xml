@@ -1,31 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Layout.Fluent2.Screen"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/start_guideline"
+        style="@style/Guideline.Fluent2.Start"
+        android:orientation="vertical">
+    </androidx.constraintlayout.widget.Guideline>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/end_guideline"
+        style="@style/Guideline.Fluent2.End"
+        android:orientation="vertical" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/bottom_guideline"
+        style="@style/Guideline.Fluent2.Bottom" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/top_guideline"
+        style="@style/Guideline.Fluent2.Top" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         style="@style/Layout.Fluent2.Screen"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_guideline"
+        app:layout_constraintEnd_toStartOf="@+id/end_guideline"
+        app:layout_constraintStart_toEndOf="@id/start_guideline"
+        app:layout_constraintTop_toBottomOf="@+id/top_guideline">
 
-        <androidx.constraibntlayout.widget.Guideline
-            android:id="@+id/start_guideline"
-            style="@style/Guideline.Fluent2.Start"
-            android:orientation="vertical" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/end_guideline"
-            style="@style/Guideline.Fluent2.End"
-            android:orientation="vertical" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/bottom_guideline"
-            style="@style/Guideline.Fluent2.Bottom" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/top_guideline"
-            style="@style/Guideline.Fluent2.Top" />
 
         <androidx.constraintlayout.widget.Group
             android:id="@+id/content_group"
@@ -41,18 +50,18 @@
             app:showBackButton="true"
             app:showSearchButton="false"
             app:titleText="@string/attendance"
-            app:layout_constraintEnd_toEndOf="@id/end_guideline"
-            app:layout_constraintStart_toStartOf="@id/start_guideline"
-            app:layout_constraintTop_toBottomOf="@id/top_guideline" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/content_scroll"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="@id/bottom_guideline"
-            app:layout_constraintEnd_toEndOf="@id/end_guideline"
-            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/appTopBar">
 
 
@@ -861,9 +870,10 @@
             android:id="@+id/shimmer_layout"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="@id/bottom_guideline"
-            app:layout_constraintEnd_toEndOf="@id/end_guideline"
-            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/appTopBar">
 
             <LinearLayout
@@ -1060,4 +1070,4 @@
         </com.facebook.shimmer.ShimmerFrameLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-</layout>
+</androidx.constraintlayout.widget.ConstraintLayout>
