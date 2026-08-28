@@ -54,6 +54,7 @@ import com.axelliant.hris.features.inventory.products.data.remote.dto.ProductSea
 import com.axelliant.hris.features.inventory.products.presentation.ProductPickerResultBundles.toProductListItem
 import com.axelliant.hris.features.inventory.products.presentation.dynamicfilters.DynamicCategorySpecsResult
 import com.axelliant.hris.features.inventory.products.presentation.dynamicfilters.SelectedCategorySpecs
+import com.axelliant.hris.features.quotes.presentation.AddQuoteViewModel
 import com.axelliant.hris.features.quotes.presentation.QuoteProductSelectionBundles
 import com.axelliant.hris.features.quotes.presentation.QuoteProductSelectionBundles.toPreselectedProductItems
 import com.axelliant.hris.features.quotes.presentation.SmartQuoteProductFlow
@@ -191,17 +192,42 @@ class ProductsFragment : Fragment() {
             selectedProducts.values.map { it.toQuoteCreationProduct() }
         )
         val navController = findNavController()
-        val smartQuoteEntry = runCatching {
-            navController.getBackStackEntry(R.id.iaSmartQuoteFragment)
+        val destinationId = destinationIdForPickerFlow(pickerFlow) ?: run {
+            navController.navigateUp()
+            return
+        }
+        val destinationEntry = runCatching {
+            navController.getBackStackEntry(destinationId)
         }.getOrNull() ?: run {
             navController.navigateUp()
             return
         }
-        smartQuoteEntry.savedStateHandle.apply {
-            set(SmartQuoteViewModel.RESULT_PRODUCTS, productsBundle)
-            set(SmartQuoteViewModel.RESULT_SEARCH_QUERY, draftSearchQuery)
+        when (pickerFlow) {
+            SmartQuoteProductFlow.FLOW_SMART_QUOTE -> {
+                destinationEntry.savedStateHandle.apply {
+                    set(SmartQuoteViewModel.RESULT_PRODUCTS, productsBundle)
+                    set(SmartQuoteViewModel.RESULT_SEARCH_QUERY, draftSearchQuery)
+                }
+            }
+            else -> {
+                destinationEntry.savedStateHandle.set(
+                    AddQuoteViewModel.RESULT_PRODUCTS,
+                    productsBundle
+                )
+            }
         }
-        navController.popBackStack(R.id.iaSmartQuoteFragment, false)
+        navController.popBackStack(destinationId, false)
+    }
+
+    private fun destinationIdForPickerFlow(flow: String): Int? {
+        return when (flow) {
+            SmartQuoteProductFlow.FLOW_SMART_QUOTE -> R.id.iaSmartQuoteFragment
+            SmartQuoteProductFlow.FLOW_ADD_QUOTE -> R.id.iaAddQuoteFragment
+            SmartQuoteProductFlow.FLOW_ADD_SALE_ORDER -> R.id.iaAddSaleOrderFragment
+            SmartQuoteProductFlow.FLOW_CREATE_MANUAL_PO -> R.id.iaCreateManualPurchaseOrderFragment
+            SmartQuoteProductFlow.FLOW_EDIT_PO -> R.id.iaEditPurchaseOrderFragment
+            else -> null
+        }
     }
 
     private fun confirmProductComparisonSelection() {

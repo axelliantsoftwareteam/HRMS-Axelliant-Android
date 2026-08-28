@@ -1283,7 +1283,7 @@ class AskAiProductSearchFragment : Fragment() {
         )
         val pickerFlow = arguments?.getString(SmartQuoteProductFlow.ARG_PRODUCT_PICKER_FLOW)
             ?: SmartQuoteProductFlow.FLOW_DEFAULT
-        if (pickerFlow == SmartQuoteProductFlow.FLOW_SMART_QUOTE ||
+        if (SmartQuoteProductFlow.isLineItemPickerFlow(pickerFlow) ||
             pickerFlow == ProductComparisonFlow.FLOW_PRODUCT_COMPARISON
         ) {
             val pickerArgs = bundleOf(
