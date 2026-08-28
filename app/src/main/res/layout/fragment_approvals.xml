@@ -62,6 +62,7 @@
                 android:paddingTop="@dimen/_6sdp"
                 android:paddingBottom="@dimen/_6sdp"
                 android:text="@string/leaves"
+                android:textAlignment="center"
                 app:layout_constraintEnd_toStartOf="@+id/tv_month"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -76,6 +77,7 @@
                 android:paddingTop="@dimen/_6sdp"
                 android:paddingBottom="@dimen/_6sdp"
                 android:text="@string/check_in"
+                android:textAlignment="center"
                 app:layout_constraintEnd_toStartOf="@+id/tv_expense"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/tv_week" />
@@ -89,6 +91,7 @@
                 android:paddingTop="@dimen/_6sdp"
                 android:paddingBottom="@dimen/_6sdp"
                 android:text="@string/expense"
+                android:textAlignment="center"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/tv_resources"
                 app:layout_constraintStart_toEndOf="@+id/tv_month" />
@@ -102,6 +105,7 @@
                 android:paddingTop="@dimen/_6sdp"
                 android:paddingBottom="@dimen/_6sdp"
                 android:text="@string/resource"
+                android:textAlignment="center"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/tv_expense" />
