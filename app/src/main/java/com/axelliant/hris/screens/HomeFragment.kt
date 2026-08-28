@@ -680,7 +680,7 @@ class HomeFragment : BaseFragment() {
                 AppDrawerAction.SaleOrders -> openInternalAppsDestination(R.id.iaSaleOrdersFragment)
                 AppDrawerAction.PurchaseOrders -> openInternalAppsDestination(R.id.iaPurchaseOrdersFragment)
                 AppDrawerAction.Subscriptions -> openInternalAppsDestination(R.id.iaSubscriptionsFragment)
-                AppDrawerAction.Profiles -> AppNavigator.navigateToProfile()
+                AppDrawerAction.Profiles -> openInternalAppsDestination(R.id.iaProfilesFragment)
                 AppDrawerAction.Settings -> openInternalAppsDestination(R.id.iaSettingsFragment)
                 AppDrawerAction.Logout -> logoutAndOpenLogin()
             }
