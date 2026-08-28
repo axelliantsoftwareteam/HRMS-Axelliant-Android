@@ -6,13 +6,17 @@ import com.axelliant.hris.features.auth.microsoft.MicrosoftSignOutResult
 import javax.inject.Inject
 import javax.inject.Singleton
 
+interface LogoutCoordinator {
+    suspend fun logout(): GlobalLogoutResult
+}
+
 @Singleton
 class GlobalLogoutCoordinator @Inject constructor(
     private val workspaceSessionProvider: WorkspaceSessionProvider,
     private val pendingCommonLoginStore: PendingCommonLoginStore,
     private val microsoftAuthManager: MicrosoftAuthManager
-) {
-    suspend fun logout(): GlobalLogoutResult {
+) : LogoutCoordinator {
+    override suspend fun logout(): GlobalLogoutResult {
         workspaceSessionProvider.clearAllSessions()
         pendingCommonLoginStore.clear()
 

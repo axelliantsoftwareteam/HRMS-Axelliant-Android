@@ -291,7 +291,7 @@ class QuotesRepository @Inject constructor(
         }) {
             is ApiResult.Success -> {
                 val payload = result.data
-                val response = QuoteApiResponseParser.unwrapSuccess(payload).orEmpty().firstOrNull()
+                val response = QuoteApiResponseParser.extractAddEditQuotationResponse(payload)
                 val serverMessage = QuoteApiResponseParser.extractApiMessage(payload)
                 if (payload.data?.success != true) {
                     ApiResult.UnknownError(serverMessage ?: "Unable to save quote draft.")

@@ -19,13 +19,19 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlinx.coroutines.suspendCancellableCoroutine
 
+interface MicrosoftAuthClient {
+    suspend fun signIn(activity: Activity): MicrosoftAuthResult
+    suspend fun acquireGraphAccessToken(): String?
+    suspend fun signOut(): MicrosoftSignOutResult
+}
+
 @Singleton
 class MicrosoftAuthManager @Inject constructor(
     @ApplicationContext private val context: Context
-) {
+) : MicrosoftAuthClient {
     private var cachedApplication: ISingleAccountPublicClientApplication? = null
 
-    suspend fun signIn(activity: Activity): MicrosoftAuthResult {
+    override suspend fun signIn(activity: Activity): MicrosoftAuthResult {
         val application = createApplication()
         signOutCurrentAccount(application)
         return suspendCancellableCoroutine { continuation ->
@@ -68,7 +74,7 @@ class MicrosoftAuthManager @Inject constructor(
         }
     }
 
-    suspend fun acquireGraphAccessToken(): String? {
+    override suspend fun acquireGraphAccessToken(): String? {
         val application = createApplication()
         val account = loadCurrentAccount(application) ?: return null
         return suspendCancellableCoroutine { continuation ->
@@ -93,7 +99,7 @@ class MicrosoftAuthManager @Inject constructor(
         }
     }
 
-    suspend fun signOut(): MicrosoftSignOutResult {
+    override suspend fun signOut(): MicrosoftSignOutResult {
         val application = runCatching { createApplication() }.getOrElse { exception ->
             Log.e(TAG, "Microsoft sign-out app creation failed.", exception)
             return MicrosoftSignOutResult.Error(exception.message)

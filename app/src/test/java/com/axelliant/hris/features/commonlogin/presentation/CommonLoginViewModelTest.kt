@@ -1,5 +1,8 @@
 package com.axelliant.hris.features.commonlogin.presentation
 
+import android.app.Activity
+import com.axelliant.hris.core.auth.GlobalLogoutResult
+import com.axelliant.hris.core.auth.LogoutCoordinator
 import com.axelliant.hris.core.auth.PendingCommonLoginStore
 import com.axelliant.hris.core.contracts.auth.AuthSessionRepository
 import com.axelliant.hris.core.contracts.auth.AuthSessionResult
@@ -7,6 +10,9 @@ import com.axelliant.hris.core.contracts.auth.WorkspaceAuthSessionRepositoryProv
 import com.axelliant.hris.core.contracts.navigation.WorkspaceKey
 import com.axelliant.hris.core.contracts.session.AppSession
 import com.axelliant.hris.features.auth.data.local.LoginCredentialStore
+import com.axelliant.hris.features.auth.microsoft.MicrosoftAuthClient
+import com.axelliant.hris.features.auth.microsoft.MicrosoftAuthResult
+import com.axelliant.hris.features.auth.microsoft.MicrosoftSignOutResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestDispatcher
@@ -173,7 +179,13 @@ class CommonLoginViewModelTest {
         return CommonLoginViewModel(
             FakeWorkspaceAuthSessionRepositoryProvider(hrisRepository, internalAppsRepository),
             pendingStore,
-            FakeLoginCredentialStore()
+            FakeLoginCredentialStore(),
+            FakeMicrosoftAuthClient(),
+            FakeLogoutCoordinator(
+                hrisRepository = hrisRepository,
+                internalAppsRepository = internalAppsRepository,
+                pendingStore = pendingStore
+            )
         )
     }
 
@@ -241,4 +253,32 @@ private class FakeLoginCredentialStore : LoginCredentialStore {
     override fun isRememberMeEnabled(): Boolean = false
     override fun saveRememberedCredentials(email: String, password: String) = Unit
     override fun clearRememberedCredentials() = Unit
+}
+
+private class FakeMicrosoftAuthClient : MicrosoftAuthClient {
+    var signOutCalls = 0
+
+    override suspend fun signIn(activity: Activity): MicrosoftAuthResult {
+        return MicrosoftAuthResult.Error()
+    }
+
+    override suspend fun acquireGraphAccessToken(): String? = null
+
+    override suspend fun signOut(): MicrosoftSignOutResult {
+        signOutCalls += 1
+        return MicrosoftSignOutResult.Success
+    }
+}
+
+private class FakeLogoutCoordinator(
+    private val hrisRepository: FakeAuthSessionRepository,
+    private val internalAppsRepository: FakeAuthSessionRepository,
+    private val pendingStore: PendingCommonLoginStore
+) : LogoutCoordinator {
+    override suspend fun logout(): GlobalLogoutResult {
+        hrisRepository.clearSession()
+        internalAppsRepository.clearSession()
+        pendingStore.clear()
+        return GlobalLogoutResult.Success
+    }
 }

@@ -5,6 +5,7 @@ import com.axelliant.hris.core.network.ApiResult
 import com.axelliant.hris.core.network.BaseApiModel
 import com.axelliant.hris.features.quotes.data.remote.dto.AddEditQuotationResponseDto
 import com.google.gson.Gson
+import com.google.gson.JsonElement
 import com.google.gson.reflect.TypeToken
 
 object QuoteApiResponseParser {
@@ -62,6 +63,37 @@ object QuoteApiResponseParser {
             ?.let { return it }
 
         return payload.message?.displayText()
+    }
+
+    fun extractAddEditQuotationResponse(payload: BaseApiModel<*>): AddEditQuotationResponseDto? {
+        val data = payload.data?.data ?: return null
+        return when (data) {
+            is AddEditQuotationResponseDto -> data
+            is String -> AddEditQuotationResponseDto(id = data)
+            is JsonElement -> data.toAddEditQuotationResponse()
+            is List<*> -> data.filterIsInstance<AddEditQuotationResponseDto>().firstOrNull()
+            else -> null
+        }
+    }
+
+    private fun JsonElement.toAddEditQuotationResponse(): AddEditQuotationResponseDto? {
+        if (isJsonPrimitive && asJsonPrimitive.isString) {
+            return AddEditQuotationResponseDto(id = asString)
+        }
+
+        if (isJsonObject) {
+            return runCatching {
+                Gson().fromJson(this, AddEditQuotationResponseDto::class.java)
+            }.getOrNull()
+        }
+
+        if (isJsonArray) {
+            return asJsonArray.firstNotNullOfOrNull { element ->
+                element.toAddEditQuotationResponse()
+            }
+        }
+
+        return null
     }
 
     private fun ApiMessage.displayText(): String? {

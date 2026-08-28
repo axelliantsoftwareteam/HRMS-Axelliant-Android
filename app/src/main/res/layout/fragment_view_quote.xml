@@ -519,7 +519,6 @@
                         android:text="@string/quote_preview_save_draft"
                         android:visibility="gone"
                         android:textColor="@color/quotes_navy"
-                        app:backgroundTint="@null"
                         app:cornerRadius="@dimen/ds_radius_md" />
 
                     <com.axelliant.hris.ui.designsystem.components.AppButtonView
@@ -527,12 +526,9 @@
                         style="@style/Widget.Fluent2.Button.Primary"
                         android:layout_width="0dp"
                         android:layout_height="@dimen/ds_button_height"
-                        android:layout_marginStart="@dimen/ds_space_6"
+                        android:layout_marginStart="@dimen/ds_space_4"
                         android:layout_weight="1"
-                        android:background="@drawable/bg_quote_create_button"
                         android:text="@string/quote_preview_submit"
-                        android:textColor="@color/ia_white"
-                        app:backgroundTint="@null"
                         app:cornerRadius="@dimen/ds_radius_md" />
                 </LinearLayout>
             </LinearLayout>

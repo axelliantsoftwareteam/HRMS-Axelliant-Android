@@ -45,7 +45,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/ds_space_2"
-        android:textSize="@dimen/text_size_18"
+        android:textSize="@dimen/text_size_15"
         android:textColor="@color/ds_text_muted"
         android:fontFamily="@font/poppins_bold"
         android:textAlignment="textStart"

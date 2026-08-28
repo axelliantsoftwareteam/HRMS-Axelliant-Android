@@ -387,7 +387,6 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:background="@drawable/rounded_shifts"
-                            android:backgroundTint="#15D06D"
                             android:gravity="center"
                             android:orientation="horizontal"
                             android:padding="@dimen/_5sdp"

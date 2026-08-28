@@ -3,7 +3,7 @@ package com.axelliant.hris.features.commonlogin.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.axelliant.hris.R
-import com.axelliant.hris.core.auth.GlobalLogoutCoordinator
+import com.axelliant.hris.core.auth.LogoutCoordinator
 import com.axelliant.hris.core.auth.PendingCommonLoginStore
 import com.axelliant.hris.core.contracts.auth.AuthSessionResult
 import com.axelliant.hris.core.contracts.auth.WorkspaceAuthSessionRepositoryProvider
@@ -11,7 +11,7 @@ import com.axelliant.hris.core.contracts.navigation.WorkspaceKey
 import com.axelliant.hris.core.contracts.session.AppSession
 import com.axelliant.hris.features.auth.data.local.LoginCredentialStore
 import com.axelliant.hris.features.auth.data.remote.dto.LoginValidationState
-import com.axelliant.hris.features.auth.microsoft.MicrosoftAuthManager
+import com.axelliant.hris.features.auth.microsoft.MicrosoftAuthClient
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -48,8 +48,8 @@ class CommonLoginViewModel @Inject constructor(
     private val authSessionRepositoryProvider: WorkspaceAuthSessionRepositoryProvider,
     private val pendingCommonLoginStore: PendingCommonLoginStore,
     private val loginPreferences: LoginCredentialStore,
-    private val microsoftAuthManager: MicrosoftAuthManager,
-    private val globalLogoutCoordinator: GlobalLogoutCoordinator
+    private val microsoftAuthManager: MicrosoftAuthClient,
+    private val globalLogoutCoordinator: LogoutCoordinator
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(

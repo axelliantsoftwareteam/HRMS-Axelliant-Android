@@ -4,7 +4,7 @@ import android.util.Base64
 import com.axelliant.hris.core.network.ApiResult
 import com.axelliant.hris.core.network.SafeApiExecutor
 import com.axelliant.hris.core.session.SessionManager
-import com.axelliant.hris.features.auth.microsoft.MicrosoftAuthManager
+import com.axelliant.hris.features.auth.microsoft.MicrosoftAuthClient
 import com.axelliant.hris.features.profiles.data.local.ProfileCacheStore
 import com.axelliant.hris.features.profiles.data.remote.ProfilesApiService
 import com.axelliant.hris.features.profiles.data.remote.dto.MicrosoftProfileResponse
@@ -17,7 +17,7 @@ import javax.inject.Singleton
 class ProfilesRepository @Inject constructor(
     private val apiService: ProfilesApiService,
     private val safeApiExecutor: SafeApiExecutor,
-    private val microsoftAuthManager: MicrosoftAuthManager,
+    private val microsoftAuthManager: MicrosoftAuthClient,
     private val sessionManager: SessionManager,
     private val profileCacheStore: ProfileCacheStore
 ) {
