@@ -2,10 +2,10 @@ package com.axelliant.hris.features.saleorders.data.remote
 
 import com.axelliant.hris.core.network.BaseApiModel
 import com.axelliant.hris.features.saleorders.data.remote.dto.AddEditSaleOrderRequest
-import com.axelliant.hris.features.saleorders.data.remote.dto.AddEditSaleOrderResponseDto
 import com.axelliant.hris.features.saleorders.data.remote.dto.GetSaleOrdersRequest
 import com.axelliant.hris.features.saleorders.data.remote.dto.GetSaleOrdersResponse
 import com.axelliant.hris.features.saleorders.data.remote.dto.SaleOrderSingleDto
+import com.google.gson.JsonElement
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -27,7 +27,7 @@ interface SaleOrderApiService {
     @POST("SalesOrder/AddEdit")
     suspend fun addEditSaleOrder(
         @Body request: AddEditSaleOrderRequest
-    ): Response<BaseApiModel<List<AddEditSaleOrderResponseDto>>>
+    ): Response<BaseApiModel<JsonElement>>
 
     @POST("SalesOrder/SubmitSaleOrder")
     suspend fun submitSaleOrder(
