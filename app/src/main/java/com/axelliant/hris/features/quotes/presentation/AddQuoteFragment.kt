@@ -2,7 +2,9 @@ package com.axelliant.hris.features.quotes.presentation
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.net.Uri
 import android.os.Bundle
+import android.provider.OpenableColumns
 import android.text.Editable
 import android.text.InputType
 import android.text.TextUtils
@@ -18,6 +20,7 @@ import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
@@ -30,6 +33,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.axelliant.hris.R
+import com.axelliant.hris.ui.designsystem.components.AppButtonView
 import com.axelliant.hris.ui.designsystem.components.AppProgressBarView
 import com.axelliant.hris.ui.designsystem.components.AppTextView
 import com.axelliant.hris.ui.designsystem.components.createAppBottomSheetDialog
@@ -38,6 +42,8 @@ import com.axelliant.hris.core.ui.UiState
 import com.axelliant.hris.databinding.FragmentAddQuoteBinding
 import com.axelliant.hris.databinding.ItemSelectedQuoteProductBinding
 import com.axelliant.hris.databinding.LayoutQuotePreviewAmountRowBinding
+import com.axelliant.hris.features.quotes.data.importer.QuoteProductExcelParseException
+import com.axelliant.hris.features.quotes.data.importer.QuoteProductExcelParser
 import com.axelliant.hris.features.quotes.domain.model.QuoteAddressUi
 import com.axelliant.hris.features.quotes.domain.model.QuoteCreationProductUi
 import com.axelliant.hris.features.quotes.domain.model.QuotePaymentTermUi
@@ -46,9 +52,13 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.axelliant.hris.features.quotes.domain.model.QuoteProductScheduleHelper
 import dagger.hilt.android.AndroidEntryPoint
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Locale
+import javax.inject.Inject
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
 class AddQuoteFragment : Fragment() {
@@ -62,6 +72,22 @@ class AddQuoteFragment : Fragment() {
     private var customerSearchProgress: AppProgressBarView? = null
     private var customerEmptyText: TextView? = null
     private var isQuoteTitleWatcherActive = true
+    private var shownProductImportPreviewId: Long? = null
+
+    @Inject
+    lateinit var quoteProductExcelParser: QuoteProductExcelParser
+
+    private val productExcelPickerLauncher = registerForActivityResult(
+        ActivityResultContracts.OpenDocument()
+    ) { uri ->
+        uri?.let(::handleProductExcelFile)
+    }
+
+    private val productTemplateDownloadLauncher = registerForActivityResult(
+        ActivityResultContracts.CreateDocument(XLSX_MIME_TYPE)
+    ) { uri ->
+        uri?.let(::copyQuoteProductTemplateTo)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -124,7 +150,16 @@ class AddQuoteFragment : Fragment() {
             openAddressScreen(AddressType.Shipping)
         }
         binding.addProductButton.setOnClickListener {
-            findNavController().navigate(R.id.iaAddQuoteProductFragment)
+            findNavController().navigate(
+                R.id.iaAddQuoteProductFragment,
+                bundleOf(
+                    SmartQuoteProductFlow.ARG_PRESELECTED_PRODUCTS to
+                        QuoteProductSelectionBundles.fromProducts(viewModel.uiState.value.selectedProducts)
+                )
+            )
+        }
+        binding.uploadProductsButton.setOnClickListener {
+            showProductExcelImportSheet()
         }
         binding.dealRegistrationCheckbox.setOnCheckedChangeListener { _, checked ->
             viewModel.setDealRegistration(checked)
@@ -277,6 +312,7 @@ class AddQuoteFragment : Fragment() {
         }
 
         renderProducts(state, readOnlyDuplicate)
+        renderProductImportPreview(state.productImportPreview)
         renderFieldErrors(state, readOnlyDuplicate)
         if (state.scrollToFirstValidationError) {
             scrollToFirstValidationError(state.fieldErrors)
@@ -302,6 +338,8 @@ class AddQuoteFragment : Fragment() {
         binding.dealRegistrationCheckbox.isEnabled = !readOnly
         binding.addProductButton.isEnabled = !readOnly
         binding.addProductButton.isVisible = !readOnly
+        binding.uploadProductsButton.isEnabled = !readOnly
+        binding.uploadProductsButton.isVisible = !readOnly
 
         listOf(
             binding.customerField,
@@ -681,6 +719,353 @@ class AddQuoteFragment : Fragment() {
         ).show()
     }
 
+    private fun showProductExcelImportSheet() {
+        val dialog = requireContext().createAppBottomSheetDialog()
+        val container = LinearLayout(requireContext()).apply {
+            orientation = LinearLayout.VERTICAL
+            setBackgroundResource(R.drawable.bg_filter_sheet)
+            setPadding(
+                resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._14sdp),
+                resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._14sdp),
+                resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._14sdp),
+                resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._18sdp)
+            )
+        }
+        val titleView = TextView(requireContext()).apply {
+            text = getString(R.string.add_quote_import_products_title)
+            setTextColor(ContextCompat.getColor(requireContext(), R.color.ds_text_primary))
+            typeface = ResourcesCompat.getFont(requireContext(), R.font.poppins_semibold)
+            textSize = 18f
+        }
+        val messageView = TextView(requireContext()).apply {
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            ).apply {
+                topMargin = resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._6sdp)
+            }
+            text = getString(R.string.add_quote_import_products_message)
+            setTextColor(ContextCompat.getColor(requireContext(), R.color.ds_text_secondary))
+            typeface = ResourcesCompat.getFont(requireContext(), R.font.poppins_regular)
+            textSize = 13f
+        }
+        val downloadButton = AppButtonView(requireContext()).apply {
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                resources.getDimensionPixelSize(R.dimen.ds_button_height)
+            ).apply {
+                topMargin = resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._14sdp)
+            }
+            text = getString(R.string.add_quote_download_sample)
+            isAllCaps = false
+            setIconResource(R.drawable.fluent_download)
+            setOnClickListener {
+                dialog.dismiss()
+                productTemplateDownloadLauncher.launch(QUOTE_PRODUCT_TEMPLATE_FILE_NAME)
+            }
+        }
+        val uploadButton = AppButtonView(requireContext()).apply {
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                resources.getDimensionPixelSize(R.dimen.ds_button_height)
+            ).apply {
+                topMargin = resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._8sdp)
+            }
+            text = getString(R.string.add_quote_choose_excel_file)
+            isAllCaps = false
+            setIconResource(R.drawable.iv_attach_file)
+            setOnClickListener {
+                dialog.dismiss()
+                productExcelPickerLauncher.launch(arrayOf(XLSX_MIME_TYPE, ANY_MIME_TYPE))
+            }
+        }
+
+        container.addView(titleView)
+        container.addView(messageView)
+        container.addView(downloadButton)
+        container.addView(uploadButton)
+        dialog.setContentView(container)
+        dialog.setOnShowListener {
+            dialog.findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)
+                ?.let { sheet ->
+                    sheet.background = ColorDrawable(Color.TRANSPARENT)
+                    BottomSheetBehavior.from(sheet).state = BottomSheetBehavior.STATE_EXPANDED
+                }
+        }
+        dialog.show()
+    }
+
+    private fun handleProductExcelFile(uri: Uri) {
+        validateProductExcelFile(uri)?.let { message ->
+            Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+            return
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            binding.loadingOverlay.isVisible = true
+            runCatching {
+                withContext(Dispatchers.IO) {
+                    requireContext().contentResolver.openInputStream(uri)
+                        ?.use(quoteProductExcelParser::parse)
+                        ?: throw IOException("Unable to open Excel file.")
+                }
+            }.onSuccess { parseResult ->
+                binding.loadingOverlay.isVisible = false
+                viewModel.importProductsFromExcel(parseResult)
+            }.onFailure { error ->
+                binding.loadingOverlay.isVisible = false
+                val message = when (error) {
+                    is QuoteProductExcelParseException -> error.message
+                    else -> getString(R.string.add_quote_import_products_parse_error)
+                }
+                Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
+    private fun validateProductExcelFile(uri: Uri): String? {
+        val fileInfo = uri.queryFileInfo()
+        val mimeType = requireContext().contentResolver.getType(uri).orEmpty()
+        val name = fileInfo.name
+        val isSupportedFile = mimeType == XLSX_MIME_TYPE ||
+            name.endsWith(".xlsx", ignoreCase = true)
+        if (!isSupportedFile) {
+            return getString(R.string.add_quote_import_products_invalid_type)
+        }
+
+        fileInfo.size?.let { size ->
+            if (size > MAX_PRODUCT_IMPORT_FILE_BYTES) {
+                return getString(R.string.add_quote_import_products_file_too_large)
+            }
+        }
+        return null
+    }
+
+    private fun Uri.queryFileInfo(): ProductImportFileInfo {
+        var name = lastPathSegment.orEmpty()
+        var size: Long? = null
+        requireContext().contentResolver.query(
+            this,
+            arrayOf(OpenableColumns.DISPLAY_NAME, OpenableColumns.SIZE),
+            null,
+            null,
+            null
+        )?.use { cursor ->
+            if (cursor.moveToFirst()) {
+                val nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+                val sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE)
+                if (nameIndex >= 0) name = cursor.getString(nameIndex).orEmpty()
+                if (sizeIndex >= 0 && !cursor.isNull(sizeIndex)) {
+                    size = cursor.getLong(sizeIndex)
+                }
+            }
+        }
+        return ProductImportFileInfo(name = name, size = size)
+    }
+
+    private fun copyQuoteProductTemplateTo(uri: Uri) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            runCatching {
+                withContext(Dispatchers.IO) {
+                    requireContext().assets.open(QUOTE_PRODUCT_TEMPLATE_ASSET).use { input ->
+                        requireContext().contentResolver.openOutputStream(uri)?.use { output ->
+                            input.copyTo(output)
+                        } ?: throw IOException("Unable to create sample file.")
+                    }
+                }
+            }.onSuccess {
+                Toast.makeText(
+                    requireContext(),
+                    R.string.add_quote_download_sample_success,
+                    Toast.LENGTH_SHORT
+                ).show()
+            }.onFailure {
+                Toast.makeText(
+                    requireContext(),
+                    R.string.add_quote_download_sample_failed,
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+    }
+
+    private fun renderProductImportPreview(preview: QuoteProductImportPreview?) {
+        val previewToShow = preview ?: return
+        if (shownProductImportPreviewId == previewToShow.id) return
+        shownProductImportPreviewId = previewToShow.id
+        showProductImportConfirmationSheet(previewToShow)
+    }
+
+    private fun showProductImportConfirmationSheet(preview: QuoteProductImportPreview) {
+        val dialog = requireContext().createAppBottomSheetDialog()
+        var handled = false
+        val container = LinearLayout(requireContext()).apply {
+            orientation = LinearLayout.VERTICAL
+            setBackgroundResource(R.drawable.bg_filter_sheet)
+            setPadding(
+                resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._14sdp),
+                resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._14sdp),
+                resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._14sdp),
+                resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._18sdp)
+            )
+        }
+        val titleView = TextView(requireContext()).apply {
+            text = getString(R.string.add_quote_import_products_confirm_title)
+            setTextColor(ContextCompat.getColor(requireContext(), R.color.ds_text_primary))
+            typeface = ResourcesCompat.getFont(requireContext(), R.font.poppins_semibold)
+            textSize = 18f
+        }
+        val summaryView = TextView(requireContext()).apply {
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            ).apply {
+                topMargin = resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._6sdp)
+            }
+            text = getString(
+                R.string.add_quote_import_products_confirm_summary,
+                preview.products.size,
+                preview.ignoredRows
+            )
+            setTextColor(ContextCompat.getColor(requireContext(), R.color.ds_text_secondary))
+            typeface = ResourcesCompat.getFont(requireContext(), R.font.poppins_regular)
+            textSize = 13f
+        }
+        val productsContainer = LinearLayout(requireContext()).apply {
+            orientation = LinearLayout.VERTICAL
+            setBackgroundResource(R.drawable.bg_filter_dropdown_panel)
+            setPadding(
+                resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._8sdp),
+                resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._8sdp),
+                resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._8sdp),
+                resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._8sdp)
+            )
+        }
+        preview.products.forEach { product ->
+            productsContainer.addView(createImportedProductPreviewRow(product))
+        }
+        val productsScroll = ScrollView(requireContext()).apply {
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._42sdp) *
+                    preview.products.size.coerceAtMost(MAX_VISIBLE_IMPORTED_PRODUCTS).coerceAtLeast(1)
+            ).apply {
+                topMargin = resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._10sdp)
+            }
+            isVerticalScrollBarEnabled = preview.products.size > MAX_VISIBLE_IMPORTED_PRODUCTS
+            addView(productsContainer)
+        }
+        val actions = LinearLayout(requireContext()).apply {
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            ).apply {
+                topMargin = resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._14sdp)
+            }
+            orientation = LinearLayout.HORIZONTAL
+        }
+        val cancelButton = AppButtonView(requireContext()).apply {
+            layoutParams = LinearLayout.LayoutParams(
+                0,
+                resources.getDimensionPixelSize(R.dimen.ds_button_height),
+                1f
+            ).apply {
+                marginEnd = resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._6sdp)
+            }
+            text = getString(R.string.cancel)
+            isAllCaps = false
+            setOnClickListener {
+                handled = true
+                viewModel.dismissProductImportPreview()
+                dialog.dismiss()
+            }
+        }
+        val confirmButton = AppButtonView(requireContext()).apply {
+            layoutParams = LinearLayout.LayoutParams(
+                0,
+                resources.getDimensionPixelSize(R.dimen.ds_button_height),
+                1f
+            ).apply {
+                marginStart = resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._6sdp)
+            }
+            text = getString(R.string.add_quote_import_products_add_found)
+            isAllCaps = false
+            setOnClickListener {
+                handled = true
+                viewModel.confirmImportedProducts(preview.id)
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.add_quote_import_products_added, preview.products.size),
+                    Toast.LENGTH_SHORT
+                ).show()
+                dialog.dismiss()
+            }
+        }
+        actions.addView(cancelButton)
+        actions.addView(confirmButton)
+
+        container.addView(titleView)
+        container.addView(summaryView)
+        container.addView(productsScroll)
+        container.addView(actions)
+        dialog.setContentView(container)
+        dialog.setOnDismissListener {
+            if (!handled) viewModel.dismissProductImportPreview()
+        }
+        dialog.setOnShowListener {
+            dialog.findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)
+                ?.let { sheet ->
+                    sheet.background = ColorDrawable(Color.TRANSPARENT)
+                    BottomSheetBehavior.from(sheet).state = BottomSheetBehavior.STATE_EXPANDED
+                }
+        }
+        dialog.show()
+    }
+
+    private fun createImportedProductPreviewRow(product: QuoteCreationProductUi): View {
+        return LinearLayout(requireContext()).apply {
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            ).apply {
+                topMargin = resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._2sdp)
+            }
+            gravity = android.view.Gravity.CENTER_VERTICAL
+            orientation = LinearLayout.HORIZONTAL
+            setPadding(
+                resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._6sdp),
+                resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._6sdp),
+                resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._6sdp),
+                resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._6sdp)
+            )
+            addView(
+                TextView(requireContext()).apply {
+                    layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
+                    text = product.name
+                    setTextColor(ContextCompat.getColor(requireContext(), R.color.ds_text_primary))
+                    typeface = ResourcesCompat.getFont(requireContext(), R.font.poppins_medium)
+                    maxLines = 1
+                    ellipsize = TextUtils.TruncateAt.END
+                    textSize = 12f
+                }
+            )
+            addView(
+                TextView(requireContext()).apply {
+                    layoutParams = LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                    ).apply {
+                        marginStart = resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._8sdp)
+                    }
+                    text = getString(R.string.add_quote_import_products_quantity, product.quantity)
+                    setTextColor(ContextCompat.getColor(requireContext(), R.color.ds_text_secondary))
+                    typeface = ResourcesCompat.getFont(requireContext(), R.font.poppins_regular)
+                    textSize = 11f
+                }
+            )
+        }
+    }
+
     private fun setAmountRow(
         row: LayoutQuotePreviewAmountRowBinding,
         label: String,
@@ -918,8 +1303,19 @@ class AddQuoteFragment : Fragment() {
     companion object {
         private const val DELIVERY_DATE_PICKER_TAG = "quote_delivery_date_picker"
         private const val MAX_VISIBLE_QUOTE_OPTIONS = 6
+        private const val MAX_VISIBLE_IMPORTED_PRODUCTS = 5
+        private const val MAX_PRODUCT_IMPORT_FILE_BYTES = 2L * 1024L * 1024L
+        private const val XLSX_MIME_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        private const val ANY_MIME_TYPE = "*/*"
+        private const val QUOTE_PRODUCT_TEMPLATE_FILE_NAME = "quote-product-upload-template.xlsx"
+        private const val QUOTE_PRODUCT_TEMPLATE_ASSET = "quote_product_upload_template.xlsx"
     }
 }
+
+private data class ProductImportFileInfo(
+    val name: String,
+    val size: Long?
+)
 
 
 

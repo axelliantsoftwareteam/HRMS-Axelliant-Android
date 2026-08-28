@@ -26,6 +26,7 @@ import com.axelliant.hris.databinding.ItemQuoteProductSelectionBinding
 import com.axelliant.hris.features.inventory.products.presentation.ProductListItemUi
 import com.axelliant.hris.features.inventory.products.presentation.ProductStatusFilter
 import com.axelliant.hris.features.inventory.products.presentation.ProductsViewModel
+import com.axelliant.hris.features.quotes.presentation.QuoteProductSelectionBundles.toPreselectedProductItems
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.NumberFormat
 import java.util.Locale
@@ -52,10 +53,18 @@ class AddQuoteProductFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        restorePreselectedProducts()
         setupInteractions()
         observeProducts()
         renderFooter()
         viewModel.loadProducts(statusFilter = ProductStatusFilter.Active)
+    }
+
+    private fun restorePreselectedProducts() {
+        selectedProducts.clear()
+        arguments?.getBundle(SmartQuoteProductFlow.ARG_PRESELECTED_PRODUCTS)
+            ?.toPreselectedProductItems()
+            ?.let { selectedProducts.putAll(it) }
     }
 
     private fun setupInteractions() {
