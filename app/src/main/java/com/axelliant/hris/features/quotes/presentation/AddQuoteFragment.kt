@@ -123,13 +123,22 @@ class AddQuoteFragment : Fragment() {
             if (!isCustomerReady()) return@setOnClickListener
             openAddressScreen(AddressType.Shipping)
         }
-        binding.addProductButton.setOnClickListener {
-            findNavController().navigate(R.id.iaAddQuoteProductFragment)
-        }
+        binding.addProductButton.setOnClickListener { openProductPicker() }
         binding.dealRegistrationCheckbox.setOnCheckedChangeListener { _, checked ->
             viewModel.setDealRegistration(checked)
         }
         binding.createQuoteButton.setOnClickListener { viewModel.saveDraft() }
+    }
+
+    private fun openProductPicker() {
+        findNavController().navigate(
+            R.id.iaAskAiProductSearchFragment,
+            bundleOf(
+                SmartQuoteProductFlow.ARG_PRODUCT_PICKER_FLOW to SmartQuoteProductFlow.FLOW_ADD_QUOTE,
+                SmartQuoteProductFlow.ARG_PRESELECTED_PRODUCTS to
+                    QuoteProductSelectionBundles.fromProducts(viewModel.uiState.value.selectedProducts)
+            )
+        )
     }
 
     private fun observeResults() {

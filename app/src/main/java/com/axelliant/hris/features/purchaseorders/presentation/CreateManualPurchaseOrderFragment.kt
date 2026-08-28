@@ -18,6 +18,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -31,8 +32,11 @@ import com.axelliant.hris.core.ui.UiState
 import com.axelliant.hris.databinding.FragmentCreateManualPurchaseOrderBinding
 import com.axelliant.hris.databinding.ItemManualPoProductBinding
 import com.axelliant.hris.features.purchaseorders.domain.model.ManualPoProductLineUi
+import com.axelliant.hris.features.quotes.domain.model.QuoteCreationProductUi
 import com.axelliant.hris.features.quotes.presentation.AddQuoteViewModel
+import com.axelliant.hris.features.quotes.presentation.QuoteProductSelectionBundles
 import com.axelliant.hris.features.quotes.presentation.QuoteProductSelectionBundles.toQuoteCreationProducts
+import com.axelliant.hris.features.quotes.presentation.SmartQuoteProductFlow
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
@@ -69,7 +73,16 @@ class CreateManualPurchaseOrderFragment : Fragment() {
     }
 
     private fun openProductPicker() {
-        findNavController().navigate(R.id.iaAddQuoteProductFragment)
+        findNavController().navigate(
+            R.id.iaAskAiProductSearchFragment,
+            bundleOf(
+                SmartQuoteProductFlow.ARG_PRODUCT_PICKER_FLOW to SmartQuoteProductFlow.FLOW_CREATE_MANUAL_PO,
+                SmartQuoteProductFlow.ARG_PRESELECTED_PRODUCTS to
+                    QuoteProductSelectionBundles.fromProducts(
+                        viewModel.uiState.value.products.map { it.toQuoteCreationProduct() }
+                    )
+            )
+        )
     }
 
     private fun observeProductResults() {
@@ -340,6 +353,18 @@ class CreateManualPurchaseOrderFragment : Fragment() {
         quantityWatchers.clear()
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun ManualPoProductLineUi.toQuoteCreationProduct(): QuoteCreationProductUi {
+        return QuoteCreationProductUi(
+            id = id,
+            name = name,
+            sku = sku,
+            category = "",
+            thumbnailLabel = thumbnailLabel,
+            brandThumbnail = brandThumbnail,
+            unitPrice = unitCost
+        )
     }
 
     companion object {

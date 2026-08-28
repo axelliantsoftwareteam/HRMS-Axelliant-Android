@@ -34,10 +34,13 @@ import com.axelliant.hris.databinding.ItemEditPoProductBinding
 import com.axelliant.hris.features.purchaseorders.domain.model.EditPoProductLineUi
 import com.axelliant.hris.features.purchaseorders.domain.model.PoAddressUi
 import com.axelliant.hris.features.purchaseorders.domain.model.PoVendorUi
+import com.axelliant.hris.features.quotes.domain.model.QuoteCreationProductUi
 import com.axelliant.hris.features.quotes.presentation.AddQuoteAddressFragment
 import com.axelliant.hris.features.quotes.presentation.AddQuoteViewModel
 import com.axelliant.hris.features.quotes.presentation.AddressType
+import com.axelliant.hris.features.quotes.presentation.QuoteProductSelectionBundles
 import com.axelliant.hris.features.quotes.presentation.QuoteProductSelectionBundles.toQuoteCreationProducts
+import com.axelliant.hris.features.quotes.presentation.SmartQuoteProductFlow
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
@@ -119,9 +122,7 @@ class EditPurchaseOrderFragment : Fragment() {
         }
         binding.editBillingDetails.setOnClickListener { openAddressScreen(AddressType.Billing) }
         binding.editShippingDetails.setOnClickListener { openAddressScreen(AddressType.Shipping) }
-        binding.addItemButton.setOnClickListener {
-            findNavController().navigate(R.id.iaAddQuoteProductFragment)
-        }
+        binding.addItemButton.setOnClickListener { openProductPicker() }
         binding.saveChangesButton.setOnClickListener { viewModel.saveChanges() }
 
         shippingWatcher = object : TextWatcher {
@@ -133,6 +134,19 @@ class EditPurchaseOrderFragment : Fragment() {
             }
         }
         binding.shippingEditText.addTextChangedListener(shippingWatcher)
+    }
+
+    private fun openProductPicker() {
+        findNavController().navigate(
+            R.id.iaAskAiProductSearchFragment,
+            bundleOf(
+                SmartQuoteProductFlow.ARG_PRODUCT_PICKER_FLOW to SmartQuoteProductFlow.FLOW_EDIT_PO,
+                SmartQuoteProductFlow.ARG_PRESELECTED_PRODUCTS to
+                    QuoteProductSelectionBundles.fromProducts(
+                        viewModel.uiState.value.products.map { it.toQuoteCreationProduct() }
+                    )
+            )
+        )
     }
 
     private fun observeProductResults() {
@@ -433,6 +447,18 @@ class EditPurchaseOrderFragment : Fragment() {
         costWatchers.clear()
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun EditPoProductLineUi.toQuoteCreationProduct(): QuoteCreationProductUi {
+        return QuoteCreationProductUi(
+            id = productId.ifBlank { id },
+            name = name,
+            sku = sku,
+            category = "",
+            thumbnailLabel = name.take(1).uppercase(),
+            brandThumbnail = false,
+            unitPrice = unitCost
+        )
     }
 
     companion object {

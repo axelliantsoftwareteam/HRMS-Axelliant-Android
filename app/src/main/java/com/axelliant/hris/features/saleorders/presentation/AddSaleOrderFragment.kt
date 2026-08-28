@@ -44,7 +44,9 @@ import com.axelliant.hris.features.quotes.presentation.AddQuoteAddressFragment
 import com.axelliant.hris.features.quotes.presentation.AddQuoteViewModel
 import com.axelliant.hris.features.quotes.presentation.AddressType
 import com.axelliant.hris.features.quotes.presentation.QuoteProductActionsBottomSheet
+import com.axelliant.hris.features.quotes.presentation.QuoteProductSelectionBundles
 import com.axelliant.hris.features.quotes.presentation.QuoteProductSelectionBundles.toQuoteCreationProducts
+import com.axelliant.hris.features.quotes.presentation.SmartQuoteProductFlow
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -132,14 +134,23 @@ class AddSaleOrderFragment : Fragment() {
             if (!isCustomerReady()) return@setOnClickListener
             openAddressScreen(AddressType.Shipping)
         }
-        binding.addProductButton.setOnClickListener {
-            findNavController().navigate(R.id.iaAddQuoteProductFragment)
-        }
+        binding.addProductButton.setOnClickListener { openProductPicker() }
         binding.changeDateButton.setOnClickListener {
             if (!isCustomerReady()) return@setOnClickListener
             showDeliveryDatePicker()
         }
         binding.saveDraftButton.setOnClickListener { viewModel.saveDraft() }
+    }
+
+    private fun openProductPicker() {
+        findNavController().navigate(
+            R.id.iaAskAiProductSearchFragment,
+            bundleOf(
+                SmartQuoteProductFlow.ARG_PRODUCT_PICKER_FLOW to SmartQuoteProductFlow.FLOW_ADD_SALE_ORDER,
+                SmartQuoteProductFlow.ARG_PRESELECTED_PRODUCTS to
+                    QuoteProductSelectionBundles.fromProducts(viewModel.uiState.value.selectedProducts)
+            )
+        )
     }
 
     private fun observeResults() {
