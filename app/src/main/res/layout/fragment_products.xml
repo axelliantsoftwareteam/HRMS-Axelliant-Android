@@ -555,13 +555,11 @@
         <com.axelliant.hris.ui.designsystem.components.AppButtonView
             android:id="@+id/confirmSelectionButton"
             style="@style/Widget.Fluent2.Button.Primary"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/_110sdp"
             android:layout_height="@dimen/ds_button_height"
-            android:background="@drawable/bg_quote_create_button"
             android:enabled="false"
             android:text="@string/add_quote_confirm_selection"
             android:textColor="@color/white"
-            app:backgroundTint="@null"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

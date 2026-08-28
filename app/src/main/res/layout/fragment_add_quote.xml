@@ -686,7 +686,7 @@
 
                 <com.axelliant.hris.ui.designsystem.components.AppButtonView
                     android:id="@+id/createQuoteButton"
-                    style="@style/Widget.Fluent2.Button.Primary"
+                    style="@style/Widget.Fluent2.Button.Secondary"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/ds_button_height"
                     android:layout_marginTop="@dimen/ds_space_8"
