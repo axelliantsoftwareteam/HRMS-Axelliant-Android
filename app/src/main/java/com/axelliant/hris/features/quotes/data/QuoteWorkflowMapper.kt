@@ -22,72 +22,84 @@ object QuoteWorkflowMapper {
         steps: List<WorkflowProcessDto>,
         settings: ProfileLocalSettings
     ): QuoteWorkflowUiModel {
+
         val mappedSteps = steps
             .sortedBy { it.processNo ?: Int.MAX_VALUE }
-            .map { toStepUiModel(dto = it, settings = settings) }
-        val stepsWithStates = assignStepStates(mappedSteps)
-        val displayMode = if (stepsWithStates.all { it.stepState == QuoteWorkflowStepState.Completed }) {
+            .map { dto ->
+                toStepUiModel(
+                    dto = dto,
+                    settings = settings
+                )
+            }
+
+        val displayMode = if (
+            mappedSteps.isNotEmpty() &&
+            mappedSteps.all {
+                it.stepState == QuoteWorkflowStepState.Approved ||
+                        it.stepState == QuoteWorkflowStepState.Skipped
+            }
+        ) {
             QuoteWorkflowDisplayMode.Completed
         } else {
             QuoteWorkflowDisplayMode.InProgress
         }
+
         return QuoteWorkflowUiModel(
             quoteNumber = quoteNumber,
             displayMode = displayMode,
-            steps = stepsWithStates
+            steps = mappedSteps
         )
-    }
-
-    private fun assignStepStates(
-        steps: List<QuoteWorkflowStepUiModel>
-    ): List<QuoteWorkflowStepUiModel> {
-        var activeAssigned = false
-        return steps.map { step ->
-            when (step.stepState) {
-                QuoteWorkflowStepState.Completed,
-                QuoteWorkflowStepState.Rejected -> step
-                else -> {
-                    if (!activeAssigned) {
-                        activeAssigned = true
-                        step.copy(stepState = QuoteWorkflowStepState.Active)
-                    } else {
-                        step.copy(stepState = QuoteWorkflowStepState.Pending)
-                    }
-                }
-            }
-        }
     }
 
     private fun toStepUiModel(
         dto: WorkflowProcessDto,
         settings: ProfileLocalSettings
     ): QuoteWorkflowStepUiModel {
-        val isCompleted = dto.status == true && dto.processStatus == true
-        val isRejected = dto.isCompletelyRejected == true
 
-        val initialState = when {
-            isCompleted -> QuoteWorkflowStepState.Completed
-            isRejected -> QuoteWorkflowStepState.Rejected
+        val state = when (dto.state?.lowercase()) {
+            "approved" -> QuoteWorkflowStepState.Approved
+            "active" -> QuoteWorkflowStepState.Active
+            "pending" -> QuoteWorkflowStepState.Pending
+            "rejected" -> QuoteWorkflowStepState.Rejected
+            "skipped" -> QuoteWorkflowStepState.Skipped
             else -> QuoteWorkflowStepState.Pending
         }
 
-        val statusLabel = when {
-            isCompleted -> "Approved"
-            isRejected -> dto.rejectText.orFallback().ifBlank { "Rejected" }
-            else -> dto.approveText.orFallback().ifBlank { "Approve" }
+        val statusLabel = when (state) {
+            QuoteWorkflowStepState.Approved -> "Approved"
+            QuoteWorkflowStepState.Active -> "In Progress"
+            QuoteWorkflowStepState.Pending -> "Pending"
+            QuoteWorkflowStepState.Rejected ->
+                dto.rejectText.orFallback().ifBlank { "Rejected" }
+
+            QuoteWorkflowStepState.Skipped -> "Skipped"
         }
 
         return QuoteWorkflowStepUiModel(
             processNo = dto.processNo ?: 0,
+
             roleName = dto.roleName.orFallback(),
+
             processName = dto.processName.orFallback(),
+
             processScreenName = dto.processScreenName.orFallback(),
-            timestampDate = formatTimestamp(dto.timeStamp, settings)
-                ?: dto.timestampDate.orEmpty().trim(),
-            approveText = dto.approveText.orFallback().ifBlank { "Approve" },
-            rejectText = dto.rejectText.orFallback().ifBlank { "Reject" },
+
+            timestampDate = formatTimestamp(
+                dto.timeStamp,
+                settings
+            ) ?: dto.timestampDate.orEmpty().trim(),
+
+            approveText = dto.approveText
+                .orFallback()
+                .ifBlank { "Approve" },
+
+            rejectText = dto.rejectText
+                .orFallback()
+                .ifBlank { "Reject" },
+
             statusLabel = statusLabel,
-            stepState = initialState
+
+            stepState = state
         )
     }
 
@@ -101,7 +113,8 @@ object QuoteWorkflowMapper {
         } else {
             safeTimestamp * 1000L
         }
-        val pattern = "${settings.dateFormat.toDatePattern()}, ${settings.timeFormat.toTimePattern()}"
+        val pattern =
+            "${settings.dateFormat.toDatePattern()}, ${settings.timeFormat.toTimePattern()}"
         return runCatching {
             SimpleDateFormat(pattern, Locale.US).apply {
                 timeZone = TimeZone.getTimeZone(settings.timeZoneId)

@@ -104,11 +104,12 @@ class QuoteWorkflowBottomSheet(
         val context = fragment.requireContext()
         val totalSteps = workflow.steps.size
         val completedCount = workflow.steps.count {
-            it.stepState == QuoteWorkflowStepState.Completed ||
-                it.stepState == QuoteWorkflowStepState.Rejected
+            it.stepState == QuoteWorkflowStepState.Approved ||
+                it.stepState == QuoteWorkflowStepState.Rejected ||
+                it.stepState == QuoteWorkflowStepState.Skipped
         }
-        val allCompleted = totalSteps > 0 && workflow.steps.all {
-            it.stepState == QuoteWorkflowStepState.Completed
+        val allApproved = totalSteps > 0 && workflow.steps.all {
+            it.stepState == QuoteWorkflowStepState.Approved
         }
         val rejected = workflow.steps.any { it.stepState == QuoteWorkflowStepState.Rejected }
         val activeStep = workflow.steps.firstOrNull {
@@ -118,13 +119,13 @@ class QuoteWorkflowBottomSheet(
             context,
             when {
                 rejected -> R.color.ds_error
-                allCompleted -> R.color.ds_success
+                allApproved -> R.color.ds_success
                 else -> R.color.ds_primary
             }
         )
         val currentStage = when {
             rejected -> context.getString(R.string.quote_workflow_status_rejected)
-            allCompleted -> context.getString(R.string.quote_workflow_status_completed)
+            allApproved -> context.getString(R.string.quote_workflow_status_approved)
             activeStep != null -> activeStep.processName
             else -> context.getString(R.string.quote_workflow_status_waiting)
         }
@@ -143,7 +144,7 @@ class QuoteWorkflowBottomSheet(
             totalSteps
         )
         binding.workflowCurrentText.text = buildCurrentText(currentStage, progressColor)
-        binding.workflowCompleteNoticeContainer.isVisible = allCompleted
+        binding.workflowCompleteNoticeContainer.isVisible = allApproved
     }
 
     private fun buildCurrentText(currentStage: String, currentColor: Int): SpannableString {

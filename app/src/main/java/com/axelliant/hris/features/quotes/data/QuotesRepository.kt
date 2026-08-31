@@ -189,36 +189,59 @@ class QuotesRepository @Inject constructor(
         relationId: String,
         quoteNumber: String
     ): ApiResult<QuoteWorkflowUiModel> {
-        return when (val result = safeApiExecutor.execute {
-            workflowApiService.getApproveProcess(relationId)
-        }) {
+
+        return when (
+            val result = safeApiExecutor.execute {
+                workflowApiService.getWorkflowGraphInstance(relationId)
+            }
+        ) {
+
             is ApiResult.Success -> {
+
                 val payload = result.data
-                val steps = QuoteApiResponseParser.unwrapSuccess(payload)
-                if (payload.data?.success == true && steps != null) {
+
+                val workflow = QuoteApiResponseParser.unwrapSuccess(
+                    payload
+                )
+
+                if (payload.data?.success == true && workflow != null) {
+
                     ApiResult.Success(
-                        QuoteWorkflowMapper.toUiModel(
+                        QuoteWorkflowGraphMapper.toUiModel(
                             quoteNumber = quoteNumber,
-                            steps = steps,
-                            settings = profileSettingsStore.getSettings()
+                            workflow = workflow
                         )
                     )
+
                 } else {
+
                     ApiResult.UnknownError(
                         QuoteApiResponseParser.extractApiMessage(payload)
                             ?: "Unable to load quote workflow."
                     )
                 }
             }
-            is ApiResult.Empty -> ApiResult.UnknownError("Unable to load quote workflow.")
-            is ApiResult.HttpError -> ApiResult.HttpError(
-                code = result.code,
-                message = QuoteApiResponseParser.resolveErrorMessage(result),
-                errorBody = result.errorBody
-            )
-            is ApiResult.NetworkError -> result
-            is ApiResult.UnknownError -> result
-            ApiResult.Unauthorized -> ApiResult.Unauthorized
+
+            is ApiResult.Empty ->
+                ApiResult.UnknownError(
+                    "Unable to load quote workflow."
+                )
+
+            is ApiResult.HttpError ->
+                ApiResult.HttpError(
+                    code = result.code,
+                    message = QuoteApiResponseParser.resolveErrorMessage(result),
+                    errorBody = result.errorBody
+                )
+
+            is ApiResult.NetworkError ->
+                result
+
+            is ApiResult.UnknownError ->
+                result
+
+            ApiResult.Unauthorized ->
+                ApiResult.Unauthorized
         }
     }
 

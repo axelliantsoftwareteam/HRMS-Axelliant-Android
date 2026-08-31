@@ -569,6 +569,18 @@
                     android:textSize="@dimen/_9ssp"
                     app:icon="@drawable/ia_ic_add"
                     />
+
+                <com.axelliant.hris.ui.designsystem.components.AppButtonView
+                    android:id="@+id/uploadProductsButton"
+                    style="@style/Widget.Fluent2.Button.Icon"
+                    android:layout_width="@dimen/ds_button_height"
+                    android:layout_height="@dimen/ds_button_height"
+                    android:layout_marginStart="@dimen/ds_space_8"
+                    android:contentDescription="@string/add_quote_upload_products"
+                    android:text=""
+                    app:cornerRadius="@dimen/ds_radius_md"
+                    app:icon="@drawable/iv_attach_file"
+                    app:iconSize="@dimen/ds_icon_button_icon_size" />
             </LinearLayout>
 
             <LinearLayout

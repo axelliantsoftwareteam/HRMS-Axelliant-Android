@@ -5,6 +5,13 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.axelliant.hris.core.network.ApiResult
 import com.axelliant.hris.core.ui.UiState
+import com.axelliant.hris.features.inventory.products.data.ProductsRepository
+import com.axelliant.hris.features.inventory.products.data.remote.dto.ProductListResponse
+import com.axelliant.hris.features.inventory.products.data.remote.dto.ProductSourceResponse
+import com.axelliant.hris.features.quotes.data.importer.QuoteProductExcelParseResult
+import com.axelliant.hris.features.quotes.data.importer.QuoteProductExcelRow
+import com.axelliant.hris.features.quotes.data.importer.QuoteProductExcelSearchCandidate
+import com.axelliant.hris.features.quotes.data.importer.QuoteProductExcelSearchType
 import com.axelliant.hris.features.quotes.data.QuotesRepository
 import com.axelliant.hris.features.quotes.domain.model.CreateDraftQuoteRequest
 import com.axelliant.hris.features.quotes.domain.model.CreateDraftQuoteResult
@@ -31,6 +38,7 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 class AddQuoteViewModel @Inject constructor(
     private val repository: QuotesRepository,
+    private val productsRepository: ProductsRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -49,6 +57,7 @@ class AddQuoteViewModel @Inject constructor(
     private var customerDetailsJob: Job? = null
     private var paymentTermsJob: Job? = null
     private var saveJob: Job? = null
+    private var productImportJob: Job? = null
 
     private val _uiState = MutableStateFlow(AddQuoteUiState())
     val uiState = _uiState.asStateFlow()
@@ -208,9 +217,11 @@ class AddQuoteViewModel @Inject constructor(
 
     fun setProducts(products: List<QuoteCreationProductUi>) {
         val current = _uiState.value
-        val existingById = current.selectedProducts.associateBy { it.id }
-        val merged = products.map { incoming -> existingById[incoming.id] ?: incoming }
-        val normalized = merged.map { product ->
+        val mergedById = current.selectedProducts.associateBy { it.id }.toMutableMap()
+        products.forEach { incoming ->
+            mergedById[incoming.id] = mergedById[incoming.id] ?: incoming
+        }
+        val normalized = mergedById.values.map { product ->
             QuoteProductScheduleHelper.ensureSchedules(
                 product = product,
                 quoteShippingAddress = current.selectedShippingAddress,
@@ -221,6 +232,73 @@ class AddQuoteViewModel @Inject constructor(
             selectedProducts = normalized,
             fieldErrors = _uiState.value.fieldErrors.withProductsValid(normalized.isNotEmpty())
         )
+    }
+
+    fun importProductsFromExcel(parseResult: QuoteProductExcelParseResult) {
+        productImportJob?.cancel()
+        if (parseResult.rows.isEmpty()) {
+            _uiState.value = _uiState.value.copy(
+                isProductImportLoading = false,
+                errorMessage = "No valid product rows found in the Excel file."
+            )
+            return
+        }
+
+        productImportJob = viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(
+                isProductImportLoading = true,
+                productImportPreview = null,
+                errorMessage = null
+            )
+
+            val importedProducts = linkedMapOf<String, QuoteCreationProductUi>()
+            var ignoredRows = parseResult.ignoredRows
+
+            parseResult.rows.forEach { row ->
+                val product = findProductForImportedRow(row)
+                if (product == null) {
+                    ignoredRows += 1
+                } else {
+                    importedProducts.putIfAbsent(product.id, product.copy(quantity = row.quantity))
+                }
+            }
+
+            if (importedProducts.isEmpty()) {
+                _uiState.value = _uiState.value.copy(
+                    isProductImportLoading = false,
+                    productImportPreview = null,
+                    errorMessage = "No matching products found on the server."
+                )
+                return@launch
+            }
+
+            _uiState.value = _uiState.value.copy(
+                isProductImportLoading = false,
+                productImportPreview = QuoteProductImportPreview(
+                    id = System.currentTimeMillis(),
+                    products = importedProducts.values.toList(),
+                    ignoredRows = ignoredRows
+                )
+            )
+        }
+    }
+
+    fun confirmImportedProducts(previewId: Long) {
+        val current = _uiState.value
+        val preview = current.productImportPreview?.takeIf { it.id == previewId } ?: return
+        val products = mergeProducts(
+            existing = current.selectedProducts,
+            incoming = preview.products
+        )
+        _uiState.value = current.copy(
+            selectedProducts = products,
+            productImportPreview = null,
+            fieldErrors = current.fieldErrors.withProductsValid(products.isNotEmpty())
+        )
+    }
+
+    fun dismissProductImportPreview() {
+        _uiState.value = _uiState.value.copy(productImportPreview = null)
     }
 
     fun updateProduct(product: QuoteCreationProductUi) {
@@ -593,6 +671,78 @@ class AddQuoteViewModel @Inject constructor(
         }
     }
 
+    private suspend fun findProductForImportedRow(row: QuoteProductExcelRow): QuoteCreationProductUi? {
+        row.searchCandidates.forEach { candidate ->
+            val result = productsRepository.getProducts(
+                search = candidate.value,
+                status = ACTIVE_PRODUCT_STATUS,
+                limit = PRODUCT_IMPORT_SEARCH_LIMIT,
+                includeNameInSearchPayload = false
+            )
+            if (result is ApiResult.Success) {
+                val matched = result.data.sourceProducts()
+                    .firstOrNull { source -> source.matchesImportedSearch(candidate) }
+                if (matched != null) {
+                    return matched.toQuoteCreationProduct(row.quantity)
+                }
+            }
+        }
+        return null
+    }
+
+    private fun ProductListResponse.sourceProducts(): List<ProductSourceResponse> {
+        return products.takeIf { it.isNotEmpty() || hits == null }
+            ?: hits?.hits.orEmpty().mapNotNull { it.source }
+    }
+
+    private fun ProductSourceResponse.matchesImportedSearch(candidate: QuoteProductExcelSearchCandidate): Boolean {
+        return when (candidate.type) {
+            QuoteProductExcelSearchType.ManufacturerPartNumber ->
+                manufacturerPartNumber.equals(candidate.value, ignoreCase = true)
+            QuoteProductExcelSearchType.Sku ->
+                axePartNumber.equals(candidate.value, ignoreCase = true)
+        }
+    }
+
+    private fun ProductSourceResponse.toQuoteCreationProduct(quantity: Int): QuoteCreationProductUi {
+        val vendor = vendorInfo.orEmpty().firstOrNull()
+        val price = vendor?.listPrice ?: listPrice ?: 0.0
+        val resolvedName = name.orEmpty().ifBlank { "Unnamed Product" }
+        val thumbnail = buildThumbnailLabel()
+        return QuoteCreationProductUi(
+            id = id.orEmpty(),
+            name = resolvedName,
+            sku = axePartNumber.orEmpty(),
+            category = category?.takeIf { it.isJsonPrimitive }?.asString.orEmpty(),
+            thumbnailLabel = thumbnail,
+            brandThumbnail = thumbnail == CISCO_LABEL,
+            unitPrice = price,
+            quantity = quantity
+        )
+    }
+
+    private fun ProductSourceResponse.buildThumbnailLabel(): String {
+        val text = listOfNotNull(name, description, manufacturerName)
+            .joinToString(" ")
+            .uppercase(Locale.US)
+
+        if (CISCO_LABEL in text) return CISCO_LABEL
+
+        return manufacturerName
+            ?.take(3)
+            ?.uppercase(Locale.US)
+            ?.ifBlank { null }
+            ?: name.orEmpty().take(3).uppercase(Locale.US).ifBlank { "APP" }
+    }
+
+    private fun mergeProducts(
+        existing: List<QuoteCreationProductUi>,
+        incoming: List<QuoteCreationProductUi>
+    ): List<QuoteCreationProductUi> {
+        val existingById = existing.associateBy { it.id }
+        return existing + incoming.filterNot { imported -> imported.id in existingById }
+    }
+
     private fun resolveAddress(
         preferred: QuoteAddressUi,
         options: List<QuoteAddressUi>
@@ -624,6 +774,9 @@ class AddQuoteViewModel @Inject constructor(
         const val VALIDATION_PRODUCTS = "validation-products"
 
         private const val SEARCH_DEBOUNCE_MS = 400L
+        private const val ACTIVE_PRODUCT_STATUS = 1
+        private const val PRODUCT_IMPORT_SEARCH_LIMIT = 10
+        private const val CISCO_LABEL = "CISCO"
     }
 }
 
@@ -678,12 +831,15 @@ data class AddQuoteUiState(
     val isCustomerDetailsLoading: Boolean = false,
     val isPaymentTermsLoading: Boolean = false,
     val isEditLoading: Boolean = false,
+    val isProductImportLoading: Boolean = false,
+    val productImportPreview: QuoteProductImportPreview? = null,
     val errorMessage: String? = null,
     val fieldErrors: AddQuoteFieldErrors = AddQuoteFieldErrors(),
     val scrollToFirstValidationError: Boolean = false
 ) {
     val isFormLoading: Boolean
-        get() = isCustomerDetailsLoading || isPaymentTermsLoading || isEditLoading
+        get() = isCustomerDetailsLoading || isPaymentTermsLoading || isEditLoading ||
+            isProductImportLoading
 
     val subtotal: Double
         get() = selectedProducts.sumOf { it.lineTotal }
@@ -697,6 +853,12 @@ data class AddQuoteUiState(
         return NumberFormat.getCurrencyInstance(Locale.US).format(amount)
     }
 }
+
+data class QuoteProductImportPreview(
+    val id: Long,
+    val products: List<QuoteCreationProductUi>,
+    val ignoredRows: Int
+)
 
 enum class AddressType {
     Billing,

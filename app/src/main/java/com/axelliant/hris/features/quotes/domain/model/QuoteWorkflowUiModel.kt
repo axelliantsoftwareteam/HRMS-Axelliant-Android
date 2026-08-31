@@ -6,12 +6,12 @@ enum class QuoteWorkflowDisplayMode {
 }
 
 enum class QuoteWorkflowStepState {
-    Completed,
+    Approved,
     Active,
     Pending,
-    Rejected
+    Rejected,
+    Skipped
 }
-
 data class QuoteWorkflowUiModel(
     val quoteNumber: String,
     val displayMode: QuoteWorkflowDisplayMode,
@@ -19,6 +19,8 @@ data class QuoteWorkflowUiModel(
 )
 
 data class QuoteWorkflowStepUiModel(
+    val id: String = "",
+    val nodeType: String = "",
     val processNo: Int,
     val roleName: String,
     val processName: String,
@@ -27,8 +29,12 @@ data class QuoteWorkflowStepUiModel(
     val approveText: String,
     val rejectText: String,
     val statusLabel: String,
-    val stepState: QuoteWorkflowStepState
+    val stepState: QuoteWorkflowStepState,
+    val comments: String = ""
 ) {
     val hasTimestamp: Boolean
         get() = timestampDate.isNotBlank() && timestampDate != "N/A"
+
+    val hasComments: Boolean
+        get() = comments.isNotBlank()
 }
