@@ -541,7 +541,7 @@
                     android:orientation="vertical"
                     android:padding="@dimen/ds_space_12">
 
-                    <LinearLayout
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
@@ -554,6 +554,10 @@
                             android:layout_weight="1"
                             android:fontFamily="@font/poppins_semibold"
                             android:text="@string/add_sale_order_products_information"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/addProductButton"
                             android:textColor="@color/ds_text_primary" />
 
                         <com.axelliant.hris.ui.designsystem.components.AppButtonView
@@ -566,9 +570,12 @@
                             android:textSize="@dimen/_9ssp"
                             app:icon="@drawable/ia_ic_add"
                             app:iconPadding="@dimen/_4sdp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
                             app:iconSize="@dimen/ds_button_inline_icon_size"
                             app:iconTint="@color/ds_on_primary" />
-                    </LinearLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <LinearLayout
                         android:id="@+id/selectedProductsContainer"
