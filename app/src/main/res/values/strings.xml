@@ -1267,6 +1267,7 @@
         <string name="product_compare_p1_in_stock">P1 In Stock</string>
         <string name="product_compare_p2_in_stock">P2 In Stock</string>
         <string name="product_compare_in_stock_quantity">In Stock (%1$d)</string>
+        <string name="press_back_again_to_exit">Press back again to exit</string>
         <plurals name="product_compare_offer_count">
             <item quantity="one">%1$d offer</item>
             <item quantity="other">%1$d offers</item>

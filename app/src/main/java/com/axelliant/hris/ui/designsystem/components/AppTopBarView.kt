@@ -21,7 +21,7 @@ class AppTopBarView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
 
-    private var centerTitle = false
+    private var centerTitle = true
     private var inverseColors = false
 
     val backButton: AppButtonView = AppButtonView(context).apply {

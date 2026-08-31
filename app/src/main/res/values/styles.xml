@@ -374,6 +374,8 @@
             <item name="cornerRadius">@dimen/ds_radius_sm</item>
             <item name="iconTint">@color/ds_button_primary_text</item>
             <item name="rippleColor">@color/ds_primary_pressed</item>
+            <!-- TEST -->
+            <item name="android:padding">0dp</item>
         </style>
 
         <style name="Widget.Axelliant.Button.Secondary" parent="Widget.MaterialComponents.Button.OutlinedButton">
