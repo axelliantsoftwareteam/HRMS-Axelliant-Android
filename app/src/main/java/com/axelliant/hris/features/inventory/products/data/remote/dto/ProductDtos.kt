@@ -10,7 +10,8 @@ object ProductSearchRequest {
         from: Int,
         search: String? = null,
         status: Int? = null,
-        filters: ProductSearchFilters = ProductSearchFilters()
+        filters: ProductSearchFilters = ProductSearchFilters(),
+        includeNameInSearchPayload: Boolean = true
     ): JsonElement {
         val trimmedSearch = search?.trim().orEmpty()
         val page = (from / size.coerceAtLeast(1)) + 1
@@ -20,7 +21,7 @@ object ProductSearchRequest {
             addProperty("size", size)
             if (trimmedSearch.isNotBlank()) {
                 addProperty("search", trimmedSearch)
-                addProperty("Name", trimmedSearch)
+                addProperty("Name", if (includeNameInSearchPayload) trimmedSearch else "")
             }
             status?.let { addProperty("status", it) }
             addStringOrArray("Category", filters.categoryNames)

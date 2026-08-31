@@ -26,7 +26,8 @@ class ProductsRepository @Inject constructor(
         filters: ProductSearchFilters = ProductSearchFilters(),
         page: Int = 1,
         limit: Int = 20,
-        from: Int = (page - 1).coerceAtLeast(0) * limit
+        from: Int = (page - 1).coerceAtLeast(0) * limit,
+        includeNameInSearchPayload: Boolean = true
     ): ApiResult<ProductListResponse> = withContext(Dispatchers.IO) {
         safeApiExecutor.execute {
             apiService.searchProducts(
@@ -35,7 +36,8 @@ class ProductsRepository @Inject constructor(
                     from = from,
                     search = search,
                     status = status,
-                    filters = filters
+                    filters = filters,
+                    includeNameInSearchPayload = includeNameInSearchPayload
                 )
             )
         }

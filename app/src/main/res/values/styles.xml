@@ -371,7 +371,7 @@
             <item name="textAllCaps">false</item>
             <item name="textSize">@dimen/text_size_10</item>
             <item name="backgroundTint">@color/ds_button_primary_background</item>
-            <item name="cornerRadius">@dimen/ds_radius_lg</item>
+            <item name="cornerRadius">@dimen/ds_radius_sm</item>
             <item name="iconTint">@color/ds_button_primary_text</item>
             <item name="rippleColor">@color/ds_primary_pressed</item>
         </style>
