@@ -38,7 +38,6 @@ class SubscriptionsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.appTopBar.titleView.textSize = 14f
         SubscriptionCommerceTabs.bind(
             this,
             binding.commerceTabs,

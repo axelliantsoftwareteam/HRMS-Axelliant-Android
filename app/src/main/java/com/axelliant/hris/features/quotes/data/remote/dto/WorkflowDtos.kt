@@ -40,5 +40,7 @@ data class WorkflowProcessDto(
     @SerializedName("roleName")
     val roleName: String? = null,
     @SerializedName("timestampDate")
-    val timestampDate: String? = null
+    val timestampDate: String? = null,
+    @SerializedName("state")
+val state: String? = null
 )

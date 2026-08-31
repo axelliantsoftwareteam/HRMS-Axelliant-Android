@@ -57,31 +57,52 @@ class QuoteWorkflowStepAdapter(
             val secondaryColor = ContextCompat.getColor(context, R.color.ds_text_secondary)
 
             bindTimeline(step, previousStepState, isFirst, isLast)
+
             binding.processNumberText.text = step.processNo.toString()
             binding.roleNameText.text = buildRoleNameText(step.roleName)
-            binding.processNameText.text = context.getString(
-                R.string.quote_workflow_step_title_format,
-                step.processNo,
-                step.processName
-            )
+            binding.processNameText.text = step.processName
             binding.processScreenNameText.text = step.processScreenName
-            binding.processScreenNameText.isVisible = false
+            binding.roleNameText.isVisible = step.roleName != "N/A"
+            binding.processScreenNameText.isVisible = step.processScreenName.isNotBlank()
+
             binding.approveButton.text = step.approveText
             binding.rejectButton.text = step.rejectText
+
             binding.approveButton.setOnClickListener(null)
             binding.rejectButton.setOnClickListener(null)
+
             binding.stepStatusIcon.clearColorFilter()
 
             binding.timestampText.isVisible = step.hasTimestamp
+
             if (step.hasTimestamp) {
                 binding.timestampText.text = step.timestampDate
             }
 
             when (step.stepState) {
-                QuoteWorkflowStepState.Completed -> bindCompletedStep(step)
-                QuoteWorkflowStepState.Active -> bindActiveStep(step, primaryColor, secondaryColor)
-                QuoteWorkflowStepState.Pending -> bindPendingStep(mutedColor)
-                QuoteWorkflowStepState.Rejected -> bindRejectedStep(step)
+                QuoteWorkflowStepState.Approved -> {
+                    bindApprovedStep(step)
+                }
+
+                QuoteWorkflowStepState.Active -> {
+                    bindActiveStep(
+                        step = step,
+                        primaryColor = primaryColor,
+                        secondaryColor = secondaryColor
+                    )
+                }
+
+                QuoteWorkflowStepState.Pending -> {
+                    bindPendingStep(mutedColor)
+                }
+
+                QuoteWorkflowStepState.Rejected -> {
+                    bindRejectedStep(step)
+                }
+
+                QuoteWorkflowStepState.Skipped -> {
+                    bindSkippedStep(mutedColor)
+                }
             }
         }
 
@@ -92,30 +113,58 @@ class QuoteWorkflowStepAdapter(
             isLast: Boolean
         ) {
             val context = binding.root.context
-            val outlineColor = ContextCompat.getColor(context, R.color.ds_outline)
-            val successColor = ContextCompat.getColor(context, R.color.ds_success)
-            val errorColor = ContextCompat.getColor(context, R.color.ds_error)
+
+            val outlineColor = ContextCompat.getColor(
+                context,
+                R.color.ds_outline
+            )
+
+            val successColor = ContextCompat.getColor(
+                context,
+                R.color.ds_success
+            )
+
+            val errorColor = ContextCompat.getColor(
+                context,
+                R.color.ds_error
+            )
 
             binding.timelineTopLine.isVisible = !isFirst
             binding.timelineBottomLine.isVisible = !isLast
+
             binding.timelineTopLine.setBackgroundColor(
                 when {
-                    step.stepState == QuoteWorkflowStepState.Rejected -> errorColor
-                    previousStepState == QuoteWorkflowStepState.Completed -> successColor
-                    previousStepState == QuoteWorkflowStepState.Rejected -> errorColor
-                    else -> outlineColor
+                    // Current step is rejected
+                    step.stepState == QuoteWorkflowStepState.Rejected ->
+                        errorColor
+
+                    // Previous step was approved
+                    previousStepState == QuoteWorkflowStepState.Approved ->
+                        successColor
+
+                    // Previous step was rejected
+                    previousStepState == QuoteWorkflowStepState.Rejected ->
+                        errorColor
+
+                    else ->
+                        outlineColor
                 }
             )
+
             binding.timelineBottomLine.setBackgroundColor(
                 when (step.stepState) {
-                    QuoteWorkflowStepState.Completed -> successColor
-                    QuoteWorkflowStepState.Rejected -> errorColor
-                    else -> outlineColor
+                    QuoteWorkflowStepState.Approved ->
+                        successColor
+
+                    QuoteWorkflowStepState.Rejected ->
+                        errorColor
+
+                    else ->
+                        outlineColor
                 }
             )
         }
-
-        private fun bindCompletedStep(step: QuoteWorkflowStepUiModel) {
+        private fun bindApprovedStep(step: QuoteWorkflowStepUiModel) {
             binding.stepCard.setBackgroundResource(R.drawable.bg_quote_workflow_step_completed)
             binding.nodeContainer.setBackgroundResource(R.drawable.bg_quote_workflow_node_done)
             binding.stepStatusIcon.isVisible = true
@@ -126,7 +175,8 @@ class QuoteWorkflowStepAdapter(
             binding.processNumberText.isVisible = false
             binding.statusBadgeText.isVisible = true
             binding.waitingForActionText.isVisible = false
-            binding.rejectionReasonText.isVisible = false
+            binding.rejectionReasonText.isVisible = step.hasComments
+            binding.rejectionReasonText.text = step.comments
             binding.actionButtonsRow.isVisible = false
             binding.statusBadgeText.text = step.statusLabel
             binding.statusBadgeText.setBackgroundResource(R.drawable.bg_quote_workflow_status_approved)
@@ -140,6 +190,33 @@ class QuoteWorkflowStepAdapter(
                 alpha = 1f
             )
         }
+        private fun bindCompletedStep(step: QuoteWorkflowStepUiModel) {
+            binding.stepCard.setBackgroundResource(R.drawable.bg_quote_workflow_step_completed)
+            binding.nodeContainer.setBackgroundResource(R.drawable.bg_quote_workflow_node_done)
+            binding.stepStatusIcon.isVisible = true
+            binding.stepStatusIcon.setImageResource(R.drawable.ia_ic_filter_check)
+            binding.stepStatusIcon.setColorFilter(
+                ContextCompat.getColor(binding.root.context, R.color.ia_white)
+            )
+            binding.processNumberText.isVisible = false
+            binding.statusBadgeText.isVisible = true
+            binding.waitingForActionText.isVisible = false
+            binding.rejectionReasonText.isVisible = step.hasComments
+            binding.rejectionReasonText.text = step.comments
+            binding.actionButtonsRow.isVisible = false
+            binding.statusBadgeText.text = step.statusLabel
+            binding.statusBadgeText.setBackgroundResource(R.drawable.bg_quote_workflow_status_approved)
+            binding.statusBadgeText.setTextColor(
+                ContextCompat.getColor(binding.root.context, R.color.quotes_status_approved_text)
+            )
+            setTextColors(
+                titleColor = ContextCompat.getColor(binding.root.context, R.color.ds_text_primary),
+                bodyColor = ContextCompat.getColor(binding.root.context, R.color.ds_text_secondary),
+                mutedColor = ContextCompat.getColor(binding.root.context, R.color.ds_text_muted),
+                alpha = 1f
+            )
+        }
+
 
         private fun bindActiveStep(
             step: QuoteWorkflowStepUiModel,
@@ -174,6 +251,27 @@ class QuoteWorkflowStepAdapter(
             setTextColors(primaryColor, secondaryColor, secondaryColor, 1f)
         }
 
+        private fun bindSkippedStep(mutedColor: Int) {
+            binding.stepCard.setBackgroundResource(R.drawable.bg_quote_workflow_step_pending)
+            binding.nodeContainer.setBackgroundResource(R.drawable.bg_quote_workflow_node_pending)
+            binding.stepStatusIcon.isVisible = false
+            binding.processNumberText.isVisible = true
+            binding.processNumberText.setTextColor(mutedColor)
+            binding.statusBadgeText.isVisible = true
+            binding.waitingForActionText.isVisible = false
+            binding.rejectionReasonText.isVisible = false
+            binding.actionButtonsRow.isVisible = false
+            binding.statusBadgeText.text = binding.root.context.getString(
+                R.string.quote_workflow_status_skipped
+            )
+            binding.statusBadgeText.setBackgroundResource(R.drawable.bg_quote_workflow_status_pending)
+            binding.statusBadgeText.setTextColor(
+                ContextCompat.getColor(binding.root.context, R.color.quotes_status_unknown_text)
+            )
+            binding.approveButton.isEnabled = false
+            binding.rejectButton.isEnabled = false
+            setTextColors(mutedColor, mutedColor, mutedColor, 0.85f)
+        }
         private fun bindPendingStep(mutedColor: Int) {
             binding.stepCard.setBackgroundResource(R.drawable.bg_quote_workflow_step_pending)
             binding.nodeContainer.setBackgroundResource(R.drawable.bg_quote_workflow_node_pending)
@@ -185,7 +283,7 @@ class QuoteWorkflowStepAdapter(
             binding.rejectionReasonText.isVisible = false
             binding.actionButtonsRow.isVisible = false
             binding.statusBadgeText.text = binding.root.context.getString(
-                R.string.quote_workflow_status_upcoming
+                R.string.quote_workflow_status_pending
             )
             binding.statusBadgeText.setBackgroundResource(R.drawable.bg_quote_workflow_status_pending)
             binding.statusBadgeText.setTextColor(
@@ -216,10 +314,12 @@ class QuoteWorkflowStepAdapter(
             binding.statusBadgeText.setTextColor(
                 ContextCompat.getColor(binding.root.context, R.color.quotes_status_rejected_text)
             )
-            binding.rejectionReasonText.text = binding.root.context.getString(
-                R.string.quote_workflow_rejected_by_format,
-                step.roleName
-            )
+            binding.rejectionReasonText.text = step.comments.ifBlank {
+                binding.root.context.getString(
+                    R.string.quote_workflow_rejected_by_format,
+                    step.roleName
+                )
+            }
             setTextColors(
                 titleColor = ContextCompat.getColor(binding.root.context, R.color.ds_text_primary),
                 bodyColor = ContextCompat.getColor(binding.root.context, R.color.ds_text_secondary),
