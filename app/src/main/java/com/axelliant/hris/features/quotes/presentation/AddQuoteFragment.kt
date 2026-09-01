@@ -153,6 +153,9 @@ class AddQuoteFragment : Fragment() {
         binding.uploadProductsButton.setOnClickListener {
             showProductExcelImportSheet()
         }
+        binding.fulfillmentRadioGroup.setOnCheckedChangeListener { _, checkedId ->
+            viewModel.setWarehouseFulfillment(checkedId == R.id.warehouseRadioButton)
+        }
         binding.dealRegistrationCheckbox.setOnCheckedChangeListener { _, checked ->
             viewModel.setDealRegistration(checked)
         }
@@ -288,6 +291,14 @@ class AddQuoteFragment : Fragment() {
         }
         binding.deliveryDateText.setTextColor(selectionTextColor(state.deliveryDate.isNotBlank()))
         binding.dealRegistrationCheckbox.isChecked = state.dealRegistration
+        val selectedFulfillmentId = if (state.isWarehouse) {
+            R.id.warehouseRadioButton
+        } else {
+            R.id.dropshipRadioButton
+        }
+        if (binding.fulfillmentRadioGroup.checkedRadioButtonId != selectedFulfillmentId) {
+            binding.fulfillmentRadioGroup.check(selectedFulfillmentId)
+        }
 
         val isSaving = viewModel.saveState.value is UiState.Loading
         val readOnlyDuplicate = isDuplicateReadOnly(state)
@@ -339,6 +350,10 @@ class AddQuoteFragment : Fragment() {
         binding.quoteTitleInputLayout.alpha = if (readOnly) 0.85f else 1f
 
         binding.dealRegistrationCheckbox.isEnabled = !readOnly
+        binding.fulfillmentRadioGroup.isEnabled = !readOnly
+        binding.warehouseRadioButton.isEnabled = !readOnly
+        binding.dropshipRadioButton.isEnabled = !readOnly
+        binding.fulfillmentCard.alpha = if (readOnly) 0.85f else 1f
         binding.addProductButton.isEnabled = !readOnly
         binding.addProductButton.isVisible = !readOnly
         binding.uploadProductsButton.isEnabled = !readOnly
@@ -633,6 +648,8 @@ class AddQuoteFragment : Fragment() {
     private fun renderProducts(state: AddQuoteUiState, readOnlyDuplicate: Boolean) {
         binding.selectedProductsContainer.removeAllViews()
         binding.noProductsText.isVisible = state.selectedProducts.isEmpty()
+        binding.hardwareSoftwareCountText.text = state.selectedProducts.size.toString()
+        binding.subscriptionCountText.setText(R.string.add_quote_subscription_count_default)
         state.selectedProducts.forEachIndexed { index, product ->
             val itemBinding = ItemSelectedQuoteProductBinding.inflate(
                 layoutInflater,

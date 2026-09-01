@@ -13,6 +13,7 @@ object BottomNavigationDestinationPolicy {
         R.id.commonLoginFragment,
         R.id.iaSettingsFragment,
         R.id.iaViewQuoteFragment,
+        R.id.iaQuoteReportFragment,
         R.id.iaAddQuoteFragment,
         R.id.iaAddQuoteAddressFragment,
         R.id.iaSmartQuoteFragment,

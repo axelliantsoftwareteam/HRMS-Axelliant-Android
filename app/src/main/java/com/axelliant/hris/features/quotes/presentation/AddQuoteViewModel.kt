@@ -323,6 +323,10 @@ class AddQuoteViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(dealRegistration = enabled)
     }
 
+    fun setWarehouseFulfillment(isWarehouse: Boolean) {
+        _uiState.value = _uiState.value.copy(isWarehouse = isWarehouse)
+    }
+
     fun clearError() {
         _uiState.value = _uiState.value.copy(errorMessage = null)
     }
@@ -366,7 +370,8 @@ class AddQuoteViewModel @Inject constructor(
                         paymentTerm = paymentTerm,
                         deliveryDate = current.deliveryDate,
                         products = current.selectedProducts,
-                        dealRegistration = current.dealRegistration
+                        dealRegistration = current.dealRegistration,
+                        isWarehouse = current.isWarehouse
                     )
                 )
             ) {
@@ -827,6 +832,7 @@ data class AddQuoteUiState(
     val deliveryDate: String = "",
     val selectedProducts: List<QuoteCreationProductUi> = emptyList(),
     val dealRegistration: Boolean = false,
+    val isWarehouse: Boolean = true,
     val isCustomerSearchLoading: Boolean = false,
     val isCustomerDetailsLoading: Boolean = false,
     val isPaymentTermsLoading: Boolean = false,

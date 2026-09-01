@@ -541,6 +541,63 @@
                 </LinearLayout>
             </com.axelliant.hris.ui.designsystem.components.AppCardView>
 
+            <com.axelliant.hris.ui.designsystem.components.AppCardView
+                android:id="@+id/fulfillmentCard"
+                style="@style/Widget.Fluent2.Card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/ds_space_10"
+                app:cardElevation="@dimen/ds_card_elevation"
+                app:strokeColor="@color/ds_outline"
+                app:strokeWidth="@dimen/_1sdp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/ds_space_12">
+
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
+                        style="@style/Text.Fluent2.Subheading.Primary.Strong"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/add_quote_fulfillment_type" />
+
+                    <RadioGroup
+                        android:id="@+id/fulfillmentRadioGroup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/ds_space_8"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/warehouseRadioButton"
+                            android:layout_width="0dp"
+                            android:layout_height="@dimen/ds_input_height"
+                            android:layout_weight="1"
+                            android:buttonTint="@color/ds_primary"
+                            android:checked="true"
+                            android:fontFamily="@font/poppins_medium"
+                            android:gravity="center_vertical"
+                            android:text="@string/add_quote_warehouse"
+                            android:textColor="@color/ds_text_primary"
+                            android:textSize="@dimen/ds_text_body" />
+
+                        <RadioButton
+                            android:id="@+id/dropshipRadioButton"
+                            android:layout_width="0dp"
+                            android:layout_height="@dimen/ds_input_height"
+                            android:layout_weight="1"
+                            android:buttonTint="@color/ds_primary"
+                            android:fontFamily="@font/poppins_medium"
+                            android:gravity="center_vertical"
+                            android:text="@string/add_quote_dropship"
+                            android:textColor="@color/ds_text_primary"
+                            android:textSize="@dimen/ds_text_body" />
+                    </RadioGroup>
+                </LinearLayout>
+            </com.axelliant.hris.ui.designsystem.components.AppCardView>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -586,6 +643,74 @@
                     app:cornerRadius="@dimen/ds_radius_md"
                     app:icon="@drawable/iv_attach_file"
                     app:iconSize="@dimen/ds_icon_button_icon_size" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/productTypeTabs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ds_space_10"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/hardwareSoftwareTab"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_38sdp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_quote_product_tab_selected"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:paddingStart="@dimen/ds_space_10"
+                    android:paddingEnd="@dimen/ds_space_10">
+
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
+                        style="@style/Text.Fluent2.Body.Primary.Strong"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/add_quote_hardware_software" />
+
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
+                        android:id="@+id/hardwareSoftwareCountText"
+                        style="@style/Text.Fluent2.Caption.Primary.Strong"
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        android:layout_marginStart="@dimen/ds_space_8"
+                        android:background="@drawable/bg_quote_product_tab_count"
+                        android:gravity="center"
+                        android:textColor="@color/ds_primary" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/subscriptionTab"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_38sdp"
+                    android:layout_marginStart="@dimen/ds_space_8"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_quote_product_tab_unselected"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:paddingStart="@dimen/ds_space_10"
+                    android:paddingEnd="@dimen/ds_space_10">
+
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
+                        style="@style/Text.Fluent2.Body"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/add_quote_subscription"
+                        android:textColor="@color/ds_text_secondary" />
+
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
+                        android:id="@+id/subscriptionCountText"
+                        style="@style/Text.Fluent2.Caption.Primary.Strong"
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        android:layout_marginStart="@dimen/ds_space_8"
+                        android:background="@drawable/bg_quote_product_tab_count"
+                        android:gravity="center"
+                        android:text="@string/add_quote_subscription_count_default"
+                        android:textColor="@color/ds_primary" />
+                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout

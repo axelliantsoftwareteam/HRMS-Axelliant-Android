@@ -19,6 +19,7 @@ import com.axelliant.hris.features.quotes.domain.model.QuoteCustomerUi
 import com.axelliant.hris.features.quotes.domain.model.QuoteModel
 import com.axelliant.hris.features.quotes.domain.model.QuotePaymentTermUi
 import com.axelliant.hris.features.quotes.domain.model.QuotePreviewUiModel
+import com.axelliant.hris.features.quotes.domain.model.QuoteReportUiModel
 import com.axelliant.hris.features.quotes.domain.model.QuoteStatus
 import com.axelliant.hris.features.quotes.domain.model.QuoteType
 import com.axelliant.hris.features.quotes.domain.model.QuoteWorkflowUiModel
@@ -60,6 +61,32 @@ class QuotesRepository @Inject constructor(
             is ApiResult.HttpError -> ApiResult.HttpError(result.code, result.message)
             is ApiResult.NetworkError -> ApiResult.NetworkError(result.message)
             is ApiResult.UnknownError -> ApiResult.UnknownError(result.message)
+            ApiResult.Unauthorized -> ApiResult.Unauthorized
+        }
+    }
+
+    suspend fun getQuoteReport(quoteId: String): ApiResult<QuoteReportUiModel> {
+        return when (val result = safeApiExecutor.execute { apiService.getQuotationReport(quoteId) }) {
+            is ApiResult.Success -> {
+                val payload = result.data
+                val report = QuoteApiResponseParser.unwrapSuccess(payload)
+                if (report == null) {
+                    ApiResult.UnknownError(
+                        QuoteApiResponseParser.extractApiMessage(payload)
+                            ?: "Unable to load quote report."
+                    )
+                } else {
+                    ApiResult.Success(QuoteReportMapper.toUiModel(report))
+                }
+            }
+            is ApiResult.Empty -> ApiResult.UnknownError("Quote report not found.")
+            is ApiResult.HttpError -> ApiResult.HttpError(
+                code = result.code,
+                message = QuoteApiResponseParser.resolveErrorMessage(result),
+                errorBody = result.errorBody
+            )
+            is ApiResult.NetworkError -> result
+            is ApiResult.UnknownError -> result
             ApiResult.Unauthorized -> ApiResult.Unauthorized
         }
     }

@@ -1066,6 +1066,12 @@
         <string name="add_quote_delivery_date_required">Delivery Date *</string>
         <string name="add_quote_add_new">Add New</string>
         <string name="add_quote_products_information">Products Information</string>
+        <string name="add_quote_fulfillment_type">Fulfillment Type</string>
+        <string name="add_quote_warehouse">Warehouse</string>
+        <string name="add_quote_dropship">Dropship</string>
+        <string name="add_quote_hardware_software">Hardware/Software</string>
+        <string name="add_quote_subscription">Subscription</string>
+        <string name="add_quote_subscription_count_default">0</string>
         <string name="add_quote_add_product">Add Product</string>
         <string name="add_quote_upload_products">Upload products</string>
         <string name="add_quote_import_products_title">Upload Products</string>
@@ -1285,5 +1291,33 @@
         <plurals name="product_compare_offer_count">
             <item quantity="one">%1$d offer</item>
             <item quantity="other">%1$d offers</item>
+        </plurals>
+        <string name="quote_report_title">Quote Report</string>
+        <string name="quote_report_error">Unable to load quote report.</string>
+        <string name="quote_report_empty">Quote report not found.</string>
+        <string name="quote_report_quote_information">Quote Information</string>
+        <string name="quote_report_contact_information">Contact Information</string>
+        <string name="quote_report_addresses">Addresses</string>
+        <string name="quote_report_billing_address">Billing Address</string>
+        <string name="quote_report_shipping_address">Shipping Address</string>
+        <string name="quote_report_hardware_details">Hardware/Software Details</string>
+        <string name="quote_report_no_line_items">No products found in this quote.</string>
+        <string name="quote_report_totals">Totals</string>
+        <string name="quote_report_grand_total">Grand Total</string>
+        <string name="quote_report_customer_acceptance">Customer Acceptance</string>
+        <string name="quote_report_quantity">Qty.</string>
+        <string name="quote_report_unit_price">Unit Price</string>
+        <string name="quote_report_ext_price">Ext. Price</string>
+        <string name="quote_report_view_details">View details</string>
+        <string name="quote_report_hide_details">Hide details</string>
+        <string name="quote_report_show_all_products">Show all</string>
+        <string name="quote_report_show_less_products">Show less</string>
+        <string name="quote_report_manufacturer">Manufacturer</string>
+        <string name="quote_report_mfg_part_no">MFG Part No</string>
+        <string name="quote_report_axe_part_no">AXE Part No</string>
+        <string name="quote_report_duration">Duration</string>
+        <plurals name="quote_report_products_count">
+            <item quantity="one">%1$d product</item>
+            <item quantity="other">%1$d products</item>
         </plurals>
 </resources>
