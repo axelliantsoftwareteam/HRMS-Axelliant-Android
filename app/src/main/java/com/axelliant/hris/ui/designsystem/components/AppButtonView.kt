@@ -1,5 +1,6 @@
 package com.axelliant.hris.ui.designsystem.components
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.res.ColorStateList
@@ -362,6 +363,7 @@ class AppButtonView @JvmOverloads constructor(
         }
     }
 
+    @SuppressLint("ResourceType")
     private fun readAndroidViewAttributes(attrs: AttributeSet?, defStyleAttr: Int) {
         context.obtainStyledAttributes(
             attrs,
@@ -378,18 +380,20 @@ class AppButtonView @JvmOverloads constructor(
             defStyleAttr,
             0
         ).use {
-            buttonText = it.getText(0)?.toString().orEmpty()
-            contentDescriptionText = it.getText(1)?.toString()
-            isEnabled = it.getBoolean(2, isEnabled)
-            textColorOverride = it.getColorStateList(3)?.defaultColor?.toComposeColorLong()
-            if (it.hasValue(4)) {
-                textSizeSpOverride = it.getDimensionPixelSize(4, 0)
+            buttonText = it.getText(ANDROID_ATTR_TEXT)?.toString().orEmpty()
+            contentDescriptionText = it.getText(ANDROID_ATTR_CONTENT_DESCRIPTION)?.toString()
+            isEnabled = it.getBoolean(ANDROID_ATTR_ENABLED, isEnabled)
+            textColorOverride = it.getColorStateList(ANDROID_ATTR_TEXT_COLOR)
+                ?.defaultColor
+                ?.toComposeColorLong()
+            if (it.hasValue(ANDROID_ATTR_TEXT_SIZE)) {
+                textSizeSpOverride = it.getDimensionPixelSize(ANDROID_ATTR_TEXT_SIZE, 0)
                     .takeIf { size -> size > 0 }
                     ?.let { size -> size / scaledFontDensity() }
             }
-            isAllCaps = it.getBoolean(5, isAllCaps)
-            minimumWidth = it.getDimensionPixelSize(6, minimumWidth)
-            minimumHeight = it.getDimensionPixelSize(7, minimumHeight)
+            isAllCaps = it.getBoolean(ANDROID_ATTR_TEXT_ALL_CAPS, isAllCaps)
+            minimumWidth = it.getDimensionPixelSize(ANDROID_ATTR_MIN_WIDTH, minimumWidth)
+            minimumHeight = it.getDimensionPixelSize(ANDROID_ATTR_MIN_HEIGHT, minimumHeight)
         }
     }
 
@@ -594,6 +598,14 @@ class AppButtonView @JvmOverloads constructor(
         const val FLUENT_STYLE_DESTRUCTIVE = 3
         const val ICON_GRAVITY_TEXT_START = 1
         const val ICON_GRAVITY_TEXT_END = 2
+        const val ANDROID_ATTR_TEXT = 0
+        const val ANDROID_ATTR_CONTENT_DESCRIPTION = 1
+        const val ANDROID_ATTR_ENABLED = 2
+        const val ANDROID_ATTR_TEXT_COLOR = 3
+        const val ANDROID_ATTR_TEXT_SIZE = 4
+        const val ANDROID_ATTR_TEXT_ALL_CAPS = 5
+        const val ANDROID_ATTR_MIN_WIDTH = 6
+        const val ANDROID_ATTR_MIN_HEIGHT = 7
     }
 }
 

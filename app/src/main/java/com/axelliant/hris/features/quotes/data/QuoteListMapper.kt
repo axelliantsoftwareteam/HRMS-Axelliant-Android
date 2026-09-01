@@ -81,6 +81,7 @@ object QuoteListMapper {
         return QuoteModel(
             id = id ?: quotationId.orEmpty(),
             quoteId = quoteSerialNo.orFallback(),
+            quoteName = quoteName.orFallback(quoteSerialNo),
             customerName = accountName?.takeIf { it.isNotBlank() }
                 ?: acountName.orFallback(),
             approvalStatus = approvalStatus ?: UNKNOWN_APPROVAL_STATUS,
@@ -110,7 +111,11 @@ object QuoteListMapper {
         return raw
     }
 
-    private fun String?.orFallback(): String = this?.trim()?.takeIf { it.isNotEmpty() } ?: FALLBACK
+    private fun String?.orFallback(fallback: String? = null): String {
+        return this?.trim()?.takeIf { it.isNotEmpty() }
+            ?: fallback?.trim()?.takeIf { it.isNotEmpty() }
+            ?: FALLBACK
+    }
 }
 
 data class QuoteListPage(

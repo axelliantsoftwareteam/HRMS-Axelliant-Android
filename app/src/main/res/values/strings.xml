@@ -195,7 +195,7 @@
         <string name="calendar_no_events_today">No events today</string>
         <string name="calendar_clear_day">Your Outlook calendar is clear for this day.</string>
         <string name="calendar_synced_outlook">Synced with Outlook</string>
-        <string name="calendar_syncing">Syncing Outlook calendar...</string>
+        <string name="calendar_syncing">Syncing Outlook calendar&#8230;</string>
         <string name="calendar_not_synced">Not synced</string>
         <string name="calendar_teams_meeting">Microsoft Teams Meeting</string>
         <string name="calendar_join_teams">Join Teams</string>
@@ -238,7 +238,7 @@
         <string name="no_record_found">No Record Found</string>
         <string name="leave_count">Leave Counts</string>
         <string name="remaining_leave">Remaining Leaves</string>
-        <string name="note_shift">Your shift, titled "AXE - (11-20)",starts at "11:00:00 " and ends at "20:00:00",taking place "In office".</string>
+        <string name="note_shift">Your shift, titled "AXE &#8211; (11&#8211;20)",starts at "11:00:00 " and ends at "20:00:00",taking place "In office".</string>
         <string name="note">Note:</string>
         <string name="team_presence">Team Presence</string>
         <string name="today_statis">Today\'s Attendance</string>
@@ -342,7 +342,7 @@
         <string name="agent_confirmation_note">Nothing will be submitted until you confirm.</string>
         <string name="agent_checkpoint">Checkpoint created · 1:36 AM</string>
         <string name="agent_input_hint">Complete the confirmation to continue</string>
-        <string name="agent_chat_input_hint">Ask about products, quotes, vendors...</string>
+        <string name="agent_chat_input_hint">Ask about products, quotes, vendors&#8230;</string>
         <string name="agent_clear">Clear</string>
         <string name="drawer_navigation">Navigation</string>
         <string name="drawer_accounts">Accounts</string>
@@ -445,7 +445,7 @@
         <string name="sale_orders_title">Sale Orders</string>
         <string name="sale_orders_heading">Sales Orders</string>
         <string name="sale_orders_total_entries">%1$d Total Entries</string>
-        <string name="sale_orders_search_hint">Search SO number or customer...</string>
+        <string name="sale_orders_search_hint">Search SO number or customer&#8230;</string>
         <string name="sale_orders_search_open">Search sale orders</string>
         <string name="sale_orders_search_close">Close search</string>
         <string name="sale_orders_create">Create Sale Order</string>
@@ -534,7 +534,7 @@
         <string name="add_sale_order_validation_shipping_method">Shipping method is required.</string>
         <string name="sale_orders_filter_chip_format">%1$s (%2$d)</string>
         <string name="purchase_orders_title">Purchase Orders</string>
-        <string name="purchase_orders_search_hint">Search PO number or vendor...</string>
+        <string name="purchase_orders_search_hint">Search PO number or vendor&#8230;</string>
         <string name="purchase_orders_search_open">Search purchase orders</string>
         <string name="purchase_orders_search_close">Close search</string>
         <string name="purchase_orders_create">Create Purchase Order</string>
@@ -793,7 +793,7 @@
         <string name="ask_ai_input_scan">Scan Product</string>
         <string name="ask_ai_input_upload_file">Upload File</string>
         <string name="ask_ai_generate_filters">Generate Filters</string>
-        <string name="ask_ai_understanding">Generating filters...</string>
+        <string name="ask_ai_understanding">Generating filters&#8230;</string>
         <string name="ask_ai_extracting_details">Loading rules and matching your product phrase.</string>
         <string name="ask_ai_may_take_seconds">This may take a few seconds.</string>
         <string name="ask_ai_examples">Try an example</string>
@@ -831,23 +831,23 @@
         <string name="ask_ai_selected_ocr">Selected: OCR Image</string>
         <string name="ask_ai_selected_scan">Selected: Scan Product</string>
         <string name="ask_ai_selected_upload">Selected: Upload File</string>
-        <string name="ask_ai_listening">Listening...</string>
-        <string name="ask_ai_ocr_scanner_preparing">Opening document scanner...</string>
-        <string name="ask_ai_ocr_processing">Reading product text from image...</string>
+        <string name="ask_ai_listening">Listening&#8230;</string>
+        <string name="ask_ai_ocr_scanner_preparing">Opening document scanner&#8230;</string>
+        <string name="ask_ai_ocr_processing">Reading product text from image&#8230;</string>
         <string name="ask_ai_ocr_cancelled">OCR scan was cancelled.</string>
         <string name="ask_ai_ocr_empty">No readable product text was found in this image.</string>
         <string name="ask_ai_ocr_error">Could not read this image. Please try another image or type your request.</string>
-        <string name="ask_ai_scan_processing">Scanning product barcode or QR...</string>
+        <string name="ask_ai_scan_processing">Scanning product barcode or QR&#8230;</string>
         <string name="ask_ai_scan_no_result">No barcode or QR product information was found. Try a clearer image.</string>
         <string name="ask_ai_scan_error">Could not scan this product. Please try again or type your request.</string>
         <string name="ask_ai_scan_cancelled">Product scan was cancelled.</string>
         <string name="ask_ai_upload_file_title">Upload file</string>
-        <string name="ask_ai_upload_reading_title">Reading file...</string>
+        <string name="ask_ai_upload_reading_title">Reading file&#8230;</string>
         <string name="ask_ai_upload_uploaded_title">File uploaded</string>
         <string name="ask_ai_upload_file_support">Text, CSV, Word, or Excel</string>
         <string name="ask_ai_upload_file_pick_hint">Choose a text, CSV, Word, or Excel file.</string>
         <string name="ask_ai_upload_file_fallback_name">selected file</string>
-        <string name="ask_ai_upload_processing">Reading %1$s...</string>
+        <string name="ask_ai_upload_processing">Reading %1$s&#8230;</string>
         <string name="ask_ai_upload_done">%1$s uploaded. Text added below.</string>
         <string name="ask_ai_upload_cancelled">File upload was cancelled.</string>
         <string name="ask_ai_upload_empty">No readable text was found in this file.</string>
@@ -863,7 +863,7 @@
         <string name="ask_ai_no_detected_filters">No clear filters were detected yet. You can edit the keyword or try another request.</string>
         <string name="ask_ai_refine_title">Refine Search</string>
         <string name="ask_ai_refine_intro">A few optional details can make this search sharper.</string>
-        <string name="ask_ai_refine_preparing">Preparing refine questions...</string>
+        <string name="ask_ai_refine_preparing">Preparing refine questions&#8230;</string>
         <string name="ask_ai_refine_preparing_details">Checking which product details are still missing.</string>
         <string name="ask_ai_refine_next_preview">Next question</string>
         <string name="ask_ai_refine_confidence_score">%1$d%%</string>
@@ -953,7 +953,7 @@
         <string name="category">Category</string>
         <string name="list_price">List Price</string>
         <string name="last_update">Last Update</string>
-        <string name="loading">Loading...</string>
+        <string name="loading">Loading&#8230;</string>
         <string name="empty_state">No records found.</string>
         <string name="session_expired">Session expired</string>
         <string name="products_session_expired_message">Sign in again to load your products.</string>
@@ -964,7 +964,7 @@
         <string name="coming_soon">Coming soon</string>
 
         <string name="quotes_title">Quotes</string>
-        <string name="quotes_search_hint">Search by Quote ID, customer name...</string>
+        <string name="quotes_search_hint">Search by Quote ID, customer name&#8230;</string>
         <string name="quotes_search_open">Search quotes</string>
         <string name="quotes_search_close">Close search</string>
         <string name="quotes_create">Create Quote</string>
@@ -1197,7 +1197,7 @@
         <string name="smart_quote_voice_unavailable">Voice input is not available on this device.</string>
         <string name="smart_quote_voice_permission_denied">Microphone permission is required for voice input.</string>
         <string name="smart_quote_voice_error">Could not understand that. Please try again.</string>
-        <string name="smart_quote_listening">Listening...</string>
+        <string name="smart_quote_listening">Listening&#8230;</string>
         <string name="smart_quote_saved">Smart quote draft is ready for review.</string>
         <string name="smart_quote_next_preview">Next question</string>
         <string name="smart_quote_review_complete">All required steps are complete.</string>
@@ -1267,7 +1267,7 @@
         <string name="product_compare_reason_price">lower list price</string>
         <string name="product_compare_reason_availability">stronger availability</string>
         <string name="product_compare_now">Compare</string>
-        <string name="product_compare_analyzing">Comparing products...</string>
+        <string name="product_compare_analyzing">Comparing products&#8230;</string>
         <string name="product_compare_analyzing_details">Checking price, stock, and vendor strength.</string>
         <string name="product_compare_save">Save\nComparison</string>
         <string name="product_compare_share">Share\nComparison</string>

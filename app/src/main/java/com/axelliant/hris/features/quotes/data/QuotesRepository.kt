@@ -352,6 +352,7 @@ class QuotesRepository @Inject constructor(
                         quoteId = response?.quoteSerialNo
                             ?: response?.quotationId
                             ?: request.quoteTitle,
+                        quoteName = request.quoteTitle,
                         customerName = request.customer.name,
                         approvalStatus = QuoteStatus.Draft.apiValue,
                         createdBy = request.customer.accountExecutive,

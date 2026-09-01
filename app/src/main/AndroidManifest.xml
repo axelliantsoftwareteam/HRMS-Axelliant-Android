@@ -13,8 +13,12 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
 
     <application
         android:name=".BaseApplication"
@@ -28,8 +32,7 @@
         android:supportsRtl="true"
         android:theme="@style/ActivityTheme"
         android:usesCleartextTraffic="true"
-        tools:replace="android:allowBackup"
-        tools:targetApi="31">
+        tools:targetApi="tiramisu">
 
         <meta-data
             android:name="com.microsoft.identity.client.ClientId"
@@ -37,7 +40,8 @@
         <activity
             android:name=".screens.MainActivity"
             android:exported="true"
-            android:screenOrientation="sensorPortrait">
+            android:screenOrientation="sensorPortrait"
+            tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -75,6 +75,7 @@
                 android:drawablePadding="@dimen/_10sdp"
                 android:hint="@string/calendar_search_events"
                 android:imeOptions="actionSearch"
+                android:importantForAutofill="no"
                 android:inputType="text"
                 android:paddingStart="@dimen/_14sdp"
                 android:paddingEnd="@dimen/_14sdp"

@@ -39,6 +39,7 @@ class QuotesAdapter(
             val statusUi = QuoteStatusUiMapper.getStatusUi(quote.approvalStatus)
 
             binding.quoteIdText.text = quote.quoteId
+            binding.quoteNameText.text = quote.quoteName
             binding.customerNameText.text = quote.customerName
             binding.createdByValue.text = quote.createdBy
             binding.dateValue.text = quote.date

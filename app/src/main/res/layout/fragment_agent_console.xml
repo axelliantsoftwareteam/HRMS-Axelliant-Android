@@ -258,6 +258,7 @@
                 android:background="@android:color/transparent"
                 android:ellipsize="end"
                 android:hint="@string/agent_chat_input_hint"
+                android:importantForAutofill="no"
                 android:inputType="textCapSentences|textMultiLine"
                 android:maxLines="1"
                 android:textColor="@color/ds_text_primary"

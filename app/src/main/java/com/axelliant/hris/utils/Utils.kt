@@ -26,7 +26,7 @@ object Utils {
     }
 
     fun getCurrentTime(): String {
-        val sdf = SimpleDateFormat(AppDateFormats.ATTENDANCE_DATE_TIME)
+        val sdf = SimpleDateFormat(AppDateFormats.ATTENDANCE_DATE_TIME, Locale.US)
         return sdf.format(Date())
 
         /*

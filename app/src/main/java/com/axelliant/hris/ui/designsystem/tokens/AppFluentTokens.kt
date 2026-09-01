@@ -1,6 +1,7 @@
 package com.axelliant.hris.ui.designsystem.tokens
 
 import androidx.compose.runtime.Composable
+import androidx.annotation.DimenRes
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
@@ -10,7 +11,6 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.axelliant.hris.R
 import com.microsoft.fluentui.theme.token.StateBrush
 import com.microsoft.fluentui.theme.token.StateColor
@@ -22,8 +22,8 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 class CheckInButtonTokens(
-    private val fontSizeDimenName: String = "_16sdp",
-    private val iconSizeDimenName: String = "_35sdp",
+    @DimenRes private val fontSizeRes: Int = com.intuit.sdp.R.dimen._16sdp,
+    @DimenRes private val iconSizeRes: Int = com.intuit.sdp.R.dimen._35sdp,
     private val bgRest: Long = 0xFF0078D4,
     private val bgPressed: Long = 0xFF106EBE,
     private val bgSelected: Long = 0xFF106EBE,
@@ -45,27 +45,14 @@ class CheckInButtonTokens(
     override fun typography(buttonInfo: ButtonInfo): TextStyle {
         val context = LocalContext.current
         val density = LocalDensity.current
-        val sdpId = context.resources.getIdentifier(fontSizeDimenName, "dimen", context.packageName)
-        val scalableFontSize = if (sdpId != 0) {
-            val pixelSize = context.resources.getDimension(sdpId)
-            with(density) { pixelSize.toSp() }
-        } else {
-            16.sp
-        }
+        val pixelSize = context.resources.getDimension(fontSizeRes)
+        val scalableFontSize = with(density) { pixelSize.toSp() }
         return TextStyle(fontSize = scalableFontSize)
     }
 
     @Composable
     override fun iconSize(buttonInfo: ButtonInfo): Dp {
-        val context = LocalContext.current
-        val density = LocalDensity.current
-        val sdpId = context.resources.getIdentifier(iconSizeDimenName, "dimen", context.packageName)
-        return if (sdpId != 0) {
-            val pixelSize = context.resources.getDimension(sdpId)
-            with(density) { pixelSize.toDp() }
-        } else {
-            35.dp
-        }
+        return dimensionResource(iconSizeRes)
     }
 
     @Composable

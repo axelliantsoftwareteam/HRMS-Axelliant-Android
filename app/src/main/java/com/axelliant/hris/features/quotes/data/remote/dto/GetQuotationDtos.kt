@@ -58,6 +58,8 @@ data class QuotationItemDto(
     val quotationId: String? = null,
     @SerializedName("quoteSerialNo")
     val quoteSerialNo: String? = null,
+    @SerializedName(value = "quoteName", alternate = ["quoteTitle", "quotationName", "quotationTitle"])
+    val quoteName: String? = null,
     @SerializedName("accountName")
     val accountName: String? = null,
     @SerializedName("acountName")

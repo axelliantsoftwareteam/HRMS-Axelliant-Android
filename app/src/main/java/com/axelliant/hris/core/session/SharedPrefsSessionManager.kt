@@ -1,5 +1,6 @@
 package com.axelliant.hris.core.session
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
@@ -61,12 +62,14 @@ class SharedPrefsSessionManager @Inject constructor(
         const val KEY_EMAIL = "email"
         const val KEY_MICROSOFT_GRAPH_TOKEN = "microsoft_graph_token"
 
+        @SuppressLint("ApplySharedPref")
         fun createEncryptedPreferences(context: Context): SharedPreferences {
             return try {
                 encryptedPreferences(context)
             } catch (exception: Exception) {
                 if (!exception.isRecoverableEncryptedPrefsFailure()) throw exception
 
+                // This recovery path must clear synchronously before retrying encrypted prefs.
                 context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
                     .edit()
                     .clear()

@@ -98,30 +98,34 @@ android {
             useLegacyPackaging = false
         }
     }
+
+    lint {
+        baseline = file("lint-baseline.xml")
+    }
 }
 
 dependencies {
-    implementation(platform("androidx.compose:compose-bom:2024.09.00"))
+    implementation(platform(libs.androidx.compose.bom))
 
-    implementation("androidx.compose.ui:ui")
-    implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.material3:material3")
-    implementation("androidx.compose.foundation:foundation")
-    implementation("androidx.activity:activity-compose:1.9.2")
-    implementation("androidx.compose.runtime:runtime-livedata")
-    implementation("androidx.compose.ui:ui-viewbinding")
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.foundation)
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.compose.runtime.livedata)
+    implementation(libs.androidx.compose.ui.viewbinding)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
-    implementation("androidx.cardview:cardview:1.0.0")
+    implementation(libs.androidx.cardview)
     implementation(libs.material)
     implementation(libs.play.services.location)
-    implementation("com.facebook.shimmer:shimmer:0.5.0")
+    implementation(libs.shimmer)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.play.services.maps)
     testImplementation(libs.junit)
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.1")
+    testImplementation(libs.coroutines.test)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     implementation(libs.hilt.android)
@@ -146,10 +150,9 @@ dependencies {
     implementation(libs.circleimageview) // circle image view
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.livedata.ktx)
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
-    implementation("androidx.security:security-crypto:1.1.0-alpha06")
-    implementation(libs.material.v120alpha03)
-    implementation("com.microsoft.identity.client:msal:5.6.0")
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.security.crypto)
+    implementation(libs.msal)
     {
         exclude(group = "io.opentelemetry")
         exclude (group="com.microsoft.device.display")
@@ -157,16 +160,11 @@ dependencies {
 
     // OpenTelemetry API
     implementation (libs.opentelemetry.api) // Add this line
-    implementation (libs.play.services.location.v2101)
-
     implementation(libs.smoothbottombar)
     implementation(libs.imagepicker)
 
     implementation(libs.app.update)
     implementation (libs.app.update.ktx)
-
-    implementation (libs.commons.net)
-    implementation(libs.androidx.core.ktx)
 
     implementation(libs.fluentui.core)
     implementation(libs.fluentui.drawer)
@@ -175,17 +173,15 @@ dependencies {
     implementation(libs.fluentui.menus)
     implementation(libs.fluentui.progress)
     implementation(libs.fluentui.controls)
-    implementation("com.intuit.sdp:sdp-android:1.1.1")
-    implementation("com.microsoft.fluentui:fluentui_calendar:0.3.3")
-    implementation("androidx.compose.runtime:runtime-livedata:1.7.0")
-    implementation("com.microsoft.fluentui:fluentui_topappbars:0.3.9")
-    implementation("androidx.camera:camera-camera2:1.4.2")
-    implementation("androidx.camera:camera-core:1.4.2")
-    implementation("androidx.camera:camera-lifecycle:1.4.2")
-    implementation("androidx.camera:camera-view:1.4.2")
-    implementation("com.google.mlkit:barcode-scanning:17.3.0")
-    implementation("com.google.mlkit:text-recognition:16.0.1")
-    implementation("com.google.android.gms:play-services-mlkit-document-scanner:16.0.0")
-    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+    implementation(libs.fluentui.calendar)
+    implementation(libs.fluentui.topappbars)
+    implementation(libs.camera.camera2)
+    implementation(libs.camera.core)
+    implementation(libs.camera.lifecycle)
+    implementation(libs.camera.view)
+    implementation(libs.mlkit.barcode.scanning)
+    implementation(libs.mlkit.text.recognition)
+    implementation(libs.document.scanner)
+    implementation(libs.mpandroidchart)
 
 }

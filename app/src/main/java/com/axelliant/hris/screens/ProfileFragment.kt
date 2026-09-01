@@ -22,6 +22,7 @@ import com.axelliant.hris.viewmodel.ProfileViewModel
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Calendar
+import java.util.Locale
 
 @AndroidEntryPoint
 class ProfileFragment : BaseFragment() {
@@ -190,7 +191,7 @@ class ProfileFragment : BaseFragment() {
         DatePickerDialog(
             requireContext(),
             { _, year, month, dayOfMonth ->
-                targetView.setText(String.format("%04d-%02d-%02d", year, month + 1, dayOfMonth))
+                targetView.setText(String.format(Locale.US, "%04d-%02d-%02d", year, month + 1, dayOfMonth))
             },
             calendar.get(Calendar.YEAR),
             calendar.get(Calendar.MONTH),

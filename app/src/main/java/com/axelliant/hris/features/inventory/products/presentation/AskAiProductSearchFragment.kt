@@ -437,7 +437,7 @@ class AskAiProductSearchFragment : Fragment() {
         }
 
         renderClarificationOptions(state)
-        renderClarificationSelection(state)
+        renderClarificationSelection()
 
         val hasSelection = state.currentAnswer.selectedOptionIds.isNotEmpty()
         binding.clarificationNextButton.isEnabled = hasSelection
@@ -651,7 +651,7 @@ class AskAiProductSearchFragment : Fragment() {
         }
     }
 
-    private fun renderClarificationSelection(state: AskAiSearchUiState.Clarifying) {
+    private fun renderClarificationSelection() {
         binding.clarificationSelectionSection.isVisible = false
         binding.clarificationSelectionChips.removeAllViews()
     }
