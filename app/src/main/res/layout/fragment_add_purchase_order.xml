@@ -693,7 +693,6 @@
                     android:text="@string/add_purchase_order_create"
                     android:textAllCaps="false"
                     android:textColor="@color/ds_on_primary"
-                    app:cornerRadius="@dimen/ds_radius_md"
                     app:icon="@drawable/ic_cart_add"
                     app:iconGravity="textStart"
                     app:iconTint="@color/ds_on_primary" />

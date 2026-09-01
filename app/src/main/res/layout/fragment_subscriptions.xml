@@ -40,12 +40,14 @@
             android:id="@+id/appTopBar"
             android:layout_width="0dp"
             android:layout_height="@dimen/_40sdp"
+            app:centerTitle="true"
+            app:showBackButton="true"
+            app:showSearchButton="false"
+            app:showActionButton="false"
+            app:titleText="@string/subscription_commerce_title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:showActionButton="false"
-            app:showSearchButton="true"
-            app:titleText="@string/subscription_commerce_title" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/commerceTabs"

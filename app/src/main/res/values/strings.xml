@@ -1170,8 +1170,11 @@
         <string name="quote_workflow_completed_count_format">%1$d of %2$d completed</string>
         <string name="quote_workflow_current_prefix">Current: </string>
         <string name="quote_workflow_status_completed">Completed</string>
+        <string name="quote_workflow_status_approved">Approved</string>
         <string name="quote_workflow_status_rejected">Rejected</string>
         <string name="quote_workflow_status_upcoming">Upcoming</string>
+        <string name="quote_workflow_status_pending">Pending</string>
+        <string name="quote_workflow_status_skipped">Skipped</string>
         <string name="quote_workflow_status_waiting">Waiting</string>
         <string name="quote_workflow_waiting_for_action">Waiting for action</string>
         <string name="quote_workflow_rejected_by_format">Rejected by %1$s</string>
@@ -1288,6 +1291,7 @@
         <string name="product_compare_p1_in_stock">P1 In Stock</string>
         <string name="product_compare_p2_in_stock">P2 In Stock</string>
         <string name="product_compare_in_stock_quantity">In Stock (%1$d)</string>
+        <string name="press_back_again_to_exit">Press back again to exit</string>
         <plurals name="product_compare_offer_count">
             <item quantity="one">%1$d offer</item>
             <item quantity="other">%1$d offers</item>

@@ -264,7 +264,7 @@
 
                         <com.axelliant.hris.ui.designsystem.components.AppButtonView
                             android:id="@+id/addBillingAddressButton"
-                            style="@style/Widget.Fluent2.Button.Text"
+                            style="@style/Widget.Fluent2.Button.Primary"
                             android:layout_width="@dimen/ds_input_height"
                             android:layout_height="@dimen/ds_input_height"
                             android:layout_marginStart="@dimen/ds_space_8"
@@ -272,7 +272,6 @@
                             android:contentDescription="@string/add_sale_order_add_billing_address_cd"
                             app:icon="@drawable/ia_ic_add"
                             app:iconGravity="textStart"
-                            app:noBackground="true"
                             app:iconSize="@dimen/ds_icon_button_icon_size" />
                     </LinearLayout>
 
@@ -333,22 +332,14 @@
 
                         <com.axelliant.hris.ui.designsystem.components.AppButtonView
                             android:id="@+id/addShippingAddressButton"
-                            style="@style/Widget.Fluent2.Button.Text"
+                            style="@style/Widget.Fluent2.Button.Primary"
                             android:layout_width="@dimen/ds_input_height"
                             android:layout_height="@dimen/ds_input_height"
                             android:layout_marginStart="@dimen/ds_space_8"
-                            android:background="@drawable/bg_sale_order_add_address_button"
+                            app:background="@drawable/bg_sale_order_add_address_button"
                             android:contentDescription="@string/add_sale_order_add_shipping_address_cd"
-                            android:insetLeft="0dp"
-                            android:insetTop="0dp"
-                            android:insetRight="0dp"
-                            android:insetBottom="0dp"
-                            android:minWidth="0dp"
-                            android:minHeight="0dp"
-                            android:padding="0dp"
                             app:icon="@drawable/ia_ic_add"
                             app:iconGravity="textStart"
-                            app:noBackground="true"
                             app:iconSize="@dimen/ds_icon_button_icon_size" />
                     </LinearLayout>
 

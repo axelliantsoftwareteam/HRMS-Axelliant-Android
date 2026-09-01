@@ -124,6 +124,12 @@ class HomeFragment : BaseFragment() {
     private var employeeTodayList = ArrayList<EmployTeamProfile>()
     private lateinit var locationPermissionLauncher: ActivityResultLauncher<String>
 
+    //Pop scope
+
+    private var backPressedOnce = false
+    private var backPressedResetJob: Job? = null
+    private var exitBackCallback: OnBackPressedCallback? = null
+
 
     private val binding get() = _binding
     private var _todayCardBinding: LayoutTodayCardContentBinding? = null
@@ -206,6 +212,7 @@ class HomeFragment : BaseFragment() {
     @SuppressLint("MissingPermission")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupExitOnBackPress()
         setupDraggableFab()
         setupInternalAppsDrawer()
         startStatusEchoAnimation()
@@ -498,6 +505,31 @@ class HomeFragment : BaseFragment() {
         binding?.tvEmployeId?.text = getString(R.string.menu)
     }
 
+    private fun setupExitOnBackPress() {
+        exitBackCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (backPressedOnce) {
+                    requireActivity().finish()
+                    return
+                }
+                backPressedOnce = true
+                com.google.android.material.snackbar.Snackbar.make(
+                    binding?.root ?: return,
+                    getString(R.string.press_back_again_to_exit),
+                    com.google.android.material.snackbar.Snackbar.LENGTH_SHORT
+                ).show()
+
+                backPressedResetJob?.cancel()
+                backPressedResetJob = viewLifecycleOwner.lifecycleScope.launch {
+                    delay(2000L)
+                    backPressedOnce = false
+                }
+            }
+        }.also { callback ->
+            requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+        }
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     private fun setupInternalAppsDrawer() {
         drawerBackCallback = object : OnBackPressedCallback(false) {
@@ -682,7 +714,7 @@ class HomeFragment : BaseFragment() {
                 AppDrawerAction.Subscriptions -> openInternalAppsDestination(R.id.iaSubscriptionsFragment)
                 AppDrawerAction.Profiles -> openInternalAppsDestination(R.id.iaProfilesFragment)
                 AppDrawerAction.Settings -> openInternalAppsDestination(R.id.iaSettingsFragment)
-                AppDrawerAction.Logout -> logoutAndOpenLogin()
+                AppDrawerAction.Logout -> showLogoutConfirmationDialog()
             }
         }
     }
@@ -1697,9 +1729,21 @@ class HomeFragment : BaseFragment() {
             }
         }
     }
+    private fun showLogoutConfirmationDialog() {
+        AlertDialog.Builder(requireContext())
+            .setTitle(getString(R.string.info))
+            .setMessage(getString(R.string.logout_message))
+            .setPositiveButton(getString(R.string.yes)) { _, _ ->
+                logoutAndOpenLogin()
+            }
+            .setNegativeButton(getString(R.string.no)) { _, _ -> }
+            .show()
+    }
     override fun onDestroyView() {
         workingTimeJob?.cancel()
         workingTimeJob = null
+        backPressedResetJob?.cancel()
+        backPressedResetJob = null
         fabWiggleJob?.cancel()
         fabWiggleJob = null
         autoCollapseJob?.cancel()
