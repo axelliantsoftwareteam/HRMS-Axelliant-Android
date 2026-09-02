@@ -15,11 +15,13 @@ import com.axelliant.hris.features.quotes.domain.model.QuoteModel
 import com.axelliant.hris.features.quotes.domain.model.QuoteStatusFilterType
 import com.axelliant.hris.features.quotes.domain.model.QuoteType
 import com.axelliant.hris.features.quotes.domain.model.QuoteWorkflowUiModel
+import com.axelliant.hris.features.quotes.domain.model.WorkflowDecisionResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -57,6 +59,12 @@ class QuotesViewModel @Inject constructor(
     val errorMessage = quotesState.map { state ->
         (state as? UiState.Error)?.message
     }
+
+    private val _workflowDecisionState =
+        MutableStateFlow<UiState<WorkflowDecisionResult>>(UiState.Idle)
+
+    val workflowDecisionState: StateFlow<UiState<WorkflowDecisionResult>> =
+        _workflowDecisionState
 
     private val searchInput = MutableStateFlow("")
     private var activeSearchQuery = ""
@@ -163,6 +171,54 @@ class QuotesViewModel @Inject constructor(
         quotesLoadJob = viewModelScope.launch {
             _quotesState.value = UiState.Success(currentUiModel(isLoadingNextPage = true))
             loadPage(start = nextStart, append = true)
+        }
+    }
+
+    fun decideWorkflowNode(
+        instanceId: String,
+        nodeId: String,
+        approved: Boolean,
+        comments: String
+    ) {
+        if (_workflowDecisionState.value is UiState.Loading) return
+
+        viewModelScope.launch {
+            _workflowDecisionState.value = UiState.Loading
+
+            _workflowDecisionState.value = when (
+                val result = repository.decideWorkflowNode(
+                    instanceId = instanceId,
+                    nodeId = nodeId,
+                    approved = approved,
+                    comments = comments
+                )
+            ) {
+                is ApiResult.Success -> {
+                    UiState.Success(result.data)
+                }
+
+                ApiResult.Empty -> {
+                    UiState.Error(
+                        message = "Unable to update workflow."
+                    )
+                }
+
+                is ApiResult.HttpError -> {
+                    UiState.Error(result.message)
+                }
+
+                is ApiResult.NetworkError -> {
+                    UiState.Error(result.message)
+                }
+
+                is ApiResult.UnknownError -> {
+                    UiState.Error(result.message)
+                }
+
+                ApiResult.Unauthorized -> {
+                    UiState.Unauthorized
+                }
+            }
         }
     }
 
@@ -360,6 +416,10 @@ class QuotesViewModel @Inject constructor(
 
     fun resetCancelState() {
         _cancelState.value = UiState.Idle
+    }
+
+    fun resetWorkflowDecisionState() {
+        _workflowDecisionState.value = UiState.Idle
     }
 
     private fun QuoteType.toApiValue(): Int {

@@ -66,6 +66,9 @@ class QuotesFragment : Fragment(), QuotesAdapter.QuoteItemListener {
 
     private lateinit var dateFilterAdapter: FilterAdapter
 
+    private var workflowBottomSheet: QuoteWorkflowBottomSheet? = null
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -89,6 +92,7 @@ class QuotesFragment : Fragment(), QuotesAdapter.QuoteItemListener {
         observeQuoteCancel()
         renderQuoteTypeTabs()
         setupDateFilterBar()
+        observeQuoteDecisionWorkflow()
 
         viewModel.loadQuotesIfNeeded()
     }
@@ -577,12 +581,36 @@ class QuotesFragment : Fragment(), QuotesAdapter.QuoteItemListener {
                     when (state) {
                         UiState.Loading -> Unit
                         is UiState.Success -> {
-                            QuoteWorkflowBottomSheet(
+                            workflowBottomSheet?.dismiss()
+
+                            workflowBottomSheet = QuoteWorkflowBottomSheet(
                                 fragment = this@QuotesFragment,
-                                workflow = state.data
-                            ).show()
+                                workflow = state.data,
+                                titleResId = R.string.quote_workflow_title,
+                                onApproveClick = { step, comments ->
+
+                                    viewModel.decideWorkflowNode(
+                                        instanceId = state.data.instanceId,
+                                        nodeId = step.workflowNodeId,
+                                        approved = true,
+                                        comments = comments
+                                    )
+                                },
+
+                                onRejectClick = { step, comments ->
+
+                                    viewModel.decideWorkflowNode(
+                                        instanceId = state.data.instanceId,
+                                        nodeId = step.workflowNodeId,
+                                        approved = false,
+                                        comments = comments
+                                    )
+                                }
+                            )
+                            workflowBottomSheet?.show()
                             viewModel.resetWorkflowState()
                         }
+
 
                         is UiState.Error -> {
                             Toast.makeText(
@@ -610,6 +638,55 @@ class QuotesFragment : Fragment(), QuotesAdapter.QuoteItemListener {
             }
         }
     }
+
+    private fun observeQuoteDecisionWorkflow() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(
+                Lifecycle.State.STARTED
+            ) {
+                viewModel.workflowDecisionState.collect { state ->
+
+                    when (state) {
+
+                        UiState.Loading -> Unit
+
+                        is UiState.Success -> {
+                            Toast.makeText(
+                                requireContext(),
+                                state.data.message,
+                                Toast.LENGTH_SHORT
+                            ).show()
+
+                            workflowBottomSheet?.dismiss()
+                            workflowBottomSheet = null
+
+                            viewModel.resetWorkflowDecisionState()
+
+                            viewModel.loadQuotes()
+                        }
+
+                        is UiState.Error -> {
+                            Toast.makeText(
+                                requireContext(),
+                                state.message,
+                                Toast.LENGTH_SHORT
+                            ).show()
+
+                            viewModel.resetWorkflowDecisionState()
+
+                        }
+
+                        UiState.Unauthorized -> {
+                            viewModel.resetWorkflowDecisionState()
+                        }
+
+                        else -> Unit
+                    }
+                }
+            }
+        }
+    }
+
 
     private fun showCancelQuoteConfirmation(quote: QuoteModel) {
         val dialogView = layoutInflater.inflate(R.layout.dialog_quote_cancel_confirmation, null)
