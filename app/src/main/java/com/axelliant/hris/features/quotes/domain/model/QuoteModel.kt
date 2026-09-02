@@ -24,6 +24,7 @@ enum class QuoteType {
 data class QuoteModel(
     val id: String,
     val quoteId: String,
+    val quoteName: String,
     val customerName: String,
     val approvalStatus: Int,
     val createdBy: String,

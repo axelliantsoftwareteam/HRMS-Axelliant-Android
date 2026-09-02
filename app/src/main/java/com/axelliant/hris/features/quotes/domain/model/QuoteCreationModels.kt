@@ -99,7 +99,8 @@ data class CreateDraftQuoteRequest(
     val paymentTerm: QuotePaymentTermUi,
     val deliveryDate: String,
     val products: List<QuoteCreationProductUi>,
-    val dealRegistration: Boolean
+    val dealRegistration: Boolean,
+    val isWarehouse: Boolean = true
 )
 
 data class CreateDraftQuoteResult(

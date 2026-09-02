@@ -100,13 +100,6 @@ class ViewQuoteFragment : Fragment() {
             items,
             selectedPosition = 0
         ) { position, _ ->
-
-            when (position) {
-             /*   0 -> viewModel.onQuoteTypeSelected(QuoteType.Standard)
-                1 -> viewModel.onQuoteTypeSelected(QuoteType.Quick) */
-
-            }
-
             dateFilterAdapter.setSelected(position)
         }
 

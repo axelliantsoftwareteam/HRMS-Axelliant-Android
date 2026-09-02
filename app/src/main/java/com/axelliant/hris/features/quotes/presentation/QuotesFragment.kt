@@ -136,6 +136,7 @@ class QuotesFragment : Fragment(), QuotesAdapter.QuoteItemListener {
                 R.id.action_quote_edit -> navigateToEditQuote(quote)
                 R.id.action_quote_revise -> navigateToReviseQuote(quote)
                 R.id.action_quote_duplicate -> navigateToDuplicateQuote(quote)
+                R.id.action_quote_show_report -> navigateToQuoteReport(quote)
                 R.id.action_quote_submit_workflow,
                 R.id.action_quote_view_workflow -> openQuoteWorkflow(quote)
 
@@ -796,6 +797,13 @@ class QuotesFragment : Fragment(), QuotesAdapter.QuoteItemListener {
         findNavController().navigate(
             R.id.iaViewQuoteFragment,
             bundleOf(ViewQuoteViewModel.ARG_QUOTE_ID to quote.id)
+        )
+    }
+
+    private fun navigateToQuoteReport(quote: QuoteModel) {
+        findNavController().navigate(
+            R.id.iaQuoteReportFragment,
+            bundleOf(QuoteReportViewModel.ARG_QUOTE_ID to quote.id)
         )
     }
 

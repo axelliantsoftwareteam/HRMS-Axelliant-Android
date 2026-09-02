@@ -91,6 +91,7 @@ object QuoteCreationMapper {
             subTotal = subTotal,
             grandTotal = subTotal,
             isDealRegistration = draft.dealRegistration,
+            isWarehouse = draft.isWarehouse,
             lineItems = draft.products.map { product ->
                 toLineItem(
                     product = product,

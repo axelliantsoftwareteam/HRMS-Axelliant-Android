@@ -1,5 +1,6 @@
 package com.axelliant.hris.ui.designsystem.components
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
 import android.util.AttributeSet
@@ -43,6 +44,7 @@ class AppProgressBarView @JvmOverloads constructor(
         }
     }
 
+    @SuppressLint("ResourceType")
     private fun applyXmlTintAttributes(attrs: AttributeSet?) {
         if (attrs == null) return
         context.obtainStyledAttributes(
@@ -53,9 +55,18 @@ class AppProgressBarView @JvmOverloads constructor(
                 android.R.attr.indeterminateTint,
             )
         ).use {
-            it.getColorStateList(0)?.let { tint -> progressTintList = tint }
-            it.getColorStateList(1)?.let { tint -> secondaryProgressTintList = tint }
-            it.getColorStateList(2)?.let { tint -> indeterminateTintList = tint }
+            it.getColorStateList(ANDROID_ATTR_PROGRESS_TINT)
+                ?.let { tint -> progressTintList = tint }
+            it.getColorStateList(ANDROID_ATTR_SECONDARY_PROGRESS_TINT)
+                ?.let { tint -> secondaryProgressTintList = tint }
+            it.getColorStateList(ANDROID_ATTR_INDETERMINATE_TINT)
+                ?.let { tint -> indeterminateTintList = tint }
         }
+    }
+
+    private companion object {
+        const val ANDROID_ATTR_PROGRESS_TINT = 0
+        const val ANDROID_ATTR_SECONDARY_PROGRESS_TINT = 1
+        const val ANDROID_ATTR_INDETERMINATE_TINT = 2
     }
 }

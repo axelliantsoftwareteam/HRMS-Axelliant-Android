@@ -111,6 +111,8 @@ data class AddEditQuotationRequest(
     val notes: String = "",
     @SerializedName("isDealRegistration")
     val isDealRegistration: Boolean = false,
+    @SerializedName("IsWarehouse")
+    val isWarehouse: Boolean = true,
     @SerializedName("isDealRegistrationId")
     val isDealRegistrationId: String = "",
     @SerializedName("dealRegistrationAtt")

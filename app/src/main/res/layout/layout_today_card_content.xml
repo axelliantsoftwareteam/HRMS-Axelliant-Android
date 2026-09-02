@@ -63,8 +63,8 @@
         android:text="Shift -- - --"
         android:textColor="@color/ds_primary"
         android:textSize="@dimen/_10ssp"
-        android:drawableTint="@color/ds_primary"
         app:drawableStartCompat="@drawable/ic_calendar"
+        app:drawableTint="@color/ds_primary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/status_dot_holder" />
 

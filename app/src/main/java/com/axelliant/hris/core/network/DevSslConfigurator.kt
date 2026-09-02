@@ -1,5 +1,6 @@
 package com.axelliant.hris.core.network
 
+import android.annotation.SuppressLint
 import com.axelliant.hris.BuildConfig
 import okhttp3.OkHttpClient
 import java.security.SecureRandom
@@ -9,6 +10,7 @@ import javax.net.ssl.TrustManager
 import javax.net.ssl.X509TrustManager
 
 object DevSslConfigurator {
+    @SuppressLint("CustomX509TrustManager", "TrustAllX509TrustManager")
     fun applyIfNeeded(builder: OkHttpClient.Builder) {
         if (!BuildConfig.TRUST_SELF_SIGNED_SSL) return
 

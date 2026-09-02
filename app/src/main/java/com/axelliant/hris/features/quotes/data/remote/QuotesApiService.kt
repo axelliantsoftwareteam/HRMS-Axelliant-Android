@@ -5,6 +5,7 @@ import com.axelliant.hris.features.quotes.data.remote.dto.GetQuotationRequest
 import com.axelliant.hris.features.quotes.data.remote.dto.GetQuotationResponse
 import com.axelliant.hris.features.quotes.data.remote.dto.AddEditQuotationResponseDto
 import com.axelliant.hris.features.quotes.data.remote.dto.QuotePreviewResponse
+import com.axelliant.hris.features.quotes.data.remote.dto.QuoteReportResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -26,6 +27,11 @@ interface QuotesApiService {
     suspend fun getQuoteSingle(
         @Query("id") id: String
     ): Response<BaseApiModel<QuotePreviewResponse>>
+
+    @GET("Quotation/GetQuotationReport")
+    suspend fun getQuotationReport(
+        @Query("id") id: String
+    ): Response<BaseApiModel<QuoteReportResponse>>
 
     @POST("Quotation/SubmitQuote")
     suspend fun submitQuote(

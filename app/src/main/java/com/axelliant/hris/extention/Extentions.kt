@@ -15,7 +15,8 @@ import com.axelliant.hris.core.ui.toAppUserSafeErrorMessage
 import com.bumptech.glide.Glide
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.apache.commons.net.ntp.NTPUDPClient
+import java.net.DatagramPacket
+import java.net.DatagramSocket
 import java.net.InetAddress
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -115,7 +116,7 @@ suspend fun getNtpTimeFormatted(): String {
         Log.d("ntpTime",ntpTime.toString())
         if (ntpTime != null) {
             val dateFormat = SimpleDateFormat(AppDateFormats.ATTENDANCE_DATE_TIME, Locale.getDefault())
-            "${dateFormat.format(ntpTime)}"
+            dateFormat.format(ntpTime)
         } else {
             "Failed to retrieve NTP time."
         }
@@ -123,22 +124,54 @@ suspend fun getNtpTimeFormatted(): String {
 }
 
 private fun getNtpTime(): Date? {
-    val ntpClient = NTPUDPClient()
-    ntpClient.defaultTimeout = 5000 // Set timeout
     return try {
-        val inetAddress = InetAddress.getByName("time.google.com")
-        val timeInfo = ntpClient.getTime(inetAddress)
-        timeInfo.computeDetails()
-        if (timeInfo.offset != null) {
-            val currentTime = System.currentTimeMillis() + timeInfo.offset
-            Date(currentTime)
-        } else {
-            null
+        val buffer = ByteArray(NTP_PACKET_SIZE)
+        buffer[0] = NTP_CLIENT_MODE
+        val requestTime = System.currentTimeMillis()
+        DatagramSocket().use { socket ->
+            socket.soTimeout = NTP_TIMEOUT_MILLIS
+            val inetAddress = InetAddress.getByName(NTP_HOST)
+            socket.send(DatagramPacket(buffer, buffer.size, inetAddress, NTP_PORT))
+            socket.receive(DatagramPacket(buffer, buffer.size))
+
+            val responseTime = System.currentTimeMillis()
+            val receiveTime = readNtpTimestamp(buffer, NTP_RECEIVE_TIME_OFFSET)
+            val transmitTime = readNtpTimestamp(buffer, NTP_TRANSMIT_TIME_OFFSET)
+            val adjustedTime = if (receiveTime > 0 && transmitTime > 0) {
+                responseTime + ((receiveTime - requestTime) + (transmitTime - responseTime)) / 2
+            } else {
+                transmitTime
+            }
+            adjustedTime.takeIf { it > 0 }?.let(::Date)
         }
     } catch (e: Exception) {
         e.printStackTrace()
         null
-    } finally {
-        ntpClient.close()
     }
 }
+
+private fun readNtpTimestamp(buffer: ByteArray, offset: Int): Long {
+    val seconds = readUnsignedInt(buffer, offset)
+    val fraction = readUnsignedInt(buffer, offset + 4)
+    if (seconds == 0L && fraction == 0L) return 0L
+
+    return ((seconds - NTP_EPOCH_DELTA_SECONDS) * 1000L) +
+        ((fraction * 1000L) / NTP_FRACTION_DIVISOR)
+}
+
+private fun readUnsignedInt(buffer: ByteArray, offset: Int): Long {
+    return ((buffer[offset].toLong() and 0xFFL) shl 24) or
+        ((buffer[offset + 1].toLong() and 0xFFL) shl 16) or
+        ((buffer[offset + 2].toLong() and 0xFFL) shl 8) or
+        (buffer[offset + 3].toLong() and 0xFFL)
+}
+
+private const val NTP_HOST = "time.google.com"
+private const val NTP_PORT = 123
+private const val NTP_TIMEOUT_MILLIS = 5000
+private const val NTP_PACKET_SIZE = 48
+private const val NTP_CLIENT_MODE = 0x1B.toByte()
+private const val NTP_RECEIVE_TIME_OFFSET = 32
+private const val NTP_TRANSMIT_TIME_OFFSET = 40
+private const val NTP_EPOCH_DELTA_SECONDS = 2_208_988_800L
+private const val NTP_FRACTION_DIVISOR = 0x1_0000_0000L

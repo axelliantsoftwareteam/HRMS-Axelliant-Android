@@ -1,13 +1,20 @@
 [versions]
 android-gif-drawable = "1.2.32"
+activity-compose = "1.9.2"
 androidx-junit = "1.1.5"
 app-update-ktx = "2.1.0"
 appcompat = "1.6.1"
+barcode-scanning = "17.3.0"
+camera = "1.4.2"
+cardview = "1.0.0"
 circleimageview = "3.1.0"
-commons-net = "3.6"
+compose-bom = "2024.09.00"
+coroutines-test = "1.8.1"
 converter-scalars = "2.9.0"
 core-ktx = "1.13.1"
+document-scanner = "16.0.0"
 espresso-core = "3.5.1"
+fluentui_calendar = "0.3.3"
 fluentui_core = "0.3.11"
 fluentui_drawer = "0.3.10"
 fluentui_icons = "0.3.2"
@@ -19,22 +26,22 @@ glide = "4.16.0"
 gson = "2.10.1"
 hilt = "2.51.1"
 imagepicker = "2.1"
-jjwt-api = "0.11.2"
 junit = "4.13.2"
 lifecycle-viewmodel-ktx = "2.7.0"
+lifecycle-runtime-ktx = "2.7.0"
 logging-interceptor = "4.12.0"
 material = "1.12.0"
 android-gradle-plugin = "8.5.2"
 jet-brains-plugin = "1.9.10"
-material-version = "1.2.0-alpha03"
 mpandroidchart = "v3.1.0"
-navigation-fragment = "1.0.0"
 navigation-fragment-ktx = "2.7.7"
 nav-safe-args = "2.7.7"
 opentelemetry-api = "1.18.0"
-play-services-location-version = "21.2.0"
+security-crypto = "1.1.0-alpha06"
+shimmer = "0.5.0"
+text-recognition = "16.0.1"
 
-sdp-android = "1.1.0"
+sdp-android = "1.1.1"
 smoothbottombar = "1.7.9"
 ssp-android = "1.1.0"
 play-services-location = "21.2.0"
@@ -45,27 +52,41 @@ play-services-maps = "19.0.0"
 [libraries]
 fluentui_controls = { module = "com.microsoft.fluentui:fluentui_controls", version.ref = "fluentui_controls" }
 android-gif-drawable = { module = "pl.droidsonroids.gif:android-gif-drawable", version.ref = "android-gif-drawable" }
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity-compose" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
+androidx-cardview = { module = "androidx.cardview:cardview", version.ref = "cardview" }
+androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose-bom" }
+androidx-compose-foundation = { module = "androidx.compose.foundation:foundation" }
+androidx-compose-material3 = { module = "androidx.compose.material3:material3" }
+androidx-compose-runtime-livedata = { module = "androidx.compose.runtime:runtime-livedata" }
+androidx-compose-ui = { module = "androidx.compose.ui:ui" }
+androidx-compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
+androidx-compose-ui-viewbinding = { module = "androidx.compose.ui:ui-viewbinding" }
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "core-ktx" }
 androidx-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espresso-core" }
 androidx-junit = { module = "androidx.test.ext:junit", version.ref = "androidx-junit" }
 androidx-lifecycle-livedata-ktx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycle-viewmodel-ktx" }
+androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle-runtime-ktx" }
 androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle-viewmodel-ktx" }
 androidx-navigation-fragment-ktx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigation-fragment-ktx" }
 androidx-navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigation-fragment-ktx" }
 app-update = { module = "com.google.android.play:app-update", version.ref = "app-update-ktx" }
 app-update-ktx = { module = "com.google.android.play:app-update-ktx", version.ref = "app-update-ktx" }
+camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "camera" }
+camera-core = { module = "androidx.camera:camera-core", version.ref = "camera" }
+camera-lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "camera" }
+camera-view = { module = "androidx.camera:camera-view", version.ref = "camera" }
 circleimageview = { module = "de.hdodenhof:circleimageview", version.ref = "circleimageview" }
-commons-net = { module = "commons-net:commons-net", version.ref = "commons-net" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converter-scalars" }
 converter-scalars = { module = "com.squareup.retrofit2:converter-scalars", version.ref = "converter-scalars" }
+coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines-test" }
+document-scanner = { module = "com.google.android.gms:play-services-mlkit-document-scanner", version.ref = "document-scanner" }
+fluentui_calendar = { module = "com.microsoft.fluentui:fluentui_calendar", version.ref = "fluentui_calendar" }
 fluentui_core = { module = "com.microsoft.fluentui:fluentui_core", version.ref = "fluentui_core" }
 fluentui_drawer = { module = "com.microsoft.fluentui:fluentui_drawer", version.ref = "fluentui_drawer" }
 fluentui_icons = { module = "com.microsoft.fluentui:fluentui_icons", version.ref = "fluentui_icons" }
 fluentui_listitem = { module = "com.microsoft.fluentui:fluentui_listitem", version.ref = "fluentui_progress" }
 fluentui_menus = { module = "com.microsoft.fluentui:fluentui_menus", version.ref = "fluentui_menus" }
-fluentui_notification = { module = "com.microsoft.fluentui:fluentui_notification", version.ref = "fluentui_drawer" }
-fluentui_persona = { module = "com.microsoft.fluentui:fluentui_persona", version.ref = "fluentui_drawer" }
 fluentui_progress = { module = "com.microsoft.fluentui:fluentui_progress", version.ref = "fluentui_progress" }
 fluentui_topappbars = { module = "com.microsoft.fluentui:fluentui_topappbars", version.ref = "fluentui_topappbars" }
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
@@ -73,20 +94,19 @@ gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
 imagepicker = { module = "com.github.dhaval2404:imagepicker", version.ref = "imagepicker" }
-jjwt-api = { module = "io.jsonwebtoken:jjwt-api", version.ref = "jjwt-api" }
-jjwt-impl = { module = "io.jsonwebtoken:jjwt-impl", version.ref = "jjwt-api" }
-jjwt-jackson = { module = "io.jsonwebtoken:jjwt-jackson", version.ref = "jjwt-api" }
 junit = { module = "junit:junit", version.ref = "junit" }
 logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "logging-interceptor" }
 material = { module = "com.google.android.material:material", version.ref = "material" }
-material-v120alpha03 = { module = "com.google.android.material:material", version.ref = "material-version" }
+mlkit-barcode-scanning = { module = "com.google.mlkit:barcode-scanning", version.ref = "barcode-scanning" }
+mlkit-text-recognition = { module = "com.google.mlkit:text-recognition", version.ref = "text-recognition" }
+msal = { module = "com.microsoft.identity.client:msal", version = "5.6.0" }
 mpandroidchart = { module = "com.github.PhilJay:MPAndroidChart", version.ref = "mpandroidchart" }
-navigation-fragment = { module = "android.arch.navigation:navigation-fragment", version.ref = "navigation-fragment" }
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "logging-interceptor" }
 opentelemetry-api = { module = "io.opentelemetry:opentelemetry-api", version.ref = "opentelemetry-api" }
-play-services-location-v2101 = { module = "com.google.android.gms:play-services-location", version.ref = "play-services-location-version" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "converter-scalars" }
+security-crypto = { module = "androidx.security:security-crypto", version.ref = "security-crypto" }
 sdp-android = { module = "com.intuit.sdp:sdp-android", version.ref = "sdp-android" }
+shimmer = { module = "com.facebook.shimmer:shimmer", version.ref = "shimmer" }
 smoothbottombar = { module = "com.github.ibrahimsn98:SmoothBottomBar", version.ref = "smoothbottombar" }
 ssp-android = { module = "com.intuit.ssp:ssp-android", version.ref = "ssp-android" }
 play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "play-services-location" }

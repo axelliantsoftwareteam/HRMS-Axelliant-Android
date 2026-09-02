@@ -44,18 +44,34 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.axelliant.hris.ui.designsystem.components.AppTextView
-            android:id="@+id/customerNameText"
+            android:id="@+id/quoteNameText"
             style="@style/Text.InternalApps.Subheading"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/ds_space_6"
             android:ellipsize="end"
             android:fontFamily="@font/poppins_semibold"
-            android:maxLines="2"
+            android:maxLines="1"
             android:textColor="@color/ds_text_primary"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/customerNameText"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/quoteIdText" />
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            android:id="@+id/customerNameText"
+            style="@style/Text.InternalApps.Caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/ds_space_8"
+            android:ellipsize="end"
+            android:fontFamily="@font/poppins_medium"
+            android:gravity="end"
+            android:maxLines="1"
+            android:maxWidth="@dimen/_120sdp"
+            android:textColor="@color/ds_text_secondary"
+            app:layout_constraintBaseline_toBaselineOf="@id/quoteNameText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/quoteNameText" />
 
         <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/createdByLabel"
@@ -65,7 +81,7 @@
             android:layout_marginTop="@dimen/ds_space_8"
             android:text="@string/quotes_created_by"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/customerNameText" />
+            app:layout_constraintTop_toBottomOf="@id/quoteNameText" />
 
         <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/createdByValue"

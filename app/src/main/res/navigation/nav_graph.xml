@@ -267,6 +267,16 @@
             app:argType="string" />
     </fragment>
 
+    <fragment
+        android:id="@+id/iaQuoteReportFragment"
+        android:name="com.axelliant.hris.features.quotes.presentation.QuoteReportFragment"
+        android:label="@string/quote_report_title"
+        tools:layout="@layout/fragment_quote_report">
+        <argument
+            android:name="quoteId"
+            app:argType="string" />
+    </fragment>
+
 
     <fragment
         android:id="@+id/iaEditQuoteFragment"
