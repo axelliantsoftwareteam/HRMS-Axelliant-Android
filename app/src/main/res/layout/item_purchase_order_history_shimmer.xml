@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.axelliant.hris.ui.designsystem.components.AppCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/ds_space_12"
+    app:cardBackgroundColor="@color/ds_surface"
+    app:cardCornerRadius="@dimen/ds_radius_md"
+    app:cardElevation="0dp"
+    app:strokeColor="@color/purchase_order_fluent_stroke_subtle"
+    app:strokeWidth="@dimen/_1sdp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/_116sdp"
+        android:padding="@dimen/ds_space_14">
+
+        <View
+            android:id="@+id/shimmerIcon"
+            android:layout_width="@dimen/_48sdp"
+            android:layout_height="@dimen/_48sdp"
+            android:background="@drawable/shimmer_circle_light"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/shimmerTitle"
+            android:layout_width="@dimen/_130sdp"
+            android:layout_height="@dimen/_16sdp"
+            android:layout_marginStart="@dimen/ds_space_14"
+            android:background="@drawable/bg_shimmer_placeholder"
+            app:layout_constraintStart_toEndOf="@id/shimmerIcon"
+            app:layout_constraintTop_toTopOf="@id/shimmerIcon" />
+
+        <View
+            android:id="@+id/shimmerRole"
+            android:layout_width="@dimen/_160sdp"
+            android:layout_height="@dimen/_12sdp"
+            android:layout_marginTop="@dimen/ds_space_8"
+            android:background="@drawable/bg_shimmer_placeholder"
+            app:layout_constraintStart_toStartOf="@id/shimmerTitle"
+            app:layout_constraintTop_toBottomOf="@id/shimmerTitle" />
+
+        <View
+            android:id="@+id/shimmerComment"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_14sdp"
+            android:layout_marginTop="@dimen/ds_space_16"
+            android:background="@drawable/bg_shimmer_placeholder"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/shimmerTitle"
+            app:layout_constraintTop_toBottomOf="@id/shimmerRole" />
+
+        <View
+            android:id="@+id/shimmerDivider"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_1sdp"
+            android:layout_marginTop="@dimen/ds_space_12"
+            android:background="@drawable/bg_shimmer_placeholder"
+            app:layout_constraintEnd_toEndOf="@id/shimmerComment"
+            app:layout_constraintStart_toStartOf="@id/shimmerComment"
+            app:layout_constraintTop_toBottomOf="@id/shimmerComment" />
+
+        <View
+            android:id="@+id/shimmerDate"
+            android:layout_width="@dimen/_150sdp"
+            android:layout_height="@dimen/_12sdp"
+            android:layout_marginTop="@dimen/ds_space_10"
+            android:background="@drawable/bg_shimmer_placeholder"
+            app:layout_constraintStart_toStartOf="@id/shimmerComment"
+            app:layout_constraintTop_toBottomOf="@id/shimmerDivider" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.axelliant.hris.ui.designsystem.components.AppCardView>
