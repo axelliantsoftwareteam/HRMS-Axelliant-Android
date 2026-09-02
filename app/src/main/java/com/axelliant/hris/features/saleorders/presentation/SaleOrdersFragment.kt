@@ -31,6 +31,11 @@ import com.axelliant.hris.features.saleorders.domain.model.SaleOrderListUiModel
 import com.axelliant.hris.features.saleorders.domain.model.SaleOrderModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import android.graphics.RenderEffect
+import android.graphics.Shader
+import android.os.Build
+import android.view.animation.DecelerateInterpolator
+import androidx.activity.OnBackPressedCallback
 
 @AndroidEntryPoint
 class SaleOrdersFragment : Fragment() {
@@ -45,6 +50,8 @@ class SaleOrdersFragment : Fragment() {
     private lateinit var actionMenuHandler: SaleOrderActionMenuHandler
 
     private var isSearchVisible = false
+    private var isFabMenuOpen = false
+    private lateinit var fabMenuBackCallback: OnBackPressedCallback
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -62,6 +69,7 @@ class SaleOrdersFragment : Fragment() {
         setupInteractions()
         setupPagination()
         observeOrders()
+        setupFabMenu()
         observeSaleOrderWorkflow()
         viewModel.loadOrdersIfNeeded()
     }
@@ -122,13 +130,13 @@ class SaleOrdersFragment : Fragment() {
 
     private fun setupInteractions() {
         binding.appTopBar.setOnBackClickListener {
-            InternalAppsNavigator.returnToHomeShell(findNavController())
+            if (isFabMenuOpen) {
+                closeFabMenu()
+            } else {
+                InternalAppsNavigator.returnToHomeShell(findNavController())
+            }
         }
         binding.appTopBar.setOnSearchClickListener { toggleSearchField() }
-        binding.createSaleOrderFab.setOnClickListener {
-            findNavController().navigate(R.id.iaAddSaleOrderFragment)
-        }
-
         binding.searchEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
@@ -364,7 +372,136 @@ class SaleOrdersFragment : Fragment() {
         }
     }
 
+    private fun setupFabMenu() {
+        binding.fabMenuScrim.isVisible = false
+        binding.fabMenuScrim.alpha = 0f
+        binding.addSaleOrderActionRow.isVisible = false
+        prepareClosedFabAction(binding.addSaleOrderActionRow)
+
+        fabMenuBackCallback = object : OnBackPressedCallback(false) {
+            override fun handleOnBackPressed() {
+                closeFabMenu()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, fabMenuBackCallback)
+
+        binding.createSaleOrderFab.setOnClickListener { toggleFabMenu() }
+        binding.fabMenuScrim.setOnClickListener { closeFabMenu() }
+
+        binding.addSaleOrderSubFab.setOnClickListener {
+            closeFabMenu()
+            findNavController().navigate(R.id.iaAddSaleOrderFragment)
+        }
+        binding.addSaleOrderLabel.setOnClickListener { binding.addSaleOrderSubFab.performClick() }
+    }
+
+    private fun toggleFabMenu() {
+        if (isFabMenuOpen) closeFabMenu() else openFabMenu()
+    }
+
+    private fun openFabMenu() {
+        if (isFabMenuOpen) return
+        isFabMenuOpen = true
+        fabMenuBackCallback.isEnabled = true
+
+        applyContentBlur(true)
+
+        binding.fabMenuScrim.isVisible = true
+        binding.fabMenuScrim.animate()
+            .alpha(1f)
+            .setDuration(FAB_MENU_ANIMATION_MS)
+            .setInterpolator(DecelerateInterpolator())
+            .start()
+
+        binding.createSaleOrderFab.setImageResource(R.drawable.ic_close)
+        binding.createSaleOrderFab.animate()
+            .rotation(90f)
+            .setDuration(FAB_MENU_ANIMATION_MS)
+            .start()
+
+        showFabAction(binding.addSaleOrderActionRow)
+    }
+
+    private fun closeFabMenu() {
+        if (!isFabMenuOpen) return
+        isFabMenuOpen = false
+        fabMenuBackCallback.isEnabled = false
+
+        binding.createSaleOrderFab.setImageResource(R.drawable.ia_ic_add)
+        binding.createSaleOrderFab.animate()
+            .rotation(0f)
+            .setDuration(FAB_MENU_ANIMATION_MS)
+            .start()
+
+        hideFabAction(binding.addSaleOrderActionRow)
+
+        binding.fabMenuScrim.animate()
+            .alpha(0f)
+            .setDuration(FAB_MENU_ANIMATION_MS)
+            .withEndAction {
+                if (_binding == null) return@withEndAction
+                binding.fabMenuScrim.isVisible = false
+                applyContentBlur(false)
+            }
+            .start()
+    }
+
+    private fun prepareClosedFabAction(row: View) {
+        row.alpha = 0f
+        row.translationY = FAB_ACTION_TRANSLATION_Y
+        row.scaleX = 0.85f
+        row.scaleY = 0.85f
+    }
+
+    private fun showFabAction(row: View) {
+        row.animate().cancel()
+        prepareClosedFabAction(row)
+        row.isVisible = true
+        row.animate()
+            .alpha(1f)
+            .translationY(0f)
+            .scaleX(1f)
+            .scaleY(1f)
+            .setDuration(FAB_MENU_ANIMATION_MS)
+            .setInterpolator(DecelerateInterpolator())
+            .start()
+    }
+
+    private fun hideFabAction(row: View) {
+        row.animate().cancel()
+        row.animate()
+            .alpha(0f)
+            .translationY(FAB_ACTION_TRANSLATION_Y)
+            .scaleX(0.85f)
+            .scaleY(0.85f)
+            .setDuration(FAB_MENU_ANIMATION_MS)
+            .withEndAction {
+                if (_binding == null) return@withEndAction
+                row.isVisible = false
+            }
+            .start()
+    }
+
+    private fun applyContentBlur(enabled: Boolean) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            binding.contentContainer.setRenderEffect(
+                if (enabled) {
+                    RenderEffect.createBlurEffect(
+                        CONTENT_BLUR_RADIUS,
+                        CONTENT_BLUR_RADIUS,
+                        Shader.TileMode.CLAMP
+                    )
+                } else {
+                    null
+                }
+            )
+        }
+    }
+
     override fun onDestroyView() {
+        if (_binding != null) {
+            applyContentBlur(false)
+        }
         shimmerHelper.release()
         super.onDestroyView()
         _binding = null
@@ -374,5 +511,10 @@ class SaleOrdersFragment : Fragment() {
         private const val PAGINATION_THRESHOLD_ITEMS = 2
         private const val SHIMMER_ITEM_COUNT = 5
         private const val SEARCH_ANIMATION_DURATION_MS = 180L
+
+        private const val FAB_MENU_ANIMATION_MS = 220L
+        private const val FAB_ACTION_TRANSLATION_Y = 28f
+        private const val CONTENT_BLUR_RADIUS = 28f
+
     }
 }

@@ -30,6 +30,9 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Date
+import androidx.recyclerview.widget.GridLayoutManager
+import com.axelliant.hris.ui.designsystem.adapters.FilterAdapter
+import com.axelliant.hris.ui.designsystem.adapters.FilterItem
 
 
 @AndroidEntryPoint
@@ -42,6 +45,8 @@ class DocumentManagementFragment : BaseFragment() {
     private var startDateString: String? = null
     private var endDateString: String? = null
     private var filterId = ""
+
+    private lateinit var dateFilterAdapter: FilterAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -69,7 +74,7 @@ class DocumentManagementFragment : BaseFragment() {
         binding?.appTopBar?.setOnBackClickListener {
             previousFragmentNavigation()
         }
-        eventSelection()
+        setupDateFilterBar()
         expenseViewModel.getDocumentReqDetail(getCurrentObject())
         expenseViewModel.documentResponse.observe(
             viewLifecycleOwner,
@@ -186,64 +191,6 @@ class DocumentManagementFragment : BaseFragment() {
         binding?.rvExpense?.adapter = expenseAdapter
     }
 
-    private fun eventSelection() {
-        binding?.tvWeek?.background =
-            ContextCompat.getDrawable(requireContext(), R.drawable.rounded_disabled)
-
-        binding?.tvMonth?.background =
-            ContextCompat.getDrawable(requireContext(), R.drawable.rounded_disabled)
-
-        binding?.tvCustom?.background =
-            ContextCompat.getDrawable(requireContext(), R.drawable.rounded_disabled)
-
-
-        binding?.tvWeek?.setTextColor(requireContext().getColor(R.color.btn_text_color))
-        binding?.tvMonth?.setTextColor(requireContext().getColor(R.color.btn_text_color))
-        binding?.tvCustom?.setTextColor(requireContext().getColor(R.color.btn_text_color))
-
-        binding?.tvWeek?.setOnClickListener {
-            currentFilter = AttendanceFilter.WEEK
-            expenseViewModel.getDocumentReqDetail(getCurrentObject())
-            eventSelection()
-        }
-        binding?.tvMonth?.setOnClickListener {
-            currentFilter = AttendanceFilter.MONTH
-            expenseViewModel.getDocumentReqDetail(getCurrentObject())
-            eventSelection()
-        }
-
-        binding?.tvCustom?.setOnClickListener {
-            datePickerDialog()
-            currentFilter = AttendanceFilter.Custom
-            expenseViewModel.getDocumentReqDetail(getCurrentObject())
-            eventSelection()
-        }
-
-        when (currentFilter) {
-            AttendanceFilter.WEEK -> {
-                binding?.tvWeek?.background =
-                    ContextCompat.getDrawable(requireContext(), R.drawable.fluent_blue)
-                binding?.tvWeek?.setTextColor(requireContext().getColor(R.color.ds_neutral_white))
-
-            }
-
-            AttendanceFilter.MONTH -> {
-
-                binding?.tvMonth?.background =
-                    ContextCompat.getDrawable(requireContext(), R.drawable.fluent_blue)
-                binding?.tvMonth?.setTextColor(requireContext().getColor(R.color.ds_neutral_white))
-            }
-
-            AttendanceFilter.Custom -> {
-
-                binding?.tvCustom?.background =
-                    ContextCompat.getDrawable(requireContext(), R.drawable.fluent_blue)
-                binding?.tvCustom?.setTextColor(requireContext().getColor(R.color.ds_neutral_white))
-            }
-
-        }
-    }
-
     private fun getCurrentObject(): AttendanceInput {
 
 
@@ -287,31 +234,25 @@ class DocumentManagementFragment : BaseFragment() {
     }
 
     private fun datePickerDialog() {
-        // Creating a MaterialDatePicker builder for selecting a date range
         val builder = MaterialDatePicker.Builder.dateRangePicker()
         builder.setTitleText("Select a date range")
         builder.setTheme(R.style.MyDatePickerTheme)
 
-        // Building the date picker dialog
         val datePicker = builder.build()
         datePicker.addOnPositiveButtonClickListener { selection ->
-            // Retrieving the selected start and end dates
-            val startDate = selection.first
-            val endDate = selection.second
+            val startDate = Utils.utcToLocalDate(selection.first)
+            val endDate = Utils.utcToLocalDate(selection.second)
 
-            // Formatting the selected dates as strings
-
-            startDateString = Utils.getServerFormat(date = Date(startDate))
-            endDateString = Utils.getServerFormat(date = Date(endDate))
+            startDateString = Utils.getServerFormat(date = startDate)
+            endDateString = Utils.getServerFormat(date = endDate)
 
             setDateView()
 
             currentFilter = AttendanceFilter.Custom
+            dateFilterAdapter.setSelected(2)
             expenseViewModel.getDocumentReqDetail(getCurrentObject())
-            eventSelection()
         }
 
-        // Showing the date picker dialog
         datePicker.show(activity?.supportFragmentManager!!, "DATE_PICKER")
     }
 
@@ -341,6 +282,33 @@ class DocumentManagementFragment : BaseFragment() {
         )
         binding?.rvSubFilter?.adapter = weeklyAdapter
 
+    }
+
+    private fun setupDateFilterBar() {
+        val items = listOf(
+            FilterItem(getString(R.string.last_seven), 0),
+            FilterItem(getString(R.string.this_month), 1),
+            FilterItem(getString(R.string.custom), 2)
+        )
+        dateFilterAdapter = FilterAdapter(items, selectedPosition = 0) { position, _ ->
+            when (position) {
+                0 -> {
+                    currentFilter = AttendanceFilter.WEEK
+                    dateFilterAdapter.setSelected(position)
+                    expenseViewModel.getDocumentReqDetail(getCurrentObject())
+                }
+                1 -> {
+                    currentFilter = AttendanceFilter.MONTH
+                    dateFilterAdapter.setSelected(position)
+                    expenseViewModel.getDocumentReqDetail(getCurrentObject())
+                }
+                2 -> datePickerDialog()
+            }
+        }
+        binding?.rvDateFilters?.apply {
+            layoutManager = GridLayoutManager(requireContext(), items.size)
+            adapter = dateFilterAdapter
+        }
     }
 
     override fun onDestroyView() {

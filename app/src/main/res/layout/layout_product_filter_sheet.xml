@@ -562,8 +562,7 @@
             android:layout_height="@dimen/_46sdp"
             android:layout_weight="1.6"
             android:text="@string/apply_filters"
-            android:textSize="@dimen/_12ssp"
-            app:cornerRadius="@dimen/_10sdp" />
+            android:textSize="@dimen/_12ssp" />
     </LinearLayout>
 </LinearLayout>
 

@@ -1,5 +1,6 @@
 package com.axelliant.hris.features.profiles.presentation
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -62,7 +63,7 @@ class ProfilesFragment : Fragment() {
         appTopBar.setOnBackClickListener {
             InternalAppsNavigator.returnToHomeShell(findNavController())
         }
-        logoutRow.setOnClickListener { logoutAndOpenLogin() }
+        logoutRow.setOnClickListener { showLogoutConfirmationDialog() }
         timeZoneRow.root.setOnClickListener {
             showChoiceDialog(
                 title = getString(R.string.profile_select_time_zone),
@@ -217,6 +218,17 @@ class ProfilesFragment : Fragment() {
                     .build()
             )
         }
+    }
+
+    private fun showLogoutConfirmationDialog() {
+        AlertDialog.Builder(requireContext())
+            .setTitle(getString(R.string.info))
+            .setMessage(getString(R.string.logout_message))
+            .setPositiveButton(getString(R.string.yes)) { _, _ ->
+                logoutAndOpenLogin()
+            }
+            .setNegativeButton(getString(R.string.no)) { _, _ -> }
+            .show()
     }
 
     private fun String?.orDash(): String = this?.takeIf { it.isNotBlank() }

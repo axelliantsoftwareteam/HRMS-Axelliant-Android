@@ -1320,6 +1320,16 @@
         <string name="quote_report_mfg_part_no">MFG Part No</string>
         <string name="quote_report_axe_part_no">AXE Part No</string>
         <string name="quote_report_duration">Duration</string>
+
+    <!--Bottom Sheet Test!-->
+    <string name="checking_your_location">Checking your location…</string>
+    <string name="you_are_in_the_radius_area">You are in the radius area</string>
+    <string name="marking_as_work_from_home">Marking as Work From Home</string>
+    <string name="location_office">You will be checked in at the office</string>
+    <string name="location_wfh">You will be checked in from home</string>
+    <string name="lets_start">Let\'s Start!</string>
+    <!--Bottom Sheet Test!-->
+
         <plurals name="quote_report_products_count">
             <item quantity="one">%1$d product</item>
             <item quantity="other">%1$d products</item>

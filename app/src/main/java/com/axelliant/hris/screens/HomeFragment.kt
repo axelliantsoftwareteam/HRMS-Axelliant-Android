@@ -1564,17 +1564,13 @@ class HomeFragment : BaseFragment() {
 
     private fun snapAndCollapseFab(parent: ViewGroup) {
         val fabContainer = binding?.askAiFloatingButton ?: return
-        val screenMid = parent.width / 2f
-        val fabCenter = fabContainer.x + fabContainer.width / 2f
-        val goRight = fabCenter > screenMid
-
-        val edgeX = if (goRight) (parent.width - fabContainer.width).toFloat() else 0f
+        val edgeX = (parent.width - fabContainer.width).toFloat()
 
         fabContainer.animate()
             .x(edgeX)
             .setDuration(200L)
             .withEndAction {
-                collapseFab(goRight)
+                collapseFab(isRightEdge = true)
             }
             .start()
     }
@@ -1627,11 +1623,7 @@ class HomeFragment : BaseFragment() {
         stopFabWiggle()
 
         val edgeGap = 16 * resources.displayMetrics.density
-        val targetX = if (isFabRightEdge) {
-            (parent.width - fabContainer.width) - edgeGap
-        } else {
-            edgeGap
-        }
+        val targetX = (parent.width - fabContainer.width) - edgeGap
 
         arrow?.isVisible = false
         fabContainer.animate()

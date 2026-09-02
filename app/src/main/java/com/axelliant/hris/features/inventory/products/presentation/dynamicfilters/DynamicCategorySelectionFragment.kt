@@ -228,7 +228,7 @@ class DynamicCategorySelectionFragment : Fragment() {
                 insetBottom = 0
                 maxLines = 1
                 ellipsize = TextUtils.TruncateAt.END
-                cornerRadius = dimen(com.intuit.sdp.R.dimen._10sdp)
+                cornerRadius = dimen(com.intuit.sdp.R.dimen._2sdp)
                 setTextColor(ContextCompat.getColor(requireContext(), R.color.ds_on_primary))
                 setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(com.intuit.ssp.R.dimen._12ssp))
                 backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.ds_primary))

@@ -277,7 +277,6 @@
             android:textAllCaps="false"
             android:textColor="@color/ds_on_primary"
             android:textSize="@dimen/_10ssp"
-            app:backgroundTint="@color/ds_primary"
-            app:cornerRadius="@dimen/_10sdp" />
+            app:backgroundTint="@color/ds_primary" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
