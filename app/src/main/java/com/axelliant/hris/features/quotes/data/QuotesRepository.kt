@@ -6,6 +6,7 @@ import com.axelliant.hris.core.network.SafeApiExecutor
 import com.axelliant.hris.features.quotes.data.remote.CreateQuoteApiService
 import com.axelliant.hris.features.quotes.data.remote.QuotesApiService
 import com.axelliant.hris.features.quotes.data.remote.WorkflowApiService
+import com.axelliant.hris.features.quotes.data.remote.dto.WorkflowDecisionRequest
 import com.axelliant.hris.features.quotes.data.remote.dto.GetQuotationRequest
 import com.axelliant.hris.features.quotes.data.remote.dto.GetQuotationResponse
 import com.axelliant.hris.features.quotes.data.remote.dto.QuotePreviewResponse
@@ -23,6 +24,7 @@ import com.axelliant.hris.features.quotes.domain.model.QuoteReportUiModel
 import com.axelliant.hris.features.quotes.domain.model.QuoteStatus
 import com.axelliant.hris.features.quotes.domain.model.QuoteType
 import com.axelliant.hris.features.quotes.domain.model.QuoteWorkflowUiModel
+import com.axelliant.hris.features.quotes.domain.model.WorkflowDecisionResult
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -269,6 +271,46 @@ class QuotesRepository @Inject constructor(
 
             ApiResult.Unauthorized ->
                 ApiResult.Unauthorized
+        }
+    }
+
+    suspend fun decideWorkflowNode(
+        instanceId: String,
+        nodeId: String,
+        approved: Boolean,
+        comments: String
+    ): ApiResult<WorkflowDecisionResult> {
+        val action = if (approved) "approve" else "reject"
+        val request = WorkflowDecisionRequest(
+            instanceId = instanceId,
+            nodeId = nodeId,
+            approved = approved,
+            comments = comments,
+            idempotencyKey = "decide:$instanceId:$nodeId:$action:${System.currentTimeMillis()}"
+        )
+        return when (val result = safeApiExecutor.execute {
+            workflowApiService.decideWorkflowNode(request)
+        }) {
+            is ApiResult.Success -> {
+                val payload = result.data
+                val message = QuoteApiResponseParser.extractApiMessage(payload)
+                    ?: payload.data?.message
+                    ?: if (approved) "Workflow approved successfully." else "Workflow rejected successfully."
+                if (payload.data?.success == true) {
+                    ApiResult.Success(WorkflowDecisionResult(message))
+                } else {
+                    ApiResult.UnknownError(message)
+                }
+            }
+            is ApiResult.Empty -> ApiResult.UnknownError("Unable to update workflow.")
+            is ApiResult.HttpError -> ApiResult.HttpError(
+                code = result.code,
+                message = QuoteApiResponseParser.resolveErrorMessage(result),
+                errorBody = result.errorBody
+            )
+            is ApiResult.NetworkError -> result
+            is ApiResult.UnknownError -> result
+            ApiResult.Unauthorized -> ApiResult.Unauthorized
         }
     }
 

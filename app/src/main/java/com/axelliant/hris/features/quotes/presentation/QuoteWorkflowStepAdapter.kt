@@ -59,10 +59,14 @@ class QuoteWorkflowStepAdapter(
             bindTimeline(step, previousStepState, isFirst, isLast)
 
             binding.processNumberText.text = step.processNo.toString()
+/*
             binding.roleNameText.text = buildRoleNameText(step.roleName)
+*/
             binding.processNameText.text = step.processName
             binding.processScreenNameText.text = step.processScreenName
+/*
             binding.roleNameText.isVisible = step.roleName != "N/A"
+*/
             binding.processScreenNameText.isVisible = step.processScreenName.isNotBlank()
 
             binding.approveButton.text = step.approveText
@@ -177,6 +181,10 @@ class QuoteWorkflowStepAdapter(
             binding.waitingForActionText.isVisible = false
             binding.rejectionReasonText.isVisible = step.hasComments
             binding.rejectionReasonText.text = step.comments
+            binding.rejectionReasonText.setBackgroundResource(R.drawable.bg_quote_workflow_comment)
+            binding.rejectionReasonText.setTextColor(
+                ContextCompat.getColor(binding.root.context, R.color.ds_text_secondary)
+            )
             binding.actionButtonsRow.isVisible = false
             binding.statusBadgeText.text = step.statusLabel
             binding.statusBadgeText.setBackgroundResource(R.drawable.bg_quote_workflow_status_approved)
@@ -203,6 +211,10 @@ class QuoteWorkflowStepAdapter(
             binding.waitingForActionText.isVisible = false
             binding.rejectionReasonText.isVisible = step.hasComments
             binding.rejectionReasonText.text = step.comments
+            binding.rejectionReasonText.setBackgroundResource(R.drawable.bg_quote_workflow_comment)
+            binding.rejectionReasonText.setTextColor(
+                ContextCompat.getColor(binding.root.context, R.color.ds_text_secondary)
+            )
             binding.actionButtonsRow.isVisible = false
             binding.statusBadgeText.text = step.statusLabel
             binding.statusBadgeText.setBackgroundResource(R.drawable.bg_quote_workflow_status_approved)
@@ -306,6 +318,10 @@ class QuoteWorkflowStepAdapter(
             binding.statusBadgeText.isVisible = true
             binding.waitingForActionText.isVisible = false
             binding.rejectionReasonText.isVisible = true
+            binding.rejectionReasonText.setBackgroundResource(R.drawable.bg_quote_workflow_reason)
+            binding.rejectionReasonText.setTextColor(
+                ContextCompat.getColor(binding.root.context, R.color.quotes_status_rejected_text)
+            )
             binding.actionButtonsRow.isVisible = false
             binding.statusBadgeText.text = binding.root.context.getString(
                 R.string.quote_workflow_status_rejected
@@ -335,10 +351,12 @@ class QuoteWorkflowStepAdapter(
             alpha: Float
         ) {
             binding.processNameText.setTextColor(titleColor)
-            binding.roleNameText.setTextColor(bodyColor)
+//            binding.roleNameText.setTextColor(bodyColor)
             binding.processScreenNameText.setTextColor(mutedColor)
             binding.timestampText.setTextColor(bodyColor)
+/*
             binding.roleNameText.alpha = alpha
+*/
             binding.processNameText.alpha = alpha
             binding.processScreenNameText.alpha = alpha
             binding.timestampText.alpha = alpha

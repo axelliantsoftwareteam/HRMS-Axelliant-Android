@@ -48,8 +48,10 @@ class PurchaseOrdersFragment : Fragment() {
 
     private val shimmerHelper = ShimmerAnimatorHelper()
     private lateinit var ordersAdapter: PurchaseOrdersAdapter
+    private lateinit var filterChipAdapter: PurchaseOrderFilterChipAdapter
     private lateinit var actionMenuHandler: PurchaseOrderActionMenuHandler
     private lateinit var fabMenuBackCallback: OnBackPressedCallback
+    private var historyBottomSheet: PurchaseOrderHistoryBottomSheet? = null
 
     private var isSearchVisible = false
     private var isFabMenuOpen = false
@@ -72,6 +74,7 @@ class PurchaseOrdersFragment : Fragment() {
         setupPagination()
         observePurchaseOrderCreated()
         observeOrders()
+        observePurchaseOrderHistory()
         viewModel.loadOrdersIfNeeded()
     }
 
@@ -100,10 +103,10 @@ class PurchaseOrdersFragment : Fragment() {
                 R.id.action_purchase_order_edit -> navigateToEditPurchaseOrder(order)
                 R.id.action_purchase_order_show_report,
                 R.id.action_purchase_order_submit_po,
-                R.id.action_purchase_order_send_to_vendor,
-                R.id.action_purchase_order_history -> {
+                R.id.action_purchase_order_send_to_vendor -> {
                     Toast.makeText(requireContext(), R.string.coming_soon, Toast.LENGTH_SHORT).show()
                 }
+                R.id.action_purchase_order_history -> openPurchaseOrderHistory(order)
             }
         }
         ordersAdapter = PurchaseOrdersAdapter { order, anchor ->
@@ -117,6 +120,14 @@ class PurchaseOrdersFragment : Fragment() {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = ordersAdapter
             setHasFixedSize(false)
+        }
+        filterChipAdapter = PurchaseOrderFilterChipAdapter { chip ->
+            viewModel.selectUtilizationFilter(chip)
+        }
+        binding.filterChipsRecyclerView.apply {
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            adapter = filterChipAdapter
+            setHasFixedSize(true)
         }
     }
 
@@ -132,6 +143,15 @@ class PurchaseOrdersFragment : Fragment() {
             R.id.iaEditPurchaseOrderFragment,
             bundleOf(EditPurchaseOrderViewModel.ARG_PURCHASE_ORDER_ID to order.id)
         )
+    }
+
+    private fun openPurchaseOrderHistory(order: PurchaseOrderModel) {
+        historyBottomSheet?.dismiss()
+        historyBottomSheet = PurchaseOrderHistoryBottomSheet(this).also { sheet ->
+            sheet.show()
+            sheet.render(UiState.Loading)
+        }
+        viewModel.loadPurchaseOrderHistory(order)
     }
 
     private fun setupFabMenu() {
@@ -398,7 +418,7 @@ class PurchaseOrdersFragment : Fragment() {
                         UiState.Loading -> {
                             updateSummaryForOrders(emptyList(), totalCount = 0)
                             showLoading(true)
-                            binding.filterChipsCard.isVisible = false
+                            binding.filterChipsRecyclerView.isVisible = false
                             binding.emptyStateContainer.isVisible = false
                             binding.errorStateContainer.isVisible = false
                             binding.purchaseOrdersRecyclerView.isVisible = false
@@ -415,7 +435,7 @@ class PurchaseOrdersFragment : Fragment() {
                             updateSummaryForOrders(emptyList(), totalCount = 0)
                             showLoading(false)
                             setPaginationLoading(false)
-                            binding.filterChipsCard.isVisible = false
+                            binding.filterChipsRecyclerView.isVisible = false
                             binding.purchaseOrdersRecyclerView.isVisible = false
                             binding.errorStateContainer.isVisible = false
                             binding.emptyStateContainer.isVisible = true
@@ -426,14 +446,53 @@ class PurchaseOrdersFragment : Fragment() {
         }
     }
 
+    private fun observePurchaseOrderHistory() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.historyState.collect { state ->
+                    when (state) {
+                        UiState.Idle -> Unit
+                        UiState.Loading,
+                        is UiState.Success,
+                        UiState.Empty -> historyBottomSheet?.render(state)
+                        is UiState.Error -> {
+                            historyBottomSheet?.dismiss()
+                            historyBottomSheet = null
+                            Toast.makeText(
+                                requireContext(),
+                                state.message.ifBlank {
+                                    getString(R.string.purchase_orders_error_title)
+                                },
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            viewModel.resetHistoryState()
+                        }
+                        UiState.Unauthorized -> {
+                            historyBottomSheet?.dismiss()
+                            historyBottomSheet = null
+                            Toast.makeText(
+                                requireContext(),
+                                R.string.purchase_orders_error_title,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            viewModel.resetHistoryState()
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     private fun renderSuccess(data: PurchaseOrderListUiModel) {
         showLoading(false)
         setPaginationLoading(data.isLoadingNextPage)
+        filterChipAdapter.setSelectedFilterId(data.selectedFilterId)
+        filterChipAdapter.submitList(data.filterChips)
         ordersAdapter.submitList(data.orders)
         updateSummaryForOrders(data.orders, data.totalCount)
         val isEmpty = data.orders.isEmpty()
         binding.purchaseOrdersRecyclerView.isVisible = !isEmpty
-        binding.filterChipsCard.isVisible = !isEmpty
+        binding.filterChipsRecyclerView.isVisible = data.filterChips.isNotEmpty()
         binding.emptyStateContainer.isVisible = isEmpty
         binding.errorStateContainer.isVisible = false
     }
@@ -442,7 +501,7 @@ class PurchaseOrdersFragment : Fragment() {
         updateSummaryForError()
         showLoading(false)
         setPaginationLoading(false)
-        binding.filterChipsCard.isVisible = false
+        binding.filterChipsRecyclerView.isVisible = false
         binding.purchaseOrdersRecyclerView.isVisible = false
         binding.emptyStateContainer.isVisible = false
         binding.errorStateContainer.isVisible = true
@@ -505,6 +564,8 @@ class PurchaseOrdersFragment : Fragment() {
         if (_binding != null) {
             applyContentBlur(false)
         }
+        historyBottomSheet?.dismiss()
+        historyBottomSheet = null
         shimmerHelper.release()
         super.onDestroyView()
         _binding = null

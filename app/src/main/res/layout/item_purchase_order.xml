@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.axelliant.hris.ui.designsystem.components.AppCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/purchaseOrderCard"
     style="@style/Widget.InternalApps.Card"
-    android:layout_marginBottom="@dimen/ds_space_12"
+    android:layout_marginBottom="@dimen/ds_space_10"
     android:foreground="?attr/selectableItemBackground"
     app:cardBackgroundColor="@color/purchase_order_fluent_surface"
     app:cardCornerRadius="@dimen/ds_radius_sm"
@@ -14,57 +15,34 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="@dimen/_124sdp"
-        android:paddingStart="@dimen/ds_space_12"
-        android:paddingTop="@dimen/ds_space_14"
-        android:paddingEnd="@dimen/ds_space_10"
-        android:paddingBottom="@dimen/ds_space_14">
-
-        <FrameLayout
-            android:id="@+id/documentIconTile"
-            android:layout_width="@dimen/_36sdp"
-            android:layout_height="@dimen/_36sdp"
-            android:background="@drawable/bg_po_document_icon_tile"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:layout_width="@dimen/_22sdp"
-                android:layout_height="@dimen/_22sdp"
-                android:layout_gravity="center"
-                android:contentDescription="@null"
-                android:src="@drawable/ic_po_card_document" />
-        </FrameLayout>
+        android:padding="@dimen/ds_space_10">
 
         <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/poNumberBadge"
             style="@style/Text.InternalApps.Subheading"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/_28sdp"
-            android:layout_marginStart="@dimen/ds_space_12"
+            android:layout_height="wrap_content"
             android:background="@drawable/bg_purchase_order_id_badge"
             android:fontFamily="sans-serif-medium"
             android:gravity="center"
             android:maxLines="1"
-            android:paddingStart="@dimen/ds_space_12"
-            android:paddingEnd="@dimen/ds_space_12"
+            tools:text="test"
+            android:padding="@dimen/ds_space_10"
             android:textColor="@color/purchase_order_id_text"
             android:textSize="@dimen/_9ssp"
-            app:layout_constraintBottom_toBottomOf="@id/documentIconTile"
-            app:layout_constraintStart_toEndOf="@id/documentIconTile"
-            app:layout_constraintTop_toTopOf="@id/documentIconTile" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/statusBadge"
             style="@style/Text.InternalApps.Caption"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/_28sdp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/ds_space_10"
             android:gravity="center"
             android:maxLines="1"
-            android:paddingStart="@dimen/ds_space_12"
-            android:paddingEnd="@dimen/ds_space_12"
-            android:textSize="@dimen/_9ssp"
+            tools:text="test"
+            android:padding="@dimen/ds_space_10"
             app:layout_constrainedWidth="true"
             app:layout_constraintBottom_toBottomOf="@id/poNumberBadge"
             app:layout_constraintEnd_toStartOf="@id/menuButton"
@@ -96,22 +74,23 @@
             style="@style/Text.InternalApps.Title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/ds_space_16"
+            android:layout_marginTop="@dimen/ds_space_10"
             android:ellipsize="end"
             android:fontFamily="sans-serif-medium"
             android:maxLines="1"
+            tools:text="test"
             android:textColor="@color/purchase_order_fluent_text_primary"
             android:textSize="@dimen/_13ssp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/documentIconTile" />
+            app:layout_constraintTop_toBottomOf="@id/poNumberBadge" />
 
         <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/grandTotalLabel"
             style="@style/Text.InternalApps.Caption"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/ds_space_16"
+            android:layout_marginTop="@dimen/ds_space_10"
             android:text="@string/purchase_orders_grand_total"
             android:textColor="@color/purchase_order_fluent_text_secondary"
             android:textSize="@dimen/_9ssp"
@@ -161,13 +140,13 @@
             android:id="@+id/utilizationBadge"
             style="@style/Text.InternalApps.Caption"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/_28sdp"
-            android:layout_marginTop="@dimen/ds_space_12"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ds_space_10"
             android:fontFamily="sans-serif-medium"
             android:gravity="center"
             android:maxLines="1"
-            android:paddingStart="@dimen/ds_space_12"
-            android:paddingEnd="@dimen/ds_space_12"
+            tools:text="test"
+            android:padding="@dimen/ds_space_10"
             android:textSize="@dimen/_9ssp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/grandTotalValue" />

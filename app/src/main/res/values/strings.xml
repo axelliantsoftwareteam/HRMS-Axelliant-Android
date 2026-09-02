@@ -555,6 +555,8 @@
         <string name="purchase_orders_filter_open">Open</string>
         <string name="purchase_orders_filter_partially_utilized">Partially Utilized</string>
         <string name="purchase_orders_filter_fully_utilized">Fully Utilized</string>
+        <string name="purchase_orders_filter_pending">Pending</string>
+        <string name="purchase_orders_filter_chip_format">%1$s (%2$d)</string>
         <string name="purchase_orders_error_title">Something Went Wrong</string>
         <string name="purchase_orders_error_description">We couldn\'t load the purchase orders.\nPlease check your connection and try again.</string>
         <string name="purchase_orders_try_again">Try Again</string>
@@ -573,6 +575,12 @@
         <string name="purchase_orders_action_submit_po">Submit PO</string>
         <string name="purchase_orders_action_send_to_vendor">Send to Vendor</string>
         <string name="purchase_orders_action_history">History</string>
+        <string name="purchase_order_history_title">History</string>
+        <string name="purchase_order_history_empty">No history available</string>
+        <string name="purchase_order_history_latest_first">Showing latest history first</string>
+        <string name="purchase_order_history_comment_format">Comment: %1$s</string>
+        <string name="purchase_order_history_date_time_format">%1$s • %2$s</string>
+        <string name="purchase_order_history_no_comment">No comment added</string>
         <string name="po_details_title">PO Details</string>
         <string name="po_details_purchase_order_label">Purchase Order</string>
         <string name="po_details_total_amount">Total Amount</string>
@@ -1177,6 +1185,13 @@
         <string name="quote_workflow_status_skipped">Skipped</string>
         <string name="quote_workflow_status_waiting">Waiting</string>
         <string name="quote_workflow_waiting_for_action">Waiting for action</string>
+        <string name="quote_workflow_comments_optional">Comment is optional.</string>
+        <string name="quote_workflow_comments_hint">Add comment</string>
+        <string name="quote_workflow_optional">Optional</string>
+        <string name="quote_workflow_approve_title">Approve workflow</string>
+        <string name="quote_workflow_reject_title">Reject workflow</string>
+        <string name="quote_workflow_approve_action">Approve</string>
+        <string name="quote_workflow_reject_action">Reject</string>
         <string name="quote_workflow_rejected_by_format">Rejected by %1$s</string>
         <string name="quote_workflow_all_stages_completed">All stages completed</string>
         <string name="quote_workflow_all_stages_body">This quote has been fully approved.</string>

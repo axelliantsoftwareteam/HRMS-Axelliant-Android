@@ -23,6 +23,8 @@ object QuoteWorkflowGraphMapper {
                 QuoteWorkflowStepUiModel(
                     id = node.id.orEmpty(),
 
+                    workflowNodeId = node.nodeId.orEmpty(),
+
                     nodeType = node.nodeType.orEmpty(),
 
                     processNo = node.sequence ?: (index + 1),
@@ -64,6 +66,7 @@ object QuoteWorkflowGraphMapper {
             }
 
         return QuoteWorkflowUiModel(
+            instanceId = workflow.instanceId.orEmpty(),
             quoteNumber = quoteNumber,
             displayMode = displayMode,
             steps = steps

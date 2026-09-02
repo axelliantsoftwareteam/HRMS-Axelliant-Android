@@ -13,6 +13,7 @@ enum class QuoteWorkflowStepState {
     Skipped
 }
 data class QuoteWorkflowUiModel(
+    val instanceId: String,
     val quoteNumber: String,
     val displayMode: QuoteWorkflowDisplayMode,
     val steps: List<QuoteWorkflowStepUiModel>
@@ -20,6 +21,7 @@ data class QuoteWorkflowUiModel(
 
 data class QuoteWorkflowStepUiModel(
     val id: String = "",
+    val workflowNodeId: String = "",
     val nodeType: String = "",
     val processNo: Int,
     val roleName: String,
@@ -38,3 +40,7 @@ data class QuoteWorkflowStepUiModel(
     val hasComments: Boolean
         get() = comments.isNotBlank()
 }
+
+data class WorkflowDecisionResult(
+    val message: String
+)

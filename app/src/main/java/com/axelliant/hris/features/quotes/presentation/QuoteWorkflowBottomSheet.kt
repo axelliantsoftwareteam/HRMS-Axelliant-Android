@@ -1,12 +1,18 @@
 package com.axelliant.hris.features.quotes.presentation
 
+import android.app.AlertDialog
+import android.content.Context
+import android.text.InputType
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.FrameLayout
-import android.widget.Toast
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
@@ -19,14 +25,20 @@ import com.axelliant.hris.R
 import com.axelliant.hris.ui.designsystem.components.createAppBottomSheetDialog
 import com.axelliant.hris.databinding.BottomSheetQuoteWorkflowBinding
 import com.axelliant.hris.features.quotes.domain.model.QuoteWorkflowStepState
+import com.axelliant.hris.features.quotes.domain.model.QuoteWorkflowStepUiModel
 import com.axelliant.hris.features.quotes.domain.model.QuoteWorkflowUiModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 
 class QuoteWorkflowBottomSheet(
     private val fragment: Fragment,
     private val workflow: QuoteWorkflowUiModel,
-    private val titleResId: Int = R.string.quote_workflow_title
+    private val titleResId: Int = R.string.quote_workflow_title,
+    private val onApproveClick: (QuoteWorkflowStepUiModel, String) -> Unit = { _, _ -> },
+    private val onRejectClick: (QuoteWorkflowStepUiModel, String) -> Unit = { _, _ -> }
 ) {
 
     private var dialog: BottomSheetDialog? = null
@@ -39,8 +51,24 @@ class QuoteWorkflowBottomSheet(
 
         val stepAdapter = QuoteWorkflowStepAdapter(
             displayMode = workflow.displayMode,
-            onApproveClick = { showComingSoon() },
-            onRejectClick = { showComingSoon() }
+            onApproveClick = { step ->
+                showCommentDialog(
+                    step = step,
+                    title = fragment.getString(R.string.quote_workflow_approve_title),
+                    actionText = fragment.getString(R.string.quote_workflow_approve_action),
+                    isRejectAction = false,
+                    onSubmit = onApproveClick
+                )
+            },
+            onRejectClick = { step ->
+                showCommentDialog(
+                    step = step,
+                    title = fragment.getString(R.string.quote_workflow_reject_title),
+                    actionText = fragment.getString(R.string.quote_workflow_reject_action),
+                    isRejectAction = true,
+                    onSubmit = onRejectClick
+                )
+            }
         )
 
         binding.workflowTitleText.text = fragment.getString(titleResId)
@@ -96,8 +124,108 @@ class QuoteWorkflowBottomSheet(
         sheetDialog.show()
     }
 
-    private fun showComingSoon() {
-        Toast.makeText(fragment.requireContext(), R.string.coming_soon, Toast.LENGTH_SHORT).show()
+    private fun showCommentDialog(
+        step: QuoteWorkflowStepUiModel,
+        title: String,
+        actionText: String,
+        isRejectAction: Boolean,
+        onSubmit: (QuoteWorkflowStepUiModel, String) -> Unit
+    ) {
+        val context = fragment.requireContext()
+        val container = LinearLayout(context).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(
+                24.dp(context),
+                4.dp(context),
+                24.dp(context),
+                8.dp(context)
+            )
+        }
+
+        val description = TextView(context).apply {
+            text = context.getString(R.string.quote_workflow_comments_optional)
+            setTextAppearance(R.style.TextAppearance_Fluent2_Body)
+            setTextColor(ContextCompat.getColor(context, R.color.ds_text_secondary))
+            setPadding(0, 0, 0, 16.dp(context))
+        }
+
+        val inputLayout = TextInputLayout(
+            context,
+            null,
+            com.google.android.material.R.attr.textInputOutlinedStyle
+        ).apply {
+            hint = context.getString(R.string.quote_workflow_comments_hint)
+            boxBackgroundMode = TextInputLayout.BOX_BACKGROUND_OUTLINE
+            setBoxCornerRadii(
+                8.dp(context).toFloat(),
+                8.dp(context).toFloat(),
+                8.dp(context).toFloat(),
+                8.dp(context).toFloat()
+            )
+            helperText = context.getString(R.string.quote_workflow_optional)
+            counterMaxLength = 500
+            isCounterEnabled = true
+        }
+
+        val commentInput = TextInputEditText(context).apply {
+            minLines = 3
+            maxLines = 5
+            gravity = Gravity.TOP or Gravity.START
+            inputType = InputType.TYPE_CLASS_TEXT or
+                InputType.TYPE_TEXT_FLAG_CAP_SENTENCES or
+                InputType.TYPE_TEXT_FLAG_MULTI_LINE
+            setSingleLine(false)
+            setPadding(
+                16.dp(context),
+                14.dp(context),
+                16.dp(context),
+                14.dp(context)
+            )
+        }
+
+        inputLayout.addView(
+            commentInput,
+            LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+        )
+
+        container.addView(description)
+        container.addView(
+            inputLayout,
+            LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+        )
+
+        val actionDialog = MaterialAlertDialogBuilder(context)
+            .setTitle(title)
+            .setView(container)
+            .setNegativeButton(R.string.cancel, null)
+            .setPositiveButton(actionText, null)
+            .create()
+
+        actionDialog.setOnShowListener {
+            val positiveButton = actionDialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            val negativeButton = actionDialog.getButton(AlertDialog.BUTTON_NEGATIVE)
+
+            positiveButton.isAllCaps = false
+            negativeButton.isAllCaps = false
+
+            if (isRejectAction) {
+                positiveButton.setTextColor(ContextCompat.getColor(context, R.color.ds_error))
+            }
+
+            positiveButton.setOnClickListener {
+                onSubmit(step, commentInput.text?.toString().orEmpty().trim())
+                actionDialog.dismiss()
+            }
+        }
+
+        actionDialog.show()
+        actionDialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
     }
 
     private fun bindWorkflowSummary(binding: BottomSheetQuoteWorkflowBinding) {
@@ -129,15 +257,12 @@ class QuoteWorkflowBottomSheet(
             activeStep != null -> activeStep.processName
             else -> context.getString(R.string.quote_workflow_status_waiting)
         }
-        val progress = if (totalSteps > 0) {
-            ((completedCount.toFloat() / totalSteps.toFloat()) * 100).toInt()
-        } else {
-            0
-        }
-
-        binding.workflowProgressIndicator.progress = progress
-        binding.workflowProgressIndicator.setIndicatorColor(progressColor)
-        binding.workflowProgressText.text = "$completedCount/$totalSteps"
+        binding.workflowProgressIndicator.isVisible = false
+        binding.workflowProgressText.text = context.getString(
+            R.string.quote_workflow_completed_count_format,
+            completedCount,
+            totalSteps
+        )
         binding.workflowCompletedText.text = context.getString(
             R.string.quote_workflow_completed_count_format,
             completedCount,
@@ -163,6 +288,9 @@ class QuoteWorkflowBottomSheet(
         dialog?.dismiss()
         dialog = null
     }
+
+    private fun Int.dp(context: Context): Int =
+        (this * context.resources.displayMetrics.density).toInt()
 }
 
 
