@@ -1360,4 +1360,5 @@
             <item quantity="one">%1$d product</item>
             <item quantity="other">%1$d products</item>
         </plurals>
+
 </resources>

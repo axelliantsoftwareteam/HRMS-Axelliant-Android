@@ -31,6 +31,7 @@ class QuoteReportFragment : Fragment() {
     private val viewModel: QuoteReportViewModel by viewModels()
     private var _binding: FragmentQuoteReportBinding? = null
     private val binding get() = _binding!!
+
     private var currentLineItems: List<QuoteReportLineItemUiModel> = emptyList()
     private var showAllProducts = false
     private var selectedSection = ReportSection.Items

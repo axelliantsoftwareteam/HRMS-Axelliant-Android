@@ -5,4 +5,5 @@ plugins {
     alias(libs.plugins.navigationSafeArgs) apply false
     alias(libs.plugins.hiltAndroid) apply false
 
+
 }

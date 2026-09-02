@@ -7,6 +7,7 @@ plugins {
     id("kotlin-parcelize")
     id("org.jetbrains.kotlin.plugin.parcelize")
 
+
 }
 
 val androidKeystorePath = System.getenv("ANDROID_KEYSTORE_PATH")
