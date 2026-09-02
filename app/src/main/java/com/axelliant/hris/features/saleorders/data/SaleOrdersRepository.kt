@@ -2,16 +2,17 @@ package com.axelliant.hris.features.saleorders.data
 
 import com.axelliant.hris.core.network.ApiResult
 import com.axelliant.hris.core.network.SafeApiExecutor
-import com.axelliant.hris.features.profiles.data.local.ProfileSettingsStore
 import com.axelliant.hris.features.purchaseorders.domain.model.AddPoAddressUi
 import com.axelliant.hris.features.purchaseorders.domain.model.AddPoProductLineUi
 import com.axelliant.hris.features.purchaseorders.domain.model.AddPoSaleOrderInfoUi
 import com.axelliant.hris.features.purchaseorders.domain.model.SaleOrderDdlUi
 import com.axelliant.hris.features.quotes.data.QuoteApiResponseParser
-import com.axelliant.hris.features.quotes.data.QuoteWorkflowMapper
+import com.axelliant.hris.features.quotes.data.QuoteWorkflowGraphMapper
 import com.axelliant.hris.features.quotes.data.remote.WorkflowApiService
+import com.axelliant.hris.features.quotes.data.remote.dto.WorkflowDecisionRequest
 import com.axelliant.hris.features.quotes.domain.model.QuotePreviewUiModel
 import com.axelliant.hris.features.quotes.domain.model.QuoteWorkflowUiModel
+import com.axelliant.hris.features.quotes.domain.model.WorkflowDecisionResult
 import com.axelliant.hris.features.saleorders.data.remote.SaleOrderApiService
 import com.axelliant.hris.features.saleorders.data.remote.dto.GetSaleOrdersRequest
 import com.axelliant.hris.features.saleorders.data.remote.dto.SaleOrderAddressDto
@@ -36,14 +37,13 @@ import javax.inject.Singleton
 /**
  * Local mock data source for Sale Orders UI.
  * Replace [getSaleOrders] / [getSaleOrderDetail] / [getSaleOrderForEdit] bodies with Retrofit once endpoints are ready.
- * Workflow uses the shared [WorkflowApiService] GetApproveProcess API (same as Quotes).
+ * Workflow uses the shared [WorkflowApiService] graph instance API (same as Quotes).
  */
 @Singleton
 class SaleOrdersRepository @Inject constructor(
     private val saleOrderApiService: SaleOrderApiService,
     private val workflowApiService: WorkflowApiService,
-    private val safeApiExecutor: SafeApiExecutor,
-    private val profileSettingsStore: ProfileSettingsStore
+    private val safeApiExecutor: SafeApiExecutor
 ) {
 
     suspend fun getSaleOrders(
@@ -103,24 +103,23 @@ class SaleOrdersRepository @Inject constructor(
 
     /**
      * Loads approval workflow steps for a sale order via the same
-     * `Workflow/GetApproveProcess` endpoint used by Quotes.
+     * `Workflow/Graph/Instance` endpoint used by Quotes.
      */
     suspend fun getSaleOrderWorkflow(
         relationId: String,
         orderNumber: String
     ): ApiResult<QuoteWorkflowUiModel> {
         return when (val result = safeApiExecutor.execute {
-            workflowApiService.getApproveProcess(relationId)
+            workflowApiService.getWorkflowGraphInstance(relationId)
         }) {
             is ApiResult.Success -> {
                 val payload = result.data
-                val steps = QuoteApiResponseParser.unwrapSuccess(payload)
-                if (payload.data?.success == true && steps != null) {
+                val workflow = QuoteApiResponseParser.unwrapSuccess(payload)
+                if (payload.data?.success == true && workflow != null) {
                     ApiResult.Success(
-                        QuoteWorkflowMapper.toUiModel(
+                        QuoteWorkflowGraphMapper.toUiModel(
                             quoteNumber = orderNumber,
-                            steps = steps,
-                            settings = profileSettingsStore.getSettings()
+                            workflow = workflow
                         )
                     )
                 } else {
@@ -131,6 +130,46 @@ class SaleOrdersRepository @Inject constructor(
                 }
             }
             is ApiResult.Empty -> ApiResult.UnknownError("Unable to load sale order workflow.")
+            is ApiResult.HttpError -> ApiResult.HttpError(
+                code = result.code,
+                message = QuoteApiResponseParser.resolveErrorMessage(result),
+                errorBody = result.errorBody
+            )
+            is ApiResult.NetworkError -> result
+            is ApiResult.UnknownError -> result
+            ApiResult.Unauthorized -> ApiResult.Unauthorized
+        }
+    }
+
+    suspend fun decideWorkflowNode(
+        instanceId: String,
+        nodeId: String,
+        approved: Boolean,
+        comments: String
+    ): ApiResult<WorkflowDecisionResult> {
+        val action = if (approved) "approve" else "reject"
+        val request = WorkflowDecisionRequest(
+            instanceId = instanceId,
+            nodeId = nodeId,
+            approved = approved,
+            comments = comments,
+            idempotencyKey = "decide:$instanceId:$nodeId:$action:${System.currentTimeMillis()}"
+        )
+        return when (val result = safeApiExecutor.execute {
+            workflowApiService.decideWorkflowNode(request)
+        }) {
+            is ApiResult.Success -> {
+                val payload = result.data
+                val message = QuoteApiResponseParser.extractApiMessage(payload)
+                    ?: payload.data?.message
+                    ?: if (approved) "Workflow approved successfully." else "Workflow rejected successfully."
+                if (payload.data?.success == true) {
+                    ApiResult.Success(WorkflowDecisionResult(message))
+                } else {
+                    ApiResult.UnknownError(message)
+                }
+            }
+            is ApiResult.Empty -> ApiResult.UnknownError("Unable to update workflow.")
             is ApiResult.HttpError -> ApiResult.HttpError(
                 code = result.code,
                 message = QuoteApiResponseParser.resolveErrorMessage(result),
