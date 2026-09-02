@@ -19,7 +19,10 @@ object QuoteReportMapper {
         return QuoteReportUiModel(
             quoteId = response.id.orEmpty(),
             quoteNumber = response.quoteSerialId.valueOrEmptyFallback(response.quoteTitle),
+            quoteTitle = response.quoteTitle.valueOrDash(),
             createdDate = response.quoteCreatedOn.formatCreatedDate(response.quoteCreatedDate),
+            customerName = response.customerName.valueOrEmptyFallback(response.serviceType),
+            customerNumber = response.customerSerialId.valueOrDash(),
             customerTitle = buildCustomerTitle(response),
             companyAddress = response.axelliantAddress.valueOrDash(),
             companyPhone = response.axelliantPhone.valueOrDash(),
@@ -45,7 +48,8 @@ object QuoteReportMapper {
 
     private fun buildQuoteInformation(response: QuoteReportResponse): List<QuoteReportFieldUiModel> {
         return listOf(
-            QuoteReportFieldUiModel("Quote Title", response.quoteTitle.valueOrEmptyFallback(response.quoteSerialId)),
+            QuoteReportFieldUiModel("Quote #", response.quoteSerialId.valueOrDash()),
+            QuoteReportFieldUiModel("Quote Title", response.quoteTitle.valueOrDash()),
             QuoteReportFieldUiModel("Payment", response.paymentTerm.valueOrDash()),
             QuoteReportFieldUiModel("Shipping", response.shippingService.valueOrDash()),
             QuoteReportFieldUiModel("Weight", response.weight.formatNumber()),

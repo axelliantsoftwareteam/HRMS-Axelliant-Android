@@ -62,349 +62,471 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/ds_space_10"
-                app:cardBackgroundColor="@color/ds_primary"
                 app:cardElevation="@dimen/ds_card_elevation"
-                app:strokeColor="@color/ds_primary"
+                app:strokeColor="@color/ds_outline"
                 app:strokeWidth="@dimen/_1sdp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="@dimen/ds_space_14">
+                    android:padding="@dimen/ds_space_10">
 
                     <ImageView
                         android:id="@+id/companyLogo"
-                        android:layout_width="@dimen/login_logo_width"
-                        android:layout_height="@dimen/login_logo_height"
+                        android:layout_width="@dimen/_92sdp"
+                        android:layout_height="@dimen/_36sdp"
+                        android:layout_gravity="center_horizontal"
                         android:adjustViewBounds="true"
-                        android:background="@drawable/bg_quote_report_logo_plate"
                         android:contentDescription="@string/app_name"
-                        android:padding="@dimen/ds_space_6"
-                        android:scaleType="fitStart"
+                        android:scaleType="fitCenter"
                         android:src="@drawable/ic_applogo" />
 
-                    <com.axelliant.hris.ui.designsystem.components.AppTextView
-                        android:id="@+id/companyAddressText"
-                        style="@style/Text.Fluent2.Caption.Inverse"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/ds_space_8"
-                        tools:text="21250 Hawthorne Blvd. Suite 500, Torrance, CA 90503" />
+                        android:baselineAligned="false"
+                        android:orientation="horizontal">
 
-                    <com.axelliant.hris.ui.designsystem.components.AppTextView
-                        android:id="@+id/companyPhoneText"
-                        style="@style/Text.Fluent2.Caption.Inverse"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/ds_space_2"
-                        tools:text="+1-424-535-1100" />
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/_1sdp"
-                        android:layout_marginTop="@dimen/ds_space_12"
-                        android:layout_marginBottom="@dimen/ds_space_12"
-                        android:background="@color/ds_neutral_white" />
+                            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                                style="@style/Text.Fluent2.Caption.Muted"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/quote_report_quote_title" />
 
-                    <com.axelliant.hris.ui.designsystem.components.AppTextView
-                        android:id="@+id/quoteNumberText"
-                        style="@style/Text.Fluent2.Title.Inverse.Strong"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        tools:text="Q-00000024" />
+                            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                                android:id="@+id/quoteTitleText"
+                                style="@style/Text.Fluent2.Body.Primary.Strong"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:maxLines="2"
+                                tools:text="Customer Testing Account" />
+                        </LinearLayout>
 
-                    <com.axelliant.hris.ui.designsystem.components.AppTextView
-                        android:id="@+id/createdDateText"
-                        style="@style/Text.Fluent2.Body.Inverse"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/ds_space_4"
-                        tools:text="Aug 31, 2026, 2:52 PM" />
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/ds_space_10"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
 
-                    <com.axelliant.hris.ui.designsystem.components.AppTextView
-                        android:id="@+id/customerTitleText"
-                        style="@style/Text.Fluent2.Subheading.Inverse.Strong"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/ds_space_12"
-                        tools:text="Testing Account CUS-00000042" />
+                            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                                style="@style/Text.Fluent2.Caption.Muted"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="start"
+                                android:text="@string/quote_report_quote_number" />
+
+                            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                                android:id="@+id/quoteNumberText"
+                                style="@style/Text.Fluent2.Body.Primary.Strong"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:gravity="start"
+                                android:maxLines="1"
+                                tools:text="Q-00000024" />
+                        </LinearLayout>
+                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/ds_space_12"
-                        android:background="@drawable/bg_quote_report_logo_plate"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:padding="@dimen/ds_space_10">
+                        android:layout_marginTop="@dimen/ds_space_8"
+                        android:baselineAligned="false"
+                        android:orientation="horizontal">
 
-                        <com.axelliant.hris.ui.designsystem.components.AppTextView
-                            style="@style/Text.Fluent2.Caption.Muted"
+                        <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="@string/quote_report_grand_total" />
+                            android:orientation="vertical">
 
-                        <com.axelliant.hris.ui.designsystem.components.AppTextView
-                            android:id="@+id/summaryGrandTotalText"
-                            style="@style/Text.Fluent2.Title.Primary.Strong"
-                            android:layout_width="wrap_content"
+                            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                                style="@style/Text.Fluent2.Caption.Muted"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/quote_report_date" />
+
+                            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                                android:id="@+id/createdDateText"
+                                style="@style/Text.Fluent2.Body.Primary.Strong"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:maxLines="1"
+                                tools:text="31/08/2026" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            tools:text="$2420.00" />
+                            android:layout_marginStart="@dimen/ds_space_10"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                                style="@style/Text.Fluent2.Caption.Muted"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="start"
+                                android:text="@string/quote_report_created_by" />
+
+                            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                                android:id="@+id/createdBySummaryText"
+                                style="@style/Text.Fluent2.Body.Primary.Strong"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:gravity="start"
+                                android:maxLines="1"
+                                tools:text="Adnan Maqbool" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/ds_space_8"
+                        android:baselineAligned="false"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                                style="@style/Text.Fluent2.Caption.Muted"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/quote_report_customer_name" />
+
+                            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                                android:id="@+id/customerNameText"
+                                style="@style/Text.Fluent2.Body.Primary.Strong"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:maxLines="1"
+                                tools:text="Credit Customer" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/ds_space_10"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                                style="@style/Text.Fluent2.Caption.Muted"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="start"
+                                android:text="@string/quote_report_customer_number" />
+
+                            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                                android:id="@+id/customerNumberText"
+                                style="@style/Text.Fluent2.Body.Primary.Strong"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:gravity="start"
+                                android:maxLines="1"
+                                tools:text="CUS-00000043" />
+                        </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
             </com.axelliant.hris.ui.designsystem.components.AppCardView>
 
-            <com.axelliant.hris.ui.designsystem.components.AppCardView
-                style="@style/Widget.Fluent2.Card"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/ds_space_10"
-                app:cardElevation="@dimen/ds_card_elevation"
-                app:strokeColor="@color/ds_outline"
-                app:strokeWidth="@dimen/_1sdp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="@dimen/ds_space_14">
-
-                    <com.axelliant.hris.ui.designsystem.components.AppTextView
-                        style="@style/Text.Fluent2.Subheading.Primary.Strong"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/quote_report_quote_information" />
-
-                    <LinearLayout
-                        android:id="@+id/quoteInfoContainer"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/ds_space_12"
-                        android:orientation="vertical" />
-
-                    <com.axelliant.hris.ui.designsystem.components.AppTextView
-                        style="@style/Text.Fluent2.Subheading.Primary.Strong"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/ds_space_4"
-                        android:text="@string/quote_report_contact_information" />
-
-                    <LinearLayout
-                        android:id="@+id/contactInfoContainer"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/ds_space_12"
-                        android:orientation="vertical" />
-                </LinearLayout>
-            </com.axelliant.hris.ui.designsystem.components.AppCardView>
-
-            <com.axelliant.hris.ui.designsystem.components.AppCardView
-                style="@style/Widget.Fluent2.Card"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/ds_space_10"
-                app:cardElevation="@dimen/ds_card_elevation"
-                app:strokeColor="@color/ds_outline"
-                app:strokeWidth="@dimen/_1sdp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="@dimen/ds_space_14">
-
-                    <com.axelliant.hris.ui.designsystem.components.AppTextView
-                        style="@style/Text.Fluent2.Subheading.Primary.Strong"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/quote_report_addresses" />
-
-                    <com.axelliant.hris.ui.designsystem.components.AppTextView
-                        style="@style/Text.Fluent2.Caption.Muted"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/ds_space_12"
-                        android:text="@string/quote_report_billing_address" />
-
-                    <com.axelliant.hris.ui.designsystem.components.AppTextView
-                        android:id="@+id/billingAddressText"
-                        style="@style/Text.Fluent2.Body"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/ds_space_2"
-                        tools:text="Testing Account, east" />
-
-                    <com.axelliant.hris.ui.designsystem.components.AppTextView
-                        style="@style/Text.Fluent2.Caption.Muted"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/ds_space_12"
-                        android:text="@string/quote_report_shipping_address" />
-
-                    <com.axelliant.hris.ui.designsystem.components.AppTextView
-                        android:id="@+id/shippingAddressText"
-                        style="@style/Text.Fluent2.Body"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/ds_space_2"
-                        tools:text="Testing Account, west" />
-                </LinearLayout>
-            </com.axelliant.hris.ui.designsystem.components.AppCardView>
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/ds_space_8"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:orientation="vertical">
 
-                    <com.axelliant.hris.ui.designsystem.components.AppTextView
-                        style="@style/Text.Fluent2.Subheading.Primary.Strong"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/quote_report_hardware_details" />
+                <LinearLayout
+                    android:id="@+id/reportTabs"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_42sdp"
+                    android:layout_marginBottom="@dimen/ds_space_10"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
-                    <com.axelliant.hris.ui.designsystem.components.AppTextView
-                        android:id="@+id/productsCountText"
-                        style="@style/Text.Fluent2.Caption.Muted"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        tools:text="3 products" />
+                    <com.axelliant.hris.ui.designsystem.components.AppButtonView
+                        android:id="@+id/itemsTabButton"
+                        style="@style/Widget.Fluent2.Button.Secondary"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:minHeight="0dp"
+                        android:text="@string/quote_report_items_tab" />
+
+                    <com.axelliant.hris.ui.designsystem.components.AppButtonView
+                        android:id="@+id/infoTabButton"
+                        style="@style/Widget.Fluent2.Button.Secondary"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:minHeight="0dp"
+                        android:text="@string/quote_report_info_tab" />
                 </LinearLayout>
 
-                <com.axelliant.hris.ui.designsystem.components.AppButtonView
-                    android:id="@+id/productsToggleButton"
-                    style="@style/Widget.Fluent2.Button.Text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/_32sdp"
-                    android:minHeight="0dp"
-                    android:text="@string/quote_report_show_all_products"
-                    android:visibility="gone"
-                    tools:visibility="visible" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/lineItemsContainer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" />
-
-            <com.axelliant.hris.ui.designsystem.components.AppTextView
-                android:id="@+id/emptyLineItemsText"
-                style="@style/Text.Fluent2.Body.Secondary"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="@dimen/ds_space_16"
-                android:text="@string/quote_report_no_line_items"
-                android:visibility="gone" />
-
-            <com.axelliant.hris.ui.designsystem.components.AppCardView
-                style="@style/Widget.Fluent2.Card"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/ds_space_2"
-                android:layout_marginBottom="@dimen/ds_space_10"
-                app:cardElevation="@dimen/ds_card_elevation"
-                app:strokeColor="@color/ds_outline"
-                app:strokeWidth="@dimen/_1sdp">
-
                 <LinearLayout
+                    android:id="@+id/itemsSection"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="@dimen/ds_space_14">
-
-                    <com.axelliant.hris.ui.designsystem.components.AppTextView
-                        style="@style/Text.Fluent2.Subheading.Primary.Strong"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/quote_report_totals" />
-
-                    <LinearLayout
-                        android:id="@+id/totalsContainer"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/ds_space_12"
-                        android:orientation="vertical" />
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/_1sdp"
-                        android:layout_marginTop="@dimen/ds_space_2"
-                        android:layout_marginBottom="@dimen/ds_space_10"
-                        android:background="@color/ds_outline" />
+                    android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/ds_space_8"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
 
-                        <com.axelliant.hris.ui.designsystem.components.AppTextView
-                            style="@style/Text.Fluent2.Subheading.Primary.Strong"
+                        <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="@string/quote_report_grand_total" />
+                            android:orientation="vertical">
 
-                        <com.axelliant.hris.ui.designsystem.components.AppTextView
-                            android:id="@+id/grandTotalValueText"
-                            style="@style/Text.Fluent2.Subheading.Primary.Strong"
+                            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                                style="@style/TextAppearance.Fluent2.Title"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/quote_report_hardware_details" />
+
+                            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                                android:id="@+id/productsCountText"
+                                style="@style/Text.Fluent2.Caption.Muted"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                tools:text="3 products" />
+                        </LinearLayout>
+
+                        <com.axelliant.hris.ui.designsystem.components.AppButtonView
+                            android:id="@+id/productsToggleButton"
+                            style="@style/Widget.Fluent2.Button.Text"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="end"
-                            tools:text="$2420.00" />
+                            android:layout_height="@dimen/_32sdp"
+                            android:minHeight="0dp"
+                            android:text="@string/quote_report_show_all_products"
+                            android:visibility="gone"
+                            tools:visibility="visible" />
                     </LinearLayout>
-                </LinearLayout>
-            </com.axelliant.hris.ui.designsystem.components.AppCardView>
-
-            <com.axelliant.hris.ui.designsystem.components.AppCardView
-                style="@style/Widget.Fluent2.Card"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/ds_space_10"
-                app:cardElevation="@dimen/ds_card_elevation"
-                app:strokeColor="@color/ds_outline"
-                app:strokeWidth="@dimen/_1sdp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="@dimen/ds_space_14">
-
-                    <com.axelliant.hris.ui.designsystem.components.AppTextView
-                        style="@style/Text.Fluent2.Subheading.Primary.Strong"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/quote_report_customer_acceptance" />
 
                     <LinearLayout
-                        android:id="@+id/acceptanceContainer"
+                        android:id="@+id/lineItemsContainer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/ds_space_12"
                         android:orientation="vertical" />
-                </LinearLayout>
-            </com.axelliant.hris.ui.designsystem.components.AppCardView>
 
-            <com.axelliant.hris.ui.designsystem.components.AppTextView
-                android:id="@+id/footerText"
-                style="@style/Text.Fluent2.Caption.Muted"
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
+                        android:id="@+id/emptyLineItemsText"
+                        style="@style/Text.Fluent2.Body.Secondary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:padding="@dimen/ds_space_16"
+                        android:text="@string/quote_report_no_line_items"
+                        android:visibility="gone" />
+                </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/infoSection"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="@dimen/ds_space_10"
-                tools:text="Axelliant | Where Passion Drives Innovation" />
+                android:orientation="vertical"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <com.axelliant.hris.ui.designsystem.components.AppCardView
+                    style="@style/Widget.Fluent2.Card"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/ds_space_10"
+                    app:cardElevation="@dimen/ds_card_elevation"
+                    app:strokeColor="@color/ds_outline"
+                    app:strokeWidth="@dimen/_1sdp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="@dimen/ds_space_14">
+
+                        <com.axelliant.hris.ui.designsystem.components.AppTextView
+                            style="@style/Text.Fluent2.Subheading.Primary.Strong"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/quote_report_quote_information" />
+
+                        <LinearLayout
+                            android:id="@+id/quoteInfoContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/ds_space_12"
+                            android:orientation="vertical" />
+                    </LinearLayout>
+                </com.axelliant.hris.ui.designsystem.components.AppCardView>
+
+                <com.axelliant.hris.ui.designsystem.components.AppCardView
+                    style="@style/Widget.Fluent2.Card"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/ds_space_10"
+                    app:cardElevation="@dimen/ds_card_elevation"
+                    app:strokeColor="@color/ds_outline"
+                    app:strokeWidth="@dimen/_1sdp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="@dimen/ds_space_14">
+
+                        <com.axelliant.hris.ui.designsystem.components.AppTextView
+                            style="@style/Text.Fluent2.Subheading.Primary.Strong"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/quote_report_contact_information" />
+
+                        <LinearLayout
+                            android:id="@+id/contactInfoContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/ds_space_12"
+                            android:orientation="vertical" />
+                    </LinearLayout>
+                </com.axelliant.hris.ui.designsystem.components.AppCardView>
+
+                <com.axelliant.hris.ui.designsystem.components.AppCardView
+                    style="@style/Widget.Fluent2.Card"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/ds_space_10"
+                    app:cardElevation="@dimen/ds_card_elevation"
+                    app:strokeColor="@color/ds_outline"
+                    app:strokeWidth="@dimen/_1sdp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="@dimen/ds_space_14">
+
+                        <com.axelliant.hris.ui.designsystem.components.AppTextView
+                            style="@style/Text.Fluent2.Subheading.Primary.Strong"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/quote_report_addresses" />
+
+                        <com.axelliant.hris.ui.designsystem.components.AppTextView
+                            style="@style/Text.Fluent2.Caption.Muted"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/ds_space_12"
+                            android:text="@string/quote_report_billing_address" />
+
+                        <com.axelliant.hris.ui.designsystem.components.AppTextView
+                            android:id="@+id/billingAddressText"
+                            style="@style/Text.Fluent2.Body"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/ds_space_2"
+                            tools:text="1500 Marilla St., Dallas, TX 75201" />
+
+                        <com.axelliant.hris.ui.designsystem.components.AppTextView
+                            style="@style/Text.Fluent2.Caption.Muted"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/ds_space_12"
+                            android:text="@string/quote_report_shipping_address" />
+
+                        <com.axelliant.hris.ui.designsystem.components.AppTextView
+                            android:id="@+id/shippingAddressText"
+                            style="@style/Text.Fluent2.Body"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/ds_space_2"
+                            tools:text="200 N Spring St, Los Angeles, CA 90012" />
+                    </LinearLayout>
+                </com.axelliant.hris.ui.designsystem.components.AppCardView>
+
+                <com.axelliant.hris.ui.designsystem.components.AppCardView
+                    style="@style/Widget.Fluent2.Card"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/ds_space_10"
+                    app:cardElevation="@dimen/ds_card_elevation"
+                    app:strokeColor="@color/ds_outline"
+                    app:strokeWidth="@dimen/_1sdp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="@dimen/ds_space_14">
+
+                        <com.axelliant.hris.ui.designsystem.components.AppTextView
+                            style="@style/Text.Fluent2.Subheading.Primary.Strong"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/quote_report_customer_acceptance" />
+
+                        <LinearLayout
+                            android:id="@+id/acceptanceContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/ds_space_12"
+                            android:orientation="vertical" />
+                    </LinearLayout>
+                </com.axelliant.hris.ui.designsystem.components.AppCardView>
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                    android:id="@+id/companyAddressText"
+                    style="@style/Text.Fluent2.Caption.Muted"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="@dimen/ds_space_4"
+                    tools:text="21250 Hawthorne Blvd. Suite 500, Torrance, CA 90503" />
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                    android:id="@+id/companyPhoneText"
+                    style="@style/Text.Fluent2.Caption.Muted"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="@dimen/ds_space_4"
+                    tools:text="+1-424-535-1100" />
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                    android:id="@+id/footerText"
+                    style="@style/Text.Fluent2.Caption.Muted"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="@dimen/ds_space_10"
+                    tools:text="Axelliant | Where Passion Drives Innovation" />
+            </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
@@ -425,28 +547,73 @@
         tools:visibility="visible">
 
         <LinearLayout
+            android:id="@+id/stickyTotalContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingStart="@dimen/ds_space_12"
-            android:paddingTop="@dimen/ds_space_8"
-            android:paddingEnd="@dimen/ds_space_12"
-            android:paddingBottom="@dimen/ds_space_8">
+            android:orientation="vertical">
 
-            <com.axelliant.hris.ui.designsystem.components.AppTextView
-                style="@style/Text.Fluent2.Caption.Primary.Strong"
-                android:layout_width="0dp"
+            <LinearLayout
+                android:id="@+id/stickyTotalHeader"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/quote_report_grand_total" />
+                android:background="@color/ds_primary"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="@dimen/ds_space_12"
+                android:paddingTop="@dimen/ds_space_8"
+                android:paddingEnd="@dimen/ds_space_12"
+                android:paddingBottom="@dimen/ds_space_8">
 
-            <com.axelliant.hris.ui.designsystem.components.AppTextView
-                android:id="@+id/stickyGrandTotalText"
-                style="@style/Text.Fluent2.Subheading.Primary.Strong"
-                android:layout_width="wrap_content"
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                    style="@style/Text.Fluent2.Caption.Inverse.Strong"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/quote_report_grand_total" />
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                    android:id="@+id/stickyGrandTotalText"
+                    style="@style/Text.Fluent2.Subheading.Inverse.Strong"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="$2420.00" />
+
+                <com.axelliant.hris.ui.designsystem.components.AppButtonView
+                    android:id="@+id/totalsChevronButton"
+                    style="@style/Widget.Fluent2.Button.Icon"
+                    android:layout_width="@dimen/_32sdp"
+                    android:layout_height="@dimen/_32sdp"
+                    android:layout_marginStart="@dimen/ds_space_10"
+                    android:contentDescription="@string/quote_report_expand_total"
+                    android:minHeight="0dp"
+                    android:minWidth="0dp"
+                    android:text=""
+                    app:icon="@drawable/ic_chevron_down"
+                    app:iconSize="@dimen/ds_icon_button_icon_size"
+                    app:iconTint="@color/ds_neutral_white"
+                    app:noBackground="true" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/stickyTotalsDetails"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                tools:text="$2420.00" />
+                android:orientation="vertical"
+                android:paddingStart="@dimen/ds_space_12"
+                android:paddingTop="@dimen/ds_space_8"
+                android:paddingEnd="@dimen/ds_space_12"
+                android:paddingBottom="@dimen/ds_space_8"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <LinearLayout
+                    android:id="@+id/totalsContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+            </LinearLayout>
         </LinearLayout>
     </com.axelliant.hris.ui.designsystem.components.AppCardView>
 

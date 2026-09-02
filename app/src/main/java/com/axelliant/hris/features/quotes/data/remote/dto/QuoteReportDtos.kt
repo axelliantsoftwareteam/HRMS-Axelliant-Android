@@ -29,7 +29,7 @@ data class QuoteReportResponse(
     val billingAddress: QuoteAddressDto? = null,
     @SerializedName("shippingAddress")
     val shippingAddress: QuoteAddressDto? = null,
-    @SerializedName("quoteTile")
+    @SerializedName(value = "quoteTitle", alternate = ["quoteTile", "quoteName", "quotationTitle"])
     val quoteTitle: String? = null,
     @SerializedName("paymentTerm")
     val paymentTerm: String? = null,
