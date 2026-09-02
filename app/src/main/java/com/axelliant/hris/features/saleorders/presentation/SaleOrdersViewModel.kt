@@ -12,11 +12,13 @@ import com.axelliant.hris.features.saleorders.domain.model.SaleOrderModel
 import com.axelliant.hris.features.saleorders.domain.model.SaleOrderStatusFilterType
 import com.axelliant.hris.features.saleorders.domain.model.SaleOrdersEmptyStateUi
 import com.axelliant.hris.features.quotes.domain.model.QuoteWorkflowUiModel
+import com.axelliant.hris.features.quotes.domain.model.WorkflowDecisionResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -28,7 +30,8 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 class SaleOrdersViewModel @Inject constructor(
     private val repository: SaleOrdersRepository
-) : ViewModel() {
+) : ViewModel()
+{
 
     private val _ordersState = MutableStateFlow<UiState<SaleOrderListUiModel>>(UiState.Idle)
     val ordersState = _ordersState.asStateFlow()
@@ -45,6 +48,12 @@ class SaleOrdersViewModel @Inject constructor(
     private var nextStart = 0
     private var isPageLoading = false
     private var loadJob: Job? = null
+
+    private val _workflowDecisionState =
+        MutableStateFlow<UiState<WorkflowDecisionResult>>(UiState.Idle)
+
+    val workflowDecisionState: StateFlow<UiState<WorkflowDecisionResult>> =
+        _workflowDecisionState
 
     init {
         observeSearchQuery()
@@ -193,6 +202,54 @@ class SaleOrdersViewModel @Inject constructor(
         )
     }
 
+    fun decideWorkflowNode(
+        instanceId: String,
+        nodeId: String,
+        approved: Boolean,
+        comments: String
+    ) {
+        if (_workflowDecisionState.value is UiState.Loading) return
+
+        viewModelScope.launch {
+            _workflowDecisionState.value = UiState.Loading
+
+            _workflowDecisionState.value = when (
+                val result = repository.decideWorkflowNode(
+                    instanceId = instanceId,
+                    nodeId = nodeId,
+                    approved = approved,
+                    comments = comments
+                )
+            ) {
+                is ApiResult.Success -> {
+                    UiState.Success(result.data)
+                }
+
+                ApiResult.Empty -> {
+                    UiState.Error(
+                        message = "Unable to update workflow."
+                    )
+                }
+
+                is ApiResult.HttpError -> {
+                    UiState.Error(result.message)
+                }
+
+                is ApiResult.NetworkError -> {
+                    UiState.Error(result.message)
+                }
+
+                is ApiResult.UnknownError -> {
+                    UiState.Error(result.message)
+                }
+
+                ApiResult.Unauthorized -> {
+                    UiState.Unauthorized
+                }
+            }
+        }
+    }
+
     fun loadSaleOrderWorkflow(order: SaleOrderModel) {
         if (_workflowState.value is UiState.Loading) return
 
@@ -216,6 +273,9 @@ class SaleOrdersViewModel @Inject constructor(
 
     fun resetWorkflowState() {
         _workflowState.value = UiState.Idle
+    }
+    fun resetWorkflowDecisionState() {
+        _workflowDecisionState.value = UiState.Idle
     }
 
     companion object {

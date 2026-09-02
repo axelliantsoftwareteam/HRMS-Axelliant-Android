@@ -46,6 +46,8 @@ class SaleOrdersFragment : Fragment() {
 
     private var isSearchVisible = false
 
+    private var workflowBottomSheet: QuoteWorkflowBottomSheet? = null
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -63,6 +65,7 @@ class SaleOrdersFragment : Fragment() {
         setupPagination()
         observeOrders()
         observeSaleOrderWorkflow()
+        observeSaleOrderDecisionWorkflow()
         viewModel.loadOrdersIfNeeded()
     }
 
@@ -71,7 +74,8 @@ class SaleOrdersFragment : Fragment() {
         binding.searchInputLayout.isVisible = false
         binding.searchInputLayout.alpha = 0f
         binding.appTopBar.setSearchIconResource(R.drawable.ia_ic_search)
-        binding.appTopBar.searchButton.contentDescription = getString(R.string.sale_orders_search_open)
+        binding.appTopBar.searchButton.contentDescription =
+            getString(R.string.sale_orders_search_open)
     }
 
     private fun setupAdapters() {
@@ -81,7 +85,8 @@ class SaleOrdersFragment : Fragment() {
                 R.id.action_sale_order_edit -> navigateToEditSaleOrder(order)
                 R.id.action_sale_order_submit_workflow -> openSaleOrderWorkflow(order)
                 R.id.action_sale_order_show_report -> {
-                    Toast.makeText(requireContext(), R.string.coming_soon, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), R.string.coming_soon, Toast.LENGTH_SHORT)
+                        .show()
                 }
             }
         }
@@ -101,13 +106,15 @@ class SaleOrdersFragment : Fragment() {
             viewModel.onFilterChipSelected(chip)
         }
         binding.statusFilterRecycler.apply {
-            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            layoutManager =
+                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             adapter = filterChipAdapter
         }
     }
 
     private fun setupPagination() {
-        binding.saleOrdersRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        binding.saleOrdersRecyclerView.addOnScrollListener(object :
+            RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 if (dy <= 0) return
                 val layoutManager = recyclerView.layoutManager as? LinearLayoutManager ?: return
@@ -130,7 +137,9 @@ class SaleOrdersFragment : Fragment() {
         }
 
         binding.searchEditText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) =
+                Unit
+
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
             override fun afterTextChanged(editable: Editable?) {
                 if (!isSearchVisible) return
@@ -140,9 +149,9 @@ class SaleOrdersFragment : Fragment() {
 
         binding.searchEditText.setOnEditorActionListener { _, actionId, event ->
             val isSubmitAction = actionId == EditorInfo.IME_ACTION_SEARCH ||
-                actionId == EditorInfo.IME_ACTION_DONE
+                    actionId == EditorInfo.IME_ACTION_DONE
             val isEnterKey = event?.keyCode == KeyEvent.KEYCODE_ENTER &&
-                event.action == KeyEvent.ACTION_UP
+                    event.action == KeyEvent.ACTION_UP
             if (isSubmitAction || isEnterKey) {
                 submitSearch()
                 true
@@ -163,7 +172,8 @@ class SaleOrdersFragment : Fragment() {
     private fun openSearchField() {
         isSearchVisible = true
         binding.appTopBar.setSearchIconResource(R.drawable.ia_ic_filter_close)
-        binding.appTopBar.searchButton.contentDescription = getString(R.string.sale_orders_search_close)
+        binding.appTopBar.searchButton.contentDescription =
+            getString(R.string.sale_orders_search_close)
 
         binding.searchInputLayout.isVisible = true
         binding.searchInputLayout.alpha = 0f
@@ -182,7 +192,8 @@ class SaleOrdersFragment : Fragment() {
     private fun closeSearchField(clearText: Boolean, reload: Boolean) {
         isSearchVisible = false
         binding.appTopBar.setSearchIconResource(R.drawable.ia_ic_search)
-        binding.appTopBar.searchButton.contentDescription = getString(R.string.sale_orders_search_open)
+        binding.appTopBar.searchButton.contentDescription =
+            getString(R.string.sale_orders_search_open)
 
         binding.searchEditText.clearFocus()
         binding.searchEditText.hideKeyboard()
@@ -251,7 +262,8 @@ class SaleOrdersFragment : Fragment() {
         shimmerHelper.clear(binding.shimmerContainer)
         binding.shimmerContainer.isVisible = false
         binding.errorStateText.isVisible = false
-        binding.totalEntriesText.text = getString(R.string.sale_orders_total_entries, data.totalCount)
+        binding.totalEntriesText.text =
+            getString(R.string.sale_orders_total_entries, data.totalCount)
 
         filterChipAdapter.setSelectedFilterId(viewModel.getSelectedFilterId())
         filterChipAdapter.submitList(data.filterChips)
@@ -332,13 +344,36 @@ class SaleOrdersFragment : Fragment() {
                     when (state) {
                         UiState.Loading -> Unit
                         is UiState.Success -> {
-                            QuoteWorkflowBottomSheet(
+                            workflowBottomSheet?.dismiss()
+
+                            workflowBottomSheet = QuoteWorkflowBottomSheet(
                                 fragment = this@SaleOrdersFragment,
                                 workflow = state.data,
-                                titleResId = R.string.sale_order_workflow_title
-                            ).show()
+                                titleResId = R.string.sale_order_workflow_title,
+                                onApproveClick = { step, comments ->
+
+                                    viewModel.decideWorkflowNode(
+                                        instanceId = state.data.instanceId,
+                                        nodeId = step.workflowNodeId,
+                                        approved = true,
+                                        comments = comments
+                                    )
+                                },
+
+                                onRejectClick = { step, comments ->
+
+                                    viewModel.decideWorkflowNode(
+                                        instanceId = state.data.instanceId,
+                                        nodeId = step.workflowNodeId,
+                                        approved = false,
+                                        comments = comments
+                                    )
+                                }
+                            )
+                            workflowBottomSheet?.show()
                             viewModel.resetWorkflowState()
                         }
+
                         is UiState.Error -> {
                             Toast.makeText(
                                 requireContext(),
@@ -349,6 +384,7 @@ class SaleOrdersFragment : Fragment() {
                             ).show()
                             viewModel.resetWorkflowState()
                         }
+
                         UiState.Unauthorized -> {
                             Toast.makeText(
                                 requireContext(),
@@ -357,6 +393,55 @@ class SaleOrdersFragment : Fragment() {
                             ).show()
                             viewModel.resetWorkflowState()
                         }
+
+                        else -> Unit
+                    }
+                }
+            }
+        }
+    }
+
+    private fun observeSaleOrderDecisionWorkflow() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(
+                Lifecycle.State.STARTED
+            ) {
+                viewModel.workflowDecisionState.collect { state ->
+
+                    when (state) {
+
+                        UiState.Loading -> Unit
+
+                        is UiState.Success -> {
+                            Toast.makeText(
+                                requireContext(),
+                                state.data.message,
+                                Toast.LENGTH_SHORT
+                            ).show()
+
+                            workflowBottomSheet?.dismiss()
+                            workflowBottomSheet = null
+
+                            viewModel.resetWorkflowDecisionState()
+
+                            viewModel.loadOrders()
+                        }
+
+                        is UiState.Error -> {
+                            Toast.makeText(
+                                requireContext(),
+                                state.message,
+                                Toast.LENGTH_SHORT
+                            ).show()
+
+                            viewModel.resetWorkflowDecisionState()
+
+                        }
+
+                        UiState.Unauthorized -> {
+                            viewModel.resetWorkflowDecisionState()
+                        }
+
                         else -> Unit
                     }
                 }
