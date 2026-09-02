@@ -41,8 +41,12 @@ data class PurchaseOrderListItemDto(
     val utilizingStatus: String? = null,
     @SerializedName("approvalStatus")
     val approvalStatus: Int? = null,
+    @SerializedName("warehouseStatus")
+    val warehouseStatus: Int? = null,
     @SerializedName("revision")
     val revision: Int? = null,
+    @SerializedName("isManual")
+    val isManual: Boolean? = null,
     @SerializedName("totalCount")
     val totalCount: Int? = null,
     @SerializedName("serialNo")
