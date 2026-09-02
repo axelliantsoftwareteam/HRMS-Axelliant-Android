@@ -6,8 +6,11 @@ import com.axelliant.hris.R
 import com.axelliant.hris.core.network.ApiResult
 import com.axelliant.hris.core.ui.UiState
 import com.axelliant.hris.features.purchaseorders.data.PurchaseOrdersRepository
+import com.axelliant.hris.features.purchaseorders.domain.model.PurchaseOrderHistoryItemUiModel
 import com.axelliant.hris.features.purchaseorders.domain.model.PurchaseOrderListUiModel
 import com.axelliant.hris.features.purchaseorders.domain.model.PurchaseOrderModel
+import com.axelliant.hris.features.purchaseorders.domain.model.PurchaseOrderUtilization
+import com.axelliant.hris.features.purchaseorders.domain.model.PurchaseOrderUtilizationFilterChip
 import com.axelliant.hris.features.purchaseorders.domain.model.PurchaseOrdersEmptyStateUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -30,6 +33,10 @@ class PurchaseOrdersViewModel @Inject constructor(
     private val _ordersState = MutableStateFlow<UiState<PurchaseOrderListUiModel>>(UiState.Idle)
     val ordersState = _ordersState.asStateFlow()
 
+    private val _historyState =
+        MutableStateFlow<UiState<List<PurchaseOrderHistoryItemUiModel>>>(UiState.Idle)
+    val historyState = _historyState.asStateFlow()
+
     private val searchInput = MutableStateFlow("")
     private var activeSearchQuery = ""
     private val loadedOrders = mutableListOf<PurchaseOrderModel>()
@@ -37,6 +44,7 @@ class PurchaseOrdersViewModel @Inject constructor(
     private var nextStart = 0
     private var isPageLoading = false
     private var loadJob: Job? = null
+    private var selectedUtilization: PurchaseOrderUtilization? = null
 
     init {
         observeSearchQuery()
@@ -73,15 +81,44 @@ class PurchaseOrdersViewModel @Inject constructor(
         searchInput.value = ""
     }
 
+    fun selectUtilizationFilter(chip: PurchaseOrderUtilizationFilterChip) {
+        if (selectedUtilization == chip.utilization) return
+        selectedUtilization = chip.utilization
+        _ordersState.value = UiState.Success(currentUiModel(isLoadingNextPage = false))
+    }
+
     fun loadOrdersIfNeeded() {
         if (_ordersState.value !is UiState.Idle) return
         loadOrders()
+    }
+
+    fun loadPurchaseOrderHistory(order: PurchaseOrderModel) {
+        viewModelScope.launch {
+            _historyState.value = UiState.Loading
+            _historyState.value = when (
+                val result = repository.getPurchaseOrderHistory(order.id)
+            ) {
+                is ApiResult.Success -> {
+                    if (result.data.isEmpty()) UiState.Empty else UiState.Success(result.data)
+                }
+                ApiResult.Empty -> UiState.Empty
+                is ApiResult.HttpError -> UiState.Error(result.message)
+                is ApiResult.NetworkError -> UiState.Error(result.message)
+                is ApiResult.UnknownError -> UiState.Error(result.message)
+                ApiResult.Unauthorized -> UiState.Unauthorized
+            }
+        }
+    }
+
+    fun resetHistoryState() {
+        _historyState.value = UiState.Idle
     }
 
     fun loadOrders() {
         loadJob?.cancel()
         loadJob = viewModelScope.launch {
             isPageLoading = false
+            selectedUtilization = null
             loadedOrders.clear()
             listTotalCount = 0
             nextStart = 0
@@ -151,9 +188,15 @@ class PurchaseOrdersViewModel @Inject constructor(
     }
 
     private fun currentUiModel(isLoadingNextPage: Boolean): PurchaseOrderListUiModel {
-        val isEmpty = loadedOrders.isEmpty()
+        val displayedOrders = selectedUtilization?.let { utilization ->
+            loadedOrders.filter { it.utilization == utilization }
+        } ?: loadedOrders.toList()
+        val isEmpty = displayedOrders.isEmpty()
         return PurchaseOrderListUiModel(
-            orders = loadedOrders.toList(),
+            orders = displayedOrders,
+            filterChips = buildFilterChips(),
+            selectedFilterId = selectedUtilization?.name
+                ?: PurchaseOrderFilterChipAdapter.FILTER_ALL_ID,
             totalCount = listTotalCount,
             isLoadingNextPage = isLoadingNextPage,
             isLastPage = loadedOrders.size >= listTotalCount,
@@ -166,6 +209,45 @@ class PurchaseOrdersViewModel @Inject constructor(
                 null
             }
         )
+    }
+
+    private fun buildFilterChips(): List<PurchaseOrderUtilizationFilterChip> {
+        val orders = loadedOrders.toList()
+        val chips = mutableListOf(
+            PurchaseOrderUtilizationFilterChip(
+                id = PurchaseOrderFilterChipAdapter.FILTER_ALL_ID,
+                labelRes = R.string.purchase_orders_filter_all,
+                utilization = null,
+                count = listTotalCount.coerceAtLeast(orders.size)
+            )
+        )
+        val utilizationOrder = listOf(
+            PurchaseOrderUtilization.PENDING,
+            PurchaseOrderUtilization.PARTIALLY_UTILIZED,
+            PurchaseOrderUtilization.FULLY_UTILIZED
+        )
+        utilizationOrder.forEach { utilization ->
+            val count = orders.count { it.utilization == utilization }
+            if (count > 0) {
+                chips += PurchaseOrderUtilizationFilterChip(
+                    id = utilization.name,
+                    labelRes = utilization.toLabelRes(),
+                    utilization = utilization,
+                    count = count
+                )
+            }
+        }
+        return chips
+    }
+
+    private fun PurchaseOrderUtilization.toLabelRes(): Int {
+        return when (this) {
+            PurchaseOrderUtilization.PENDING -> R.string.purchase_orders_filter_pending
+            PurchaseOrderUtilization.PARTIALLY_UTILIZED ->
+                R.string.purchase_orders_filter_partially_utilized
+            PurchaseOrderUtilization.FULLY_UTILIZED ->
+                R.string.purchase_orders_filter_fully_utilized
+        }
     }
 
     companion object {
