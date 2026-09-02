@@ -148,6 +148,8 @@ data class PurchaseOrdersEmptyStateUi(
 
 data class PurchaseOrderListUiModel(
     val orders: List<PurchaseOrderModel>,
+    val filterChips: List<PurchaseOrderUtilizationFilterChip> = emptyList(),
+    val selectedFilterId: String = "all",
     val totalCount: Int = 0,
     val isLoadingNextPage: Boolean = false,
     val isLastPage: Boolean = false,
@@ -157,4 +159,11 @@ data class PurchaseOrderListUiModel(
 data class PurchaseOrderPageResult(
     val orders: List<PurchaseOrderModel>,
     val totalCount: Int
+)
+
+data class PurchaseOrderUtilizationFilterChip(
+    val id: String,
+    @StringRes val labelRes: Int,
+    val utilization: PurchaseOrderUtilization?,
+    val count: Int
 )

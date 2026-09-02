@@ -51,7 +51,7 @@
             style="@style/Widget.InternalApps.InputLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/ds_space_2"
+            android:layout_marginTop="@dimen/ds_space_8"
             android:visibility="gone"
             app:boxBackgroundMode="none"
             app:endIconDrawable="@drawable/ia_ic_filter_close"
@@ -92,8 +92,8 @@
                 android:layout_height="@dimen/_78sdp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:paddingStart="@dimen/ds_space_12"
-                android:paddingEnd="@dimen/ds_space_12">
+                android:paddingStart="@dimen/ds_space_6"
+                android:paddingEnd="@dimen/ds_space_6">
 
                 <FrameLayout
                     android:id="@+id/summaryIconContainer"
@@ -210,112 +210,33 @@
             </LinearLayout>
         </com.axelliant.hris.ui.designsystem.components.AppCardView>
 
-        <com.axelliant.hris.ui.designsystem.components.AppCardView
-            android:id="@+id/filterChipsCard"
-            style="@style/Widget.InternalApps.Card"
-            android:layout_marginStart="@dimen/ds_space_8"
-            android:layout_marginTop="@dimen/ds_space_12"
-            android:layout_marginEnd="@dimen/ds_space_8"
-            android:visibility="gone"
-            app:cardBackgroundColor="@color/purchase_order_fluent_surface"
-            app:cardCornerRadius="@dimen/ds_radius_sm"
-            app:cardElevation="@dimen/_1sdp"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/filterChipsRecyclerView"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_52sdp"
+            android:layout_marginTop="@dimen/ds_space_10"
+            android:clipToPadding="false"
+            android:orientation="horizontal"
+            android:overScrollMode="never"
+            android:paddingStart="@dimen/ds_space_8"
+            android:paddingEnd="@dimen/ds_space_8"
+            android:scrollbars="none"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="@id/endGuideline"
             app:layout_constraintStart_toStartOf="@id/startGuideline"
-            app:layout_constraintTop_toBottomOf="@id/summaryCard"
-            app:strokeColor="@color/purchase_order_fluent_stroke"
-            app:strokeWidth="@dimen/_1sdp">
-
-            <HorizontalScrollView
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_52sdp"
-                android:fillViewport="true"
-                android:overScrollMode="never"
-                android:scrollbars="none">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingStart="@dimen/ds_space_8"
-                    android:paddingEnd="@dimen/ds_space_8">
-
-                    <com.axelliant.hris.ui.designsystem.components.AppTextView
-                        style="@style/Text.InternalApps.Subheading"
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/_36sdp"
-                        android:background="@drawable/bg_po_filter_selected"
-                        android:drawablePadding="@dimen/ds_space_6"
-                        android:fontFamily="sans-serif-medium"
-                        android:gravity="center"
-                        android:paddingStart="@dimen/ds_space_14"
-                        android:paddingEnd="@dimen/ds_space_14"
-                        android:text="@string/purchase_orders_filter_all"
-                        android:textColor="@color/ds_on_primary"
-                        android:textSize="@dimen/_9ssp"
-                        app:drawableStartCompat="@drawable/ic_menu"
-                        app:drawableTint="@color/ds_on_primary" />
-
-                    <com.axelliant.hris.ui.designsystem.components.AppTextView
-                        style="@style/Text.InternalApps.Subheading"
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/_36sdp"
-                        android:layout_marginStart="@dimen/ds_space_14"
-                        android:background="@drawable/bg_po_filter_default"
-                        android:drawablePadding="@dimen/ds_space_6"
-                        android:gravity="center"
-                        android:paddingStart="@dimen/ds_space_4"
-                        android:paddingEnd="@dimen/ds_space_4"
-                        android:text="@string/purchase_orders_filter_open"
-                        android:textColor="@color/purchase_order_fluent_text_secondary"
-                        android:textSize="@dimen/_9ssp"
-                        app:drawableStartCompat="@drawable/ia_ic_filter_calendar"
-                        app:drawableTint="@color/purchase_order_fluent_text_tertiary" />
-
-                    <com.axelliant.hris.ui.designsystem.components.AppTextView
-                        style="@style/Text.InternalApps.Subheading"
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/_36sdp"
-                        android:layout_marginStart="@dimen/ds_space_14"
-                        android:background="@drawable/bg_po_filter_default"
-                        android:gravity="center"
-                        android:paddingStart="@dimen/ds_space_4"
-                        android:paddingEnd="@dimen/ds_space_4"
-                        android:text="@string/purchase_orders_filter_partially_utilized"
-                        android:textColor="@color/purchase_order_fluent_text_secondary"
-                        android:textSize="@dimen/_9ssp" />
-
-                    <com.axelliant.hris.ui.designsystem.components.AppTextView
-                        style="@style/Text.InternalApps.Subheading"
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/_36sdp"
-                        android:layout_marginStart="@dimen/ds_space_14"
-                        android:background="@drawable/bg_po_filter_default"
-                        android:gravity="center"
-                        android:paddingStart="@dimen/ds_space_4"
-                        android:paddingEnd="@dimen/ds_space_4"
-                        android:text="@string/purchase_orders_filter_fully_utilized"
-                        android:textColor="@color/purchase_order_fluent_text_secondary"
-                        android:textSize="@dimen/_9ssp" />
-                </LinearLayout>
-            </HorizontalScrollView>
-        </com.axelliant.hris.ui.designsystem.components.AppCardView>
-
+            app:layout_constraintTop_toBottomOf="@id/summaryCard" />
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/purchaseOrdersRecyclerView"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginStart="@dimen/ds_space_8"
-            android:layout_marginTop="@dimen/ds_space_12"
-            android:layout_marginEnd="@dimen/ds_space_8"
+            android:layout_marginTop="@dimen/ds_space_10"
             android:clipToPadding="false"
             android:overScrollMode="never"
             android:paddingBottom="@dimen/ds_space_72"
             app:layout_constraintBottom_toTopOf="@id/paginationShimmerContainer"
             app:layout_constraintEnd_toEndOf="@id/endGuideline"
             app:layout_constraintStart_toStartOf="@id/startGuideline"
-            app:layout_constraintTop_toBottomOf="@id/filterChipsCard" />
+            app:layout_constraintTop_toBottomOf="@id/filterChipsRecyclerView" />
 
         <LinearLayout
             android:id="@+id/paginationShimmerContainer"
@@ -333,9 +254,6 @@
             android:id="@+id/shimmerContainer"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginStart="@dimen/ds_space_8"
-            android:layout_marginTop="@dimen/ds_space_12"
-            android:layout_marginEnd="@dimen/ds_space_8"
             android:orientation="vertical"
             android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@id/bottomGuideline"

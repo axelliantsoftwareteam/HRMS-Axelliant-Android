@@ -3,7 +3,10 @@ package com.axelliant.hris.features.quotes.domain.model
 data class QuoteReportUiModel(
     val quoteId: String,
     val quoteNumber: String,
+    val quoteTitle: String,
     val createdDate: String,
+    val customerName: String,
+    val customerNumber: String,
     val customerTitle: String,
     val companyAddress: String,
     val companyPhone: String,

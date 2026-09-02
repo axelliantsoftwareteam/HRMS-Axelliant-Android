@@ -22,6 +22,35 @@
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                android:id="@+id/lineNumberText"
+                style="@style/Text.Fluent2.Caption.Primary.Strong"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                tools:text="Line #1" />
+
+            <com.axelliant.hris.ui.designsystem.components.AppButtonView
+                android:id="@+id/detailsToggleButton"
+                style="@style/Widget.Fluent2.Button.Icon"
+                android:layout_width="@dimen/_32sdp"
+                android:layout_height="@dimen/_32sdp"
+                android:contentDescription="@string/quote_report_view_details"
+                android:minHeight="0dp"
+                android:minWidth="0dp"
+                android:text=""
+                app:icon="@drawable/ic_chevron_down"
+                app:iconSize="@dimen/ds_icon_button_icon_size"
+                app:iconTint="@color/ds_text_primary" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ds_space_2"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -29,18 +58,10 @@
                 android:orientation="vertical">
 
                 <com.axelliant.hris.ui.designsystem.components.AppTextView
-                    android:id="@+id/lineNumberText"
-                    style="@style/Text.Fluent2.Caption.Primary.Strong"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    tools:text="Line #1" />
-
-                <com.axelliant.hris.ui.designsystem.components.AppTextView
                     android:id="@+id/productNameText"
                     style="@style/Text.Fluent2.Subheading.Primary.Strong"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/ds_space_2"
                     android:ellipsize="end"
                     android:maxLines="2"
                     tools:text="HUMANSCALE NEATLINKS - SMALL 17, BLACK" />
@@ -159,13 +180,5 @@
                 android:orientation="vertical" />
         </LinearLayout>
 
-        <com.axelliant.hris.ui.designsystem.components.AppButtonView
-            android:id="@+id/detailsToggleButton"
-            style="@style/Widget.Fluent2.Button.Text"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/_32sdp"
-            android:layout_marginTop="@dimen/ds_space_4"
-            android:minHeight="0dp"
-            android:text="@string/quote_report_view_details" />
     </LinearLayout>
 </com.axelliant.hris.ui.designsystem.components.AppCardView>

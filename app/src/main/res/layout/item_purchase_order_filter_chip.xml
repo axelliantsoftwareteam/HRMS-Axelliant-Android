@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.axelliant.hris.ui.designsystem.components.AppTextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/filterChipLabel"
+    style="@style/Text.InternalApps.Caption"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="@dimen/ds_space_8"
+    android:background="@drawable/bg_quote_filter_chip_default"
+    android:fontFamily="@font/poppins_medium"
+    android:gravity="center"
+    android:maxLines="1"
+    android:minHeight="@dimen/_32sdp"
+    android:paddingStart="@dimen/ds_space_14"
+    android:paddingTop="@dimen/ds_space_6"
+    android:paddingEnd="@dimen/ds_space_14"
+    android:paddingBottom="@dimen/ds_space_6"
+    android:textColor="@color/quotes_filter_chip_default_text" />
+
+
+<!--<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:layout_marginEnd="@dimen/ds_space_8"
+    android:foreground="?attr/selectableItemBackgroundBorderless">
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        android:id="@+id/filterChipLabel"
+        style="@style/Text.InternalApps.Subheading"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/_36sdp"
+        android:layout_gravity="center_vertical"
+        android:background="@drawable/bg_po_filter_default"
+        android:fontFamily="@font/poppins_medium"
+        android:gravity="center"
+        android:maxLines="1"
+        android:paddingStart="@dimen/ds_space_14"
+        android:paddingEnd="@dimen/ds_space_14"
+        android:textColor="@color/purchase_order_fluent_text_secondary"
+        android:textSize="@dimen/_9ssp" />
+</FrameLayout>-->
+
+

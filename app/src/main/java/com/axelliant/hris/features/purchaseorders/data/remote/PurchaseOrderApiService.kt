@@ -8,6 +8,7 @@ import com.axelliant.hris.features.purchaseorders.data.remote.dto.CompanyAddress
 import com.axelliant.hris.features.purchaseorders.data.remote.dto.GetPurchaseOrdersRequest
 import com.axelliant.hris.features.purchaseorders.data.remote.dto.GetPurchaseOrdersResponse
 import com.axelliant.hris.features.purchaseorders.data.remote.dto.GetSinglePurchaseOrderResponse
+import com.axelliant.hris.features.purchaseorders.data.remote.dto.PurchaseOrderCommentDto
 import com.axelliant.hris.features.purchaseorders.data.remote.dto.VendorDdlDto
 import retrofit2.Response
 import retrofit2.http.Body
@@ -26,6 +27,11 @@ interface PurchaseOrderApiService {
     suspend fun getSinglePurchaseOrder(
         @Query("id") id: String
     ): Response<BaseApiModel<GetSinglePurchaseOrderResponse>>
+
+    @GET("PurchaseOrder/Comments")
+    suspend fun getPurchaseOrderComments(
+        @Query("purchaseOrderId") purchaseOrderId: String
+    ): Response<BaseApiModel<List<PurchaseOrderCommentDto>>>
 
     @GET("Vendor/GetAllForDDL")
     suspend fun getVendorsForDdl(

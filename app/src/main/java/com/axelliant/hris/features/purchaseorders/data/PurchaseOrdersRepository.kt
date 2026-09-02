@@ -17,6 +17,7 @@ import com.axelliant.hris.features.purchaseorders.domain.model.CreatePurchaseOrd
 import com.axelliant.hris.features.purchaseorders.domain.model.EditPoProductLineUi
 import com.axelliant.hris.features.purchaseorders.domain.model.PoAddressUi
 import com.axelliant.hris.features.purchaseorders.domain.model.PoVendorUi
+import com.axelliant.hris.features.purchaseorders.domain.model.PurchaseOrderHistoryItemUiModel
 import com.axelliant.hris.features.purchaseorders.domain.model.PurchaseOrderDetailModel
 import com.axelliant.hris.features.purchaseorders.domain.model.PurchaseOrderModel
 import com.axelliant.hris.features.purchaseorders.domain.model.PurchaseOrderPageResult
@@ -61,7 +62,7 @@ class PurchaseOrdersRepository @Inject constructor(
         search: String = ""
     ): ApiResult<PurchaseOrderPageResult> {
         val request = GetPurchaseOrdersRequest(
-            start = start + 1,
+            start = start,
             limit = limit,
             search = search.trim()
         )
@@ -117,6 +118,33 @@ class PurchaseOrdersRepository @Inject constructor(
                 }
             }
             is ApiResult.Empty -> ApiResult.UnknownError("Purchase order not found.")
+            is ApiResult.HttpError -> ApiResult.HttpError(
+                code = result.code,
+                message = PurchaseOrderApiMapper.resolveErrorMessage(result),
+                errorBody = result.errorBody
+            )
+            is ApiResult.NetworkError -> result
+            is ApiResult.UnknownError -> result
+            ApiResult.Unauthorized -> ApiResult.Unauthorized
+        }
+    }
+
+    suspend fun getPurchaseOrderHistory(
+        purchaseOrderId: String
+    ): ApiResult<List<PurchaseOrderHistoryItemUiModel>> {
+        return when (val result = safeApiExecutor.execute {
+            purchaseOrderApiService.getPurchaseOrderComments(purchaseOrderId)
+        }) {
+            is ApiResult.Success -> {
+                val payload = result.data
+                val comments = payload.data?.data
+                if (payload.data?.success == true && comments != null) {
+                    ApiResult.Success(PurchaseOrderHistoryMapper.map(comments))
+                } else {
+                    ApiResult.UnknownError(apiMessage(payload) ?: "Unable to load history.")
+                }
+            }
+            ApiResult.Empty -> ApiResult.Success(emptyList())
             is ApiResult.HttpError -> ApiResult.HttpError(
                 code = result.code,
                 message = PurchaseOrderApiMapper.resolveErrorMessage(result),

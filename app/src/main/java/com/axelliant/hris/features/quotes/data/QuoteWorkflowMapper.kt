@@ -45,6 +45,7 @@ object QuoteWorkflowMapper {
         }
 
         return QuoteWorkflowUiModel(
+            instanceId = "",
             quoteNumber = quoteNumber,
             displayMode = displayMode,
             steps = mappedSteps

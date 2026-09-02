@@ -57,6 +57,7 @@ data class SaleOrderListItemDto(
     val createdOn: Long? = null,
     @SerializedName("createdDate")
     val createdDate: String? = null
+
 )
 
 data class SaleOrderSingleDto(
