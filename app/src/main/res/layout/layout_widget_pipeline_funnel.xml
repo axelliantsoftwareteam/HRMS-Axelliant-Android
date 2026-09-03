@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_widget_card"
+    android:padding="@dimen/_12sdp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="84dp"
+        android:background="@drawable/bg_stat_box"
+        android:padding="@dimen/_10sdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/lyPipelineStep1">
+
+        <TextView
+            android:id="@+id/tvStep2Title"
+            style="@style/Text.Fluent2.Body.Primary.Strong"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="3. Orders"
+            app:layout_constraintEnd_toStartOf="@id/tvStep2Value"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            style="@style/Text.Fluent2.Caption.Muted.Strong"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:text="136 cleared · 12 in transit"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvStep2Title" />
+
+        <TextView
+            android:id="@+id/tvStep2Value"
+            style="@style/Text.Fluent2.Title.Primary.Strong"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="126"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        style="@style/Text.Fluent2.Caption.Muted.Strong"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="WORKFLOW PIPELINE"
+        android:textColor="@color/ds_primary"
+        android:letterSpacing="0.05"
+        android:textSize="@dimen/_9ssp"
+        android:id="@+id/tvPipelineEyebrow"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        style="@style/Text.Fluent2.Subheading.Primary.Strong"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Operations Lifecycle &amp; Funnel"
+        android:textSize="@dimen/_13ssp"
+        android:id="@+id/tvPipelineTitle"
+        app:layout_constraintTop_toBottomOf="@id/tvPipelineEyebrow"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        style="@style/Text.Fluent2.Caption.Muted.Strong"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:text="Overall Funnel Conversion"
+        android:id="@+id/tvConversionLabel"
+        app:layout_constraintTop_toBottomOf="@id/tvPipelineTitle"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/green"
+        android:textSize="@dimen/_11ssp"
+        android:text="51.2% Overall"
+        app:layout_constraintTop_toTopOf="@id/tvConversionLabel"
+        app:layout_constraintBottom_toBottomOf="@id/tvConversionLabel"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/lyPipelineStep1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:background="@drawable/bg_stat_box"
+        android:padding="@dimen/_10sdp"
+        app:layout_constraintTop_toBottomOf="@id/tvConversionLabel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            style="@style/Text.Fluent2.Body.Primary.Strong"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="1. Total Quotes"
+            android:id="@+id/tvStep1Title"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tvStep1Value" />
+
+        <TextView
+            style="@style/Text.Fluent2.Caption.Muted.Strong"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:text="242 submitted · $184.5K volume"
+            app:layout_constraintTop_toBottomOf="@id/tvStep1Title"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/tvStep1Value"
+            style="@style/Text.Fluent2.Title.Primary.Strong"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="242"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_6sdp"
+        android:background="@drawable/bg_stat_box"
+        android:padding="@dimen/_10sdp"
+        app:layout_constraintTop_toBottomOf="@id/lyPipelineStep1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            style="@style/Text.Fluent2.Body.Primary.Strong"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="2. Approval"
+            android:id="@+id/tvStep3Title"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tvStep3Value" />
+
+        <TextView
+            style="@style/Text.Fluent2.Caption.Muted.Strong"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:text="136 cleared · 12 in transit"
+            app:layout_constraintTop_toBottomOf="@id/tvStep3Title"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/tvStep3Value"
+            style="@style/Text.Fluent2.Title.Primary.Strong"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="20"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

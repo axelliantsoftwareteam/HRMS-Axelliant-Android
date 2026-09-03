@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/bg_widget_card"
+    android:padding="@dimen/_12sdp">
+
+    <TextView
+        android:id="@+id/tvCheckinWidgetTitle"
+        style="@style/Text.Fluent2.Subheading.Primary.Strong"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Check-in Activity"
+        android:textSize="@dimen/_13ssp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/lyCheckinBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:background="@drawable/bg_stat_box"
+        android:padding="@dimen/_10sdp"
+        app:layout_constraintTop_toBottomOf="@id/tvCheckinWidgetTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/lyCheckoutBox"
+        app:layout_constraintHorizontal_weight="1">
+
+        <TextView
+            android:id="@+id/tvCheckinLabel"
+            style="@style/Text.Fluent2.Caption.Muted.Strong"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Check-in"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/tvCheckinTime"
+            style="@style/Text.Fluent2.Title.Primary.Strong"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:textSize="@dimen/_16ssp"
+            android:textColor="@color/green"
+            tools:text="09:12 AM"
+            app:layout_constraintTop_toBottomOf="@id/tvCheckinLabel"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/lyCheckoutBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:background="@drawable/bg_stat_box"
+        android:padding="@dimen/_10sdp"
+        app:layout_constraintTop_toBottomOf="@id/tvCheckinWidgetTitle"
+        app:layout_constraintStart_toEndOf="@id/lyCheckinBox"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="1">
+
+        <TextView
+            android:id="@+id/tvCheckoutLabel"
+            style="@style/Text.Fluent2.Caption.Muted.Strong"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Check-out"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/tvCheckoutTime"
+            style="@style/Text.Fluent2.Title.Primary.Strong"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:textSize="@dimen/_16ssp"
+            android:textColor="@color/ds_primary"
+            tools:text="06:05 PM"
+            app:layout_constraintTop_toBottomOf="@id/tvCheckoutLabel"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/tvWorkingHoursLabel"
+        style="@style/Text.Fluent2.Caption.Muted.Strong"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:text="Hours logged today"
+        app:layout_constraintTop_toBottomOf="@id/lyCheckinBox"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/tvWorkingHoursValue"
+        style="@style/Text.Fluent2.Body.Primary.Strong"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="08:53:12"
+        app:layout_constraintTop_toTopOf="@id/tvWorkingHoursLabel"
+        app:layout_constraintBottom_toBottomOf="@id/tvWorkingHoursLabel"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

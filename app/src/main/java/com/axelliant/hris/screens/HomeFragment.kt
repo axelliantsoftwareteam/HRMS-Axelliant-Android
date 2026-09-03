@@ -8,6 +8,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationListener
+import android.widget.ProgressBar
 import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
@@ -88,6 +89,11 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
+import com.axelliant.hris.viewmodel.AttendanceViewModel
+import com.axelliant.hris.model.attendance.AttendanceInput
+import com.axelliant.hris.enums.AttendanceFilter
+import com.axelliant.hris.model.attendance.SelfAttendanceStats
+import com.axelliant.hris.utils.Utils
 
 
 @AndroidEntryPoint
@@ -140,6 +146,7 @@ class HomeFragment : BaseFragment() {
     private lateinit var locationManager: LocationManager
 
     private val homeViewModel: HomeViewModel by viewModels()
+    private val attendanceViewModel: AttendanceViewModel by viewModels()
 
     @Inject
     lateinit var workspaceSessionProvider: WorkspaceSessionProvider
@@ -171,6 +178,11 @@ class HomeFragment : BaseFragment() {
         get() = binding?.root?.findViewById(R.id.drawerCommonMenuContainer)
     private val drawerFooterMenuContainer: LinearLayout?
         get() = binding?.root?.findViewById(R.id.drawerFooterMenuContainer)
+    private val quickActionsScrim: View?
+        get() = binding?.root?.findViewById(R.id.quickActionsScrim)
+    private val quickActionsSheet: View?
+        get() = binding?.root?.findViewById(R.id.quickActionsSheet)
+    private var quickActionsBackCallback: OnBackPressedCallback? = null
 
 
 
@@ -208,17 +220,33 @@ class HomeFragment : BaseFragment() {
         return binding?.root
     }
 
+    private fun getMonthlyAttendanceInput(): AttendanceInput {
+        return AttendanceInput().apply {
+            this.startDate = Utils.getServerFormat(date = Utils.getFirstDayOfMonth())
+            this.endDate = Utils.getServerFormat(date = Utils.getLastDayOfMonth())
+            this.filter = AttendanceFilter.MONTH
+        }
+    }
+
 
     @SuppressLint("MissingPermission")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupExitOnBackPress()
-        setupDraggableFab()
         setupInternalAppsDrawer()
+        setupQuickActionsSheet()
         startStatusEchoAnimation()
         setupLogoutAction()
         observeDrawerPermissions()
         homeViewModel.loadDrawerPermissions()
+        attendanceViewModel.getAttendanceStats(getMonthlyAttendanceInput())
+        attendanceViewModel.attendanceResponse.observe(
+            viewLifecycleOwner,
+            EventObserver { response ->
+                if (response?.meta?.status == true) {
+                    response.self_attendance_counts?.let { bindMonthlyAttendanceWidget(it) }
+                }
+            })
         hasHrisHomeAccess = workspaceSessionProvider.hasValidSession(WorkspaceKey.HRIS)
 
         locationPermissionLauncher = registerForActivityResult(
@@ -444,7 +472,7 @@ class HomeFragment : BaseFragment() {
         binding?.ivQr?.setOnClickListener {
             requireContext().showSuccessMsg()
         }
-        binding?.askAiFloatingButton?.setOnClickListener {
+        binding?.root?.findViewById<View>(R.id.lyAiAssistantPill)?.setOnClickListener {
             if (!workspaceSessionProvider.hasValidSession(WorkspaceKey.INTERNAL_APPS)) {
                 requireContext().showErrorMsg("Internal Apps session is not available.")
                 return@setOnClickListener
@@ -467,18 +495,6 @@ class HomeFragment : BaseFragment() {
             onCheckInButtonClicked()
         }
         updateCheckInButton()
-
-        binding?.askAiFloatingButton?.apply {
-            clipToOutline = true
-            outlineProvider = object : android.view.ViewOutlineProvider() {
-                override fun getOutline(view: View, outline: android.graphics.Outline) {
-                    outline.setRoundRect(
-                        0, 0, view.width, view.height,
-                        resources.getDimension(R.dimen.ds_radius_xl)
-                    )
-                }
-            }
-        }
     }
 
     private fun setupLogoutAction() {
@@ -673,6 +689,57 @@ class HomeFragment : BaseFragment() {
             ?.start()
     }
 
+    private fun setupQuickActionsSheet() {
+        quickActionsBackCallback = object : OnBackPressedCallback(false) {
+            override fun handleOnBackPressed() {
+                closeQuickActionsMenu()
+            }
+        }.also { callback ->
+            requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+        }
+
+        binding?.root?.findViewById<View>(R.id.fabQuickActions)?.setOnClickListener {
+            openQuickActionsMenu()
+        }
+        quickActionsScrim?.setOnClickListener { closeQuickActionsMenu() }
+        binding?.root?.findViewById<View>(R.id.ivCloseSheet)?.setOnClickListener {
+            closeQuickActionsMenu()
+        }
+
+        binding?.root?.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.rvBusinessModuleSheet)
+            ?.layoutManager = GridLayoutManager(requireContext(), 2)
+        binding?.root?.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.rvModuleSheet)
+            ?.layoutManager = GridLayoutManager(requireContext(), 2)
+    }
+
+    private fun openQuickActionsMenu() {
+        val sheet = quickActionsSheet ?: return
+        quickActionsScrim?.apply {
+            isVisible = true
+            alpha = 0f
+            bringToFront()
+            animate().alpha(1f).setDuration(180L).start()
+        }
+        sheet.isVisible = true
+        sheet.bringToFront()
+        sheet.translationY = 1000f
+        sheet.animate().translationY(0f).setDuration(220L).start()
+        quickActionsBackCallback?.isEnabled = true
+    }
+
+    private fun closeQuickActionsMenu() {
+        val sheet = quickActionsSheet ?: return
+        quickActionsBackCallback?.isEnabled = false
+        quickActionsScrim?.animate()?.alpha(0f)?.setDuration(180L)?.withEndAction {
+            quickActionsScrim?.isVisible = false
+        }?.start()
+        sheet.animate()
+            .translationY(sheet.height.toFloat() + 200f)
+            .setDuration(220L)
+            .withEndAction { sheet.isVisible = false }
+            .start()
+    }
+
     private fun handleDrawerItemClick(action: AppDrawerAction) {
         val requiresInternalAppsSession = action in setOf(
             AppDrawerAction.Products,
@@ -753,11 +820,7 @@ class HomeFragment : BaseFragment() {
             binding?.lyMyShift?.isVisible = false
         }
 
-        binding?.tvBusinessModules?.isVisible = hasBusinessAccess
-        binding?.tvBusinessViewAll?.isVisible = hasBusinessAccess
-        binding?.rvBusinessModule?.isVisible = hasBusinessAccess
-        binding?.tvWeekly?.isVisible = hasHrisAccess
-        binding?.rvModule?.isVisible = hasHrisAccess
+        binding?.root?.findViewById<View>(R.id.fabQuickActions)?.isVisible = hasHrisAccess || hasBusinessAccess
         if (hasBusinessAccess) {
             bindBusinessModules(businessActions)
         }
@@ -777,9 +840,10 @@ class HomeFragment : BaseFragment() {
             }
         })
         businessModulesAdapter = adapter
-        binding?.rvBusinessModule?.layoutManager = GridLayoutManager(requireContext(), 2)
-        binding?.rvBusinessModule?.adapter = adapter
-        binding?.rvBusinessModule?.isNestedScrollingEnabled = false
+        binding?.root?.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.rvBusinessModuleSheet)
+            ?.adapter = adapter
+        binding?.root?.findViewById<View>(R.id.tvSheetBusinessModules)?.isVisible = true
+        binding?.root?.findViewById<View>(R.id.rvBusinessModuleSheet)?.isVisible = true
     }
 
     private fun AppDrawerAction.toBusinessModule(): Modules? {
@@ -1016,6 +1080,7 @@ class HomeFragment : BaseFragment() {
 
 //        todayCardBinding?.tvLocation?.text = checkInInfo.location.valueQualifier()
         todayCardBinding?.tvOfficeStatus?.text = checkInInfo.location.valueQualifier()
+        bindCheckinActivityWidget(checkInInfo)
         bindAttendanceTimes(checkInInfo)
         bindWorkingTime(checkInInfo)
 
@@ -1037,6 +1102,13 @@ class HomeFragment : BaseFragment() {
             }
         }
         updateCheckInButton()
+    }
+
+    private fun bindCheckinActivityWidget(checkInInfo: CheckInInfoResponse) {
+        val root = binding?.root?.findViewById<View>(R.id.widgetCheckinActivity) ?: return
+        root.findViewById<TextView>(R.id.tvCheckinTime)?.text = checkInInfo.check_in.valueQualifier()
+        root.findViewById<TextView>(R.id.tvCheckoutTime)?.text = checkInInfo.check_out.valueQualifier()
+        root.findViewById<TextView>(R.id.tvWorkingHoursValue)?.text = todayCardBinding?.tvWorkingTime?.text
     }
 
     private fun bindAttendanceTimes(checkInInfo: CheckInInfoResponse) {
@@ -1327,8 +1399,6 @@ class HomeFragment : BaseFragment() {
                 )
             )
         }
-
-        binding?.rvModule?.layoutManager = GridLayoutManager(requireContext(), 2)
         val modulesAdapter = ModulesAdapter(
             gridList!!,
             object : AdapterItemClick {
@@ -1386,8 +1456,8 @@ class HomeFragment : BaseFragment() {
                 }
 
             })
-        binding?.rvModule?.adapter = modulesAdapter
-        binding?.rvModule?.isNestedScrollingEnabled = false
+        binding?.root?.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.rvModuleSheet)
+            ?.adapter = modulesAdapter
         renderHomePermissionSections()
 
 
@@ -1467,208 +1537,28 @@ class HomeFragment : BaseFragment() {
         }
     }
 
-    @SuppressLint("ClickableViewAccessibility")
-    private fun setupDraggableFab() {
-        val fabContainer = binding?.askAiFloatingButton ?: return
-        val fabOrb = binding?.askAiFloatingButton ?: return
+    private fun bindMonthlyAttendanceWidget(stats: SelfAttendanceStats) {
+        val root = binding?.root?.findViewById<View>(R.id.widgetMonthlyAttendance) ?: return
 
-        var dX = 0f
-        var dY = 0f
-        var downRawX = 0f
-        var downRawY = 0f
-        val clickSlop = ViewConfiguration.get(requireContext()).scaledTouchSlop
+        val presentDays = stats.present
+        val absentDays = stats.absent_count
+        val leaveDays = stats.leave_count
+        val halfDays = stats.half_days
+        val missedPunch = stats.missed_punch_out
+        val totalCounted = presentDays + absentDays + leaveDays + halfDays + missedPunch
+        val attendancePercent = if (totalCounted > 0) {
+            ((presentDays.toFloat() / totalCounted.toFloat()) * 100).toInt()
+        } else 0
 
-        fabOrb.setOnTouchListener { _, event ->
-            val parent = fabContainer.parent as? ViewGroup ?: return@setOnTouchListener false
-
-            when (event.actionMasked) {
-                MotionEvent.ACTION_DOWN -> {
-                    if (isFabCollapsed) {
-                        return@setOnTouchListener false
-                    }
-                    isDraggingFab = false
-                    dX = fabContainer.x - event.rawX
-                    dY = fabContainer.y - event.rawY
-                    downRawX = event.rawX
-                    downRawY = event.rawY
-                    parent.requestDisallowInterceptTouchEvent(true)
-                    true
-                }
-
-                MotionEvent.ACTION_MOVE -> {
-                    if (isFabCollapsed) return@setOnTouchListener false
-
-                    val movedX = abs(event.rawX - downRawX)
-                    val movedY = abs(event.rawY - downRawY)
-                    if (movedX > clickSlop || movedY > clickSlop) isDraggingFab = true
-
-                    var newX = event.rawX + dX
-                    var newY = event.rawY + dY
-                    newX = newX.coerceIn(0f, (parent.width - fabContainer.width).toFloat())
-                    newY = newY.coerceIn(0f, (parent.height - fabContainer.height).toFloat())
-
-                    fabContainer.x = newX
-                    fabContainer.y = newY
-                    true
-                }
-
-                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                    parent.requestDisallowInterceptTouchEvent(false)
-
-                    if (isFabCollapsed) {
-                        if (event.actionMasked == MotionEvent.ACTION_UP) {
-                            expandFab()
-                        }
-                        return@setOnTouchListener true
-                    }
-
-                    val wasDragging = isDraggingFab
-                    isDraggingFab = false // reset immediately so auto-collapse isn't stuck blocked
-
-                    if (!wasDragging) {
-                        fabOrb.performClick()
-                    } else {
-                        // dropped after a drag — stays put, auto-collapses after a delay
-                        scheduleAutoCollapse()
-                    }
-                    true
-                }
-
-                else -> false
-            }
-        }
-
-        // on screen load: visible first, then auto-collapse after a delay
-        fabContainer.post {
-            if (isAdded && _binding != null) {
-                scheduleAutoCollapse()
-            }
-        }
-    }
-
-    private fun scheduleAutoCollapse() {
-        val fabContainer = binding?.askAiFloatingButton ?: return
-
-        isFabCollapsed = false
-        fabContainer.alpha = 1f
-
-        autoCollapseJob?.cancel()
-        autoCollapseJob = viewLifecycleOwner.lifecycleScope.launch {
-            delay(1800L)
-            if (!isAdded || _binding == null) return@launch
-            if (isDraggingFab) return@launch
-            val parent = fabContainer.parent as? ViewGroup ?: return@launch
-            snapAndCollapseFab(parent)
-        }
-    }
-
-    private fun snapAndCollapseFab(parent: ViewGroup) {
-        val fabContainer = binding?.askAiFloatingButton ?: return
-        val edgeX = (parent.width - fabContainer.width).toFloat()
-
-        fabContainer.animate()
-            .x(edgeX)
-            .setDuration(200L)
-            .withEndAction {
-                collapseFab(isRightEdge = true)
-            }
-            .start()
-    }
-
-    private fun collapseFab(isRightEdge: Boolean, animate: Boolean = true) {
-        val fabContainer = binding?.askAiFloatingButton ?: return
-        val arrow = binding?.root?.findViewById<ImageView>(R.id.ivFabArrow)
-        val parent = fabContainer.parent as? ViewGroup
-
-        isFabCollapsed = true
-        isFabRightEdge = isRightEdge
-
-        val peekPx = 22 * resources.displayMetrics.density
-        val hiddenOffset = fabContainer.width - peekPx
-
-        val baseX = if (isRightEdge) {
-            (parent?.width ?: 0) - fabContainer.width
-        } else {
-            0
-        }.toFloat()
-
-        val targetX = if (isRightEdge) baseX + hiddenOffset else baseX - hiddenOffset
-
-        arrow?.apply {
-            isVisible = true
-            scaleX = if (isRightEdge) 1f else -1f
-        }
-
-        if (animate) {
-            fabContainer.animate()
-                .x(targetX)
-                .alpha(0.9f)
-                .setDuration(220L)
-                .start()
-        } else {
-            fabContainer.x = targetX
-            fabContainer.alpha = 0.9f
-        }
-
-        startFabWiggle()
-    }
-
-    private fun expandFab() {
-        val fabContainer = binding?.askAiFloatingButton ?: return
-        val arrow = binding?.root?.findViewById<ImageView>(R.id.ivFabArrow)
-        val parent = fabContainer.parent as? ViewGroup ?: return
-
-        autoCollapseJob?.cancel()
-        isFabCollapsed = false
-        stopFabWiggle()
-
-        val edgeGap = 16 * resources.displayMetrics.density
-        val targetX = (parent.width - fabContainer.width) - edgeGap
-
-        arrow?.isVisible = false
-        fabContainer.animate()
-            .x(targetX)
-            .alpha(1f)
-            .setDuration(220L)
-            .start()
-
-        // re-collapse automatically if left untouched
-        scheduleAutoCollapse()
-    }
-
-    private fun startFabWiggle() {
-        fabWiggleJob?.cancel()
-        val fabContainer = binding?.askAiFloatingButton ?: return
-
-        fabWiggleJob = viewLifecycleOwner.lifecycleScope.launch {
-            while (isActive) {
-                delay(3500L)
-                if (!isFabCollapsed || _binding == null) continue
-                playWiggle(fabContainer)
-            }
-        }
-    }
-
-    private fun stopFabWiggle() {
-        fabWiggleJob?.cancel()
-        fabWiggleJob = null
-        binding?.askAiFloatingButton?.rotation = 0f
-    }
-
-    private fun playWiggle(view: View) {
-        val pivotAdjust = if (isFabRightEdge) 1f else 0f
-        view.pivotX = view.width * pivotAdjust
-        view.pivotY = view.height / 2f
-
-        val tiltAngle = if (isFabRightEdge) -12f else 12f
-
-        android.animation.ObjectAnimator.ofFloat(
-            view, "rotation", 0f, tiltAngle, 0f, tiltAngle * 0.6f, 0f
-        ).apply {
-            duration = 500L
-            interpolator = android.view.animation.DecelerateInterpolator()
-            start()
-        }
+        root.findViewById<TextView>(R.id.tvPresentsCount)?.text = "$presentDays Days"
+        root.findViewById<TextView>(R.id.tvPresentsTarget)?.text = "Target: $totalCounted Days"
+        root.findViewById<TextView>(R.id.tvAbsentsCount)?.text = "$absentDays Days"
+        root.findViewById<TextView>(R.id.tvAbsentsSub)?.text =
+            if (leaveDays > 0) "$leaveDays Approved Leave" else "No approved leaves"
+        root.findViewById<TextView>(R.id.tvAttendancePercentChip)?.text = "$attendancePercent% Attendance"
+        root.findViewById<TextView>(R.id.tvAttendanceCompleted)?.text = "$presentDays Completed"
+        root.findViewById<TextView>(R.id.tvAttendanceScheduled)?.text = "$absentDays Absent"
+        root.findViewById<ProgressBar>(R.id.progressAttendance)?.progress = attendancePercent
     }
 
 
@@ -1736,10 +1626,6 @@ class HomeFragment : BaseFragment() {
         workingTimeJob = null
         backPressedResetJob?.cancel()
         backPressedResetJob = null
-        fabWiggleJob?.cancel()
-        fabWiggleJob = null
-        autoCollapseJob?.cancel()
-        autoCollapseJob = null
         binding?.shimmerLayout?.stopShimmer()
         super.onDestroyView()
         stopStatusEchoAnimation()

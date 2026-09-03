@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_widget_card"
+    android:padding="@dimen/_12sdp">
+
+    <TextView
+        style="@style/Text.Fluent2.Caption.Muted.Strong"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ROLE PERFORMANCE"
+        android:textColor="@color/ds_primary"
+        android:letterSpacing="0.05"
+        android:textSize="@dimen/_9ssp"
+        android:id="@+id/tvRolePerfEyebrow"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/tvRolePerfTitle"
+        style="@style/Text.Fluent2.Subheading.Primary.Strong"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_4sdp"
+        android:text="Regional Dispatch &amp; Operations"
+        android:textSize="@dimen/_13ssp"
+        app:layout_constraintTop_toBottomOf="@id/tvRolePerfEyebrow"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:background="@drawable/bg_stat_box"
+        android:padding="@dimen/_10sdp"
+        android:id="@+id/lyOrdersHandled"
+        app:layout_constraintTop_toBottomOf="@id/tvRolePerfTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            style="@style/Text.Fluent2.Caption.Muted.Strong"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Total Orders Handled"
+            android:id="@+id/tvOrdersLabel"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            style="@style/Text.Fluent2.Title.Primary.Strong"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:textSize="@dimen/_18ssp"
+            android:text="148 Orders"
+            app:layout_constraintTop_toBottomOf="@id/tvOrdersLabel"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_pill_green"
+            android:paddingStart="@dimen/_8sdp"
+            android:paddingEnd="@dimen/_8sdp"
+            android:paddingTop="@dimen/_3sdp"
+            android:paddingBottom="@dimen/_3sdp"
+            android:textColor="@color/green"
+            android:textSize="@dimen/_9ssp"
+            android:text="+12%"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:background="@drawable/bg_stat_box"
+        android:padding="@dimen/_10sdp"
+        android:id="@+id/lyOpsRevenue"
+        app:layout_constraintTop_toBottomOf="@id/lyOrdersHandled"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            style="@style/Text.Fluent2.Caption.Muted.Strong"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Operations Revenue"
+            android:id="@+id/tvRevenueLabel"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            style="@style/Text.Fluent2.Title.Primary.Strong"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:textSize="@dimen/_18ssp"
+            android:text="$24,850"
+            app:layout_constraintTop_toBottomOf="@id/tvRevenueLabel"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/green"
+            android:textSize="@dimen/_10ssp"
+            android:text="+$3,240"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:background="@drawable/bg_stat_box"
+        android:padding="@dimen/_10sdp"
+        app:layout_constraintTop_toBottomOf="@id/lyOpsRevenue"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            style="@style/Text.Fluent2.Caption.Muted.Strong"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fulfillment Accuracy"
+            android:id="@+id/tvAccuracyLabel"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            style="@style/Text.Fluent2.Title.Primary.Strong"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:textSize="@dimen/_18ssp"
+            android:text="99.4%"
+            app:layout_constraintTop_toBottomOf="@id/tvAccuracyLabel"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_pill_green"
+            android:paddingStart="@dimen/_8sdp"
+            android:paddingEnd="@dimen/_8sdp"
+            android:paddingTop="@dimen/_3sdp"
+            android:paddingBottom="@dimen/_3sdp"
+            android:textColor="@color/green"
+            android:textSize="@dimen/_9ssp"
+            android:text="Top 1% Tier"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -355,6 +355,98 @@
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                     </com.axelliant.hris.ui.designsystem.components.AppCardView>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/lyAiAssistantPill"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:background="@drawable/bg_ai_assistant_pill"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?attr/selectableItemBackground"
+                        android:padding="@dimen/_10sdp"
+                        app:layout_constraintTop_toBottomOf="@id/card_note"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent">
+
+                        <ImageView
+                            android:id="@+id/ivAiAssistantIcon"
+                            android:layout_width="@dimen/_36sdp"
+                            android:layout_height="@dimen/_36sdp"
+                            android:background="@drawable/bg_ai_assistant_icon"
+                            android:padding="@dimen/_9sdp"
+                            android:src="@drawable/ic_ai_sparkles"
+                            app:tint="@color/ds_neutral_white"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tvAiAssistantLabel"
+                            style="@style/Text.Fluent2.Body.Primary.Strong"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_10sdp"
+                            android:text="AI Assistant"
+                            android:textSize="@dimen/_13ssp"
+                            app:layout_constraintTop_toTopOf="@id/ivAiAssistantIcon"
+                            app:layout_constraintBottom_toBottomOf="@id/ivAiAssistantIcon"
+                            app:layout_constraintStart_toEndOf="@id/ivAiAssistantIcon"
+                            app:layout_constraintEnd_toStartOf="@id/ivAiAssistantArrow" />
+
+                        <ImageView
+                            android:id="@+id/ivAiAssistantArrow"
+                            android:layout_width="@dimen/_16sdp"
+                            android:layout_height="@dimen/_16sdp"
+                            android:src="@drawable/ic_chevron_left"
+                            android:rotation="180"
+                            app:tint="@color/ds_text_secondary"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <include
+                        android:id="@+id/widgetMonthlyAttendance"
+                        layout="@layout/layout_widget_monthly_attendance"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        app:layout_constraintTop_toBottomOf="@id/lyAiAssistantPill"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <include
+                        android:id="@+id/widgetCheckinActivity"
+                        layout="@layout/layout_widget_checkin_activity"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        app:layout_constraintTop_toBottomOf="@id/widgetMonthlyAttendance"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <include
+                        android:id="@+id/widgetRolePerformance"
+                        layout="@layout/layout_widget_role_performance"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        app:layout_constraintTop_toBottomOf="@id/widgetCheckinActivity"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <include
+                        android:id="@+id/widgetPipelineFunnel"
+                        layout="@layout/layout_widget_pipeline_funnel"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        app:layout_constraintTop_toBottomOf="@id/widgetRolePerformance"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
                     <!-- ============================================================ -->
                     <!-- END: NOTE CARD                                               -->
                     <!-- ============================================================ -->
@@ -862,83 +954,10 @@
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <com.axelliant.hris.ui.designsystem.components.AppTextView
-                        android:id="@+id/tv_business_modules"
-                        style="@style/Text.Fluent2.Subheading.Primary.Strong"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        android:text="@string/home_business_modules"
-                        android:textAlignment="textStart"
-                        android:textSize="@dimen/_13ssp"
-                        android:visibility="gone"
-                        app:layout_constraintEnd_toStartOf="@id/tv_business_view_all"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/ly_my_shift" />
-
-                    <com.axelliant.hris.ui.designsystem.components.AppTextView
-                        android:id="@+id/tv_business_view_all"
-                        style="@style/Text.Fluent2.Subheading.Primary.Strong"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/view_all"
-                        android:textColor="@color/ds_primary"
-                        android:textSize="@dimen/_10ssp"
-                        android:visibility="gone"
-                        app:layout_constraintBottom_toBottomOf="@id/tv_business_modules"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="@id/tv_business_modules" />
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rv_business_module"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:clipChildren="false"
-                        android:clipToPadding="false"
-                        android:nestedScrollingEnabled="false"
-                        android:orientation="vertical"
-                        android:visibility="gone"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_business_modules"
-                        app:spanCount="2"
-                        tools:itemCount="4"
-                        tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                        tools:listitem="@layout/modules_row" />
-
-                    <com.axelliant.hris.ui.designsystem.components.AppTextView
-                        android:id="@+id/tv_weekly"
-                        style="@style/Text.Fluent2.Subheading.Primary.Strong"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        android:text="@string/home_hris_employee_services"
-                        android:textAlignment="textStart"
-                        android:textSize="@dimen/_13ssp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/rv_business_module" />
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rv_module"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:clipChildren="false"
-                        android:clipToPadding="false"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_weekly"
-                        app:spanCount="2"
-                        tools:itemCount="4"
-                        tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                        tools:listitem="@layout/modules_row" />
-
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/_50sdp"
-                        app:layout_constraintTop_toBottomOf="@+id/rv_module" />
+                        android:layout_height="@dimen/_100sdp"
+                        app:layout_constraintTop_toBottomOf="@+id/widgetPipelineFunnel"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -948,47 +967,6 @@
         <!-- ============================================================ -->
         <!-- END: card_main                                                -->
         <!-- ============================================================ -->
-
-        <FrameLayout
-            android:id="@+id/askAiFloatingButton"
-            android:layout_width="@dimen/_54sdp"
-            android:layout_height="@dimen/_54sdp"
-            android:layout_marginEnd="@dimen/_8sdp"
-            android:layout_marginBottom="@dimen/_12sdp"
-            android:background="@drawable/bg_home_ask_ai_fab"
-            android:clickable="true"
-            android:contentDescription="@string/ask_ai"
-            android:elevation="@dimen/_4sdp"
-            android:focusable="true"
-            android:foreground="?attr/selectableItemBackground"
-            app:layout_constraintBottom_toBottomOf="@id/bottom_guideline"
-            app:layout_constraintEnd_toEndOf="@id/end_guideline">
-
-            <FrameLayout
-                android:layout_width="@dimen/_40sdp"
-                android:layout_height="@dimen/_40sdp"
-                android:layout_gravity="center"
-                android:background="@drawable/bg_home_ask_ai_orb">
-
-                <ImageView
-                    android:layout_width="19dp"
-                    android:layout_height="@dimen/_20sdp"
-                    android:layout_gravity="center"
-                    android:contentDescription="@null"
-                    android:src="@drawable/ic_ai_sparkles"
-                    app:tint="@color/ds_neutral_white" />
-            </FrameLayout>
-
-            <ImageView
-                android:id="@+id/ivFabArrow"
-                android:layout_width="@dimen/_14sdp"
-                android:layout_height="@dimen/_14sdp"
-                android:layout_gravity="center_vertical|start"
-                android:src="@drawable/ic_chevron_left"
-                android:visibility="gone"
-                app:tint="@color/ds_neutral_white" />
-
-        </FrameLayout>
         <com.facebook.shimmer.ShimmerFrameLayout
             android:id="@+id/shimmer_layout"
             android:layout_width="0dp"
@@ -1224,5 +1202,31 @@
         </com.facebook.shimmer.ShimmerFrameLayout>
 
         <include layout="@layout/include_app_navigation_drawer" />
+        <FrameLayout
+            android:id="@+id/fabQuickActions"
+            android:layout_width="@dimen/_54sdp"
+            android:layout_height="@dimen/_54sdp"
+            android:layout_marginBottom="@dimen/_12sdp"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:background="@drawable/bg_home_ask_ai_fab"
+            android:clickable="true"
+            android:contentDescription="Quick actions"
+            android:elevation="@dimen/_4sdp"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            app:layout_constraintBottom_toBottomOf="@id/bottom_guideline"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline">
+
+            <ImageView
+                android:layout_width="@dimen/_22sdp"
+                android:layout_height="@dimen/_22sdp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_quick_actions"
+                app:tint="@color/ds_neutral_white" />
+        </FrameLayout>
+
+        <include
+            android:id="@+id/quickActionsMenu"
+            layout="@layout/layout_quick_actions_menu" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
