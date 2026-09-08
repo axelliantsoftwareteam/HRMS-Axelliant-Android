@@ -1058,7 +1058,7 @@
         <string name="quote_preview_unit_format">Unit: %1$s</string>
         <string name="quote_preview_comments_history">Comments &amp; History</string>
 
-        <string name="add_quote_title">Create Quote</string>
+        <string name="add_quote_title">Add Quote</string>
         <string name="add_quote_quote_title_required">Quote Title *</string>
         <string name="add_quote_quote_title_hint">Enter quote title</string>
         <string name="add_quote_customer_information">Customer Information</string>
