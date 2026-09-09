@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -13,6 +14,7 @@ import com.axelliant.hris.databinding.ItemSubscriptionFilterTabBinding
 data class SubscriptionFilterTab(
     val id: String,
     @StringRes val labelRes: Int,
+    val count: Int = 0,
 )
 
 class SubscriptionFilterTabAdapter(
@@ -48,16 +50,21 @@ class SubscriptionFilterTabAdapter(
 
         fun bind(tab: SubscriptionFilterTab) = with(binding.filterTabLabel) {
             val selected = tab.id == selectedId
-            setText(tab.labelRes)
+            text = context.getString(tab.labelRes, tab.count)
             setBackgroundResource(
-                if (selected) R.drawable.bg_subscription_filter_chip_selected
-                else R.drawable.bg_subscription_filter_chip
+                if (selected) R.drawable.bg_quote_filter_chip_selected
+                else R.drawable.bg_quote_filter_chip_default
             )
+
             setTextColor(
                 ContextCompat.getColor(
                     context,
-                    if (selected) R.color.ds_on_primary else R.color.ds_text_primary,
+                    if (selected) R.color.ia_white else R.color.quotes_filter_chip_default_text,
                 )
+            )
+            ResourcesCompat.getFont(
+                context,
+                if (isSelected) R.font.poppins_semibold else R.font.poppins_medium
             )
             setOnClickListener {
                 if (selectedId == tab.id) return@setOnClickListener

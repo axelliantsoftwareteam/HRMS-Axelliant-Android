@@ -19,6 +19,7 @@ import com.axelliant.hris.features.quotes.data.remote.CreateQuoteApiService
 import com.axelliant.hris.features.quotes.data.remote.QuotesApiService
 import com.axelliant.hris.features.quotes.data.remote.WorkflowApiService
 import com.axelliant.hris.features.saleorders.data.remote.SaleOrderApiService
+import com.axelliant.hris.features.subscriptions.data.remote.SubscriptionApiService
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dagger.Module
@@ -171,4 +172,9 @@ object NetworkModule {
     @Singleton
     fun provideSaleOrderApiService(retrofit: Retrofit): SaleOrderApiService =
         retrofit.create(SaleOrderApiService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideSubscriptionApiService(retrofit: Retrofit): SubscriptionApiService =
+        retrofit.create(SubscriptionApiService::class.java)
 }

@@ -360,8 +360,20 @@
         <string name="subscription_filter_all">All</string>
         <string name="subscription_status_active">Active</string>
         <string name="subscription_status_trial">Trial</string>
+        <string name="subscription_filter_all_count">All (%1$d)</string>
+        <string name="subscription_filter_active_count">Active (%1$d)</string>
+        <string name="subscription_filter_trial_count">Trial (%1$d)</string>
         <string name="subscription_status_past_due">Past due</string>
         <string name="subscription_count">3 subscriptions</string>
+        <string name="subscriptions_count_format">%1$d subscriptions</string>
+        <plurals name="subscriptions_count">
+            <item quantity="one">%1$d subscription</item>
+            <item quantity="other">%1$d subscriptions</item>
+        </plurals>
+        <string name="subscriptions_empty_title">No subscriptions found</string>
+        <string name="subscriptions_empty_description">Try a different search or create a new subscription.</string>
+        <string name="subscriptions_error_title">Unable to load subscriptions</string>
+        <string name="subscriptions_error_description">Please check your connection and try again.</string>
         <string name="subscription_account">Account</string>
         <string name="subscription_plan">Plan</string>
         <string name="subscription_price">Price</string>
@@ -410,7 +422,23 @@
         <string name="subscription_plans_search_hint">Search plans</string>
         <string name="subscription_status_draft">Draft</string>
         <string name="subscription_status_archived">Archived</string>
+        <string name="subscription_filter_draft_count">Draft (%1$d)</string>
+        <string name="subscription_filter_archived_count">Archived (%1$d)</string>
         <string name="subscription_plans_count">3 plans</string>
+        <string name="subscription_plans_count_format">%1$d plans</string>
+        <plurals name="subscription_plans_count_plural">
+            <item quantity="one">%1$d plan</item>
+            <item quantity="other">%1$d plans</item>
+        </plurals>
+        <string name="subscription_plans_empty_title">No plans found</string>
+        <string name="subscription_plans_empty_description">Try a different search or create a new plan.</string>
+        <string name="subscription_plans_error_title">Unable to load plans</string>
+        <string name="subscription_plans_error_description">Please check your connection and try again.</string>
+        <string name="subscription_plan_price_format">%1$s / %2$s</string>
+        <string name="subscription_plan_billing_model_format">Billing model\n%1$s</string>
+        <string name="subscription_plan_meta_format">%1$s   ·   %2$d tiers   ·   %3$d features   ·   %4$d subscriptions</string>
+        <string name="subscription_trial_available">Trial available</string>
+        <string name="subscription_no_trial">No trial</string>
         <string name="subscription_view_plan">View plan</string>
         <string name="subscription_new_plan">New plan</string>
         <string name="subscription_new_plan_title">New plan</string>
