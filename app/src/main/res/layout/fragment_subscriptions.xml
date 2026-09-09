@@ -354,8 +354,79 @@
         android:textSize="@dimen/text_size_10"
         app:icon="@drawable/ia_ic_add"
         app:iconPadding="@dimen/_4sdp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/bottomGuideline"
         app:layout_constraintEnd_toEndOf="@id/endGuideline"
         app:iconSize="@dimen/ds_button_inline_icon_size"
         app:iconTint="@color/ds_on_primary" />
+
+    <!-- Scrim, action row, and FAB are siblings of contentContainer so blur doesn't affect them -->
+
+    <View
+        android:id="@+id/fabMenuScrim"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/purchase_order_fab_scrim"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/addSaleOrderActionRow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/ds_space_12"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        app:layout_constraintBottom_toTopOf="@id/createSaleOrderFab"
+        app:layout_constraintEnd_toEndOf="@id/createSaleOrderFab">
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            android:id="@+id/addSaleOrderLabel"
+            style="@style/Text.InternalApps.Body"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/ds_space_10"
+            android:background="@drawable/bg_purchase_order_fab_label"
+            android:elevation="@dimen/_2sdp"
+            android:fontFamily="sans-serif-medium"
+            android:paddingStart="@dimen/ds_space_14"
+            android:paddingTop="@dimen/ds_space_8"
+            android:paddingEnd="@dimen/ds_space_14"
+            android:paddingBottom="@dimen/ds_space_8"
+            android:text="@string/new_subscription"
+            android:textColor="@color/ds_text_primary" />
+
+        <com.axelliant.hris.ui.designsystem.components.AppFloatingActionButtonView
+            android:id="@+id/addSaleOrderSubFab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ia_ic_add"
+            app:backgroundTint="@color/ds_primary"
+            app:elevation="@dimen/_4sdp"
+            app:fabSize="mini"
+            app:tint="@color/ds_on_primary" />
+    </LinearLayout>
+
+    <com.axelliant.hris.ui.designsystem.components.AppFloatingActionButtonView
+        android:id="@+id/createSaleOrderFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/ds_space_16"
+        android:layout_marginBottom="@dimen/ds_space_24"
+        android:contentDescription="@string/sale_orders_create"
+        android:src="@drawable/ia_ic_add"
+        app:backgroundTint="@color/ds_primary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:tint="@color/ds_on_primary" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

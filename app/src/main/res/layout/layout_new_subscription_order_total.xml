@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.axelliant.hris.ui.designsystem.components.AppCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     style="@style/Widget.InternalApps.Card"
     android:layout_marginTop="@dimen/ds_space_10"
     app:cardBackgroundColor="@color/subscription_card_surface">
@@ -47,7 +48,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/ds_space_6"
-            android:text="USD 32.70"
+            tools:text="USD 32.70"
             android:textColor="@color/ds_primary"
             android:textSize="@dimen/text_size_15" />
     </LinearLayout>

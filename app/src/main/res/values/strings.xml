@@ -486,6 +486,7 @@
         <string name="sale_orders_search_open">Search sale orders</string>
         <string name="sale_orders_search_close">Close search</string>
         <string name="sale_orders_create">Create Sale Order</string>
+        <string name="new_subscription">New Subscription</string>
         <string name="sale_orders_grand_total">Grand Total</string>
         <string name="sale_orders_delivery_date">Delivery Date</string>
         <string name="sale_orders_error">Unable to load sale orders.</string>
@@ -555,6 +556,8 @@
         <string name="add_sale_order_credit_limit">Credit Limit</string>
         <string name="add_sale_order_payment_term">Payment Term</string>
         <string name="add_sale_order_delivery_date">Delivery Date</string>
+        <string name="add_subscription_end_date">End Date</string>
+        <string name="add_subscription_start_date_required">Start Date *</string>
         <string name="add_sale_order_shipping_method">Shipping Method</string>
         <string name="add_sale_order_select_shipping_method">Select shipping method</string>
         <string name="add_sale_order_delivery_date_hint">mm/dd/yyyy</string>
