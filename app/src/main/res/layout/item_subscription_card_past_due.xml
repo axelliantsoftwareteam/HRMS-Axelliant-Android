@@ -6,7 +6,7 @@
     android:background="@drawable/bg_subscription_card"
     android:elevation="@dimen/_2sdp"
     android:orientation="vertical"
-    android:padding="@dimen/_14sdp">
+    android:padding="@dimen/_8sdp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,7 +15,7 @@
         android:orientation="horizontal">
 
         <com.axelliant.hris.ui.designsystem.components.AppTextView
-            style="@style/Text.InternalApps.Heading"
+            style="@style/Text.Fluent2.Title.Primary.Strong"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -37,7 +37,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_18sdp"
+        android:layout_marginTop="@dimen/_10sdp"
         android:baselineAligned="false"
         android:orientation="horizontal">
 
@@ -51,26 +51,31 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/_1sdp"
-        android:layout_marginTop="@dimen/_14sdp"
+        android:layout_marginTop="@dimen/_10sdp"
         android:background="@color/ds_outline" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_12sdp"
+        android:layout_marginTop="@dimen/_10sdp"
         android:orientation="horizontal">
 
         <include layout="@layout/layout_subscription_billing_overdue" />
 
         <include layout="@layout/layout_subscription_auto_off" />
     </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:background="@color/ds_outline" />
 
     <com.axelliant.hris.ui.designsystem.components.AppTextView
-        style="@style/Text.InternalApps.Subheading"
+        style="@style/Text.Fluent2.Title.Primary.Strong"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_16sdp"
+        android:layout_marginTop="@dimen/_10sdp"
         android:text="@string/subscription_view_details"
         android:textColor="@color/ds_primary"
-        android:textSize="@dimen/_12ssp" />
+        android:textSize="@dimen/_10ssp" />
 </LinearLayout>

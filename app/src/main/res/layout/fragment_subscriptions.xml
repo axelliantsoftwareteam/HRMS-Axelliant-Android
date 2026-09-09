@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/Layout.Fluent2.Screen"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/ds_background">
+    android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/startGuideline"
@@ -41,20 +40,19 @@
             android:layout_width="0dp"
             android:layout_height="@dimen/_40sdp"
             app:centerTitle="true"
-            app:showBackButton="true"
-            app:showSearchButton="false"
-            app:showActionButton="false"
-            app:titleText="@string/subscription_commerce_title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:showActionButton="false"
+            app:showBackButton="true"
+            app:showSearchButton="true"
+            app:titleText="@string/subscription_commerce_title" />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/commerceTabs"
             android:layout_width="0dp"
             android:layout_height="@dimen/_40sdp"
             android:layout_marginTop="@dimen/_8sdp"
-            android:background="@color/ds_background"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/appTopBar"
@@ -64,54 +62,72 @@
             app:tabIndicatorColor="@color/ds_primary"
             app:tabIndicatorFullWidth="false"
             app:tabIndicatorHeight="@dimen/_2sdp"
+            app:tabInlineLabel="true"
             app:tabMode="scrollable"
             app:tabRippleColor="@android:color/transparent"
             app:tabSelectedTextColor="@color/ds_primary"
+            app:tabTextAppearance="@style/CommerceTabTextAppearance"
             app:tabTextColor="@color/subscription_commerce_tab_text">
-            <com.google.android.material.tabs.TabItem  android:text="@string/drawer_subscriptions" />
-            <com.google.android.material.tabs.TabItem  android:text="@string/subscription_plans" />
-            <com.google.android.material.tabs.TabItem  android:text="@string/subscription_invoices" />
-            <com.google.android.material.tabs.TabItem  android:text="@string/subscription_reconciliation" />
 
-<!--            <com.google.android.material.tabs.TabItem android:icon="@drawable/ic_subscription_box" android:text="@string/drawer_subscriptions" />
-            <com.google.android.material.tabs.TabItem android:icon="@drawable/ic_dashboard_box" android:text="@string/subscription_plans" />
-            <com.google.android.material.tabs.TabItem android:icon="@drawable/ic_subscription_invoice" android:text="@string/subscription_invoices" />
-            <com.google.android.material.tabs.TabItem android:icon="@drawable/ic_subscription_renew" android:text="@string/subscription_reconciliation" />-->
+            <com.google.android.material.tabs.TabItem
+                android:icon="@drawable/ic_subscription_box"
+                android:text="@string/drawer_subscriptions" />
+
+            <com.google.android.material.tabs.TabItem
+                android:icon="@drawable/ic_dashboard_box"
+                android:text="@string/subscription_plans" />
+
+            <com.google.android.material.tabs.TabItem
+                android:icon="@drawable/ic_subscription_invoice"
+                android:text="@string/subscription_invoices" />
+
+            <com.google.android.material.tabs.TabItem
+                android:icon="@drawable/ic_subscription_renew"
+                android:text="@string/subscription_reconciliation" />
         </com.google.android.material.tabs.TabLayout>
 
-    <!--    <View
-            android:id="@+id/tabsDivider"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/_1sdp"
-            android:background="@color/ds_outline"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/commerceTabs" />-->
+        <!--            <com.google.android.material.tabs.TabItem android:icon="@drawable/ic_subscription_box" android:text="@string/drawer_subscriptions" />
+                    <com.google.android.material.tabs.TabItem android:icon="@drawable/ic_dashboard_box" android:text="@string/subscription_plans" />
+                    <com.google.android.material.tabs.TabItem android:icon="@drawable/ic_subscription_invoice" android:text="@string/subscription_invoices" />
+                    <com.google.android.material.tabs.TabItem android:icon="@drawable/ic_subscription_renew" android:text="@string/subscription_reconciliation" />-->
+
+
+        <!--    <View
+                android:id="@+id/tabsDivider"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_1sdp"
+                android:background="@color/ds_outline"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/commerceTabs" />-->
 
         <androidx.core.widget.NestedScrollView
+            android:id="@+id/subscriptionsScrollView"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:clipToPadding="false"
-            android:paddingBottom="@dimen/_10sdp"
+            android:paddingBottom="@dimen/_15sdp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/commerceTabs">
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:paddingTop="@dimen/_5sdp">
 
                 <com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout
                     android:id="@+id/searchInputLayout"
                     style="@style/Widget.InternalApps.InputLayout"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/ds_space_10"
                     android:hint="@string/subscription_search_hint"
                     android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:startIconDrawable="@drawable/ia_ic_search"
                     app:startIconTint="@color/ds_text_secondary">
 
@@ -121,67 +137,183 @@
                         android:inputType="text" />
                 </com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout>
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_40sdp"
-                    android:layout_marginTop="@dimen/_10sdp">
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/filterTabsRecyclerView"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_38sdp"
+                    android:layout_marginTop="@dimen/ds_space_10"
+                    android:clipToPadding="false"
+                    android:orientation="horizontal"
+                    android:overScrollMode="never"
+                    android:scrollbars="none"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/filterButton"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/searchInputLayout" />
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/filterTabsRecyclerView"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:clipToPadding="false"
-                        android:orientation="horizontal"
-                        android:overScrollMode="never"
-                        android:scrollbars="none"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/filterButton"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <com.axelliant.hris.ui.designsystem.components.AppButtonView
-                        android:id="@+id/filterButton"
-                        style="@style/Widget.Fluent2.Button.Icon"
-                        android:layout_width="@dimen/_36sdp"
-                        android:layout_height="@dimen/_32sdp"
-                        android:layout_marginStart="@dimen/_6sdp"
-                        android:background="@drawable/bg_subscription_filter_chip"
-                        android:text=""
-                        app:backgroundTint="@null"
-                        app:icon="@drawable/ic_subscription_filter"
-                        app:iconGravity="textStart"
-                        app:iconSize="@dimen/_14sdp"
-                        app:noBackground="true"
-                        android:visibility="gone"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                <com.axelliant.hris.ui.designsystem.components.AppButtonView
+                    android:id="@+id/filterButton"
+                    style="@style/Widget.Fluent2.Button.Icon"
+                    android:layout_width="@dimen/_36sdp"
+                    android:layout_height="@dimen/_32sdp"
+                    android:layout_marginStart="@dimen/_6sdp"
+                    android:background="@drawable/bg_subscription_filter_chip"
+                    android:text=""
+                    android:visibility="gone"
+                    app:backgroundTint="@null"
+                    app:icon="@drawable/ic_subscription_filter"
+                    app:iconGravity="textStart"
+                    app:iconSize="@dimen/_14sdp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:noBackground="true" />
 
                 <com.axelliant.hris.ui.designsystem.components.AppTextView
-                    style="@style/Text.InternalApps.Caption"
+                    android:id="@+id/subscriptionCountText"
+                    style="@style/Text.InternalApps.Display"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/ds_space_8"
+                    android:fontFamily="@font/poppins_bold"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/ds_text_muted"
+                    android:textSize="@dimen/text_size_15"
+                    tools:text="@string/subscription_count"
+                    app:layout_constraintTop_toBottomOf="@+id/filterTabsRecyclerView"
+                    />
+
+                <LinearLayout
+                    android:id="@+id/shimmerContainer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_10sdp"
-                    android:text="@string/subscription_count"
-                    android:textColor="@color/ds_text_secondary"
-                    android:textSize="@dimen/_11ssp" />
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    app:layout_constraintTop_toBottomOf="@+id/subscriptionCountText"
+                    />
 
-                <include layout="@layout/item_subscription_card_active" />
-                <include layout="@layout/item_subscription_card_trial" />
-                <include layout="@layout/item_subscription_card_past_due" />
-            </LinearLayout>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/subscriptionsRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:nestedScrollingEnabled="false"
+                    android:overScrollMode="never"
+                    android:visibility="visible"
+                    tools:itemCount="3"
+                    tools:listitem="@layout/item_subscription_card_active"
+                    app:layout_constraintTop_toBottomOf="@+id/subscriptionCountText"
+                    />
+
+                <LinearLayout
+                    android:id="@+id/paginationShimmerContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toBottomOf="@+id/subscriptionCountText"
+                    />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
+
+        <LinearLayout
+            android:id="@+id/emptyStateContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="@dimen/_10sdp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:visibility="gone">
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                style="@style/Text.Fluent2.Title.Primary.Strong"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/subscriptions_empty_title"
+                android:textColor="@color/ds_text_primary"
+                android:textSize="@dimen/_14ssp" />
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                style="@style/Text.InternalApps.Body"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_6sdp"
+                android:gravity="center"
+                android:text="@string/subscriptions_empty_description"
+                android:textColor="@color/ds_text_secondary"
+                android:textSize="@dimen/_11ssp" />
+
+            <com.axelliant.hris.ui.designsystem.components.AppButtonView
+                android:id="@+id/emptyRetryButton"
+                style="@style/Widget.Fluent2.Button.Primary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_14sdp"
+                android:text="@string/ask_ai_try_again"
+                app:icon="@drawable/ic_retry"
+                app:iconGravity="textStart"
+                app:iconTint="@color/ds_on_primary" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/errorStateContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            >
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                style="@style/Text.Fluent2.Title.Primary.Strong"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/subscriptions_error_title"
+                android:textColor="@color/ds_text_primary"
+                android:textSize="@dimen/_14ssp" />
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                android:id="@+id/errorDescriptionText"
+                style="@style/Text.InternalApps.Body"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_6sdp"
+                android:gravity="center"
+                android:text="@string/subscriptions_error_description"
+                android:textColor="@color/ds_text_secondary"
+                android:textSize="@dimen/_11ssp" />
+
+            <com.axelliant.hris.ui.designsystem.components.AppButtonView
+                android:id="@+id/errorRetryButton"
+                style="@style/Widget.Fluent2.Button.Primary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_14sdp"
+                android:text="@string/retry"
+                app:icon="@drawable/ic_retry"
+                app:iconGravity="textStart"
+                app:iconTint="@color/ds_on_primary" />
+        </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+<!--
     <LinearLayout
         android:id="@+id/newSubscriptionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/_5sdp"
         android:layout_marginBottom="@dimen/_10sdp"
-        android:padding="@dimen/_10sdp"
         android:background="@drawable/bg_subscription_new_button"
         android:clickable="true"
         android:elevation="@dimen/_8sdp"
@@ -189,6 +321,8 @@
         android:foreground="?attr/selectableItemBackground"
         android:gravity="center"
         android:orientation="horizontal"
+        android:padding="@dimen/_10sdp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/bottomGuideline"
         app:layout_constraintEnd_toEndOf="@id/endGuideline">
 
@@ -209,4 +343,19 @@
             android:textColor="@color/ds_on_primary"
             android:textSize="@dimen/_12ssp" />
     </LinearLayout>
+-->
+    <com.axelliant.hris.ui.designsystem.components.AppButtonView
+        android:id="@+id/newSubscriptionButton"
+        style="@style/Widget.Fluent2.Button.Primary"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/ds_button_height"
+        android:text="@string/subscription_new"
+        android:textAllCaps="false"
+        android:textSize="@dimen/text_size_10"
+        app:icon="@drawable/ia_ic_add"
+        app:iconPadding="@dimen/_4sdp"
+        app:layout_constraintBottom_toBottomOf="@id/bottomGuideline"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:iconSize="@dimen/ds_button_inline_icon_size"
+        app:iconTint="@color/ds_on_primary" />
 </androidx.constraintlayout.widget.ConstraintLayout>

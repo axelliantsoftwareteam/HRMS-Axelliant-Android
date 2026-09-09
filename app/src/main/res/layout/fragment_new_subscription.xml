@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/Layout.Fluent2.Screen"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/ds_background">
+    android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/startGuideline"
@@ -44,10 +43,10 @@
         style="@style/Text.InternalApps.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_8sdp"
+        android:layout_marginTop="@dimen/ds_space_12"
         android:text="@string/new_subscription_details_subtitle"
         android:textColor="@color/ds_text_secondary"
-        android:textSize="@dimen/_12ssp"
+        android:textSize="@dimen/text_size_12"
         app:layout_constraintEnd_toEndOf="@id/appTopBar"
         app:layout_constraintStart_toStartOf="@id/appTopBar"
         app:layout_constraintTop_toBottomOf="@id/appTopBar" />
@@ -55,8 +54,8 @@
     <LinearLayout
         android:id="@+id/stepper"
         android:layout_width="0dp"
-        android:layout_height="@dimen/_58sdp"
-        android:layout_marginTop="@dimen/_18sdp"
+        android:layout_height="@dimen/_40sdp"
+        android:layout_marginTop="@dimen/_10sdp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="@id/appTopBar"
@@ -140,8 +139,8 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:clipToPadding="false"
-        android:paddingTop="@dimen/_14sdp"
-        android:paddingBottom="@dimen/_138sdp"
+        android:paddingTop="@dimen/ds_space_10"
+        android:paddingBottom="@dimen/ds_space_40"
         app:layout_constraintBottom_toTopOf="@id/bottomGuideline"
         app:layout_constraintEnd_toStartOf="@id/endGuideline"
         app:layout_constraintStart_toEndOf="@id/startGuideline"
@@ -163,7 +162,8 @@
                     android:layout_height="wrap_content"
                     android:text="@string/subscription_customer_plan"
                     android:textColor="@color/ds_text_primary"
-                    android:textSize="@dimen/_15ssp" />
+                    android:visibility="gone"
+                    android:textSize="@dimen/text_size_15" />
 
                 <include layout="@layout/layout_new_subscription_details_fields" />
                 <include layout="@layout/layout_new_subscription_order_total" />
@@ -252,29 +252,32 @@
         android:layout_height="wrap_content"
         android:background="@color/ds_surface"
         android:elevation="@dimen/_6sdp"
-        android:orientation="vertical"
-        android:padding="@dimen/_14sdp"
+        android:orientation="horizontal"
+        android:padding="@dimen/ds_space_6"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintEnd_toStartOf="@id/endGuideline"
+        app:layout_constraintStart_toEndOf="@id/startGuideline">
 
         <com.axelliant.hris.ui.designsystem.components.AppButtonView
             android:id="@+id/backButton"
             style="@style/Widget.Fluent2.Button.Secondary"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_44sdp"
+            android:layout_height="@dimen/ds_button_height"
             android:text="@string/subscription_cancel"
             android:textAllCaps="false"
+            android:padding="0dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="@dimen/ds_space_6"
             android:textColor="@color/ds_primary" />
 
         <com.axelliant.hris.ui.designsystem.components.AppButtonView
             android:id="@+id/primaryButton"
             style="@style/Widget.Fluent2.Button.Primary"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_46sdp"
-            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_height="@dimen/ds_button_height"
             android:text="@string/subscription_continue_items"
             android:textAllCaps="false"
+            android:layout_weight="1"
             android:textColor="@color/ds_on_primary"
             android:textSize="@dimen/_10ssp"
             app:backgroundTint="@color/ds_primary" />

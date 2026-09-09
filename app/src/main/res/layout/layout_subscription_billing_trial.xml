@@ -35,7 +35,7 @@
             style="@style/Text.InternalApps.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:text="Aug 28, 2026"
+            android:text="Aug 28, 2026"
             android:textColor="@color/ds_text_primary"
             android:textSize="@dimen/_10ssp" />
     </LinearLayout>

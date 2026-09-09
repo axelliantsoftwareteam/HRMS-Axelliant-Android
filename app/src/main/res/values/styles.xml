@@ -348,6 +348,12 @@
             <item name="endIconTint">@color/ds_text_muted</item>
         </style>
 
+
+    <style name="CommerceTabTextAppearance" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="android:textSize">@dimen/text_size_12</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
         <style name="Widget.Axelliant.InputEditText">
             <item name="android:layout_width">match_parent</item>
             <item name="android:layout_height">wrap_content</item>
@@ -371,7 +377,7 @@
             <item name="textAllCaps">false</item>
             <item name="textSize">@dimen/text_size_10</item>
             <item name="backgroundTint">@color/ds_button_primary_background</item>
-            <item name="cornerRadius">@dimen/ds_radius_sm</item>
+            <item name="cornerRadius">@dimen/ds_radius_md</item>
             <item name="iconTint">@color/ds_button_primary_text</item>
             <item name="rippleColor">@color/ds_primary_pressed</item>
             <!-- TEST -->
@@ -388,7 +394,7 @@
             <item name="android:textAllCaps">false</item>
             <item name="textAllCaps">false</item>
             <item name="backgroundTint">@color/ds_button_secondary_background</item>
-            <item name="cornerRadius">@dimen/ds_radius_lg</item>
+            <item name="cornerRadius">@dimen/ds_radius_md</item>
             <item name="strokeColor">@color/ds_outline</item>
             <item name="strokeWidth">@dimen/_1sdp</item>
             <item name="iconTint">@color/ds_button_secondary_text</item>

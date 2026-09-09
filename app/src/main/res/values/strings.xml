@@ -369,8 +369,20 @@
         <string name="subscription_filter_all">All</string>
         <string name="subscription_status_active">Active</string>
         <string name="subscription_status_trial">Trial</string>
+        <string name="subscription_filter_all_count">All (%1$d)</string>
+        <string name="subscription_filter_active_count">Active (%1$d)</string>
+        <string name="subscription_filter_trial_count">Trial (%1$d)</string>
         <string name="subscription_status_past_due">Past due</string>
         <string name="subscription_count">3 subscriptions</string>
+        <string name="subscriptions_count_format">%1$d subscriptions</string>
+        <plurals name="subscriptions_count">
+            <item quantity="one">%1$d subscription</item>
+            <item quantity="other">%1$d subscriptions</item>
+        </plurals>
+        <string name="subscriptions_empty_title">No subscriptions found</string>
+        <string name="subscriptions_empty_description">Try a different search or create a new subscription.</string>
+        <string name="subscriptions_error_title">Unable to load subscriptions</string>
+        <string name="subscriptions_error_description">Please check your connection and try again.</string>
         <string name="subscription_account">Account</string>
         <string name="subscription_plan">Plan</string>
         <string name="subscription_price">Price</string>
@@ -381,7 +393,7 @@
         <string name="subscription_auto_renew_on">Auto renew on</string>
         <string name="subscription_auto_renew_off">Auto renew off</string>
         <string name="subscription_view_details">View details</string>
-        <string name="subscription_new">New subscription</string>
+        <string name="subscription_new">New Subscription</string>
         <string name="subscriptions_more_actions_coming_soon">Subscription actions are coming soon.</string>
         <string name="subscriptions_filter_coming_soon">Subscription filters are coming soon.</string>
         <string name="subscriptions_new_coming_soon">New subscription flow is coming soon.</string>
@@ -419,9 +431,25 @@
         <string name="subscription_plans_search_hint">Search plans</string>
         <string name="subscription_status_draft">Draft</string>
         <string name="subscription_status_archived">Archived</string>
+        <string name="subscription_filter_draft_count">Draft (%1$d)</string>
+        <string name="subscription_filter_archived_count">Archived (%1$d)</string>
         <string name="subscription_plans_count">3 plans</string>
-        <string name="subscription_view_plan">View plan</string>
-        <string name="subscription_new_plan">New plan</string>
+        <string name="subscription_plans_count_format">%1$d plans</string>
+        <plurals name="subscription_plans_count_plural">
+            <item quantity="one">%1$d plan</item>
+            <item quantity="other">%1$d plans</item>
+        </plurals>
+        <string name="subscription_plans_empty_title">No plans found</string>
+        <string name="subscription_plans_empty_description">Try a different search or create a new plan.</string>
+        <string name="subscription_plans_error_title">Unable to load plans</string>
+        <string name="subscription_plans_error_description">Please check your connection and try again.</string>
+        <string name="subscription_plan_price_format">%1$s / %2$s</string>
+        <string name="subscription_plan_billing_model_format">Billing model\n%1$s</string>
+        <string name="subscription_plan_meta_format">%1$s   ·   %2$d tiers   ·   %3$d features   ·   %4$d subscriptions</string>
+        <string name="subscription_trial_available">Trial available</string>
+        <string name="subscription_no_trial">No trial</string>
+        <string name="subscription_view_plan">View Plan</string>
+        <string name="subscription_new_plan">New Plan</string>
         <string name="subscription_new_plan_title">New plan</string>
         <string name="subscription_new_plan_subtitle">Create a billable subscription offer.</string>
         <string name="subscription_plan_details">Plan details</string>
@@ -519,6 +547,11 @@
         <string name="edit_sale_order_saved">Sale order updated.</string>
         <string name="add_sale_order_customer_information">Customer Information</string>
         <string name="add_sale_order_customer_name">Customer Name</string>
+        <string name="add_subscription_account">Account *</string>
+        <string name="add_subscription_plan">Plan *</string>
+        <string name="add_subscription_tier">Tier *</string>
+        <string name="add_subscription_billing_frequency">Billing Frequency</string>
+        <string name="add_subscription_currency">Currency *</string>
         <string name="add_sale_order_credit_limit">Credit Limit</string>
         <string name="add_sale_order_payment_term">Payment Term</string>
         <string name="add_sale_order_delivery_date">Delivery Date</string>
@@ -1067,7 +1100,7 @@
         <string name="quote_preview_unit_format">Unit: %1$s</string>
         <string name="quote_preview_comments_history">Comments &amp; History</string>
 
-        <string name="add_quote_title">Create Quote</string>
+        <string name="add_quote_title">Add Quote</string>
         <string name="add_quote_quote_title_required">Quote Title *</string>
         <string name="add_quote_quote_title_hint">Enter quote title</string>
         <string name="add_quote_customer_information">Customer Information</string>
@@ -1121,6 +1154,11 @@
         <string name="add_quote_search_customers_hint">Search customers</string>
         <string name="add_quote_no_customers_found">No customers found.</string>
         <string name="add_quote_select_customer">Select customer</string>
+        <string name="add_subscription_select_account">Select account</string>
+        <string name="add_subscription_select_plan">Select plan</string>
+        <string name="add_subscription_select_tier">Select tier</string>
+        <string name="add_subscription_select_billing_frequency">Select billing</string>
+        <string name="add_subscription_select_currency">Select currency</string>
         <string name="add_quote_select_payment_term">Select payment term</string>
         <string name="add_quote_select_address">Select existing address</string>
         <string name="add_quote_select_delivery_date">Select date</string>
@@ -1141,10 +1179,14 @@
         <string name="add_quote_product_category_fallback">PRODUCT</string>
         <string name="add_quote_unit_price">Unit Price</string>
         <string name="add_quote_qty">Qty</string>
+        <string name="add_subscription_qty">Qty *</string>
+        <string name="add_subscription_tax_rate">Tax Rate (%)</string>
         <string name="add_quote_line_total">Line Total</string>
         <string name="add_quote_product_actions">Edit product</string>
         <string name="add_quote_edit_product">Edit Product</string>
         <string name="add_quote_base_price_required">Base Price *</string>
+        <string name="add_quote_unit_price_required">Unit Price *</string>
+        <string name="add_subscription_discount">Discount</string>
         <string name="add_quote_base_price_hint">0.00</string>
         <string name="add_quote_delivery_schedule">Delivery Schedule</string>
         <string name="add_quote_add_delivery_schedule">Add Delivery Schedule</string>

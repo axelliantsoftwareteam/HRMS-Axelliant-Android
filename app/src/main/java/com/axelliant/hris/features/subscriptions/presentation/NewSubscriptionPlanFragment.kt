@@ -20,7 +20,6 @@ class NewSubscriptionPlanFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) = with(binding) {
-        appTopBar.titleView.textSize = 14f
         appTopBar.setOnBackClickListener { findNavController().navigateUp() }
         cancelButton.setOnClickListener { findNavController().navigateUp() }
         createPlanButton.setOnClickListener {

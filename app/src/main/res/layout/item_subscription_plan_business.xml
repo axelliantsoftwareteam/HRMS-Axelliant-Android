@@ -1,10 +1,135 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.axelliant.hris.ui.designsystem.components.AppCardView xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/_10sdp" app:cardCornerRadius="@dimen/ds_radius_lg">
-    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="@dimen/_12sdp">
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical"><com.axelliant.hris.ui.designsystem.components.AppTextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Business Monthly" android:textColor="@color/ds_text_primary" android:textSize="@dimen/_12ssp" android:textStyle="bold"/><com.axelliant.hris.ui.designsystem.components.AppTextView android:layout_width="@dimen/_62sdp" android:layout_height="@dimen/_24sdp" android:background="@drawable/bg_subscription_status_active" android:gravity="center" android:text="@string/subscription_status_active" android:textColor="@color/subscription_active_text" android:textSize="@dimen/_9ssp"/></LinearLayout>
-        <com.axelliant.hris.ui.designsystem.components.AppTextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="@dimen/_3sdp" android:text="BUS-MONTHLY" android:textColor="@color/ds_text_secondary" android:textSize="@dimen/_9ssp"/>
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/_10sdp" android:gravity="center_vertical"><com.axelliant.hris.ui.designsystem.components.AppTextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1.1" android:text="$20.00 / month" android:textColor="@color/ds_text_primary" android:textSize="@dimen/_15ssp"/><View android:layout_width="@dimen/_1sdp" android:layout_height="@dimen/_34sdp" android:background="@color/ds_outline"/><com.axelliant.hris.ui.designsystem.components.AppTextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="@dimen/_12sdp" android:layout_weight="1" android:text="Billing model\nPer unit" android:textColor="@color/ds_text_secondary" android:textSize="@dimen/_9ssp"/></LinearLayout>
-        <com.axelliant.hris.ui.designsystem.components.AppTextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/_10sdp" android:maxLines="1" android:text="7-day trial   ·   3 tiers   ·   6 features   ·   24 subscriptions" android:textColor="@color/ds_text_secondary" android:textSize="@dimen/_8ssp"/>
-        <com.axelliant.hris.ui.designsystem.components.AppTextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/_12sdp" android:text="@string/subscription_view_plan" android:textColor="@color/ds_primary" android:textSize="@dimen/_10ssp" android:textStyle="bold"/>
+<com.axelliant.hris.ui.designsystem.components.AppCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/ds_space_10"
+    app:cardCornerRadius="@dimen/ds_radius_lg">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/ds_space_10">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical">
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                android:id="@+id/planNameText"
+                android:layout_width="0dp"
+                style="@style/Text.Fluent2.Title.Primary.Strong"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Business Monthly"
+                android:textColor="@color/ds_text_primary"
+                android:textSize="@dimen/text_size_12" />
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                android:id="@+id/statusBadge"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/_24sdp"
+                android:background="@drawable/bg_subscription_status_active"
+                android:gravity="center"
+                android:minWidth="@dimen/_62sdp"
+                android:paddingStart="@dimen/_10sdp"
+                android:paddingEnd="@dimen/_10sdp"
+                android:text="@string/subscription_status_active"
+                android:textColor="@color/subscription_active_text"
+                android:textSize="@dimen/ds_space_10" />
+
+            <com.axelliant.hris.ui.designsystem.components.AppButtonView
+                android:id="@+id/menuButton"
+                style="@style/Widget.Fluent2.Button.Text"
+                android:layout_width="@dimen/_36sdp"
+                android:layout_height="@dimen/_36sdp"
+                android:background="@android:color/transparent"
+                android:insetLeft="0dp"
+                android:insetTop="0dp"
+                android:insetRight="0dp"
+                android:insetBottom="0dp"
+                android:minWidth="0dp"
+                android:text=""
+                android:layout_marginStart="@dimen/_3sdp"
+                android:layout_gravity="end"
+                app:backgroundTint="@android:color/transparent"
+                app:icon="@drawable/ic_more_vert"
+                app:iconGravity="textStart"
+                app:noBackground="true"
+                app:layout_constraintBottom_toBottomOf="@id/totalAmountValue"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/totalAmountLabel" />
+
+        </LinearLayout>
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            android:id="@+id/planCodeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_3sdp"
+            android:text="BUS-MONTHLY"
+            android:textColor="@color/ds_text_secondary"
+            android:textSize="@dimen/text_size_10" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:gravity="center_vertical">
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                android:id="@+id/priceText"
+                android:layout_width="0dp"
+                style="@style/Text.Fluent2.Title.Primary.Strong"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.1"
+                android:text="$20.00 / month"
+                android:textColor="@color/ds_text_primary"
+                android:textSize="@dimen/text_size_15" />
+
+            <View
+                android:layout_width="@dimen/_1sdp"
+                android:layout_height="@dimen/_34sdp"
+                android:background="@color/ds_outline" />
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                android:id="@+id/billingModelText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_12sdp"
+                android:layout_weight="1"
+                android:text="Billing model\nPer unit"
+                android:textColor="@color/ds_text_secondary"
+                android:textSize="@dimen/text_size_10" />
+        </LinearLayout>
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            android:id="@+id/metaText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:maxLines="1"
+            android:text="7-day trial   ·   3 tiers   ·   6 features   ·   24 subscriptions"
+            android:textColor="@color/ds_text_secondary"
+            android:textSize="@dimen/text_size_10" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1sdp"
+            android:layout_marginTop="@dimen/_14sdp"
+            android:visibility="gone"
+            android:background="@color/ds_outline" />
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            android:id="@+id/viewPlanText"
+            style="@style/Text.Fluent2.Title.Primary.Strong"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_12sdp"
+            android:text="@string/subscription_view_plan"
+            android:visibility="gone"
+            android:textColor="@color/ds_primary"
+            android:textSize="@dimen/_10ssp" />
     </LinearLayout>
 </com.axelliant.hris.ui.designsystem.components.AppCardView>

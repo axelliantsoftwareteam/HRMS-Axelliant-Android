@@ -23,14 +23,15 @@
         <dimen name="ds_space_20">@dimen/_20sdp</dimen>
         <dimen name="ds_space_24">@dimen/_24sdp</dimen>
         <dimen name="ds_space_32">@dimen/_32sdp</dimen>
+        <dimen name="ds_space_40">@dimen/_40sdp</dimen>
         <dimen name="ds_space_72">@dimen/_72sdp</dimen>
 
         <!-- Responsive controls. Keep minimum touch sizes near 48dp. -->
         <dimen name="ds_input_height">@dimen/_42sdp</dimen>
-        <dimen name="ds_button_height">@dimen/_42sdp</dimen>
+        <dimen name="ds_button_height">@dimen/_40sdp</dimen>
         <dimen name="ds_touch_target">@dimen/_48sdp</dimen>
         <dimen name="ds_icon_button_icon_size">@dimen/_22sdp</dimen>
-        <dimen name="ds_button_inline_icon_size">@dimen/_18sdp</dimen>
+        <dimen name="ds_button_inline_icon_size">@dimen/_16sdp</dimen>
         <dimen name="ds_filter_chip_close_icon_size">@dimen/_18sdp</dimen>
         <dimen name="ds_card_elevation">@dimen/_1sdp</dimen>
 
