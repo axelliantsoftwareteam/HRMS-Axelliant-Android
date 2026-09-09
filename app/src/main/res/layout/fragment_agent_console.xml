@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/Layout.Fluent2.Screen"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/ds_background">
+    android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/startGuideline"
@@ -113,9 +112,10 @@
     <HorizontalScrollView
         android:id="@+id/agentTabsScroll"
         android:layout_width="0dp"
-        android:layout_height="@dimen/_54sdp"
+        android:layout_height="wrap_content"
         android:overScrollMode="never"
         android:scrollbars="none"
+        android:layout_marginTop="@dimen/ds_space_10"
         app:layout_constraintEnd_toStartOf="@+id/endGuideline"
         app:layout_constraintStart_toEndOf="@+id/startGuideline"
         app:layout_constraintTop_toBottomOf="@id/agentTopBar">
@@ -132,8 +132,9 @@
                 android:layout_height="@dimen/_30sdp"
                 android:background="@drawable/bg_agent_primary_pill"
                 android:gravity="center"
-                android:paddingStart="@dimen/ds_space_16"
-                android:paddingEnd="@dimen/ds_space_16"
+                android:textSize="@dimen/text_size_10"
+                android:paddingStart="@dimen/ds_space_14"
+                android:paddingEnd="@dimen/ds_space_14"
                 android:text="@string/agent_tab_general" />
 
             <com.axelliant.hris.ui.designsystem.components.AppTextView
@@ -143,8 +144,9 @@
                 android:layout_marginStart="@dimen/ds_space_8"
                 android:background="@drawable/bg_agent_outline_pill"
                 android:gravity="center"
-                android:paddingStart="@dimen/ds_space_16"
-                android:paddingEnd="@dimen/ds_space_16"
+                android:textSize="@dimen/text_size_10"
+                android:paddingStart="@dimen/ds_space_14"
+                android:paddingEnd="@dimen/ds_space_14"
                 android:text="@string/agent_tab_quotes_products" />
 
             <com.axelliant.hris.ui.designsystem.components.AppTextView
@@ -154,8 +156,9 @@
                 android:layout_marginStart="@dimen/ds_space_8"
                 android:background="@drawable/bg_agent_outline_pill"
                 android:gravity="center"
-                android:paddingStart="@dimen/ds_space_16"
-                android:paddingEnd="@dimen/ds_space_16"
+                android:textSize="@dimen/text_size_10"
+                android:paddingStart="@dimen/ds_space_14"
+                android:paddingEnd="@dimen/ds_space_14"
                 android:text="@string/agent_tab_vendors" />
 
             <com.axelliant.hris.ui.designsystem.components.AppTextView
@@ -165,8 +168,9 @@
                 android:layout_marginStart="@dimen/ds_space_8"
                 android:background="@drawable/bg_agent_outline_pill"
                 android:gravity="center"
-                android:paddingStart="@dimen/ds_space_16"
-                android:paddingEnd="@dimen/ds_space_16"
+                android:textSize="@dimen/text_size_10"
+                android:paddingStart="@dimen/ds_space_14"
+                android:paddingEnd="@dimen/ds_space_14"
                 android:text="@string/agent_tab_availability" />
         </LinearLayout>
     </HorizontalScrollView>
@@ -178,6 +182,7 @@
         android:clipToPadding="false"
         android:fillViewport="false"
         android:overScrollMode="never"
+        android:layout_marginTop="@dimen/ds_space_10"
         app:layout_constraintBottom_toTopOf="@id/agentInputContainer"
         app:layout_constraintEnd_toStartOf="@+id/endGuideline"
         app:layout_constraintStart_toEndOf="@id/startGuideline"
@@ -234,7 +239,7 @@
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="@dimen/_40sdp"
+            android:layout_height="@dimen/ds_input_height"
             android:layout_weight="1"
             android:background="@drawable/bg_agent_input_bar"
             android:gravity="center_vertical"
@@ -252,7 +257,7 @@
             <EditText
                 android:id="@+id/messageInput"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginStart="@dimen/ds_space_4"
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
@@ -286,11 +291,11 @@
 
             <ImageView
                 android:id="@+id/sendIcon"
-                android:layout_width="@dimen/_16sdp"
+                android:layout_width="19dp"
                 android:layout_height="@dimen/_16sdp"
                 android:layout_gravity="center"
                 android:src="@drawable/ic_login_arrow_right"
-                app:tint="@color/ds_text_muted" />
+                app:tint="@color/ds_outline" />
         </FrameLayout>
     </LinearLayout>
 

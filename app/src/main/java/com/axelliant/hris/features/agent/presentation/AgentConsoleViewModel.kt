@@ -38,6 +38,7 @@ class AgentConsoleViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(
                 isLoading = true,
+                isAwaitingAssistantReply = true,
                 pendingMessage = trimmedMessage,
                 assistantReply = null,
                 error = null
@@ -46,18 +47,36 @@ class AgentConsoleViewModel @Inject constructor(
             _uiState.value = when (val result = repository.sendMessage(trimmedMessage)) {
                 is ApiResult.Success -> _uiState.value.copy(
                     isLoading = false,
+                    isAwaitingAssistantReply = false,
                     session = repository.getSavedSession(),
                     assistantReply = result.data.reply.orEmpty(),
                     error = null
                 )
                 ApiResult.Empty -> _uiState.value.copy(
                     isLoading = false,
+                    isAwaitingAssistantReply = false,
                     error = "Agent response is empty."
                 )
-                is ApiResult.HttpError -> _uiState.value.copy(isLoading = false, error = result.message)
-                is ApiResult.NetworkError -> _uiState.value.copy(isLoading = false, error = result.message)
-                is ApiResult.UnknownError -> _uiState.value.copy(isLoading = false, error = result.message)
-                ApiResult.Unauthorized -> _uiState.value.copy(isLoading = false, error = "Session expired.")
+                is ApiResult.HttpError -> _uiState.value.copy(
+                    isLoading = false,
+                    isAwaitingAssistantReply = false,
+                    error = result.message
+                )
+                is ApiResult.NetworkError -> _uiState.value.copy(
+                    isLoading = false,
+                    isAwaitingAssistantReply = false,
+                    error = result.message
+                )
+                is ApiResult.UnknownError -> _uiState.value.copy(
+                    isLoading = false,
+                    isAwaitingAssistantReply = false,
+                    error = result.message
+                )
+                ApiResult.Unauthorized -> _uiState.value.copy(
+                    isLoading = false,
+                    isAwaitingAssistantReply = false,
+                    error = "Session expired."
+                )
             }
         }
     }
@@ -106,6 +125,7 @@ class AgentConsoleViewModel @Inject constructor(
 
 data class AgentConsoleUiState(
     val isLoading: Boolean = false,
+    val isAwaitingAssistantReply: Boolean = false,
     val session: AgentChatSession? = null,
     val pendingMessage: String? = null,
     val assistantReply: String? = null,
