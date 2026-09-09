@@ -23,7 +23,7 @@
             android:layout_weight="1"
             android:text="SUB-1048"
             android:textColor="@color/ds_text_primary"
-            android:textSize="@dimen/_12ssp" />
+            android:textSize="@dimen/text_size_12" />
 
         <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/statusBadge"
@@ -36,7 +36,29 @@
             android:paddingStart="@dimen/_12sdp"
             android:paddingEnd="@dimen/_12sdp"
             android:textColor="@color/subscription_active_text"
-            android:textSize="@dimen/_10ssp" />
+            android:textSize="@dimen/text_size_10" />
+        <com.axelliant.hris.ui.designsystem.components.AppButtonView
+            android:id="@+id/menuButton"
+            style="@style/Widget.Fluent2.Button.Text"
+            android:layout_width="@dimen/_36sdp"
+            android:layout_height="@dimen/_36sdp"
+            android:background="@android:color/transparent"
+            android:insetLeft="0dp"
+            android:insetTop="0dp"
+            android:insetRight="0dp"
+            android:insetBottom="0dp"
+            android:minWidth="0dp"
+            android:text=""
+            android:layout_marginStart="@dimen/_3sdp"
+            android:layout_gravity="end"
+            app:backgroundTint="@android:color/transparent"
+            app:icon="@drawable/ic_more_vert"
+            app:iconGravity="textStart"
+            app:noBackground="true"
+            app:layout_constraintBottom_toBottomOf="@id/totalAmountValue"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/totalAmountLabel" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -67,7 +89,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_3sdp"
                 android:textColor="@color/ds_text_primary"
-                android:textSize="@dimen/_10ssp"
+                android:textSize="@dimen/text_size_10"
                 android:maxLines="2" />
         </LinearLayout>
 
@@ -93,7 +115,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_3sdp"
                 android:textColor="@color/ds_text_primary"
-                android:textSize="@dimen/_10ssp"
+                android:textSize="@dimen/text_size_10"
                 android:maxLines="2" />
         </LinearLayout>
 
@@ -119,7 +141,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_3sdp"
                 android:textColor="@color/ds_text_primary"
-                android:textSize="@dimen/_10ssp" />
+                android:textSize="@dimen/text_size_10" />
         </LinearLayout>
     </LinearLayout>
 
@@ -152,7 +174,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_3sdp"
                 android:textColor="@color/ds_text_primary"
-                android:textSize="@dimen/_10ssp" />
+                android:textSize="@dimen/text_size_10" />
         </LinearLayout>
 
         <com.axelliant.hris.ui.designsystem.components.AppTextView
@@ -160,26 +182,16 @@
             style="@style/Text.InternalApps.Caption"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/_26sdp"
-            android:background="@drawable/bg_subscription_status_active"
+            android:background="@drawable/bg_subscription_status_trial"
             android:gravity="center"
             android:paddingStart="@dimen/_12sdp"
             android:paddingEnd="@dimen/_12sdp"
-            android:textColor="@color/subscription_active_text"
-            android:textSize="@dimen/_10ssp" />
+            android:textColor="@color/ds_primary"
+            android:textSize="@dimen/text_size_10" />
     </LinearLayout>
-    <View
+   <!-- <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/_1sdp"
         android:layout_marginTop="@dimen/_10sdp"
-        android:background="@color/ds_outline" />
-
-    <com.axelliant.hris.ui.designsystem.components.AppTextView
-        android:id="@+id/viewDetailsText"
-        style="@style/Text.Fluent2.Title.Primary.Strong"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_10sdp"
-        android:text="@string/subscription_view_details"
-        android:textColor="@color/ds_primary"
-        android:textSize="@dimen/_10ssp" />
+        android:background="@color/ds_outline" />-->
 </LinearLayout>

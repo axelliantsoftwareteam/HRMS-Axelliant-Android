@@ -2,18 +2,53 @@
 <com.axelliant.hris.ui.designsystem.components.AppCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/Widget.InternalApps.Card"
-    android:layout_marginTop="@dimen/_14sdp"
+    android:layout_marginTop="@dimen/ds_space_10"
     app:cardBackgroundColor="@color/subscription_card_surface">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="@dimen/_14sdp">
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical" android:orientation="horizontal">
-            <com.axelliant.hris.ui.designsystem.components.AppTextView style="@style/Text.InternalApps.Subheading" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/subscription_order_total" android:textColor="@color/ds_text_primary" android:textSize="@dimen/_14ssp" />
-            <ImageView android:layout_width="@dimen/_18sdp" android:layout_height="@dimen/_18sdp" android:src="@drawable/ic_chevron_up" app:tint="@color/ds_text_primary" />
+        android:padding="@dimen/ds_space_10">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                style="@style/Text.InternalApps.Subheading"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/subscription_order_total"
+                android:textColor="@color/ds_text_primary"
+                android:textSize="@dimen/text_size_12" />
+
+            <ImageView
+                android:layout_width="@dimen/_18sdp"
+                android:layout_height="@dimen/_18sdp"
+                android:src="@drawable/ic_chevron_up"
+                app:tint="@color/ds_text_primary" />
         </LinearLayout>
-        <com.axelliant.hris.ui.designsystem.components.AppTextView style="@style/Text.InternalApps.Caption" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/_10sdp" android:text="Base $40.00  •  Discount -$10.00  •  Tax $2.70" android:textColor="@color/ds_text_secondary" android:textSize="@dimen/_11ssp" />
-        <com.axelliant.hris.ui.designsystem.components.AppTextView style="@style/Text.InternalApps.Heading" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/_6sdp" android:text="USD 32.70" android:textColor="@color/ds_primary" android:textSize="@dimen/_20ssp" />
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            style="@style/Text.InternalApps.Caption"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:text="Base $40.00  •  Discount -$10.00  •  Tax $2.70"
+            android:textColor="@color/ds_text_secondary"
+            android:textSize="@dimen/text_size_10" />
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            style="@style/Text.InternalApps.Heading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ds_space_6"
+            android:text="USD 32.70"
+            android:textColor="@color/ds_primary"
+            android:textSize="@dimen/text_size_15" />
     </LinearLayout>
 </com.axelliant.hris.ui.designsystem.components.AppCardView>
