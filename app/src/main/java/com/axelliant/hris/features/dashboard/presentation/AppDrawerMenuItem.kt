@@ -6,5 +6,7 @@ data class AppDrawerMenuItem(
     val titleRes: Int,
     val iconRes: Int,
     val action: AppDrawerAction,
-    val isDestructive: Boolean = false
+    val isDestructive: Boolean = false,
+    val isSubItem: Boolean = false,
+    val isEnabled: Boolean = true
 )

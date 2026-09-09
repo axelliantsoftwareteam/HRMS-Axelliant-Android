@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_receiving_view_manage"
+        android:icon="@drawable/ic_quote_action_view"
+        android:title="@string/receiving_action_view_manage" />
+    <item
+        android:id="@+id/action_receiving_delete"
+        android:icon="@drawable/ic_delete"
+        android:title="@string/delete" />
+</menu>

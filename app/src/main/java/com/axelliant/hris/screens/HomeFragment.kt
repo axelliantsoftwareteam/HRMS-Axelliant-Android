@@ -596,6 +596,16 @@ class HomeFragment : BaseFragment() {
             val itemBinding = ItemAppDrawerMenuBinding.inflate(layoutInflater, container, false)
             itemBinding.drawerMenuTitle.setText(item.titleRes)
             itemBinding.drawerMenuIcon.setImageResource(item.iconRes)
+            val startPadding = resources.getDimensionPixelSize(
+                if (item.isSubItem) R.dimen.drawer_sub_item_start_padding else R.dimen.drawer_item_start_padding
+            )
+            itemBinding.drawerMenuRoot.setPadding(
+                startPadding,
+                itemBinding.drawerMenuRoot.paddingTop,
+                itemBinding.drawerMenuRoot.paddingEnd,
+                itemBinding.drawerMenuRoot.paddingBottom
+            )
+            itemBinding.drawerMenuRoot.alpha = if (item.isEnabled) 1f else DRAWER_DISABLED_ALPHA
             itemBinding.drawerMenuRoot.setOnClickListener {
                 handleDrawerItemClick(item.action)
             }
@@ -612,6 +622,7 @@ class HomeFragment : BaseFragment() {
         }
         drawerMenuBindings.forEach { (action, itemBinding) ->
             val isSelected = action == selectedDrawerAction
+            val item = allDrawerItems.firstOrNull { it.action == action }
             val textColor = when {
                 isSelected -> R.color.ds_primary
                 else -> R.color.ds_text_primary
@@ -630,6 +641,7 @@ class HomeFragment : BaseFragment() {
             )
             itemBinding.drawerMenuTitle.setTextColor(ContextCompat.getColor(requireContext(), textColor))
             itemBinding.drawerMenuIcon.setColorFilter(ContextCompat.getColor(requireContext(), iconColor))
+            itemBinding.drawerMenuRoot.alpha = if (item?.isEnabled == false) DRAWER_DISABLED_ALPHA else 1f
         }
     }
 
@@ -674,18 +686,32 @@ class HomeFragment : BaseFragment() {
     }
 
     private fun handleDrawerItemClick(action: AppDrawerAction) {
+        val drawerItem = allDrawerItems.firstOrNull { it.action == action }
         val requiresInternalAppsSession = action in setOf(
             AppDrawerAction.Products,
             AppDrawerAction.Quotes,
             AppDrawerAction.SaleOrders,
             AppDrawerAction.PurchaseOrders,
             AppDrawerAction.Subscriptions,
+            AppDrawerAction.Warehouse,
+            AppDrawerAction.Warehouses,
+            AppDrawerAction.WarehouseLocations,
+            AppDrawerAction.WarehouseReceiving,
+            AppDrawerAction.WarehouseInventory,
+            AppDrawerAction.WarehousePutaway,
+            AppDrawerAction.InventoryReservations,
+            AppDrawerAction.WarehousePicking,
+            AppDrawerAction.CustomerSuppliedInventory,
             AppDrawerAction.Settings
         )
         if (requiresInternalAppsSession &&
             !workspaceSessionProvider.hasValidSession(WorkspaceKey.INTERNAL_APPS)
         ) {
             requireContext().showErrorMsg("Internal Apps session is not available.")
+            return
+        }
+        if (drawerItem?.isEnabled == false) {
+            requireContext().showSuccessMsg(getString(R.string.warehouse_submodule_coming_soon))
             return
         }
 
@@ -712,6 +738,17 @@ class HomeFragment : BaseFragment() {
                 AppDrawerAction.SaleOrders -> openInternalAppsDestination(R.id.iaSaleOrdersFragment)
                 AppDrawerAction.PurchaseOrders -> openInternalAppsDestination(R.id.iaPurchaseOrdersFragment)
                 AppDrawerAction.Subscriptions -> openInternalAppsDestination(R.id.iaSubscriptionsFragment)
+                AppDrawerAction.Warehouse,
+                AppDrawerAction.Warehouses -> openInternalAppsDestination(R.id.iaWarehousesFragment)
+                AppDrawerAction.WarehouseLocations -> openInternalAppsDestination(R.id.iaWarehouseLocationsFragment)
+                AppDrawerAction.WarehouseInventory -> openInternalAppsDestination(R.id.iaWarehouseInventoryFragment)
+                AppDrawerAction.WarehouseReceiving -> openInternalAppsDestination(R.id.iaWarehouseReceivingFragment)
+                AppDrawerAction.WarehousePutaway,
+                AppDrawerAction.InventoryReservations,
+                AppDrawerAction.WarehousePicking,
+                AppDrawerAction.CustomerSuppliedInventory -> requireContext().showSuccessMsg(
+                    getString(R.string.warehouse_submodule_coming_soon)
+                )
                 AppDrawerAction.Profiles -> openInternalAppsDestination(R.id.iaProfilesFragment)
                 AppDrawerAction.Settings -> openInternalAppsDestination(R.id.iaSettingsFragment)
                 AppDrawerAction.Logout -> showLogoutConfirmationDialog()
@@ -773,6 +810,7 @@ class HomeFragment : BaseFragment() {
                     BUSINESS_MODULE_PRODUCTS -> openInternalAppsDestination(R.id.iaProductsFragment)
                     BUSINESS_MODULE_PURCHASE_ORDERS -> openInternalAppsDestination(R.id.iaPurchaseOrdersFragment)
                     BUSINESS_MODULE_SUBSCRIPTIONS -> openInternalAppsDestination(R.id.iaSubscriptionsFragment)
+                    BUSINESS_MODULE_WAREHOUSE -> openInternalAppsDestination(R.id.iaWarehousesFragment)
                 }
             }
         })
@@ -816,6 +854,13 @@ class HomeFragment : BaseFragment() {
                 id = BUSINESS_MODULE_SUBSCRIPTIONS,
                 name = getString(R.string.drawer_subscriptions),
                 description = "Manage subscriptions",
+                color = null,
+                drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_warehouse)
+            )
+            AppDrawerAction.Warehouse -> Modules(
+                id = BUSINESS_MODULE_WAREHOUSE,
+                name = getString(R.string.drawer_warehouse),
+                description = getString(R.string.warehouses_module_description),
                 color = null,
                 drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_dashboard_box)
             )
@@ -887,8 +932,20 @@ class HomeFragment : BaseFragment() {
         AppDrawerMenuItem(R.string.drawer_quotes, R.drawable.ic_home_quotes, AppDrawerAction.Quotes),
         AppDrawerMenuItem(R.string.products, R.drawable.ic_home_products, AppDrawerAction.Products),
         AppDrawerMenuItem(R.string.drawer_purchase_orders, R.drawable.ic_home_sales_orders, AppDrawerAction.PurchaseOrders),
-        AppDrawerMenuItem(R.string.drawer_subscriptions, R.drawable.ic_dashboard_box, AppDrawerAction.Subscriptions)
+        AppDrawerMenuItem(R.string.drawer_subscriptions, R.drawable.ic_dashboard_box, AppDrawerAction.Subscriptions),
+        AppDrawerMenuItem(R.string.drawer_warehouse, R.drawable.ic_warehouse, AppDrawerAction.Warehouse),
+        AppDrawerMenuItem(R.string.drawer_warehouses, R.drawable.ic_warehouse, AppDrawerAction.Warehouses, isSubItem = true),
+        AppDrawerMenuItem(R.string.drawer_warehouse_locations, R.drawable.fluent_location, AppDrawerAction.WarehouseLocations, isSubItem = true),
+        AppDrawerMenuItem(R.string.drawer_warehouse_receiving, R.drawable.ic_po_summary_box, AppDrawerAction.WarehouseReceiving, isSubItem = true),
+        AppDrawerMenuItem(R.string.drawer_inventory, R.drawable.ic_home_products, AppDrawerAction.WarehouseInventory, isSubItem = true),
+        AppDrawerMenuItem(R.string.drawer_warehouse_putaway, R.drawable.ic_dashboard_box, AppDrawerAction.WarehousePutaway, isSubItem = true, isEnabled = false),
+        AppDrawerMenuItem(R.string.drawer_inventory_reservations, R.drawable.ic_dashboard_box, AppDrawerAction.InventoryReservations, isSubItem = true, isEnabled = false),
+        AppDrawerMenuItem(R.string.drawer_warehouse_picking, R.drawable.ic_dashboard_box, AppDrawerAction.WarehousePicking, isSubItem = true, isEnabled = false),
+        AppDrawerMenuItem(R.string.drawer_customer_supplied_inventory, R.drawable.ic_home_products, AppDrawerAction.CustomerSuppliedInventory, isSubItem = true, isEnabled = false)
     )
+
+    private val allDrawerItems
+        get() = homeDrawerItems() + hrisDrawerItems() + allPrimaryDrawerItems + commonDrawerItems() + footerDrawerItems()
 
     private val footerActions = setOf(AppDrawerAction.Settings, AppDrawerAction.Logout)
 
@@ -1755,6 +1812,8 @@ class HomeFragment : BaseFragment() {
         private const val BUSINESS_MODULE_SALES_ORDERS = 102
         private const val BUSINESS_MODULE_PURCHASE_ORDERS = 103
         private const val BUSINESS_MODULE_SUBSCRIPTIONS = 104
+        private const val BUSINESS_MODULE_WAREHOUSE = 105
+        private const val DRAWER_DISABLED_ALPHA = 0.48f
         private const val ONE_DAY_IN_MILLIS = 24 * 60 * 60 * 1000L
     }
 }

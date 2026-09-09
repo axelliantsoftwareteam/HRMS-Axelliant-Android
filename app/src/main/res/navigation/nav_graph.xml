@@ -170,6 +170,52 @@
         tools:layout="@layout/fragment_sale_orders" />
 
     <fragment
+        android:id="@+id/iaWarehousesFragment"
+        android:name="com.axelliant.hris.features.warehouse.presentation.WarehousesFragment"
+        android:label="@string/warehouses_title"
+        tools:layout="@layout/fragment_warehouses" />
+
+    <fragment
+        android:id="@+id/iaAddWarehouseFragment"
+        android:name="com.axelliant.hris.features.warehouse.presentation.AddWarehouseFragment"
+        android:label="@string/add_warehouse_title"
+        tools:layout="@layout/fragment_add_warehouse" />
+
+    <fragment
+        android:id="@+id/iaWarehouseLocationsFragment"
+        android:name="com.axelliant.hris.features.warehouse.presentation.WarehouseLocationsFragment"
+        android:label="@string/warehouse_locations_title"
+        tools:layout="@layout/fragment_warehouse_locations" />
+
+    <fragment
+        android:id="@+id/iaAddWarehouseLocationFragment"
+        android:name="com.axelliant.hris.features.warehouse.presentation.AddWarehouseLocationFragment"
+        android:label="@string/add_location_title"
+        tools:layout="@layout/fragment_add_warehouse_location" />
+
+    <fragment
+        android:id="@+id/iaWarehouseInventoryFragment"
+        android:name="com.axelliant.hris.features.warehouse.presentation.WarehouseInventoryFragment"
+        android:label="@string/inventory_title"
+        tools:layout="@layout/fragment_warehouse_inventory" />
+
+    <fragment
+        android:id="@+id/iaWarehouseReceivingFragment"
+        android:name="com.axelliant.hris.features.warehouse.presentation.WarehouseReceivingFragment"
+        android:label="@string/receiving_title"
+        tools:layout="@layout/fragment_warehouse_receiving" />
+
+    <fragment
+        android:id="@+id/iaWarehouseReceivingDetailFragment"
+        android:name="com.axelliant.hris.features.warehouse.presentation.WarehouseReceivingDetailFragment"
+        android:label="@string/receiving_detail_title"
+        tools:layout="@layout/fragment_warehouse_receiving_detail">
+        <argument
+            android:name="receiptId"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
         android:id="@+id/iaPurchaseOrdersFragment"
         android:name="com.axelliant.hris.features.purchaseorders.presentation.PurchaseOrdersFragment"
         android:label="@string/purchase_orders_title"

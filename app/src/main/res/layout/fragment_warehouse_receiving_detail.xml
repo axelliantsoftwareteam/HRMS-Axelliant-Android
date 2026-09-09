@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Layout.Fluent2.Screen"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/ds_background">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/startGuideline"
+        style="@style/Guideline.Fluent2.Start"
+        android:orientation="vertical" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/endGuideline"
+        style="@style/Guideline.Fluent2.End"
+        android:orientation="vertical" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/topGuideline"
+        style="@style/Guideline.Fluent2.Top"
+        android:orientation="horizontal" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/bottomGuideline"
+        style="@style/Guideline.Fluent2.Bottom"
+        android:orientation="horizontal" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppTopBarView
+        android:id="@+id/appTopBar"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_40sdp"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/topGuideline"
+        app:showBackButton="true"
+        app:showSearchButton="false"
+        app:titleText="@string/receiving_detail_title" />
+
+    <View
+        android:id="@+id/headerDivider"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_1sdp"
+        android:layout_marginTop="@dimen/ds_space_10"
+        android:background="@color/ds_outline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appTopBar" />
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/contentScroll"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:fillViewport="true"
+        android:paddingTop="@dimen/ds_space_12"
+        android:paddingBottom="@dimen/ds_space_16"
+        app:layout_constraintBottom_toTopOf="@id/footerContainer"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/headerDivider">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.axelliant.hris.ui.designsystem.components.AppCardView
+                android:id="@+id/receiptInfoCard"
+                style="@style/Widget.InternalApps.Card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardElevation="@dimen/_1sdp"
+                app:strokeColor="@color/ds_outline"
+                app:strokeWidth="@dimen/_1sdp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/ds_space_14">
+
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
+                        android:id="@+id/receiptInfoTitle"
+                        style="@style/Text.InternalApps.Subheading"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:text="@string/receiving_detail_info_title"
+                        android:textColor="@color/ds_text_primary"
+                        app:layout_constraintEnd_toStartOf="@id/statusBadge"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
+                        android:id="@+id/statusBadge"
+                        style="@style/Text.InternalApps.Caption"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_quote_status_approved"
+                        android:fontFamily="@font/poppins_medium"
+                        android:gravity="center"
+                        android:minWidth="@dimen/_76sdp"
+                        android:paddingStart="@dimen/ds_space_10"
+                        android:paddingTop="@dimen/ds_space_4"
+                        android:paddingEnd="@dimen/ds_space_10"
+                        android:paddingBottom="@dimen/ds_space_4"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="Completed" />
+
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
+                        android:id="@+id/receiptInfoSubtitle"
+                        style="@style/Text.InternalApps.Caption"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/ds_space_2"
+                        android:text="@string/receiving_detail_info_subtitle"
+                        android:textColor="@color/ds_text_secondary"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="@id/receiptInfoTitle"
+                        app:layout_constraintTop_toBottomOf="@id/receiptInfoTitle" />
+
+                    <LinearLayout
+                        android:id="@+id/infoGrid"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/ds_space_16"
+                        android:baselineAligned="false"
+                        android:orientation="vertical"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/receiptInfoSubtitle">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:baselineAligned="false"
+                            android:orientation="horizontal">
+
+                            <include
+                                android:id="@+id/receiptNumberField"
+                                layout="@layout/layout_warehouse_receiving_detail_field" />
+
+                            <include
+                                android:id="@+id/warehouseField"
+                                layout="@layout/layout_warehouse_receiving_detail_field" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/ds_space_12"
+                            android:baselineAligned="false"
+                            android:orientation="horizontal">
+
+                            <include
+                                android:id="@+id/receiptTypeField"
+                                layout="@layout/layout_warehouse_receiving_detail_field" />
+
+                            <include
+                                android:id="@+id/purchaseOrderField"
+                                layout="@layout/layout_warehouse_receiving_detail_field" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/ds_space_12"
+                            android:baselineAligned="false"
+                            android:orientation="horizontal">
+
+                            <include
+                                android:id="@+id/expectedDateField"
+                                layout="@layout/layout_warehouse_receiving_detail_field" />
+
+                            <include
+                                android:id="@+id/receivedDateField"
+                                layout="@layout/layout_warehouse_receiving_detail_field" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.axelliant.hris.ui.designsystem.components.AppCardView>
+
+            <LinearLayout
+                android:id="@+id/itemsHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ds_space_16"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
+                        style="@style/Text.InternalApps.Subheading"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:text="@string/receiving_detail_items_title"
+                        android:textColor="@color/ds_text_primary" />
+
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
+                        style="@style/Text.InternalApps.Caption"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/ds_space_2"
+                        android:text="@string/receiving_detail_items_subtitle"
+                        android:textColor="@color/ds_text_secondary" />
+                </LinearLayout>
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                    android:id="@+id/linesCountBadge"
+                    style="@style/Text.InternalApps.Caption"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_po_details_items_badge"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:paddingStart="@dimen/ds_space_10"
+                    android:paddingTop="@dimen/ds_space_4"
+                    android:paddingEnd="@dimen/ds_space_10"
+                    android:paddingBottom="@dimen/ds_space_4"
+                    android:textColor="@color/ds_primary"
+                    tools:text="1 item" />
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/linesRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ds_space_8"
+                android:nestedScrollingEnabled="false"
+                android:overScrollMode="never"
+                tools:itemCount="1"
+                tools:listitem="@layout/item_warehouse_receiving_line" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <LinearLayout
+        android:id="@+id/footerContainer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="end|center_vertical"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/ds_space_10"
+        android:paddingBottom="@dimen/ds_space_10"
+        app:layout_constraintBottom_toTopOf="@id/bottomGuideline"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:layout_constraintStart_toStartOf="@id/startGuideline">
+
+        <com.axelliant.hris.ui.designsystem.components.AppButtonView
+            android:id="@+id/closeButton"
+            style="@style/Widget.Fluent2.Button.Secondary"
+            android:layout_width="@dimen/_100sdp"
+            android:layout_height="@dimen/ds_button_height"
+            android:text="@string/close" />
+    </LinearLayout>
+
+    <com.axelliant.hris.ui.designsystem.components.AppProgressBarView
+        android:id="@+id/loadingProgress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        android:id="@+id/errorStateText"
+        style="@style/Text.InternalApps.Body"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/receiving_detail_error"
+        android:textColor="@color/ds_error"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

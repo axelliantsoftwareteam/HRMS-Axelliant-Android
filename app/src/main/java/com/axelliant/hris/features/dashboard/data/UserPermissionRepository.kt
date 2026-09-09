@@ -57,6 +57,15 @@ class UserPermissionRepository @Inject constructor(
             AppDrawerAction.SaleOrders -> setOf("salesorder")
             AppDrawerAction.PurchaseOrders -> setOf("purchaseorder")
             AppDrawerAction.Subscriptions -> setOf("subscription", "managedsubscription")
+            AppDrawerAction.Warehouse,
+            AppDrawerAction.Warehouses,
+            AppDrawerAction.WarehouseLocations,
+            AppDrawerAction.WarehouseReceiving,
+            AppDrawerAction.WarehouseInventory,
+            AppDrawerAction.WarehousePutaway,
+            AppDrawerAction.InventoryReservations,
+            AppDrawerAction.WarehousePicking,
+            AppDrawerAction.CustomerSuppliedInventory -> setOf("warehouse")
             AppDrawerAction.Profiles -> setOf("user")
             AppDrawerAction.Home,
             AppDrawerAction.AgentConsole,

@@ -205,6 +205,8 @@ class DashboardFragment : Fragment() {
                 AppDrawerAction.SaleOrders -> openSaleOrders()
                 AppDrawerAction.PurchaseOrders -> openPurchaseOrders()
                 AppDrawerAction.Subscriptions -> openSubscriptions()
+                AppDrawerAction.Warehouse,
+                AppDrawerAction.Warehouses -> openWarehouses()
                 AppDrawerAction.Profiles -> openProfiles()
                 AppDrawerAction.Settings -> openSettings()
                 AppDrawerAction.Logout -> logoutAndOpenLogin()
@@ -217,7 +219,14 @@ class DashboardFragment : Fragment() {
                 AppDrawerAction.CheckInRequests,
                 AppDrawerAction.Expenses,
                 AppDrawerAction.DocumentVault,
-                AppDrawerAction.ResourceManagement -> Unit
+                AppDrawerAction.ResourceManagement,
+                AppDrawerAction.WarehouseLocations,
+                AppDrawerAction.WarehouseReceiving,
+                AppDrawerAction.WarehouseInventory,
+                AppDrawerAction.WarehousePutaway,
+                AppDrawerAction.InventoryReservations,
+                AppDrawerAction.WarehousePicking,
+                AppDrawerAction.CustomerSuppliedInventory -> Unit
             }
         }
     }
@@ -240,6 +249,10 @@ class DashboardFragment : Fragment() {
 
     private fun openSubscriptions() {
         InternalAppsNavigator.open(findNavController(), R.id.iaSubscriptionsFragment)
+    }
+
+    private fun openWarehouses() {
+        InternalAppsNavigator.open(findNavController(), R.id.iaWarehousesFragment)
     }
 
     private fun openProfiles() {
@@ -359,6 +372,7 @@ class DashboardFragment : Fragment() {
         AppDrawerMenuItem(R.string.drawer_sale_orders, R.drawable.ic_document, AppDrawerAction.SaleOrders),
         AppDrawerMenuItem(R.string.drawer_purchase_orders, R.drawable.ic_document, AppDrawerAction.PurchaseOrders),
         AppDrawerMenuItem(R.string.drawer_subscriptions, R.drawable.ic_dashboard_box, AppDrawerAction.Subscriptions),
+        AppDrawerMenuItem(R.string.drawer_warehouse, R.drawable.ic_warehouse, AppDrawerAction.Warehouse),
         AppDrawerMenuItem(R.string.profiles, R.drawable.ic_bt_account, AppDrawerAction.Profiles)
     )
 
