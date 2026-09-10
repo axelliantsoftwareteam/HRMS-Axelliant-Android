@@ -58,6 +58,7 @@ class AppTextFieldLayout @JvmOverloads constructor(
     private var endIconClickListener: OnClickListener? = null
     private var startIconDrawable: Drawable? = null
     private var startIconTint: Int? = null
+    private var useDefaultInputBackground = false
     private val errorTextView = AppTextView(context)
     private val hintTextView = AppTextView(context)
     val editText: AppTextFieldView?
@@ -74,7 +75,7 @@ class AppTextFieldLayout @JvmOverloads constructor(
 
     override fun onFinishInflate() {
         super.onFinishInflate()
-        editText?.background = null
+        applyInputBackground()
         applyHintPresentation()
         ensureErrorTextView()
         applyStartIcon()
@@ -101,8 +102,18 @@ class AppTextFieldLayout @JvmOverloads constructor(
         ) != null
 
         if (!hasXmlBackground) {
-            setBackgroundResource(R.drawable.bg_filter_field)
+            useDefaultInputBackground = true
         }
+    }
+
+    private fun applyInputBackground() {
+        val field = editText ?: return
+        field.background = field.background?.mutate()
+            ?: if (useDefaultInputBackground) {
+                AppCompatResources.getDrawable(context, R.drawable.bg_filter_field)?.mutate()
+            } else {
+                null
+            }
     }
 
     private fun applyRawXmlAttributes(attrs: AttributeSet?) {
