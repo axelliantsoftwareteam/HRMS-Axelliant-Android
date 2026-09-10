@@ -10,9 +10,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="@dimen/_78sdp"
-        android:paddingStart="@dimen/_10sdp"
+        android:paddingStart="@dimen/ds_space_8"
         android:paddingTop="@dimen/ds_space_8"
-        android:paddingEnd="@dimen/ds_space_4"
+        android:paddingEnd="@dimen/ds_space_8"
         android:paddingBottom="@dimen/ds_space_8">
 
         <com.axelliant.hris.ui.designsystem.components.AppTextView
@@ -24,7 +24,9 @@
             android:textColor="@color/dashboard_card_purple"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/statusBadge"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@+id/statusBadge"
+            app:layout_constraintBottom_toBottomOf="@+id/statusBadge"
+            />
 
         <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/statusBadge"
@@ -55,7 +57,7 @@
             android:textColor="@color/ds_text_primary"
             app:layout_constraintEnd_toStartOf="@id/customerNameText"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/quoteIdText" />
+            app:layout_constraintTop_toBottomOf="@id/statusBadge" />
 
         <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/customerNameText"
