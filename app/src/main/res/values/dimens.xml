@@ -27,7 +27,8 @@
         <dimen name="ds_space_72">@dimen/_72sdp</dimen>
 
         <!-- Responsive controls. Keep minimum touch sizes near 48dp. -->
-        <dimen name="ds_input_height">@dimen/_42sdp</dimen>
+        <dimen name="ds_input_height">@dimen/_40sdp</dimen>
+        <dimen name="ds_input_height_add_item">@dimen/_36sdp</dimen>
         <dimen name="ds_button_height">@dimen/_40sdp</dimen>
         <dimen name="ds_touch_target">@dimen/_48sdp</dimen>
         <dimen name="ds_icon_button_icon_size">@dimen/_22sdp</dimen>

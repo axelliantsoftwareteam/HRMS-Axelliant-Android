@@ -1106,6 +1106,8 @@
         <string name="add_quote_title">Add Quote</string>
         <string name="add_quote_quote_title_required">Quote Title *</string>
         <string name="add_quote_quote_title_hint">Enter quote title</string>
+        <string name="add_subscription_item_name_hint">Enter item name</string>
+        <string name="add_subscription_item_vendor_hint">Enter Subscription Id</string>
         <string name="add_quote_customer_information">Customer Information</string>
         <string name="add_quote_customer_required">Customer Name *</string>
         <string name="add_quote_customer_email">Customer Email</string>
@@ -1157,6 +1159,7 @@
         <string name="add_quote_search_customers_hint">Search customers</string>
         <string name="add_quote_no_customers_found">No customers found.</string>
         <string name="add_quote_select_customer">Select customer</string>
+        <string name="add_subscription_select_type">Select type</string>
         <string name="add_subscription_select_account">Select account</string>
         <string name="add_subscription_select_plan">Select plan</string>
         <string name="add_subscription_select_tier">Select tier</string>

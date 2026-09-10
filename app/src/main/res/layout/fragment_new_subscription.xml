@@ -46,7 +46,7 @@
         android:layout_marginTop="@dimen/ds_space_12"
         android:text="@string/new_subscription_details_subtitle"
         android:textColor="@color/ds_text_secondary"
-        android:textSize="@dimen/text_size_12"
+        android:textSize="@dimen/text_size_10"
         app:layout_constraintEnd_toEndOf="@id/appTopBar"
         app:layout_constraintStart_toStartOf="@id/appTopBar"
         app:layout_constraintTop_toBottomOf="@id/appTopBar" />
@@ -54,7 +54,7 @@
     <LinearLayout
         android:id="@+id/stepper"
         android:layout_width="0dp"
-        android:layout_height="@dimen/_40sdp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_10sdp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
@@ -65,11 +65,12 @@
         <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/detailsStepCircle"
             style="@style/Text.InternalApps.Subheading"
-            android:layout_width="@dimen/_24sdp"
-            android:layout_height="@dimen/_24sdp"
+            android:layout_width="@dimen/ds_space_16"
+            android:layout_height="@dimen/ds_space_16"
             android:background="@drawable/bg_subscription_step_circle_active"
             android:gravity="center"
             android:text="1"
+            android:textSize="@dimen/text_size_10"
             android:textColor="@color/ds_on_primary" />
 
         <com.axelliant.hris.ui.designsystem.components.AppTextView
@@ -77,25 +78,27 @@
             style="@style/Text.InternalApps.Subheading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_8sdp"
+            android:layout_marginStart="@dimen/ds_space_6"
             android:text="@string/subscription_step_details"
+            android:textSize="@dimen/text_size_10"
             android:textColor="@color/ds_primary" />
 
         <View
             android:layout_width="0dp"
             android:layout_height="@dimen/_1sdp"
-            android:layout_marginHorizontal="@dimen/_6sdp"
+            android:layout_marginHorizontal="@dimen/ds_space_6"
             android:layout_weight="1"
             android:background="@color/ds_outline" />
 
         <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/itemsStepCircle"
             style="@style/Text.InternalApps.Subheading"
-            android:layout_width="@dimen/_24sdp"
-            android:layout_height="@dimen/_24sdp"
+            android:layout_width="@dimen/ds_space_16"
+            android:layout_height="@dimen/ds_space_16"
             android:background="@drawable/bg_subscription_step_circle_inactive"
             android:gravity="center"
             android:text="2"
+            android:textSize="@dimen/text_size_10"
             android:textColor="@color/ds_text_secondary" />
 
         <com.axelliant.hris.ui.designsystem.components.AppTextView
@@ -103,25 +106,27 @@
             style="@style/Text.InternalApps.Subheading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_8sdp"
+            android:layout_marginStart="@dimen/ds_space_6"
             android:text="@string/subscription_step_items"
+            android:textSize="@dimen/text_size_10"
             android:textColor="@color/ds_text_secondary" />
 
         <View
             android:layout_width="0dp"
             android:layout_height="@dimen/_1sdp"
-            android:layout_marginHorizontal="@dimen/_6sdp"
+            android:layout_marginHorizontal="@dimen/ds_space_6"
             android:layout_weight="1"
             android:background="@color/ds_outline" />
 
         <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/reviewStepCircle"
             style="@style/Text.InternalApps.Subheading"
-            android:layout_width="@dimen/_24sdp"
-            android:layout_height="@dimen/_24sdp"
+            android:layout_width="@dimen/ds_space_16"
+            android:layout_height="@dimen/ds_space_16"
             android:background="@drawable/bg_subscription_step_circle_inactive"
             android:gravity="center"
             android:text="3"
+            android:textSize="@dimen/text_size_10"
             android:textColor="@color/ds_text_secondary" />
 
         <com.axelliant.hris.ui.designsystem.components.AppTextView
@@ -129,8 +134,9 @@
             style="@style/Text.InternalApps.Subheading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_8sdp"
+            android:layout_marginStart="@dimen/ds_space_6"
             android:text="@string/subscription_step_review"
+            android:textSize="@dimen/text_size_10"
             android:textColor="@color/ds_text_secondary" />
     </LinearLayout>
 
@@ -154,6 +160,7 @@
                 android:id="@+id/detailsContent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="visible"
                 android:orientation="vertical">
 
                 <com.axelliant.hris.ui.designsystem.components.AppTextView
@@ -183,7 +190,7 @@
                         android:id="@+id/accountField"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/ds_input_height"
-                        android:layout_marginTop="@dimen/_6sdp"
+                        android:layout_marginTop="@dimen/ds_space_6"
                         android:background="@drawable/bg_quote_search"
                         android:clickable="true"
                         android:focusable="true"
@@ -222,7 +229,7 @@
                         android:id="@+id/planField"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/ds_input_height"
-                        android:layout_marginTop="@dimen/_6sdp"
+                        android:layout_marginTop="@dimen/ds_space_6"
                         android:background="@drawable/bg_quote_search"
                         android:clickable="true"
                         android:focusable="true"
@@ -261,7 +268,7 @@
                         android:id="@+id/tierField"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/ds_input_height"
-                        android:layout_marginTop="@dimen/_6sdp"
+                        android:layout_marginTop="@dimen/ds_space_6"
                         android:background="@drawable/bg_quote_search"
                         android:clickable="true"
                         android:focusable="true"
@@ -324,7 +331,7 @@
                                 android:id="@+id/billingFrequencyField"
                                 android:layout_width="match_parent"
                                 android:layout_height="@dimen/ds_input_height"
-                                android:layout_marginTop="@dimen/_6sdp"
+                                android:layout_marginTop="@dimen/ds_space_6"
                                 android:background="@drawable/bg_quote_search"
                                 android:clickable="true"
                                 android:focusable="true"
@@ -371,7 +378,7 @@
                                 android:id="@+id/currencyField"
                                 android:layout_width="match_parent"
                                 android:layout_height="@dimen/ds_input_height"
-                                android:layout_marginTop="@dimen/_6sdp"
+                                android:layout_marginTop="@dimen/ds_space_6"
                                 android:background="@drawable/bg_quote_search"
                                 android:clickable="true"
                                 android:focusable="true"
@@ -442,7 +449,7 @@
                                     style="@style/Widget.InternalApps.InputLayout"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_6sdp"
+                                    android:layout_marginTop="@dimen/ds_space_6"
                                     app:endIconDrawable="@drawable/ia_ic_filter_close"
                                     app:endIconMode="clear_text"
                                     app:errorEnabled="false"
@@ -472,7 +479,7 @@
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="@dimen/ds_input_height"
-                                    android:layout_marginTop="@dimen/_6sdp"
+                                    android:layout_marginTop="@dimen/ds_space_6"
                                     android:background="@drawable/bg_quote_search"
                                     android:gravity="center_vertical"
                                     android:orientation="horizontal">
@@ -536,7 +543,7 @@
                                     style="@style/Widget.InternalApps.InputLayout"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_6sdp"
+                                    android:layout_marginTop="@dimen/ds_space_6"
                                     app:endIconDrawable="@drawable/ia_ic_filter_close"
                                     app:endIconMode="clear_text"
                                     app:errorEnabled="false"
@@ -566,7 +573,7 @@
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="@dimen/ds_input_height"
-                                    android:layout_marginTop="@dimen/_6sdp"
+                                    android:layout_marginTop="@dimen/ds_space_6"
                                     android:background="@drawable/bg_quote_search"
                                     android:gravity="center_vertical"
                                     android:orientation="horizontal">
@@ -642,7 +649,7 @@
                                 android:id="@+id/startDateField"
                                 android:layout_width="match_parent"
                                 android:layout_height="@dimen/ds_input_height"
-                                android:layout_marginTop="@dimen/_6sdp"
+                                android:layout_marginTop="@dimen/ds_space_6"
                                 android:background="@drawable/bg_quote_search"
                                 android:clickable="true"
                                 android:focusable="true"
@@ -696,7 +703,7 @@
                                 android:id="@+id/endDateField"
                                 android:layout_width="match_parent"
                                 android:layout_height="@dimen/ds_input_height"
-                                android:layout_marginTop="@dimen/_6sdp"
+                                android:layout_marginTop="@dimen/ds_space_6"
                                 android:background="@drawable/bg_quote_search"
                                 android:clickable="true"
                                 android:focusable="true"
@@ -771,7 +778,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_44sdp"
+                    android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
@@ -787,7 +794,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/subscription_items"
                             android:textColor="@color/ds_text_primary"
-                            android:textSize="@dimen/_15ssp" />
+                            android:textSize="@dimen/text_size_12" />
 
                         <com.axelliant.hris.ui.designsystem.components.AppTextView
                             style="@style/Text.InternalApps.Body"
@@ -795,18 +802,19 @@
                             android:layout_height="wrap_content"
                             android:text="1 item added"
                             android:textColor="@color/ds_text_secondary"
-                            android:textSize="@dimen/_12ssp" />
+                            android:textSize="@dimen/text_size_10" />
                     </LinearLayout>
 
                     <com.axelliant.hris.ui.designsystem.components.AppButtonView
                         style="@style/Widget.Fluent2.Button.Secondary"
-                        android:layout_width="@dimen/_126sdp"
-                        android:layout_height="@dimen/_40sdp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:text="@string/subscription_add_item"
+                        android:padding="0dp"
                         android:textAllCaps="false"
                         android:textColor="@color/ds_primary"
                         app:icon="@drawable/ia_ic_add"
-                        app:iconPadding="@dimen/_6sdp"
+                        app:iconPadding="@dimen/ds_space_6"
                         app:iconTint="@color/ds_primary" />
                 </LinearLayout>
 
@@ -815,13 +823,14 @@
                 <com.axelliant.hris.ui.designsystem.components.AppButtonView
                     style="@style/Widget.Fluent2.Button.Secondary"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_44sdp"
+                    android:layout_height="@dimen/ds_button_height"
                     android:layout_marginTop="@dimen/_14sdp"
                     android:text="@string/subscription_add_another_item"
                     android:textAllCaps="false"
                     android:textColor="@color/ds_primary"
                     app:icon="@drawable/ia_ic_add"
                     app:iconPadding="@dimen/_8sdp"
+                    android:padding="0dp"
                     app:iconTint="@color/ds_primary" />
 
                 <include layout="@layout/layout_new_subscription_order_total" />
@@ -844,7 +853,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@color/ds_surface"
-        android:elevation="@dimen/_6sdp"
+        android:elevation="@dimen/ds_space_6"
         android:orientation="horizontal"
         android:padding="@dimen/ds_space_6"
         app:layout_constraintBottom_toBottomOf="parent"

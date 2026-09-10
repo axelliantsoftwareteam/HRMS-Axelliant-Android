@@ -4,30 +4,317 @@
     style="@style/Widget.InternalApps.Card"
     android:layout_marginTop="@dimen/_14sdp"
     app:cardBackgroundColor="@color/subscription_card_surface">
-    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="@dimen/_14sdp">
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical" android:orientation="horizontal">
-            <com.axelliant.hris.ui.designsystem.components.AppTextView style="@style/Text.InternalApps.Heading" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Item 1" android:textColor="@color/ds_text_primary" android:textSize="@dimen/_15ssp" />
-            <ImageView android:layout_width="@dimen/_22sdp" android:layout_height="@dimen/_22sdp" android:src="@drawable/ic_delete" app:tint="@color/ds_error" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/ds_space_8">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                style="@style/Text.InternalApps.Heading"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="#1"
+                android:textColor="@color/ds_text_primary"
+                android:textSize="@dimen/_15ssp" />
+
+            <ImageView
+                android:layout_width="@dimen/_22sdp"
+                android:layout_height="@dimen/_22sdp"
+                android:src="@drawable/ic_delete"
+                app:tint="@color/ds_error" />
         </LinearLayout>
-        <com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout style="@style/Widget.InternalApps.InputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/_12sdp" android:hint="@string/subscription_item_name">
-            <com.axelliant.hris.ui.designsystem.components.AppTextFieldView style="@style/Widget.InternalApps.InputEditText" android:text="Cloud service license" />
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            style="@style/Text.InternalApps.Subheading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size_10"
+            android:layout_marginTop="@dimen/ds_space_4"
+            android:text="@string/subscription_item_name" />
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout
+            android:id="@+id/itemTitleInputLayout"
+            style="@style/Widget.InternalApps.InputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/ds_input_height_add_item"
+            android:layout_marginTop="@dimen/_6sdp"
+            android:hint="@string/add_subscription_item_name_hint"
+            app:endIconDrawable="@drawable/ia_ic_filter_close"
+            app:endIconMode="clear_text"
+            app:errorEnabled="false"
+            app:errorIconDrawable="@null">
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextFieldView
+                android:id="@+id/itemTitleInput"
+                style="@style/Widget.InternalApps.InputEditText"
+                android:inputType="textCapSentences" />
         </com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout>
-        <com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout style="@style/Widget.InternalApps.InputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/_10sdp" android:hint="@string/subscription_type" app:endIconDrawable="@drawable/ic_down">
-            <com.axelliant.hris.ui.designsystem.components.AppTextFieldView style="@style/Widget.InternalApps.InputEditText" android:text="Base plan" />
-        </com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout>
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:baselineAligned="false" android:orientation="horizontal">
-            <com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout style="@style/Widget.InternalApps.InputLayout" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginTop="@dimen/_10sdp" android:layout_marginEnd="@dimen/_6sdp" android:layout_weight="1" android:hint="@string/subscription_quantity"><com.axelliant.hris.ui.designsystem.components.AppTextFieldView style="@style/Widget.InternalApps.InputEditText" android:text="1" /></com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout>
-            <com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout style="@style/Widget.InternalApps.InputLayout" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="@dimen/_6sdp" android:layout_marginTop="@dimen/_10sdp" android:layout_weight="1" android:hint="@string/subscription_unit_price"><com.axelliant.hris.ui.designsystem.components.AppTextFieldView style="@style/Widget.InternalApps.InputEditText" android:text="20.00" /></com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout>
+
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            style="@style/Text.InternalApps.FormLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size_10"
+            android:layout_marginTop="@dimen/ds_space_4"
+            android:text="@string/subscription_type" />
+
+        <LinearLayout
+            android:id="@+id/typeField"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/ds_input_height_add_item"
+            android:layout_marginTop="@dimen/_6sdp"
+            android:background="@drawable/bg_quote_search"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="@dimen/ds_space_12"
+            android:paddingEnd="@dimen/ds_space_8">
+
+            <ImageView
+                android:layout_width="@dimen/_18sdp"
+                android:layout_height="@dimen/_18sdp"
+                android:contentDescription="@null"
+                android:src="@drawable/ia_ic_search"
+                app:tint="@color/ds_text_muted" />
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                android:id="@+id/typeNameText"
+                style="@style/Text.InternalApps.Body"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/ds_space_8"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="@string/add_subscription_select_type"
+                android:textColor="@color/ds_text_muted" />
+
+            <ImageView
+                android:layout_width="@dimen/_22sdp"
+                android:layout_height="@dimen/_22sdp"
+                android:contentDescription="@null"
+                android:src="@drawable/ia_ic_filter_down" />
         </LinearLayout>
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:baselineAligned="false" android:orientation="horizontal">
-            <com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout style="@style/Widget.InternalApps.InputLayout" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginTop="@dimen/_10sdp" android:layout_marginEnd="@dimen/_6sdp" android:layout_weight="1" android:hint="@string/subscription_cost_price"><com.axelliant.hris.ui.designsystem.components.AppTextFieldView style="@style/Widget.InternalApps.InputEditText" android:text="12.00" /></com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout>
-            <com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout style="@style/Widget.InternalApps.InputLayout" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="@dimen/_6sdp" android:layout_marginTop="@dimen/_10sdp" android:layout_weight="1" android:hint="@string/subscription_vendor_sku"><com.axelliant.hris.ui.designsystem.components.AppTextFieldView style="@style/Widget.InternalApps.InputEditText" android:text="SKU-1001" /></com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:baselineAligned="false"
+            android:layout_marginTop="@dimen/ds_space_4"
+            android:orientation="horizontal">
+
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="@dimen/ds_space_4"
+                android:orientation="vertical">
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                    style="@style/Text.InternalApps.FormLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/text_size_10"
+                    android:text="@string/subscription_quantity" />
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout
+                    android:id="@+id/quantityInputLayout"
+                    style="@style/Widget.InternalApps.InputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/ds_input_height_add_item"
+                    android:layout_marginTop="@dimen/ds_space_6"
+                    android:hint="00"
+                    app:endIconDrawable="@drawable/ia_ic_filter_close"
+                    app:endIconMode="clear_text"
+                    app:errorEnabled="false"
+                    app:errorIconDrawable="@null">
+
+                    <com.axelliant.hris.ui.designsystem.components.AppTextFieldView
+                        android:id="@+id/quantityInput"
+                        style="@style/Widget.InternalApps.InputEditText"
+                        android:inputType="number" />
+                </com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="@dimen/ds_space_4"
+                android:orientation="vertical">
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                    style="@style/Text.InternalApps.FormLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/text_size_10"
+                    android:text="@string/subscription_unit_price" />
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout
+                    android:id="@+id/unitPriceInputLayout"
+                    style="@style/Widget.InternalApps.InputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/ds_input_height_add_item"
+                    android:layout_marginTop="@dimen/ds_space_6"
+                    android:hint="00"
+                    app:endIconDrawable="@drawable/ia_ic_filter_close"
+                    app:endIconMode="clear_text"
+                    app:errorEnabled="false"
+                    app:errorIconDrawable="@null">
+
+                    <com.axelliant.hris.ui.designsystem.components.AppTextFieldView
+                        android:id="@+id/unitPriceInput"
+                        style="@style/Widget.InternalApps.InputEditText"
+                        android:inputType="number" />
+                </com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout>
+
+            </LinearLayout>
+
         </LinearLayout>
-        <com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout style="@style/Widget.InternalApps.InputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/_10sdp" android:hint="@string/subscription_vendor_subscription_id">
-            <com.axelliant.hris.ui.designsystem.components.AppTextFieldView style="@style/Widget.InternalApps.InputEditText" android:text="VS-2048" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:baselineAligned="false"
+            android:layout_marginTop="@dimen/ds_space_4"
+            android:orientation="horizontal">
+
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="@dimen/ds_space_4"
+                android:orientation="vertical">
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                    style="@style/Text.InternalApps.FormLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/text_size_10"
+                    android:text="@string/subscription_cost_price" />
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout
+                    android:id="@+id/costPriceInputLayout"
+                    style="@style/Widget.InternalApps.InputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/ds_space_6"
+                    android:hint="00"
+                    app:endIconDrawable="@drawable/ia_ic_filter_close"
+                    app:endIconMode="clear_text"
+                    app:errorEnabled="false"
+                    app:errorIconDrawable="@null">
+
+                    <com.axelliant.hris.ui.designsystem.components.AppTextFieldView
+                        android:id="@+id/costPriceInput"
+                        style="@style/Widget.InternalApps.InputEditText"
+                        android:inputType="number" />
+                </com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="@dimen/ds_space_4"
+                android:orientation="vertical">
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                    style="@style/Text.InternalApps.FormLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/text_size_10"
+                    android:text="@string/subscription_vendor_sku" />
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout
+                    android:id="@+id/vendorSkuInputLayout"
+                    style="@style/Widget.InternalApps.InputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/ds_space_6"
+                    android:hint="00"
+                    app:endIconDrawable="@drawable/ia_ic_filter_close"
+                    app:endIconMode="clear_text"
+                    app:errorEnabled="false"
+                    app:errorIconDrawable="@null">
+
+                    <com.axelliant.hris.ui.designsystem.components.AppTextFieldView
+                        android:id="@+id/vendorSkuInput"
+                        style="@style/Widget.InternalApps.InputEditText"
+                        android:inputType="textCapSentences" />
+                </com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            style="@style/Text.InternalApps.Subheading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size_10"
+            android:layout_marginTop="@dimen/ds_space_4"
+            android:text="@string/subscription_vendor_subscription_id" />
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout
+            android:id="@+id/vendorSubIdInputLayout"
+            style="@style/Widget.InternalApps.InputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/ds_input_height_add_item"
+            android:layout_marginTop="@dimen/_6sdp"
+            android:hint="@string/add_subscription_item_vendor_hint"
+            app:endIconDrawable="@drawable/ia_ic_filter_close"
+            app:endIconMode="clear_text"
+            app:errorEnabled="false"
+            app:errorIconDrawable="@null">
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextFieldView
+                android:id="@+id/vendorSubIdInput"
+                style="@style/Widget.InternalApps.InputEditText"
+                android:inputType="textCapSentences" />
         </com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout>
-        <com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout style="@style/Widget.InternalApps.InputLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/_10sdp" android:hint="@string/subscription_item_notes" app:endIconDrawable="@drawable/ic_down">
-            <com.axelliant.hris.ui.designsystem.components.AppTextFieldView style="@style/Widget.InternalApps.InputEditText" android:hint="Optional notes" />
+
+        
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            style="@style/Text.InternalApps.Subheading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size_10"
+            android:layout_marginTop="@dimen/ds_space_4"
+            android:text="@string/subscription_item_notes" />
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout
+            android:id="@+id/noteInputLayout"
+            style="@style/Widget.InternalApps.InputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/ds_input_height_add_item"
+            android:layout_marginTop="@dimen/_6sdp"
+            android:hint="@string/add_subscription_item_vendor_hint"
+            app:endIconDrawable="@drawable/ia_ic_filter_close"
+            app:endIconMode="clear_text"
+            app:errorEnabled="false"
+            app:errorIconDrawable="@null">
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextFieldView
+                android:id="@+id/noteInput"
+                style="@style/Widget.InternalApps.InputEditText"
+                android:inputType="textCapSentences" />
         </com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout>
+
+
     </LinearLayout>
 </com.axelliant.hris.ui.designsystem.components.AppCardView>
