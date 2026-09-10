@@ -23,7 +23,9 @@ import com.axelliant.hris.core.constants.AppRouteArgs
 import com.axelliant.hris.databinding.FragmentExpenseBinding
 import com.axelliant.hris.enums.AttendanceFilter
 import com.axelliant.hris.event.EventObserver
+import com.axelliant.hris.extention.hideShimmer
 import com.axelliant.hris.extention.showErrorMsg
+import com.axelliant.hris.extention.showShimmer
 import com.axelliant.hris.model.attendance.AttendanceInput
 import com.axelliant.hris.model.dashboard.FilterModel
 import com.axelliant.hris.model.expense.Expense
@@ -63,16 +65,28 @@ class ExpenseFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentExpenseBinding.inflate(inflater).also { _binding = it }
+        binding?.lyContent?.isVisible = false
+        binding?.shimmerLayout?.showShimmer(binding?.lyContent!!)
         return binding?.root
     }
+
+    private var isDataLoaded = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // 1. Trigger dialog spinner ONLY after initial shimmer load completes
         expenseViewModel.getIsLoading()
             .observe(viewLifecycleOwner, EventObserver { isLoading ->
-                if (isLoading) showDialog() else hideDialog()
+                if (isDataLoaded) {
+                    if (isLoading) showDialog() else hideDialog()
+                }
             })
+
+        // 2. Start initial shimmer only on first launch
+        if (!isDataLoaded) {
+            toggleShimmer(true)
+        }
 
         binding?.appTopBar?.setOnBackClickListener {
             if (isFabMenuOpen) closeFabMenu() else previousFragmentNavigation()
@@ -86,6 +100,10 @@ class ExpenseFragment : BaseFragment() {
         expenseViewModel.expenseResponse.observe(
             viewLifecycleOwner,
             EventObserver { response ->
+                // 3. Dismiss shimmer and mark initial load finished as soon as response arrives
+                toggleShimmer(false)
+                isDataLoaded = true
+
                 if (response?.meta?.status == true && response.expenses != null) {
                     subFilterPopulations(response.expense_status)
                     expenseList = response.expenses
@@ -94,6 +112,14 @@ class ExpenseFragment : BaseFragment() {
                     requireContext().showErrorMsg(response?.meta?.message.toString())
                 }
             })
+    }
+
+    private fun toggleShimmer(show: Boolean) {
+        if (show) {
+            binding?.shimmerLayout?.showShimmer(binding?.lyContent!!)
+        } else {
+            binding?.shimmerLayout?.hideShimmer(binding?.lyContent!!)
+        }
     }
 
     // --- FAB menu setup ---
@@ -377,6 +403,7 @@ class ExpenseFragment : BaseFragment() {
     }
 
     override fun onDestroyView() {
+        binding?.shimmerLayout?.stopShimmer()
         if (_binding != null) {
             applyContentBlur(false)
         }

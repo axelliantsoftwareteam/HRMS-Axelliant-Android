@@ -24,7 +24,9 @@ import com.axelliant.hris.enums.AttendanceFilter.WEEK
 import com.axelliant.hris.enums.LeaveStatus
 import com.axelliant.hris.enums.RequestFilter
 import com.axelliant.hris.event.EventObserver
+import com.axelliant.hris.extention.hideShimmer
 import com.axelliant.hris.extention.showErrorMsg
+import com.axelliant.hris.extention.showShimmer
 import com.axelliant.hris.model.attendance.LeaveCountInput
 import com.axelliant.hris.model.checkin.CheckInDetail
 import com.axelliant.hris.model.dashboard.FilterModel
@@ -67,17 +69,29 @@ class CheckInListFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentCheckInListBinding.inflate(inflater).also { _binding = it }
+        binding?.lyContent?.isVisible = false
+        binding?.shimmerLayout?.showShimmer(binding?.lyContent!!)
         return binding?.root
     }
+
+    private var isDataLoaded = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerViews()
 
+        // 1. Dialog spinner only triggers after initial shimmer load completes
         attendanceViewModel.getIsLoading()
             .observe(viewLifecycleOwner, EventObserver { isLoading ->
-                if (isLoading) showDialog() else hideDialog()
+                if (isDataLoaded) {
+                    if (isLoading) showDialog() else hideDialog()
+                }
             })
+
+        // 2. Trigger initial shimmer
+        if (!isDataLoaded) {
+            toggleShimmer(true)
+        }
 
         attendanceViewModel.getCheckInList(getCurrentObject())
         setupDateFilterBar()
@@ -85,6 +99,10 @@ class CheckInListFragment : BaseFragment() {
         attendanceViewModel.checkInListResponse.observe(
             viewLifecycleOwner,
             EventObserver { response ->
+                // 3. Dismiss shimmer and reveal content layout
+                toggleShimmer(false)
+                isDataLoaded = true
+
                 if (response?.meta?.status == true) {
                     response.checkin_status?.let { filters ->
                         subFilters = arrayListOf<FilterModel>().apply {
@@ -100,9 +118,9 @@ class CheckInListFragment : BaseFragment() {
                     } ?: run {
                         subFilters = arrayListOf(
                             FilterModel().apply {
-                            this.id = ""
-                            this.title = "All"
-                            this.count = "0"
+                                this.id = ""
+                                this.title = "All"
+                                this.count = "0"
                             }
                         )
                     }
@@ -117,6 +135,20 @@ class CheckInListFragment : BaseFragment() {
         binding?.appTopBar?.setOnBackClickListener {
             previousFragmentNavigation()
         }
+    }
+
+    private fun toggleShimmer(show: Boolean) {
+        binding?.shimmerLayout?.apply {
+            if (show) startShimmer() else stopShimmer()
+            isVisible = show
+        }
+        binding?.lyContent?.isVisible = !show
+    }
+
+    override fun onDestroyView() {
+        binding?.shimmerLayout?.stopShimmer()
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun setupRecyclerViews() {

@@ -1342,12 +1342,10 @@ class HomeFragment : BaseFragment() {
                         }
 
                         HomeMenu.Leaves.gridName -> {
-                            showDialog()
                             AppNavigator.navigateToLeaves()
                         }
 
                         HomeMenu.Request.gridName -> {
-                            showDialog()
                             AppNavigator.navigateToRequest()
                         }
 
@@ -1357,20 +1355,16 @@ class HomeFragment : BaseFragment() {
                         }
 
                         HomeMenu.CheckIN.gridName -> {
-                            showDialog()
                             AppNavigator.navigateToCheckInFragment()
                         }
 
                         HomeMenu.Expense.gridName -> {
-                            showDialog()
                             AppNavigator.navigateToExpenseFragment()
                         }
                         HomeMenu.DocumentManagement.gridName -> {
-                            showDialog()
                             AppNavigator.navigateToDocumentManageFragment()
                         }
                         HomeMenu.ResourceManagement.gridName -> {
-                            showDialog()
                             AppNavigator.navigateToResourceManageFragment()
                         }
                         HomeMenu.PaySlips.gridName -> {

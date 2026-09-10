@@ -4,10 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-    style="@style/Layout.Fluent2.Screen"
+        style="@style/Layout.Fluent2.Screen"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/ds_neutral_white">
+        android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/start_guideline"
@@ -18,7 +17,6 @@
             android:id="@+id/end_guideline"
             style="@style/Guideline.Fluent2.End"
             android:orientation="vertical" />
-
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/bottom_guideline"
@@ -40,255 +38,344 @@
             app:layout_constraintStart_toStartOf="@id/start_guideline"
             app:layout_constraintTop_toBottomOf="@id/top_guideline" />
 
-<!--        <fragment-->
-<!--            android:id="@+id/ux_fragment"-->
-<!--            android:name="com.google.ar.sceneform.ux.ArFragment"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:layout_marginBottom="16dp"-->
-<!--            tools:layout_editor_absoluteY="0dp" />-->
-
-        <LinearLayout
-            android:id="@+id/ly_header_title"
+        <!-- ================= CONTENT WRAPPER ================= -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/ly_content"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@id/appTopBar"
             app:layout_constraintStart_toStartOf="@id/start_guideline"
-            app:layout_constraintTop_toBottomOf="@id/appTopBar">
-
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_date_filters"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_30sdp"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:background="@drawable/rounded_bgg"
-                android:paddingStart="@dimen/_3sdp"
-                android:paddingEnd="@dimen/_3sdp"
-                tools:itemCount="3"
-                tools:listitem="@layout/item_filter_pill" />
-
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/ly_range_date"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp">
-
-                <com.axelliant.hris.ui.designsystem.components.AppTextView
-                    android:id="@+id/tv_start_date"
-                    style="@style/Text.Fluent2.Caption.Primary.Strong"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_5sdp"
-                    android:text="@string/start_date"
-                    android:visibility="gone"
-                    android:textAlignment="textStart"
-                    app:layout_constraintEnd_toEndOf="@+id/divider_absent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/ly_start_date"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/_5sdp"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:background="@drawable/rounded_leave_filter"
-                    android:orientation="vertical"
-                    android:padding="@dimen/_10sdp"
-                    app:layout_constraintEnd_toStartOf="@+id/divider_absent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-
-                    <com.axelliant.hris.ui.designsystem.components.AppTextView
-                        android:id="@+id/tv_start_date_txt"
-                        style="@style/Text.Fluent2.Caption.Muted.Strong"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_5sdp"
-                        android:hint="@string/start_date"
-                        android:textAlignment="textStart"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/img_start_cal"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <ImageView
-                        android:id="@+id/img_start_cal"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/_5sdp"
-                        android:src="@drawable/ic_calendar"
-                        android:visibility="gone"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
-
-                    </ImageView>
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <View
-                    android:id="@+id/divider_absent"
-                    android:layout_width="2dp"
-                    android:layout_height="0dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_margin="@dimen/_5sdp"
-                    android:background="@color/line_divider"
-                    app:layout_constraintBottom_toBottomOf="@+id/ly_end_date"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/ly_end_date" />
-
-
-                <com.axelliant.hris.ui.designsystem.components.AppTextView
-                    android:id="@+id/tv_end_date"
-                    style="@style/Text.Fluent2.Caption.Primary.Strong"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_5sdp"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:text="@string/end_date"
-                    android:visibility="gone"
-                    android:textAlignment="textStart"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/divider_absent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/ly_end_date"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_5sdp"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:background="@drawable/rounded_leave_filter"
-                    android:orientation="vertical"
-                    android:padding="@dimen/_10sdp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/divider_absent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-
-                    <com.axelliant.hris.ui.designsystem.components.AppTextView
-                        android:id="@+id/tv_end_date_txt"
-                        style="@style/Text.Fluent2.Caption.Muted.Strong"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_5sdp"
-                        android:hint="@string/end_date"
-                        android:textAlignment="textStart"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/img_end_cal"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <ImageView
-                        android:id="@+id/img_end_cal"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_calendar"
-                        android:visibility="gone"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
-
-                    </ImageView>
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_sub_filter"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:orientation="horizontal"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:itemCount="3"
-                tools:listitem="@layout/sub_filter_row">
-            </androidx.recyclerview.widget.RecyclerView>
-
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintBottom_toTopOf="@id/bottom_guideline">
 
             <LinearLayout
-                android:id="@+id/list_header"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_32sdp"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:weightSum="10">
+                android:id="@+id/ly_header_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-                <com.axelliant.hris.ui.designsystem.components.AppTextView
-                    style="@style/Text.Fluent2.Caption.Muted.Strong"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="3"
-                    android:gravity="center"
-                    android:paddingStart="@dimen/_5sdp"
-                    android:textAlignment="textStart"
-                    android:text="@string/subject" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_date_filters"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_30sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:background="@drawable/rounded_bgg"
+                    android:padding="@dimen/_3sdp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:itemCount="3"
+                    tools:listitem="@layout/item_filter_pill" />
 
-                <com.axelliant.hris.ui.designsystem.components.AppTextView
-                    style="@style/Text.Fluent2.Caption.Muted.Strong"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="3"
-                    android:gravity="center"
-                    android:text="@string/posting_date" />
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/ly_range_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp">
 
-                <com.axelliant.hris.ui.designsystem.components.AppTextView
-                    style="@style/Text.Fluent2.Caption.Muted.Strong"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="3"
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
+                        android:id="@+id/tv_start_date"
+                        style="@style/Text.Fluent2.Caption.Primary.Strong"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/_5sdp"
+                        android:text="@string/start_date"
+                        android:visibility="gone"
+                        android:textAlignment="textStart"
+                        app:layout_constraintEnd_toEndOf="@+id/divider_absent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/ly_start_date"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/_5sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:background="@drawable/rounded_leave_filter"
+                        android:orientation="vertical"
+                        android:padding="@dimen/_10sdp"
+                        app:layout_constraintEnd_toStartOf="@+id/divider_absent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <com.axelliant.hris.ui.designsystem.components.AppTextView
+                            android:id="@+id/tv_start_date_txt"
+                            style="@style/Text.Fluent2.Caption.Muted.Strong"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_5sdp"
+                            android:hint="@string/start_date"
+                            android:textAlignment="textStart"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/img_start_cal"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <ImageView
+                            android:id="@+id/img_start_cal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/_5sdp"
+                            android:src="@drawable/ic_calendar"
+                            android:visibility="gone"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                        </ImageView>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <View
+                        android:id="@+id/divider_absent"
+                        android:layout_width="2dp"
+                        android:layout_height="0dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_margin="@dimen/_5sdp"
+                        android:background="@color/line_divider"
+                        app:layout_constraintBottom_toBottomOf="@+id/ly_end_date"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/ly_end_date" />
+
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
+                        android:id="@+id/tv_end_date"
+                        style="@style/Text.Fluent2.Caption.Primary.Strong"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:text="@string/end_date"
+                        android:visibility="gone"
+                        android:textAlignment="textStart"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/divider_absent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/ly_end_date"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:background="@drawable/rounded_leave_filter"
+                        android:orientation="vertical"
+                        android:padding="@dimen/_10sdp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/divider_absent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <com.axelliant.hris.ui.designsystem.components.AppTextView
+                            android:id="@+id/tv_end_date_txt"
+                            style="@style/Text.Fluent2.Caption.Muted.Strong"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_5sdp"
+                            android:hint="@string/end_date"
+                            android:textAlignment="textStart"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/img_end_cal"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <ImageView
+                            android:id="@+id/img_end_cal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_calendar"
+                            android:visibility="gone"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                        </ImageView>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_sub_filter"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:itemCount="3"
+                    tools:listitem="@layout/sub_filter_row">
+                </androidx.recyclerview.widget.RecyclerView>
+
+                <LinearLayout
+                    android:id="@+id/list_header"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_32sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
                     android:gravity="center"
-                    android:text="@string/status" />
+                    android:orientation="horizontal"
+                    android:weightSum="10">
+
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
+                        style="@style/Text.Fluent2.Caption.Muted.Strong"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:gravity="center"
+                        android:paddingStart="@dimen/_5sdp"
+                        android:textAlignment="textStart"
+                        android:text="@string/subject" />
+
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
+                        style="@style/Text.Fluent2.Caption.Muted.Strong"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:gravity="center"
+                        android:text="@string/posting_date" />
+
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
+                        style="@style/Text.Fluent2.Caption.Muted.Strong"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:gravity="center"
+                        android:text="@string/status" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
+            <com.axelliant.hris.ui.designsystem.components.AppCardView
+                android:id="@+id/list_card"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="@dimen/_4sdp"
+                app:layout_constraintTop_toBottomOf="@+id/ly_header_title"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
 
-        </LinearLayout>
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
-        <com.axelliant.hris.ui.designsystem.components.AppCardView
-            android:id="@+id/list_card"
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_expense"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clipToPadding="false"
+                        android:padding="@dimen/_6sdp"
+                        tools:itemCount="3"
+                        tools:listitem="@layout/my_team_expense_row" />
+
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
+                        android:id="@+id/tv_no_record"
+                        style="@style/Text.Fluent2.Caption.Muted.Strong"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="@string/no_record_found"
+                        android:visibility="gone"
+                        tools:visibility="visible" />
+
+                </FrameLayout>
+            </com.axelliant.hris.ui.designsystem.components.AppCardView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <!-- ================= END CONTENT WRAPPER ================= -->
+
+        <!-- ================= SHIMMER ================= -->
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmer_layout"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="@dimen/_4sdp"
-            app:layout_constraintTop_toBottomOf="@+id/ly_header_title"
-            app:layout_constraintBottom_toTopOf="@+id/bottom_guideline"
-            app:layout_constraintStart_toEndOf="@id/start_guideline"
-            app:layout_constraintEnd_toStartOf="@+id/end_guideline">
+            android:visibility="visible"
+            app:layout_constraintTop_toBottomOf="@id/appTopBar"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintBottom_toTopOf="@id/bottom_guideline">
 
-            <FrameLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:background="@color/ds_surface">
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_expense"
+                <!-- Filter pills — mirrors rv_date_filters -->
+                <View
+                    android:id="@+id/shimmer_filter_bar"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:background="@drawable/shimmer_rect"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <!-- Start/End date row — mirrors ly_range_date -->
+                <View
+                    android:id="@+id/shimmer_date_start"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_44sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginEnd="@dimen/_3sdp"
+                    android:background="@drawable/shimmer_rect"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/shimmer_date_end"
+                    app:layout_constraintTop_toBottomOf="@id/shimmer_filter_bar"
+                    app:layout_constraintHorizontal_weight="1" />
+
+                <View
+                    android:id="@+id/shimmer_date_end"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_44sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginStart="@dimen/_3sdp"
+                    android:background="@drawable/shimmer_rect"
+                    app:layout_constraintStart_toEndOf="@id/shimmer_date_start"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/shimmer_filter_bar"
+                    app:layout_constraintHorizontal_weight="1" />
+
+                <!-- Sub-filter chips row — mirrors rv_sub_filter -->
+                <View
+                    android:id="@+id/shimmer_sub_filter"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:clipToPadding="false"
-                    android:padding="@dimen/_6sdp"
-                    tools:itemCount="3"
-                    tools:listitem="@layout/my_team_expense_row" />
+                    android:layout_height="@dimen/_35sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:background="@drawable/shimmer_rect"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/shimmer_date_start" />
 
-                <com.axelliant.hris.ui.designsystem.components.AppTextView
-                    android:id="@+id/tv_no_record"
-                    style="@style/Text.Fluent2.Caption.Muted.Strong"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/no_record_found"
-                    android:visibility="gone"
-                    tools:visibility="visible" />
+                <!-- List header (Subject/Date/Status) — mirrors list_header -->
+                <View
+                    android:id="@+id/shimmer_list_header"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_12sdp"
+                    android:layout_marginTop="@dimen/_14sdp"
+                    android:background="@drawable/shimmer_rect"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/shimmer_sub_filter" />
 
-            </FrameLayout>
-        </com.axelliant.hris.ui.designsystem.components.AppCardView>
+                <!-- List card — mirrors list_card, fills remaining space -->
+                <View
+                    android:id="@+id/shimmer_list_card"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="@dimen/_4sdp"
+                    android:background="@drawable/shimmer_rect"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/shimmer_list_header"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.facebook.shimmer.ShimmerFrameLayout>
+        <!-- ================= END SHIMMER ================= -->
 
         <com.axelliant.hris.ui.designsystem.components.AppFloatingActionButtonView
             android:id="@+id/add_expense"
@@ -303,9 +390,6 @@
             android:layout_marginBottom="@dimen/_20sdp"
             app:elevation="6dp"
             app:fabSize="normal" />
-
-
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

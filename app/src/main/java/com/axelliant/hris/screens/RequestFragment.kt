@@ -41,6 +41,8 @@ import com.axelliant.hris.viewmodel.RequestViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.gson.Gson
 import androidx.fragment.app.viewModels
+import com.axelliant.hris.extention.hideShimmer
+import com.axelliant.hris.extention.showShimmer
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -106,11 +108,22 @@ class RequestFragment : BaseFragment() {
 
 
         _binding = FragmentRequestBinding.inflate(inflater).also { _binding = it }
+
+        binding?.spLeaveType?.adapter = LeaveWithCountSpinnerAdapter(requireContext(), arrayListOf())
+        binding?.spAttendType?.adapter = LeaveSpinnerAdapter(requireContext(), arrayListOf())
+        binding?.spLocType?.adapter = LeaveSpinnerAdapter(requireContext(), arrayListOf())
+
+        binding?.cvContainer?.isVisible = false
+        binding?.lyActionBtn?.isVisible = false
+        binding?.shimmerLayout?.showShimmer(binding?.nsvContent!!)
+
         return binding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding?.shimmerLayout?.startShimmer()
 
         if (arguments != null && requireArguments().containsKey(AppRouteArgs.REQUEST_TYPE)) {
             isUpdate = true
@@ -168,11 +181,7 @@ class RequestFragment : BaseFragment() {
 
         requestViewModel.getIsLoading()
             .observe(viewLifecycleOwner, EventObserver { isLoading ->
-                if (isLoading) {
-                    showDialog()
-                } else {
-                    hideDialog()
-                }
+                toggleShimmer(isLoading)
             })
 
         requestViewModel.postLeaveResponse.observe(
@@ -680,6 +689,24 @@ class RequestFragment : BaseFragment() {
             RequestFilter.EXPENSE,
             RequestFilter.RESOURCES -> Unit
         }
+    }
+
+    private fun toggleShimmer(isLoading: Boolean) {
+        if (isLoading) {
+            binding?.shimmerLayout?.showShimmer(binding?.nsvContent!!)
+            binding?.lyActionBtn?.isVisible = false
+            binding?.cvContainer?.isVisible = false
+        } else {
+            binding?.shimmerLayout?.hideShimmer(binding?.nsvContent!!)
+            binding?.lyActionBtn?.isVisible = true
+            binding?.cvContainer?.isVisible = true
+        }
+    }
+
+    override fun onDestroyView() {
+        binding?.shimmerLayout?.stopShimmer()
+        super.onDestroyView()
+        _binding = null
     }
 
     @SuppressLint("ClickableViewAccessibility")

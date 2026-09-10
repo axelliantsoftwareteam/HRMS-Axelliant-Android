@@ -39,6 +39,7 @@
             app:layout_constraintTop_toBottomOf="@id/top_guideline" />
 
         <androidx.core.widget.NestedScrollView
+            android:id="@+id/nsv_content"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginTop="@dimen/_10sdp"
@@ -587,7 +588,194 @@
                     tools:orientation="horizontal" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.core.widget.NestedScrollView>
 
+        </androidx.core.widget.NestedScrollView>
+        <!-- ================= SHIMMER ================= -->
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmer_layout"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="visible"
+            app:layout_constraintTop_toBottomOf="@id/appTopBar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/ds_surface">
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/shimmer_start_guideline"
+                    style="@style/Guideline.Fluent2.Start"
+                    android:orientation="vertical" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/shimmer_end_guideline"
+                    style="@style/Guideline.Fluent2.End"
+                    android:orientation="vertical" />
+
+                <!-- Title — mirrors tv_title -->
+                <View
+                    android:id="@+id/shimmer_title"
+                    android:layout_width="@dimen/_140sdp"
+                    android:layout_height="@dimen/_14sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:background="@drawable/shimmer_rect"
+                    app:layout_constraintStart_toStartOf="@id/shimmer_start_guideline"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <!-- Week/Month filter pill row — mirrors rv_date_filters -->
+                <View
+                    android:id="@+id/shimmer_filter_bar"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:background="@drawable/shimmer_rect"
+                    app:layout_constraintEnd_toEndOf="@id/shimmer_end_guideline"
+                    app:layout_constraintStart_toStartOf="@id/shimmer_start_guideline"
+                    app:layout_constraintTop_toBottomOf="@id/shimmer_title" />
+
+                <!-- My statistics card — mirrors card_my_statistics (~80sdp incl. padding+row) -->
+                <View
+                    android:id="@+id/shimmer_my_stats_card"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_80sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:background="@drawable/shimmer_rect"
+                    app:layout_constraintEnd_toEndOf="@id/shimmer_end_guideline"
+                    app:layout_constraintStart_toStartOf="@id/shimmer_start_guideline"
+                    app:layout_constraintTop_toBottomOf="@id/shimmer_filter_bar" />
+
+                <!-- "My remaining leaves" header — mirrors tv_remaining_header -->
+                <View
+                    android:id="@+id/shimmer_remaining_header"
+                    android:layout_width="@dimen/_130sdp"
+                    android:layout_height="@dimen/_12sdp"
+                    android:layout_marginTop="@dimen/_16sdp"
+                    android:background="@drawable/shimmer_rect"
+                    app:layout_constraintStart_toStartOf="@id/shimmer_start_guideline"
+                    app:layout_constraintTop_toBottomOf="@id/shimmer_my_stats_card" />
+
+                <!-- "4 leave types" — mirrors tv_leave_types_count -->
+                <View
+                    android:id="@+id/shimmer_leave_types_count"
+                    android:layout_width="@dimen/_70sdp"
+                    android:layout_height="@dimen/_9sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:background="@drawable/shimmer_rect"
+                    app:layout_constraintStart_toStartOf="@id/shimmer_start_guideline"
+                    app:layout_constraintTop_toBottomOf="@id/shimmer_remaining_header" />
+
+                <!-- Remaining leaves grid: 2 columns x 2 rows — mirrors rv_remaining -->
+                <View
+                    android:id="@+id/shimmer_remaining_1"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_60sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_3sdp"
+                    android:background="@drawable/shimmer_rect"
+                    app:layout_constraintStart_toStartOf="@id/shimmer_start_guideline"
+                    app:layout_constraintEnd_toStartOf="@id/shimmer_remaining_2"
+                    app:layout_constraintTop_toBottomOf="@id/shimmer_leave_types_count"
+                    app:layout_constraintHorizontal_weight="1" />
+
+                <View
+                    android:id="@+id/shimmer_remaining_2"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_60sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginStart="@dimen/_3sdp"
+                    android:background="@drawable/shimmer_rect"
+                    app:layout_constraintStart_toEndOf="@id/shimmer_remaining_1"
+                    app:layout_constraintEnd_toEndOf="@id/shimmer_end_guideline"
+                    app:layout_constraintTop_toBottomOf="@id/shimmer_leave_types_count"
+                    app:layout_constraintHorizontal_weight="1" />
+
+                <View
+                    android:id="@+id/shimmer_remaining_3"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_60sdp"
+                    android:layout_marginTop="@dimen/_6sdp"
+                    android:layout_marginEnd="@dimen/_3sdp"
+                    android:background="@drawable/shimmer_rect"
+                    app:layout_constraintStart_toStartOf="@id/shimmer_start_guideline"
+                    app:layout_constraintEnd_toStartOf="@id/shimmer_remaining_4"
+                    app:layout_constraintTop_toBottomOf="@id/shimmer_remaining_1"
+                    app:layout_constraintHorizontal_weight="1" />
+
+                <View
+                    android:id="@+id/shimmer_remaining_4"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_60sdp"
+                    android:layout_marginTop="@dimen/_6sdp"
+                    android:layout_marginStart="@dimen/_3sdp"
+                    android:background="@drawable/shimmer_rect"
+                    app:layout_constraintStart_toEndOf="@id/shimmer_remaining_3"
+                    app:layout_constraintEnd_toEndOf="@id/shimmer_end_guideline"
+                    app:layout_constraintTop_toBottomOf="@id/shimmer_remaining_2"
+                    app:layout_constraintHorizontal_weight="1" />
+
+                <!-- "My team" header — mirrors tv_my_team -->
+                <View
+                    android:id="@+id/shimmer_my_team_header"
+                    android:layout_width="@dimen/_90sdp"
+                    android:layout_height="@dimen/_12sdp"
+                    android:layout_marginTop="@dimen/_16sdp"
+                    android:background="@drawable/shimmer_rect"
+                    app:layout_constraintStart_toStartOf="@id/shimmer_start_guideline"
+                    app:layout_constraintTop_toBottomOf="@id/shimmer_remaining_3" />
+
+                <!-- My team card — mirrors ly_myteam_attend (header+progress+3 stats, ~150sdp) -->
+                <View
+                    android:id="@+id/shimmer_team_card"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_150sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:background="@drawable/shimmer_rect"
+                    app:layout_constraintEnd_toEndOf="@id/shimmer_end_guideline"
+                    app:layout_constraintStart_toStartOf="@id/shimmer_start_guideline"
+                    app:layout_constraintTop_toBottomOf="@id/shimmer_my_team_header" />
+
+                <!-- "Upcoming leaves" header — mirrors tv_my_shift -->
+                <View
+                    android:id="@+id/shimmer_upcoming_header"
+                    android:layout_width="@dimen/_110sdp"
+                    android:layout_height="@dimen/_12sdp"
+                    android:layout_marginTop="@dimen/_16sdp"
+                    android:background="@drawable/shimmer_rect"
+                    app:layout_constraintStart_toStartOf="@id/shimmer_start_guideline"
+                    app:layout_constraintTop_toBottomOf="@id/shimmer_team_card" />
+
+                <!-- Upcoming leaves row (2 horizontal cards) — mirrors rv_upcoming_leaves -->
+                <View
+                    android:id="@+id/shimmer_upcoming_1"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_70sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_3sdp"
+                    android:background="@drawable/shimmer_rect"
+                    app:layout_constraintStart_toStartOf="@id/shimmer_start_guideline"
+                    app:layout_constraintEnd_toStartOf="@id/shimmer_upcoming_2"
+                    app:layout_constraintTop_toBottomOf="@id/shimmer_upcoming_header"
+                    app:layout_constraintHorizontal_weight="1" />
+
+                <View
+                    android:id="@+id/shimmer_upcoming_2"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_70sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginStart="@dimen/_3sdp"
+                    android:layout_marginBottom="@dimen/_10sdp"
+                    android:background="@drawable/shimmer_rect"
+                    app:layout_constraintStart_toEndOf="@id/shimmer_upcoming_1"
+                    app:layout_constraintEnd_toEndOf="@id/shimmer_end_guideline"
+                    app:layout_constraintTop_toBottomOf="@id/shimmer_upcoming_header"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintHorizontal_weight="1" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.facebook.shimmer.ShimmerFrameLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

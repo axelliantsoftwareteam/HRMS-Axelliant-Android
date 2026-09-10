@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.axelliant.hris.R
@@ -31,6 +32,8 @@ import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Date
 import androidx.recyclerview.widget.GridLayoutManager
+import com.axelliant.hris.extention.hideShimmer
+import com.axelliant.hris.extention.showShimmer
 import com.axelliant.hris.ui.designsystem.adapters.FilterAdapter
 import com.axelliant.hris.ui.designsystem.adapters.FilterItem
 
@@ -53,32 +56,40 @@ class DocumentManagementFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentDocumentManagementBinding.inflate(inflater).also { _binding = it }
+        binding?.lyContent?.isVisible = false
+        binding?.shimmerLayout?.showShimmer(binding?.lyContent!!)
         return binding?.root
     }
 
+    private var isDataLoaded = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // 1. Show dialog spinner ONLY for subsequent fetches (filter switches)
         expenseViewModel.getIsLoading()
             .observe(viewLifecycleOwner, EventObserver { isLoading ->
-                if (isLoading) {
-                    showDialog()
-                } else {
-                    hideDialog()
+                if (isDataLoaded) {
+                    if (isLoading) showDialog() else hideDialog()
                 }
             })
 
-
+        // 2. Start initial shimmer only on first launch
+        if (!isDataLoaded) {
+            toggleShimmer(true)
+        }
 
         binding?.appTopBar?.setOnBackClickListener {
             previousFragmentNavigation()
         }
         setupDateFilterBar()
         expenseViewModel.getDocumentReqDetail(getCurrentObject())
+
         expenseViewModel.documentResponse.observe(
             viewLifecycleOwner,
             EventObserver { response ->
+                toggleShimmer(false)
+                isDataLoaded = true
 
                 if (response?.meta?.status == true && response.employee_forms != null) {
                     subFilterPopulations(response.employee_form_status)
@@ -96,17 +107,19 @@ class DocumentManagementFragment : BaseFragment() {
                 } else {
                     requireContext().showErrorMsg(response?.meta?.message.toString())
                 }
-
             })
 
-
         binding?.addExpense?.setOnClickListener {
-//            AppNavigator.navigateToAddDocumentFragment()
-            customDialog(requireContext(),expenseViewModel)
+            customDialog(requireContext(), expenseViewModel)
         }
+    }
 
-
-
+    private fun toggleShimmer(show: Boolean) {
+        if (show) {
+            binding?.shimmerLayout?.showShimmer(binding?.lyContent!!)
+        } else {
+            binding?.shimmerLayout?.hideShimmer(binding?.lyContent!!)
+        }
     }
 
     private fun customDialog(
@@ -312,6 +325,7 @@ class DocumentManagementFragment : BaseFragment() {
     }
 
     override fun onDestroyView() {
+        binding?.shimmerLayout?.stopShimmer()
         super.onDestroyView()
         _binding = null
     }

@@ -30,6 +30,8 @@ import com.axelliant.hris.navigation.AppNavigator
 import com.axelliant.hris.utils.Utils
 import com.axelliant.hris.viewmodel.LeaveViewModel
 import androidx.fragment.app.viewModels
+import com.axelliant.hris.extention.hideShimmer
+import com.axelliant.hris.extention.showShimmer
 import com.axelliant.hris.ui.designsystem.adapters.FilterAdapter
 import com.axelliant.hris.ui.designsystem.adapters.FilterItem
 import dagger.hilt.android.AndroidEntryPoint
@@ -55,20 +57,28 @@ class LeavesFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentLeavesBinding.inflate(inflater).also { _binding = it }
+        binding?.shimmerLayout?.showShimmer(binding?.nsvContent!!)
         return binding?.root
     }
 
 
+    private var isDataLoaded = false
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // 1. Show dialog spinner ONLY for subsequent fetches (like changing filter tabs)
         leaveViewModel.getIsLoading()
             .observe(viewLifecycleOwner, EventObserver { isLoading ->
-                if (isLoading) {
-                    showDialog()
-                } else {
-                    hideDialog()
+                if (isDataLoaded) {
+                    if (isLoading) showDialog() else hideDialog()
                 }
             })
+
+        // 2. Start initial shimmer only before data has loaded once
+        if (!isDataLoaded) {
+            toggleShimmer(true)
+        }
 
         val isManager = GlobalConfig.isCurrentManager()
         binding?.tvMyTeam?.isVisible = isManager
@@ -81,20 +91,20 @@ class LeavesFragment : BaseFragment() {
         leaveViewModel.leaveStatResponse.observe(
             viewLifecycleOwner,
             EventObserver { response ->
+                // 3. Turn off shimmer and show content layout on first response
+                toggleShimmer(false)
+                isDataLoaded = true
 
                 if (response?.meta?.status == true) {
-
                     selfAttendanceStats(response.self_count!!)
 
                     if (currentFilter == AttendanceFilter.WEEK)
                         teamAttendanceStats(response.team_count!!)
 
                     remainingLeaveDataPopulate(response.remaining_balance!!)
-
                 } else {
                     requireContext().showErrorMsg(response?.meta?.message.toString())
                 }
-
             })
 
         binding?.tvView?.setOnClickListener {
@@ -103,14 +113,11 @@ class LeavesFragment : BaseFragment() {
 
         binding?.tvMyTeamView?.setOnClickListener {
             AppNavigator.navigateToTeamLeaveDetail()
-
         }
 
         binding?.appTopBar?.setOnBackClickListener {
             AppNavigator.moveBackToPreviousFragment()
-
         }
-
 
         leaveViewModel.getUpcomingLeaveDetail(UpcomingLeaveInput().apply {
             val formatter = SimpleDateFormat(AppDateFormats.SERVER_DATE, Locale.getDefault())
@@ -128,6 +135,7 @@ class LeavesFragment : BaseFragment() {
             this.start_date = formattedTomorrow
             this.end_date = formattedLastDayOfYear
         })
+
         leaveViewModel.upcomingLeavesResponse.observe(
             viewLifecycleOwner,
             EventObserver { response ->
@@ -145,6 +153,13 @@ class LeavesFragment : BaseFragment() {
             })
     }
 
+    private fun toggleShimmer(show: Boolean) {
+        binding?.shimmerLayout?.apply {
+            if (show) startShimmer() else stopShimmer()
+            isVisible = show
+        }
+        binding?.nsvContent?.isVisible = !show
+    }
     private fun setupDateFilterBar() {
         val items = listOf(
             FilterItem(getString(R.string.last_seven), 0),
@@ -223,6 +238,12 @@ class LeavesFragment : BaseFragment() {
         }
 
         binding?.tvTeamPresentSummary?.text = "$present of $total present"
+    }
+
+    override fun onDestroyView() {
+        binding?.shimmerLayout?.stopShimmer()
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun getCurrentObject(): AttendanceInput {

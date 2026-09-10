@@ -42,6 +42,7 @@
                 android:minHeight="0dp"
                 android:minWidth="0dp"
                 app:icon="@drawable/ic_delete"
+                app:iconTint="@color/red"
                 app:iconGravity="textStart"
                 app:noBackground="true" />
         </LinearLayout>
