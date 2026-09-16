@@ -743,7 +743,7 @@ class HomeFragment : BaseFragment() {
                 AppDrawerAction.WarehouseLocations -> openInternalAppsDestination(R.id.iaWarehouseLocationsFragment)
                 AppDrawerAction.WarehouseInventory -> openInternalAppsDestination(R.id.iaWarehouseInventoryFragment)
                 AppDrawerAction.WarehouseReceiving -> openInternalAppsDestination(R.id.iaWarehouseReceivingFragment)
-                AppDrawerAction.WarehousePutaway,
+                AppDrawerAction.WarehousePutaway -> openInternalAppsDestination(R.id.iaWarehousePutawayFragment)
                 AppDrawerAction.InventoryReservations,
                 AppDrawerAction.WarehousePicking,
                 AppDrawerAction.CustomerSuppliedInventory -> requireContext().showSuccessMsg(
@@ -941,7 +941,7 @@ class HomeFragment : BaseFragment() {
         AppDrawerMenuItem(R.string.drawer_warehouse_locations, R.drawable.fluent_location, AppDrawerAction.WarehouseLocations, isSubItem = true),
         AppDrawerMenuItem(R.string.drawer_warehouse_receiving, R.drawable.ic_po_summary_box, AppDrawerAction.WarehouseReceiving, isSubItem = true),
         AppDrawerMenuItem(R.string.drawer_inventory, R.drawable.ic_home_products, AppDrawerAction.WarehouseInventory, isSubItem = true),
-        AppDrawerMenuItem(R.string.drawer_warehouse_putaway, R.drawable.ic_dashboard_box, AppDrawerAction.WarehousePutaway, isSubItem = true, isEnabled = false),
+        AppDrawerMenuItem(R.string.drawer_warehouse_putaway, R.drawable.ic_dashboard_box, AppDrawerAction.WarehousePutaway, isSubItem = true),
         AppDrawerMenuItem(R.string.drawer_inventory_reservations, R.drawable.ic_dashboard_box, AppDrawerAction.InventoryReservations, isSubItem = true, isEnabled = false),
         AppDrawerMenuItem(R.string.drawer_warehouse_picking, R.drawable.ic_dashboard_box, AppDrawerAction.WarehousePicking, isSubItem = true, isEnabled = false),
         AppDrawerMenuItem(R.string.drawer_customer_supplied_inventory, R.drawable.ic_home_products, AppDrawerAction.CustomerSuppliedInventory, isSubItem = true, isEnabled = false)

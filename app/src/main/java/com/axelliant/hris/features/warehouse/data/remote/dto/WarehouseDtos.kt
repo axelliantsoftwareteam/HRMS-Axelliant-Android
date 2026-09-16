@@ -88,6 +88,27 @@ data class GetWarehouseReceiptsRequest(
     val receiptType: Int? = null
 )
 
+data class GetPutawaysRequest(
+    @SerializedName("start")
+    val start: Int = 0,
+    @SerializedName("limit")
+    val limit: Int = 10,
+    @SerializedName("sort")
+    val sort: String = "",
+    @SerializedName("order")
+    val order: String = "",
+    @SerializedName("isPaginated")
+    val isPaginated: Boolean = true,
+    @SerializedName("search")
+    val search: String = "",
+    @SerializedName("productId")
+    val productId: String? = null,
+    @SerializedName("warehouseId")
+    val warehouseId: String? = null,
+    @SerializedName("locationId")
+    val locationId: String? = null
+)
+
 data class AddWarehouseRequest(
     @SerializedName("id")
     val id: String? = null,
@@ -316,6 +337,49 @@ data class WarehouseReceiptDto(
     val reservationStatus: Int? = null,
     @SerializedName("receivedDate")
     val receivedDate: String? = null,
+    @SerializedName("totalCount")
+    val totalCount: Int? = null,
+    @SerializedName("serialNo")
+    val serialNo: Int? = null,
+    @SerializedName("status")
+    val status: Int? = null,
+    @SerializedName("createdOn")
+    val createdOn: Long? = null,
+    @SerializedName("createdDate")
+    val createdDate: String? = null
+)
+
+data class WarehousePutawayDto(
+    @SerializedName("id")
+    val id: String? = null,
+    @SerializedName("receiptLineId")
+    val receiptLineId: String? = null,
+    @SerializedName("inventoryId")
+    val inventoryId: String? = null,
+    @SerializedName("destinationInventoryId")
+    val destinationInventoryId: String? = null,
+    @SerializedName("productName")
+    val productName: String? = null,
+    @SerializedName("warehouseReceiptType")
+    val warehouseReceiptType: Int? = null,
+    @SerializedName("poNumber")
+    val poNumber: String? = null,
+    @SerializedName("fromLocationId")
+    val fromLocationId: String? = null,
+    @SerializedName("fromLocationPath")
+    val fromLocationPath: String? = null,
+    @SerializedName("toLocationId")
+    val toLocationId: String? = null,
+    @SerializedName("toLocationPath")
+    val toLocationPath: String? = null,
+    @SerializedName("quantity")
+    val quantity: Double? = null,
+    @SerializedName("notes")
+    val notes: String? = null,
+    @SerializedName("productId")
+    val productId: String? = null,
+    @SerializedName("warehouseName")
+    val warehouseName: String? = null,
     @SerializedName("totalCount")
     val totalCount: Int? = null,
     @SerializedName("serialNo")

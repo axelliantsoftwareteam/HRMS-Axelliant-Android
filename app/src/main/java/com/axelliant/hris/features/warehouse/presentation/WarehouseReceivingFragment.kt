@@ -12,11 +12,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.view.animation.DecelerateInterpolator
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.PopupWindow
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.use
@@ -35,6 +37,8 @@ import com.axelliant.hris.core.extensions.hideKeyboard
 import com.axelliant.hris.core.extensions.showKeyboard
 import com.axelliant.hris.core.ui.ShimmerAnimatorHelper
 import com.axelliant.hris.core.ui.UiState
+import com.axelliant.hris.databinding.BottomSheetCreateWarehouseReceiptBinding
+import com.axelliant.hris.databinding.BottomSheetScannedWarehouseReceiptBinding
 import com.axelliant.hris.databinding.DialogWarehouseDeleteConfirmationBinding
 import com.axelliant.hris.databinding.FragmentWarehouseReceivingBinding
 import com.axelliant.hris.databinding.ItemAppliedProductFilterChipBinding
@@ -64,8 +68,12 @@ class WarehouseReceivingFragment : Fragment() {
     private var draftFilters = WarehouseReceivingFilters()
     private var activeFilterPopup: PopupWindow? = null
     private var activeSheetBinding: LayoutWarehouseReceivingFilterSheetBinding? = null
+    private var activeCreateSheetBinding: BottomSheetCreateWarehouseReceiptBinding? = null
     private var activeDropdown: ReceivingDropdown? = null
     private var isSearchVisible = false
+    private var isFabMenuOpen = false
+    private lateinit var fabMenuBackCallback: OnBackPressedCallback
+    private var createReceiptDraft = CreateReceiptDraft()
 
     private val receiptTypeOptions by lazy {
         listOf(
@@ -98,9 +106,11 @@ class WarehouseReceivingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupSearchUi()
+        setupFabMenu()
         setupAppliedFilterChips()
         setupList()
         setupInteractions()
+        observeScannerResult()
         observeReceipts()
         observeFilterOptions()
         renderAppliedFilterChips()
@@ -144,14 +154,34 @@ class WarehouseReceivingFragment : Fragment() {
 
     private fun setupInteractions() {
         binding.appTopBar.setOnBackClickListener {
-            InternalAppsNavigator.returnToHomeShell(findNavController())
+            if (isFabMenuOpen) {
+                closeFabMenu()
+            } else {
+                InternalAppsNavigator.returnToHomeShell(findNavController())
+            }
         }
         binding.appTopBar.setOnSearchClickListener {
+            if (isFabMenuOpen) {
+                closeFabMenu()
+                return@setOnSearchClickListener
+            }
             toggleSearchField()
         }
         binding.appTopBar.setOnActionClickListener {
             showFilterSheet()
         }
+        binding.createReceiptFab.setOnClickListener { toggleFabMenu() }
+        binding.fabMenuScrim.setOnClickListener { closeFabMenu() }
+        binding.createReceiptOptionFab.setOnClickListener {
+            closeFabMenu()
+            showCreateReceiptSheet()
+        }
+        binding.createReceiptLabel.setOnClickListener { binding.createReceiptOptionFab.performClick() }
+        binding.scanReceiptFab.setOnClickListener {
+            closeFabMenu()
+            findNavController().navigate(R.id.iaWarehouseReceiptScannerFragment)
+        }
+        binding.scanReceiptLabel.setOnClickListener { binding.scanReceiptFab.performClick() }
         binding.searchEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
@@ -174,6 +204,105 @@ class WarehouseReceivingFragment : Fragment() {
                 false
             }
         }
+    }
+
+    private fun setupFabMenu() {
+        binding.fabMenuScrim.isVisible = false
+        binding.fabMenuScrim.alpha = 0f
+        binding.createReceiptActionRow.isVisible = false
+        binding.scanReceiptActionRow.isVisible = false
+        prepareClosedFabAction(binding.createReceiptActionRow)
+        prepareClosedFabAction(binding.scanReceiptActionRow)
+        fabMenuBackCallback = object : OnBackPressedCallback(false) {
+            override fun handleOnBackPressed() {
+                closeFabMenu()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, fabMenuBackCallback)
+    }
+
+    private fun toggleFabMenu() {
+        if (isFabMenuOpen) closeFabMenu() else openFabMenu()
+    }
+
+    private fun openFabMenu() {
+        if (isFabMenuOpen) return
+        isFabMenuOpen = true
+        fabMenuBackCallback.isEnabled = true
+        binding.fabMenuScrim.isVisible = true
+        binding.fabMenuScrim.animate()
+            .alpha(1f)
+            .setDuration(FAB_MENU_ANIMATION_MS)
+            .setInterpolator(DecelerateInterpolator())
+            .start()
+        binding.createReceiptFab.setImageResource(R.drawable.ic_close)
+        binding.createReceiptFab.contentDescription = getString(R.string.receiving_fab_close)
+        binding.createReceiptFab.animate()
+            .rotation(90f)
+            .setDuration(FAB_MENU_ANIMATION_MS)
+            .start()
+        showFabAction(binding.createReceiptActionRow, delayMs = 40L)
+        showFabAction(binding.scanReceiptActionRow, delayMs = 90L)
+    }
+
+    private fun closeFabMenu() {
+        if (!isFabMenuOpen) return
+        isFabMenuOpen = false
+        fabMenuBackCallback.isEnabled = false
+        binding.createReceiptFab.setImageResource(R.drawable.ia_ic_add)
+        binding.createReceiptFab.contentDescription = getString(R.string.receiving_fab_open)
+        binding.createReceiptFab.animate()
+            .rotation(0f)
+            .setDuration(FAB_MENU_ANIMATION_MS)
+            .start()
+        hideFabAction(binding.scanReceiptActionRow, delayMs = 0L)
+        hideFabAction(binding.createReceiptActionRow, delayMs = 40L)
+        binding.fabMenuScrim.animate()
+            .alpha(0f)
+            .setDuration(FAB_MENU_ANIMATION_MS)
+            .withEndAction {
+                if (_binding == null) return@withEndAction
+                binding.fabMenuScrim.isVisible = false
+            }
+            .start()
+    }
+
+    private fun prepareClosedFabAction(row: View) {
+        row.alpha = 0f
+        row.translationY = FAB_ACTION_TRANSLATION_Y
+        row.scaleX = 0.85f
+        row.scaleY = 0.85f
+    }
+
+    private fun showFabAction(row: View, delayMs: Long) {
+        row.animate().cancel()
+        prepareClosedFabAction(row)
+        row.isVisible = true
+        row.animate()
+            .alpha(1f)
+            .translationY(0f)
+            .scaleX(1f)
+            .scaleY(1f)
+            .setStartDelay(delayMs)
+            .setDuration(FAB_MENU_ANIMATION_MS)
+            .setInterpolator(DecelerateInterpolator())
+            .start()
+    }
+
+    private fun hideFabAction(row: View, delayMs: Long) {
+        row.animate().cancel()
+        row.animate()
+            .alpha(0f)
+            .translationY(FAB_ACTION_TRANSLATION_Y)
+            .scaleX(0.85f)
+            .scaleY(0.85f)
+            .setStartDelay(delayMs)
+            .setDuration(FAB_MENU_ANIMATION_MS)
+            .withEndAction {
+                if (_binding == null) return@withEndAction
+                row.isVisible = false
+            }
+            .start()
     }
 
     private fun showFilterSheet() {
@@ -224,6 +353,203 @@ class WarehouseReceivingFragment : Fragment() {
             }
         }
         dialog.show()
+    }
+
+    private fun showCreateReceiptSheet() {
+        createReceiptDraft = CreateReceiptDraft()
+        val sheetBinding = BottomSheetCreateWarehouseReceiptBinding.inflate(layoutInflater)
+        val dialog = requireContext().createAppBottomSheetDialog().apply {
+            setContentView(sheetBinding.root)
+            setCancelable(false)
+            setCanceledOnTouchOutside(false)
+        }
+        activeCreateSheetBinding = sheetBinding
+        bindCreateReceiptSheet(sheetBinding)
+        sheetBinding.root.setOnClickListener { activeFilterPopup?.dismiss() }
+        sheetBinding.closeButton.setOnClickListener {
+            activeFilterPopup?.dismiss()
+            dialog.dismiss()
+        }
+        sheetBinding.cancelButton.setOnClickListener {
+            activeFilterPopup?.dismiss()
+            dialog.dismiss()
+        }
+        sheetBinding.createButton.setOnClickListener {
+            Toast.makeText(
+                requireContext(),
+                getString(R.string.receiving_create_save_not_connected),
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+        sheetBinding.addLineButton.setOnClickListener {
+            sheetBinding.manualLineContainer.isVisible = true
+            sheetBinding.itemsEmptyText.isVisible = false
+        }
+        sheetBinding.removeLineButton.setOnClickListener {
+            sheetBinding.manualLineContainer.isVisible = false
+            sheetBinding.itemsEmptyText.isVisible = true
+        }
+        dialog.setOnDismissListener {
+            activeFilterPopup?.dismiss()
+            activeFilterPopup = null
+            activeCreateSheetBinding = null
+            activeDropdown = null
+        }
+        dialog.setOnShowListener {
+            val bottomSheet = dialog.findViewById<FrameLayout>(
+                com.google.android.material.R.id.design_bottom_sheet
+            )
+            bottomSheet?.let { sheet ->
+                sheet.background = ColorDrawable(Color.TRANSPARENT)
+                sheet.layoutParams = sheet.layoutParams.apply {
+                    height = (resources.displayMetrics.heightPixels * CREATE_SHEET_HEIGHT_RATIO).toInt()
+                }
+                BottomSheetBehavior.from(sheet).apply {
+                    isDraggable = false
+                    skipCollapsed = true
+                    state = BottomSheetBehavior.STATE_EXPANDED
+                }
+            }
+        }
+        dialog.show()
+    }
+
+    private fun observeScannerResult() {
+        findNavController().currentBackStackEntry?.savedStateHandle
+            ?.getLiveData<Bundle>(WarehouseReceiptScannerResult.REQUEST_KEY)
+            ?.observe(viewLifecycleOwner) { bundle ->
+                findNavController().currentBackStackEntry?.savedStateHandle
+                    ?.remove<Bundle>(WarehouseReceiptScannerResult.REQUEST_KEY)
+                val scannedValue = bundle.getString(WarehouseReceiptScannerResult.RESULT_VALUE).orEmpty()
+                showScannedReceiptSheet(scannedValue)
+            }
+    }
+
+    private fun showScannedReceiptSheet(scannedValue: String) {
+        val receipt = ScannedReceiptUi.dummy(scannedValue)
+        val sheetBinding = BottomSheetScannedWarehouseReceiptBinding.inflate(layoutInflater)
+        val dialog = requireContext().createAppBottomSheetDialog().apply {
+            setContentView(sheetBinding.root)
+            setCancelable(false)
+            setCanceledOnTouchOutside(false)
+        }
+        bindScannedReceiptSheet(sheetBinding, receipt)
+        sheetBinding.closeButton.setOnClickListener { dialog.dismiss() }
+        sheetBinding.cancelButton.setOnClickListener { dialog.dismiss() }
+        sheetBinding.createButton.setOnClickListener {
+            Toast.makeText(
+                requireContext(),
+                getString(R.string.receiving_create_save_not_connected),
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+        dialog.setOnShowListener {
+            val bottomSheet = dialog.findViewById<FrameLayout>(
+                com.google.android.material.R.id.design_bottom_sheet
+            )
+            bottomSheet?.let { sheet ->
+                sheet.background = ColorDrawable(Color.TRANSPARENT)
+                sheet.layoutParams = sheet.layoutParams.apply {
+                    height = (resources.displayMetrics.heightPixels * CREATE_SHEET_HEIGHT_RATIO).toInt()
+                }
+                BottomSheetBehavior.from(sheet).apply {
+                    isDraggable = false
+                    skipCollapsed = true
+                    state = BottomSheetBehavior.STATE_EXPANDED
+                }
+            }
+        }
+        dialog.show()
+    }
+
+    private fun bindScannedReceiptSheet(
+        sheetBinding: BottomSheetScannedWarehouseReceiptBinding,
+        receipt: ScannedReceiptUi
+    ) = with(sheetBinding) {
+        scannedPayloadText.text = getString(R.string.receiving_scanned_result_format, receipt.scannedValue)
+        warehouseField.fieldLabel.text = getString(R.string.receiving_filter_warehouse)
+        warehouseField.fieldValue.text = receipt.warehouse
+        typeField.fieldLabel.text = getString(R.string.receiving_filter_type)
+        typeField.fieldValue.text = receipt.receiptType
+        purchaseOrderField.fieldLabel.text = getString(R.string.receiving_filter_purchase_order)
+        purchaseOrderField.fieldValue.text = receipt.purchaseOrder
+        expectedDateField.fieldLabel.text = getString(R.string.receiving_create_expected_date)
+        expectedDateField.fieldValue.text = receipt.expectedDate
+        notesField.fieldLabel.text = getString(R.string.receiving_create_notes)
+        notesField.fieldValue.text = receipt.notes
+        itemProductText.text = receipt.itemProduct
+        itemQuantityText.text = receipt.itemQuantity
+    }
+
+    private fun bindCreateReceiptSheet(sheetBinding: BottomSheetCreateWarehouseReceiptBinding) {
+        val hasWarehouse = !createReceiptDraft.warehouseId.isNullOrBlank()
+        val isCustomerProvided = createReceiptDraft.receiptType == CUSTOMER_PROVIDED_TYPE
+        bindField(
+            binding = sheetBinding.warehouseFieldInclude,
+            text = createReceiptDraft.warehouseLabel,
+            placeholder = getString(R.string.receiving_filter_warehouse)
+        ) { showCreateWarehouseDropdown() }
+        bindField(
+            binding = sheetBinding.typeFieldInclude,
+            text = createReceiptDraft.receiptTypeLabel,
+            placeholder = getString(R.string.receiving_filter_type)
+        ) {
+            if (hasWarehouse) {
+                showCreateTypeDropdown()
+            } else {
+                showFilterError(getString(R.string.putaway_select_warehouse_first))
+            }
+        }
+        setCreateFieldEnabled(sheetBinding.typeFieldInclude, hasWarehouse)
+        sheetBinding.sourceLabel.text = if (isCustomerProvided) {
+            getString(R.string.receiving_create_customer_id)
+        } else {
+            getString(R.string.receiving_create_purchase_order_required)
+        }
+        sheetBinding.purchaseOrderFieldInclude.root.isVisible = !isCustomerProvided
+        sheetBinding.customerIdEditText.isVisible = isCustomerProvided
+        bindField(
+            binding = sheetBinding.purchaseOrderFieldInclude,
+            text = createReceiptDraft.purchaseOrderLabel,
+            placeholder = getString(R.string.receiving_filter_purchase_order)
+        ) {
+            if (hasWarehouse) {
+                showCreatePurchaseOrderDropdown()
+            } else {
+                showFilterError(getString(R.string.putaway_select_warehouse_first))
+            }
+        }
+        setCreateFieldEnabled(sheetBinding.purchaseOrderFieldInclude, hasWarehouse)
+        listOf(
+            sheetBinding.customerIdEditText,
+            sheetBinding.expectedDateEditText,
+            sheetBinding.notesEditText,
+            sheetBinding.addLineButton,
+            sheetBinding.createButton
+        ).forEach { view ->
+            view.isEnabled = hasWarehouse
+            view.alpha = if (hasWarehouse) ENABLED_ALPHA else DISABLED_ALPHA
+        }
+        sheetBinding.itemsSubtitleText.text = if (isCustomerProvided) {
+            getString(R.string.receiving_create_items_customer_subtitle)
+        } else {
+            getString(R.string.receiving_create_items_po_subtitle)
+        }
+        sheetBinding.itemsEmptyText.text = if (isCustomerProvided) {
+            ""
+        } else {
+            getString(R.string.receiving_create_items_empty_po)
+        }
+        sheetBinding.addLineButton.isVisible = isCustomerProvided
+        sheetBinding.manualLineContainer.isVisible = isCustomerProvided && hasWarehouse
+        sheetBinding.itemsEmptyText.isVisible = !isCustomerProvided
+        bindField(
+            binding = sheetBinding.productFieldInclude,
+            text = null,
+            placeholder = getString(R.string.receiving_create_product_placeholder)
+        ) {
+            Toast.makeText(requireContext(), R.string.coming_soon, Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun bindFilterSheetFields(sheetBinding: LayoutWarehouseReceivingFilterSheetBinding) {
@@ -291,6 +617,14 @@ class WarehouseReceivingFragment : Fragment() {
         binding.selectField.setOnClickListener { onClick() }
     }
 
+    private fun setCreateFieldEnabled(
+        binding: LayoutWarehouseInventorySelectFieldBinding,
+        enabled: Boolean
+    ) {
+        binding.selectField.isEnabled = enabled
+        binding.selectField.alpha = if (enabled) ENABLED_ALPHA else DISABLED_ALPHA
+    }
+
     private fun showWarehouseDropdown() {
         val sheetBinding = activeSheetBinding ?: return
         activeDropdown = ReceivingDropdown.Warehouse
@@ -303,6 +637,43 @@ class WarehouseReceivingFragment : Fragment() {
         val sheetBinding = activeSheetBinding ?: return
         activeDropdown = ReceivingDropdown.PurchaseOrder
         if (showPurchaseOrderDropdownIfReady()) return
+        showLoadingDropdown(sheetBinding.purchaseOrderFieldInclude.selectField)
+        viewModel.loadPurchaseOrderOptionsIfNeeded()
+    }
+
+    private fun showCreateWarehouseDropdown() {
+        val sheetBinding = activeCreateSheetBinding ?: return
+        activeDropdown = ReceivingDropdown.CreateWarehouse
+        if (showCreateWarehouseDropdownIfReady()) return
+        showLoadingDropdown(sheetBinding.warehouseFieldInclude.selectField)
+        viewModel.loadWarehouseOptionsIfNeeded()
+    }
+
+    private fun showCreateTypeDropdown() {
+        val sheetBinding = activeCreateSheetBinding ?: return
+        activeDropdown = ReceivingDropdown.CreateType
+        showOptionDropdown(
+            anchor = sheetBinding.typeFieldInclude.selectField,
+            allLabel = null,
+            options = receiptTypeOptions.map {
+                ReceivingDropdownOption(it.value.toString(), it.label)
+            }
+        ) { selected ->
+            val selectedType = receiptTypeOptions.firstOrNull { it.value.toString() == selected?.id }
+            createReceiptDraft = createReceiptDraft.copy(
+                receiptType = selectedType?.value,
+                receiptTypeLabel = selectedType?.label,
+                purchaseOrderId = null,
+                purchaseOrderLabel = null
+            )
+            bindCreateReceiptSheet(sheetBinding)
+        }
+    }
+
+    private fun showCreatePurchaseOrderDropdown() {
+        val sheetBinding = activeCreateSheetBinding ?: return
+        activeDropdown = ReceivingDropdown.CreatePurchaseOrder
+        if (showCreatePurchaseOrderDropdownIfReady()) return
         showLoadingDropdown(sheetBinding.purchaseOrderFieldInclude.selectField)
         viewModel.loadPurchaseOrderOptionsIfNeeded()
     }
@@ -323,6 +694,50 @@ class WarehouseReceivingFragment : Fragment() {
                 warehouseLabel = selected?.label
             )
             bindFilterSheetFields(sheetBinding)
+        }
+        return true
+    }
+
+    private fun showCreateWarehouseDropdownIfReady(): Boolean {
+        val sheetBinding = activeCreateSheetBinding ?: return false
+        val state = viewModel.warehouseOptionsState.value as? UiState.Success ?: return false
+        if (activeDropdown != ReceivingDropdown.CreateWarehouse) return true
+        showOptionDropdown(
+            anchor = sheetBinding.warehouseFieldInclude.selectField,
+            allLabel = null,
+            options = state.data.map { option ->
+                ReceivingDropdownOption(option.id, option.selectorLabel())
+            }
+        ) { selected ->
+            createReceiptDraft = createReceiptDraft.copy(
+                warehouseId = selected?.id,
+                warehouseLabel = selected?.label,
+                receiptType = PURCHASE_ORDER_TYPE,
+                receiptTypeLabel = getString(R.string.receiving_type_purchase_order),
+                purchaseOrderId = null,
+                purchaseOrderLabel = null
+            )
+            bindCreateReceiptSheet(sheetBinding)
+        }
+        return true
+    }
+
+    private fun showCreatePurchaseOrderDropdownIfReady(): Boolean {
+        val sheetBinding = activeCreateSheetBinding ?: return false
+        val state = viewModel.purchaseOrderOptionsState.value as? UiState.Success ?: return false
+        if (activeDropdown != ReceivingDropdown.CreatePurchaseOrder) return true
+        showOptionDropdown(
+            anchor = sheetBinding.purchaseOrderFieldInclude.selectField,
+            allLabel = null,
+            options = state.data.map { option ->
+                ReceivingDropdownOption(option.id, option.number)
+            }
+        ) { selected ->
+            createReceiptDraft = createReceiptDraft.copy(
+                purchaseOrderId = selected?.id,
+                purchaseOrderLabel = selected?.label
+            )
+            bindCreateReceiptSheet(sheetBinding)
         }
         return true
     }
@@ -472,6 +887,7 @@ class WarehouseReceivingFragment : Fragment() {
                     viewModel.warehouseOptionsState.collect { state ->
                         when (state) {
                             is UiState.Success -> showWarehouseDropdownIfReady()
+                                .also { showCreateWarehouseDropdownIfReady() }
                             is UiState.Error -> showFilterError(state.message)
                             UiState.Unauthorized -> showFilterError(getString(R.string.receiving_filter_error))
                             else -> Unit
@@ -482,6 +898,7 @@ class WarehouseReceivingFragment : Fragment() {
                     viewModel.purchaseOrderOptionsState.collect { state ->
                         when (state) {
                             is UiState.Success -> showPurchaseOrderDropdownIfReady()
+                                .also { showCreatePurchaseOrderDropdownIfReady() }
                             is UiState.Error -> showFilterError(state.message)
                             UiState.Unauthorized -> showFilterError(getString(R.string.receiving_filter_error))
                             else -> Unit
@@ -762,7 +1179,10 @@ class WarehouseReceivingFragment : Fragment() {
         Warehouse,
         PurchaseOrder,
         Type,
-        Status
+        Status,
+        CreateWarehouse,
+        CreateType,
+        CreatePurchaseOrder
     }
 
     private companion object {
@@ -771,8 +1191,15 @@ class WarehouseReceivingFragment : Fragment() {
         const val PAGINATION_THRESHOLD_ITEMS = 2
         const val SHIMMER_ITEM_COUNT = 5
         const val FILTER_SHEET_HEIGHT_RATIO = 0.68f
+        const val CREATE_SHEET_HEIGHT_RATIO = 0.92f
         const val MAX_VISIBLE_FILTER_OPTIONS = 6
         const val SEARCH_ANIMATION_DURATION_MS = 180L
+        const val FAB_MENU_ANIMATION_MS = 180L
+        const val FAB_ACTION_TRANSLATION_Y = 28f
+        const val PURCHASE_ORDER_TYPE = 1
+        const val CUSTOMER_PROVIDED_TYPE = 2
+        const val ENABLED_ALPHA = 1f
+        const val DISABLED_ALPHA = 0.45f
         const val APPLIED_SEARCH_ID = "search"
         const val APPLIED_WAREHOUSE_ID = "warehouse"
         const val APPLIED_PURCHASE_ORDER_ID = "purchase_order"
@@ -791,6 +1218,41 @@ private data class ReceivingStaticFilterOption(
     val value: Int,
     val label: String
 )
+
+private data class CreateReceiptDraft(
+    val warehouseId: String? = null,
+    val warehouseLabel: String? = null,
+    val receiptType: Int? = null,
+    val receiptTypeLabel: String? = null,
+    val purchaseOrderId: String? = null,
+    val purchaseOrderLabel: String? = null
+)
+
+private data class ScannedReceiptUi(
+    val scannedValue: String,
+    val warehouse: String,
+    val receiptType: String,
+    val purchaseOrder: String,
+    val expectedDate: String,
+    val notes: String,
+    val itemProduct: String,
+    val itemQuantity: String
+) {
+    companion object {
+        fun dummy(scannedValue: String): ScannedReceiptUi {
+            return ScannedReceiptUi(
+                scannedValue = scannedValue.ifBlank { "WR-QR-DUMMY" },
+                warehouse = "LA",
+                receiptType = "Purchase Order",
+                purchaseOrder = "PO-00000028",
+                expectedDate = "09/10/2026",
+                notes = "Auto-filled from scanned receipt QR.",
+                itemProduct = "#6 WALL BRACKET WHITE",
+                itemQuantity = "1"
+            )
+        }
+    }
+}
 
 private data class AppliedReceivingFilterChipUi(
     val id: String,

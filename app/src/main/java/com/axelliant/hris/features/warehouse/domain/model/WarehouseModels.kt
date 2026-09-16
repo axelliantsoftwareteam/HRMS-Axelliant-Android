@@ -111,6 +111,23 @@ data class WarehouseReceiptsPageResult(
     val totalCount: Int
 )
 
+data class WarehousePutawayModel(
+    val id: String,
+    val productName: String,
+    val warehouseName: String,
+    val poNumber: String,
+    val fromLocationPath: String,
+    val toLocationPath: String,
+    val quantity: Double,
+    val notes: String,
+    val createdDate: String
+)
+
+data class WarehousePutawaysPageResult(
+    val putaways: List<WarehousePutawayModel>,
+    val totalCount: Int
+)
+
 data class WarehouseReceiptDetailModel(
     val receipt: WarehouseReceiptModel,
     val lines: List<WarehouseReceiptLineModel>

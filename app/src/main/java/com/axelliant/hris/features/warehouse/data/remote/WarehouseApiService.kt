@@ -5,11 +5,13 @@ import com.axelliant.hris.features.warehouse.data.remote.dto.AddWarehouseLocatio
 import com.axelliant.hris.features.warehouse.data.remote.dto.AddWarehouseRequest
 import com.axelliant.hris.features.warehouse.data.remote.dto.GetInventoryRequest
 import com.axelliant.hris.features.warehouse.data.remote.dto.GetInventoryTransactionsRequest
+import com.axelliant.hris.features.warehouse.data.remote.dto.GetPutawaysRequest
 import com.axelliant.hris.features.warehouse.data.remote.dto.GetWarehouseReceiptsRequest
 import com.axelliant.hris.features.warehouse.data.remote.dto.GetWarehousesRequest
 import com.axelliant.hris.features.warehouse.data.remote.dto.InventoryDto
 import com.axelliant.hris.features.warehouse.data.remote.dto.InventoryTransactionDto
 import com.axelliant.hris.features.warehouse.data.remote.dto.PurchaseOrderDdlDto
+import com.axelliant.hris.features.warehouse.data.remote.dto.WarehousePutawayDto
 import com.axelliant.hris.features.warehouse.data.remote.dto.WarehouseReceiptDto
 import com.axelliant.hris.features.warehouse.data.remote.dto.WarehouseReceiptSingleDto
 import com.axelliant.hris.features.warehouse.data.remote.dto.WarehouseDdlDto
@@ -72,6 +74,11 @@ interface WarehouseApiService {
     suspend fun getWarehouseReceipts(
         @Body request: GetWarehouseReceiptsRequest
     ): Response<BaseApiModel<List<WarehouseReceiptDto>>>
+
+    @POST("WarehouseReceipt/GetPutaways")
+    suspend fun getPutaways(
+        @Body request: GetPutawaysRequest
+    ): Response<BaseApiModel<List<WarehousePutawayDto>>>
 
     @GET("WarehouseReceipt/GetSingle")
     suspend fun getWarehouseReceipt(

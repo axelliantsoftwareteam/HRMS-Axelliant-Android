@@ -8,11 +8,13 @@ import com.axelliant.hris.features.warehouse.data.remote.dto.AddWarehouseLocatio
 import com.axelliant.hris.features.warehouse.data.remote.dto.AddWarehouseRequest
 import com.axelliant.hris.features.warehouse.data.remote.dto.GetInventoryRequest
 import com.axelliant.hris.features.warehouse.data.remote.dto.GetInventoryTransactionsRequest
+import com.axelliant.hris.features.warehouse.data.remote.dto.GetPutawaysRequest
 import com.axelliant.hris.features.warehouse.data.remote.dto.GetWarehouseReceiptsRequest
 import com.axelliant.hris.features.warehouse.data.remote.dto.GetWarehousesRequest
 import com.axelliant.hris.features.warehouse.data.remote.dto.InventoryDto
 import com.axelliant.hris.features.warehouse.data.remote.dto.InventoryTransactionDto
 import com.axelliant.hris.features.warehouse.data.remote.dto.PurchaseOrderDdlDto
+import com.axelliant.hris.features.warehouse.data.remote.dto.WarehousePutawayDto
 import com.axelliant.hris.features.warehouse.data.remote.dto.WarehouseDdlDto
 import com.axelliant.hris.features.warehouse.data.remote.dto.WarehouseDto
 import com.axelliant.hris.features.warehouse.data.remote.dto.WarehouseLocationDdlDto
@@ -30,6 +32,8 @@ import com.axelliant.hris.features.warehouse.domain.model.WarehouseLocationModel
 import com.axelliant.hris.features.warehouse.domain.model.WarehouseModel
 import com.axelliant.hris.features.warehouse.domain.model.WarehouseOptionModel
 import com.axelliant.hris.features.warehouse.domain.model.WarehousePageResult
+import com.axelliant.hris.features.warehouse.domain.model.WarehousePutawayModel
+import com.axelliant.hris.features.warehouse.domain.model.WarehousePutawaysPageResult
 import com.axelliant.hris.features.warehouse.domain.model.WarehouseReceiptDetailModel
 import com.axelliant.hris.features.warehouse.domain.model.WarehouseReceiptLineModel
 import com.axelliant.hris.features.warehouse.domain.model.WarehouseReceiptModel
@@ -245,6 +249,32 @@ class WarehouseRepository @Inject constructor(
         }
     }
 
+    suspend fun getPutaways(
+        start: Int,
+        limit: Int = PAGE_SIZE,
+        search: String = "",
+        productId: String? = null,
+        warehouseId: String? = null,
+        locationId: String? = null
+    ): ApiResult<WarehousePutawaysPageResult> = withContext(Dispatchers.IO) {
+        val request = GetPutawaysRequest(
+            start = start,
+            limit = limit,
+            search = search,
+            productId = productId,
+            warehouseId = warehouseId,
+            locationId = locationId
+        )
+        when (val result = safeApiExecutor.execute { apiService.getPutaways(request) }) {
+            is ApiResult.Success -> mapPutawaysResponse(result.data)
+            ApiResult.Empty -> ApiResult.Success(WarehousePutawaysPageResult(emptyList(), 0))
+            is ApiResult.HttpError -> result
+            is ApiResult.NetworkError -> result
+            is ApiResult.UnknownError -> result
+            ApiResult.Unauthorized -> ApiResult.Unauthorized
+        }
+    }
+
     suspend fun addWarehouse(request: AddWarehouseRequest): ApiResult<WarehouseModel> =
         withContext(Dispatchers.IO) {
             when (val result = safeApiExecutor.execute { apiService.addWarehouse(request) }) {
@@ -391,6 +421,26 @@ class WarehouseRepository @Inject constructor(
                 payload.data?.message?.takeIf { it.isNotBlank() }
                     ?: payload.message?.text?.takeIf { it.isNotBlank() }
                     ?: "Unable to load receipt details."
+            )
+        }
+    }
+
+    private fun mapPutawaysResponse(
+        payload: BaseApiModel<List<WarehousePutawayDto>>
+    ): ApiResult<WarehousePutawaysPageResult> {
+        val data = payload.data?.data.orEmpty()
+        return if (payload.data?.success == true) {
+            ApiResult.Success(
+                WarehousePutawaysPageResult(
+                    putaways = data.map { it.toModel() },
+                    totalCount = data.firstOrNull()?.totalCount ?: data.size
+                )
+            )
+        } else {
+            ApiResult.UnknownError(
+                payload.data?.message?.takeIf { it.isNotBlank() }
+                    ?: payload.message?.text?.takeIf { it.isNotBlank() }
+                    ?: "Unable to load putaway history."
             )
         }
     }
@@ -549,6 +599,20 @@ class WarehouseRepository @Inject constructor(
                 remaining <= 0.0 -> "Completed"
                 else -> "-"
             }
+        )
+    }
+
+    private fun WarehousePutawayDto.toModel(): WarehousePutawayModel {
+        return WarehousePutawayModel(
+            id = id.orEmpty(),
+            productName = productName.orEmpty().ifBlank { "-" },
+            warehouseName = warehouseName.orEmpty().ifBlank { "-" },
+            poNumber = poNumber.orEmpty().ifBlank { "-" },
+            fromLocationPath = fromLocationPath.orEmpty().ifBlank { "-" },
+            toLocationPath = toLocationPath.orEmpty().ifBlank { "-" },
+            quantity = quantity ?: 0.0,
+            notes = notes.orEmpty(),
+            createdDate = createdDate.orEmpty().ifBlank { "-" }
         )
     }
 

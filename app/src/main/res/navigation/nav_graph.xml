@@ -206,6 +206,18 @@
         tools:layout="@layout/fragment_warehouse_receiving" />
 
     <fragment
+        android:id="@+id/iaWarehouseReceiptScannerFragment"
+        android:name="com.axelliant.hris.features.warehouse.presentation.WarehouseReceiptScannerFragment"
+        android:label="@string/receiving_scan_receipt"
+        tools:layout="@layout/fragment_warehouse_receipt_scanner" />
+
+    <fragment
+        android:id="@+id/iaWarehousePutawayFragment"
+        android:name="com.axelliant.hris.features.warehouse.presentation.WarehousePutawayFragment"
+        android:label="@string/putaway_history_title"
+        tools:layout="@layout/fragment_warehouse_putaway" />
+
+    <fragment
         android:id="@+id/iaWarehouseReceivingDetailFragment"
         android:name="com.axelliant.hris.features.warehouse.presentation.WarehouseReceivingDetailFragment"
         android:label="@string/receiving_detail_title"
