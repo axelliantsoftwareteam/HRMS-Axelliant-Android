@@ -240,6 +240,12 @@
         tools:layout="@layout/fragment_subscriptions" />
 
     <fragment
+        android:id="@+id/iaSubscriptionDetailsFragment"
+        android:name="com.axelliant.hris.features.subscriptions.presentation.SubscriptionDetailsFragment"
+        android:label="@string/subscription_details_title"
+        tools:layout="@layout/fragment_subscription_details" />
+
+    <fragment
         android:id="@+id/iaNewSubscriptionFragment"
         android:name="com.axelliant.hris.features.subscriptions.presentation.NewSubscriptionFragment"
         android:label="@string/new_subscription_title"
@@ -250,6 +256,12 @@
         android:name="com.axelliant.hris.features.subscriptions.presentation.SubscriptionPlansFragment"
         android:label="@string/subscription_plans"
         tools:layout="@layout/fragment_subscription_plans" />
+
+    <fragment
+        android:id="@+id/iaSubscriptionPlanDetailsFragment"
+        android:name="com.axelliant.hris.features.subscriptions.presentation.SubscriptionPlanDetailsFragment"
+        android:label="@string/subscription_plan_details_title"
+        tools:layout="@layout/fragment_subscription_plan_details" />
 
     <fragment
         android:id="@+id/iaNewSubscriptionPlanFragment"
