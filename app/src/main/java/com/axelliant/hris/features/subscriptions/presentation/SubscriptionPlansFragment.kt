@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.getSystemService
 import androidx.core.view.isVisible
@@ -107,7 +106,10 @@ class SubscriptionPlansFragment : Fragment() {
         popupMenu.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.action_subscription_plan_view -> {
-                    Toast.makeText(requireContext(), R.string.subscription_view_plan, Toast.LENGTH_SHORT).show()
+                    val args = Bundle().apply {
+                        putParcelable(SubscriptionPlanDetailsFragment.ARG_PLAN, plan)
+                    }
+                    findNavController().navigate(R.id.iaSubscriptionPlanDetailsFragment, args)
                     true
                 }
                 else -> false
