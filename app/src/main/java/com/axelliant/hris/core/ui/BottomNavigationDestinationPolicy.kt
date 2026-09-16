@@ -34,6 +34,8 @@ object BottomNavigationDestinationPolicy {
         R.id.iaAddWarehouseLocationFragment,
         R.id.iaWarehouseInventoryFragment,
         R.id.iaWarehouseReceivingFragment,
+        R.id.iaWarehouseReceiptScannerFragment,
+        R.id.iaWarehousePutawayFragment,
         R.id.iaAddPurchaseOrderFragment,
         R.id.iaCreateManualPurchaseOrderFragment,
         R.id.iaViewPurchaseOrderFragment,

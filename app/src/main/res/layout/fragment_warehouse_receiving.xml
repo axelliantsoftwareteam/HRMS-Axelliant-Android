@@ -182,4 +182,108 @@
         app:layout_constraintEnd_toEndOf="@id/endGuideline"
         app:layout_constraintStart_toStartOf="@id/startGuideline"
         app:layout_constraintTop_toBottomOf="@id/totalEntriesText" />
+
+    <View
+        android:id="@+id/fabMenuScrim"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/purchase_order_fab_scrim"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/scanReceiptActionRow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/ds_space_12"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/createReceiptActionRow"
+        app:layout_constraintEnd_toEndOf="@id/createReceiptFab">
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            android:id="@+id/scanReceiptLabel"
+            style="@style/Text.InternalApps.Body"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/ds_space_10"
+            android:background="@drawable/bg_purchase_order_fab_label"
+            android:elevation="@dimen/_2sdp"
+            android:fontFamily="sans-serif-medium"
+            android:paddingStart="@dimen/ds_space_14"
+            android:paddingTop="@dimen/ds_space_8"
+            android:paddingEnd="@dimen/ds_space_14"
+            android:paddingBottom="@dimen/ds_space_8"
+            android:text="@string/receiving_scan_receipt"
+            android:textColor="@color/purchase_order_fluent_text_primary" />
+
+        <com.axelliant.hris.ui.designsystem.components.AppFloatingActionButtonView
+            android:id="@+id/scanReceiptFab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/receiving_scan_receipt"
+            android:src="@drawable/ic_qr_scan"
+            app:backgroundTint="@color/ds_primary"
+            app:elevation="@dimen/_4sdp"
+            app:fabSize="mini"
+            app:tint="@color/ds_on_primary" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/createReceiptActionRow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/ds_space_12"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/createReceiptFab"
+        app:layout_constraintEnd_toEndOf="@id/createReceiptFab">
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            android:id="@+id/createReceiptLabel"
+            style="@style/Text.InternalApps.Body"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/ds_space_10"
+            android:background="@drawable/bg_purchase_order_fab_label"
+            android:elevation="@dimen/_2sdp"
+            android:fontFamily="sans-serif-medium"
+            android:paddingStart="@dimen/ds_space_14"
+            android:paddingTop="@dimen/ds_space_8"
+            android:paddingEnd="@dimen/ds_space_14"
+            android:paddingBottom="@dimen/ds_space_8"
+            android:text="@string/receiving_create_receipt"
+            android:textColor="@color/purchase_order_fluent_text_primary" />
+
+        <com.axelliant.hris.ui.designsystem.components.AppFloatingActionButtonView
+            android:id="@+id/createReceiptOptionFab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/receiving_create_receipt"
+            android:src="@drawable/ic_document_add"
+            app:backgroundTint="@color/ds_primary"
+            app:elevation="@dimen/_4sdp"
+            app:fabSize="mini"
+            app:tint="@color/ds_on_primary" />
+    </LinearLayout>
+
+    <com.axelliant.hris.ui.designsystem.components.AppFloatingActionButtonView
+        android:id="@+id/createReceiptFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/ds_space_16"
+        android:layout_marginBottom="@dimen/ds_space_16"
+        android:contentDescription="@string/receiving_fab_open"
+        android:src="@drawable/ia_ic_add"
+        app:backgroundTint="@color/ds_primary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:tint="@color/ds_on_primary" />
 </androidx.constraintlayout.widget.ConstraintLayout>
