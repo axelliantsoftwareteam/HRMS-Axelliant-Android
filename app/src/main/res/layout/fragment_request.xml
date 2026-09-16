@@ -84,8 +84,10 @@
 
 
         <androidx.core.widget.NestedScrollView
+            android:id="@+id/nsv_content"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:visibility="gone"
             android:layout_marginTop="@dimen/_10sdp"
             android:layout_marginBottom="@dimen/_5sdp"
             android:background="@android:color/transparent"
@@ -1138,6 +1140,7 @@
             android:id="@+id/cv_container"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@id/bottom_guideline"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
@@ -1180,6 +1183,242 @@
                 app:fluentButtonStyle="destructive"
                 android:text="@string/delete" />
         </androidx.constraintlayout.widget.ConstraintLayout>
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmer_layout"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="visible"
+            app:layout_constraintTop_toBottomOf="@id/appTopBar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/ds_surface">
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/shimmer_start_guideline"
+                    style="@style/Guideline.Fluent2.Start"
+                    android:orientation="vertical" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/shimmer_end_guideline"
+                    style="@style/Guideline.Fluent2.End"
+                    android:orientation="vertical" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/shimmer_top_guideline"
+                    style="@style/Guideline.Fluent2.Top" />
+
+                <View
+                    android:id="@+id/shimmer_filter_bar"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_32sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:background="@drawable/shimmer_rect"
+                    app:layout_constraintEnd_toEndOf="@id/shimmer_end_guideline"
+                    app:layout_constraintStart_toStartOf="@id/shimmer_start_guideline"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <!-- Blue banner — mirrors ly_header: marginTop 10sdp (nsv_content), 5sdp inset, ~64sdp tall -->
+                <View
+                    android:id="@+id/shimmer_banner"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_64sdp"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_marginEnd="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:background="@drawable/shimmer_rect"
+                    app:layout_constraintEnd_toEndOf="@id/shimmer_end_guideline"
+                    app:layout_constraintStart_toStartOf="@id/shimmer_start_guideline"
+                    app:layout_constraintTop_toBottomOf="@id/shimmer_filter_bar" />
+
+                <!-- Leave type label — mirrors tv_leave_type: marginTop 16sdp, marginStart 5sdp -->
+                <View
+                    android:id="@+id/shimmer_field_1_label"
+                    android:layout_width="@dimen/_90sdp"
+                    android:layout_height="@dimen/_10sdp"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_16sdp"
+                    android:background="@drawable/shimmer_rect"
+                    app:layout_constraintStart_toStartOf="@id/shimmer_start_guideline"
+                    app:layout_constraintTop_toBottomOf="@id/shimmer_banner" />
+
+                <!-- Leave type field — mirrors ly_leave_type: marginTop 6sdp, height 44sdp -->
+                <View
+                    android:id="@+id/shimmer_field_1"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_44sdp"
+                    android:layout_marginEnd="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_6sdp"
+                    android:background="@drawable/shimmer_rect"
+                    app:layout_constraintEnd_toEndOf="@id/shimmer_end_guideline"
+                    app:layout_constraintStart_toStartOf="@id/shimmer_field_1_label"
+                    app:layout_constraintTop_toBottomOf="@id/shimmer_field_1_label" />
+
+                <!-- Start date label — mirrors tv_start_date: ly_range_date marginTop 5sdp + own margin 5sdp -->
+                <View
+                    android:id="@+id/shimmer_date_start_label"
+                    android:layout_width="@dimen/_70sdp"
+                    android:layout_height="@dimen/_10sdp"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:background="@drawable/shimmer_rect"
+                    app:layout_constraintEnd_toStartOf="@id/shimmer_date_divider"
+                    app:layout_constraintHorizontal_weight="1"
+                    app:layout_constraintStart_toStartOf="@id/shimmer_start_guideline"
+                    app:layout_constraintTop_toBottomOf="@id/shimmer_field_1" />
+
+                <!-- Start date field — mirrors ly_start_date: marginTop 5sdp, height 44sdp -->
+                <View
+                    android:id="@+id/shimmer_date_start"
+                    android:layout_width="@dimen/_120sdp"
+                    android:layout_height="@dimen/_44sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:background="@drawable/shimmer_rect"
+                    app:layout_constraintEnd_toEndOf="@id/shimmer_date_start_label"
+                    app:layout_constraintHorizontal_weight="1"
+                    app:layout_constraintStart_toStartOf="@id/shimmer_date_start_label"
+                    app:layout_constraintTop_toBottomOf="@id/shimmer_date_start_label" />
+
+                <!-- Divider gap between start/end date columns — mirrors divider_absent: 8sdp -->
+                <View
+                    android:id="@+id/shimmer_date_divider"
+                    android:layout_width="@dimen/_8sdp"
+                    android:layout_height="0dp"
+                    android:background="@android:color/transparent"
+                    app:layout_constraintBottom_toBottomOf="@id/shimmer_date_end"
+                    app:layout_constraintEnd_toStartOf="@id/shimmer_date_end_label"
+                    app:layout_constraintStart_toEndOf="@id/shimmer_date_start_label"
+                    app:layout_constraintTop_toTopOf="@id/shimmer_date_start_label" />
+
+                <!-- End date label -->
+                <View
+                    android:id="@+id/shimmer_date_end_label"
+                    android:layout_width="@dimen/_70sdp"
+                    android:layout_height="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:background="@drawable/shimmer_rect"
+                    app:layout_constraintEnd_toEndOf="@id/shimmer_end_guideline"
+                    app:layout_constraintHorizontal_weight="1"
+                    app:layout_constraintStart_toEndOf="@id/shimmer_date_divider"
+                    app:layout_constraintTop_toBottomOf="@id/shimmer_field_1" />
+
+                <!-- End date field -->
+                <View
+                    android:id="@+id/shimmer_date_end"
+                    android:layout_width="@dimen/_120sdp"
+                    android:layout_height="@dimen/_44sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:background="@drawable/shimmer_rect"
+                    app:layout_constraintEnd_toEndOf="@id/shimmer_date_end_label"
+                    app:layout_constraintHorizontal_weight="1"
+                    app:layout_constraintStart_toStartOf="@id/shimmer_date_end_label"
+                    app:layout_constraintTop_toBottomOf="@id/shimmer_date_end_label" />
+
+                <!-- Half-day card — mirrors ly_half_day_card: marginTop 10sdp, ~66sdp -->
+                <View
+                    android:id="@+id/shimmer_halfday_card"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_66sdp"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_marginEnd="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:background="@drawable/shimmer_rect"
+                    app:layout_constraintEnd_toEndOf="@id/shimmer_end_guideline"
+                    app:layout_constraintStart_toStartOf="@id/shimmer_start_guideline"
+                    app:layout_constraintTop_toBottomOf="@id/shimmer_date_start" />
+
+                <!-- Leave balance details label — mirrors tv_balance_details_header: marginTop 14sdp -->
+                <View
+                    android:id="@+id/shimmer_balance_label"
+                    android:layout_width="@dimen/_140sdp"
+                    android:layout_height="@dimen/_10sdp"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_14sdp"
+                    android:background="@drawable/shimmer_rect"
+                    app:layout_constraintStart_toStartOf="@id/shimmer_start_guideline"
+                    app:layout_constraintTop_toBottomOf="@id/shimmer_halfday_card" />
+
+                <!-- Leave count / remaining balance cards — mirrors ly_leave_count_remain: marginTop 6sdp, height 68sdp -->
+                <View
+                    android:id="@+id/shimmer_balance_left"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_68sdp"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_marginEnd="@dimen/_3sdp"
+                    android:layout_marginTop="@dimen/_6sdp"
+                    android:background="@drawable/shimmer_rect"
+                    app:layout_constraintStart_toStartOf="@id/shimmer_start_guideline"
+                    app:layout_constraintEnd_toStartOf="@id/shimmer_balance_right"
+                    app:layout_constraintTop_toBottomOf="@id/shimmer_balance_label"
+                    app:layout_constraintHorizontal_weight="1" />
+
+                <View
+                    android:id="@+id/shimmer_balance_right"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_68sdp"
+                    android:layout_marginStart="@dimen/_3sdp"
+                    android:layout_marginEnd="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_6sdp"
+                    android:background="@drawable/shimmer_rect"
+                    app:layout_constraintStart_toEndOf="@id/shimmer_balance_left"
+                    app:layout_constraintEnd_toEndOf="@id/shimmer_end_guideline"
+                    app:layout_constraintTop_toBottomOf="@id/shimmer_balance_label"
+                    app:layout_constraintHorizontal_weight="1" />
+
+                <!-- Balance note — mirrors tv_balance_note: marginTop 6sdp, small line -->
+                <View
+                    android:id="@+id/shimmer_balance_note"
+                    android:layout_width="@dimen/_100sdp"
+                    android:layout_height="@dimen/_8sdp"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_6sdp"
+                    android:background="@drawable/shimmer_rect"
+                    app:layout_constraintStart_toStartOf="@id/shimmer_start_guideline"
+                    app:layout_constraintTop_toBottomOf="@id/shimmer_balance_left" />
+
+                <!-- Reason label — mirrors tv_reason_header: marginTop 14sdp -->
+                <View
+                    android:id="@+id/shimmer_reason_label"
+                    android:layout_width="@dimen/_100sdp"
+                    android:layout_height="@dimen/_10sdp"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_14sdp"
+                    android:background="@drawable/shimmer_rect"
+                    app:layout_constraintStart_toStartOf="@id/shimmer_start_guideline"
+                    app:layout_constraintTop_toBottomOf="@id/shimmer_balance_note" />
+
+                <!-- Reason box — mirrors til_leave_reason: marginTop 6sdp, height 120sdp (6 min lines) -->
+                <View
+                    android:id="@+id/shimmer_reason_box"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:layout_marginEnd="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_6sdp"
+                    android:background="@drawable/shimmer_rect"
+                    app:layout_constraintEnd_toEndOf="@id/shimmer_end_guideline"
+                    app:layout_constraintStart_toStartOf="@id/shimmer_reason_label"
+                    app:layout_constraintTop_toBottomOf="@id/shimmer_reason_label" />
+
+                <!-- Bottom button — mirrors cv_container/btn_apply -->
+                <View
+                    android:id="@+id/shimmer_button"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_44sdp"
+                    android:layout_marginStart="@dimen/_15sdp"
+                    android:layout_marginEnd="@dimen/_15sdp"
+                    android:layout_marginBottom="@dimen/_10sdp"
+                    android:background="@drawable/shimmer_rect"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.facebook.shimmer.ShimmerFrameLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

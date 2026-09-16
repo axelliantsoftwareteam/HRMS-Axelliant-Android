@@ -510,16 +510,13 @@
 
                     <com.axelliant.hris.ui.designsystem.components.AppButtonView
                         android:id="@+id/saveDraftButton"
-                        style="@style/Widget.Fluent2.Button.Primary"
+                        style="@style/Widget.Fluent2.Button.Secondary"
                         android:layout_width="0dp"
                         android:layout_height="@dimen/ds_button_height"
                         android:layout_weight="1"
-                        android:background="@drawable/bg_quote_save_draft_button"
                         android:text="@string/quote_preview_save_draft"
                         android:visibility="visible"
-                        app:backgroundTint="@null"
-                        android:textColor="@color/quotes_navy"
-                        app:cornerRadius="@dimen/ds_radius_md" />
+                        android:textColor="@color/quotes_navy" />
 
                     <com.axelliant.hris.ui.designsystem.components.AppButtonView
                         android:id="@+id/submitQuoteButton"
@@ -527,8 +524,7 @@
                         android:layout_width="0dp"
                         android:layout_height="@dimen/ds_button_height"
                         android:layout_weight="1"
-                        android:text="@string/quote_preview_submit"
-                        app:cornerRadius="@dimen/ds_radius_md" />
+                        android:text="@string/quote_preview_submit" />
                 </LinearLayout>
             </LinearLayout>
 

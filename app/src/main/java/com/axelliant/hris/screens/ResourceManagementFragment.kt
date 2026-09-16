@@ -42,6 +42,8 @@ import java.util.Date
 import com.axelliant.hris.ui.designsystem.adapters.FilterAdapter
 import com.axelliant.hris.ui.designsystem.adapters.FilterItem
 import androidx.recyclerview.widget.GridLayoutManager
+import com.axelliant.hris.extention.hideShimmer
+import com.axelliant.hris.extention.showShimmer
 
 @AndroidEntryPoint
 class ResourceManagementFragment : BaseFragment() {
@@ -63,68 +65,69 @@ class ResourceManagementFragment : BaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         _binding = FragmentResourceManagmentBinding.inflate(inflater).also { _binding = it }
+        binding?.lyContent?.isVisible = false
+        binding?.addExpense?.isVisible = false
+        binding?.shimmerLayout?.showShimmer(binding?.lyContent!!)
         return binding?.root
     }
 
+    private var isDataLoaded = false
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // 1. Trigger dialog spinner ONLY for subsequent fetches (filter switches or form submissions)
         resourceManageViewModel.getIsLoading()
             .observe(viewLifecycleOwner, EventObserver { isLoading ->
-                if (isLoading) {
-                    showDialog()
-                } else {
-                    hideDialog()
+                if (isDataLoaded) {
+                    if (isLoading) showDialog() else hideDialog()
                 }
             })
 
-
+        // 2. Start initial shimmer only on first launch
+        if (!isDataLoaded) {
+            toggleShimmer(true)
+        }
 
         binding?.appTopBar?.setOnBackClickListener {
             previousFragmentNavigation()
         }
         setupDateFilterBar()
         resourceManageViewModel.getMyHoursDetail(getCurrentObject())
+
         resourceManageViewModel.hoursResponse.observe(
             viewLifecycleOwner,
             EventObserver { response ->
+                // 3. Turn off shimmer and mark data loaded as soon as response arrives
+                toggleShimmer(false)
+                isDataLoaded = true
 
                 if (response?.meta?.status == true && response.resource_hour_data != null) {
-//                    subFilterPopulations(response.expense_status)
-
                     if (response.resource_hour_data.size > 0) {
                         binding?.rvExpense?.visibility = View.VISIBLE
                         binding?.tvNoRecord?.visibility = View.GONE
                         resourceHours = response.resource_hour_data
                         dataPopulate()
-                        binding?.viewExpand?.isVisible=true
-                        binding?.btnApply?.isVisible=true
-
-
+                        binding?.viewExpand?.isVisible = true
+                        binding?.btnApply?.isVisible = true
                     } else {
                         binding?.rvExpense?.visibility = View.GONE
                         binding?.tvNoRecord?.visibility = View.VISIBLE
-                        binding?.viewExpand?.isVisible=false
-                        binding?.btnApply?.isVisible=false
-
+                        binding?.viewExpand?.isVisible = false
+                        binding?.btnApply?.isVisible = false
                     }
-
                 } else {
                     requireContext().showErrorMsg(response?.meta?.message.toString())
                 }
-
             })
-
 
         resourceManageViewModel.postResponse.observe(
             viewLifecycleOwner,
             EventObserver { response ->
-
                 if (response?.meta?.status == true) {
                     requireContext().showSuccessMsg(response.status_message.toString())
                     resourceManageViewModel.getMyHoursDetail(getCurrentObject())
-
                 } else {
                     requireContext().showErrorMsg(response?.meta?.message.toString())
                 }
@@ -146,6 +149,16 @@ class ResourceManagementFragment : BaseFragment() {
                     resourceHoursAdapter.notifyItemChanged(index)
                 }
             }
+        }
+    }
+
+    private fun toggleShimmer(show: Boolean) {
+        if (show) {
+            binding?.shimmerLayout?.showShimmer(binding?.lyContent!!)
+            binding?.addExpense?.isVisible = false
+        } else {
+            binding?.shimmerLayout?.hideShimmer(binding?.lyContent!!)
+            binding?.addExpense?.isVisible = true
         }
     }
 
@@ -314,6 +327,12 @@ class ResourceManagementFragment : BaseFragment() {
         }
         binding?.rvSubFilter?.adapter = weeklyAdapter
 
+    }
+
+    override fun onDestroyView() {
+        binding?.shimmerLayout?.stopShimmer()
+        super.onDestroyView()
+        _binding = null
     }
 
 }
