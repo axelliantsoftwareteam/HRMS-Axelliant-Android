@@ -60,10 +60,35 @@ class AppFloatingActionButtonView @JvmOverloads constructor(
         alpha = if (enabled) ENABLED_ALPHA else DISABLED_ALPHA
     }
 
+
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        val isMini = fabSize == FAB_SIZE_MINI
+
         val size = resources.getDimensionPixelSize(
-            if (fabSize == FAB_SIZE_MINI) com.intuit.sdp.R.dimen._40sdp else com.intuit.sdp.R.dimen._56sdp
+            if (isMini) {
+                com.intuit.sdp.R.dimen._40sdp
+            } else {
+                com.intuit.sdp.R.dimen._56sdp
+            }
         )
+
+        val iconSize = resources.getDimensionPixelSize(
+            if (isMini) {
+                com.intuit.sdp.R.dimen._20sdp
+            } else {
+                com.intuit.sdp.R.dimen._34sdp
+            }
+        )
+
+        val iconPadding = (size - iconSize) / 2
+
+        setPadding(
+            iconPadding,
+            iconPadding,
+            iconPadding,
+            iconPadding
+        )
+
         super.onMeasure(
             MeasureSpec.makeMeasureSpec(size, MeasureSpec.EXACTLY),
             MeasureSpec.makeMeasureSpec(size, MeasureSpec.EXACTLY)
