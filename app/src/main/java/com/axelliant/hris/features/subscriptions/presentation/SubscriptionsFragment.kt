@@ -9,7 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.getSystemService
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
@@ -77,7 +79,7 @@ class SubscriptionsFragment : Fragment() {
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             adapter = filterTabAdapter
         }
-        subscriptionsAdapter = SubscriptionsAdapter()
+        subscriptionsAdapter = SubscriptionsAdapter(::showSubscriptionActions)
         binding.subscriptionsRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = subscriptionsAdapter
@@ -257,6 +259,20 @@ class SubscriptionsFragment : Fragment() {
             .start()
     }
 
+    private fun showSubscriptionActions(subscription: SubscriptionModel, anchor: View) {
+        val popupMenu = PopupMenu(anchor.context, anchor)
+        popupMenu.menuInflater.inflate(R.menu.menu_subscription_actions, popupMenu.menu)
+        popupMenu.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.action_subscription_view_details -> {
+                    Toast.makeText(requireContext(), R.string.subscription_view_details, Toast.LENGTH_SHORT).show()
+                    true
+                }
+                else -> false
+            }
+        }
+        popupMenu.show()
+    }
     fun submitFilterTabs(tabs: List<SubscriptionFilterTab>) {
         selectedFilterId = selectedFilterId.takeIf { id -> tabs.any { it.id == id } }
             ?: tabs.firstOrNull()?.id.orEmpty()
