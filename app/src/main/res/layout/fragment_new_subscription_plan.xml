@@ -81,50 +81,85 @@
                         android:layout_height="wrap_content"
                         android:text="@string/subscription_plan_details"
                         android:textColor="@color/ds_text_primary"
-                        android:textSize="@dimen/_11ssp"
+                        android:textSize="@dimen/text_size_12"
                         android:textStyle="bold" />
 
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
+                        style="@style/Text.InternalApps.FormLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/ds_space_8"
+                        android:text="@string/subscription_plan_name_hint" />
+
                     <com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout
+                        android:id="@+id/planNameInputLayout"
                         style="@style/Widget.InternalApps.InputLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        android:hint="@string/subscription_plan_name_hint">
+                        android:layout_marginTop="@dimen/ds_space_6"
+                        android:hint="@string/add_plan_name_hint"
+                        app:endIconDrawable="@drawable/ia_ic_filter_close"
+                        app:endIconMode="clear_text"
+                        app:errorEnabled="false"
+                        app:errorIconDrawable="@null">
 
                         <com.axelliant.hris.ui.designsystem.components.AppTextFieldView
-                            style="@style/Widget.InternalApps.SubscriptionInputEditText"
-                            android:hint="@string/subscription_plan_name_hint"
-                            tools:text="Business Monthly" />
+                            android:id="@+id/planNameInput"
+                            style="@style/Widget.InternalApps.InputEditText"
+                            android:inputType="textCapSentences" />
                     </com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout>
 
+
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
+                        style="@style/Text.InternalApps.FormLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/ds_space_8"
+                        android:text="@string/subscription_plan_code_hint" />
+
                     <com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout
+                        android:id="@+id/planCodeInputLayout"
                         style="@style/Widget.InternalApps.InputLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_8sdp"
-                        android:hint="@string/subscription_plan_code_hint">
+                        android:layout_marginTop="@dimen/ds_space_6"
+                        android:hint="@string/add_plan_code_hint"
+                        app:endIconDrawable="@drawable/ia_ic_filter_close"
+                        app:endIconMode="clear_text"
+                        app:errorEnabled="false"
+                        app:errorIconDrawable="@null">
 
                         <com.axelliant.hris.ui.designsystem.components.AppTextFieldView
-                            style="@style/Widget.InternalApps.SubscriptionInputEditText"
-                            android:hint="@string/subscription_plan_code_hint"
-                            tools:text="BUS-MONTHLY" />
+                            android:id="@+id/planCodeInput"
+                            style="@style/Widget.InternalApps.InputEditText"
+                            android:inputType="textCapSentences" />
                     </com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout>
 
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
+                        style="@style/Text.InternalApps.FormLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/ds_space_8"
+                        android:text="@string/subscription_description_hint" />
+
                     <com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout
+                        android:id="@+id/descriptionInputLayout"
                         style="@style/Widget.InternalApps.InputLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_8sdp"
-                        android:hint="@string/subscription_description_hint">
+                        android:layout_marginTop="@dimen/ds_space_6"
+                        android:hint="@string/subscription_description_hint"
+                        app:endIconDrawable="@drawable/ia_ic_filter_close"
+                        app:endIconMode="clear_text"
+                        app:errorEnabled="false"
+                        app:errorIconDrawable="@null">
 
                         <com.axelliant.hris.ui.designsystem.components.AppTextFieldView
-                            style="@style/Widget.InternalApps.SubscriptionInputEditText"
-                            android:gravity="top"
-                            android:hint="@string/subscription_description_hint"
-                            android:minLines="3"
-                            android:singleLine="false"
-                            tools:text="Monthly business subscription with flexible seats." />
+                            android:id="@+id/descriptionInput"
+                            style="@style/Widget.InternalApps.InputEditText"
+                            android:inputType="textCapSentences" />
                     </com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout>
+
                 </LinearLayout>
             </com.axelliant.hris.ui.designsystem.components.AppCardView>
 
@@ -145,21 +180,8 @@
                         android:layout_height="wrap_content"
                         android:text="@string/subscription_pricing_billing"
                         android:textColor="@color/ds_text_primary"
-                        android:textSize="@dimen/_11ssp"
+                        android:textSize="@dimen/text_size_12"
                         android:textStyle="bold" />
-
-                    <com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout
-                        style="@style/Widget.InternalApps.InputLayout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        android:hint="@string/subscription_billing_model_hint"
-                        app:endIconDrawable="@drawable/ic_down">
-
-                        <com.axelliant.hris.ui.designsystem.components.AppTextFieldView
-                            style="@style/Widget.InternalApps.InputEditText"
-                            tools:text="Per unit" />
-                    </com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -347,8 +369,8 @@
             android:layout_height="@dimen/ds_button_height"
             android:layout_marginEnd="@dimen/ds_space_4"
             android:layout_weight="1"
-            android:text="@string/subscription_cancel"
             android:padding="0dp"
+            android:text="@string/subscription_cancel"
             android:textAllCaps="false"
             android:textSize="@dimen/_11ssp" />
 

@@ -174,7 +174,7 @@
 
         <style name="Text.Axelliant.FormLabel" parent="@style/Text.Axelliant.Subheading">
             <item name="android:textColor">@color/ds_text_secondary</item>
-            <item name="android:textSize">@dimen/text_size_12</item>
+            <item name="android:textSize">@dimen/text_size_10</item>
 
         </style>
 
@@ -335,7 +335,7 @@
 
         <style name="Widget.Axelliant.InputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
             <item name="android:layout_width">match_parent</item>
-            <item name="android:layout_height">wrap_content</item>
+            <item name="android:layout_height">@dimen/ds_input_height</item>
             <item name="boxBackgroundColor">@color/ds_surface</item>
             <item name="boxCornerRadiusTopStart">@dimen/ds_radius_lg</item>
             <item name="boxCornerRadiusTopEnd">@dimen/ds_radius_lg</item>
