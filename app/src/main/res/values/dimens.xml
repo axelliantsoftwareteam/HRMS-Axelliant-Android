@@ -51,6 +51,7 @@
         <dimen name="ds_text_caption">@dimen/_10ssp</dimen>
 
         <!-- Backward-compatible aliases -->
+        <dimen name="text_size_9">@dimen/_9ssp</dimen>
         <dimen name="text_size_10">@dimen/_10ssp</dimen>
         <dimen name="text_size_12">@dimen/_12ssp</dimen>
         <dimen name="text_size_15">@dimen/_15ssp</dimen>

@@ -1,7 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="wrap_content" android:layout_height="@dimen/_36sdp" android:background="@drawable/bg_subscription_plan_detail_pill" android:gravity="center_vertical" android:paddingStart="@dimen/ds_space_10" android:paddingEnd="@dimen/ds_space_10">
-    <ImageView android:layout_width="@dimen/_16sdp" android:layout_height="@dimen/_16sdp" android:contentDescription="@null" android:src="@drawable/ic_people_group" app:tint="@color/ds_text_primary" />
-    <com.axelliant.hris.ui.designsystem.components.AppTextView android:id="@+id/subscriptionChipText" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="@dimen/ds_space_8" android:textColor="@color/ds_text_secondary" android:textSize="@dimen/text_size_10" />
+    android:layout_width="wrap_content"
+    android:layout_height="@dimen/_30sdp"
+    android:background="@drawable/bg_subscription_plan_detail_pill"
+    android:gravity="center_vertical"
+    android:paddingStart="@dimen/ds_space_10"
+    android:paddingEnd="@dimen/ds_space_10">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@null"
+        android:src="@drawable/ic_people_group"
+        app:tint="@color/ds_text_primary" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        android:id="@+id/subscriptionChipText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/ds_space_8"
+        android:textColor="@color/ds_text_secondary"
+        android:textSize="@dimen/text_size_10" />
 </LinearLayout>
