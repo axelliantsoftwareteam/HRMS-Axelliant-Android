@@ -34,7 +34,7 @@ class ExtentionsTest {
         val message = "User does not have doctype access for Expense Claim"
 
         assertEquals(
-            "Your account does not have access to this action yet. Please contact HR or your administrator.",
+            "Your account does not have access to this action yet. Please contact your administrator.",
             message.toUserSafeErrorMessage()
         )
         assertTrue(message.shouldOfferSupportForError())
@@ -45,7 +45,7 @@ class ExtentionsTest {
         val message = "Unable to resolve host hris.axelliant.com"
 
         assertEquals(
-            "We could not connect to HRIS right now. Please check your internet connection and try again.",
+            "We could not connect right now. Please check your internet connection and try again.",
             message.toUserSafeErrorMessage()
         )
         assertTrue(message.shouldOfferSupportForError())
@@ -56,7 +56,7 @@ class ExtentionsTest {
         val message = "<html><body>500 Server Error</body></html>"
 
         assertEquals(
-            "We could not complete this request. Please try again. If it keeps happening, report the issue to HRIS support.",
+            "We could not complete this request. Please try again. If it keeps happening, report the issue to support.",
             message.toUserSafeErrorMessage()
         )
         assertTrue(message.shouldOfferSupportForError())
