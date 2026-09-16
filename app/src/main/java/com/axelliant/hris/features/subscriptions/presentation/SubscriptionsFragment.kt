@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.getSystemService
@@ -265,7 +264,10 @@ class SubscriptionsFragment : Fragment() {
         popupMenu.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.action_subscription_view_details -> {
-                    Toast.makeText(requireContext(), R.string.subscription_view_details, Toast.LENGTH_SHORT).show()
+                    val args = Bundle().apply {
+                        putParcelable(SubscriptionDetailsFragment.ARG_SUBSCRIPTION, subscription)
+                    }
+                    findNavController().navigate(R.id.iaSubscriptionDetailsFragment, args)
                     true
                 }
                 else -> false
