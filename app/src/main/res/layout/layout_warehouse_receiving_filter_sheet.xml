@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_filter_sheet"
+    android:orientation="vertical">
+
+    <View
+        android:layout_width="@dimen/_48sdp"
+        android:layout_height="@dimen/_4sdp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:background="@drawable/bg_filter_handle" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/_14sdp"
+        android:paddingTop="@dimen/_14sdp"
+        android:paddingEnd="@dimen/_14sdp"
+        android:paddingBottom="@dimen/_8sdp">
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            style="@style/Text.InternalApps.Heading"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/poppins_semibold"
+            android:text="@string/filters"
+            android:textColor="@color/ds_text_primary"
+            android:textSize="@dimen/_18ssp" />
+
+        <ImageButton
+            android:id="@+id/closeFilterButton"
+            android:layout_width="@dimen/_36sdp"
+            android:layout_height="@dimen/_36sdp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/close"
+            android:padding="@dimen/_6sdp"
+            android:src="@drawable/ia_ic_filter_close" />
+    </LinearLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:paddingStart="@dimen/_14sdp"
+        android:paddingEnd="@dimen/_14sdp"
+        android:paddingBottom="@dimen/_14sdp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                style="@style/Text.InternalApps.Subheading"
+                android:layout_width="match_parent"
+                android:text="@string/receiving_filter_warehouse"
+                android:textColor="@color/ds_text_secondary"
+                android:textSize="@dimen/_12ssp" />
+
+            <include
+                android:id="@+id/warehouseFieldInclude"
+                layout="@layout/layout_warehouse_inventory_select_field" />
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                style="@style/Text.InternalApps.Subheading"
+                android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/_14sdp"
+                android:text="@string/receiving_filter_purchase_order"
+                android:textColor="@color/ds_text_secondary"
+                android:textSize="@dimen/_12ssp" />
+
+            <include
+                android:id="@+id/purchaseOrderFieldInclude"
+                layout="@layout/layout_warehouse_inventory_select_field" />
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                style="@style/Text.InternalApps.Subheading"
+                android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/_14sdp"
+                android:text="@string/receiving_filter_type"
+                android:textColor="@color/ds_text_secondary"
+                android:textSize="@dimen/_12ssp" />
+
+            <include
+                android:id="@+id/typeFieldInclude"
+                layout="@layout/layout_warehouse_inventory_select_field" />
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                style="@style/Text.InternalApps.Subheading"
+                android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/_14sdp"
+                android:text="@string/receiving_filter_status"
+                android:textColor="@color/ds_text_secondary"
+                android:textSize="@dimen/_12ssp" />
+
+            <include
+                android:id="@+id/statusFieldInclude"
+                layout="@layout/layout_warehouse_inventory_select_field" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_70sdp"
+        android:background="@drawable/bg_filter_footer_border"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/_14sdp"
+        android:paddingEnd="@dimen/_14sdp">
+
+        <com.axelliant.hris.ui.designsystem.components.AppButtonView
+            android:id="@+id/resetFiltersButton"
+            style="@style/Widget.Fluent2.Button.Secondary"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/ds_button_height"
+            android:layout_weight="1"
+            android:text="@string/reset" />
+
+        <Space
+            android:layout_width="@dimen/_16sdp"
+            android:layout_height="1dp" />
+
+        <com.axelliant.hris.ui.designsystem.components.AppButtonView
+            android:id="@+id/applyFiltersButton"
+            style="@style/Widget.Fluent2.Button.Primary"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/ds_button_height"
+            android:layout_weight="1"
+            android:text="@string/apply_filters" />
+    </LinearLayout>
+</LinearLayout>

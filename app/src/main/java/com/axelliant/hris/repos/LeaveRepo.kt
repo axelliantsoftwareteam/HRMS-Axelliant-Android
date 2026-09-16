@@ -2,7 +2,7 @@ package com.axelliant.hris.repos
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import com.axelliant.hris.config.AppConst
+import com.axelliant.hris.core.auth.HrisTokenProvider
 import com.axelliant.hris.model.approval.ApprovalActionRequest
 import com.axelliant.hris.model.approval.ApprovalActionItem
 import com.axelliant.hris.model.approval.BulkApprovalActionRequest
@@ -17,6 +17,7 @@ import com.axelliant.hris.model.leave.MyLeaveDetailResponse
 import com.axelliant.hris.model.leave.MyUpcomingLeaveDetailResponse
 import com.axelliant.hris.model.leave.PostResponse
 import com.axelliant.hris.model.leave.TeamLeaveDetailResponse
+import com.axelliant.hris.model.leave.TeamLeaveQuotaResponse
 import com.axelliant.hris.model.leave.UpcomingLeaveInput
 import com.axelliant.hris.network.ApiInterface
 import com.axelliant.hris.network.BaseCallBack
@@ -25,14 +26,18 @@ import com.google.gson.reflect.TypeToken
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
+import javax.inject.Inject
 import java.lang.reflect.Type
 
-class LeaveRepo(private var apiInterface: ApiInterface) {
+class LeaveRepo @Inject constructor(
+    private val apiInterface: ApiInterface,
+    private val hrisTokenProvider: HrisTokenProvider
+) {
 
     fun getLeaveStats(attendanceInput: AttendanceInput): MutableLiveData<BaseApiModel<LeaveResponse>> {
         val serverResponse = MutableLiveData<BaseApiModel<LeaveResponse>>()
 
-        val call: Call<ResponseBody> = apiInterface.callLeaveStats("token ${AppConst.TOKEN}",AttRequest().apply {
+        val call: Call<ResponseBody> = apiInterface.callLeaveStats(hrisTokenProvider.authorizationHeader(),AttRequest().apply {
             this.start_date = attendanceInput.startDate
             this.end_date = attendanceInput.endDate
         })
@@ -83,7 +88,7 @@ class LeaveRepo(private var apiInterface: ApiInterface) {
     fun getMyLeaveDetail(attendanceInput: AttendanceInput): MutableLiveData<BaseApiModel<MyLeaveDetailResponse>> {
         val serverResponse = MutableLiveData<BaseApiModel<MyLeaveDetailResponse>>()
 
-        val call: Call<ResponseBody> = apiInterface.callMyLeaveDetail("token ${AppConst.TOKEN}",
+        val call: Call<ResponseBody> = apiInterface.callMyLeaveDetail(hrisTokenProvider.authorizationHeader(),
             AttRequest().apply {
                 this.start_date = attendanceInput.startDate
                 this.end_date = attendanceInput.endDate
@@ -139,7 +144,7 @@ class LeaveRepo(private var apiInterface: ApiInterface) {
     fun getTeamLeaveDetail(attendanceInput: AttendanceInput): MutableLiveData<BaseApiModel<TeamLeaveDetailResponse>> {
         val serverResponse = MutableLiveData<BaseApiModel<TeamLeaveDetailResponse>>()
 
-        val call: Call<ResponseBody> = apiInterface.callTeamLeaveDetail("token ${AppConst.TOKEN}",
+        val call: Call<ResponseBody> = apiInterface.callTeamLeaveDetail(hrisTokenProvider.authorizationHeader(),
             AttRequest().apply {
                 this.start_date = attendanceInput.startDate
                 this.end_date = attendanceInput.endDate
@@ -192,10 +197,54 @@ class LeaveRepo(private var apiInterface: ApiInterface) {
 
         return serverResponse
     }
+    fun getTeamLeaveQuota(): MutableLiveData<BaseApiModel<TeamLeaveQuotaResponse>> {
+        val serverResponse = MutableLiveData<BaseApiModel<TeamLeaveQuotaResponse>>()
+
+        val call: Call<ResponseBody> =
+            apiInterface.callTeamLeaveQuota(hrisTokenProvider.authorizationHeader())
+
+        Log.e("HTTP Request", " " + call.request().toString())
+
+        call.enqueue(object : BaseCallBack<ResponseBody>(call) {
+            override fun onFinalSuccess(
+                call: Call<ResponseBody>,
+                response: Response<ResponseBody>
+            ) {
+                Log.e("API success", " " + response.body())
+
+                val type: Type = object : TypeToken<BaseApiModel<TeamLeaveQuotaResponse>>() {}.type
+                val jsonString = response.body()?.string()
+                val userModel =
+                    Gson().fromJson<BaseApiModel<TeamLeaveQuotaResponse>>(jsonString, type)
+                serverResponse.value = userModel
+            }
+
+            override fun onFinalFailure(
+                errorString: String?
+            ) {
+                Log.e("API Failure", " $errorString")
+
+                serverResponse.value =
+                    BaseApiModel(
+                        BaseModel(
+                            TeamLeaveQuotaResponse(
+                                meta = Meta(
+                                    errorString.toString(),
+                                    false
+                                )
+                            )
+                        )
+                    )
+            }
+        })
+
+        return serverResponse
+    }
+
     fun getUpcomingLeaveDetail(upcomingLeaveInput: UpcomingLeaveInput): MutableLiveData<BaseApiModel<MyUpcomingLeaveDetailResponse>> {
         val serverResponse = MutableLiveData<BaseApiModel<MyUpcomingLeaveDetailResponse>>()
 
-        val call: Call<ResponseBody> = apiInterface.callUpcomingLeaveDetail("token ${AppConst.TOKEN}",
+        val call: Call<ResponseBody> = apiInterface.callUpcomingLeaveDetail(hrisTokenProvider.authorizationHeader(),
             upcomingLeaveInput
         )
 
@@ -247,7 +296,7 @@ class LeaveRepo(private var apiInterface: ApiInterface) {
         val serverResponse = MutableLiveData<BaseApiModel<PostResponse>>()
 
         val call: Call<ResponseBody> = apiInterface.takeApprovalAction(
-            "token ${AppConst.TOKEN}",
+            hrisTokenProvider.authorizationHeader(),
             ApprovalActionRequest(
                 approval_type = "leave",
                 reference_name = attendanceInput.leave_id,
@@ -305,7 +354,7 @@ class LeaveRepo(private var apiInterface: ApiInterface) {
         val serverResponse = MutableLiveData<BaseApiModel<PostResponse>>()
 
         val call: Call<ResponseBody> = apiInterface.bulkTakeApprovalAction(
-            "token ${AppConst.TOKEN}",
+            hrisTokenProvider.authorizationHeader(),
             BulkApprovalActionRequest(
                 actions = leaveIds.filter { it.isNotBlank() }.map {
                     ApprovalActionItem(

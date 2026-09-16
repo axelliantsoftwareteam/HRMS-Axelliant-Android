@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+    style="@style/Layout.Fluent2.Screen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- Guidelines -->
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/start_guideline"
+            style="@style/Guideline.Fluent2.Start"
+            android:orientation="vertical" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/end_guideline"
+            style="@style/Guideline.Fluent2.End"
+            android:orientation="vertical" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/top_guideline"
+            style="@style/Guideline.Fluent2.Top" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/bottom_guideline"
+            style="@style/Guideline.Fluent2.Bottom" />
+
+        <com.axelliant.hris.ui.designsystem.components.AppTopBarView
+            android:id="@+id/appTopBar"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_40sdp"
+            app:centerTitle="true"
+            app:showBackButton="true"
+            app:showSearchButton="false"
+            app:titleText="@string/payslips"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintTop_toBottomOf="@id/top_guideline" />
+
+        <!-- Filter Area -->
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/ly_filter"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_15sdp"
+            app:layout_constraintTop_toBottomOf="@id/appTopBar"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline">
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                android:id="@+id/tv_from_date"
+                style="@style/Text.Fluent2.Caption.Muted.Strong"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_45sdp"
+                android:background="@drawable/rounded_leave_filter"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="@dimen/_12sdp"
+                android:text="From Date"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/tv_to_date"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintHorizontal_weight="1" />
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                android:id="@+id/tv_to_date"
+                style="@style/Text.Fluent2.Caption.Muted.Strong"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_45sdp"
+                android:layout_marginStart="@dimen/_8sdp"
+                android:background="@drawable/rounded_leave_filter"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="@dimen/_12sdp"
+                android:text="To Date"
+                app:layout_constraintStart_toEndOf="@id/tv_from_date"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintHorizontal_weight="1" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- Payslip List -->
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_payslips"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/_15sdp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintTop_toBottomOf="@id/ly_filter"
+            app:layout_constraintBottom_toTopOf="@id/bottom_guideline"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline" />
+
+        <!-- Empty State -->
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            android:id="@+id/tv_no_record"
+            style="@style/Text.Fluent2.Subheading.Primary.Strong"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="No Payslips Found"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/ly_filter"
+            app:layout_constraintBottom_toTopOf="@id/bottom_guideline"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

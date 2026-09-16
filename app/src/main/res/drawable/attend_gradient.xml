@@ -1,26 +1,21 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <!-- Content -->
     <item>
         <shape android:shape="rectangle">
-       <!--     <gradient
-                android:angle="0"
-                android:startColor="@color/color_secondry"
-                android:centerColor="@color/color_secondry"
-                android:endColor="@color/color_secondry"/>-->
-
             <gradient
-                android:angle="0"
-                android:startColor="@color/color_secondry"
-                android:centerColor="#16769E"
-                android:endColor="#082E42"/>
-
-            <corners android:radius="@dimen/_8sdp" />
-
+                android:angle="270"
+                android:startColor="#7E81E3"
+                android:centerColor="#5B5FC7"
+                android:endColor="#4347A5"/>
+            <corners android:radius="@dimen/_4sdp" />
+        </shape>
+    </item>
+    <item android:top="0dp" android:bottom="24dp">
+        <shape android:shape="rectangle">
+            <gradient
+                android:angle="270"
+                android:startColor="#55FFFFFF"
+                android:endColor="#00FFFFFF"/>
+            <corners android:radius="@dimen/_4sdp" />
         </shape>
     </item>
 </layer-list>
-
-
-
-

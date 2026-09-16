@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.axelliant.hris.adapter.ProfileCertificationAdapter
 import com.axelliant.hris.base.BaseFragment
@@ -16,15 +17,19 @@ import com.axelliant.hris.extention.showSuccessMsg
 import com.axelliant.hris.model.profile.CertificationCreateRequest
 import com.axelliant.hris.model.profile.ProfileCertification
 import com.axelliant.hris.model.profile.ProfileResponse
+import com.axelliant.hris.ui.designsystem.components.AppTextFieldView
 import com.axelliant.hris.viewmodel.ProfileViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import androidx.fragment.app.viewModels
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.Calendar
+import java.util.Locale
 
+@AndroidEntryPoint
 class ProfileFragment : BaseFragment() {
 
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
-    private val profileViewModel: ProfileViewModel by viewModel()
+    private val profileViewModel: ProfileViewModel by viewModels()
     private val certificationsAdapter = ProfileCertificationAdapter()
 
     override fun onCreateView(
@@ -58,6 +63,7 @@ class ProfileFragment : BaseFragment() {
     }
 
     private fun setupActions() {
+        binding.appTopBar.setOnBackClickListener { findNavController().navigateUp() }
         binding.etIssueDate.setOnClickListener { openDatePicker(binding.etIssueDate) }
         binding.etExpiryDate.setOnClickListener { openDatePicker(binding.etExpiryDate) }
         binding.btnAddCertification.setOnClickListener { submitCertification() }
@@ -180,12 +186,12 @@ class ProfileFragment : BaseFragment() {
         binding.cbRenewalRequired.isChecked = true
     }
 
-    private fun openDatePicker(targetView: com.google.android.material.textfield.TextInputEditText) {
+    private fun openDatePicker(targetView: AppTextFieldView) {
         val calendar = Calendar.getInstance()
         DatePickerDialog(
             requireContext(),
             { _, year, month, dayOfMonth ->
-                targetView.setText(String.format("%04d-%02d-%02d", year, month + 1, dayOfMonth))
+                targetView.setText(String.format(Locale.US, "%04d-%02d-%02d", year, month + 1, dayOfMonth))
             },
             calendar.get(Calendar.YEAR),
             calendar.get(Calendar.MONTH),

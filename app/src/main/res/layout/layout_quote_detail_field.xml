@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/ds_space_12">
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        android:id="@+id/fieldLabel"
+        style="@style/Text.InternalApps.Caption"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        android:id="@+id/fieldValue"
+        style="@style/Text.InternalApps.Subheading"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ds_space_4"
+        android:fontFamily="@font/poppins_semibold"
+        android:textColor="@color/ds_text_primary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fieldLabel" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+

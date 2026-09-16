@@ -18,10 +18,8 @@ import com.axelliant.hris.R
 import com.axelliant.hris.adapter.LeaveSpinnerAdapter
 import com.axelliant.hris.adapter.LeaveWithCountSpinnerAdapter
 import com.axelliant.hris.base.BaseFragment
-import com.axelliant.hris.config.AppConst.AttendanceRequestParam
-import com.axelliant.hris.config.AppConst.LeaveRequestParam
-import com.axelliant.hris.config.AppConst.RequestType
-import com.axelliant.hris.config.AppConst.SERVER_DATE_FORMAT_ATTENDANCE
+import com.axelliant.hris.core.constants.AppRouteArgs
+import com.axelliant.hris.core.constants.AppDateFormats
 import com.axelliant.hris.databinding.FragmentRequestBinding
 import com.axelliant.hris.enums.RequestFilter
 import com.axelliant.hris.event.EventObserver
@@ -42,7 +40,10 @@ import com.axelliant.hris.utils.Utils
 import com.axelliant.hris.viewmodel.RequestViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.gson.Gson
-import org.koin.android.ext.android.inject
+import androidx.fragment.app.viewModels
+import com.axelliant.hris.extention.hideShimmer
+import com.axelliant.hris.extention.showShimmer
+import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -53,6 +54,7 @@ const val leaveType = "Select leave type"
 const val attendanceType = "Select attendance type"
 const val locationType = "Select location"
 
+@AndroidEntryPoint
 class RequestFragment : BaseFragment() {
 
     private var halfDayCount: Double? = null
@@ -70,7 +72,7 @@ class RequestFragment : BaseFragment() {
     private var _binding: FragmentRequestBinding? = null
     private val binding get() = _binding
 
-    private val requestViewModel: RequestViewModel by inject()
+    private val requestViewModel: RequestViewModel by viewModels()
 
     private var isUpdate: Boolean = false
     private var leaveId: String = ""
@@ -89,6 +91,14 @@ class RequestFragment : BaseFragment() {
         return binding?.tvLeaveCountTxt?.text?.toString()?.toDoubleOrNull() ?: 0.0
     }
 
+    // Formats a Double as a whole number when possible (24.0 -> "24"), otherwise keeps decimals (12.5 -> "12.5")
+    private fun formatLeaveNumber(value: Double): String {
+        return if (value == value.toLong().toDouble())
+            value.toLong().toString()
+        else
+            value.toString()
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -98,25 +108,35 @@ class RequestFragment : BaseFragment() {
 
 
         _binding = FragmentRequestBinding.inflate(inflater).also { _binding = it }
+
+        binding?.spLeaveType?.adapter = LeaveWithCountSpinnerAdapter(requireContext(), arrayListOf())
+        binding?.spAttendType?.adapter = LeaveSpinnerAdapter(requireContext(), arrayListOf())
+        binding?.spLocType?.adapter = LeaveSpinnerAdapter(requireContext(), arrayListOf())
+
+        binding?.cvContainer?.isVisible = false
+        binding?.lyActionBtn?.isVisible = false
+        binding?.shimmerLayout?.showShimmer(binding?.nsvContent!!)
+
         return binding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (arguments != null && requireArguments().containsKey(RequestType)) {
+        binding?.shimmerLayout?.startShimmer()
+
+        if (arguments != null && requireArguments().containsKey(AppRouteArgs.REQUEST_TYPE)) {
             isUpdate = true
 
-            val type = arguments?.getString(RequestType, RequestFilter.LEAVE.name)
+            val type = arguments?.getString(AppRouteArgs.REQUEST_TYPE, RequestFilter.LEAVE.name)
             if (type == RequestFilter.LEAVE.name) {
                 currentFilter = RequestFilter.LEAVE
                 val leaveDetail = Gson().fromJson(
-                    arguments?.getString(LeaveRequestParam),
+                    arguments?.getString(AppRouteArgs.LEAVE_REQUEST),
                     LeaveDetail::class.java
                 )
                 startDateString = leaveDetail.from_date
                 endDateString = leaveDetail.to_date
-
                 binding?.etLeaveReason?.setText(leaveDetail.leave_reason.nullToEmpty())
                 preLeaveType = leaveDetail.leave_type
                 leaveId = leaveDetail.name
@@ -133,14 +153,13 @@ class RequestFragment : BaseFragment() {
 
 
                 val checkInDetail = Gson().fromJson(
-                    arguments?.getString(AttendanceRequestParam),
+                    arguments?.getString(AppRouteArgs.ATTENDANCE_REQUEST),
                     CheckInDetail::class.java
                 )
                 checkInId = checkInDetail.name
                 val dateTimeParts = checkInDetail.time
-                    ?.trim()
-                    ?.split(Regex("\\s+"), limit = 2)
-                    .orEmpty()
+                    .trim()
+                    .split(Regex("\\s+"), limit = 2)
 
                 currentDateString = dateTimeParts.getOrNull(0)
                 currentTimeString = dateTimeParts.getOrNull(1)
@@ -162,11 +181,7 @@ class RequestFragment : BaseFragment() {
 
         requestViewModel.getIsLoading()
             .observe(viewLifecycleOwner, EventObserver { isLoading ->
-                if (isLoading) {
-                    showDialog()
-                } else {
-                    hideDialog()
-                }
+                toggleShimmer(isLoading)
             })
 
         requestViewModel.postLeaveResponse.observe(
@@ -291,12 +306,9 @@ class RequestFragment : BaseFragment() {
 
                 if (response?.meta?.status == true) {
 //                    spinnerLeavePopulations(response.leaves)
-
                     spinnerAttendTypePopulations(response.checkin)
                     spinnerLocTypePopulations(response.location)
                     //parse leave spinner here
-
-
                 } else {
                     requireContext().showErrorMsg(response?.meta?.message.toString())
                 }
@@ -348,7 +360,7 @@ class RequestFragment : BaseFragment() {
 
         }
 
-        binding?.ivBack?.setOnClickListener {
+        binding?.appTopBar?.setOnBackClickListener {
             AppNavigator.moveBackToPreviousFragment()
         }
 
@@ -388,7 +400,6 @@ class RequestFragment : BaseFragment() {
                     requireContext().showErrorMsg("Requested leave exceeds your remaining quota for this leave type")
                 } else {
                     val leaveItem = binding?.spLeaveType?.selectedItem as LeaveAllocation
-
                     if (isUpdate) {
                         requestViewModel.updateLeaveQuest(LeaveRequest().apply {
                             this.start_date = startDateString
@@ -399,7 +410,6 @@ class RequestFragment : BaseFragment() {
                             this.leave_id = leaveId
                             this.half_day_date = halfDateString
                             this.half_day = ishalfday
-
                         })
                     } else {
                         requestViewModel.postLeaveQuest(LeaveRequest().apply {
@@ -413,12 +423,8 @@ class RequestFragment : BaseFragment() {
 
                         })
                     }
-
-
                 }
-
             }
-
             RequestFilter.ATTENDANCE -> {
 
                 if (binding?.spAttendType?.selectedItemPosition == 0) {
@@ -501,13 +507,13 @@ class RequestFragment : BaseFragment() {
         val day = c.get(Calendar.DAY_OF_MONTH)
         val datePickerDialog = DatePickerDialog(
             requireActivity(), R.style.my_dialog_theme, // Apply the theme here
-            { view, year, monthOfYear, dayOfMonth ->
+            { _, selectedYear, monthOfYear, dayOfMonth ->
                 val selectedDate = Calendar.getInstance()
-                selectedDate.set(year, monthOfYear, dayOfMonth)
+                selectedDate.set(selectedYear, monthOfYear, dayOfMonth)
 
                 // Format the date using SimpleDateFormat
                 currentDateString = Utils.getServerFormat(
-                    dateFormat = SERVER_DATE_FORMAT_ATTENDANCE, date = selectedDate.time
+                    dateFormat = AppDateFormats.SERVER_ATTENDANCE_DATE, date = selectedDate.time
                 )
                 setCurrentDate()
             },
@@ -527,7 +533,7 @@ class RequestFragment : BaseFragment() {
         val minutes = c[Calendar.MINUTE]
         val timePickerDialog = TimePickerDialog(
             requireActivity(), R.style.my_dialog_theme,
-            { view, hourOfDay, minute ->
+            { _, hourOfDay, minute ->
 
                 currentTimeString =
                     hourOfDay.toString().plus(":").plus(minute)
@@ -584,6 +590,7 @@ class RequestFragment : BaseFragment() {
         // Creating a MaterialDatePicker builder for selecting a date range
         val builder = MaterialDatePicker.Builder.dateRangePicker()
         builder.setTitleText("Select a date range")
+        builder.setTheme(R.style.MyDatePickerTheme)
 
         // Building the date picker dialog
         val datePicker = builder.build()
@@ -663,8 +670,8 @@ class RequestFragment : BaseFragment() {
         when (currentFilter) {
             RequestFilter.LEAVE -> {
                 binding?.tvWeek?.background =
-                    ContextCompat.getDrawable(requireContext(), R.drawable.rounded_enabled)
-                binding?.tvWeek?.setTextColor(requireContext().getColor(R.color.white))
+                    ContextCompat.getDrawable(requireContext(), R.drawable.fluent_blue)
+                binding?.tvWeek?.setTextColor(requireContext().getColor(R.color.ds_neutral_white))
                 binding?.lyCreateLeave!!.visibility = View.VISIBLE
                 binding?.lyCreateAttend!!.visibility = View.GONE
 
@@ -673,14 +680,33 @@ class RequestFragment : BaseFragment() {
             RequestFilter.ATTENDANCE -> {
 
                 binding?.tvMonth?.background =
-                    ContextCompat.getDrawable(requireContext(), R.drawable.rounded_enabled)
-                binding?.tvMonth?.setTextColor(requireContext().getColor(R.color.white))
+                    ContextCompat.getDrawable(requireContext(), R.drawable.fluent_blue)
+                binding?.tvMonth?.setTextColor(requireContext().getColor(R.color.ds_neutral_white))
                 binding?.lyCreateAttend!!.visibility = View.VISIBLE
                 binding?.lyCreateLeave!!.visibility = View.GONE
             }
 
-            else -> {}
+            RequestFilter.EXPENSE,
+            RequestFilter.RESOURCES -> Unit
         }
+    }
+
+    private fun toggleShimmer(isLoading: Boolean) {
+        if (isLoading) {
+            binding?.shimmerLayout?.showShimmer(binding?.nsvContent!!)
+            binding?.lyActionBtn?.isVisible = false
+            binding?.cvContainer?.isVisible = false
+        } else {
+            binding?.shimmerLayout?.hideShimmer(binding?.nsvContent!!)
+            binding?.lyActionBtn?.isVisible = true
+            binding?.cvContainer?.isVisible = true
+        }
+    }
+
+    override fun onDestroyView() {
+        binding?.shimmerLayout?.stopShimmer()
+        super.onDestroyView()
+        _binding = null
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -692,11 +718,20 @@ class RequestFragment : BaseFragment() {
             this.name = leaveType
             this.remaining_leaves = 0.0
         })
-        if (leaves?.leave_allocation != null) {
-            finalLeavesArray.addAll(
-                leaves.leave_allocation.filter { !it.name.isNullOrBlank() }
-            )
-        }
+
+        val realAllocations = leaves?.leave_allocation?.filter { !it.name.isNullOrBlank() } ?: emptyList()
+        finalLeavesArray.addAll(realAllocations)
+
+        // ---- Aggregate Total Leave Count & Remaining Balance cards (independent of dropdown) ----
+        val overallRemaining = realAllocations.sumOf { it.remaining_leaves ?: 0.0 }
+        val overallTaken = realAllocations.sumOf { it.leaves_taken ?: 0.0 }
+        val overallPending = realAllocations.sumOf { it.leaves_pending_approval ?: 0.0 }
+        val overallExpired = realAllocations.sumOf { it.expired_leaves ?: 0.0 }
+        val overallTotal = overallRemaining + overallTaken + overallPending + overallExpired
+
+        binding?.tvTotalLeaveValue?.text = formatLeaveNumber(overallTotal)
+        binding?.tvRemainingLeaveValue?.text = formatLeaveNumber(overallRemaining)
+        // -------------------------------------------------------------------------------------
 
         val adapter = LeaveWithCountSpinnerAdapter(
             requireContext(), finalLeavesArray
@@ -704,7 +739,6 @@ class RequestFragment : BaseFragment() {
         binding?.spLeaveType?.adapter = adapter
 
         if (isUpdate) {
-
             for (index in 0..<finalLeavesArray.size) {
                 if (finalLeavesArray[index].name.equals(preLeaveType)) {
                     binding?.spLeaveType?.setSelection(index)
@@ -715,13 +749,11 @@ class RequestFragment : BaseFragment() {
             binding?.spLeaveType?.isClickable = false
             binding?.spLeaveType?.setOnTouchListener { _, event ->
                 if (event.action == MotionEvent.ACTION_UP) {
-                    //Your code
                     requireContext().showErrorMsg(ErrorMessages.UNABLE_TO_EDIT_LEAVE.errorString)
                 }
                 true
             }
         }
-
 
         binding?.spLeaveType?.onItemSelectedListener = object :
             AdapterView.OnItemSelectedListener {
@@ -731,11 +763,13 @@ class RequestFragment : BaseFragment() {
                 position: Int,
                 id: Long
             ) {
+                val selectedAllocation = finalLeavesArray[position]
+                selectedLeaveType = selectedAllocation.name.toString()
 
-                selectedLeaveType = finalLeavesArray[position].name.toString()
-
+                // This still tracks the SELECTED type's remaining balance — used only for
+                // the "requested exceeds quota" validation in addUpdateCall(), not the cards.
                 binding?.tvRemainingLeaveTxt?.text =
-                    finalLeavesArray[position].remaining_leaves.toString()
+                    selectedAllocation.remaining_leaves.toString()
 
                 if (startDateString != null && endDateString != null && !selectedLeaveType.isNullOrEmpty()) {
                     requestViewModel.getLeaveCountOnDate(LeaveCountByDaysRequest().apply {
@@ -744,11 +778,9 @@ class RequestFragment : BaseFragment() {
                         this.to_date = endDateString
                     })
                 }
-
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
-
         }
     }
 
@@ -895,4 +927,6 @@ class RequestFragment : BaseFragment() {
 
     }
 }
+
+
 

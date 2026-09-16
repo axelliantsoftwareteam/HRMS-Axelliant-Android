@@ -37,14 +37,14 @@ class ApprovalsDetailAdapter(
         }
 
         holder.binding.tvApproved.setOnClickListener {
-            val adapterPosition = holder.adapterPosition
+            val adapterPosition = holder.bindingAdapterPosition
             if (adapterPosition != RecyclerView.NO_POSITION) {
                 approvedItemClick.onItemClick(detailArrayList[adapterPosition], adapterPosition)
             }
         }
 
         holder.binding.tvReject.setOnClickListener {
-            val adapterPosition = holder.adapterPosition
+            val adapterPosition = holder.bindingAdapterPosition
             if (adapterPosition != RecyclerView.NO_POSITION) {
                 rejectItemClick.onItemClick(detailArrayList[adapterPosition], adapterPosition)
             }

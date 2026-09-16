@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/ds_space_8"
+    android:background="@drawable/bg_quote_search"
+    android:padding="@dimen/ds_space_12">
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        android:id="@+id/productSkuText"
+        style="@style/Text.InternalApps.Caption"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/ds_text_muted"
+        app:layout_constraintEnd_toStartOf="@id/productQtyText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        android:id="@+id/productQtyText"
+        style="@style/Text.InternalApps.Subheading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_semibold"
+        android:textColor="@color/ds_text_primary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        android:id="@+id/productNameText"
+        style="@style/Text.InternalApps.Subheading"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ds_space_8"
+        android:fontFamily="@font/poppins_semibold"
+        android:textColor="@color/ds_text_primary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/productSkuText" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        android:id="@+id/productUnitText"
+        style="@style/Text.InternalApps.Caption"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ds_space_8"
+        android:textColor="@color/ds_text_muted"
+        app:layout_constraintEnd_toStartOf="@id/productLineTotalText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/productNameText" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        android:id="@+id/productLineTotalText"
+        style="@style/Text.InternalApps.Heading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_bold"
+        android:textColor="@color/ds_text_primary"
+        android:textSize="@dimen/_16ssp"
+        app:layout_constraintBottom_toBottomOf="@id/productUnitText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/productUnitText" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+
