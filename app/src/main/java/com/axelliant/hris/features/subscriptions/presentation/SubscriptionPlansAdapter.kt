@@ -1,6 +1,7 @@
 package com.axelliant.hris.features.subscriptions.presentation
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
@@ -11,8 +12,9 @@ import com.axelliant.hris.databinding.ItemSubscriptionPlanBusinessBinding
 import com.axelliant.hris.features.subscriptions.domain.model.SubscriptionPlanModel
 import com.axelliant.hris.features.subscriptions.domain.model.SubscriptionPlanStatus
 
-class SubscriptionPlansAdapter :
-    ListAdapter<SubscriptionPlanModel, SubscriptionPlansAdapter.PlanViewHolder>(DiffCallback) {
+class SubscriptionPlansAdapter(
+    private val onMenuClick: (SubscriptionPlanModel, View) -> Unit
+) : ListAdapter<SubscriptionPlanModel, SubscriptionPlansAdapter.PlanViewHolder>(DiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlanViewHolder {
         val binding = ItemSubscriptionPlanBusinessBinding.inflate(
@@ -20,7 +22,7 @@ class SubscriptionPlansAdapter :
             parent,
             false
         )
-        return PlanViewHolder(binding)
+        return PlanViewHolder(binding, onMenuClick)
     }
 
     override fun onBindViewHolder(holder: PlanViewHolder, position: Int) {
@@ -28,7 +30,8 @@ class SubscriptionPlansAdapter :
     }
 
     class PlanViewHolder(
-        private val binding: ItemSubscriptionPlanBusinessBinding
+        private val binding: ItemSubscriptionPlanBusinessBinding,
+        private val onMenuClick: (SubscriptionPlanModel, View) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(plan: SubscriptionPlanModel) {
             val context = binding.root.context
@@ -59,6 +62,7 @@ class SubscriptionPlansAdapter :
             binding.statusBadge.text = context.getString(statusUi.labelRes)
             binding.statusBadge.setBackgroundResource(statusUi.backgroundRes)
             binding.statusBadge.setTextColor(ContextCompat.getColor(context, statusUi.textColorRes))
+            binding.menuButton.setOnClickListener { anchor -> onMenuClick(plan, anchor) }
         }
 
         private fun SubscriptionPlanStatus.toStatusUi(): PlanStatusUi {
