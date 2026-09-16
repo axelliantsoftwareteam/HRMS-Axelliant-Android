@@ -1,5 +1,8 @@
 package com.axelliant.hris.features.subscriptions.domain.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
 enum class SubscriptionStatus {
     ACTIVE,
     TRIAL,
@@ -8,6 +11,7 @@ enum class SubscriptionStatus {
     UNKNOWN
 }
 
+@Parcelize
 data class SubscriptionModel(
     val id: String,
     val subscriptionNumber: String,
@@ -17,7 +21,7 @@ data class SubscriptionModel(
     val nextBillingDate: String,
     val autoRenew: Boolean,
     val status: SubscriptionStatus
-)
+) : Parcelable
 
 data class SubscriptionPageResult(
     val subscriptions: List<SubscriptionModel>,
@@ -38,6 +42,7 @@ enum class SubscriptionPlanStatus {
     UNKNOWN
 }
 
+@Parcelize
 data class SubscriptionPlanModel(
     val id: String,
     val name: String,
@@ -50,7 +55,7 @@ data class SubscriptionPlanModel(
     val featureCount: Int,
     val activeSubscriptionCount: Int,
     val status: SubscriptionPlanStatus
-)
+) : Parcelable
 
 data class SubscriptionPlanPageResult(
     val plans: List<SubscriptionPlanModel>,
