@@ -7,8 +7,13 @@ import com.axelliant.hris.model.profile.CertificationCreateResponse
 import com.axelliant.hris.model.profile.CertificationListResponse
 import com.axelliant.hris.model.profile.ProfileResponse
 import com.axelliant.hris.repos.ProfileRepo
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class ProfileViewModel(private val profileRepo: ProfileRepo) : BaseViewModel() {
+@HiltViewModel
+class ProfileViewModel @Inject constructor(
+    private val profileRepo: ProfileRepo
+) : BaseViewModel() {
 
     val profileResponse: MutableLiveData<Event<ProfileResponse?>> by lazy { MutableLiveData<Event<ProfileResponse?>>() }
     val certificationsResponse: MutableLiveData<Event<CertificationListResponse?>> by lazy { MutableLiveData<Event<CertificationListResponse?>>() }

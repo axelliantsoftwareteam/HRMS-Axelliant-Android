@@ -4,8 +4,6 @@ import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.View
 import android.view.WindowManager
 import com.axelliant.hris.R
 
@@ -18,10 +16,7 @@ class LoadingDialog(context: Context?) : Dialog(context!!) {
         setTitle(null)
         setCancelable(false)
         setOnCancelListener(null)
-        val view: View = LayoutInflater.from(context).inflate(
-            R.layout.loading_dialog, null
-        )
-        setContentView(view)
+        setContentView(R.layout.loading_dialog)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

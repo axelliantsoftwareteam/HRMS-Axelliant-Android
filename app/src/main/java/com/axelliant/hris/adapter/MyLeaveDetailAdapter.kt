@@ -34,14 +34,14 @@ class MyLeaveDetailAdapter(
 
 
         holder.binding.tvEdit.setOnClickListener {
-            val adapterPosition = holder.adapterPosition
+            val adapterPosition = holder.bindingAdapterPosition
             if (adapterPosition != RecyclerView.NO_POSITION) {
                 adapterItemClick.onItemClick(leaves[adapterPosition], adapterPosition)
             }
         }
 
         holder.binding.tvDropDown.setOnClickListener {
-            val adapterPosition = holder.adapterPosition
+            val adapterPosition = holder.bindingAdapterPosition
             if (adapterPosition != RecyclerView.NO_POSITION) {
                 val currentItem = leaves[adapterPosition]
                 currentItem.isDetailVisible = !currentItem.isDetailVisible
@@ -87,7 +87,7 @@ class MyLeaveDetailAdapter(
             binding.tvLeaveDays.text = leaveDetail.total_leave_days.toString()
             if (leaveDetail.is_paid) {
                 binding.tvPaid.text = "Paid"
-                binding.tvPaid.setTextColor(mContext.getColor(R.color.black))
+                binding.tvPaid.setTextColor(mContext.getColor(R.color.ds_text_primary))
 
             } else {
                 binding.tvPaid.text = "Un Paid"

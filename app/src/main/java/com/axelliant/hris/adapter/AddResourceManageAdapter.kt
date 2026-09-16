@@ -14,7 +14,7 @@ import android.widget.Spinner
 import androidx.recyclerview.widget.RecyclerView
 import com.axelliant.hris.R
 import com.axelliant.hris.callback.AdapterItemClick
-import com.axelliant.hris.config.AppConst.SERVER_DATE_FORMAT_ATTENDANCE
+import com.axelliant.hris.core.constants.AppDateFormats
 import com.axelliant.hris.databinding.LyAddNewResourceBinding
 import com.axelliant.hris.model.resourceManage. ProjectHour
 import com.axelliant.hris.utils.Utils
@@ -39,7 +39,7 @@ class AddResourceManageAdapter(
     }
 
     override fun onBindViewHolder(holder: AccountsVH, @SuppressLint("RecyclerView") position: Int) {
-        holder.bind(list[position], mContext)
+        holder.bind(list[position])
         Log.d("updatedListJson", Gson().toJson(list[position]))
         // Populate spinner for expense types
         spinnerLeavePopulations(mContext, holder.binding.spAttendType, position)
@@ -106,7 +106,7 @@ class AddResourceManageAdapter(
         var reasonTextWatcher: TextWatcher? = null
         var amountTextWatcher: TextWatcher? = null
 
-        fun bind(item:  ProjectHour, mContext: Context) {
+        fun bind(item: ProjectHour) {
             binding.tvDateTxt.text = item.date ?: ""
 //            binding.etAmount.setText(item.amount?.toString() ?: "")
         }
@@ -120,15 +120,15 @@ class AddResourceManageAdapter(
 
         val datePickerDialog = DatePickerDialog(
             mContext, R.style.my_dialog_theme,
-            { _, year, monthOfYear, dayOfMonth ->
+            { _, selectedYear, monthOfYear, dayOfMonth ->
                 val selectedDate = Calendar.getInstance()
-                selectedDate.set(year, monthOfYear, dayOfMonth)
+                selectedDate.set(selectedYear, monthOfYear, dayOfMonth)
 
                 val selectedProjectName = list[position].name
 
                 // Format the date and update the list
                 list[position].date = Utils.getServerFormat(
-                    SERVER_DATE_FORMAT_ATTENDANCE, selectedDate.time
+                    AppDateFormats.SERVER_ATTENDANCE_DATE, selectedDate.time
                 )
                 list[position].name = selectedProjectName
 

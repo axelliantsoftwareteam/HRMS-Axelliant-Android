@@ -2,7 +2,7 @@ package com.axelliant.hris.repos
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import com.axelliant.hris.config.AppConst
+import com.axelliant.hris.core.auth.HrisTokenProvider
 import com.axelliant.hris.model.todayTeam.TodayTeamResponse
 import com.axelliant.hris.model.base.BaseApiModel
 import com.axelliant.hris.model.base.BaseModel
@@ -19,14 +19,18 @@ import com.google.gson.reflect.TypeToken
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
+import javax.inject.Inject
 import java.lang.reflect.Type
 
-class HomeRepo(private var apiInterface: ApiInterface) {
+class HomeRepo @Inject constructor(
+    private val apiInterface: ApiInterface,
+    private val hrisTokenProvider: HrisTokenProvider
+) {
 
     fun checkInAttendance(checkInRequest: CheckInRequest): MutableLiveData<BaseApiModel<CheckInResponse>> {
         val serverResponse = MutableLiveData<BaseApiModel<CheckInResponse>>()
 
-        val call = apiInterface.callCheckIn("token ${AppConst.TOKEN}", checkInRequest)
+        val call = apiInterface.callCheckIn(hrisTokenProvider.authorizationHeader(), checkInRequest)
         Log.e("HTTP Request", " ${call.request().toString()}")
         call.enqueue(object : BaseCallBack<ResponseBody>(call) {
             override fun onFinalSuccess(
@@ -71,7 +75,7 @@ class HomeRepo(private var apiInterface: ApiInterface) {
 
     fun getDashboardData(): MutableLiveData<BaseApiModel<DashboardResponse>> {
         val serverResponse = MutableLiveData<BaseApiModel<DashboardResponse>>()
-        val call = apiInterface.callDashBoard("token ${AppConst.TOKEN}")
+        val call = apiInterface.callDashBoard(hrisTokenProvider.authorizationHeader())
 
         Log.e("HTTP Request", " " + call.request().toString())
 
@@ -117,7 +121,7 @@ class HomeRepo(private var apiInterface: ApiInterface) {
 
     fun getTeamAttendData(): MutableLiveData<BaseApiModel<TodayTeamResponse>> {
         val serverResponse = MutableLiveData<BaseApiModel<TodayTeamResponse>>()
-        val call = apiInterface.callTeamInfo("token ${AppConst.TOKEN}")
+        val call = apiInterface.callTeamInfo(hrisTokenProvider.authorizationHeader())
 
         Log.e("HTTP Request", " " + call.request().toString())
 
@@ -164,7 +168,7 @@ class HomeRepo(private var apiInterface: ApiInterface) {
     fun getTodayEmployListData(filter: String?): MutableLiveData<BaseApiModel<EmployProfileListModel>> {
         val serverResponse = MutableLiveData<BaseApiModel<EmployProfileListModel>>()
         val call = apiInterface.callTodayTeamList(
-            "token ${AppConst.TOKEN}",
+            hrisTokenProvider.authorizationHeader(),
             TeamListRequest().apply {
                 this.filters = filter
             }

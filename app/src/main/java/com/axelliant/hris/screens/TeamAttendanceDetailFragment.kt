@@ -13,7 +13,7 @@ import com.axelliant.hris.adapter.PersonSpinnerAdapter
 import com.axelliant.hris.adapter.TeamAttendanceDetailAdapter
 import com.axelliant.hris.base.BaseFragment
 import com.axelliant.hris.callback.AdapterItemClick
-import com.axelliant.hris.config.AppConst.KEY_ID
+import com.axelliant.hris.core.constants.AppRouteArgs
 import com.axelliant.hris.config.GlobalConfig
 import com.axelliant.hris.databinding.FragmentTeamAttendanceDetailBinding
 import com.axelliant.hris.enums.AttendanceFilter
@@ -26,10 +26,12 @@ import com.axelliant.hris.navigation.AppNavigator
 import com.axelliant.hris.utils.Utils
 import com.axelliant.hris.viewmodel.AttendanceViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
-import org.koin.android.ext.android.inject
+import androidx.fragment.app.viewModels
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.Date
 
 
+@AndroidEntryPoint
 class TeamAttendanceDetailFragment : BaseFragment() {
 
     private var startDateString: String? = null
@@ -40,7 +42,7 @@ class TeamAttendanceDetailFragment : BaseFragment() {
     private var selectedDateRange: String? = null
     private var emplId = ""
 
-    private val attendanceViewModel: AttendanceViewModel by inject()
+    private val attendanceViewModel: AttendanceViewModel by viewModels()
 
 
     override fun onCreateView(
@@ -66,7 +68,7 @@ class TeamAttendanceDetailFragment : BaseFragment() {
                 }
             })
 
-        binding?.ivBack?.setOnClickListener {
+        binding?.appTopBar?.setOnBackClickListener {
             previousFragmentNavigation()
         }
 
@@ -176,7 +178,7 @@ class TeamAttendanceDetailFragment : BaseFragment() {
                 override fun onItemClick(customObject: Any, position: Int) {
                     val currentObject = customObject as AttendanceData
                     AppNavigator.navigateToMyAttendanceDetail(Bundle().apply {
-                        this.putString(KEY_ID, currentObject.id)
+                        this.putString(AppRouteArgs.EMPLOYEE_ID, currentObject.id)
                     })
 
 
@@ -224,7 +226,7 @@ class TeamAttendanceDetailFragment : BaseFragment() {
             AttendanceFilter.WEEK -> {
                 binding?.tvWeek?.background =
                     ContextCompat.getDrawable(requireContext(), R.drawable.rounded_enabled)
-                binding?.tvWeek?.setTextColor(requireContext().getColor(R.color.white))
+                binding?.tvWeek?.setTextColor(requireContext().getColor(R.color.ds_neutral_white))
 
             }
 
@@ -232,17 +234,15 @@ class TeamAttendanceDetailFragment : BaseFragment() {
 
                 binding?.tvMonth?.background =
                     ContextCompat.getDrawable(requireContext(), R.drawable.rounded_enabled)
-                binding?.tvMonth?.setTextColor(requireContext().getColor(R.color.white))
+                binding?.tvMonth?.setTextColor(requireContext().getColor(R.color.ds_neutral_white))
             }
 
             AttendanceFilter.Custom -> {
 
                 binding?.tvCustom?.background =
                     ContextCompat.getDrawable(requireContext(), R.drawable.rounded_enabled)
-                binding?.tvCustom?.setTextColor(requireContext().getColor(R.color.white))
+                binding?.tvCustom?.setTextColor(requireContext().getColor(R.color.ds_neutral_white))
             }
-
-            else -> {}
         }
     }
 

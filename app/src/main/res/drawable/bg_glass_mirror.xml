@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Transparent "mirror" glass overlay.
+    Used INSIDE a MaterialCardView (which provides real elevation + clipping),
+    so this drawable only needs to paint the glass surface, not fake a shadow.
+
+    Layer order (bottom to top):
+      1. Base fill: barely-there white tint, so whatever is behind (screen bg,
+         gradient, image) still reads through strongly — this is what makes it
+         "mirror" rather than "frosted".
+      2. Full edge stroke: thin, low-opacity — defines where the glass ends.
+      3. Top reflection sliver: bright gradient band across the top edge only,
+         mimicking light catching a glass/mirror surface.
+-->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 1. Base fill: ~10% white, lets background show through -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#1AFFFFFF" />
+            <corners android:radius="@dimen/_18sdp" />
+        </shape>
+    </item>
+
+    <!-- 2. Edge stroke -->
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="@dimen/_18sdp" />
+            <stroke
+                android:width="@dimen/_1sdp"
+                android:color="#40FFFFFF" />
+        </shape>
+    </item>
+
+    <!-- 3. Top reflection sliver -->
+    <item android:bottom="@dimen/_45sdp">
+        <shape android:shape="rectangle">
+            <corners
+                android:topLeftRadius="@dimen/_18sdp"
+                android:topRightRadius="@dimen/_18sdp"
+                android:bottomLeftRadius="0dp"
+                android:bottomRightRadius="0dp" />
+            <gradient
+                android:type="linear"
+                android:angle="270"
+                android:startColor="#59FFFFFF"
+                android:endColor="#00FFFFFF" />
+        </shape>
+    </item>
+
+</layer-list>

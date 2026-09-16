@@ -37,9 +37,11 @@ import com.axelliant.hris.viewmodel.AttendanceViewModel
 import com.axelliant.hris.viewmodel.ExpenseViewModel
 import com.axelliant.hris.viewmodel.LeaveViewModel
 import com.axelliant.hris.viewmodel.ResourceManageViewModel
-import org.koin.android.ext.android.inject
+import androidx.fragment.app.viewModels
+import dagger.hilt.android.AndroidEntryPoint
 
 
+@AndroidEntryPoint
 class ApprovalsFragment : BaseFragment() {
 
 
@@ -52,10 +54,10 @@ class ApprovalsFragment : BaseFragment() {
 
     private val binding get() = _binding!!
     private var currentFilter = RequestFilter.LEAVE
-    private val attendanceViewModel: AttendanceViewModel by inject()
-    private val leaveViewModel: LeaveViewModel by inject()
-    private val expenseViewModel: ExpenseViewModel by inject()
-    private val resourceManageViewModel: ResourceManageViewModel by inject()
+    private val attendanceViewModel: AttendanceViewModel by viewModels()
+    private val leaveViewModel: LeaveViewModel by viewModels()
+    private val expenseViewModel: ExpenseViewModel by viewModels()
+    private val resourceManageViewModel: ResourceManageViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -95,7 +97,7 @@ class ApprovalsFragment : BaseFragment() {
                 }
             })
 
-        binding.ivBack.setOnClickListener {
+        binding.appTopBar.setOnBackClickListener {
             previousFragmentNavigation()
         }
 
@@ -272,7 +274,7 @@ class ApprovalsFragment : BaseFragment() {
     }
 
     private fun actionStatus(): Boolean {
-        resourceHours?.forEachIndexed { index, documentHour ->
+        resourceHours?.forEach { documentHour ->
             if (documentHour.docstatus == ResourceStatus.DRAFT.value) {
                 return true
             }
@@ -353,7 +355,7 @@ class ApprovalsFragment : BaseFragment() {
             RequestFilter.LEAVE -> {
                 binding.tvWeek.background =
                     ContextCompat.getDrawable(requireContext(), R.drawable.rounded_enabled)
-                binding.tvWeek.setTextColor(requireContext().getColor(R.color.white))
+                binding.tvWeek.setTextColor(requireContext().getColor(R.color.ds_neutral_white))
 
             }
 
@@ -361,23 +363,20 @@ class ApprovalsFragment : BaseFragment() {
 
                 binding.tvMonth.background =
                     ContextCompat.getDrawable(requireContext(), R.drawable.rounded_enabled)
-                binding.tvMonth.setTextColor(requireContext().getColor(R.color.white))
+                binding.tvMonth.setTextColor(requireContext().getColor(R.color.ds_neutral_white))
             }
 
             RequestFilter.EXPENSE -> {
                 binding.tvExpense.background =
                     ContextCompat.getDrawable(requireContext(), R.drawable.rounded_enabled)
-                binding.tvExpense.setTextColor(requireContext().getColor(R.color.white))
+                binding.tvExpense.setTextColor(requireContext().getColor(R.color.ds_neutral_white))
             }
 
             RequestFilter.RESOURCES -> {
                 binding.tvResources.background =
                     ContextCompat.getDrawable(requireContext(), R.drawable.rounded_enabled)
-                binding.tvResources.setTextColor(requireContext().getColor(R.color.white))
+                binding.tvResources.setTextColor(requireContext().getColor(R.color.ds_neutral_white))
             }
-
-
-            else -> {}
         }
 
 

@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/Layout.Fluent2.Screen"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/ds_background">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/startGuideline"
+        style="@style/Guideline.Fluent2.Start"
+        android:orientation="vertical" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/endGuideline"
+        style="@style/Guideline.Fluent2.End"
+        android:orientation="vertical" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/topGuideline"
+        style="@style/Guideline.Fluent2.Top"
+        android:orientation="horizontal" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/bottomGuideline"
+        style="@style/Guideline.Fluent2.Bottom"
+        android:orientation="horizontal" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppTopBarView
+        android:id="@+id/appTopBar"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_40sdp"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/topGuideline"
+        app:showBackButton="true"
+        app:showSearchButton="false"
+        app:titleText="@string/add_location_title" />
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollContent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/ds_space_12"
+        android:clipToPadding="false"
+        android:paddingBottom="@dimen/ds_space_16"
+        app:layout_constraintBottom_toTopOf="@id/actionRow"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/appTopBar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.axelliant.hris.ui.designsystem.components.AppCardView
+                style="@style/Widget.InternalApps.Card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardElevation="@dimen/_1sdp"
+                app:strokeColor="@color/ds_outline"
+                app:strokeWidth="@dimen/_1sdp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/ds_space_16">
+
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
+                        style="@style/Text.Fluent2.Subheading.Primary.Strong"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/location_hierarchy_title" />
+
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
+                        style="@style/Text.InternalApps.Caption"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/ds_space_4"
+                        android:text="@string/location_hierarchy_hint"
+                        android:textColor="@color/ds_text_secondary" />
+
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
+                        android:id="@+id/warehouseContextText"
+                        style="@style/Text.Fluent2.Body.Primary.Strong"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/ds_space_10"
+                        android:background="@drawable/bg_quote_search"
+                        android:gravity="center"
+                        android:paddingStart="@dimen/ds_space_10"
+                        android:paddingTop="@dimen/ds_space_8"
+                        android:paddingEnd="@dimen/ds_space_10"
+                        android:paddingBottom="@dimen/ds_space_8"
+                        android:textColor="@color/ds_primary" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/ds_space_12"
+                        android:baselineAligned="false"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/ds_space_8"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                                style="@style/Text.InternalApps.Caption"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/location_level_required"
+                                android:textColor="@color/ds_text_muted" />
+
+                            <LinearLayout
+                                android:id="@+id/levelField"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/ds_input_height"
+                                android:layout_marginTop="@dimen/ds_space_4"
+                                android:background="@drawable/bg_quote_search"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:foreground="?attr/selectableItemBackground"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:paddingStart="@dimen/ds_space_12"
+                                android:paddingEnd="@dimen/ds_space_8">
+
+                                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                                    android:id="@+id/levelText"
+                                    style="@style/Text.InternalApps.Body"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:ellipsize="end"
+                                    android:singleLine="true"
+                                    android:text="@string/location_level_area"
+                                    android:textColor="@color/ds_text_primary" />
+
+                                <ImageView
+                                    android:layout_width="@dimen/_22sdp"
+                                    android:layout_height="@dimen/_22sdp"
+                                    android:contentDescription="@null"
+                                    android:src="@drawable/ia_ic_filter_down" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/ds_space_8"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                                style="@style/Text.InternalApps.Caption"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/location_parent_label"
+                                android:textColor="@color/ds_text_muted" />
+
+                            <LinearLayout
+                                android:id="@+id/parentLocationField"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/ds_input_height"
+                                android:layout_marginTop="@dimen/ds_space_4"
+                                android:background="@drawable/bg_quote_search"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:foreground="?attr/selectableItemBackground"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:paddingStart="@dimen/ds_space_12"
+                                android:paddingEnd="@dimen/ds_space_8">
+
+                                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                                    android:id="@+id/parentLocationText"
+                                    style="@style/Text.InternalApps.Body"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:ellipsize="end"
+                                    android:singleLine="true"
+                                    android:text="@string/location_parent_placeholder"
+                                    android:textColor="@color/ds_text_muted" />
+
+                                <ImageView
+                                    android:layout_width="@dimen/_22sdp"
+                                    android:layout_height="@dimen/_22sdp"
+                                    android:contentDescription="@null"
+                                    android:src="@drawable/ia_ic_filter_down" />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </com.axelliant.hris.ui.designsystem.components.AppCardView>
+
+            <com.axelliant.hris.ui.designsystem.components.AppCardView
+                style="@style/Widget.InternalApps.Card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ds_space_12"
+                app:cardElevation="@dimen/_1sdp"
+                app:strokeColor="@color/ds_outline"
+                app:strokeWidth="@dimen/_1sdp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/ds_space_16">
+
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
+                        style="@style/Text.Fluent2.Subheading.Primary.Strong"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/location_details_title" />
+
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
+                        style="@style/Text.InternalApps.Caption"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/ds_space_4"
+                        android:text="@string/location_details_hint"
+                        android:textColor="@color/ds_text_secondary" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/ds_space_12"
+                        android:baselineAligned="false"
+                        android:orientation="horizontal">
+
+                        <com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout
+                            android:id="@+id/codeInputLayout"
+                            style="@style/Widget.InternalApps.InputLayout"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/ds_space_8"
+                            android:layout_weight="1"
+                            android:hint="@string/location_code_required"
+                            app:endIconMode="clear_text">
+
+                            <com.axelliant.hris.ui.designsystem.components.AppTextFieldView
+                                android:id="@+id/codeInput"
+                                style="@style/Widget.InternalApps.InputEditText"
+                                android:inputType="textCapCharacters"
+                                android:maxLines="1" />
+                        </com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout>
+
+                        <com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout
+                            android:id="@+id/nameInputLayout"
+                            style="@style/Widget.InternalApps.InputLayout"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/ds_space_8"
+                            android:layout_weight="1"
+                            android:hint="@string/location_name_required"
+                            app:endIconMode="clear_text">
+
+                            <com.axelliant.hris.ui.designsystem.components.AppTextFieldView
+                                android:id="@+id/nameInput"
+                                style="@style/Widget.InternalApps.InputEditText"
+                                android:inputType="textCapWords"
+                                android:maxLines="1" />
+                        </com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </com.axelliant.hris.ui.designsystem.components.AppCardView>
+
+            <com.axelliant.hris.ui.designsystem.components.AppCardView
+                style="@style/Widget.InternalApps.Card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ds_space_12"
+                app:cardElevation="@dimen/_1sdp"
+                app:strokeColor="@color/ds_outline"
+                app:strokeWidth="@dimen/_1sdp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/ds_space_16">
+
+                    <com.axelliant.hris.ui.designsystem.components.AppCheckboxView
+                        android:id="@+id/activeCheckbox"
+                        style="@style/Text.InternalApps.Body"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/location_active"
+                        android:textColor="@color/ds_text_primary" />
+
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
+                        style="@style/Text.InternalApps.Caption"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/ds_space_2"
+                        android:paddingStart="@dimen/ds_space_2"
+                        android:text="@string/location_active_hint"
+                        android:textColor="@color/ds_text_secondary" />
+                </LinearLayout>
+            </com.axelliant.hris.ui.designsystem.components.AppCardView>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <com.axelliant.hris.ui.designsystem.components.AppProgressBarView
+        android:id="@+id/progress"
+        android:layout_width="@dimen/_28sdp"
+        android:layout_height="@dimen/_28sdp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/actionRow"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:layout_constraintStart_toStartOf="@id/startGuideline" />
+
+    <LinearLayout
+        android:id="@+id/actionRow"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ds_space_12"
+        android:layout_marginBottom="@dimen/ds_space_12"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@id/bottomGuideline"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:layout_constraintStart_toStartOf="@id/startGuideline">
+
+        <com.axelliant.hris.ui.designsystem.components.AppButtonView
+            android:id="@+id/cancelButton"
+            style="@style/Widget.Fluent2.Button.Secondary"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/ds_button_height"
+            android:layout_marginEnd="@dimen/ds_space_8"
+            android:layout_weight="1"
+            android:text="@string/cancel" />
+
+        <com.axelliant.hris.ui.designsystem.components.AppButtonView
+            android:id="@+id/saveButton"
+            style="@style/Widget.Fluent2.Button.Primary"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/ds_button_height"
+            android:layout_marginStart="@dimen/ds_space_8"
+            android:layout_weight="1"
+            android:text="@string/save" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,9 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.TextView
 import com.axelliant.hris.R
 import com.axelliant.hris.Test
+import com.axelliant.hris.ui.designsystem.components.AppTextView
 
 class CustomSpinnerAdapter(context: Context, private val list: ArrayList<Test>)
     : ArrayAdapter<Test>(context, 0, list) {
@@ -26,7 +26,7 @@ class CustomSpinnerAdapter(context: Context, private val list: ArrayList<Test>)
 
         val item = getItem(position)
 //        val imageView = view.findViewById<ImageView>(R.id.imageView)
-        val textView = view.findViewById<TextView>(R.id.tv_spinner_text)
+        val textView = view.findViewById<AppTextView>(R.id.tv_spinner_text)
 
         item?.let {
 //            imageView.setImageResource(it.imageResource)

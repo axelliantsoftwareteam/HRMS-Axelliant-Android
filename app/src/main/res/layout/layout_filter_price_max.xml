@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="0dp"
+    android:layout_height="@dimen/_44sdp"
+    android:layout_weight="1"
+    android:background="@drawable/bg_filter_field"
+    android:gravity="center_vertical"
+    android:orientation="vertical"
+    android:paddingStart="@dimen/_10sdp"
+    android:paddingEnd="@dimen/_10sdp">
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        style="@style/Text.InternalApps.Body"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/max"
+        android:textColor="@color/ds_text_muted"
+        android:textSize="@dimen/_12ssp" />
+</LinearLayout>
+

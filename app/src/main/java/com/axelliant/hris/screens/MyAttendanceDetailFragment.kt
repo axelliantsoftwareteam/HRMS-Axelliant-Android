@@ -5,36 +5,38 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.core.view.isVisible
 import com.axelliant.hris.R
 import com.axelliant.hris.adapter.MyAttendanceDetailAdapter
 import com.axelliant.hris.adapter.SubFilterAdapter
 import com.axelliant.hris.base.BaseFragment
 import com.axelliant.hris.callback.AdapterItemClick
-import com.axelliant.hris.config.AppConst
-import com.axelliant.hris.config.AppConst.KEY_ID
 import com.axelliant.hris.config.GlobalConfig
+import com.axelliant.hris.core.constants.AppRouteArgs
 import com.axelliant.hris.databinding.FragmentMyAttendanceDetailBinding
 import com.axelliant.hris.enums.AttendanceFilter
 import com.axelliant.hris.enums.AttendanceFilter.Custom
 import com.axelliant.hris.enums.AttendanceFilter.MONTH
 import com.axelliant.hris.enums.AttendanceFilter.WEEK
-import com.axelliant.hris.enums.RequestFilter
 import com.axelliant.hris.event.EventObserver
 import com.axelliant.hris.extention.showErrorMsg
 import com.axelliant.hris.model.attendance.AttendanceDetail
 import com.axelliant.hris.model.attendance.AttendanceInput
 import com.axelliant.hris.model.dashboard.FilterModel
-import com.axelliant.hris.navigation.AppNavigator
 import com.axelliant.hris.utils.Utils
 import com.axelliant.hris.viewmodel.AttendanceViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
-import com.google.gson.Gson
-import org.koin.android.ext.android.inject
+import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.axelliant.hris.ui.designsystem.adapters.FilterAdapter
+import com.axelliant.hris.ui.designsystem.adapters.FilterItem
+import com.axelliant.hris.utils.Utils.utcToLocalDate
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.Date
 
-
+@AndroidEntryPoint
 class MyAttendanceDetailFragment : BaseFragment() {
 
     private var startDateString: String? = null
@@ -42,29 +44,33 @@ class MyAttendanceDetailFragment : BaseFragment() {
     private var _binding: FragmentMyAttendanceDetailBinding? = null
     private val binding get() = _binding
     private var currentFilter = WEEK
-    private val attendanceViewModel: AttendanceViewModel by inject()
+    private val attendanceViewModel: AttendanceViewModel by viewModels()
 
     private var emplId = ""
     private var filterId = ""
+    private var attendanceList = arrayListOf<AttendanceDetail>()
+    private var filterList = arrayListOf<FilterModel>()
+    private lateinit var dateFilterAdapter: FilterAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         _binding = FragmentMyAttendanceDetailBinding.inflate(inflater).also { _binding = it }
         return binding?.root
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val bundle = this.arguments
         if (bundle != null) {
-            emplId = bundle.getString(KEY_ID, GlobalConfig.currentEmployeeId())
+            emplId = bundle.getString(AppRouteArgs.EMPLOYEE_ID, GlobalConfig.currentEmployeeId())
         }
+
+        setupRecyclerViews()
+
         attendanceViewModel.getIsLoading()
             .observe(viewLifecycleOwner, EventObserver { isLoading ->
                 if (isLoading) {
@@ -75,7 +81,6 @@ class MyAttendanceDetailFragment : BaseFragment() {
             })
 
         attendanceViewModel.getAttendanceDetail(getCurrentObject())
-        eventSelection()
 
         attendanceViewModel.attendanceDetailResponse.observe(
             viewLifecycleOwner,
@@ -84,124 +89,89 @@ class MyAttendanceDetailFragment : BaseFragment() {
                 if (response?.meta?.status == true) {
                     dataPopulate(response.attendance_data!!)
                     subFilterPopulations(response.attendance_status!!)
-
-
                 } else {
                     requireContext().showErrorMsg(response?.meta?.message.toString())
                 }
 
             })
 
-        binding?.ivBack?.setOnClickListener {
+        binding?.appTopBar?.setOnBackClickListener {
             previousFragmentNavigation()
         }
-
-
     }
 
+    private fun setupRecyclerViews() {
+        binding?.rvAttendanceFilters?.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+        binding?.rvAttendanceDetail?.layoutManager = LinearLayoutManager(requireContext())
+        setupDateFilterBar()
+        binding?.tvFromDate?.setOnClickListener { datePickerDialog() }
+        binding?.tvToDate?.setOnClickListener { datePickerDialog() }
+    }
 
     private fun dataPopulate(attendanceData: ArrayList<AttendanceDetail>) {
-
-        binding?.rvAttendanceDetail?.layoutManager = LinearLayoutManager(requireActivity())
-        val weeklyAdapter = MyAttendanceDetailAdapter(attendanceData,requireContext(),object :AdapterItemClick{
-            override fun onItemClick(customObject: Any, position: Int) {
-
-                val attendanceDetail = customObject as AttendanceDetail
-//                AppNavigator.navigateToRequest(Bundle().apply {
-//                    this.putString(AppConst.RequestType, RequestFilter.ATTENDANCE.name)
-//                    this.putString(AppConst.AttendanceRequestParam, Gson().toJson(attendanceDetail))
-//                })
-
-
-            }
-        })
-        binding?.rvAttendanceDetail?.adapter = weeklyAdapter
-
-
-
+        attendanceList = attendanceData
+        renderContent()
     }
 
     private fun subFilterPopulations(attendanceStatusList: ArrayList<FilterModel>) {
-        attendanceStatusList.add(0,FilterModel().apply {
-            this.id = ""
-            this.title = "All"
-            this.count = "0"
-        })
-
-        binding?.rvSubFilter?.layoutManager =
-            LinearLayoutManager(requireActivity(), RecyclerView.HORIZONTAL, false)
-        val weeklyAdapter = SubFilterAdapter(filterId,
-            attendanceStatusList, requireContext(),
-            object : AdapterItemClick {
-                override fun onItemClick(customObject: Any, position: Int) {
-                    val filterObject = customObject as FilterModel
-
-                    filterId = filterObject.id.toString()
-                    attendanceViewModel.getAttendanceDetail(getCurrentObject())
-
-                }
-
-            }
-        )
-        binding?.rvSubFilter?.adapter = weeklyAdapter
-
+        filterList = arrayListOf<FilterModel>().apply {
+            add(FilterModel().apply {
+                id = ""
+                title = "All"
+                count = "0"
+            })
+            addAll(attendanceStatusList)
+        }
+        renderContent()
     }
 
-    private fun eventSelection() {
-        binding?.tvWeek?.background =
-            ContextCompat.getDrawable(requireContext(), R.drawable.rounded_disabled)
-
-        binding?.tvMonth?.background =
-            ContextCompat.getDrawable(requireContext(), R.drawable.rounded_disabled)
-
-        binding?.tvCustom?.background =
-            ContextCompat.getDrawable(requireContext(), R.drawable.rounded_disabled)
-
-
-        binding?.tvWeek?.setTextColor(requireContext().getColor(R.color.btn_text_color))
-        binding?.tvMonth?.setTextColor(requireContext().getColor(R.color.btn_text_color))
-        binding?.tvCustom?.setTextColor(requireContext().getColor(R.color.btn_text_color))
-
-
-        binding?.tvWeek?.setOnClickListener {
-            currentFilter = WEEK
-            attendanceViewModel.getAttendanceDetail(getCurrentObject())
-            eventSelection()
-        }
-
-        binding?.tvMonth?.setOnClickListener {
-            currentFilter = MONTH
-            attendanceViewModel.getAttendanceDetail(getCurrentObject())
-            eventSelection()
-        }
-
-        binding?.tvCustom?.setOnClickListener {
-            datePickerDialog()
-        }
-
-        when (currentFilter) {
-            WEEK -> {
-                binding?.tvWeek?.background =
-                    ContextCompat.getDrawable(requireContext(), R.drawable.rounded_enabled)
-                binding?.tvWeek?.setTextColor(requireContext().getColor(R.color.white))
-
+    private fun renderContent() {
+        binding?.tvNoRecord?.isVisible = attendanceList.isEmpty()
+        binding?.rvAttendanceDetail?.isVisible = attendanceList.isNotEmpty()
+        binding?.rvAttendanceFilters?.adapter = SubFilterAdapter(
+            filterId,
+            filterList,
+            requireContext(),
+            object : AdapterItemClick {
+                override fun onItemClick(customObject: Any, position: Int) {
+                    filterId = (customObject as FilterModel).id.orEmpty()
+                    attendanceViewModel.getAttendanceDetail(getCurrentObject())
+                }
             }
-
-            MONTH -> {
-
-                binding?.tvMonth?.background =
-                    ContextCompat.getDrawable(requireContext(), R.drawable.rounded_enabled)
-                binding?.tvMonth?.setTextColor(requireContext().getColor(R.color.white))
+        )
+        binding?.rvAttendanceDetail?.adapter = MyAttendanceDetailAdapter(
+            attendanceList,
+            requireContext(),
+            object : AdapterItemClick {
+                override fun onItemClick(customObject: Any, position: Int) = Unit
             }
+        )
+    }
 
-            Custom -> {
-
-                binding?.tvCustom?.background =
-                    ContextCompat.getDrawable(requireContext(), R.drawable.rounded_enabled)
-                binding?.tvCustom?.setTextColor(requireContext().getColor(R.color.white))
+    private fun setupDateFilterBar() {
+        val items = listOf(
+            FilterItem(getString(R.string.last_seven), 0),
+            FilterItem(getString(R.string.this_month), 1),
+            FilterItem(getString(R.string.custom), 2)
+        )
+        dateFilterAdapter = FilterAdapter(items, selectedPosition = 0) { position, _ ->
+            when (position) {
+                0 -> {
+                    currentFilter = WEEK
+                    dateFilterAdapter.setSelected(position)
+                    attendanceViewModel.getAttendanceDetail(getCurrentObject())
+                }
+                1 -> {
+                    currentFilter = MONTH
+                    dateFilterAdapter.setSelected(position)
+                    attendanceViewModel.getAttendanceDetail(getCurrentObject())
+                }
+                2 -> datePickerDialog()
             }
-
-            else -> {}
+        }
+        binding?.rvDateFilters?.apply {
+            layoutManager = GridLayoutManager(requireContext(), items.size)
+            adapter = dateFilterAdapter
         }
     }
 
@@ -211,15 +181,12 @@ class MyAttendanceDetailFragment : BaseFragment() {
             WEEK -> {
                 startDateString = Utils.getServerFormat(date = Utils.getLastWeek())
                 endDateString = Utils.getServerFormat()
-
                 setDateView()
             }
 
             MONTH -> {
                 startDateString = Utils.getServerFormat(date = Utils.getFirstDayOfMonth())
-                endDateString =
-                    Utils.getServerFormat(date = Utils.getLastDayOfMonth())
-
+                endDateString = Utils.getServerFormat(date = Utils.getLastDayOfMonth())
                 setDateView()
             }
 
@@ -231,45 +198,41 @@ class MyAttendanceDetailFragment : BaseFragment() {
             this.employeeId = listOf(emplId)
             this.filter = currentFilter
             this.filters = filterId
-
         }
-
     }
-
 
     private fun setDateView() {
         if (startDateString != null && endDateString != null) {
-            binding?.tvStartDateTxt?.text = startDateString
-            binding?.tvEndDateTxt?.text = endDateString
+            binding?.tvFromDate?.text = startDateString
+            binding?.tvToDate?.text = endDateString
         }
-
     }
 
+
     private fun datePickerDialog() {
-        // Creating a MaterialDatePicker builder for selecting a date range
         val builder = MaterialDatePicker.Builder.dateRangePicker()
+        builder.setTheme(R.style.MyDatePickerTheme)
         builder.setTitleText("Select a date range")
 
-        // Building the date picker dialog
         val datePicker = builder.build()
         datePicker.addOnPositiveButtonClickListener { selection ->
-            // Retrieving the selected start and end dates
-            val startDate = selection.first
-            val endDate = selection.second
+            val startDate = utcToLocalDate(selection.first)
+            val endDate = utcToLocalDate(selection.second)
 
-            // Formatting the selected dates as strings
-
-            startDateString = Utils.getServerFormat(date = Date(startDate))
-            endDateString = Utils.getServerFormat(date = Date(endDate))
+            startDateString = Utils.getServerFormat(date = startDate)
+            endDateString = Utils.getServerFormat(date = endDate)
 
             setDateView()
 
             currentFilter = AttendanceFilter.Custom
+            dateFilterAdapter.setSelected(2)
             attendanceViewModel.getAttendanceDetail(getCurrentObject())
-            eventSelection()
         }
 
-        // Showing the date picker dialog
         datePicker.show(activity?.supportFragmentManager!!, "DATE_PICKER")
+    }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

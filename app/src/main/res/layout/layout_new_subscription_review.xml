@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <include layout="@layout/item_subscription_card_active" />
+    <include layout="@layout/layout_new_subscription_order_total" />
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/_14sdp" android:background="@drawable/bg_subscription_notice" android:gravity="center_vertical" android:orientation="horizontal" android:padding="@dimen/_14sdp">
+        <ImageView android:layout_width="@dimen/_32sdp" android:layout_height="@dimen/_32sdp" android:src="@drawable/ic_check_small" app:tint="@color/ds_primary" />
+        <com.axelliant.hris.ui.designsystem.components.AppTextView style="@style/Text.InternalApps.Body" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="@dimen/_14sdp" android:layout_weight="1" android:text="@string/subscription_customer_notice" android:textColor="@color/ds_text_primary" android:textSize="@dimen/_12ssp" />
+    </LinearLayout>
+</LinearLayout>
