@@ -743,9 +743,12 @@ class HomeFragment : BaseFragment() {
         val hasBusinessAccess = businessActions.isNotEmpty()
         hasHrisHomeAccess = hasHrisAccess
 
-        binding?.tvTodayTitle?.isVisible = hasHrisAccess
-        binding?.tvCurrentLocs?.isVisible = hasHrisAccess
-        binding?.composeTodayCard?.isVisible = hasHrisAccess
+        binding?.cardMain?.isVisible = hasHrisAccess || hasBusinessAccess
+
+
+        binding?.tvTodayTitle?.isVisible = true
+        binding?.tvCurrentLocs?.isVisible = true
+        binding?.composeTodayCard?.isVisible = true
         binding?.cardNote?.isVisible = hasHrisAccess
         binding?.tvShift?.isVisible = hasHrisAccess && isManager
         binding?.lyMyTeam?.isVisible = hasHrisAccess && isManager
@@ -1202,7 +1205,8 @@ class HomeFragment : BaseFragment() {
     private fun updateCheckInButton() {
         todayCardBinding?.btnCheckIn?.text =
             if (isCheckIn) getString(R.string.check_in) else getString(R.string.check_out)
-        todayCardBinding?.btnCheckIn?.isEnabled = isCheckInButtonEnabled
+        val hasHrisAccess = workspaceSessionProvider.hasValidSession(WorkspaceKey.HRIS)
+        todayCardBinding?.btnCheckIn?.isEnabled = isCheckInButtonEnabled && hasHrisAccess
     }
     private fun setCurrentLocationText() {
 //        binding?.tvLocTxt?.text = getLocationAddress(currentLocation)
