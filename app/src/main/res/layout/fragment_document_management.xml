@@ -225,7 +225,7 @@
                         android:layout_weight="3"
                         android:gravity="center"
                         android:paddingStart="@dimen/_5sdp"
-                        android:textAlignment="textStart"
+                        android:textAlignment="center"
                         android:text="@string/subject" />
 
                     <com.axelliant.hris.ui.designsystem.components.AppTextView
