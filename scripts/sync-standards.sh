@@ -51,6 +51,9 @@ if [ "$mode" = "check" ]; then
     [ -f "$LOCK" ] || { echo "standards-sync: no $LOCK; this repository has not adopted the standards. Run scripts/sync-standards.sh."; exit 1; }
     failures=0
     while read -r checksum path; do
+        # A repository whose own .gitattributes lacks eol=lf checks the lock out with CRLF on Windows
+        # (core.autocrlf=true); the trailing \r made every managed file look missing.
+        path="${path%$'\r'}"
         case "$checksum" in ''|'#'*) continue ;; esac
         [ -n "$path" ] || continue
         if [ ! -f "$path" ]; then echo "FAIL managed file missing: $path"; failures=$((failures + 1));
