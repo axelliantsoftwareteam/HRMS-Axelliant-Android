@@ -1,0 +1,74 @@
+# Release — seeded by eng-wiki-standards; owned by this repository (adapt the build and deploy steps).
+#
+# Tag-driven: pushing vX.Y.Z on main builds the image ONCE, scans it, pushes it by digest with the
+# version and SHA tags, attaches an SBOM, and creates a GitHub Release whose notes are generated
+# from PR labels (.github/release.yml). Production deploys that digest — never a rebuild.
+name: Release
+
+on:
+  push:
+    tags: ["v*.*.*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  packages: write
+  id-token: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  # Self-hosted when an Axelliant runner is online and idle, GitHub-hosted otherwise
+  # (runner-select.yml says why this is a probe, not a fallback).
+  runner:
+    uses: ./.github/workflows/runner-select.yml
+    # Only the probe token, not `secrets: inherit`: the called workflow gets nothing it does not use.
+    secrets:
+      AXELLIANT_RUNNER_PROBE_TOKEN: ${{ secrets.AXELLIANT_RUNNER_PROBE_TOKEN }}
+
+  release:
+    if: ${{ !cancelled() }}
+    needs: runner
+    runs-on: ${{ fromJSON(needs.runner.outputs.runs-on || '"ubuntu-latest"') }}
+    timeout-minutes: 30
+    env:
+      IMAGE: ghcr.io/${{ github.repository }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: docker/setup-buildx-action@e468171a9de216ec08956ac3ada2f0791b6bd435 # v3.11.1
+      - name: Log in to the registry
+        env:
+          REGISTRY_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: printf '%s' "$REGISTRY_TOKEN" | docker login ghcr.io -u "$GITHUB_ACTOR" --password-stdin
+      - name: Build and push
+        id: build
+        uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6.18.0
+        with:
+          context: .
+          push: true
+          provenance: true
+          sbom: true
+          tags: |
+            ${{ env.IMAGE }}:${{ github.ref_name }}
+            ${{ env.IMAGE }}:${{ github.sha }}
+          labels: |
+            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
+            org.opencontainers.image.revision=${{ github.sha }}
+            org.opencontainers.image.version=${{ github.ref_name }}
+      - name: Scan image
+        uses: aquasecurity/trivy-action@b6643a29fecd7f34b3597bc6acb0a98b03d33ff8 # 0.33.1
+        with:
+          image-ref: ${{ env.IMAGE }}@${{ steps.build.outputs.digest }}
+          severity: CRITICAL
+          ignore-unfixed: true
+          exit-code: "1"
+      - name: GitHub Release with generated notes
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DIGEST: ${{ steps.build.outputs.digest }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" --generate-notes --title "$GITHUB_REF_NAME" --notes "Image: ${IMAGE}@${DIGEST}"
+      # Add the production deployment here, as a separate job with `environment: production`
+      # (required reviewers), deploying ${{ env.IMAGE }}@<digest>. Then call notify.yml.

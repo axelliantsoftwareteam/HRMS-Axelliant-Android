@@ -1,0 +1,20 @@
+# Review routing for the paths where a bad change is expensive. Owned by this repository.
+#
+# Deliberately NOT a catch-all `*`: a catch-all requests the whole team on every PR, including the
+# routine ones that merge into uat without approval, which trains people to ignore review requests.
+# A request from this file therefore means something. Teams must have write access to own paths.
+
+# CI, gates and anything that changes what the gates enforce.
+/.github/        @axelliantsoftwareteam/eng-standards
+/.githooks/      @axelliantsoftwareteam/eng-standards
+/scripts/        @axelliantsoftwareteam/eng-standards
+/.axelliant/     @axelliantsoftwareteam/eng-standards
+
+# Schema and migrations — the class of change hardest to undo.
+/database/       @axelliantsoftwareteam/<backend-team>
+
+# Infrastructure.
+/infra/          @axelliantsoftwareteam/<platform-team>
+
+# Authorisation surface — add the paths that hold permissions/auth code in this repository.
+# /src/Acme.Api/Authorization/   @axelliantsoftwareteam/<backend-team>

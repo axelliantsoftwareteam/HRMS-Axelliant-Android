@@ -1,0 +1,50 @@
+# Axelliant standard editor configuration. Every repository ships this file.
+# It settles whitespace before a formatter or a reviewer has to.
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 4
+max_line_length = 120
+
+[*.{md,markdown}]
+trim_trailing_whitespace = false   # two trailing spaces is a hard line break
+
+[*.{js,jsx,ts,tsx,mjs,cjs,json,jsonc,json5,yml,yaml,css,scss,less,html,vue,svelte}]
+indent_size = 2
+
+[*.{py,pyi}]
+indent_size = 4
+max_line_length = 100
+
+[*.{cs,csx,vb}]
+indent_size = 4
+
+[*.{java,kt,kts,gradle}]
+indent_size = 4
+
+[*.{swift}]
+indent_size = 4
+
+[*.{go}]
+indent_style = tab
+
+[*.{sql,psql}]
+indent_size = 2
+
+[{Makefile,makefile,*.mk}]
+indent_style = tab
+
+[*.{sh,bash,zsh}]
+indent_size = 2
+
+[*.{ps1,psm1,psd1}]
+indent_size = 4
+end_of_line = crlf
+
+[*.{bat,cmd}]
+end_of_line = crlf

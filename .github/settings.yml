@@ -1,0 +1,25 @@
+# Repository configuration source of truth. GitHub does NOT apply this file by itself: run
+# scripts/apply-github-ruleset.sh <owner/repo> (rulesets + settings), or use the Settings app.
+repository:
+  default_branch: main
+  private: true
+  has_wiki: false
+  delete_branch_on_merge: true
+  allow_auto_merge: true
+  allow_update_branch: true
+  allow_merge_commit: true      # promotions uat -> main
+  allow_squash_merge: true      # feature PRs into uat
+  allow_rebase_merge: false
+  squash_merge_commit_title: PR_TITLE
+  squash_merge_commit_message: PR_BODY
+
+# Branch protection is expressed as rulesets in .github/rulesets/*.json (applied by the script).
+# Required status checks are BARE JOB IDS — the check-run name GitHub reports — from workflows that
+# run on EVERY pull request. Never require a path-filtered job: it permanently blocks PRs that do not
+# touch its path. The stack CI's always-reporting aggregate job is `axelliant-gate`.
+required_status_checks:
+  - repo-guardrails
+  - branch-name
+  - promotion-source
+  - lint-pr-metadata
+  - axelliant-gate

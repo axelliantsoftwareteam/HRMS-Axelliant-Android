@@ -1,0 +1,34 @@
+# type(scope): summary        <- 72 chars max, imperative, no trailing period
+#
+# Why this change is needed, and what it does. Wrap at 72 characters.
+# Explain the reasoning, not the diff - the diff is already in the commit.
+#
+# Refs: AXE-123
+# ---------------------------------------------------------------------
+# type   feat     a new capability
+#        fix      a bug fix
+#        docs     documentation only
+#        test     tests only
+#        refactor behaviour-preserving code change
+#        perf     performance work
+#        chore    tooling, deps, housekeeping
+#        ci       CI/CD pipelines and workflows
+#        build    build system or packaging
+#        infra    Terraform, Bicep and infrastructure
+#        style    formatting only, no code change
+#        revert   reverts a previous commit
+#
+# scope  optional, lowercase, e.g. (billing) (auth) (ios) (postgres)
+#        omit it rather than inventing a vague one
+#
+# Breaking change: put ! before the colon  ->  feat(api)!: drop v1 endpoints
+#
+# Examples
+#   fix(billing): capture only added entities on auto-start
+#   docs: correct subscription API routes to match controllers
+#   ci: run checks on uat as well as main
+#   feat(subscription)!: require currency on plan creation
+#
+# Enforced on pull request titles by the lint-pr-metadata CI job.
+# No AI attribution: no Co-Authored-By trailers naming an assistant, no
+# "Generated with" footers, no AI product names. The commit-msg hook rejects them.

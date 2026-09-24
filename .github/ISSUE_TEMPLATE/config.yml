@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/axelliantsoftwareteam/eng-wiki-standards/security/advisories/new
+    about: Report privately. Never in a public issue.
+  - name: Engineering standards
+    url: https://github.com/axelliantsoftwareteam/eng-wiki-standards
+    about: How we build software at Axelliant.

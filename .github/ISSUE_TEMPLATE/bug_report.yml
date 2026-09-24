@@ -1,0 +1,47 @@
+name: Bug report
+description: Something is broken or behaves differently from its documentation.
+labels: ["type: fix"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Never paste secrets, credentials, tokens or customer personal data into an issue.
+        For a security vulnerability, do not open an issue — follow SECURITY.md.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What you did, what you expected, and what happened instead.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. …
+        2. …
+    validations:
+      required: true
+  - type: input
+    id: correlation
+    attributes:
+      label: Correlation reference
+      description: The reference shown in the error message or response (Correlation-Id), if any.
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Environment
+      options: [local, uat, production]
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version / commit
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant log output
+      description: Redact anything sensitive.
+      render: shell

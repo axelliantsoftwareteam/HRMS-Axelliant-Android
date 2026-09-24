@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+# Fast checks on what is being committed. Seconds, not minutes.
+#
+# Why this split: a pre-commit hook that builds and runs every test gets bypassed with --no-verify
+# within a week, and then it catches nothing. So this runs only what is fast and specific to the
+# staged change; the full build and test suite run in scripts/check-before-push.sh and in CI.
+#
+#   1. repository hygiene (build output, secret-shaped files, >10 MB files)
+#   2. secrets in content (gitleaks, when installed — CI always runs it)
+#   3. file-length budget and naming conventions, on the staged files only
+#   4. method length (no new god functions)
+#   5. the repository's own formatter/linter on staged files: .axelliant/pre-commit.sh, which the
+#      stack templates provide (dotnet format, ruff, prettier/eslint, ktlint, swiftformat, dart format…)
+set -euo pipefail
+
+root="$(git rev-parse --show-toplevel)"
+cd "$root"
+. scripts/lib/python-interpreter.sh
+
+echo "pre-commit: repository hygiene"
+scripts/check-repo-hygiene.sh >/dev/null || scripts/check-repo-hygiene.sh
+
+if command -v gitleaks >/dev/null 2>&1; then
+    echo "pre-commit: secret scan (staged)"
+    gitleaks protect --staged --redact --no-banner
+else
+    echo "pre-commit: gitleaks not installed — secret scan skipped locally (CI runs it). brew install gitleaks"
+fi
+
+echo "pre-commit: file-length budget and naming (staged)"
+scripts/check-file-length-budget.sh --staged
+"$PYTHON3" scripts/check-naming-conventions.py --staged
+
+echo "pre-commit: method length"
+scripts/check-method-length.sh >/dev/null || scripts/check-method-length.sh
+
+if git diff --cached --name-only | grep -Eq '^\.github/(workflows|actions)/'; then
+    echo "pre-commit: workflow run steps"
+    "$PYTHON3" scripts/check-workflow-interpolation.py >/dev/null || "$PYTHON3" scripts/check-workflow-interpolation.py
+fi
+
+if [ -x .axelliant/pre-commit.sh ]; then
+    echo "pre-commit: stack format and lint (.axelliant/pre-commit.sh)"
+    .axelliant/pre-commit.sh
+fi
+echo "pre-commit: OK"

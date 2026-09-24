@@ -1,0 +1,6 @@
+# actionlint configuration. List the custom labels of any self-hosted runners this repository uses,
+# or actionlint reports every self-hosted job as an unknown label.
+self-hosted-runner:
+  labels:
+    - axelliant
+    - lab

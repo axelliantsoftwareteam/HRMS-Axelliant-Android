@@ -1,0 +1,24 @@
+# Groups GitHub's generated release notes by the labels pr-labeler.yml applies. This is why labels
+# are worth having: they become the changelog without anyone writing one. A PR lands in the first
+# category whose labels it matches.
+changelog:
+  exclude:
+    labels: ["type: chore", "type: style"]
+    authors: [dependabot, renovate, github-actions]
+  categories:
+    - title: ⚠️ Breaking changes
+      labels: ["breaking"]
+    - title: 🚀 Features
+      labels: ["type: feature"]
+    - title: 🐛 Fixes
+      labels: ["type: fix"]
+    - title: ⚡ Performance
+      labels: ["type: performance"]
+    - title: 🗄️ Database
+      labels: ["area: database"]
+    - title: 🏗️ Build, CI and infrastructure
+      labels: ["type: ci", "type: build", "type: infra"]
+    - title: 📚 Documentation
+      labels: ["type: docs"]
+    - title: 🧹 Everything else
+      labels: ["*"]

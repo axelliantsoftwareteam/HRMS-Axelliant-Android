@@ -1,0 +1,63 @@
+{
+  "_comment": "Single source of truth for PR labels, read by .github/workflows/pr-labeler.yml. Owned by this repository: edit the areas to match its layout. The labeler creates any listed label that does not exist yet. Pattern shapes: 'prefix/**', '**/*.ext', '**/name/**', exact path.",
+  "types": {
+    "feat": "type: feature", "fix": "type: fix", "docs": "type: docs", "test": "type: tests",
+    "refactor": "type: refactor", "perf": "type: performance", "chore": "type: chore", "ci": "type: ci",
+    "build": "type: build", "infra": "type: infra", "style": "type: style", "revert": "type: revert"
+  },
+  "breaking": "breaking",
+  "sizes": [
+    { "label": "size: XS", "upTo": 20 },
+    { "label": "size: S", "upTo": 100 },
+    { "label": "size: M", "upTo": 400 },
+    { "label": "size: L", "upTo": 1000 },
+    { "label": "size: XL", "upTo": 1000000000 }
+  ],
+  "sizeIgnore": ["**/*.lock", "package-lock.json", "pnpm-lock.yaml", "database/schema.expected.sql", "**/*.snap", "contracts/openapi.yaml"],
+  "areas": [
+    { "label": "area: api", "paths": ["src/**", "services/**", "apps/api/**"] },
+    { "label": "area: web", "paths": ["web/**", "apps/web/**", "frontend/**", "**/*.component.ts", "**/*.tsx"] },
+    { "label": "area: ios", "paths": ["ios/**", "**/*.swift"] },
+    { "label": "area: android", "paths": ["android/**", "**/*.kt"] },
+    { "label": "area: database", "paths": ["database/**", "**/migrations/**", "**/Migrations/**"] },
+    { "label": "area: contracts", "paths": ["contracts/**", "**/*.proto"] },
+    { "label": "area: tests", "paths": ["tests/**", "test/**", "**/__tests__/**"] },
+    { "label": "area: infra", "paths": ["infra/**", "**/*.tf", "**/*.bicep"] },
+    { "label": "area: docker", "paths": ["**/Dockerfile", "compose.yaml", "docker-compose.yml", ".dockerignore"] },
+    { "label": "area: ci", "paths": [".github/**", ".githooks/**", "scripts/**", ".axelliant/**"] },
+    { "label": "area: docs", "paths": ["docs/**", "**/*.md"] },
+    { "label": "area: dependencies", "paths": ["package.json", "**/package.json", "**/*.csproj", "Directory.Packages.props", "pyproject.toml", "**/pyproject.toml", "**/build.gradle.kts", "gradle/libs.versions.toml", "Package.swift", "pubspec.yaml", "go.mod"] }
+  ],
+  "definitions": {
+    "type: feature": { "color": "0e8a16", "description": "Adds a capability" },
+    "type: fix": { "color": "d73a4a", "description": "Corrects broken behaviour" },
+    "type: docs": { "color": "0075ca", "description": "Documentation only" },
+    "type: tests": { "color": "bfd4f2", "description": "Tests only" },
+    "type: refactor": { "color": "fbca04", "description": "Restructures without changing behaviour" },
+    "type: performance": { "color": "d4c5f9", "description": "Makes something faster or lighter" },
+    "type: chore": { "color": "ededed", "description": "Housekeeping" },
+    "type: ci": { "color": "1d76db", "description": "CI, workflows and automation" },
+    "type: build": { "color": "c2e0c6", "description": "Build system or dependencies" },
+    "type: infra": { "color": "5319e7", "description": "Infrastructure and provisioning" },
+    "type: style": { "color": "f9d0c4", "description": "Formatting only" },
+    "type: revert": { "color": "b60205", "description": "Reverts a previous change" },
+    "breaking": { "color": "b60205", "description": "Breaks a public contract" },
+    "size: XS": { "color": "e8f5e9", "description": "Up to 20 lines - a glance" },
+    "size: S": { "color": "c2e0c6", "description": "Up to 100 lines" },
+    "size: M": { "color": "fbca04", "description": "Up to 400 lines" },
+    "size: L": { "color": "ff9800", "description": "Up to 1000 lines - consider splitting" },
+    "size: XL": { "color": "b60205", "description": "Over 1000 lines - split this" },
+    "area: api": { "color": "1f6feb", "description": "Backend services" },
+    "area: web": { "color": "a2eeef", "description": "Web frontend" },
+    "area: ios": { "color": "000000", "description": "iOS app" },
+    "area: android": { "color": "3ddc84", "description": "Android app" },
+    "area: database": { "color": "5319e7", "description": "Schema and migrations" },
+    "area: contracts": { "color": "c5def5", "description": "OpenAPI, proto and event contracts" },
+    "area: tests": { "color": "bfd4f2", "description": "Tests" },
+    "area: infra": { "color": "5319e7", "description": "Infrastructure as code" },
+    "area: docker": { "color": "0db7ed", "description": "Containers and Compose" },
+    "area: ci": { "color": "1d76db", "description": "CI, hooks, gates" },
+    "area: docs": { "color": "0075ca", "description": "Documentation" },
+    "area: dependencies": { "color": "0366d6", "description": "Dependency manifests" }
+  }
+}

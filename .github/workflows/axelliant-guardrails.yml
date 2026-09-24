@@ -1,0 +1,231 @@
+# Axelliant guardrails — MANAGED by eng-wiki-standards (scripts/sync-standards.sh). Do not edit here;
+# change it in https://github.com/axelliantsoftwareteam/eng-wiki-standards and re-sync.
+#
+# Why this exists: these are the company-wide gates every repository runs on every pull request,
+# whatever it touches — hygiene, secrets, code shape, naming, code documentation, error leaks,
+# logging, database immutability, docs drift, Docker, infrastructure as code, the coverage ratchet — plus branch naming,
+# the uat -> main promotion rule, and PR title/body/ticket lint. Each gate is a script in scripts/
+# that runs identically on a laptop (scripts/check-before-push.sh). Configuration per repository is
+# .axelliant/standards.env.
+#
+# Required status checks (rulesets) list these bare job ids: repo-guardrails, branch-name,
+# promotion-source, lint-pr-metadata. They run on every PR so they can safely be required.
+name: Axelliant guardrails
+
+on:
+  # `edited` because the title, body and base branch are checked here: without it, a PR opened with a
+  # bad title fails once and stays failed, since fixing the text does not create a new commit.
+  pull_request:
+    types: [opened, synchronize, reopened, edited, ready_for_review]
+  push:
+    branches: [main, master, uat]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Separate groups for code runs and metadata-only (`edited`) runs. `gh pr create` fires `opened` and
+# then `edited` seconds later; with one group the edited run cancelled the real one.
+# No job is ever skipped on `edited`: GitHub shows the latest run of a check name, and a skipped job
+# satisfies a required check, so a skipped re-run would hide a real failure from the same commit.
+# The edited run re-checks the same SHA, so it reaches the same verdict.
+concurrency:
+  group: axelliant-guardrails-${{ github.event.pull_request.number || github.ref }}-${{ github.event.action == 'edited' && 'metadata' || 'code' }}
+  cancel-in-progress: true
+
+jobs:
+  # Self-hosted when an Axelliant runner is online and idle, GitHub-hosted otherwise
+  # (runner-select.yml says why this is a probe, not a fallback).
+  runner:
+    uses: ./.github/workflows/runner-select.yml
+    # Only the probe token, not `secrets: inherit`: the called workflow gets nothing it does not use.
+    secrets:
+      AXELLIANT_RUNNER_PROBE_TOKEN: ${{ secrets.AXELLIANT_RUNNER_PROBE_TOKEN }}
+
+  repo-guardrails:
+    if: ${{ !cancelled() }}
+    needs: runner
+    runs-on: ${{ fromJSON(needs.runner.outputs.runs-on || '"ubuntu-latest"') }}
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: "3.12"
+
+      - name: Resolve base ref
+        id: base
+        env:
+          BASE_REF: ${{ github.event.pull_request.base.ref }}
+        # Exported to the environment, never interpolated into a later `run:` — an expression is
+        # substituted as text before the shell sees it (scripts/check-workflow-interpolation.py).
+        run: |
+          if [ -n "$BASE_REF" ]; then echo "AX_BASE_REF=origin/$BASE_REF" >> "$GITHUB_ENV"; else echo "AX_BASE_REF=HEAD~1" >> "$GITHUB_ENV"; fi
+
+      - name: Standards files unmodified
+        if: hashFiles('.axelliant/standards.lock') != ''
+        run: ./scripts/sync-standards.sh --check
+
+      - name: Repository hygiene
+        run: ./scripts/check-repo-hygiene.sh
+
+      # The gitleaks CLI (MIT), pinned and checksum-verified. Not gitleaks-action: that requires a paid
+      # licence for organisation accounts and fails without one.
+      - name: Secrets in content (gitleaks)
+        run: |
+          curl -fsSL -o "$RUNNER_TEMP/gitleaks.tgz" https://github.com/gitleaks/gitleaks/releases/download/v8.28.0/gitleaks_8.28.0_linux_x64.tar.gz
+          echo "a65b5253807a68ac0cafa4414031fd740aeb55f54fb7e55f386acb52e6a840eb  $RUNNER_TEMP/gitleaks.tgz" | sha256sum -c -
+          tar -xzf "$RUNNER_TEMP/gitleaks.tgz" -C "$RUNNER_TEMP" gitleaks
+          if [ "$GITHUB_EVENT_NAME" = "pull_request" ]; then
+            "$RUNNER_TEMP/gitleaks" git --redact --no-banner --log-opts="$AX_BASE_REF..HEAD" .
+          else
+            "$RUNNER_TEMP/gitleaks" dir --redact --no-banner .
+          fi
+
+      - name: No new god functions
+        run: ./scripts/check-method-length.sh
+
+      - name: File-length budget
+        run: ./scripts/check-file-length-budget.sh "$AX_BASE_REF"
+
+      - name: Naming conventions (new files, SQL)
+        run: python3 scripts/check-naming-conventions.py "$AX_BASE_REF"
+
+      - name: Code documentation (added public declarations)
+        run: python3 scripts/check-code-docs.py "$AX_BASE_REF"
+
+      - name: No exception text reaches callers
+        run: ./scripts/check-exception-leaks.sh "$AX_BASE_REF"
+
+      - name: Request-path code logs through the logger
+        run: ./scripts/check-console-logging.sh "$AX_BASE_REF"
+
+      - name: Applied database scripts are immutable
+        run: python3 scripts/check-applied-scripts.py "$AX_BASE_REF"
+
+      - name: Migration extensions are allow-listed
+        run: python3 scripts/check-migration-extensions.py
+
+      - name: Documentation drift
+        run: python3 scripts/check-docs-drift.py
+
+      - name: No expression reaches a workflow run step
+        run: python3 scripts/check-workflow-interpolation.py
+
+      - name: Docker standard
+        run: |
+          # The job's own temp directory: a self-hosted runner cannot write to the system bin
+          # directories, and two jobs on one machine must not share a download.
+          mkdir -p "$RUNNER_TEMP/bin"
+          curl -fsSL -o "$RUNNER_TEMP/bin/hadolint" https://github.com/hadolint/hadolint/releases/download/v2.12.0/hadolint-Linux-x86_64
+          echo "56de6d5e5ec427e17b74fa48d51271c7fc0d61244bf5c90e828aab8362d55010  $RUNNER_TEMP/bin/hadolint" | sha256sum -c -
+          chmod +x "$RUNNER_TEMP/bin/hadolint"
+          export PATH="$RUNNER_TEMP/bin:$PATH"
+          python3 scripts/check-docker.py
+
+      - name: Infrastructure as code
+        run: python3 scripts/check-infra-as-code.py
+
+      - name: Coverage floors never lowered
+        run: python3 scripts/check-coverage.py ratchet "$AX_BASE_REF"
+
+  branch-name:
+    needs: runner
+    if: ${{ !cancelled() && (github.event_name == 'pull_request') }}
+    runs-on: ${{ fromJSON(needs.runner.outputs.runs-on || '"ubuntu-latest"') }}
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Validate branch name
+        env:
+          HEAD_BRANCH: ${{ github.event.pull_request.head.ref }}
+        run: ./scripts/check-branch-name.sh "$HEAD_BRANCH"
+
+  promotion-source:
+    needs: runner
+    # Runs on `edited` too: retargeting a PR's base is an edit, and must be re-checked.
+    if: ${{ !cancelled() && (github.event_name == 'pull_request') }}
+    runs-on: ${{ fromJSON(needs.runner.outputs.runs-on || '"ubuntu-latest"') }}
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Validate promotion source
+        env:
+          BASE_BRANCH: ${{ github.event.pull_request.base.ref }}
+          HEAD_BRANCH: ${{ github.event.pull_request.head.ref }}
+        run: ./scripts/check-promotion-source.sh "$BASE_BRANCH" "$HEAD_BRANCH"
+
+  lint-pr-metadata:
+    needs: runner
+    # Bot PRs (Renovate, Dependabot) are exempted INSIDE the steps, not with a job-level `if:` — a
+    # skipped required check reports no conclusion and can block a PR indefinitely.
+    if: ${{ !cancelled() && (github.event_name == 'pull_request') }}
+    runs-on: ${{ fromJSON(needs.runner.outputs.runs-on || '"ubuntu-latest"') }}
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Validate PR title
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            if (pr.user.type === 'Bot') { core.info('Bot PR - title check skipped.'); return; }
+            const title = pr.title || '';
+            const types = ['feat','fix','docs','test','refactor','perf','chore','ci','build','infra','style','revert'];
+            const pattern = new RegExp('^(' + types.join('|') + ')(\\([a-z0-9._/-]+\\))?!?: .{1,}$');
+            if (!pattern.test(title)) {
+              core.setFailed('PR title does not match the required format.\n\n  Required:  type(scope): summary\n  Received:  ' + title +
+                '\n\n  Valid types: ' + types.join(', ') + '\n  Scope optional, lowercase; ! before the colon for a breaking change.\n  See .gitmessage.');
+              return;
+            }
+            const summary = title.replace(/^[a-z]+(\([^)]*\))?!?: /, '');
+            if (summary.length < 10) core.setFailed('PR title summary is too short to be meaningful: "' + summary + '"');
+            else if (summary.endsWith('.')) core.setFailed('PR title summary should not end with a period.');
+            else if (title.length > 100) core.setFailed('PR title is ' + title.length + ' characters; keep it under 100.');
+            else if (/\b(claude|anthropic|chatgpt|openai|copilot|gemini)\b/i.test(title)) core.setFailed('No AI product names in PR titles.');
+
+      - name: Validate PR body
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            if (pr.user.type === 'Bot') { core.info('Bot PR - template check skipped.'); return; }
+            const body = pr.body || '';
+            if (!body.trim()) { core.setFailed('PR body is empty. Fill in the pull request template.'); return; }
+            const stripped = body.replace(/<!--[\s\S]*?-->/g, '');
+            const problems = [];
+            const placeholders = stripped.match(/^_[^_]+_\s*$/gm) || [];
+            if (placeholders.length) {
+              problems.push(placeholders.length + ' template placeholder(s) left unfilled:\n' +
+                placeholders.slice(0, 6).map(p => '      ' + p.trim().replace(/\s+/g, ' ').slice(0, 90)).join('\n'));
+            }
+            for (const heading of ['Summary', 'Tests']) {
+              const section = new RegExp('^##\\s+' + heading + '\\s*$([\\s\\S]*?)(?=^##\\s|(?![\\s\\S]))', 'm');
+              const match = stripped.match(section);
+              if (!match) problems.push('missing required "## ' + heading + '" section');
+              else if (!match[1].replace(/^_[^_]+_\s*$/gm, '').trim()) problems.push('"## ' + heading + '" section is empty');
+            }
+            if (/co-authored-by:.*(claude|anthropic|openai|copilot|gemini)|generated (with|by) (claude|chatgpt|copilot)|🤖/i.test(body)) {
+              problems.push('AI attribution in the PR body');
+            }
+            if (problems.length) {
+              core.setFailed('Pull request template is not filled in:\n\n' + problems.map(p => '  - ' + p).join('\n') +
+                '\n\nReplace the italic prompts with real content, or write "None" for a section that genuinely does not apply.');
+            }
+
+      - name: Ticket reference
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_BODY: ${{ github.event.pull_request.body }}
+          HEAD_BRANCH: ${{ github.event.pull_request.head.ref }}
+          PR_AUTHOR_TYPE: ${{ github.event.pull_request.user.type }}
+        run: |
+          if [ "$PR_AUTHOR_TYPE" = "Bot" ]; then echo "Bot PR - ticket check skipped."; exit 0; fi
+          ./scripts/check-ticket-reference.sh "$PR_TITLE" "$PR_BODY" "$HEAD_BRANCH"

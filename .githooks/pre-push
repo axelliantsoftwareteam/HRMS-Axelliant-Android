@@ -1,0 +1,145 @@
+#!/usr/bin/env bash
+# Three pre-push guards:
+#   1. Branch naming convention (scripts/check-branch-name.sh), applied to the ref being PUSHED.
+#   2. The fast gates (scripts/check-before-push.sh --fast): every company-wide check except the
+#      stack build and tests, in seconds. CI runs everything again; this is the last chance to see
+#      a red gate before a reviewer does.
+#   3. Base freshness — blocks a push from a branch that is behind the integration branch (`uat`),
+#      or behind its parent when the branch is stacked.
+#
+# Why: work pushed from a stale checkout has the wrong layout, resurrects deleted files and dead
+# patterns, and turns review into archaeology. Rebasing before push is cheap; untangling after is not.
+#
+# The base is derived, not hardcoded: INTEGRATION_BRANCH from .axelliant/standards.env when the remote
+# has it, otherwise the remote's default branch.
+#
+# Deliberate exceptions:
+#   SKIP_BRANCH_NAME_CHECK=1 git push ...   (naming)
+#   SKIP_BASE_SYNC_CHECK=1 git push ...     (stale base; a stacked branch does not need it)
+#   SKIP_PREPUSH_GATES=1 git push ...       (gates; CI still runs them and still blocks the merge)
+#
+# Stacked branches: record the parent once and the check follows it:
+#   git config branch.<this-branch>.stackParent <parent-branch>
+# Once the branch has an open pull request, its base is read automatically (via gh).
+set -euo pipefail
+
+repo_root="$(git rev-parse --show-toplevel)"
+. "$repo_root/scripts/lib/config.sh"
+
+# 1. Branch naming convention.
+#
+# Validate the ref being PUSHED, not the branch currently checked out. Git
+# passes one line per ref on stdin: <local ref> <local sha> <remote ref>
+# <remote sha>. Checking HEAD instead meant `git push origin HEAD:bad-name`
+# from a correctly-named branch sailed through, and a badly-named local
+# branch could block a push to a valid target.
+#
+# stdin can only be read once, so it is captured for the base-sync check below.
+push_refs="$(cat)"
+if [ -x "$repo_root/scripts/check-branch-name.sh" ]; then
+    while read -r _ local_sha remote_ref _; do
+        [ -z "${remote_ref:-}" ] && continue
+        case "$remote_ref" in
+            refs/heads/*) ;;
+            *) continue ;;          # tags and other refs are not branches
+        esac
+        # Deleting a remote branch pushes an all-zero local sha; nothing to name.
+        [ "$local_sha" = "0000000000000000000000000000000000000000" ] && continue
+        target="${remote_ref#refs/heads/}"
+        "$repo_root/scripts/check-branch-name.sh" "$target" || exit 1
+    done <<EOF
+$push_refs
+EOF
+fi
+
+if [ "${SKIP_PREPUSH_GATES:-}" = "1" ]; then
+    echo "pre-push: gates skipped by SKIP_PREPUSH_GATES=1 (CI still runs them)."
+elif [ -x "$repo_root/scripts/check-before-push.sh" ]; then
+    gate_log="$(mktemp)"
+    if ! "$repo_root/scripts/check-before-push.sh" --fast >"$gate_log" 2>&1; then
+        cat "$gate_log"
+        rm -f "$gate_log"
+        echo ""
+        echo "pre-push: a gate failed. Fix it, commit, and push again."
+        exit 1
+    fi
+    rm -f "$gate_log"
+    echo "pre-push: gates passed."
+fi
+
+# 2. Base freshness.
+if [ "${SKIP_BASE_SYNC_CHECK:-}" = "1" ]; then
+    echo "pre-push: base-sync check skipped by SKIP_BASE_SYNC_CHECK=1."
+    exit 0
+fi
+
+BASE_REMOTE="${1:-origin}"
+
+resolve_base_branch() {
+    # The integration branch: every branch is cut from it and every pull request targets it. The
+    # release branch only receives it through a promotion PR, so it sits one merge commit ahead
+    # permanently — checking freshness against the release branch would block every branch in the
+    # repository the moment a promotion lands, which is exactly what happened on one platform.
+    if git rev-parse --verify -q "refs/remotes/$BASE_REMOTE/$INTEGRATION_BRANCH" >/dev/null; then
+        echo "$INTEGRATION_BRANCH"
+        return
+    fi
+
+    local head_ref
+    head_ref="$(git symbolic-ref -q "refs/remotes/$BASE_REMOTE/HEAD" 2>/dev/null || true)"
+    if [ -z "$head_ref" ]; then
+        # Populate the remote HEAD ref if it was never set locally.
+        git remote set-head "$BASE_REMOTE" --auto >/dev/null 2>&1 || true
+        head_ref="$(git symbolic-ref -q "refs/remotes/$BASE_REMOTE/HEAD" 2>/dev/null || true)"
+    fi
+    if [ -n "$head_ref" ]; then
+        echo "${head_ref#refs/remotes/$BASE_REMOTE/}"
+        return
+    fi
+    # Safe fallback: whichever conventional branch exists on the remote.
+    if git rev-parse --verify -q "refs/remotes/$BASE_REMOTE/main" >/dev/null; then
+        echo "main"
+    else
+        echo "master"
+    fi
+}
+
+BASE_BRANCH="$(resolve_base_branch)"
+
+current_branch="$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo HEAD)"
+if [ "$current_branch" = "HEAD" ] || [ "$current_branch" = "$BASE_BRANCH" ]; then
+    exit 0
+fi
+
+# A stacked branch is only as fresh as its parent. Take the parent from local config, or from
+# the base of this branch's open pull request; fall back to the default branch otherwise.
+stack_parent="$(git config --get "branch.$current_branch.stackParent" 2>/dev/null || true)"
+if [ -z "$stack_parent" ] && command -v gh >/dev/null 2>&1; then
+    stack_parent="$(gh pr view "$current_branch" --json baseRefName,state \
+        --jq 'select(.state == "OPEN") | .baseRefName' 2>/dev/null || true)"
+fi
+if [ -n "$stack_parent" ] && [ "$stack_parent" != "$BASE_BRANCH" ]; then
+    echo "pre-push: '$current_branch' is stacked on '$stack_parent'; checking freshness against it."
+    BASE_BRANCH="$stack_parent"
+fi
+
+git fetch -q "$BASE_REMOTE" "$BASE_BRANCH" || {
+    echo "pre-push: could not fetch $BASE_REMOTE/$BASE_BRANCH; skipping base-sync check."
+    exit 0
+}
+
+behind="$(git rev-list --count HEAD.."refs/remotes/$BASE_REMOTE/$BASE_BRANCH")"
+if [ "$behind" -gt 0 ]; then
+    echo ""
+    echo "Push blocked: '$current_branch' is $behind commit(s) behind $BASE_REMOTE/$BASE_BRANCH."
+    echo "Working from a stale base causes wrong-layout changes and merge pain."
+    echo ""
+    echo "Update your branch first:"
+    echo "  git pull --rebase $BASE_REMOTE $BASE_BRANCH"
+    echo ""
+    echo "Stacked on another branch? Record the parent instead of skipping the check:"
+    echo "  git config branch.$current_branch.stackParent <parent-branch>"
+    exit 1
+fi
+
+exit 0

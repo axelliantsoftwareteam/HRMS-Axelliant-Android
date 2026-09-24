@@ -1,0 +1,85 @@
+# Notify — MANAGED by eng-wiki-standards. A reusable workflow other workflows call.
+#
+# Posts ONLY two kinds of message to the team channel: a deploy happened, or a build/deploy failed on
+# a protected branch. A green PR check is not worth interrupting anyone for; a channel that posts
+# everything gets muted, and then the failure is missed.
+#
+# The webhook is an organisation secret (TEAMS_WEBHOOK_URL for a Teams Power Automate workflow, or
+# SLACK_WEBHOOK_URL). Missing secret -> a warning, never a failure: a notification must not fail a deploy.
+#
+# Usage from another workflow:
+#   notify:
+#     needs: [deploy]
+#     if: always() && (needs.deploy.result == 'success' || needs.deploy.result == 'failure')
+#     uses: ./.github/workflows/notify.yml
+#     with: { outcome: "${{ needs.deploy.result == 'success' && 'deployed' || 'failed' }}", environment: uat }
+#     secrets:
+#       TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}
+#       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+#       AXELLIANT_RUNNER_PROBE_TOKEN: ${{ secrets.AXELLIANT_RUNNER_PROBE_TOKEN }}
+name: Notify
+
+on:
+  workflow_call:
+    inputs:
+      outcome:
+        description: "deployed | failed"
+        required: true
+        type: string
+      environment:
+        description: "uat | production | (blank for CI failures)"
+        required: false
+        type: string
+        default: ""
+      detail:
+        description: "Optional one line of context"
+        required: false
+        type: string
+        default: ""
+    secrets:
+      TEAMS_WEBHOOK_URL:
+        required: false
+      SLACK_WEBHOOK_URL:
+        required: false
+      AXELLIANT_RUNNER_PROBE_TOKEN:
+        required: false
+
+permissions:
+  contents: read
+
+jobs:
+  # Self-hosted when an Axelliant runner is online and idle, GitHub-hosted otherwise
+  # (runner-select.yml says why this is a probe, not a fallback).
+  runner:
+    uses: ./.github/workflows/runner-select.yml
+    # Only the probe token, not `secrets: inherit`: the called workflow gets nothing it does not use.
+    secrets:
+      AXELLIANT_RUNNER_PROBE_TOKEN: ${{ secrets.AXELLIANT_RUNNER_PROBE_TOKEN }}
+
+  notify:
+    if: ${{ !cancelled() }}
+    needs: runner
+    runs-on: ${{ fromJSON(needs.runner.outputs.runs-on || '"ubuntu-latest"') }}
+    timeout-minutes: 5
+    steps:
+      - name: Post
+        env:
+          TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          OUTCOME: ${{ inputs.outcome }}
+          ENVIRONMENT: ${{ inputs.environment }}
+          DETAIL: ${{ inputs.detail }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          case "$OUTCOME" in
+            deployed) text="✅ ${GITHUB_REPOSITORY} deployed to ${ENVIRONMENT:-?} — ${GITHUB_REF_NAME}@${GITHUB_SHA::7} by ${GITHUB_ACTOR}" ;;
+            failed)   text="❌ ${GITHUB_REPOSITORY} ${ENVIRONMENT:+deploy to $ENVIRONMENT }failed on ${GITHUB_REF_NAME}@${GITHUB_SHA::7} (${GITHUB_WORKFLOW})" ;;
+            *) echo "Nothing to post for outcome '$OUTCOME'."; exit 0 ;;
+          esac
+          [ -n "$DETAIL" ] && text="$text — $DETAIL"
+          text="$text — $RUN_URL"
+          payload="$(python3 -c 'import json,sys; print(json.dumps({"text": sys.argv[1]}))' "$text")"
+          posted=0
+          if [ -n "$TEAMS_WEBHOOK_URL" ]; then curl -fsS -H 'Content-Type: application/json' -d "$payload" "$TEAMS_WEBHOOK_URL" >/dev/null && posted=1; fi
+          if [ -n "$SLACK_WEBHOOK_URL" ]; then curl -fsS -H 'Content-Type: application/json' -d "$payload" "$SLACK_WEBHOOK_URL" >/dev/null && posted=1; fi
+          [ "$posted" = 1 ] || echo "::warning::No TEAMS_WEBHOOK_URL / SLACK_WEBHOOK_URL secret; notification not sent."
