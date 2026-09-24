@@ -148,19 +148,22 @@ line_count_at_ref() {
 }
 
 has_only_whitespace_diff_against_base() {
-  local ref="$1"
-  local base_file="$2"
-  local file="$3"
+  local ref="$1" base_file="$2" file="$3" base_commit old new
 
-  [[ "$MODE" == "diff" ]] || return 1
   [[ -n "$ref" ]] || return 1
-
-  # Empty diff with -w means growth is formatting-only; both paths passed so rename detection pairs moved files.
-  if git diff -w --exit-code --find-renames "$ref"...HEAD -- "$base_file" "$file" >/dev/null 2>&1; then
-    return 0
+  if [[ "$MODE" == "diff" ]]; then
+    base_commit="$(git merge-base "$ref" HEAD 2>/dev/null)" || return 1
+    new="$(git show "HEAD:$file" 2>/dev/null)" || return 1
+  else
+    base_commit="$ref"
+    new="$(git show ":$file" 2>/dev/null)" || return 1
   fi
+  old="$(git show "$base_commit:$base_file" 2>/dev/null)" || return 1
 
-  return 1
+  # Growth is formatting-only when the content is identical once every space, tab and line break is
+  # removed. `git diff -w` ignores spaces within a line but not a line a formatter split in two, so a
+  # Prettier reflow of an already oversized file used to fail as real growth.
+  [[ "$(printf '%s' "$old" | tr -d ' \t\r\n')" == "$(printf '%s' "$new" | tr -d ' \t\r\n')" ]]
 }
 
 BASE_FOR_COMPARE=""

@@ -88,6 +88,14 @@ target="$(cd "$target" && pwd)"
 commit="$(git -C "$source_dir" rev-parse --verify -q HEAD 2>/dev/null || echo unknown)"
 ref="${ref:-$(git -C "$source_dir" describe --tags --always 2>/dev/null || echo local)}"
 
+# On Windows core.fileMode is false: chmod +x changes nothing git records, so the scripts were
+# committed as 100644 and every hook and gate failed with "Permission denied" on Linux CI. In that
+# case the executable bit is written to the index directly (which also stages those files).
+record_exec_bit=false
+if git -C "$target" rev-parse --is-inside-work-tree >/dev/null 2>&1    && [ "$(git -C "$target" config --bool --get core.fileMode 2>/dev/null || echo true)" = false ]; then
+    record_exec_bit=true
+fi
+
 keep_local=" $(sed -n 's/^STANDARDS_KEEP_LOCAL=//p' "$target/.axelliant/standards.env" 2>/dev/null | tr -d "\"'" || true) "
 lock_rows=() copied=0 seeded=0 kept=0 local_kept=0
 while read -r kind src dest; do
@@ -100,7 +108,14 @@ while read -r kind src dest; do
             local_kept=$((local_kept + 1))
         elif [ "$kind" = "managed" ]; then
             cp "$source_dir/$file" "$target/$out"
-            case "$out" in *.sh|*.py|.githooks/*) chmod +x "$target/$out" ;; esac
+            case "$out" in
+                *.sh|*.py|.githooks/*)
+                    chmod +x "$target/$out"
+                    # An ignored path is never committed, so there is no mode to record.
+                    if [ "$record_exec_bit" = true ] && ! git -C "$target" check-ignore -q -- "$out"; then
+                        git -C "$target" add --chmod=+x -- "$out"
+                    fi ;;
+            esac
             lock_rows+=("$(sha "$target/$out") $out")
             copied=$((copied + 1))
         elif [ "${keep_local#* "$out" }" != "$keep_local" ]; then

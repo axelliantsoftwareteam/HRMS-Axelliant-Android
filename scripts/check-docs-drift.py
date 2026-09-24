@@ -299,11 +299,17 @@ def title_scope(path: str) -> str | None:
     """Pages compete for a title only within one documentation tree.
 
     Each project folder in a wiki (`projects/<name>/`) is its own tree — every project rightly has a
-    page called "Architecture" — and the template folder is excluded. Everything else is one tree.
+    page called "Architecture" — and the template folder is excluded. A project with one folder per
+    code repository (`projects/<name>/<repo>/README.md`) has one tree per repository: its backend and
+    frontend each rightly have a "07 · Reference". Everything else is one tree.
     """
     parts = path.split('/')
     if parts[0] == 'projects' and len(parts) > 2:
-        return None if parts[1].startswith('_') else f'projects/{parts[1]}'
+        if parts[1].startswith('_'):
+            return None
+        if len(parts) > 3 and os.path.isfile(os.path.join('projects', parts[1], parts[2], 'README.md')):
+            return f'projects/{parts[1]}/{parts[2]}'
+        return f'projects/{parts[1]}'
     return 'repository'
 
 
