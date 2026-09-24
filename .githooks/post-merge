@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# Keep .axelliant/standards pointing at the latest Axelliant standards after every checkout and
+# pull, so the rules agents and people read are never older than the wiki. Never blocks git: it runs
+# in the background and scripts/link-standards.sh never fails.
+repo_root="$(git rev-parse --show-toplevel 2>/dev/null)" || exit 0
+[ -x "$repo_root/scripts/link-standards.sh" ] || exit 0
+( "$repo_root/scripts/link-standards.sh" --quiet >/dev/null 2>&1 & ) 
+exit 0

@@ -1,6 +1,8 @@
 # Gemini instructions
 
-All AI agent instructions for this repository are in **[AIAGENTS.md](AIAGENTS.md)**. Read it at
-the start of every session and follow its planning and verification requirements.
+**Start every session by running `scripts/link-standards.sh`, then read [AIAGENTS.md](AIAGENTS.md)
+and the Axelliant standards pages for the work in `.axelliant/standards/`** (the current wiki,
+[online](https://github.com/axelliantsoftwareteam/eng-wiki-standards/tree/main/standards)). The
+standards change in the wiki; always work to today's version.
 
 No AI attribution in code, comments, commit messages, branch names, PR titles or PR bodies.
