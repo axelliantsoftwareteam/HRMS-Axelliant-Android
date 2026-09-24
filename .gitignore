@@ -23,3 +23,15 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+# Signing material and service credentials: CI injects them from secrets, never from git.
+*.jks
+*.keystore
+google-services.json
+
+# Local Gradle home: per machine, never shared.
+.gradle-user/
+
+# Python caches written by the gate scripts
+__pycache__/
+*.py[cod]

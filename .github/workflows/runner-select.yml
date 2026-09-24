@@ -1,0 +1,98 @@
+# Runner select — managed by eng-wiki-standards. Do not edit here; change it in eng-wiki-standards.
+#
+# Decides where the calling workflow's jobs run: on an Axelliant self-hosted runner when one is
+# online and idle, otherwise on a GitHub-hosted runner.
+#
+# Why a probe rather than a fallback job: a job sent to a self-hosted runner that is offline does
+# not fail, it waits in the queue for up to 24 hours, so a "retry on GitHub if it failed" chain never
+# fires. Asking first costs one GitHub-hosted job of a few seconds and never hangs.
+#
+# Needs the organisation secret AXELLIANT_RUNNER_PROBE_TOKEN: a fine-grained token with the
+# organisation permission "Self-hosted runners: read" (the workflow's own token cannot list
+# runners). Without it, and for pull requests from forks (code nobody has reviewed never touches
+# our hardware), jobs run on GitHub-hosted runners.
+#
+# The labels a self-hosted runner must carry come from the repository or organisation variable
+# AXELLIANT_SELF_HOSTED_LABELS (a JSON array), default ["self-hosted","linux","x64","axelliant"].
+#
+# Use:
+#   jobs:
+#     runner:
+#       uses: ./.github/workflows/runner-select.yml
+#       secrets:
+#         AXELLIANT_RUNNER_PROBE_TOKEN: ${{ secrets.AXELLIANT_RUNNER_PROBE_TOKEN }}
+#     build:
+#       needs: runner
+#       runs-on: ${{ fromJSON(needs.runner.outputs.runs-on) }}
+name: Runner select
+
+on:
+  workflow_call:
+    outputs:
+      runs-on:
+        description: A JSON runs-on value; pass it through fromJSON().
+        value: ${{ jobs.select.outputs.runs-on }}
+    secrets:
+      AXELLIANT_RUNNER_PROBE_TOKEN:
+        required: false
+
+permissions: {}
+
+jobs:
+  select:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    outputs:
+      runs-on: ${{ steps.pick.outputs.runs-on }}
+    steps:
+      - id: pick
+        env:
+          TOKEN: ${{ secrets.AXELLIANT_RUNNER_PROBE_TOKEN }}
+          ORG: ${{ github.repository_owner }}
+          LABELS: ${{ vars.AXELLIANT_SELF_HOSTED_LABELS || '["self-hosted","linux","x64","axelliant"]' }}
+          HEAD_REPO: ${{ github.event.pull_request.head.repo.full_name }}
+          REPO: ${{ github.repository }}
+        run: |
+          python3 - <<'PY'
+          import json, os, urllib.request
+
+          wanted = json.loads(os.environ['LABELS'])
+          hosted = 'ubuntu-latest'
+
+          def decide():
+              head = os.environ.get('HEAD_REPO')
+              if head and head != os.environ['REPO']:
+                  return hosted, 'pull request from a fork: GitHub-hosted only'
+              token = os.environ.get('TOKEN')
+              if not token:
+                  return hosted, 'AXELLIANT_RUNNER_PROBE_TOKEN is not set, so self-hosted runners cannot be checked'
+              runners, page = [], 1
+              try:
+                  while True:
+                      request = urllib.request.Request(
+                          f"https://api.github.com/orgs/{os.environ['ORG']}/actions/runners?per_page=100&page={page}",
+                          headers={'Authorization': f'Bearer {token}', 'Accept': 'application/vnd.github+json'})
+                      with urllib.request.urlopen(request, timeout=20) as response:
+                          batch = json.load(response).get('runners', [])
+                      runners += batch
+                      if len(batch) < 100:
+                          break
+                      page += 1
+              except Exception as error:  # an unreachable API must never block the build
+                  return hosted, f'runner API unavailable ({type(error).__name__}); using GitHub-hosted'
+              matching = [r for r in runners if set(wanted) <= {label['name'] for label in r.get('labels', [])}]
+              online = [r for r in matching if r.get('status') == 'online']
+              idle = [r for r in online if not r.get('busy')]
+              if idle:
+                  return wanted, f'{len(idle)} of {len(matching)} self-hosted runner(s) online and idle'
+              if online:
+                  return hosted, f'all {len(online)} online self-hosted runner(s) are busy; using GitHub-hosted'
+              return hosted, f'no self-hosted runner online ({len(matching)} registered with these labels)'
+
+          choice, reason = decide()
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as out:
+              out.write(f'runs-on={json.dumps(choice)}\n')
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as summary:
+              summary.write(f'### Runner: `{json.dumps(choice)}`\n\n{reason}\n')
+          print(f'runs-on={json.dumps(choice)}: {reason}')
+          PY

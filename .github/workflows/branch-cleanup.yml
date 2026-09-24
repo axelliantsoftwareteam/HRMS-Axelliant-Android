@@ -1,0 +1,64 @@
+# Branch cleanup — MANAGED by eng-wiki-standards.
+#
+# Deletes a PR's head branch when it merges (a backstop for the "delete branch on merge" setting,
+# which is off in some repositories and does not apply to branches merged by other means), and once
+# a week deletes branches already merged into uat or main. A branch list full of dead branches hides
+# the live ones, and stale branches get resurrected by accident.
+# Never touches long-lived branches, or branches with an open pull request.
+name: Branch cleanup
+
+on:
+  pull_request:
+    types: [closed]
+  schedule:
+    - cron: "30 3 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: read
+
+jobs:
+  # Self-hosted when an Axelliant runner is online and idle, GitHub-hosted otherwise
+  # (runner-select.yml says why this is a probe, not a fallback).
+  runner:
+    uses: ./.github/workflows/runner-select.yml
+    # Only the probe token, not `secrets: inherit`: the called workflow gets nothing it does not use.
+    secrets:
+      AXELLIANT_RUNNER_PROBE_TOKEN: ${{ secrets.AXELLIANT_RUNNER_PROBE_TOKEN }}
+
+  cleanup:
+    if: ${{ !cancelled() }}
+    needs: runner
+    runs-on: ${{ fromJSON(needs.runner.outputs.runs-on || '"ubuntu-latest"') }}
+    timeout-minutes: 10
+    steps:
+      - uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const keep = new Set(['main', 'master', 'uat', 'develop', 'development', 'staging', 'production']);
+            const remove = async (branch, why) => {
+              if (keep.has(branch)) return;
+              const open = await github.rest.pulls.list({ owner, repo, state: 'open', head: `${owner}:${branch}` });
+              const base = await github.rest.pulls.list({ owner, repo, state: 'open', base: branch });
+              if (open.data.length || base.data.length) { core.info(`Keeping ${branch}: open PR uses it.`); return; }
+              try {
+                await github.rest.git.deleteRef({ owner, repo, ref: `heads/${branch}` });
+                core.info(`Deleted ${branch} (${why}).`);
+              } catch (e) { if (e.status !== 422 && e.status !== 404) throw e; }
+            };
+            if (context.eventName === 'pull_request') {
+              const pr = context.payload.pull_request;
+              if (pr.merged && pr.head.repo.full_name === `${owner}/${repo}`) await remove(pr.head.ref, `merged in #${pr.number}`);
+              return;
+            }
+            const branches = await github.paginate(github.rest.repos.listBranches, { owner, repo, per_page: 100 });
+            for (const target of ['uat', 'main', 'master']) {
+              if (!branches.some(b => b.name === target)) continue;
+              for (const b of branches) {
+                if (keep.has(b.name) || b.protected) continue;
+                const cmp = await github.rest.repos.compareCommitsWithBasehead({ owner, repo, basehead: `${target}...${b.name}` });
+                if (cmp.data.ahead_by === 0) await remove(b.name, `fully merged into ${target}`);
+              }
+            }

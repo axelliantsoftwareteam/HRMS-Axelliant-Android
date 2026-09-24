@@ -1,0 +1,124 @@
+#!/usr/bin/env bash
+# The commit message follows the convention CI enforces on pull request titles:
+#
+#   type(scope): summary
+#
+# Why here as well as in CI: a commit message cannot be corrected after it is pushed and shared,
+# only rewritten — which everyone else then has to deal with. Catching it at commit time is free.
+#
+# Also rejects AI attribution: an assistant named in a Co-Authored-By trailer, a "Generated with"
+# footer, or an AI product name. A pushed commit can only be rewritten, not corrected. The agent
+# instruction file names (CLAUDE.md, GEMINI.md, copilot-instructions.md, cursor.md) are allowed.
+# A Co-Authored-By naming a human colleague is fine and encouraged.
+#
+# Ticket reference: when the repository declares a tracker (TICKET_TRACKER in
+# .axelliant/standards.env — jira, linear, github, azure-boards), every commit names its ticket.
+#   1. Already in the message?                    fine.
+#   2. In the branch name (feature/AXE-123-x)?    added as a "Refs: AXE-123" trailer automatically.
+#   3. Otherwise, at a terminal, the hook ASKS.   Answer the ticket, or "none" if you are working
+#                                                 without a project task — that is recorded as
+#                                                 "Refs: none" and accepted.
+#   4. No terminal (IDE, agent, script)?          the message must already carry "Refs: <ID>" or
+#                                                 "Refs: none"; the hook says how.
+#
+# Merge, revert, fixup and squash messages are written by git and are left alone.
+set -euo pipefail
+
+root="$(git rev-parse --show-toplevel)"
+. "$root/scripts/lib/config.sh"
+. "$root/scripts/lib/ticket.sh"
+
+message_file="$1"
+subject="$(sed -n '1p' "$message_file")"
+
+case "$subject" in ""|"#"*) exit 0 ;; esac
+case "$subject" in "Merge "*|"Revert "*|"fixup!"*|"squash!"*|"amend!"*) exit 0 ;; esac
+
+body="$(grep -v '^#' "$message_file" | sed -E 's/(CLAUDE|GEMINI|AIAGENTS|AGENTS)(\.local)?\.md//g; s/copilot-instructions\.md//g; s/cursor\.md//g')"
+ai='claude|anthropic|openai|chatgpt|gpt-[0-9]|copilot|gemini|codex|devin|cursor ai'
+if printf '%s' "$body" | grep -Eqi "co-authored-by:.*($ai|noreply@anthropic|noreply@openai)|(^|[^a-z])generated (with|by) |🤖|(^|[^a-z-])($ai)([^a-z]|$)"; then
+    cat >&2 <<MSG
+
+Commit message names an AI tool or carries AI attribution, which Axelliant repositories do not allow.
+Remove the Co-Authored-By trailer, "Generated with" footer or product name. (Human co-authors are fine.)
+
+MSG
+    exit 1
+fi
+
+types="feat|fix|docs|test|refactor|perf|chore|ci|build|infra|style|revert"
+if [[ ! "$subject" =~ ^($types)(\([a-z0-9._/-]+\))?!?:\ .+$ ]]; then
+    cat >&2 <<MSG
+
+Commit message does not match the required format.
+
+  Required:  type(scope): summary
+  Received:  $subject
+
+  Valid types: ${types//|/, }
+  Scope is optional and lowercase. Use ! before the colon for a breaking change,
+  e.g. feat(api)!: drop v1 endpoints.   See .gitmessage for the full convention.
+
+MSG
+    exit 1
+fi
+
+if [ "${#subject}" -gt 100 ]; then
+    printf '\nCommit subject is %s characters; keep it under 72 (100 is the hard limit).\nPut the detail in the body, after a blank line.\n\n' "${#subject}" >&2
+    exit 1
+fi
+if [[ "$subject" =~ \.$ ]]; then
+    printf '\nCommit subject ends with a period; drop it.\n\n' >&2
+    exit 1
+fi
+
+# ---- ticket reference -------------------------------------------------------------------------
+[ -n "$TICKET_PATTERN" ] || exit 0
+message="$(grep -v '^#' "$message_file")"
+if ticket_in "$message" >/dev/null || printf '%s\n' "$message" | grep -Eiq "$NO_TICKET_PATTERN"; then
+    exit 0
+fi
+
+add_trailer() { git interpret-trailers --in-place --trailer "Refs: $1" "$message_file"; }
+
+# symbolic-ref names the branch even before its first commit (rev-parse cannot).
+branch="$(git symbolic-ref --short -q HEAD 2>/dev/null || true)"
+if from_branch="$(ticket_in "$branch")" && [ -n "$from_branch" ]; then
+    add_trailer "$from_branch"
+    exit 0
+fi
+
+if [ "${NO_TICKET:-}" = "1" ]; then
+    add_trailer none
+    exit 0
+fi
+
+if { : < /dev/tty; } 2>/dev/null; then
+    exec < /dev/tty
+    for _ in 1 2 3; do
+        printf '\nThis repository tracks work in %s%s.\n' "$TICKET_TRACKER" "${TICKET_PREFIX:+ ($TICKET_PREFIX)}" > /dev/tty
+        printf 'Ticket for this commit (e.g. %s), or "none" if you are working without a project task: ' "$TICKET_EXAMPLE" > /dev/tty
+        read -r answer || answer=""
+        answer="$(printf '%s' "$answer" | tr -d '[:space:]')"
+        case "$(printf '%s' "$answer" | tr '[:upper:]' '[:lower:]')" in
+            none|n/a|no|-) add_trailer none; exit 0 ;;
+        esac
+        if found="$(ticket_in " $answer ")" && [ -n "$found" ]; then
+            add_trailer "$found"
+            exit 0
+        fi
+        printf '"%s" does not look like a ticket in this project.\n' "$answer" > /dev/tty
+    done
+    echo "No ticket given; commit aborted." >&2
+    exit 1
+fi
+
+cat >&2 <<MSG
+
+This repository tracks work in ${TICKET_TRACKER}${TICKET_PREFIX:+ (${TICKET_PREFIX})}, and this commit names no ticket.
+Add a trailer to the message:     Refs: ${TICKET_EXAMPLE}
+or, when there is no project task: Refs: none
+(Or name the branch after the ticket, e.g. feature/${TICKET_EXAMPLE}-short-description.)
+
+MSG
+exit 1

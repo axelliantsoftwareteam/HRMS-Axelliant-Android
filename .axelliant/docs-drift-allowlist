@@ -1,0 +1,4 @@
+# Documents allowed to mention routes that are not served (historical designs, target architecture).
+# One "path | reason" per line. An entry without a reason fails the check.
+#
+# docs/04-projects/target-architecture.md | describes the v2 API being built; routes not shipped yet

@@ -1,0 +1,34 @@
+name: Feature request
+description: Propose a new capability or a change to existing behaviour.
+labels: ["type: feature"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: Who needs this, and what can they not do today?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behaviour
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      placeholder: |
+        - Given … when … then …
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+  - type: input
+    id: ticket
+    attributes:
+      label: Tracker ticket
+      description: Jira / Linear / Azure Boards reference, if one exists.

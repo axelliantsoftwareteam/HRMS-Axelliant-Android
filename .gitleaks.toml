@@ -1,0 +1,16 @@
+# gitleaks configuration. Extends the default rules; add allowlist entries only with a reason.
+title = "Axelliant gitleaks config"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Documented placeholders and local-only values"
+paths = [
+  '''(^|/)\.env\.example$''',
+  '''(^|/)docs/.*\.md$''',
+]
+regexes = [
+  '''local-only-password''',
+  '''<your-[a-z-]+>''',
+]

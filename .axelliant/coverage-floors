@@ -1,0 +1,7 @@
+# Coverage floors, per coverage target. Checked by scripts/check-coverage.py.
+# Floors only go up: lowering one fails CI. Record when and why each moved.
+#
+#   <target>  line=<percent> branch=<percent>   # <yyyy-mm-dd> <why>
+#
+# Example:
+# api  line=62 branch=48   # 2026-09-24 initial floor from first CI run
