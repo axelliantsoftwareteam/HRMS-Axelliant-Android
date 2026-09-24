@@ -1,4 +1,4 @@
-# <Project name> — local agent instructions
+# HRMS Android — local agent instructions
 
 The company-wide rules are in [AIAGENTS.md](AIAGENTS.md) — read that first. This file adds only what
 is specific to this repository. Where the two disagree about something generic, AIAGENTS.md wins.
@@ -7,29 +7,41 @@ is specific to this repository. Where the two disagree about something generic, 
 
 | | |
 |---|---|
-| Project documentation (architecture, features, runbooks) | https://github.com/axelliantsoftwareteam/eng-wiki-standards/tree/main/projects/<project> |
-| Ledger (update in the same commit as your work) | `docs/ledger.md` |
-| Task packs | `docs/tasks/` |
-| Ticket tracker | <Jira project AXE / Linear team ENG / GitHub Issues / none> — see `.axelliant/standards.env` |
+| Project documentation (product state, roadmap, API contract, release) | [eng-wiki-standards → projects/hrms](https://github.com/axelliantsoftwareteam/eng-wiki-standards/tree/main/projects/hrms), this repository under `android/` |
+| Ledger — update in the same commit as your work | [docs/ledger.md](docs/ledger.md) |
+| Ticket tracker | GitHub Issues in this repository (`TICKET_TRACKER=github`): commits carry `Refs: #<issue>` or `Refs: none` |
+| Backend (not in this repository) | HRIS, Frappe/ERPNext at `https://hris.axelliant.com/api/method/`; source in [Axelliant-HRIS-Custom](https://github.com/axelliantsoftwareteam/Axelliant-HRIS-Custom) |
 
 ## Stack
 
-| Layer | Technology and version |
+| Layer | Technology |
 |---|---|
-| API | <e.g. .NET 10 minimal API + EF Core 10> |
-| UI | <e.g. Angular 20 standalone> |
-| Database | <e.g. PostgreSQL 16> |
-| Hosting | <e.g. Azure Container Apps> |
+| App | Kotlin, Android Views with view and data binding, Navigation (safe args), `minSdk 24`, `compileSdk`/`targetSdk 36`, JDK 17 |
+| Presentation | Fragments (`screens/`) with ViewModels (`viewmodel/`), LiveData |
+| Data | Retrofit + Gson over OkHttp (`network/ApiHandler.kt`), repositories in `repos/`, Koin for DI (`di/`) |
+| Auth | MSAL (`res/raw/auth_config_ciam_auth.json`); the Microsoft token is exchanged by `hrms.api.mobile_v1.get_set_user_token` for an HRIS `token <api_key>:<api_secret>` |
+| Release | `android-release.yml`: signed AAB to Google Play on every push to `main` and on `android-v*` tags |
 
 ## Commands
 
 ```bash
-docker compose up -d                 # local dependencies
-<run the app>                        # e.g. dotnet run --project src/Acme.Api
-./scripts/check-before-push.sh       # everything CI runs
+bash ./gradlew assembleDebug                                 # debug APK
+bash ./gradlew lint testDebugUnitTest assembleDebug          # what CI runs (.axelliant/local-checks.sh)
+docker compose up -d mock-hris                               # mock HRIS on http://localhost:8000
+./scripts/check-before-push.sh                               # every gate CI runs
 ```
 
 ## Local rules
 
-<Only what genuinely differs here: service boundaries, owners to route contract changes to, locked
-decisions, known sharp edges. Link to the wiki folder rather than repeating it.>
+- **Stay on `hrms.api.mobile_v1.*`**; never go back to `hrms.hr.doctype.employee.*`. Preserve payload
+  shapes unless the backend change is coordinated with the iOS and web clients.
+- **Translate backend errors to user-safe text**; never show a raw Frappe message or exception.
+- **Every push to `main` publishes to Google Play.** Merge to `main` only what is ready to ship.
+- `BASE_URL` in `network/ApiHandler.kt` is hard-coded to production; pointing a debug build at the
+  mock or a local HRIS is a local edit that must not be committed.
+- Signing material (keystores, `google-services.json`, Play service-account JSON) comes from GitHub
+  secrets only. `.jks`, `.keystore` and `google-services.json` are ignored; never force-add one.
+- The five fragment `onViewCreated` methods over 150 lines are baselined in
+  `.axelliant/method-length-baseline-app.txt`. When you change one, split it into named steps.
+- Log through a logger that is silent in release builds; no `println` or unguarded `Log.d` on
+  request paths (`app/src/main/java`).
