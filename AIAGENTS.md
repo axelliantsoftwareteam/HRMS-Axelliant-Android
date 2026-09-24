@@ -1,10 +1,16 @@
 # Axelliant AI Agent Operating Procedures
 
 **This file is canonical.** Every Axelliant repository carries a copy, and every AI coding agent
-— Claude, Copilot, Gemini, Cursor, Codex, whatever comes next — reads it at the start of every
-session. The tool-specific files (`CLAUDE.md`, `GEMINI.md`, `cursor.md`,
-`.github/copilot-instructions.md`, `AGENTS.md`) are pointers to this one. One source of truth;
-five copies of the same rules drift within a month.
+— Claude, Copilot, Gemini, Cursor, Codex, Windsurf, Cline, Junie, Amazon Q, Aider, whatever comes
+next — reads it at the start of every session. The tool-specific files (`CLAUDE.md`, `AGENTS.md`,
+`GEMINI.md`, `cursor.md`, `.cursor/rules/axelliant.mdc`, `.github/copilot-instructions.md`,
+`.windsurfrules`, `.clinerules`, `.junie/guidelines.md`, `.amazonq/rules/axelliant.md`,
+`CONVENTIONS.md`) are pointers to this one.
+
+**The full Axelliant engineering standards are the wiki's
+[`standards/`](https://github.com/axelliantsoftwareteam/eng-wiki-standards/tree/main/standards)**,
+and you read the current version every session (below). This file summarises them; where the two
+differ, the wiki is newer and wins.
 
 It is also written for humans. Nothing here is advice for machines only.
 
@@ -44,9 +50,42 @@ It is also written for humans. Nothing here is advice for machines only.
 
 ---
 
+## Read the current standards first (MANDATORY)
+
+The standards change in the wiki, and you must work to the version that is current today, not the
+one you remember or the one this copy summarises.
+
+1. **At the start of every session, run `scripts/link-standards.sh`.** It refreshes a local copy of
+   the wiki to its latest `main` and links it at `.axelliant/standards/` (the git hooks keep it
+   current too). In eng-wiki-standards itself, read `standards/` directly.
+2. **Before you change code, read the standards pages for the work** from `.axelliant/standards/`,
+   starting at its `README.md`. The table below maps the work to the pages; read every row that
+   applies, every time. Pages you read last week may have changed.
+3. **If the script cannot reach the wiki,** read the same pages online at
+   `https://github.com/axelliantsoftwareteam/eng-wiki-standards/tree/main/standards`. If you can
+   reach neither, say so to the user and in the pull request before writing code against rules
+   you could not check.
+4. **Follow the standards over habit and over this summary.** When the code around you breaks one,
+   fix it as you go (see "Leave every repository better than you found it"), or record why not.
+
+| When the work involves | Read (under `.axelliant/standards/`) |
+|---|---|
+| Any code at all | `00-foundations/`, `03-code-quality/naming-conventions.md`, `03-code-quality/code-shape.md`, `03-code-quality/code-documentation.md`, `03-code-quality/error-handling.md`, `03-code-quality/testing.md` |
+| Your language or framework | `04-languages/` — the page for the stack (C#/.NET, Python, TypeScript/React/Angular/Next, Java, Go, Kotlin/Android, Swift/iOS, React Native, Flutter) |
+| Logging, metrics, tracing, audit | `06-observability/` — every log follows the OpenTelemetry record (`log-record.schema.json`), console output included |
+| A database, a query, a migration | `05-data/` — the page for the engine, and `migrations.md` |
+| An endpoint, gRPC, WebSockets/SignalR/SSE, messaging or events | `08-api-and-contracts/` |
+| Authentication, authorisation, secrets, dependencies | `07-security/` |
+| A frontend screen | `09-frontend/` |
+| Docker, compose, Terraform/Bicep, deployment | `10-containers-and-infra/` |
+| CI, the gates, a pull request, branching | `11-ci-cd/`, `01-ways-of-working/`, `02-repo-hygiene/` |
+| Working as an agent | `12-ai-agents/`, including the lessons learned |
+
+---
+
 ## Before you write anything
 
-1. **Read this file and the repo's `AIAGENTS.local.md`.** Then read the repo's ledger
+1. **Read this file, the current standards (above) and the repo's `AIAGENTS.local.md`.** Then read the repo's ledger
    (`docs/07-reference/master-ledger.md` or the path the local file names). The ledger is the
    record of what exists; starting without it means re-implementing something that shipped last
    week.
@@ -357,7 +396,8 @@ Anything beyond a single file, before implementing:
 
 ## Standards you are expected to know
 
-These live in the wiki and apply to every repository:
+These live in the wiki and apply to every repository. Read them from `.axelliant/standards/` (the
+current wiki, see "Read the current standards first"); the links below are the same pages online:
 
 | Topic | Page |
 |---|---|

@@ -76,6 +76,7 @@ get_changed_files() {
 BUDGET_OVERRIDES=()
 if [[ -f .axelliant/file-length-budgets ]]; then
   while read -r glob limit _; do
+    limit="${limit%$'\r'}"  # a CRLF checkout on Windows leaves "150\r", which is not a number
     [[ -z "${glob:-}" || "$glob" == \#* ]] && continue
     BUDGET_OVERRIDES+=("$glob $limit")
   done < .axelliant/file-length-budgets
