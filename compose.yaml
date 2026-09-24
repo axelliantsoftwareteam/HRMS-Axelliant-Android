@@ -1,0 +1,19 @@
+# Local backend for the Android app (DOCKER_MODE=compose-only: the app itself ships as an APK/AAB,
+# not an image). Runs a WireMock stand-in for the HRIS (Frappe) API on http://localhost:8000, so
+# screens can be developed without reaching https://hris.axelliant.com.
+#
+#   docker compose up -d mock-hris
+#
+# From the emulator the host is 10.0.2.2: point a debug build's BASE_URL
+# (app/src/main/java/com/axelliant/hris/network/ApiHandler.kt) at http://10.0.2.2:8000/api/method/.
+# See mock-hris/README.md for adding responses.
+name: hrms-android
+
+services:
+  mock-hris:
+    image: wiremock/wiremock:3.13.2-alpine
+    command: ["--port", "8080", "--disable-banner"]
+    volumes:
+      - ./mock-hris:/home/wiremock:ro
+    ports:
+      - "8000:8080"

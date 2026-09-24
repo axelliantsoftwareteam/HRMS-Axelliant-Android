@@ -1,0 +1,17 @@
+{
+  "priority": 10,
+  "request": {
+    "urlPathPattern": "/api/method/.*"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "jsonBody": {
+      "message": {},
+      "data": {},
+      "_server_messages": "[]"
+    }
+  }
+}
