@@ -31,3 +31,7 @@ google-services.json
 
 # Local Gradle home: per machine, never shared.
 .gradle-user/
+
+# Python caches written by the gate scripts
+__pycache__/
+*.py[cod]

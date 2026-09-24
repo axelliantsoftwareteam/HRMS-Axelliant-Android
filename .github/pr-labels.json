@@ -15,18 +15,12 @@
   ],
   "sizeIgnore": ["**/*.lock", "package-lock.json", "pnpm-lock.yaml", "database/schema.expected.sql", "**/*.snap", "contracts/openapi.yaml"],
   "areas": [
-    { "label": "area: api", "paths": ["src/**", "services/**", "apps/api/**"] },
-    { "label": "area: web", "paths": ["web/**", "apps/web/**", "frontend/**", "**/*.component.ts", "**/*.tsx"] },
-    { "label": "area: ios", "paths": ["ios/**", "**/*.swift"] },
-    { "label": "area: android", "paths": ["android/**", "**/*.kt"] },
-    { "label": "area: database", "paths": ["database/**", "**/migrations/**", "**/Migrations/**"] },
-    { "label": "area: contracts", "paths": ["contracts/**", "**/*.proto"] },
-    { "label": "area: tests", "paths": ["tests/**", "test/**", "**/__tests__/**"] },
-    { "label": "area: infra", "paths": ["infra/**", "**/*.tf", "**/*.bicep"] },
-    { "label": "area: docker", "paths": ["**/Dockerfile", "compose.yaml", "docker-compose.yml", ".dockerignore"] },
+    { "label": "area: android", "paths": ["app/src/main/**", "**/*.kt", "app/proguard-rules.pro"] },
+    { "label": "area: tests", "paths": ["app/src/test/**", "app/src/androidTest/**"] },
+    { "label": "area: docker", "paths": ["**/Dockerfile", "compose.yaml", "docker-compose.yml", ".dockerignore", "mock-hris/**"] },
     { "label": "area: ci", "paths": [".github/**", ".githooks/**", "scripts/**", ".axelliant/**"] },
     { "label": "area: docs", "paths": ["docs/**", "**/*.md"] },
-    { "label": "area: dependencies", "paths": ["package.json", "**/package.json", "**/*.csproj", "Directory.Packages.props", "pyproject.toml", "**/pyproject.toml", "**/build.gradle.kts", "gradle/libs.versions.toml", "Package.swift", "pubspec.yaml", "go.mod"] }
+    { "label": "area: dependencies", "paths": ["gradle/libs.versions.toml", "**/build.gradle.kts", "settings.gradle.kts", "gradle/wrapper/**"] }
   ],
   "definitions": {
     "type: feature": { "color": "0e8a16", "description": "Adds a capability" },

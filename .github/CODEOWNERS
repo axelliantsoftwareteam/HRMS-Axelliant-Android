@@ -10,11 +10,5 @@
 /scripts/        @axelliantsoftwareteam/eng-standards
 /.axelliant/     @axelliantsoftwareteam/eng-standards
 
-# Schema and migrations — the class of change hardest to undo.
-/database/       @axelliantsoftwareteam/<backend-team>
-
-# Infrastructure.
-/infra/          @axelliantsoftwareteam/<platform-team>
-
 # Authorisation surface — add the paths that hold permissions/auth code in this repository.
 # /src/Acme.Api/Authorization/   @axelliantsoftwareteam/<backend-team>
