@@ -35,3 +35,8 @@ resolve_python3() {
 }
 
 resolve_python3
+
+# The gates print and read UTF-8 (em dashes, arrows, non-ASCII file names). On Windows Python
+# defaults to the console code page (cp1252), so a gate died with UnicodeEncodeError on a laptop
+# while Linux CI stayed green. UTF-8 mode makes the laptop behave like CI.
+export PYTHONUTF8=1

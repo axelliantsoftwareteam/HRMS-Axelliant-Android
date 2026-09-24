@@ -30,6 +30,7 @@ package inside the image — that is the image scan's job (Trivy in the CI templ
 from __future__ import annotations
 
 import os
+import posixpath
 import re
 import shutil
 import subprocess
@@ -113,8 +114,10 @@ def lint(path: str, files: set[str]) -> tuple[list[str], list[str]]:
         fails.append(f'{path}: final stage runs as root; add a non-root USER (e.g. `USER app` or `USER 10001`)')
     if not has_healthcheck:
         warns.append(f'{path}: no HEALTHCHECK (acceptable when the orchestrator probes /health/live; say so in a comment)')
-    directory = os.path.dirname(path)
-    if os.path.join(directory, '.dockerignore').lstrip('/') not in files and '.dockerignore' not in files:
+    # git lists paths with '/' on every platform; os.path.join would give 'fe\.dockerignore' on
+    # Windows, never match, and fail every Dockerfile outside the repository root.
+    directory = posixpath.dirname(path)
+    if posixpath.join(directory, '.dockerignore').lstrip('/') not in files and '.dockerignore' not in files:
         fails.append(f'{path}: no .dockerignore beside it or at the repository root')
     return fails, warns
 
