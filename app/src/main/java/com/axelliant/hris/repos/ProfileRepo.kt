@@ -2,7 +2,7 @@ package com.axelliant.hris.repos
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import com.axelliant.hris.config.AppConst
+import com.axelliant.hris.core.auth.HrisTokenProvider
 import com.axelliant.hris.model.base.BaseApiModel
 import com.axelliant.hris.model.base.BaseModel
 import com.axelliant.hris.model.base.Meta
@@ -17,13 +17,17 @@ import com.google.gson.reflect.TypeToken
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
+import javax.inject.Inject
 import java.lang.reflect.Type
 
-class ProfileRepo(private val apiInterface: ApiInterface) {
+class ProfileRepo @Inject constructor(
+    private val apiInterface: ApiInterface,
+    private val hrisTokenProvider: HrisTokenProvider
+) {
 
     fun getProfile(): MutableLiveData<BaseApiModel<ProfileResponse>> {
         val responseLiveData = MutableLiveData<BaseApiModel<ProfileResponse>>()
-        val call = apiInterface.getProfileOfEmployee("token ${AppConst.TOKEN}")
+        val call = apiInterface.getProfileOfEmployee(hrisTokenProvider.authorizationHeader())
         call.enqueue(object : BaseCallBack<ResponseBody>(call) {
             override fun onFinalSuccess(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 val type: Type = object : TypeToken<BaseApiModel<ProfileResponse>>() {}.type
@@ -47,7 +51,7 @@ class ProfileRepo(private val apiInterface: ApiInterface) {
 
     fun getCertifications(): MutableLiveData<BaseApiModel<CertificationListResponse>> {
         val responseLiveData = MutableLiveData<BaseApiModel<CertificationListResponse>>()
-        val call = apiInterface.getEmployeeCertifications("token ${AppConst.TOKEN}")
+        val call = apiInterface.getEmployeeCertifications(hrisTokenProvider.authorizationHeader())
         call.enqueue(object : BaseCallBack<ResponseBody>(call) {
             override fun onFinalSuccess(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 val type: Type = object : TypeToken<BaseApiModel<CertificationListResponse>>() {}.type
@@ -71,7 +75,7 @@ class ProfileRepo(private val apiInterface: ApiInterface) {
 
     fun createCertification(request: CertificationCreateRequest): MutableLiveData<BaseApiModel<CertificationCreateResponse>> {
         val responseLiveData = MutableLiveData<BaseApiModel<CertificationCreateResponse>>()
-        val call = apiInterface.createEmployeeCertification("token ${AppConst.TOKEN}", request)
+        val call = apiInterface.createEmployeeCertification(hrisTokenProvider.authorizationHeader(), request)
         call.enqueue(object : BaseCallBack<ResponseBody>(call) {
             override fun onFinalSuccess(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 val type: Type = object : TypeToken<BaseApiModel<CertificationCreateResponse>>() {}.type

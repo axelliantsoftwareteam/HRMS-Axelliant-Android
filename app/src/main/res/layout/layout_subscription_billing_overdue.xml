@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:layout_width="@dimen/_28sdp"
+        android:layout_height="@dimen/_28sdp"
+        android:background="@drawable/bg_subscription_status_past_due"
+        android:padding="@dimen/_8sdp"
+        android:src="@drawable/ic_alert_circle"
+        app:tint="@color/ds_error" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            style="@style/Text.InternalApps.Caption"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/subscription_payment_overdue"
+            android:textColor="@color/ds_text_secondary"
+            android:textSize="@dimen/_8ssp" />
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            style="@style/Text.InternalApps.Body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Aug 15, 2026"
+            android:textColor="@color/ds_text_primary"
+            android:textSize="@dimen/_10ssp" />
+    </LinearLayout>
+</LinearLayout>

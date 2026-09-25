@@ -37,7 +37,7 @@ class TeamAttendanceDetailAdapter(
 
 
         holder.binding.lyWeekly.setOnClickListener {
-            val adapterPosition = holder.adapterPosition
+            val adapterPosition = holder.bindingAdapterPosition
             if (adapterPosition != RecyclerView.NO_POSITION) {
                 itemClick.onItemClick(detailArrayList[adapterPosition], adapterPosition)
             }

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/ds_space_12"
+    >
+
+    <com.axelliant.hris.ui.designsystem.components.AppCardView
+        android:id="@+id/historyCard"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_po_history_card"
+        app:cardBackgroundColor="@color/ds_surface"
+        app:cardCornerRadius="@dimen/ds_radius_md"
+        app:cardElevation="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:strokeColor="@color/purchase_order_fluent_stroke_subtle"
+        app:strokeWidth="@dimen/_1sdp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/ds_space_10">
+
+            <View
+                android:id="@+id/timelineLine"
+                android:layout_width="@dimen/_1sdp"
+                android:layout_height="0dp"
+                android:background="@color/ds_outline"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/iconContainer"
+                app:layout_constraintStart_toStartOf="@id/iconContainer"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <FrameLayout
+                android:id="@+id/iconContainer"
+                android:layout_width="@dimen/_38sdp"
+                android:layout_height="@dimen/_38sdp"
+                android:background="@drawable/bg_po_history_icon_blue"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/processIcon"
+                    android:layout_width="@dimen/_16sdp"
+                    android:layout_height="@dimen/_16sdp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_document"
+                    app:tint="@color/ds_primary" />
+            </FrameLayout>
+
+            <View
+                android:id="@+id/statusDot"
+                android:layout_width="@dimen/_8sdp"
+                android:layout_height="@dimen/_8sdp"
+                android:layout_marginTop="@dimen/ds_space_8"
+                android:background="@drawable/bg_po_history_node_dot"
+                app:layout_constraintEnd_toEndOf="@id/iconContainer"
+                app:layout_constraintStart_toStartOf="@id/iconContainer"
+                app:layout_constraintTop_toBottomOf="@id/iconContainer" />
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                android:id="@+id/processNameText"
+                style="@style/Text.InternalApps.Subheading"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/ds_space_10"
+                android:fontFamily="@font/poppins_semibold"
+                android:textColor="@color/ds_text_primary"
+                android:textSize="@dimen/_10ssp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/iconContainer"
+                app:layout_constraintTop_toTopOf="@id/iconContainer"
+                tools:text="SendToVendor" />
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                android:id="@+id/roleNameText"
+                style="@style/Text.InternalApps.Caption"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ds_space_4"
+                android:textColor="@color/ds_text_secondary"
+                android:textSize="@dimen/_8ssp"
+                app:layout_constraintEnd_toEndOf="@id/processNameText"
+                app:layout_constraintStart_toStartOf="@id/processNameText"
+                app:layout_constraintTop_toBottomOf="@id/processNameText"
+                tools:text="Account Review Team" />
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                android:id="@+id/commentText"
+                style="@style/Text.InternalApps.Body"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ds_space_12"
+                android:textColor="@color/ds_text_primary"
+                android:textSize="@dimen/_8ssp"
+                app:layout_constraintEnd_toEndOf="@id/processNameText"
+                app:layout_constraintStart_toStartOf="@id/processNameText"
+                app:layout_constraintTop_toBottomOf="@id/roleNameText"
+                tools:text="Comment: Request sent to vendor" />
+
+            <View
+                android:id="@+id/divider"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_1sdp"
+                android:layout_marginTop="@dimen/ds_space_10"
+                android:background="@color/purchase_order_fluent_stroke_subtle"
+                app:layout_constraintEnd_toEndOf="@id/processNameText"
+                app:layout_constraintStart_toStartOf="@id/processNameText"
+                app:layout_constraintTop_toBottomOf="@id/commentText" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/timeIcon"
+                android:layout_width="@dimen/_12sdp"
+                android:layout_height="@dimen/_12sdp"
+                android:layout_marginTop="@dimen/ds_space_10"
+                android:src="@drawable/ic_clock_outline"
+                app:layout_constraintStart_toStartOf="@id/processNameText"
+                app:layout_constraintTop_toBottomOf="@id/divider"
+                app:tint="@color/ds_text_muted" />
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                android:id="@+id/dateTimeText"
+                style="@style/Text.InternalApps.Caption"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/ds_space_8"
+                android:textColor="@color/ds_text_secondary"
+                android:textSize="@dimen/_8ssp"
+                app:layout_constraintBottom_toBottomOf="@id/timeIcon"
+                app:layout_constraintEnd_toEndOf="@id/processNameText"
+                app:layout_constraintStart_toEndOf="@id/timeIcon"
+                app:layout_constraintTop_toTopOf="@id/timeIcon"
+                tools:text="Aug 31, 2026 • 11:43:40 AM" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.axelliant.hris.ui.designsystem.components.AppCardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

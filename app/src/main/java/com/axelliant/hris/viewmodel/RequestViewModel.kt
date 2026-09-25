@@ -12,8 +12,13 @@ import com.axelliant.hris.model.leave.leaveCount.LeaveCountByDaysRequest
 import com.axelliant.hris.model.post.AttendanceRequest
 import com.axelliant.hris.model.post.LeaveRequest
 import com.axelliant.hris.repos.RequestRepo
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class RequestViewModel(private val leaveRepo: RequestRepo) : BaseViewModel() {
+@HiltViewModel
+class RequestViewModel @Inject constructor(
+    private val leaveRepo: RequestRepo
+) : BaseViewModel() {
 
     val deleteLeaveResponse: MutableLiveData<Event<PostResponse?>> by lazy { MutableLiveData<Event<PostResponse?>>() }
     val updateLeaveResponse: MutableLiveData<Event<PostResponse?>> by lazy { MutableLiveData<Event<PostResponse?>>() }

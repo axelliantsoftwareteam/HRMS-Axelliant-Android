@@ -34,9 +34,9 @@
                 app:layout_constraintBottom_toBottomOf="@+id/tv_employe_designation"
                 />
 
-            <com.google.android.material.textview.MaterialTextView
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
                 android:id="@+id/tv_employe_name"
-                style="@style/TEXT_SEMI_BLACK_15"
+                style="@style/Text.Fluent2.Subheading.Primary.Strong"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_5sdp"
@@ -48,9 +48,9 @@
                 app:layout_constraintStart_toEndOf="@id/profile_img"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <com.google.android.material.textview.MaterialTextView
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
                 android:id="@+id/tv_employe_designation"
-                style="@style/TEXT_MEDIUM_BLACK_10"
+                style="@style/Text.Fluent2.Caption.Primary.Strong"
                 android:layout_width="0dp"
                 app:layout_constraintEnd_toStartOf="@+id/drop_down"
                 android:layout_height="wrap_content"

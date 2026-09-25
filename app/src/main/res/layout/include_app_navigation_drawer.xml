@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <View
+        android:id="@+id/drawerScrim"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/drawer_scrim"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/appDrawer"
+        android:layout_width="@dimen/drawer_width"
+        android:layout_height="0dp"
+        android:background="@drawable/bg_app_drawer_panel"
+        android:clickable="true"
+        android:elevation="@dimen/_10sdp"
+        android:focusable="true"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/drawerScroll"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:clipToPadding="false"
+            android:overScrollMode="never"
+            android:paddingStart="@dimen/_18sdp"
+            android:paddingTop="@dimen/_24sdp"
+            android:paddingEnd="@dimen/_24sdp"
+            android:paddingBottom="@dimen/_24sdp"
+            android:scrollbars="none"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:id="@+id/drawerScrollContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/drawerProfileHeader"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/_6sdp"
+                    android:paddingBottom="@dimen/_14sdp">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/drawerProfileImage"
+                        android:layout_width="@dimen/_48sdp"
+                        android:layout_height="@dimen/_48sdp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_bt_account"
+                        app:civ_border_color="@color/ds_text_primary"
+                        app:civ_border_width="1dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
+                        android:id="@+id/drawerUserName"
+                        style="@style/Text.Fluent2.Title.Primary.Strong"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_8sdp"
+                        android:ellipsize="end"
+                        android:textAlignment="textStart"
+                        android:maxLines="1"
+                        android:textColor="@color/ds_text_primary"
+                        android:textSize="@dimen/_14ssp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/drawerProfileImage"
+                        app:layout_constraintTop_toTopOf="@id/drawerProfileImage"
+                        tools:text="Muhammad Arslan" />
+
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
+                        android:id="@+id/drawerUserRole"
+                        style="@style/Text.Fluent2.Body.Secondary"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_4sdp"
+                        android:textAlignment="textStart"
+                        android:textColor="@color/ds_text_secondary"
+                        android:textSize="@dimen/_11ssp"
+                        app:layout_constraintEnd_toEndOf="@id/drawerUserName"
+                        app:layout_constraintStart_toStartOf="@id/drawerUserName"
+                        app:layout_constraintTop_toBottomOf="@id/drawerUserName"
+                        tools:text="Mobile Solutions Engineer" />
+
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
+                        android:id="@+id/drawerUserEmpId"
+                        style="@style/Text.Fluent2.Body.Secondary"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        android:textAlignment="textStart"
+                        android:textColor="@color/ds_text_secondary"
+                        android:textSize="@dimen/_11ssp"
+                        app:layout_constraintEnd_toEndOf="@id/drawerUserName"
+                        app:layout_constraintStart_toStartOf="@id/drawerUserName"
+                        app:layout_constraintTop_toBottomOf="@id/drawerUserRole"
+                        tools:text="Emp ID: 33" />
+
+                    <TextView
+                        android:id="@+id/drawerViewProfile"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/_25sdp"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:drawablePadding="@dimen/_8sdp"
+                        android:textAlignment="textStart"
+                        android:text="@string/drawer_view_profile"
+                        android:textColor="@color/ds_text_secondary"
+                        android:textSize="@dimen/_11ssp"
+                        app:drawableEndCompat="@drawable/ic_chevron_right"
+                        app:drawableTint="@color/ds_text_secondary"
+                        app:layout_constraintEnd_toEndOf="@id/drawerUserName"
+                        app:layout_constraintStart_toStartOf="@id/drawerUserName"
+                        app:layout_constraintTop_toBottomOf="@id/drawerUserEmpId" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/ds_outline" />
+
+                <LinearLayout
+                    android:id="@+id/drawerHomeContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:orientation="vertical" />
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                    android:id="@+id/drawerHrisLabel"
+                    style="@style/Text.Fluent2.Body.Secondary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_8sdp"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:gravity="start"
+                    android:text="@string/drawer_hris_employee"
+                    android:textAllCaps="true"
+                    android:textColor="@color/ds_text_secondary"
+                    android:textSize="@dimen/_11ssp" />
+
+                <LinearLayout
+                    android:id="@+id/drawerHrisMenuContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_6sdp"
+                    android:orientation="vertical" />
+
+                <View
+                    android:id="@+id/drawerBusinessDivider"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:background="@color/ds_outline" />
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                    android:id="@+id/drawerBusinessLabel"
+                    style="@style/Text.Fluent2.Body.Secondary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_8sdp"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:gravity="start"
+                    android:text="@string/drawer_business"
+                    android:textAllCaps="true"
+                    android:textColor="@color/ds_text_secondary"
+                    android:textSize="@dimen/_11ssp" />
+
+                <LinearLayout
+                    android:id="@+id/drawerMenuContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_6sdp"
+                    android:orientation="vertical" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:background="@color/ds_outline" />
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                    android:id="@+id/drawerCommonLabel"
+                    style="@style/Text.Fluent2.Body.Secondary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_8sdp"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:gravity="start"
+                    android:text="@string/drawer_common"
+                    android:textAllCaps="true"
+                    android:textColor="@color/ds_text_secondary"
+                    android:textSize="@dimen/_11ssp" />
+
+                <LinearLayout
+                    android:id="@+id/drawerCommonMenuContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_6sdp"
+                    android:orientation="vertical" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:background="@color/ds_outline" />
+
+                <LinearLayout
+                    android:id="@+id/drawerFooterMenuContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_6sdp"
+                    android:orientation="vertical" />
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</merge>

@@ -13,9 +13,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.axelliant.hris.R
 import com.axelliant.hris.adapter.RemainingLeaveAdapter
 import com.axelliant.hris.adapter.UpcomingLeaveAdapter
-
 import com.axelliant.hris.base.BaseFragment
-import com.axelliant.hris.config.AppConst.SERVER_DATE_FORMAT
+import com.axelliant.hris.core.constants.AppDateFormats
 import com.axelliant.hris.config.GlobalConfig
 import com.axelliant.hris.databinding.FragmentLeavesBinding
 import com.axelliant.hris.enums.AttendanceFilter
@@ -30,40 +29,56 @@ import com.axelliant.hris.model.leave.UpcomingLeaves
 import com.axelliant.hris.navigation.AppNavigator
 import com.axelliant.hris.utils.Utils
 import com.axelliant.hris.viewmodel.LeaveViewModel
-import org.koin.android.ext.android.inject
+import androidx.fragment.app.viewModels
+import com.axelliant.hris.extention.hideShimmer
+import com.axelliant.hris.extention.showShimmer
+import com.axelliant.hris.ui.designsystem.adapters.FilterAdapter
+import com.axelliant.hris.ui.designsystem.adapters.FilterItem
+import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
 
+@AndroidEntryPoint
 class LeavesFragment : BaseFragment() {
     private var currentFilter = AttendanceFilter.WEEK
 
     private var _binding: FragmentLeavesBinding? = null
     private val binding get() = _binding
-    private val leaveViewModel: LeaveViewModel by inject()
+    private val leaveViewModel: LeaveViewModel by viewModels()
+
+    private lateinit var dateFilterAdapter: FilterAdapter
+
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         _binding = FragmentLeavesBinding.inflate(inflater).also { _binding = it }
+        binding?.shimmerLayout?.showShimmer(binding?.nsvContent!!)
         return binding?.root
     }
 
 
+    private var isDataLoaded = false
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // 1. Show dialog spinner ONLY for subsequent fetches (like changing filter tabs)
         leaveViewModel.getIsLoading()
             .observe(viewLifecycleOwner, EventObserver { isLoading ->
-                if (isLoading) {
-                    showDialog()
-                } else {
-                    hideDialog()
+                if (isDataLoaded) {
+                    if (isLoading) showDialog() else hideDialog()
                 }
             })
+
+        // 2. Start initial shimmer only before data has loaded once
+        if (!isDataLoaded) {
+            toggleShimmer(true)
+        }
 
         val isManager = GlobalConfig.isCurrentManager()
         binding?.tvMyTeam?.isVisible = isManager
@@ -71,25 +86,25 @@ class LeavesFragment : BaseFragment() {
         binding?.lyMyteamAttend?.isVisible = isManager
 
         leaveViewModel.getLeaveStats(getCurrentObject())
-        eventSelection()
+        setupDateFilterBar()
 
         leaveViewModel.leaveStatResponse.observe(
             viewLifecycleOwner,
             EventObserver { response ->
+                // 3. Turn off shimmer and show content layout on first response
+                toggleShimmer(false)
+                isDataLoaded = true
 
                 if (response?.meta?.status == true) {
-
                     selfAttendanceStats(response.self_count!!)
 
-                    if(currentFilter == AttendanceFilter.WEEK)
+                    if (currentFilter == AttendanceFilter.WEEK)
                         teamAttendanceStats(response.team_count!!)
 
                     remainingLeaveDataPopulate(response.remaining_balance!!)
-
                 } else {
                     requireContext().showErrorMsg(response?.meta?.message.toString())
                 }
-
             })
 
         binding?.tvView?.setOnClickListener {
@@ -98,17 +113,14 @@ class LeavesFragment : BaseFragment() {
 
         binding?.tvMyTeamView?.setOnClickListener {
             AppNavigator.navigateToTeamLeaveDetail()
-
         }
 
-        binding?.ivBack?.setOnClickListener {
+        binding?.appTopBar?.setOnBackClickListener {
             AppNavigator.moveBackToPreviousFragment()
-
         }
-
 
         leaveViewModel.getUpcomingLeaveDetail(UpcomingLeaveInput().apply {
-            val formatter = SimpleDateFormat(SERVER_DATE_FORMAT, Locale.getDefault())
+            val formatter = SimpleDateFormat(AppDateFormats.SERVER_DATE, Locale.getDefault())
             val tomorrow = Calendar.getInstance().apply {
                 add(Calendar.DAY_OF_YEAR, 1)
             }
@@ -123,17 +135,17 @@ class LeavesFragment : BaseFragment() {
             this.start_date = formattedTomorrow
             this.end_date = formattedLastDayOfYear
         })
+
         leaveViewModel.upcomingLeavesResponse.observe(
             viewLifecycleOwner,
             EventObserver { response ->
                 if (response?.meta?.status == true) {
-                    if (response.upcoming_leaves?.size?: 0 > 0){
-                        binding?.tvMyShift?.isVisible=true
+                    if (response.upcoming_leaves?.size ?: 0 > 0) {
+                        binding?.tvMyShift?.isVisible = true
                         upcomingLeavePopulate(response.upcoming_leaves)
-                    }
-                    else{
-                        binding?.tvMyShift?.isVisible=false
-                        binding?.rvUpcomingLeaves?.isVisible=false
+                    } else {
+                        binding?.tvMyShift?.isVisible = false
+                        binding?.rvUpcomingLeaves?.isVisible = false
                     }
                 } else {
                     requireContext().showErrorMsg(response?.meta?.message.toString())
@@ -141,51 +153,32 @@ class LeavesFragment : BaseFragment() {
             })
     }
 
-    private fun eventSelection() {
-        binding?.tvWeek?.background =
-            ContextCompat.getDrawable(requireContext(), R.drawable.rounded_disabled)
-
-        binding?.tvMonth?.background =
-            ContextCompat.getDrawable(requireContext(), R.drawable.rounded_disabled)
-
-        binding?.tvWeek?.setTextColor(requireContext().getColor(R.color.btn_text_color))
-        binding?.tvMonth?.setTextColor(requireContext().getColor(R.color.btn_text_color))
-
-        binding?.tvWeek?.setOnClickListener {
-            currentFilter = AttendanceFilter.WEEK
-            leaveViewModel.getLeaveStats(getCurrentObject())
-            eventSelection()
+    private fun toggleShimmer(show: Boolean) {
+        binding?.shimmerLayout?.apply {
+            if (show) startShimmer() else stopShimmer()
+            isVisible = show
         }
-
-        binding?.tvMonth?.setOnClickListener {
-            currentFilter = AttendanceFilter.MONTH
+        binding?.nsvContent?.isVisible = !show
+    }
+    private fun setupDateFilterBar() {
+        val items = listOf(
+            FilterItem(getString(R.string.last_seven), 0),
+            FilterItem(getString(R.string.this_month), 1)
+        )
+        dateFilterAdapter = FilterAdapter(items, selectedPosition = 0) { position, _ ->
+            currentFilter = if (position == 0) AttendanceFilter.WEEK else AttendanceFilter.MONTH
+            dateFilterAdapter.setSelected(position)
             leaveViewModel.getLeaveStats(getCurrentObject())
-            eventSelection()
         }
-
-        when (currentFilter) {
-            AttendanceFilter.WEEK -> {
-                binding?.tvWeek?.background =
-                    ContextCompat.getDrawable(requireContext(), R.drawable.rounded_enabled)
-                binding?.tvWeek?.setTextColor(requireContext().getColor(R.color.white))
-
-            }
-
-            AttendanceFilter.MONTH -> {
-
-                binding?.tvMonth?.background =
-                    ContextCompat.getDrawable(requireContext(), R.drawable.rounded_enabled)
-                binding?.tvMonth?.setTextColor(requireContext().getColor(R.color.white))
-            }
-
-
-            else -> {}
+        binding?.rvDateFilters?.apply {
+            layoutManager = GridLayoutManager(requireContext(), items.size)
+            adapter = dateFilterAdapter
         }
     }
 
 
     private fun remainingLeaveDataPopulate(leaves: ArrayList<LeaveType>) {
-        binding?.rvRemaining?.layoutManager = GridLayoutManager(requireContext(), 3)
+        binding?.rvRemaining?.layoutManager = GridLayoutManager(requireContext(), 2)
         val modulesAdapter = RemainingLeaveAdapter(
             leaves
         )
@@ -197,7 +190,7 @@ class LeavesFragment : BaseFragment() {
 
 
     private fun upcomingLeavePopulate(upcomingLeaves: ArrayList<UpcomingLeaves>?) {
-        Log.d("upcomingLeaves", ""+upcomingLeaves)
+        Log.d("upcomingLeaves", "" + upcomingLeaves)
         if (upcomingLeaves != null) {
             binding?.rvUpcomingLeaves?.layoutManager =
                 LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
@@ -210,28 +203,47 @@ class LeavesFragment : BaseFragment() {
     }
 
     private fun selfAttendanceStats(selfStats: SelfLeaveStats) {
+        binding?.tvSelfTotalValue?.text = selfStats.total_leave.toString()
+        binding?.tvSelfPendingValue?.text = selfStats.self_pending.toString()
+        binding?.tvSelfApprovedValue?.text = selfStats.self_approved.toString()
+        binding?.tvSelfRejectedValue?.text = selfStats.self_reject.toString()
+        binding?.tvSelfRemainingValue?.text = selfStats.remaining_leave.toString()
+    }
+    private fun teamAttendanceStats(teamLeaveStats: TeamLeaveStats) {
+        binding?.tvTeamTotalValue?.text = teamLeaveStats.total_team_members.toString()
+        binding?.tvTeamPresentValue?.text = teamLeaveStats.all_leaves.toString()
+        binding?.tvTeamApprovedValue?.text = teamLeaveStats.team_approved.toString()
+        binding?.tvTeamRejectedValue?.text = teamLeaveStats.team_reject.toString()
+        binding?.tvTeamPendingValue?.text = teamLeaveStats.team_pending.toString()
 
-        binding?.tvTotalLeaveTxt?.text = selfStats.total_leave.toString() //total leaves
-
-        binding?.tvPendingTxt?.text = selfStats.self_pending.toString()
-        binding?.tvApprovedTxt?.text = selfStats.self_approved.toString()
-        binding?.tvRejectedTxt?.text = selfStats.self_reject.toString()
-        binding?.tvUsedLeavesTxt?.text = selfStats.remaining_leave.toString()  // reamining leave
-
-        /*        binding?.tvCasualTxt?.text = selfAttendanceStats.week_count.toString()
-                binding?.tvSickTxt?.text = selfAttendanceStats.week_count.toString()
-                binding?.tvAnnualTxt?.text = selfAttendanceStats.week_count.toString()*/
-
+        updateTeamPresentProgress(teamLeaveStats)
     }
 
-    private fun teamAttendanceStats(teamLeaveStats: TeamLeaveStats) {
+    private fun updateTeamPresentProgress(teamLeaveStats: TeamLeaveStats) {
+        val total = (teamLeaveStats.total_team_members as? Number)?.toInt() ?: 0
+        val present = (teamLeaveStats.all_leaves as? Number)?.toInt() ?: 0
+        val percent = if (total > 0) present.toFloat() / total.toFloat() else 0f
 
-        binding?.tvTotalMemberTxt?.text = teamLeaveStats.total_team_members.toString()
-        binding?.tvPresentTxt?.text = teamLeaveStats.all_leaves.toString()
-        binding?.tvWorkHomeTxt?.text = teamLeaveStats.team_approved.toString()
-        binding?.tvTeamsAbsentTxt?.text = teamLeaveStats.team_reject.toString()
-        binding?.tvTeamsOnleaveTxt?.text = teamLeaveStats.team_pending.toString()
+        val progressView = binding?.progressTeamPresent ?: return
+        (progressView.parent as? View)?.let { track ->
+            track.viewTreeObserver.addOnGlobalLayoutListener(object :
+                android.view.ViewTreeObserver.OnGlobalLayoutListener {
+                override fun onGlobalLayout() {
+                    track.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                    val params = progressView.layoutParams
+                    params.width = (track.width * percent).toInt()
+                    progressView.layoutParams = params
+                }
+            })
+        }
 
+        binding?.tvTeamPresentSummary?.text = "$present of $total present"
+    }
+
+    override fun onDestroyView() {
+        binding?.shimmerLayout?.stopShimmer()
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun getCurrentObject(): AttendanceInput {
@@ -250,8 +262,7 @@ class LeavesFragment : BaseFragment() {
                 localEnd =
                     Utils.getServerFormat(date = Utils.getLastDayOfMonth())
             }
-
-            else -> {}
+            AttendanceFilter.Custom -> {}
 
         }
         return AttendanceInput().apply {

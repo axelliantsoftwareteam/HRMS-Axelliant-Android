@@ -3,18 +3,18 @@ package com.axelliant.hris.utils
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
-import com.axelliant.hris.config.AppConst
-import com.axelliant.hris.config.AppConst.SERVER_DATE_FORMAT
+import com.axelliant.hris.core.constants.AppDateFormats
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import java.util.TimeZone
 
 object Utils {
 
     fun getServerFormat(
-        dateFormat: String = SERVER_DATE_FORMAT,
+        dateFormat: String = AppDateFormats.SERVER_DATE,
         date: Date = getCurrentDate()
     ): String {
         val format = SimpleDateFormat(dateFormat, Locale.getDefault())
@@ -26,7 +26,7 @@ object Utils {
     }
 
     fun getCurrentTime(): String {
-        val sdf = SimpleDateFormat(AppConst.ATTENDANCE_DATE_FORMAT)
+        val sdf = SimpleDateFormat(AppDateFormats.ATTENDANCE_DATE_TIME, Locale.US)
         return sdf.format(Date())
 
         /*
@@ -36,7 +36,7 @@ object Utils {
 
     fun formatTitleDate(input: String): String {
         try {
-            val inputFormatter = SimpleDateFormat(AppConst.RESOURCE_DATE_FORMAT, Locale.ENGLISH)
+            val inputFormatter = SimpleDateFormat(AppDateFormats.RESOURCE_DATE_TIME, Locale.ENGLISH)
             val date = inputFormatter.parse(input)
 
             val outputFormatter = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
@@ -94,5 +94,27 @@ object Utils {
             this.animate().setDuration(200).rotation(0f)
             false
         }
+    }
+
+    /**
+     * MaterialDatePicker returns selection millis at UTC midnight for the
+     * calendar day the user tapped. Converting that directly to a Date and
+     * formatting in local timezone can roll the day back (e.g. Jul 1 -> Jun 30
+     * for timezones ahead of UTC). This pulls out the year/month/day fields
+     * the picker visually showed and reconstructs them at local midnight.
+     */
+    fun utcToLocalDate(utcMillis: Long): Date {
+        val utcCalendar = Calendar.getInstance(TimeZone.getTimeZone("UTC")).apply {
+            timeInMillis = utcMillis
+        }
+        return Calendar.getInstance().apply {
+            set(
+                utcCalendar.get(Calendar.YEAR),
+                utcCalendar.get(Calendar.MONTH),
+                utcCalendar.get(Calendar.DAY_OF_MONTH),
+                0, 0, 0
+            )
+            set(Calendar.MILLISECOND, 0)
+        }.time
     }
 }

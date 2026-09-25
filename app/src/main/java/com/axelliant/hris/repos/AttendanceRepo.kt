@@ -2,7 +2,7 @@ package com.axelliant.hris.repos
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import com.axelliant.hris.config.AppConst
+import com.axelliant.hris.core.auth.HrisTokenProvider
 import com.axelliant.hris.enums.AttendanceFilter.*
 import com.axelliant.hris.model.approval.ApprovalActionRequest
 import com.axelliant.hris.model.approval.ApprovalActionItem
@@ -28,18 +28,22 @@ import com.google.gson.reflect.TypeToken
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
+import javax.inject.Inject
 import java.lang.reflect.Type
 
-class AttendanceRepo(private var apiInterface: ApiInterface) {
+class AttendanceRepo @Inject constructor(
+    private val apiInterface: ApiInterface,
+    private val hrisTokenProvider: HrisTokenProvider
+) {
 
     fun getAttendanceStats(attendanceInput: AttendanceInput): MutableLiveData<BaseApiModel<AttendanceStatsResponse>> {
         val serverResponse = MutableLiveData<BaseApiModel<AttendanceStatsResponse>>()
 
         var call: Call<ResponseBody>? = null
         when (attendanceInput.filter) {
-            WEEK -> call = apiInterface.callAttendanceWeekStats("token ${AppConst.TOKEN}")
+            WEEK -> call = apiInterface.callAttendanceWeekStats(hrisTokenProvider.authorizationHeader())
             MONTH -> call = apiInterface.callAttendanceMonthStats(
-                "token ${AppConst.TOKEN}",
+                hrisTokenProvider.authorizationHeader(),
                 AttRequest().apply {
                     this.start_date = attendanceInput.startDate
                     this.end_date = attendanceInput.endDate
@@ -100,7 +104,7 @@ class AttendanceRepo(private var apiInterface: ApiInterface) {
     ): MutableLiveData<BaseApiModel<AttendanceResponse>> {
         val serverResponse = MutableLiveData<BaseApiModel<AttendanceResponse>>()
 
-        val call = apiInterface.callAttendanceDetail("token ${AppConst.TOKEN}",
+        val call = apiInterface.callAttendanceDetail(hrisTokenProvider.authorizationHeader(),
             AttRequest().apply {
                 this.start_date = inputObject.startDate
                 this.end_date = inputObject.endDate
@@ -166,7 +170,7 @@ class AttendanceRepo(private var apiInterface: ApiInterface) {
                employee_list = inputObject.employeeId
            )*/
 
-        val call = apiInterface.callTeamAttendanceDetail("token ${AppConst.TOKEN}",
+        val call = apiInterface.callTeamAttendanceDetail(hrisTokenProvider.authorizationHeader(),
             AttRequest().apply {
                 this.start_date = inputObject.startDate
                 this.end_date = inputObject.endDate
@@ -225,7 +229,7 @@ class AttendanceRepo(private var apiInterface: ApiInterface) {
         val serverResponse = MutableLiveData<BaseApiModel<AttendanceApproval>>()
 
         val call = apiInterface.callAttendanceApproval(
-            "token ${AppConst.TOKEN}",AttRequest().apply {
+            hrisTokenProvider.authorizationHeader(),AttRequest().apply {
                 this.start_date = inputObject.startDate
                 this.end_date = inputObject.endDate
                 this.employee_list = inputObject.employeeId
@@ -284,7 +288,7 @@ class AttendanceRepo(private var apiInterface: ApiInterface) {
         val serverResponse = MutableLiveData<BaseApiModel<PostResponse>>()
 
         val call = apiInterface.takeApprovalAction(
-            "token ${AppConst.TOKEN}",
+            hrisTokenProvider.authorizationHeader(),
             ApprovalActionRequest(
                 approval_type = "checkin",
                 reference_name = inputObject.checkin_id,
@@ -342,7 +346,7 @@ class AttendanceRepo(private var apiInterface: ApiInterface) {
         val serverResponse = MutableLiveData<BaseApiModel<PostResponse>>()
 
         val call = apiInterface.bulkTakeApprovalAction(
-            "token ${AppConst.TOKEN}",
+            hrisTokenProvider.authorizationHeader(),
             BulkApprovalActionRequest(
                 actions = checkinIds.filter { it.isNotBlank() }.map {
                     ApprovalActionItem(
@@ -392,7 +396,7 @@ class AttendanceRepo(private var apiInterface: ApiInterface) {
         val serverResponse = MutableLiveData<BaseApiModel<CheckInListResponse>>()
 
         val call = apiInterface.callCheckInList(
-            "token ${AppConst.TOKEN}",LeaveCountRequest().apply {
+            hrisTokenProvider.authorizationHeader(),LeaveCountRequest().apply {
                 this.start_date = inputObject.startDate
                 this.end_date = inputObject.endDate
                 this.employee_list = inputObject.employeeId

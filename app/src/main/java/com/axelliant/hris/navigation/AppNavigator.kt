@@ -25,36 +25,27 @@ class AppNavigator {
             getController().popBackStack()
         }
 
-        fun navigateToSplash(args: Bundle = Bundle()) {
-            Log.i(TAG, "navigateToLogin: $args")
-            val navAction = NavAction(R.id.splashFragment)
-            val navOptions = NavOptions.Builder()
-                .setPopUpTo(getCurrentDestinationId()!!, true).build()
-            navAction.navOptions = navOptions
-
-            val destination: NavDestination? = getCurrentDestinationId()?.let {
-                getController().graph.findNode(it)
-            }
-            if (destination != null) {
-                destination.putAction(R.id.splash_fragment_action, navAction)
-                getController().navigate(R.id.splash_fragment_action, args)
-            }
-        }
+//        fun navigateToSplash(args: Bundle = Bundle()) {
+//            Log.i(TAG, "navigateToLogin: $args")
+//            val navAction = NavAction(R.id.splashFragment)
+//            val navOptions = NavOptions.Builder()
+//                .setPopUpTo(getCurrentDestinationId()!!, true).build()
+//            navAction.navOptions = navOptions
+//
+//            val destination: NavDestination? = getCurrentDestinationId()?.let {
+//                getController().graph.findNode(it)
+//            }
+//            if (destination != null) {
+//                destination.putAction(R.id.splash_fragment_action, navAction)
+//                getController().navigate(R.id.splash_fragment_action, args)
+//            }
+//        }
 
         fun navigateToLogin(args: Bundle = Bundle()) {
             Log.i(TAG, "navigateToLogin: $args")
-            val navAction = NavAction(R.id.loginFragment)
             val navOptions = NavOptions.Builder()
                 .setPopUpTo(getCurrentDestinationId()!!, true).build()
-            navAction.navOptions = navOptions
-
-            val destination: NavDestination? = getCurrentDestinationId()?.let {
-                getController().graph.findNode(it)
-            }
-            if (destination != null) {
-                destination.putAction(R.id.login_fragment_action, navAction)
-                getController().navigate(R.id.login_fragment_action, args)
-            }
+            getController().navigate(R.id.commonLoginFragment, args, navOptions)
         }
 
 
@@ -376,6 +367,25 @@ class AppNavigator {
                 getController().navigate(R.id.add_resource_manage_fragment_action, args)
             }
 
+        }
+        fun navigateToPaySlips(args: Bundle = Bundle()) {
+            Log.i(TAG, "navigateToPaySlips: $args")
+
+            val navAction = NavAction(R.id.PayslipFragment)
+            val navOptions = NavOptions.Builder()
+                .setPopUpTo(getCurrentDestinationId()!!, false)
+                .build()
+
+            navAction.navOptions = navOptions
+
+            val destination = getCurrentDestinationId()?.let {
+                getController().graph.findNode(it)
+            }
+
+            if (destination != null) {
+                destination.putAction(R.id.payslip_fragment_action, navAction)
+                getController().navigate(R.id.payslip_fragment_action, args)
+            }
         }
 
     }

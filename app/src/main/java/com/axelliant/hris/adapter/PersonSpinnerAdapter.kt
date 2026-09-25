@@ -6,9 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.TextView
 import com.axelliant.hris.R
 import com.axelliant.hris.model.dashboard.EmployProfile
+import com.axelliant.hris.ui.designsystem.components.AppTextView
 
 class PersonSpinnerAdapter(context: Context, private val employsList: ArrayList<EmployProfile>)
     : ArrayAdapter<EmployProfile>(context, 0, employsList) {
@@ -26,7 +26,7 @@ class PersonSpinnerAdapter(context: Context, private val employsList: ArrayList<
 
         val item = getItem(position)
 //        val imageView = view.findViewById<ImageView>(R.id.imageView)
-        val textView = view.findViewById<TextView>(R.id.tv_spinner_text)
+        val textView = view.findViewById<AppTextView>(R.id.tv_spinner_text)
 
         item?.let {
 //            imageView.setImageResource(it.imageResource)

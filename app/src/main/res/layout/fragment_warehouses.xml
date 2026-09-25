@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Layout.Fluent2.Screen"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/startGuideline"
+        style="@style/Guideline.Fluent2.Start"
+        android:orientation="vertical" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/endGuideline"
+        style="@style/Guideline.Fluent2.End"
+        android:orientation="vertical" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/topGuideline"
+        style="@style/Guideline.Fluent2.Top"
+        android:orientation="horizontal" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/bottomGuideline"
+        style="@style/Guideline.Fluent2.Bottom"
+        android:orientation="horizontal" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppTopBarView
+        android:id="@+id/appTopBar"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_40sdp"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/topGuideline"
+        app:actionIcon="@drawable/ia_ic_add"
+        app:showActionButton="true"
+        app:searchIcon="@drawable/ia_ic_search"
+        app:showSearchButton="true"
+        app:titleText="@string/warehouses_title" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout
+        android:id="@+id/searchInputLayout"
+        style="@style/Widget.InternalApps.InputLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ds_space_8"
+        android:visibility="gone"
+        app:boxBackgroundMode="none"
+        app:endIconMode="clear_text"
+        app:hintEnabled="false"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/appTopBar"
+        app:startIconDrawable="@drawable/ia_ic_search">
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextFieldView
+            android:id="@+id/searchEditText"
+            style="@style/Text.InternalApps.Body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_quote_search"
+            android:hint="@string/warehouses_search_hint"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+            android:minHeight="@dimen/ds_input_height"
+            android:paddingStart="@dimen/ds_space_8"
+            android:paddingEnd="@dimen/ds_space_12"
+            android:textColorHint="@color/ds_text_muted" />
+    </com.axelliant.hris.ui.designsystem.components.AppTextFieldLayout>
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/headerBottomBarrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="appTopBar,searchInputLayout" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        android:id="@+id/totalEntriesText"
+        style="@style/Text.InternalApps.Caption"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ds_space_8"
+        android:textColor="@color/ds_text_secondary"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/headerBottomBarrier"
+        tools:text="2 warehouses" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/warehousesRecyclerView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/ds_space_8"
+        android:clipToPadding="false"
+        android:overScrollMode="never"
+        android:paddingBottom="@dimen/bottom_nav_content_padding"
+        app:layout_constraintBottom_toTopOf="@id/paginationShimmerContainer"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/totalEntriesText"
+        tools:listitem="@layout/item_warehouse" />
+
+    <LinearLayout
+        android:id="@+id/paginationShimmerContainer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/bottomGuideline"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:layout_constraintStart_toStartOf="@id/startGuideline" />
+
+    <LinearLayout
+        android:id="@+id/shimmerContainer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/ds_space_8"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/bottomGuideline"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/totalEntriesText" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        android:id="@+id/emptyStateText"
+        style="@style/Text.InternalApps.Body"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/warehouses_empty"
+        android:textColor="@color/ds_text_secondary"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/bottomGuideline"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/totalEntriesText"
+        app:layout_constraintVertical_bias="0.35" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        android:id="@+id/errorStateText"
+        style="@style/Text.InternalApps.Body"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/warehouses_error"
+        android:textColor="@color/ds_error"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/bottomGuideline"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/totalEntriesText" />
+</androidx.constraintlayout.widget.ConstraintLayout>

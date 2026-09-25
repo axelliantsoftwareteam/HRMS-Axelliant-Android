@@ -1,0 +1,50 @@
+<!--
+  ~ Copyright (C) 2026 The Android Open Source Project
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="32dp"
+    android:height="32dp"
+    android:viewportWidth="32"
+    android:viewportHeight="32">
+  <path
+      android:pathData="M11,28h14.5a2.5,2.5 0,0 0,2.5 -2.5v-2a2.5,2.5 0,0 0,-2.5 -2.5L11,21l-1,3.5zM11,19h14.5a2.5,2.5 0,0 0,2.5 -2.5v-1a2.5,2.5 0,0 0,-2.5 -2.5L11,13l-1,3zM11,11h14.5A2.5,2.5 0,0 0,28 8.5v-2A2.5,2.5 0,0 0,25.5 4L11,4l-1,3.5z">
+    <aapt:attr name="android:fillColor">
+      <gradient
+          android:startX="7.3"
+          android:startY="0.571"
+          android:endX="27.919"
+          android:endY="26.64"
+          android:type="linear">
+        <item android:offset="0" android:color="#FF36DFF1"/>
+        <item android:offset="1" android:color="#FF0094F0"/>
+      </gradient>
+    </aapt:attr>
+  </path>
+  <path
+      android:pathData="M11,13v6L6.5,19A2.5,2.5 0,0 1,4 16.5v-1A2.5,2.5 0,0 1,6.5 13zM11,4v7L6.5,11A2.5,2.5 0,0 1,4 8.5v-2A2.5,2.5 0,0 1,6.5 4zM11,21v7L6.5,28A2.5,2.5 0,0 1,4 25.5v-2A2.5,2.5 0,0 1,6.5 21z">
+    <aapt:attr name="android:fillColor">
+      <gradient
+          android:startX="5.665"
+          android:startY="7.19"
+          android:endX="16.071"
+          android:endY="12.037"
+          android:type="linear">
+        <item android:offset="0.125" android:color="#FF9C6CFE"/>
+        <item android:offset="1" android:color="#FF7A41DC"/>
+      </gradient>
+    </aapt:attr>
+  </path>
+</vector>
