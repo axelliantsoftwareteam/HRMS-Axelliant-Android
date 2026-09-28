@@ -19,7 +19,9 @@
 # the pull request that adds them.
 set -euo pipefail
 
-. "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/config.sh"
+here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+. "$here/lib/config.sh"
+. "$here/lib/python-interpreter.sh"
 cd "$AX_REPO_ROOT"
 
 failures=0
@@ -51,17 +53,32 @@ if [ -n "$secrets" ]; then
 fi
 
 echo "Checking tracked files over $((LARGE_FILE_LIMIT_BYTES / 1048576)) MB..."
-while IFS= read -r file; do
-    [ -f "$file" ] || continue
-    size="$(wc -c < "$file" | tr -d ' ')"
-    [ "$size" -gt "$LARGE_FILE_LIMIT_BYTES" ] || continue
+# One process measures every tracked file and names only those over the limit. The loop this
+# replaced forked `wc -c` (and `tr`) once per file: on Windows Git Bash, where a fork costs tens of
+# milliseconds, that was minutes per run in a large repository and made every commit's pre-commit
+# hook take five minutes or more. Same measure as before: the working-tree size of each regular
+# file (symlinks followed), in bytes. Output is "<size><TAB><path>", with a LF line ending even on
+# Windows so `read` below never sees a trailing CR.
+oversized="$(printf '%s\n' "$tracked" | "$PYTHON3" -c '
+import os, sys
+sys.stdout.reconfigure(newline="\n")
+limit = int(sys.argv[1])
+for line in sys.stdin:
+    path = line.rstrip("\n")
+    if path and os.path.isfile(path):
+        size = os.path.getsize(path)
+        if size > limit:
+            print(f"{size}\t{path}")
+' "$LARGE_FILE_LIMIT_BYTES")"
+while IFS=$'\t' read -r size file; do
+    [ -n "$file" ] || continue
     if [ -n "$LARGE_FILE_ALLOWLIST" ] && printf '%s' "$file" | grep -Eq "$LARGE_FILE_ALLOWLIST"; then
         echo "WARN allowlisted large file: $file ($size bytes)"
         continue
     fi
     echo "FAIL tracked file exceeds limit: $file ($size bytes)"
     failures=$((failures + 1))
-done <<< "$tracked"
+done <<< "$oversized"
 
 if [ "$failures" -gt 0 ]; then
     echo "Repository hygiene check failed."

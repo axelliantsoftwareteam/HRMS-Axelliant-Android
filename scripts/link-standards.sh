@@ -19,6 +19,12 @@
 # do: guarantee an agent reads the pages. That is AIAGENTS.md's instruction and the gates' job.
 set -uo pipefail
 
+# Git hands a hook its own location in GIT_DIR (and friends) - an absolute path inside a worktree.
+# Every `git -C "$cache" ...` below would inherit it and act on the repository that ran the hook
+# instead of the cache: `reset --hard FETCH_HEAD` then rewinds that worktree's branch and working
+# tree. Clear them first (lessons learned 30 and 34).
+unset GIT_DIR GIT_WORK_TREE GIT_INDEX_FILE GIT_OBJECT_DIRECTORY GIT_ALTERNATE_OBJECT_DIRECTORIES GIT_COMMON_DIR GIT_PREFIX
+
 quiet=0
 [ "${1:-}" = "--quiet" ] && quiet=1
 say() { [ "$quiet" -eq 1 ] || printf '%s\n' "$*"; }
