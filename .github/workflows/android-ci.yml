@@ -18,7 +18,7 @@ concurrency:
 
 jobs:
   build-test:
-    runs-on: ubuntu-latest
+    runs-on: ${{ (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository) && 'ubuntu-latest' || (vars.AXELLIANT_RUNNER_MODE == 'self-hosted' && fromJSON(vars.AXELLIANT_SELF_HOSTED_LABELS || '["self-hosted","linux","x64","axelliant"]') || (vars.AXELLIANT_RUNNER_MODE == 'github' && 'ubuntu-latest' || (vars.AXELLIANT_RUNNER_MODE == 'blacksmith' && 'blacksmith-4vcpu-ubuntu-2404' || 'ubuntu-latest'))) }}
     timeout-minutes: 40
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -26,6 +26,9 @@ jobs:
         with:
           distribution: temurin
           java-version: "17"
+      # GitHub-hosted and Blacksmith images ship the Android SDK; the Axelliant self-hosted image
+      # does not. This installs it where missing and is a no-op where it is already present.
+      - uses: android-actions/setup-android@be39fa834029ff78f1a44aa3bb0819b8fc2bd8fd # v4.0.4
       - uses: gradle/actions/setup-gradle@ac638b010cf58a27ee6c972d7336334ccaf61c96 # v4.4.1
 
       - name: Lint, unit tests, debug build
@@ -53,7 +56,7 @@ jobs:
     # The single required context. Always runs; fails if any needed job failed or was cancelled.
     if: always()
     needs: [build-test]
-    runs-on: ubuntu-latest
+    runs-on: ${{ (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository) && 'ubuntu-latest' || (vars.AXELLIANT_RUNNER_MODE == 'self-hosted' && fromJSON(vars.AXELLIANT_SELF_HOSTED_LABELS || '["self-hosted","linux","x64","axelliant"]') || (vars.AXELLIANT_RUNNER_MODE == 'github' && 'ubuntu-latest' || (vars.AXELLIANT_RUNNER_MODE == 'blacksmith' && 'blacksmith-4vcpu-ubuntu-2404' || 'ubuntu-latest'))) }}
     steps:
       - env:
           NEEDS: ${{ toJSON(needs) }}

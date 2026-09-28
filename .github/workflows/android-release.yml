@@ -17,7 +17,7 @@ concurrency:
 
 jobs:
   release:
-    runs-on: ubuntu-latest
+    runs-on: ${{ (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository) && 'ubuntu-latest' || (vars.AXELLIANT_RUNNER_MODE == 'self-hosted' && fromJSON(vars.AXELLIANT_SELF_HOSTED_LABELS || '["self-hosted","linux","x64","axelliant"]') || (vars.AXELLIANT_RUNNER_MODE == 'github' && 'ubuntu-latest' || (vars.AXELLIANT_RUNNER_MODE == 'blacksmith' && 'blacksmith-4vcpu-ubuntu-2404' || 'ubuntu-latest'))) }}
     environment: Production
     env:
       ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
@@ -37,6 +37,11 @@ jobs:
         with:
           distribution: temurin
           java-version: "17"
+
+      # GitHub-hosted and Blacksmith images ship the Android SDK; the Axelliant self-hosted image
+      # does not. This installs it where missing and is a no-op where it is already present.
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v4
 
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
