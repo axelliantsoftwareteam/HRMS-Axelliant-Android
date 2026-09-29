@@ -24,6 +24,10 @@ set -euo pipefail
 
 . "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/config.sh"
 cd "$AX_REPO_ROOT"
+# Git for Windows' bash rewrites an argument that looks like a POSIX path list before starting git, so
+# `origin/uat:.github/x.yml` arrived as `origin\uat;.github\x.yml`: the base blob looked missing and a
+# shrinking legacy file failed as new. Every `rev:path` below is a git object name, never a path.
+export MSYS_NO_PATHCONV=1 MSYS2_ARG_CONV_EXCL='*'
 
 MODE="diff"
 BASE_REF="${1:-}"
@@ -116,19 +120,13 @@ file_max_lines() {
 line_count_worktree() {
   local file="$1"
   # In staged mode, evaluate the staged blob (index) rather than the worktree file.
-  if [[ "$MODE" == "staged" ]]; then
-    if git cat-file -e ":$file" 2>/dev/null; then
-      git show ":$file" | wc -l | tr -d ' '
-      return
-    fi
-    if [[ -e "$file" ]]; then
-      wc -l < "$file" | tr -d ' '
-      return
-    fi
+  if [[ "$MODE" == "staged" ]] && git cat-file -e ":$file" 2>/dev/null; then
+    git show ":$file" | wc -l | tr -d ' '
+  elif [[ -e "$file" ]]; then
+    wc -l < "$file" | tr -d ' '
+  else
     echo "0"
-    return
   fi
-  wc -l < "$file" | tr -d ' '
 }
 
 line_count_at_ref() {

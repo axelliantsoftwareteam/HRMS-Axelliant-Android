@@ -64,9 +64,11 @@ start() {
         sqlserver) docker run -d --name "$name" -e ACCEPT_EULA=Y -e MSSQL_SA_PASSWORD="$password" -p "127.0.0.1::$port" "$DB_IMAGE" >/dev/null
                    wait_until docker exec "$name" /opt/mssql-tools18/bin/sqlcmd -C -S localhost -U sa -P "$password" -Q 'SELECT 1'
                    docker exec "$name" /opt/mssql-tools18/bin/sqlcmd -C -S localhost -U sa -P "$password" -b -Q 'CREATE DATABASE contract' >/dev/null ;;
-        # As the caller's UID: the work directory is 0700 (mktemp), and a container user that does
-        # not own it cannot create the database there on Linux (Docker Desktop hides this on macOS).
-        sqlite)    docker run -d --name "$name" --user "$(id -u):$(id -g)" --entrypoint sleep -v "$work:/work" "$DB_IMAGE" 3600 >/dev/null ;;
+        # The database lives inside the container, not in a bind mount: an ephemeral CI runner that
+        # talks to the host's Docker from its own container has paths the daemon cannot see, and a
+        # mount of one arrives as an empty root-owned directory nobody else can write to.
+        sqlite)    docker run -d --name "$name" --entrypoint sleep "$DB_IMAGE" 3600 >/dev/null
+                   docker exec "$name" sqlite3 /tmp/contract.db 'VACUUM;' ;;
     esac
 }
 
@@ -78,7 +80,7 @@ apply_sql() {
                    [ "${PIPESTATUS[0]}" -eq 0 ] ;;
         sqlserver) docker cp "$file" "$name:/tmp/apply.sql" >/dev/null
                    docker exec "$name" /opt/mssql-tools18/bin/sqlcmd -C -S localhost -U sa -P "$password" -d contract -b -i /tmp/apply.sql >/dev/null ;;
-        sqlite)    docker exec -i "$name" sqlite3 -bail /work/contract.db < "$file" ;;
+        sqlite)    docker exec -i "$name" sqlite3 -bail /tmp/contract.db < "$file" ;;
     esac
 }
 
@@ -110,7 +112,7 @@ dump() {
             docker exec "$name" /opt/mssql-tools18/bin/sqlcmd -C -S localhost -U sa -P "$password" -d contract \
                 -h -1 -W -b -i /tmp/contract.sql ;;
         sqlite)
-            docker exec "$name" sqlite3 /work/contract.db '.schema --indent' ;;
+            docker exec "$name" sqlite3 /tmp/contract.db '.schema --indent' ;;
     esac
 }
 
@@ -119,7 +121,11 @@ for file in "${scripts[@]}"; do
     apply_sql "$file" || { echo "Applying $file failed." >&2; exit 1; }
 done
 if [ -n "${DB_CONTRACT_APPLY_CMD:-}" ]; then
+    # A host-side migration tool needs a SQLite file it can open: copy it out and back in
+    # (docker cp works however the daemon's filesystem relates to ours).
+    [ "$DB_ENGINE" = sqlite ] && docker cp "$name:/tmp/contract.db" "$work/contract.db" >/dev/null
     DATABASE_URL="$(database_url)" bash -c "$DB_CONTRACT_APPLY_CMD"
+    [ "$DB_ENGINE" = sqlite ] && docker cp "$work/contract.db" "$name:/tmp/contract.db" >/dev/null
 fi
 
 if ! dump > "$work/contract.sql" 2> "$work/dump.err"; then

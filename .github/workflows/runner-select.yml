@@ -1,16 +1,35 @@
 # Runner select — managed by eng-wiki-standards. Do not edit here; change it in eng-wiki-standards.
 #
-# Decides where the calling workflow's jobs run: on an Axelliant self-hosted runner when one is
-# online and idle, otherwise on a GitHub-hosted runner.
+# Decides where the calling workflow's jobs run. The organisation variable AXELLIANT_RUNNER_MODE
+# is the switch (a repository variable of the same name overrides it for one repository):
 #
-# Why a probe rather than a fallback job: a job sent to a self-hosted runner that is offline does
+#   self-hosted   every job on the Axelliant self-hosted pool, release branches included
+#   blacksmith    every job on Blacksmith, blacksmith-<size>-ubuntu-2404
+#   github        every job on ubuntu-latest
+#   auto / unset  by the branch the code is going into:
+#                   into main or master (a PR targeting it, a push)  Blacksmith
+#                   into anything else (uat, feature branches)       a self-hosted runner when one
+#                                                                    is online and idle, otherwise
+#                                                                    ubuntu-latest
+#
+# Whatever the mode, a pull request from a fork runs on ubuntu-latest: unreviewed code never touches
+# our hardware or our Blacksmith account.
+#
+# The fixed modes do not probe, so in self-hosted mode a lab outage leaves jobs queued (for up to 24
+# hours) until the pool is back. Set the mode to github or blacksmith for the duration; jobs already
+# queued keep their runner, so re-run them after the switch.
+#
+# The target is `github.base_ref` on a pull request and `github.ref_name` otherwise. `ref_name` alone
+# is `123/merge` on a pull request, which is how promotion PRs once missed Blacksmith entirely.
+#
+# Why auto mode probes rather than falling back: a job sent to a self-hosted runner that is offline does
 # not fail, it waits in the queue for up to 24 hours, so a "retry on GitHub if it failed" chain never
 # fires. Asking first costs one GitHub-hosted job of a few seconds and never hangs.
 #
-# Needs the organisation secret AXELLIANT_RUNNER_PROBE_TOKEN: a fine-grained token with the
-# organisation permission "Self-hosted runners: read" (the workflow's own token cannot list
-# runners). Without it, and for pull requests from forks (code nobody has reviewed never touches
-# our hardware), jobs run on GitHub-hosted runners.
+# The probe needs the organisation secret AXELLIANT_RUNNER_PROBE_TOKEN: a fine-grained token with
+# the organisation permission "Self-hosted runners: read" (the workflow's own token cannot list
+# runners). Without it, work bound for uat runs GitHub-hosted. Release targets and the fixed modes
+# never probe.
 #
 # The labels a self-hosted runner must carry come from the repository or organisation variable
 # AXELLIANT_SELF_HOSTED_LABELS (a JSON array), default ["self-hosted","linux","x64","axelliant"].
@@ -19,15 +38,23 @@
 #   jobs:
 #     runner:
 #       uses: ./.github/workflows/runner-select.yml
+#       # with: {blacksmith-size: 8vcpu}   # optional, for a heavy build; default 4vcpu
 #       secrets:
 #         AXELLIANT_RUNNER_PROBE_TOKEN: ${{ secrets.AXELLIANT_RUNNER_PROBE_TOKEN }}
 #     build:
 #       needs: runner
-#       runs-on: ${{ fromJSON(needs.runner.outputs.runs-on) }}
+#       if: ${{ !cancelled() }}
+#       runs-on: ${{ fromJSON(needs.runner.outputs.runs-on || '"ubuntu-latest"') }}
 name: Runner select
 
 on:
   workflow_call:
+    inputs:
+      blacksmith-size:
+        description: Blacksmith machine size for release targets, e.g. 4vcpu or 8vcpu.
+        type: string
+        required: false
+        default: 4vcpu
     outputs:
       runs-on:
         description: A JSON runs-on value; pass it through fromJSON().
@@ -40,7 +67,10 @@ permissions: {}
 
 jobs:
   select:
-    runs-on: ubuntu-latest
+    # The decision itself is a few seconds of work. In a fixed mode it runs on that mode's pool, so
+    # self-hosted and blacksmith modes use no GitHub-hosted minutes at all. In auto mode and for a
+    # fork it runs GitHub-hosted, so the probe can never be the job that waits for a runner.
+    runs-on: ${{ (github.event.pull_request && github.event.pull_request.head.repo.full_name != github.repository) && 'ubuntu-latest' || (vars.AXELLIANT_RUNNER_MODE == 'self-hosted' && fromJSON(vars.AXELLIANT_SELF_HOSTED_LABELS || '["self-hosted","linux","x64","axelliant"]') || (vars.AXELLIANT_RUNNER_MODE == 'blacksmith' && 'blacksmith-2vcpu-ubuntu-2404' || 'ubuntu-latest')) }}
     timeout-minutes: 3
     outputs:
       runs-on: ${{ steps.pick.outputs.runs-on }}
@@ -52,17 +82,55 @@ jobs:
           LABELS: ${{ vars.AXELLIANT_SELF_HOSTED_LABELS || '["self-hosted","linux","x64","axelliant"]' }}
           HEAD_REPO: ${{ github.event.pull_request.head.repo.full_name }}
           REPO: ${{ github.repository }}
+          BASE_REF: ${{ github.base_ref }}
+          REF_NAME: ${{ github.ref_name }}
+          BLACKSMITH_SIZE: ${{ inputs.blacksmith-size }}
+          MODE: ${{ vars.AXELLIANT_RUNNER_MODE }}
         run: |
           python3 - <<'PY'
-          import json, os, urllib.request
+          import json, os, re, urllib.request
 
           wanted = json.loads(os.environ['LABELS'])
           hosted = 'ubuntu-latest'
+          release_branches = ('main', 'master')
+          base = os.environ.get('BASE_REF', '')
+          target = base or os.environ.get('REF_NAME', '')
+          if base:
+              target_note = f'target branch `{target}` (pull request into it)'
+          else:
+              target_note = f'target branch `{target}` (the ref this run is for)'
+
+          def blacksmith():
+              size = os.environ.get('BLACKSMITH_SIZE') or '4vcpu'
+              if not re.fullmatch(r'[0-9]+vcpu', size):
+                  return 'blacksmith-4vcpu-ubuntu-2404', f' (blacksmith-size `{size}` is not like `4vcpu`; using 4vcpu)'
+              return f'blacksmith-{size}-ubuntu-2404', ''
+
+          modes = ('auto', 'self-hosted', 'blacksmith', 'github')
 
           def decide():
               head = os.environ.get('HEAD_REPO')
               if head and head != os.environ['REPO']:
                   return hosted, 'pull request from a fork: GitHub-hosted only'
+              mode = (os.environ.get('MODE') or 'auto').strip().lower()
+              mode_note = ''
+              if mode not in modes:
+                  mode_note = f' (AXELLIANT_RUNNER_MODE `{mode}` is not one of {", ".join(modes)}; using auto)'
+                  mode = 'auto'
+              if mode == 'self-hosted':
+                  return wanted, 'mode self-hosted (AXELLIANT_RUNNER_MODE)'
+              if mode == 'blacksmith':
+                  label, note = blacksmith()
+                  return label, f'mode blacksmith (AXELLIANT_RUNNER_MODE){note}'
+              if mode == 'github':
+                  return hosted, 'mode github (AXELLIANT_RUNNER_MODE)'
+              choice, reason = decide_auto()
+              return choice, f'mode auto{mode_note}: {reason}'
+
+          def decide_auto():
+              if target in release_branches:
+                  label, note = blacksmith()
+                  return label, f'release target: Blacksmith{note}'
               token = os.environ.get('TOKEN')
               if not token:
                   return hosted, 'AXELLIANT_RUNNER_PROBE_TOKEN is not set, so self-hosted runners cannot be checked'
@@ -80,7 +148,10 @@ jobs:
                       page += 1
               except Exception as error:  # an unreachable API must never block the build
                   return hosted, f'runner API unavailable ({type(error).__name__}); using GitHub-hosted'
-              matching = [r for r in runners if set(wanted) <= {label['name'] for label in r.get('labels', [])}]
+              # GitHub matches runs-on labels case-insensitively and reports default labels
+              # capitalised (Linux, X64), so compare the same way.
+              wanted_folded = {label.casefold() for label in wanted}
+              matching = [r for r in runners if wanted_folded <= {label['name'].casefold() for label in r.get('labels', [])}]
               online = [r for r in matching if r.get('status') == 'online']
               idle = [r for r in online if not r.get('busy')]
               if idle:
@@ -93,6 +164,6 @@ jobs:
           with open(os.environ['GITHUB_OUTPUT'], 'a') as out:
               out.write(f'runs-on={json.dumps(choice)}\n')
           with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as summary:
-              summary.write(f'### Runner: `{json.dumps(choice)}`\n\n{reason}\n')
-          print(f'runs-on={json.dumps(choice)}: {reason}')
+              summary.write(f'### Runner: `{json.dumps(choice)}`\n\n{reason}\n\nWhy: {target_note}.\n')
+          print(f'runs-on={json.dumps(choice)}: {reason}; {target_note}')
           PY
