@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/Layout.Fluent2.Screen"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center">
@@ -12,22 +13,22 @@
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/start_guideline"
-            style="@style/start_gl"
+            style="@style/Guideline.Fluent2.Start"
             android:orientation="vertical" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/end_guideline"
-            style="@style/end_gl"
+            style="@style/Guideline.Fluent2.End"
             android:orientation="vertical" />
 
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/bottom_guideline"
-            style="@style/bottom_gl" />
+            style="@style/Guideline.Fluent2.Bottom" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/top_guideline"
-            style="@style/top_gl" />
+            style="@style/Guideline.Fluent2.Top" />
 
         <ImageView
             android:id="@+id/myImageView"

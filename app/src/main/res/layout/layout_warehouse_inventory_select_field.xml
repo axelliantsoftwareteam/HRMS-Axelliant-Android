@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/selectField"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/_44sdp"
+    android:layout_marginTop="@dimen/_6sdp"
+    android:background="@drawable/bg_filter_field"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingStart="@dimen/_10sdp"
+    android:paddingEnd="@dimen/_8sdp">
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        android:id="@+id/selectFieldText"
+        style="@style/Text.InternalApps.Body"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:textColor="@color/ds_text_muted"
+        android:textSize="@dimen/_12ssp" />
+
+    <ImageView
+        android:layout_width="@dimen/_22sdp"
+        android:layout_height="@dimen/_22sdp"
+        android:contentDescription="@null"
+        android:src="@drawable/ia_ic_filter_down" />
+</LinearLayout>

@@ -36,13 +36,13 @@ class TeamLeaveDetailAdapter(
             holder.binding.tvApproved.isVisible = true
             holder.binding.tvReject.isVisible = true
             holder.binding.tvApproved.setOnClickListener {
-                val adapterPosition = holder.adapterPosition
+                val adapterPosition = holder.bindingAdapterPosition
                 if (adapterPosition != RecyclerView.NO_POSITION) {
                     approvedClick?.onItemClick(leaves[adapterPosition], adapterPosition)
                 }
             }
             holder.binding.tvReject.setOnClickListener {
-                val adapterPosition = holder.adapterPosition
+                val adapterPosition = holder.bindingAdapterPosition
                 if (adapterPosition != RecyclerView.NO_POSITION) {
                     rejectClick?.onItemClick(leaves[adapterPosition], adapterPosition)
                 }

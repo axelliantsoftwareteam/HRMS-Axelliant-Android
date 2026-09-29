@@ -2,7 +2,7 @@ package com.axelliant.hris.repos
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import com.axelliant.hris.config.AppConst
+import com.axelliant.hris.core.auth.HrisTokenProvider
 import com.axelliant.hris.model.base.BaseApiModel
 import com.axelliant.hris.model.base.BaseModel
 import com.axelliant.hris.model.base.Meta
@@ -21,15 +21,19 @@ import com.google.gson.reflect.TypeToken
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
+import javax.inject.Inject
 import java.lang.reflect.Type
 
-class RequestRepo(private var apiInterface: ApiInterface) {
+class RequestRepo @Inject constructor(
+    private val apiInterface: ApiInterface,
+    private val hrisTokenProvider: HrisTokenProvider
+) {
 
 
     fun getLeaves(): MutableLiveData<BaseApiModel<GetLeavesResponse>> {
         val serverResponse = MutableLiveData<BaseApiModel<GetLeavesResponse>>()
 
-        val call: Call<ResponseBody>  = apiInterface.getLeaveTypes("token ${AppConst.TOKEN}")
+        val call: Call<ResponseBody>  = apiInterface.getLeaveTypes(hrisTokenProvider.authorizationHeader())
 
         Log.e("HTTP Request", " " + call?.request().toString())
 
@@ -67,7 +71,7 @@ class RequestRepo(private var apiInterface: ApiInterface) {
     fun getLeavesTypeWithCount(): MutableLiveData<BaseApiModel<GetLeaveCount>> {
         val serverResponse = MutableLiveData<BaseApiModel<GetLeaveCount>>()
 
-        val call: Call<ResponseBody>  = apiInterface.getLeaveTypesWithCount("token ${AppConst.TOKEN}")
+        val call: Call<ResponseBody>  = apiInterface.getLeaveTypesWithCount(hrisTokenProvider.authorizationHeader())
 
         Log.e("HTTP Request", " " + call?.request().toString())
 
@@ -104,7 +108,7 @@ class RequestRepo(private var apiInterface: ApiInterface) {
     fun getAttendanceInfo(): MutableLiveData<BaseApiModel<GetAttendanceResponse>> {
         val serverResponse = MutableLiveData<BaseApiModel<GetAttendanceResponse>>()
 
-        val call: Call<ResponseBody>  = apiInterface.getAttendanceRequestInformation("token ${AppConst.TOKEN}")
+        val call: Call<ResponseBody>  = apiInterface.getAttendanceRequestInformation(hrisTokenProvider.authorizationHeader())
 
         Log.e("HTTP Request", " " + call?.request().toString())
 
@@ -142,7 +146,7 @@ class RequestRepo(private var apiInterface: ApiInterface) {
     fun updateLeaveRequest(leaveRequest: LeaveRequest): MutableLiveData<BaseApiModel<PostResponse>> {
         val serverResponse = MutableLiveData<BaseApiModel<PostResponse>>()
 
-        val call: Call<ResponseBody>  = apiInterface.updateLeaveRequest("token ${AppConst.TOKEN}",leaveRequest)
+        val call: Call<ResponseBody>  = apiInterface.updateLeaveRequest(hrisTokenProvider.authorizationHeader(),leaveRequest)
 
         Log.e("HTTP Request", " " + call?.request().toString())
 
@@ -180,7 +184,7 @@ class RequestRepo(private var apiInterface: ApiInterface) {
     fun deleteLeaveRequest(leaveRequest: LeaveRequest): MutableLiveData<BaseApiModel<PostResponse>> {
         val serverResponse = MutableLiveData<BaseApiModel<PostResponse>>()
 
-        val call: Call<ResponseBody>  = apiInterface.deleteLeaveRequest("token ${AppConst.TOKEN}",leaveRequest)
+        val call: Call<ResponseBody>  = apiInterface.deleteLeaveRequest(hrisTokenProvider.authorizationHeader(),leaveRequest)
 
         Log.e("HTTP Request", " " + call?.request().toString())
 
@@ -218,7 +222,7 @@ class RequestRepo(private var apiInterface: ApiInterface) {
     fun getLeaveCountRequest(leaveCountByDaysRequest: LeaveCountByDaysRequest): MutableLiveData<BaseApiModel<LeaveCountByDate>> {
         val serverResponse = MutableLiveData<BaseApiModel<LeaveCountByDate>>()
 
-        val call: Call<ResponseBody>  = apiInterface.leaveCountRequest("token ${AppConst.TOKEN}",leaveCountByDaysRequest)
+        val call: Call<ResponseBody>  = apiInterface.leaveCountRequest(hrisTokenProvider.authorizationHeader(),leaveCountByDaysRequest)
 
         Log.e("HTTP Request", " " + call?.request().toString())
 
@@ -257,7 +261,7 @@ class RequestRepo(private var apiInterface: ApiInterface) {
     fun postLeaveRequest(leaveRequest: LeaveRequest): MutableLiveData<BaseApiModel<PostResponse>> {
         val serverResponse = MutableLiveData<BaseApiModel<PostResponse>>()
 
-        val call: Call<ResponseBody>  = apiInterface.postLeaveRequest("token ${AppConst.TOKEN}",leaveRequest)
+        val call: Call<ResponseBody>  = apiInterface.postLeaveRequest(hrisTokenProvider.authorizationHeader(),leaveRequest)
 
         Log.e("HTTP Request", " " + call?.request().toString())
 
@@ -294,7 +298,7 @@ class RequestRepo(private var apiInterface: ApiInterface) {
     fun postAttendanceRequest(attendanceRequest: AttendanceRequest): MutableLiveData<BaseApiModel<PostResponse>> {
         val serverResponse = MutableLiveData<BaseApiModel<PostResponse>>()
 
-        val call: Call<ResponseBody>  = apiInterface.postAttendanceRequest("token ${AppConst.TOKEN}",attendanceRequest)
+        val call: Call<ResponseBody>  = apiInterface.postAttendanceRequest(hrisTokenProvider.authorizationHeader(),attendanceRequest)
 
         Log.e("HTTP Request", " " + call?.request().toString())
 
@@ -334,7 +338,7 @@ class RequestRepo(private var apiInterface: ApiInterface) {
     fun updateAttendanceRequest(leaveRequest: AttendanceRequest): MutableLiveData<BaseApiModel<PostResponse>> {
         val serverResponse = MutableLiveData<BaseApiModel<PostResponse>>()
 
-        val call: Call<ResponseBody>  = apiInterface.updateAttendanceRequest("token ${AppConst.TOKEN}",leaveRequest)
+        val call: Call<ResponseBody>  = apiInterface.updateAttendanceRequest(hrisTokenProvider.authorizationHeader(),leaveRequest)
 
         Log.e("HTTP Request", " " + call?.request().toString())
 
@@ -372,7 +376,7 @@ class RequestRepo(private var apiInterface: ApiInterface) {
     fun deleteAttendanceRequest(leaveRequest: LeaveRequest): MutableLiveData<BaseApiModel<PostResponse>> {
         val serverResponse = MutableLiveData<BaseApiModel<PostResponse>>()
 
-        val call: Call<ResponseBody>  = apiInterface.deleteAttendanceRequest("token ${AppConst.TOKEN}",leaveRequest)
+        val call: Call<ResponseBody>  = apiInterface.deleteAttendanceRequest(hrisTokenProvider.authorizationHeader(),leaveRequest)
 
         Log.e("HTTP Request", " " + call?.request().toString())
 

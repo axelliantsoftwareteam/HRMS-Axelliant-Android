@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingTop="@dimen/ds_space_10">
+
+    <FrameLayout
+        android:id="@+id/productIconFrame"
+        android:layout_width="@dimen/_36sdp"
+        android:layout_height="@dimen/_36sdp"
+        android:background="@drawable/bg_product_thumb_placeholder">
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            android:id="@+id/productIconLabel"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/poppins_bold"
+            android:gravity="center"
+            android:textColor="@color/ds_text_muted"
+            android:textSize="@dimen/_8ssp"
+            tools:text="CE" />
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/ds_space_10"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            android:id="@+id/productNameText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_semibold"
+            android:textColor="@color/ds_text_primary"
+            android:textSize="@dimen/_9ssp"
+            tools:text="Cloud Compute Engine" />
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            android:id="@+id/productSubtitleText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:textColor="@color/ds_text_secondary"
+            android:textSize="@dimen/_7ssp"
+            tools:text="SKU-123 · Networking" />
+    </LinearLayout>
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        android:id="@+id/productPriceText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/ds_space_8"
+        android:fontFamily="@font/poppins_semibold"
+        android:textColor="@color/ds_text_primary"
+        android:textSize="@dimen/_9ssp"
+        tools:text="$12,500.00" />
+</LinearLayout>
+

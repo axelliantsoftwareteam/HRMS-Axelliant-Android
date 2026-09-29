@@ -6,7 +6,10 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.database.Cursor
+import android.graphics.RenderEffect
+import android.graphics.Shader
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -16,16 +19,19 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.DecelerateInterpolator
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.axelliant.hris.R
 import com.axelliant.hris.adapter.AddExpenseAdapter
 import com.axelliant.hris.adapter.AttachmentsAdapter
 import com.axelliant.hris.base.BaseFragment
 import com.axelliant.hris.callback.AdapterItemClick
-import com.axelliant.hris.config.AppConst
+import com.axelliant.hris.core.constants.AppRouteArgs
 import com.axelliant.hris.databinding.FragmentAddExpenseBinding
 import com.axelliant.hris.event.EventObserver
 import com.axelliant.hris.extention.showErrorMsg
@@ -47,10 +53,12 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
-import org.koin.android.ext.android.inject
+import androidx.fragment.app.viewModels
+import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 
 
+@AndroidEntryPoint
 class AddExpenseFragment : BaseFragment(), AddExpenseAdapter.OnUpdateList {
 
     private var pickMultipleImages = 103
@@ -69,13 +77,17 @@ class AddExpenseFragment : BaseFragment(), AddExpenseAdapter.OnUpdateList {
     private var _binding: FragmentAddExpenseBinding? = null
     private val binding get() = _binding
     private var addExpenseList: ArrayList<AddExpense> = arrayListOf()
-    private val expenseViewModel: ExpenseViewModel by inject()
+    private val expenseViewModel: ExpenseViewModel by viewModels()
 
     var addExpenseAdapter: AddExpenseAdapter? = null
     private var expenseList: ArrayList<SpinnerType> = arrayListOf()
 
 
     private var forUpdateList: ArrayList<AddExpense> = arrayListOf()
+
+    // --- FAB menu state ---
+    private var isFabMenuOpen = false
+    private lateinit var fabMenuBackCallback: OnBackPressedCallback
 
 
     override fun onCreateView(
@@ -109,10 +121,10 @@ class AddExpenseFragment : BaseFragment(), AddExpenseAdapter.OnUpdateList {
 
 
 
-        if (arguments != null && requireArguments().containsKey(AppConst.ExpenseRequestParam)) {
-            val parsedData = arguments?.getString(AppConst.ExpenseRequestParam, "")
-            val expenseID = arguments?.getString(AppConst.ExpenseRequestIDParam, "")
-            val attachments = arguments?.getString(AppConst.ExpenseRequestAttachments, "")
+        if (arguments != null && requireArguments().containsKey(AppRouteArgs.EXPENSE_REQUEST)) {
+            val parsedData = arguments?.getString(AppRouteArgs.EXPENSE_REQUEST, "")
+            val expenseID = arguments?.getString(AppRouteArgs.EXPENSE_REQUEST_ID, "")
+            val attachments = arguments?.getString(AppRouteArgs.EXPENSE_REQUEST_ATTACHMENTS, "")
 
             if (parsedData != null) {
                 forUpdateList =
@@ -304,7 +316,7 @@ class AddExpenseFragment : BaseFragment(), AddExpenseAdapter.OnUpdateList {
 
         binding?.btnApply?.setOnClickListener {
 
-            Log.d("addExpenseListSize",addExpenseList.size.toString())
+            Log.d("addExpenseListSize", addExpenseList.size.toString())
 
             for (expenseItem in addExpenseList) {
 
@@ -345,8 +357,12 @@ class AddExpenseFragment : BaseFragment(), AddExpenseAdapter.OnUpdateList {
 
         }
 
-        binding?.ivBack?.setOnClickListener {
-            AppNavigator.moveBackToPreviousFragment()
+        binding?.appTopBar?.setOnBackClickListener {
+            if (isFabMenuOpen) {
+                closeFabMenu()
+            } else {
+                AppNavigator.moveBackToPreviousFragment()
+            }
         }
 
         binding?.tvReject?.setOnClickListener {
@@ -358,27 +374,165 @@ class AddExpenseFragment : BaseFragment(), AddExpenseAdapter.OnUpdateList {
         }
 
 
-        // Initial item list with one item
+        setupFabMenu()
 
+    }
+
+    // ==================== FAB MENU ====================
+
+    private fun setupFabMenu() {
+        binding?.fabMenuScrim?.isVisible = false
+        binding?.fabMenuScrim?.alpha = 0f
+        binding?.addAttachmentActionRow?.isVisible = false
+        binding?.addExpenseRowAction?.isVisible = false
+        prepareClosedFabAction(binding?.addAttachmentActionRow)
+        prepareClosedFabAction(binding?.addExpenseRowAction)
+
+        fabMenuBackCallback = object : OnBackPressedCallback(false) {
+            override fun handleOnBackPressed() {
+                closeFabMenu()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, fabMenuBackCallback)
+
+        binding?.mainFab?.setOnClickListener { toggleFabMenu() }
+        binding?.fabMenuScrim?.setOnClickListener { closeFabMenu() }
+
+        // "Add new expense row" action
         binding?.tvAddNew?.setOnClickListener {
+            closeFabMenu()
             addExpenseList.add(AddExpense().apply {
                 this.expense_type = expenseType
                 this.expense_date = null
                 this.description = ""
                 this.amount = 0.0
                 this.expenseTypeList = expenseList
-
             })
             addExpenseAdapter?.notifyItemInserted(addExpenseList.size - 1)
             binding?.rvLeaveCount?.scrollToPosition(addExpenseList.size - 1)
         }
+        binding?.addExpenseRowLabel?.setOnClickListener { binding?.tvAddNew?.performClick() }
 
+        // "Add attachment" action
         binding?.ivAttachments?.setOnClickListener {
+            closeFabMenu()
             selectImage()
         }
-
-
+        binding?.addAttachmentLabel?.setOnClickListener { binding?.ivAttachments?.performClick() }
     }
+
+    private fun toggleFabMenu() {
+        if (isFabMenuOpen) closeFabMenu() else openFabMenu()
+    }
+
+    private fun openFabMenu() {
+        if (isFabMenuOpen) return
+        isFabMenuOpen = true
+        fabMenuBackCallback.isEnabled = true
+
+        applyContentBlur(true)
+
+        binding?.fabMenuScrim?.isVisible = true
+        binding?.fabMenuScrim?.animate()
+            ?.alpha(1f)
+            ?.setDuration(FAB_MENU_ANIMATION_MS)
+            ?.setInterpolator(DecelerateInterpolator())
+            ?.start()
+
+        binding?.mainFab?.setImageResource(R.drawable.ic_close)
+        binding?.mainFab?.animate()
+            ?.rotation(90f)
+            ?.setDuration(FAB_MENU_ANIMATION_MS)
+            ?.start()
+
+        showFabAction(binding?.addExpenseRowAction, delayMs = 40L)
+        showFabAction(binding?.addAttachmentActionRow, delayMs = 90L)
+    }
+
+    private fun closeFabMenu() {
+        if (!isFabMenuOpen) return
+        isFabMenuOpen = false
+        fabMenuBackCallback.isEnabled = false
+
+        binding?.mainFab?.setImageResource(R.drawable.plus)
+        binding?.mainFab?.animate()
+            ?.rotation(0f)
+            ?.setDuration(FAB_MENU_ANIMATION_MS)
+            ?.start()
+
+        hideFabAction(binding?.addAttachmentActionRow, delayMs = 0L)
+        hideFabAction(binding?.addExpenseRowAction, delayMs = 40L)
+
+        binding?.fabMenuScrim?.animate()
+            ?.alpha(0f)
+            ?.setDuration(FAB_MENU_ANIMATION_MS)
+            ?.withEndAction {
+                if (_binding == null) return@withEndAction
+                binding?.fabMenuScrim?.isVisible = false
+                applyContentBlur(false)
+            }
+            ?.start()
+    }
+
+    private fun prepareClosedFabAction(row: View?) {
+        row?.apply {
+            alpha = 0f
+            translationY = FAB_ACTION_TRANSLATION_Y
+            scaleX = 0.85f
+            scaleY = 0.85f
+        }
+    }
+
+    private fun showFabAction(row: View?, delayMs: Long) {
+        row ?: return
+        row.animate().cancel()
+        prepareClosedFabAction(row)
+        row.isVisible = true
+        row.animate()
+            .alpha(1f)
+            .translationY(0f)
+            .scaleX(1f)
+            .scaleY(1f)
+            .setStartDelay(delayMs)
+            .setDuration(FAB_MENU_ANIMATION_MS)
+            .setInterpolator(DecelerateInterpolator())
+            .start()
+    }
+
+    private fun hideFabAction(row: View?, delayMs: Long) {
+        row ?: return
+        row.animate().cancel()
+        row.animate()
+            .alpha(0f)
+            .translationY(FAB_ACTION_TRANSLATION_Y)
+            .scaleX(0.85f)
+            .scaleY(0.85f)
+            .setStartDelay(delayMs)
+            .setDuration(FAB_MENU_ANIMATION_MS)
+            .withEndAction {
+                if (_binding == null) return@withEndAction
+                row.isVisible = false
+            }
+            .start()
+    }
+
+    private fun applyContentBlur(enabled: Boolean) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            binding?.contentContainer?.setRenderEffect(
+                if (enabled) {
+                    RenderEffect.createBlurEffect(
+                        CONTENT_BLUR_RADIUS,
+                        CONTENT_BLUR_RADIUS,
+                        Shader.TileMode.CLAMP
+                    )
+                } else {
+                    null
+                }
+            )
+        }
+    }
+
+    // ==================== EXISTING LOGIC (unchanged) ====================
 
     private fun attachmentVisibility() {
         binding?.tvAttachments?.isVisible = multiPartArray.size > 0
@@ -635,6 +789,20 @@ class AddExpenseFragment : BaseFragment(), AddExpenseAdapter.OnUpdateList {
 
     private fun isMediaDocument(uri: Uri): Boolean {
         return "com.android.providers.media.documents" == uri.authority
+    }
+
+    override fun onDestroyView() {
+        if (_binding != null) {
+            applyContentBlur(false)
+        }
+        super.onDestroyView()
+        _binding = null
+    }
+
+    companion object {
+        private const val FAB_MENU_ANIMATION_MS = 220L
+        private const val FAB_ACTION_TRANSLATION_Y = 28f
+        private const val CONTENT_BLUR_RADIUS = 28f
     }
 
 }

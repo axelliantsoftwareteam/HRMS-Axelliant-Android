@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/ds_background"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="@dimen/_8sdp">
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        android:id="@+id/titleText"
+        style="@style/Text.InternalApps.Heading"
+        android:layout_width="match_parent"
+        android:textAlignment="center" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        style="@style/Text.InternalApps.Body"
+        android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/ds_space_8"
+        android:text="@string/coming_soon"
+        android:textAlignment="center" />
+
+</LinearLayout>
+

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_inventory_adjust_quantity"
+        android:icon="@drawable/ic_settings"
+        android:title="@string/inventory_action_adjust_quantity" />
+    <item
+        android:id="@+id/action_inventory_view_transactions"
+        android:icon="@drawable/ic_quote_action_view"
+        android:title="@string/inventory_action_view_transactions" />
+</menu>

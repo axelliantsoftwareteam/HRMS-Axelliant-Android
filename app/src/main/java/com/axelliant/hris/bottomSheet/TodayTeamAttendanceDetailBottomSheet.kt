@@ -93,8 +93,6 @@ class TodayTeamAttendanceDetailBottomSheet(
         val weeklyAdapter = TodayTeamAttendanceDetailAdapter(requireContext(),getList,
             object : AdapterItemClick {
                 override fun onItemClick(customObject: Any, position: Int) {
-                    val currentObject = customObject as EmployTeamProfile
-
                 }
 
             }

@@ -13,8 +13,13 @@ import com.axelliant.hris.model.checkin.CheckInListResponse
 import com.axelliant.hris.model.leave.LeaveApproval
 import com.axelliant.hris.model.leave.PostResponse
 import com.axelliant.hris.repos.AttendanceRepo
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class AttendanceViewModel(private val attendanceRepo: AttendanceRepo) : BaseViewModel() {
+@HiltViewModel
+class AttendanceViewModel @Inject constructor(
+    private val attendanceRepo: AttendanceRepo
+) : BaseViewModel() {
 
      val attendanceResponse: MutableLiveData<Event<AttendanceStatsResponse?>> by lazy { MutableLiveData<Event<AttendanceStatsResponse?>>() }
      val attendanceDetailResponse: MutableLiveData<Event<AttendanceResponse?>> by lazy { MutableLiveData<Event<AttendanceResponse?>>() }

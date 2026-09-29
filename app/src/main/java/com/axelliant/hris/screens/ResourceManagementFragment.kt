@@ -16,7 +16,7 @@ import com.axelliant.hris.adapter.SubFilterAdapter
 import com.axelliant.hris.base.BaseFragment
 import com.axelliant.hris.callback.AdapterItemClick
 import com.axelliant.hris.callback.CheckBoxAdapterItemClick
-import com.axelliant.hris.config.AppConst
+import com.axelliant.hris.core.constants.AppRouteArgs
 import com.axelliant.hris.databinding.FragmentResourceManagmentBinding
 import com.axelliant.hris.enums.AttendanceFilter
 import com.axelliant.hris.enums.LeaveStatus
@@ -36,9 +36,16 @@ import com.axelliant.hris.utils.Utils
 import com.axelliant.hris.viewmodel.ResourceManageViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.gson.Gson
-import org.koin.android.ext.android.inject
+import androidx.fragment.app.viewModels
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.Date
+import com.axelliant.hris.ui.designsystem.adapters.FilterAdapter
+import com.axelliant.hris.ui.designsystem.adapters.FilterItem
+import androidx.recyclerview.widget.GridLayoutManager
+import com.axelliant.hris.extention.hideShimmer
+import com.axelliant.hris.extention.showShimmer
 
+@AndroidEntryPoint
 class ResourceManagementFragment : BaseFragment() {
 
     private var resourceHours: ArrayList<DocumentHours>? = null
@@ -46,78 +53,81 @@ class ResourceManagementFragment : BaseFragment() {
     private var _binding: FragmentResourceManagmentBinding? = null
     private val binding get() = _binding
     private var currentFilter = AttendanceFilter.WEEK
-    private val resourceManageViewModel: ResourceManageViewModel by inject()
+    private val resourceManageViewModel: ResourceManageViewModel by viewModels()
     private var startDateString: String? = null
     private var endDateString: String? = null
     private var filterId = ""
+    private lateinit var dateFilterAdapter: FilterAdapter
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         _binding = FragmentResourceManagmentBinding.inflate(inflater).also { _binding = it }
+        binding?.lyContent?.isVisible = false
+        binding?.addExpense?.isVisible = false
+        binding?.shimmerLayout?.showShimmer(binding?.lyContent!!)
         return binding?.root
     }
 
+    private var isDataLoaded = false
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // 1. Trigger dialog spinner ONLY for subsequent fetches (filter switches or form submissions)
         resourceManageViewModel.getIsLoading()
             .observe(viewLifecycleOwner, EventObserver { isLoading ->
-                if (isLoading) {
-                    showDialog()
-                } else {
-                    hideDialog()
+                if (isDataLoaded) {
+                    if (isLoading) showDialog() else hideDialog()
                 }
             })
 
+        // 2. Start initial shimmer only on first launch
+        if (!isDataLoaded) {
+            toggleShimmer(true)
+        }
 
-
-        binding?.ivBack?.setOnClickListener {
+        binding?.appTopBar?.setOnBackClickListener {
             previousFragmentNavigation()
         }
-        eventSelection()
+        setupDateFilterBar()
         resourceManageViewModel.getMyHoursDetail(getCurrentObject())
+
         resourceManageViewModel.hoursResponse.observe(
             viewLifecycleOwner,
             EventObserver { response ->
+                // 3. Turn off shimmer and mark data loaded as soon as response arrives
+                toggleShimmer(false)
+                isDataLoaded = true
 
                 if (response?.meta?.status == true && response.resource_hour_data != null) {
-//                    subFilterPopulations(response.expense_status)
-
                     if (response.resource_hour_data.size > 0) {
                         binding?.rvExpense?.visibility = View.VISIBLE
                         binding?.tvNoRecord?.visibility = View.GONE
                         resourceHours = response.resource_hour_data
                         dataPopulate()
-                        binding?.viewExpand?.isVisible=true
-                        binding?.btnApply?.isVisible=true
-
-
+                        binding?.viewExpand?.isVisible = true
+                        binding?.btnApply?.isVisible = true
                     } else {
                         binding?.rvExpense?.visibility = View.GONE
                         binding?.tvNoRecord?.visibility = View.VISIBLE
-                        binding?.viewExpand?.isVisible=false
-                        binding?.btnApply?.isVisible=false
-
+                        binding?.viewExpand?.isVisible = false
+                        binding?.btnApply?.isVisible = false
                     }
-
                 } else {
                     requireContext().showErrorMsg(response?.meta?.message.toString())
                 }
-
             })
-
 
         resourceManageViewModel.postResponse.observe(
             viewLifecycleOwner,
             EventObserver { response ->
-
                 if (response?.meta?.status == true) {
                     requireContext().showSuccessMsg(response.status_message.toString())
                     resourceManageViewModel.getMyHoursDetail(getCurrentObject())
-
                 } else {
                     requireContext().showErrorMsg(response?.meta?.message.toString())
                 }
@@ -142,6 +152,16 @@ class ResourceManagementFragment : BaseFragment() {
         }
     }
 
+    private fun toggleShimmer(show: Boolean) {
+        if (show) {
+            binding?.shimmerLayout?.showShimmer(binding?.lyContent!!)
+            binding?.addExpense?.isVisible = false
+        } else {
+            binding?.shimmerLayout?.hideShimmer(binding?.lyContent!!)
+            binding?.addExpense?.isVisible = true
+        }
+    }
+
     private fun getMultiSelectedDocument(): ArrayList<String> {
 
         val arrayList: ArrayList<String> = arrayListOf()
@@ -163,9 +183,9 @@ class ResourceManagementFragment : BaseFragment() {
                     if (documentHours.status == LeaveStatus.PENDING.value)
                     {
                         AppNavigator.navigateToAddResourceManageFragment(Bundle().apply {
-                            this.putString(AppConst.HoursRequestIDParam, documentHours.name)
+                            this.putString(AppRouteArgs.HOURS_REQUEST_ID, documentHours.name)
                             this.putString(
-                                AppConst.HoursRequestParam,
+                                AppRouteArgs.HOURS_REQUEST,
                                 Gson().toJson(documentHours.resource_detail)
                             )
                         })
@@ -188,65 +208,32 @@ class ResourceManagementFragment : BaseFragment() {
         binding?.rvExpense?.adapter = resourceHoursAdapter
     }
 
-    private fun eventSelection() {
-        binding?.tvWeek?.background =
-            ContextCompat.getDrawable(requireContext(), R.drawable.rounded_disabled)
-
-        binding?.tvMonth?.background =
-            ContextCompat.getDrawable(requireContext(), R.drawable.rounded_disabled)
-
-        binding?.tvCustom?.background =
-            ContextCompat.getDrawable(requireContext(), R.drawable.rounded_disabled)
-
-
-        binding?.tvWeek?.setTextColor(requireContext().getColor(R.color.btn_text_color))
-        binding?.tvMonth?.setTextColor(requireContext().getColor(R.color.btn_text_color))
-        binding?.tvCustom?.setTextColor(requireContext().getColor(R.color.btn_text_color))
-
-        binding?.tvWeek?.setOnClickListener {
-            currentFilter = AttendanceFilter.WEEK
-            resourceManageViewModel.getMyHoursDetail(getCurrentObject())
-            eventSelection()
-        }
-        binding?.tvMonth?.setOnClickListener {
-            currentFilter = AttendanceFilter.MONTH
-            resourceManageViewModel.getMyHoursDetail(getCurrentObject())
-            eventSelection()
-        }
-
-        binding?.tvCustom?.setOnClickListener {
-            datePickerDialog()
-            currentFilter = AttendanceFilter.Custom
-            resourceManageViewModel.getMyHoursDetail(getCurrentObject())
-            eventSelection()
-        }
-
-        when (currentFilter) {
-            AttendanceFilter.WEEK -> {
-                binding?.tvWeek?.background =
-                    ContextCompat.getDrawable(requireContext(), R.drawable.rounded_enabled)
-                binding?.tvWeek?.setTextColor(requireContext().getColor(R.color.white))
-
+    private fun setupDateFilterBar() {
+        val items = listOf(
+            FilterItem(getString(R.string.last_seven), 0),
+            FilterItem(getString(R.string.this_month), 1),
+            FilterItem(getString(R.string.custom), 2)
+        )
+        dateFilterAdapter = FilterAdapter(items, selectedPosition = 0) { position, _ ->
+            when (position) {
+                0 -> {
+                    currentFilter = AttendanceFilter.WEEK
+                    dateFilterAdapter.setSelected(position)
+                    resourceManageViewModel.getMyHoursDetail(getCurrentObject())
+                }
+                1 -> {
+                    currentFilter = AttendanceFilter.MONTH
+                    dateFilterAdapter.setSelected(position)
+                    resourceManageViewModel.getMyHoursDetail(getCurrentObject())
+                }
+                2 -> datePickerDialog()
             }
-
-            AttendanceFilter.MONTH -> {
-
-                binding?.tvMonth?.background =
-                    ContextCompat.getDrawable(requireContext(), R.drawable.rounded_enabled)
-                binding?.tvMonth?.setTextColor(requireContext().getColor(R.color.white))
-            }
-
-            AttendanceFilter.Custom -> {
-
-                binding?.tvCustom?.background =
-                    ContextCompat.getDrawable(requireContext(), R.drawable.rounded_enabled)
-                binding?.tvCustom?.setTextColor(requireContext().getColor(R.color.white))
-            }
-
-            else -> {}
+        }
+        binding?.rvDateFilters?.apply {
+            layoutManager = GridLayoutManager(requireContext(), items.size)
+            adapter = dateFilterAdapter
         }
     }
-
     private fun getCurrentObject(): AttendanceInput {
 
 
@@ -290,18 +277,14 @@ class ResourceManagementFragment : BaseFragment() {
     }
 
     private fun datePickerDialog() {
-        // Creating a MaterialDatePicker builder for selecting a date range
         val builder = MaterialDatePicker.Builder.dateRangePicker()
         builder.setTitleText("Select a date range")
+        builder.setTheme(R.style.MyDatePickerTheme)
 
-        // Building the date picker dialog
         val datePicker = builder.build()
         datePicker.addOnPositiveButtonClickListener { selection ->
-            // Retrieving the selected start and end dates
             val startDate = selection.first
             val endDate = selection.second
-
-            // Formatting the selected dates as strings
 
             startDateString = Utils.getServerFormat(date = Date(startDate))
             endDateString = Utils.getServerFormat(date = Date(endDate))
@@ -309,11 +292,10 @@ class ResourceManagementFragment : BaseFragment() {
             setDateView()
 
             currentFilter = AttendanceFilter.Custom
+            dateFilterAdapter.setSelected(2)
             resourceManageViewModel.getMyHoursDetail(getCurrentObject())
-            eventSelection()
         }
 
-        // Showing the date picker dialog
         datePicker.show(activity?.supportFragmentManager!!, "DATE_PICKER")
     }
 
@@ -345,6 +327,12 @@ class ResourceManagementFragment : BaseFragment() {
         }
         binding?.rvSubFilter?.adapter = weeklyAdapter
 
+    }
+
+    override fun onDestroyView() {
+        binding?.shimmerLayout?.stopShimmer()
+        super.onDestroyView()
+        _binding = null
     }
 
 }

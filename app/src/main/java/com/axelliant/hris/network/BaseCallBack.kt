@@ -1,15 +1,18 @@
 package com.axelliant.hris.network
 
-import com.axelliant.hris.config.AppConst.observableCode
+import com.axelliant.hris.core.events.AppSessionEvents
+import com.axelliant.hris.core.contracts.network.ApiErrorMapperContract
+import com.axelliant.hris.core.network.ApiResult
+import com.axelliant.hris.core.network.DefaultApiErrorMapper
 
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.net.SocketException
-import java.net.SocketTimeoutException
-import java.net.UnknownHostException
 
-abstract class BaseCallBack<T>(private val call: Call<T>) : Callback<T> {
+abstract class BaseCallBack<T>(
+    private val call: Call<T>,
+    private val apiErrorMapper: ApiErrorMapperContract = DefaultApiErrorMapper()
+) : Callback<T> {
     abstract fun onFinalSuccess(call: Call<T>, response: Response<T>)
 
     abstract fun onFinalFailure(
@@ -22,55 +25,20 @@ abstract class BaseCallBack<T>(private val call: Call<T>) : Callback<T> {
     }
 
     override fun onFailure(call: Call<T>, t: Throwable) {
-        onFinalFailure(getErrorFromThrowable(t))
+        onFinalFailure(apiErrorMapper.messageFor(apiErrorMapper.mapThrowable(t)))
     }
 
 
     private fun onResponseValidator(call: Call<T>, response: Response<T>) {
-        observableCode.set(response.code())
-        if (response.isSuccessful) {
-            onFinalSuccess(call, response)
-        } else if (response.errorBody() != null) {
-            if (response.code() == 500) {
-                onFinalFailure(ErrorMessages.InternalServerError500.errorString)
-            } else if (response.code() == 400) {
-                onFinalFailure(ErrorMessages.BadRequest400.errorString)
-            } else if (response.code() == 404) {
-                onFinalFailure(ErrorMessages.NotFound404.errorString)
-            } else if (response.code() == 401) {
-                onFinalFailure(ErrorMessages.SessionExpired401.errorString)
-            } else if (response.code() == 422) {
-                onFinalFailure(response.message().toString())
-            } else {
-                onFinalFailure(response.message().toString())
-            }
+        AppSessionEvents.sessionExpired.set(response.code())
+        when (val result = apiErrorMapper.mapResponse(response)) {
+            is ApiResult.Success,
+            ApiResult.Empty -> onFinalSuccess(call, response)
 
-        } else {
-            onFinalFailure(errorString = response.toString())
-        }
-
-    }
-
-
-    private fun getErrorFromThrowable(
-        t: Throwable
-    ): String {
-        return when (t) {
-            is UnknownHostException, is SocketException -> {
-                ErrorMessages.NoInternetError.errorString
-            }
-
-            is UnknownHostException -> {
-                ErrorMessages.SocketException.errorString
-            }
-
-            is SocketTimeoutException -> {
-                ErrorMessages.SocketTimeout.errorString
-            }
-
-            else -> {
-                ErrorMessages.UnknownError.errorString
-            }
+            is ApiResult.HttpError,
+            is ApiResult.NetworkError,
+            is ApiResult.UnknownError,
+            ApiResult.Unauthorized -> onFinalFailure(apiErrorMapper.messageFor(result))
         }
     }
 }

@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.axelliant.hris.adapter.AddResourceManageAdapter
 import com.axelliant.hris.base.BaseFragment
 import com.axelliant.hris.callback.AdapterItemClick
-import com.axelliant.hris.config.AppConst
+import com.axelliant.hris.core.constants.AppRouteArgs
 import com.axelliant.hris.databinding.FragmentAddResourceManageBinding
 import com.axelliant.hris.event.EventObserver
 import com.axelliant.hris.extention.showErrorMsg
@@ -26,9 +26,11 @@ import com.axelliant.hris.utils.Utils.getServerFormat
 import com.axelliant.hris.viewmodel.ResourceManageViewModel
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import org.koin.android.ext.android.inject
+import androidx.fragment.app.viewModels
+import dagger.hilt.android.AndroidEntryPoint
 
 
+@AndroidEntryPoint
 class AddResourceManageFragment : BaseFragment(), AddResourceManageAdapter.OnUpdateList {
 
     private var currentIndex = 0
@@ -39,7 +41,7 @@ class AddResourceManageFragment : BaseFragment(), AddResourceManageAdapter.OnUpd
     private var _binding: FragmentAddResourceManageBinding? = null
     private val binding get() = _binding
     private var addProjectHoursList: ArrayList<ProjectHour> = arrayListOf()
-    private val resourceManageViewModel: ResourceManageViewModel by inject()
+    private val resourceManageViewModel: ResourceManageViewModel by viewModels()
 
     var addResourceManageAdapter: AddResourceManageAdapter? = null
     private var projectTypeList: ArrayList<ProjectType> = arrayListOf()
@@ -59,9 +61,9 @@ class AddResourceManageFragment : BaseFragment(), AddResourceManageAdapter.OnUpd
         super.onViewCreated(view, savedInstanceState)
 
 
-        if (arguments != null && requireArguments().containsKey(AppConst.HoursRequestParam)) {
-            val parsedData = arguments?.getString(AppConst.HoursRequestParam, "")
-            val docID = arguments?.getString(AppConst.HoursRequestIDParam, "")
+        if (arguments != null && requireArguments().containsKey(AppRouteArgs.HOURS_REQUEST)) {
+            val parsedData = arguments?.getString(AppRouteArgs.HOURS_REQUEST, "")
+            val docID = arguments?.getString(AppRouteArgs.HOURS_REQUEST_ID, "")
 
             if (parsedData != null) {
                 forUpdateList =
@@ -221,7 +223,7 @@ class AddResourceManageFragment : BaseFragment(), AddResourceManageAdapter.OnUpd
 
         }
 
-        binding?.ivBack?.setOnClickListener {
+        binding?.appTopBar?.setOnBackClickListener {
             AppNavigator.moveBackToPreviousFragment()
         }
 

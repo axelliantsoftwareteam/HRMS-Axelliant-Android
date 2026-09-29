@@ -13,12 +13,13 @@ import android.widget.Spinner
 import androidx.recyclerview.widget.RecyclerView
 import com.axelliant.hris.R
 import com.axelliant.hris.callback.AdapterItemClick
-import com.axelliant.hris.config.AppConst.SERVER_DATE_FORMAT_ATTENDANCE
+import com.axelliant.hris.core.constants.AppDateFormats
 import com.axelliant.hris.databinding.LyAddNewExpenseBinding
 import com.axelliant.hris.model.expense.AddExpense
 import com.axelliant.hris.utils.Utils
 import com.google.gson.Gson
 import java.util.Calendar
+import androidx.core.view.doOnLayout
 
 class AddExpenseAdapter(
     private val list: ArrayList<AddExpense>,
@@ -39,13 +40,13 @@ class AddExpenseAdapter(
 
     override fun onBindViewHolder(holder: AccountsVH, position: Int) {
         val currentItem = list[position]
-        holder.bind(currentItem, mContext)
+        holder.bind(currentItem)
         Log.d("updatedListJson", Gson().toJson(currentItem))
         // Populate spinner for expense types
         spinnerLeavePopulations(mContext, holder.binding.spAttendType, currentItem, holder)
 
         // Show/Hide delete button for the first item
-        holder.binding.ivDelete.visibility = if (position == 0) View.GONE else View.VISIBLE
+        holder.binding.tvDelete.visibility = if (position == 0) View.GONE else View.VISIBLE
 
         // Remove any previous TextWatchers before adding new ones
         holder.binding.etAttendanceReason.removeTextChangedListener(holder.reasonTextWatcher)
@@ -58,7 +59,7 @@ class AddExpenseAdapter(
         // Add new TextWatchers for description and amount
         holder.reasonTextWatcher = object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                val adapterPosition = holder.adapterPosition
+                val adapterPosition = holder.bindingAdapterPosition
                 if (adapterPosition != RecyclerView.NO_POSITION) {
                     list[adapterPosition].description = s.toString()
                     onUpdateList.onListUpdated(list)
@@ -71,7 +72,7 @@ class AddExpenseAdapter(
 
         holder.amountTextWatcher = object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                val adapterPosition = holder.adapterPosition
+                val adapterPosition = holder.bindingAdapterPosition
                 if (adapterPosition != RecyclerView.NO_POSITION) {
                     val newAmount = try {
                         s.toString().toDouble()
@@ -93,7 +94,7 @@ class AddExpenseAdapter(
 
         // Handle the delete action
         holder.binding.tvDelete.setOnClickListener {
-            val adapterPosition = holder.adapterPosition
+            val adapterPosition = holder.bindingAdapterPosition
             if (adapterPosition != RecyclerView.NO_POSITION) {
                 list.removeAt(adapterPosition)
                 notifyItemRemoved(adapterPosition)
@@ -105,7 +106,7 @@ class AddExpenseAdapter(
 
         // Handle the date picker
         holder.binding.lyDate.setOnClickListener {
-            val adapterPosition = holder.adapterPosition
+            val adapterPosition = holder.bindingAdapterPosition
             if (adapterPosition != RecyclerView.NO_POSITION) {
                 pickDate(adapterPosition)
             }
@@ -120,7 +121,7 @@ class AddExpenseAdapter(
         var reasonTextWatcher: TextWatcher? = null
         var amountTextWatcher: TextWatcher? = null
 
-        fun bind(item: AddExpense, mContext: Context) {
+        fun bind(item: AddExpense) {
             binding.tvDateTxt.text = item.expense_date ?: ""
 //            binding.etAttendanceReason.setText(item.description ?: "")
 //            binding.etAmount.setText(item.amount?.toString() ?: "")
@@ -135,13 +136,13 @@ class AddExpenseAdapter(
 
         val datePickerDialog = DatePickerDialog(
             mContext, R.style.my_dialog_theme,
-            { _, year, monthOfYear, dayOfMonth ->
+            { _, selectedYear, monthOfYear, dayOfMonth ->
                 val selectedDate = Calendar.getInstance()
-                selectedDate.set(year, monthOfYear, dayOfMonth)
+                selectedDate.set(selectedYear, monthOfYear, dayOfMonth)
 
                 // Format the date and update the list
                 list[position].expense_date = Utils.getServerFormat(
-                    SERVER_DATE_FORMAT_ATTENDANCE, selectedDate.time
+                    AppDateFormats.SERVER_ATTENDANCE_DATE, selectedDate.time
                 )
                 notifyItemChanged(position)
                 onUpdateList.onListUpdated(list)
@@ -171,7 +172,7 @@ class AddExpenseAdapter(
 
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
-                val adapterPosition = holder.adapterPosition
+                val adapterPosition = holder.bindingAdapterPosition
                 if (adapterPosition != RecyclerView.NO_POSITION) {
                     val currentItem = list[adapterPosition]
                     currentItem.expense_type = currentItem.expenseTypeList[pos].type

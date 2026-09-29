@@ -17,8 +17,14 @@ import com.axelliant.hris.model.resourceManage.MyHoursDetails
 import com.axelliant.hris.model.resourceManage.PostHoursRequestResponse
 import com.axelliant.hris.repos.ResourceManageRepo
 import com.axelliant.hris.utils.Validator
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class ResourceManageViewModel(private val resourceManageRepo: ResourceManageRepo, private val validator: Validator) : BaseViewModel() {
+@HiltViewModel
+class ResourceManageViewModel @Inject constructor(
+    private val resourceManageRepo: ResourceManageRepo,
+    private val validator: Validator
+) : BaseViewModel() {
 
     var subject = ObservableField<String>()
     var description = ObservableField<String>()

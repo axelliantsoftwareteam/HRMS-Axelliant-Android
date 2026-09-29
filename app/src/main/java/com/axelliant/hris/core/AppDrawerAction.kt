@@ -1,0 +1,31 @@
+package com.axelliant.hris.core
+
+enum class AppDrawerAction {
+    Home,
+    AgentConsole,
+    Calendar,
+    Attendance,
+    Requests,
+    Leaves,
+    CheckInRequests,
+    Expenses,
+    DocumentVault,
+    ResourceManagement,
+    Products,
+    Quotes,
+    SaleOrders,
+    PurchaseOrders,
+    Subscriptions,
+    Warehouse,
+    Warehouses,
+    WarehouseLocations,
+    WarehouseReceiving,
+    WarehouseInventory,
+    WarehousePutaway,
+    InventoryReservations,
+    WarehousePicking,
+    CustomerSuppliedInventory,
+    Profiles,
+    Settings,
+    Logout
+}

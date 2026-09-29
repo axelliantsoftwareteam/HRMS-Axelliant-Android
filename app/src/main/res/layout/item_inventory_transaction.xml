@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.axelliant.hris.ui.designsystem.components.AppCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/ds_space_12"
+    app:cardBackgroundColor="@color/ds_surface"
+    app:cardCornerRadius="@dimen/ds_radius_md"
+    app:cardElevation="0dp"
+    app:strokeColor="@color/purchase_order_fluent_stroke_subtle"
+    app:strokeWidth="@dimen/_1sdp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/ds_space_12">
+
+        <LinearLayout
+            android:id="@+id/summaryRow"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:baselineAligned="false"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/ds_space_8"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                    style="@style/Text.InternalApps.Caption"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/inventory_transaction_type"
+                    android:textColor="@color/ds_text_muted" />
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                    android:id="@+id/typeBadge"
+                    style="@style/Text.InternalApps.Caption"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/ds_space_2"
+                    android:background="@drawable/bg_quote_status_submitted"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:maxLines="1"
+                    android:paddingStart="@dimen/ds_space_10"
+                    android:paddingTop="@dimen/ds_space_4"
+                    android:paddingEnd="@dimen/ds_space_10"
+                    android:paddingBottom="@dimen/ds_space_4"
+                    android:textColor="@color/quotes_status_submitted_text"
+                    tools:text="Move To Staging" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/quantityGroup"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/ds_space_8"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:orientation="vertical">
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                    style="@style/Text.InternalApps.Caption"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:text="@string/inventory_transaction_quantity"
+                    android:textColor="@color/ds_text_muted" />
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                    android:id="@+id/quantityText"
+                    style="@style/Text.InternalApps.Body"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:gravity="end"
+                    android:textColor="@color/ds_text_primary"
+                    tools:text="1" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
+            android:id="@+id/createdDateText"
+            style="@style/Text.InternalApps.Caption"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ds_space_8"
+            android:textColor="@color/ds_text_secondary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/summaryRow"
+            app:layout_constraintTop_toBottomOf="@id/summaryRow"
+            tools:text="Sep 03, 2026, 01:13:45 PM" />
+
+        <LinearLayout
+            android:id="@+id/locationRow"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ds_space_12"
+            android:baselineAligned="false"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/createdDateText">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/ds_space_8"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                    style="@style/Text.InternalApps.Caption"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/inventory_transaction_from"
+                    android:textColor="@color/ds_text_muted" />
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                    android:id="@+id/fromLocationText"
+                    style="@style/Text.InternalApps.Caption"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/poppins_medium"
+                    android:maxLines="2"
+                    android:textColor="@color/ds_text_primary"
+                    tools:text="Receiving" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/ds_space_8"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                    style="@style/Text.InternalApps.Caption"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/inventory_transaction_to"
+                    android:textColor="@color/ds_text_muted" />
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                    android:id="@+id/toLocationText"
+                    style="@style/Text.InternalApps.Caption"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/poppins_medium"
+                    android:maxLines="2"
+                    android:textColor="@color/ds_text_primary"
+                    tools:text="Inspection" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_1sdp"
+            android:layout_marginTop="@dimen/ds_space_10"
+            android:background="@color/purchase_order_fluent_stroke_subtle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/locationRow" />
+
+        <LinearLayout
+            android:id="@+id/referenceRow"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ds_space_10"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="@id/divider"
+            app:layout_constraintStart_toStartOf="@id/divider"
+            app:layout_constraintTop_toBottomOf="@id/divider">
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                style="@style/Text.InternalApps.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/inventory_transaction_reference"
+                android:textColor="@color/ds_text_muted" />
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                android:id="@+id/referenceText"
+                style="@style/Text.InternalApps.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:fontFamily="@font/poppins_medium"
+                android:maxLines="2"
+                android:textColor="@color/ds_text_primary"
+                tools:text="Warehouse Receipt Line" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/notesRow"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/ds_space_8"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="@id/referenceRow"
+            app:layout_constraintStart_toStartOf="@id/referenceRow"
+            app:layout_constraintTop_toBottomOf="@id/referenceRow">
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                style="@style/Text.InternalApps.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/inventory_transaction_notes"
+                android:textColor="@color/ds_text_muted" />
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                android:id="@+id/notesText"
+                style="@style/Text.InternalApps.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_medium"
+                android:textColor="@color/ds_text_primary"
+                tools:text="Automatic reservation from warehouse receipt WR-00000001." />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.axelliant.hris.ui.designsystem.components.AppCardView>

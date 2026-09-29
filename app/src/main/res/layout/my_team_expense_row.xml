@@ -18,9 +18,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:weightSum="10">
 
-        <com.google.android.material.textview.MaterialTextView
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/tv_hour"
-            style="@style/TEXT_MEDIUM_BLACK_10"
+            style="@style/Text.Fluent2.Caption.Primary.Strong"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="3.5"
@@ -28,9 +28,9 @@
             android:textAlignment="textStart"
             tools:text="2024-06-11" />
 
-        <com.google.android.material.textview.MaterialTextView
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/status"
-            style="@style/TEXT_SEMI_BLACK_10"
+            style="@style/Text.Fluent2.Caption.Primary.Strong"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:paddingStart="@dimen/_1sdp"
@@ -38,7 +38,7 @@
             android:layout_weight="2.5"
             android:gravity="center"
             tools:text="100000"
-            android:textColor="@color/colorApp" />
+            android:textColor="@color/ds_primary" />
 
         <LinearLayout
             android:id="@+id/tv_custom"
@@ -47,9 +47,9 @@
             android:layout_weight="3"
             android:gravity="center">
 
-            <com.google.android.material.textview.MaterialTextView
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
                 android:id="@+id/tv_date"
-                style="@style/TEXT_SEMI_BLACK_10"
+                style="@style/Text.Fluent2.Caption.Primary.Strong"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/rounded_time_bg"
@@ -66,7 +66,7 @@
 
         <ImageView
             android:id="@+id/ic_drop_down"
-            style="@style/TEXT_SEMI_BLACK_10"
+            style="@style/Text.Fluent2.Caption.Primary.Strong"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -89,9 +89,9 @@
         app:layout_constraintTop_toBottomOf="@+id/line_div" >
 
 
-        <com.google.android.material.textview.MaterialTextView
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/tv_attend_status"
-            style="@style/TEXT_SEMI_BLACK_10"
+            style="@style/Text.Fluent2.Caption.Primary.Strong"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_5sdp"
@@ -100,7 +100,7 @@
             android:gravity="center"
             android:padding="@dimen/_5sdp"
             tools:text="Edit"
-            android:textColor="@color/colorApp"
+            android:textColor="@color/ds_primary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

@@ -4,55 +4,96 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+    style="@style/Layout.Fluent2.Screen"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/start_guideline"
-            style="@style/start_gl"
+            style="@style/Guideline.Fluent2.Start"
             android:orientation="vertical" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/end_guideline"
-            style="@style/end_gl"
+            style="@style/Guideline.Fluent2.End"
             android:orientation="vertical" />
 
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/bottom_guideline"
-            style="@style/bottom_gl" />
+            style="@style/Guideline.Fluent2.Bottom" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/top_guideline"
-            style="@style/top_gl" />
+            style="@style/Guideline.Fluent2.Top" />
 
-        <ImageView
-            android:id="@+id/iv_back"
-            android:layout_width="@dimen/_30sdp"
-            android:layout_height="@dimen/_30sdp"
-            android:contentDescription="@string/todo"
-            android:src="@drawable/ic_left"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/top_guideline" />
-
-
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv_title"
-            style="@style/TEXT_SEMI_BLACK_15"
+        <com.axelliant.hris.ui.designsystem.components.AppTopBarView
+            android:id="@+id/appTopBar"
             android:layout_width="0dp"
-            android:gravity="center"
-            android:text="@string/my_team_leave"
-            app:layout_constraintBottom_toBottomOf="@+id/iv_back"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/iv_back" />
+            android:layout_height="@dimen/_40sdp"
+            app:centerTitle="true"
+            app:showBackButton="true"
+            app:showSearchButton="false"
+            app:titleText="@string/team_leave"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintTop_toBottomOf="@id/top_guideline" />
+
+        <!-- Segmented tab bar: Leave Requests / Leave Quota -->
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/ly_tabs"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:background="@drawable/rounded_bgg"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="@dimen/_4sdp"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintTop_toBottomOf="@id/appTopBar">
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                android:id="@+id/tv_tab_requests"
+                style="@style/Text.Fluent2.Body.Primary.Strong"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_disabled"
+                android:gravity="center"
+                android:paddingTop="@dimen/_8sdp"
+                android:paddingBottom="@dimen/_8sdp"
+                android:text="@string/leave_requests"
+                app:layout_constraintEnd_toStartOf="@+id/tv_tab_quota"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                android:id="@+id/tv_tab_quota"
+                style="@style/Text.Fluent2.Body.Inverse.Strong"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_4sdp"
+                android:background="@drawable/rounded_enabled"
+                android:gravity="center"
+                android:paddingTop="@dimen/_8sdp"
+                android:paddingBottom="@dimen/_8sdp"
+                android:text="@string/leave_quota"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tv_tab_requests"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- ==================== TAB 1: LEAVE REQUESTS (existing) ==================== -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/ly_requests_tab"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/bottom_guideline"
             app:layout_constraintEnd_toEndOf="@id/end_guideline"
             app:layout_constraintStart_toStartOf="@id/start_guideline"
-            app:layout_constraintTop_toBottomOf="@+id/iv_back">
+            app:layout_constraintTop_toBottomOf="@+id/ly_tabs">
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -68,9 +109,9 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <com.google.android.material.textview.MaterialTextView
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
                     android:id="@+id/tv_week"
-                    style="@style/TEXT_REGULAR_WHITE_10"
+                    style="@style/Text.Fluent2.Caption.Inverse"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:background="@drawable/rounded_enabled"
@@ -81,9 +122,9 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <com.google.android.material.textview.MaterialTextView
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
                     android:id="@+id/tv_month"
-                    style="@style/TEXT_REGULAR_BLACK_10"
+                    style="@style/Text.Fluent2.Caption.Primary"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/_5sdp"
@@ -94,9 +135,9 @@
                     app:layout_constraintEnd_toStartOf="@+id/tv_custom"
                     app:layout_constraintStart_toEndOf="@+id/tv_week" />
 
-                <com.google.android.material.textview.MaterialTextView
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
                     android:id="@+id/tv_custom"
-                    style="@style/TEXT_REGULAR_BLACK_10"
+                    style="@style/Text.Fluent2.Caption.Primary"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/_5sdp"
@@ -116,9 +157,9 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ly_action_btn">
-                <com.google.android.material.textview.MaterialTextView
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
                     android:id="@+id/tv_start_date"
-                    style="@style/TEXT_MEDIUM_BLACK_10"
+                    style="@style/Text.Fluent2.Caption.Primary.Strong"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/_5sdp"
@@ -144,9 +185,9 @@
                     >
 
 
-                    <com.google.android.material.textview.MaterialTextView
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
                         android:id="@+id/tv_start_date_txt"
-                        style="@style/TEXT_MEDIUM_GREY_10"
+                        style="@style/Text.Fluent2.Caption.Muted.Strong"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_5sdp"
@@ -183,9 +224,9 @@
                     app:layout_constraintTop_toTopOf="@+id/ly_end_date" />
 
 
-                <com.google.android.material.textview.MaterialTextView
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
                     android:id="@+id/tv_end_date"
-                    style="@style/TEXT_MEDIUM_BLACK_10"
+                    style="@style/Text.Fluent2.Caption.Primary.Strong"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_5sdp"
@@ -211,9 +252,9 @@
                     app:layout_constraintTop_toTopOf="parent">
 
 
-                    <com.google.android.material.textview.MaterialTextView
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
                         android:id="@+id/tv_end_date_txt"
-                        style="@style/TEXT_MEDIUM_GREY_10"
+                        style="@style/Text.Fluent2.Caption.Muted.Strong"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_5sdp"
@@ -305,9 +346,9 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
-                    <com.google.android.material.textview.MaterialTextView
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
                         android:id="@+id/tv_team_member"
-                        style="@style/TEXT_MEDIUM_WHITE_12"
+                        style="@style/Text.Fluent2.Body.Inverse.Strong"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:text="@string/team_member"
@@ -316,14 +357,14 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <com.google.android.material.textview.MaterialTextView
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
                         android:id="@+id/tv_team_member_txt"
-                        style="@style/TEXT_MEDIUM_WHITE_12"
+                        style="@style/Text.Fluent2.Body.Inverse.Strong"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_marginStart="@dimen/_5sdp"
                         android:background="@drawable/circle_no_bg"
-                        android:backgroundTint="@color/colorApp"
+                        android:backgroundTint="@color/ds_primary"
                         android:padding="@dimen/_3sdp"
                         tools:text="20"
                         android:textSize="@dimen/_8sdp"
@@ -358,9 +399,9 @@
                         tools:listitem="@layout/my_team_leave_row" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <com.google.android.material.textview.MaterialTextView
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
                     android:id="@+id/tv_no_record"
-                    style="@style/TEXT_SEMI_BLACK_15"
+                    style="@style/Text.Fluent2.Subheading.Primary.Strong"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -377,5 +418,152 @@
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- ==================== TAB 2: LEAVE QUOTA (new) ==================== -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/ly_quota_tab"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@id/bottom_guideline"
+            app:layout_constraintEnd_toEndOf="@id/end_guideline"
+            app:layout_constraintStart_toStartOf="@id/start_guideline"
+            app:layout_constraintTop_toBottomOf="@+id/ly_tabs">
+
+            <!-- Search bar -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/ly_search"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_12sdp"
+                android:background="@drawable/rounded_search_bg"
+                android:paddingStart="@dimen/_12sdp"
+                android:paddingEnd="@dimen/_12sdp"
+                android:paddingTop="@dimen/_4sdp"
+                android:paddingBottom="@dimen/_4sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/iv_search"
+                    android:layout_width="@dimen/_18sdp"
+                    android:layout_height="@dimen/_18sdp"
+                    android:contentDescription="@string/accessibility_search"
+                    android:src="@drawable/ic_search"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/ds_text_muted" />
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextFieldView
+                    android:id="@+id/et_search"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_8sdp"
+                    android:background="@android:color/transparent"
+                    android:hint="@string/search_team_member"
+                    android:imeOptions="actionSearch"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:paddingTop="@dimen/_8sdp"
+                    android:paddingBottom="@dimen/_8sdp"
+                    android:textColor="@color/ds_text_primary"
+                    android:textColorHint="@color/ds_text_muted"
+                    android:textSize="@dimen/_12sdp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/iv_search"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="Autofill,TouchTargetSizeCheck" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!-- Team members container (red header + list) -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/ly_quota_members"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="@dimen/_12sdp"
+                android:background="@drawable/rounded_attend_row"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ly_search">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/ly_quota_header"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rounded_shifts"
+                    android:backgroundTint="@color/color_third"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/_10sdp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
+                        android:id="@+id/tv_quota_title"
+                        style="@style/Text.Fluent2.Subheading.Inverse.Strong"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/team_member"
+                        android:textSize="@dimen/_14sdp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
+                        android:id="@+id/tv_quota_count"
+                        style="@style/Text.Fluent2.Body.Inverse.Strong"
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        android:layout_marginStart="@dimen/_8sdp"
+                        android:background="@drawable/circle_no_bg"
+                        android:backgroundTint="@color/ds_primary"
+                        android:gravity="center"
+                        android:textSize="@dimen/_9sdp"
+                        app:layout_constraintBottom_toBottomOf="@+id/tv_quota_title"
+                        app:layout_constraintStart_toEndOf="@+id/tv_quota_title"
+                        app:layout_constraintTop_toTopOf="@+id/tv_quota_title"
+                        tools:text="2" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_quota"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="@dimen/_4sdp"
+                    android:layout_marginBottom="@dimen/_5sdp"
+                    android:clipToPadding="false"
+                    android:orientation="vertical"
+                    android:paddingBottom="@dimen/_5sdp"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/ly_quota_header"
+                    tools:itemCount="2"
+                    tools:listitem="@layout/row_leave_quota" />
+
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
+                    android:id="@+id/tv_quota_no_record"
+                    style="@style/Text.Fluent2.Subheading.Primary.Strong"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/no_record_found"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/ly_quota_header" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

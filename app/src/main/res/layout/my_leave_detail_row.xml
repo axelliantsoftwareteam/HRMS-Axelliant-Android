@@ -15,9 +15,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.textview.MaterialTextView
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/from_date"
-            style="@style/TEXT_MEDIUM_BLACK_10"
+            style="@style/Text.Fluent2.Caption.Primary.Strong"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:text="@string/_17_may_2024"
@@ -29,9 +29,9 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.textview.MaterialTextView
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/to_date"
-            style="@style/TEXT_MEDIUM_BLACK_10"
+            style="@style/Text.Fluent2.Caption.Primary.Strong"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:text="@string/_17_may_2024"
@@ -41,9 +41,9 @@
             app:layout_constraintStart_toEndOf="@+id/from_date"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.textview.MaterialTextView
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/tv_type"
-            style="@style/TEXT_MEDIUM_BLACK_10"
+            style="@style/Text.Fluent2.Caption.Primary.Strong"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:text="@string/sick"
@@ -55,7 +55,7 @@
 
         <ImageView
             android:id="@+id/tv_drop_down"
-            style="@style/TEXT_SEMI_BLACK_10"
+            style="@style/Text.Fluent2.Caption.Primary.Strong"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="@dimen/_10sdp"
@@ -74,9 +74,9 @@
         app:layout_constraintTop_toBottomOf="@+id/ly_action_btn" >
 
 
-        <com.google.android.material.textview.MaterialTextView
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/tv_attend_status"
-            style="@style/TEXT_SEMI_BLACK_10"
+            style="@style/Text.Fluent2.Caption.Primary.Strong"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_time_bg"
@@ -91,15 +91,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
            />
-        <com.google.android.material.textview.MaterialTextView
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/tv_edit"
-            style="@style/TEXT_SEMI_BLACK_10"
+            style="@style/Text.Fluent2.Caption.Primary.Strong"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_time_bg"
             android:backgroundTint="#1A09589B"
             android:padding="@dimen/_5sdp"
-            android:textColor="@color/colorApp"
+            android:textColor="@color/ds_primary"
             android:gravity="center"
             android:paddingStart="@dimen/_10sdp"
             android:paddingTop="@dimen/_5sdp"
@@ -156,9 +156,9 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
-                    <com.google.android.material.textview.MaterialTextView
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
                         android:id="@+id/tv_actual_in"
-                        style="@style/TEXT_MEDIUM_GREY_10"
+                        style="@style/Text.Fluent2.Caption.Muted.Strong"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/leaves_days"
@@ -166,9 +166,9 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <com.google.android.material.textview.MaterialTextView
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
                         android:id="@+id/tv_leave_days"
-                        style="@style/TEXT_MEDIUM_BLACK_10"
+                        style="@style/Text.Fluent2.Caption.Primary.Strong"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_5sdp"
@@ -188,9 +188,9 @@
                     app:layout_constraintStart_toEndOf="@+id/ly_actual_in"
                     app:layout_constraintTop_toTopOf="@+id/ly_actual_in">
 
-                    <com.google.android.material.textview.MaterialTextView
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
                         android:id="@+id/tv_work_home"
-                        style="@style/TEXT_MEDIUM_GREY_10"
+                        style="@style/Text.Fluent2.Caption.Muted.Strong"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/status"
@@ -198,9 +198,9 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <com.google.android.material.textview.MaterialTextView
+                    <com.axelliant.hris.ui.designsystem.components.AppTextView
                         android:id="@+id/tv_paid"
-                        style="@style/TEXT_MEDIUM_BLACK_10"
+                        style="@style/Text.Fluent2.Caption.Primary.Strong"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_5sdp"
@@ -218,9 +218,9 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-            <com.google.android.material.textview.MaterialTextView
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
                 android:id="@+id/tv_shift"
-                style="@style/TEXT_MEDIUM_GREY_10"
+                style="@style/Text.Fluent2.Caption.Muted.Strong"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/reason"
@@ -229,9 +229,9 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ly_shift_details" />
 
-            <com.google.android.material.textview.MaterialTextView
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
                 android:id="@+id/tv_reason"
-                style="@style/TEXT_MEDIUM_BLACK_10"
+                style="@style/Text.Fluent2.Caption.Primary.Strong"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"

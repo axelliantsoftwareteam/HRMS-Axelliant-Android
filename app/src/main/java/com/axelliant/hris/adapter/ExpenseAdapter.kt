@@ -38,7 +38,7 @@ class ExpenseAdapter(
 
     override fun onBindViewHolder(holder: AccountsVH, position: Int) {
         val currentItem = list[position]
-        holder.bind(currentItem, mContext)
+        holder.bind(currentItem)
 
 //        holder.binding.tvViewDetail.setOnClickListener {
 //            itemClick.onItemClick(list[position], position)
@@ -57,7 +57,7 @@ class ExpenseAdapter(
                 attachmentTypeMapping(currentItem.attachments),
                 object : AdapterItemClick {
                     override fun onItemClick(customObject: Any, position: Int) {
-                        val adapterPosition = holder.adapterPosition
+                        val adapterPosition = holder.bindingAdapterPosition
                         if (adapterPosition != RecyclerView.NO_POSITION) {
                             AppNavigator.navigateToImageDetailFragment(Bundle().apply {
                                 this.putString("images", Gson().toJson(list[adapterPosition].attachments))
@@ -69,7 +69,7 @@ class ExpenseAdapter(
 
 
         holder.binding.tvAttendStatus.setOnClickListener {
-            val adapterPosition = holder.adapterPosition
+            val adapterPosition = holder.bindingAdapterPosition
             if (adapterPosition != RecyclerView.NO_POSITION) {
                 itemClick.onItemClick(list[adapterPosition], adapterPosition)
             }
@@ -105,7 +105,7 @@ class ExpenseAdapter(
 
     class AccountsVH(val binding: MyTeamExpenseRowBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: Expense, mContext: Context) {
+        fun bind(item: Expense) {
 //            binding.tvTitle.text = item.title.toString()
 //            when(expenseEvent){
 //                Pending -> {

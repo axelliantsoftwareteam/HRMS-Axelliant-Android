@@ -8,23 +8,17 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 open class BaseFragment : Fragment() {
 
-
-
-    fun previousFragmentNavigation(){
+    fun previousFragmentNavigation() {
         showDialog()
         AppNavigator.moveBackToPreviousFragment()
     }
 
-     fun showDialog() {
-        if (requireActivity() is BaseActivity) {
-            if (!(requireActivity() as BaseActivity).isFinishing)
-                (requireActivity() as BaseActivity).loadingDialog.show()
-        }
+    fun showDialog() {
+        (activity as? BaseActivity)?.showDialog()
     }
 
-     fun hideDialog() {
-        if (requireActivity() is BaseActivity)
-            (requireActivity() as BaseActivity).loadingDialog.dismiss()
+    fun hideDialog() {
+        (activity as? BaseActivity)?.hideDialog()
     }
 
     fun navigateToBottomSheet(bottomSheetFragment: BottomSheetDialogFragment) {
@@ -46,12 +40,9 @@ open class BaseFragment : Fragment() {
             }
             return "v $versionName ($versionCode)"
 
-        } catch (e: Exception) {
-            e.printStackTrace()
+        } catch (exception: Exception) {
+            exception.printStackTrace()
             return ""
         }
-
-
     }
-
 }

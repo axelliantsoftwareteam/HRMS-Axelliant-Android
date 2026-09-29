@@ -18,7 +18,7 @@
         <clip>
             <scale android:scaleWidth="100%" android:scaleHeight="50">
                 <shape>
-                    <gradient android:endColor="@color/colorApp"
+                    <gradient android:endColor="@color/ds_primary"
                         android:centerColor="@color/color_secondry"
                         android:startColor="@color/color_secondry"
                         android:angle="0"/>

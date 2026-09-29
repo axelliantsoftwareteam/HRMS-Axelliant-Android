@@ -16,9 +16,9 @@
         android:padding="@dimen/_10sdp">
 
 
-        <com.google.android.material.textview.MaterialTextView
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/tv_date"
-            style="@style/TEXT_MEDIUM_GREY_10"
+            style="@style/Text.Fluent2.Caption.Muted.Strong"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/date"
@@ -27,9 +27,9 @@
             app:layout_constraintBottom_toTopOf="@+id/tv_date_txt"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.textview.MaterialTextView
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/tv_date_txt"
-            style="@style/TEXT_MEDIUM_BLACK_10"
+            style="@style/Text.Fluent2.Caption.Primary.Strong"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="10 Sep, 2024"
@@ -37,9 +37,9 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_date"
             app:layout_constraintStart_toStartOf="parent"/>
 
-        <com.google.android.material.textview.MaterialTextView
+        <com.axelliant.hris.ui.designsystem.components.AppTextView
             android:id="@+id/tv_status"
-            style="@style/TEXT_SEMI_BLACK_10"
+            style="@style/Text.Fluent2.Caption.Primary.Strong"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Approved"
@@ -83,15 +83,15 @@
                 android:orientation="vertical"
                 android:gravity="center"
                 android:layout_weight=".35">
-                <com.google.android.material.textview.MaterialTextView
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
                     android:id="@+id/tv_apply"
-                    style="@style/TEXT_MEDIUM_GREY_10"
+                    style="@style/Text.Fluent2.Caption.Muted.Strong"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/apply_day" />
-                <com.google.android.material.textview.MaterialTextView
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
                     android:id="@+id/tv_apply_txt"
-                    style="@style/TEXT_SEMI_BLACK_10"
+                    style="@style/Text.Fluent2.Caption.Primary.Strong"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="03 days" />
@@ -104,15 +104,15 @@
                 android:orientation="vertical"
                 android:gravity="center"
                 android:layout_weight=".30">
-                <com.google.android.material.textview.MaterialTextView
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
                     android:id="@+id/tv_leave_bal"
-                    style="@style/TEXT_MEDIUM_GREY_10"
+                    style="@style/Text.Fluent2.Caption.Muted.Strong"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/leave_bal" />
-                <com.google.android.material.textview.MaterialTextView
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
                     android:id="@+id/tv_leave_bal_txt"
-                    style="@style/TEXT_SEMI_BLACK_10"
+                    style="@style/Text.Fluent2.Caption.Primary.Strong"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="03" />
@@ -125,15 +125,15 @@
                 android:orientation="vertical"
                 android:gravity="center"
                 android:layout_weight=".35">
-                <com.google.android.material.textview.MaterialTextView
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
                     android:id="@+id/tv_approved_by"
-                    style="@style/TEXT_MEDIUM_GREY_10"
+                    style="@style/Text.Fluent2.Caption.Muted.Strong"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/approved_by" />
-                <com.google.android.material.textview.MaterialTextView
+                <com.axelliant.hris.ui.designsystem.components.AppTextView
                     android:id="@+id/tv_approved_by_txt"
-                    style="@style/TEXT_SEMI_BLACK_10"
+                    style="@style/Text.Fluent2.Caption.Primary.Strong"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"

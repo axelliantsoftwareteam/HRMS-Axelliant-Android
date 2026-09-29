@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/ds_space_12"
+    android:layout_weight="1"
+    android:orientation="vertical">
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        style="@style/Text.InternalApps.Caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/subscription_quantity_label"
+        android:textColor="@color/ds_text_secondary"
+        android:textSize="@dimen/_9ssp" />
+
+    <com.axelliant.hris.ui.designsystem.components.AppTextView
+        android:id="@+id/quantityValue"
+        style="@style/Text.Fluent2.Title.Primary.Strong"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_3sdp"
+        android:textColor="@color/ds_text_primary"
+        android:textSize="@dimen/text_size_10"
+        tools:text="2" />
+</LinearLayout>

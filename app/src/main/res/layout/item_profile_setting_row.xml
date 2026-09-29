@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/settingRowRoot"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/ds_space_12"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_46sdp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <FrameLayout
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_30sdp"
+            android:background="@drawable/bg_profile_setting_icon">
+
+            <ImageView
+                android:id="@+id/settingIcon"
+                android:layout_width="@dimen/_17sdp"
+                android:layout_height="@dimen/_17sdp"
+                android:layout_gravity="center"
+                android:contentDescription="@null"
+                app:tint="@color/ds_success" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/ds_space_8"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                android:id="@+id/settingTitle"
+                style="@style/Text.InternalApps.Subheading"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/ds_text_primary"
+                android:textSize="@dimen/text_size_10" />
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                android:id="@+id/settingSubtitle"
+                style="@style/Text.InternalApps.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/ds_space_2"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/ds_text_secondary"
+                android:textSize="@dimen/ds_text_caption" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="@dimen/_98sdp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/ds_space_8"
+            android:gravity="end|center_vertical"
+            android:orientation="vertical">
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                android:id="@+id/settingValueTop"
+                style="@style/Text.InternalApps.Body"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:gravity="end"
+                android:maxLines="1"
+                android:textColor="@color/ds_text_secondary"
+                android:textSize="@dimen/_9ssp" />
+
+            <com.axelliant.hris.ui.designsystem.components.AppTextView
+                android:id="@+id/settingValueBottom"
+                style="@style/Text.InternalApps.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:gravity="end"
+                android:maxLines="1"
+                android:textColor="@color/ds_text_secondary"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="@dimen/_22sdp"
+            android:layout_height="@dimen/_22sdp"
+            android:layout_marginStart="@dimen/ds_space_4"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_chevron_right"
+            app:tint="@color/ds_primary" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/settingDivider"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1sdp"
+        android:layout_marginStart="@dimen/_40sdp"
+        android:background="@color/ds_outline" />
+</LinearLayout>
+

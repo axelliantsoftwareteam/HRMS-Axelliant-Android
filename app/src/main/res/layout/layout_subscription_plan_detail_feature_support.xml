@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="0dp" android:layout_height="@dimen/_38sdp" android:layout_columnWeight="1" android:layout_margin="@dimen/ds_space_4" android:background="@drawable/bg_subscription_plan_detail_pill" android:gravity="center" android:text="@string/subscription_feature_priority_support" android:textColor="@color/ds_text_secondary" android:textSize="@dimen/text_size_10" />

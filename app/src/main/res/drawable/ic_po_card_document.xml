@@ -1,0 +1,16 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="@dimen/_22sdp"
+    android:height="@dimen/_22sdp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="@color/purchase_order_blue"
+        android:pathData="M6,3h8l4,4v14H6z" />
+    <path
+        android:fillColor="@color/ds_on_primary"
+        android:pathData="M14,3v5h5z"
+        android:fillAlpha="0.78" />
+    <path
+        android:fillColor="@color/ds_on_primary"
+        android:pathData="M8.5,11h7v1.6h-7zM8.5,15h6v1.6h-6z" />
+</vector>
