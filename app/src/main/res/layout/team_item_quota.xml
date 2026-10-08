@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/Widget.Ws.Card"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/_2sdp"
+    android:layout_marginEnd="@dimen/_2sdp"
+    android:layout_marginBottom="@dimen/_10sdp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/_11sdp">
+
+        <LinearLayout
+            android:id="@+id/team_q_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/team_q_avatar"
+                android:layout_width="@dimen/_36sdp"
+                android:layout_height="@dimen/_36sdp"
+                android:contentDescription="@null"
+                android:scaleType="centerCrop" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/team_q_name"
+                    style="@style/Ws.Text.Medium"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/_11ssp" />
+
+                <TextView
+                    android:id="@+id/team_q_you"
+                    style="@style/Ws.Text.Badge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:text="@string/team_you"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/team_q_designation"
+                    style="@style/Ws.Text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:textColor="@color/ws_grey"
+                    android:textSize="@dimen/_10ssp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_6sdp"
+                android:gravity="end"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/team_q_available"
+                    style="@style/Ws.Text.Badge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <ImageView
+                    android:id="@+id/team_q_chevron"
+                    android:layout_width="@dimen/_14sdp"
+                    android:layout_height="@dimen/_14sdp"
+                    android:layout_marginTop="@dimen/_6sdp"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ws_ic_expand_more"
+                    app:tint="@color/black" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/team_q_body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:background="@color/ws_divider" />
+
+            <TextView
+                style="@style/Ws.Text.Medium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/team_quota_usage_header"
+                android:textColor="@color/ws_grey"
+                android:textSize="@dimen/_10ssp" />
+
+            <TextView
+                android:id="@+id/team_q_none"
+                style="@style/Ws.Text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:gravity="center"
+                android:text="@string/team_quota_none"
+                android:textColor="@color/ws_grey"
+                android:textSize="@dimen/_10ssp"
+                android:visibility="gone" />
+
+            <GridLayout
+                android:id="@+id/team_q_grid"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:columnCount="2" />
+        </LinearLayout>
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

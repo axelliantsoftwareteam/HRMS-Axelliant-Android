@@ -4,23 +4,189 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/ws_screen_bg"
-    android:orientation="vertical"
-    android:paddingStart="@dimen/_12sdp"
-    android:paddingEnd="@dimen/_12sdp">
+    android:orientation="vertical">
 
     <com.axelliant.hris.ui.WsToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_12sdp"
         android:layout_marginTop="@dimen/_6sdp"
-        app:wsTitle="Team Activity" />
+        android:layout_marginEnd="@dimen/_12sdp"
+        app:wsActionDescription="@string/team_filter"
+        app:wsActionIcon="@drawable/ws_ic_filter"
+        app:wsTitle="@string/team_title" />
 
-    <com.axelliant.hris.ui.WsEmptyState
-        android:id="@+id/empty_state"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_12sdp"
-        app:wsEmptyIcon="@drawable/ws_ic_info"
-        app:wsEmptyMessage="This screen is being built."
-        app:wsEmptyTitle="Team Activity" />
+        android:orientation="vertical"
+        android:paddingStart="@dimen/_16sdp"
+        android:paddingTop="@dimen/_8sdp"
+        android:paddingEnd="@dimen/_16sdp">
+
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            android:id="@+id/team_segments"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:selectionRequired="true"
+            app:singleSelection="true">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/team_seg_arrivals"
+                style="@style/Widget.Ws.Segment.Button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/team_seg_arrivals" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/team_seg_hours"
+                style="@style/Widget.Ws.Segment.Button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/team_seg_hours" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/team_seg_quota"
+                style="@style/Widget.Ws.Segment.Button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/team_seg_quota" />
+        </com.google.android.material.button.MaterialButtonToggleGroup>
+
+        <TextView
+            android:id="@+id/team_list_title"
+            style="@style/Ws.Text.SemiBold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:textSize="@dimen/_12ssp" />
+    </LinearLayout>
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/team_refresh"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/team_error_block"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_16sdp"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <com.axelliant.hris.ui.WsEmptyState
+                    android:id="@+id/team_error_state"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:wsEmptyIcon="@drawable/ws_ic_warning"
+                    app:wsEmptyMessage="@string/team_error_message"
+                    app:wsEmptyTitle="@string/team_error_title" />
+
+                <TextView
+                    android:id="@+id/team_btn_retry"
+                    style="@style/Ws.Text.Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:padding="@dimen/_8sdp"
+                    android:text="@string/ws_try_again"
+                    android:textColor="@color/ws_primary"
+                    android:textSize="@dimen/_11ssp" />
+            </LinearLayout>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/team_search_card"
+                style="@style/Widget.Ws.Card"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_38sdp"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_16sdp"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingStart="@dimen/_11sdp"
+                    android:paddingEnd="@dimen/_4sdp">
+
+                    <ImageView
+                        android:layout_width="@dimen/_16sdp"
+                        android:layout_height="@dimen/_16sdp"
+                        android:importantForAccessibility="no"
+                        android:src="@drawable/ws_ic_search"
+                        app:tint="@color/ws_grey" />
+
+                    <EditText
+                        android:id="@+id/team_search_input"
+                        style="@style/Ws.Text.Medium"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="@dimen/_6sdp"
+                        android:layout_weight="1"
+                        android:background="@null"
+                        android:hint="@string/team_search_hint"
+                        android:imeOptions="actionSearch"
+                        android:importantForAutofill="no"
+                        android:inputType="textPersonName"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:textColorHint="@color/ws_grey"
+                        android:textSize="@dimen/_11ssp" />
+
+                    <ImageButton
+                        android:id="@+id/team_search_clear"
+                        android:layout_width="@dimen/_30sdp"
+                        android:layout_height="@dimen/_30sdp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="@string/team_clear_search"
+                        android:padding="@dimen/_7sdp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ws_ic_close"
+                        android:visibility="gone"
+                        app:tint="@color/ws_grey" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.axelliant.hris.ui.WsEmptyState
+                android:id="@+id/team_empty_state"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_16sdp"
+                android:visibility="gone"
+                app:wsEmptyIcon="@drawable/ws_ic_person" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/team_list"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                android:overScrollMode="never"
+                android:paddingStart="@dimen/_16sdp"
+                android:paddingTop="@dimen/_10sdp"
+                android:paddingEnd="@dimen/_16sdp"
+                android:paddingBottom="@dimen/_20sdp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+        </LinearLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </LinearLayout>

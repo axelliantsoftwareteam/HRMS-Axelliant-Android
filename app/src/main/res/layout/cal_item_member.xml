@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/Widget.Ws.Card"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/_2sdp"
+    android:layout_marginEnd="@dimen/_2sdp"
+    android:layout_marginBottom="@dimen/_10sdp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/_11sdp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/cal_mem_avatar"
+                android:layout_width="@dimen/_34sdp"
+                android:layout_height="@dimen/_34sdp"
+                android:contentDescription="@null"
+                android:scaleType="centerCrop" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_8sdp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/cal_mem_name"
+                    style="@style/Ws.Text.Medium"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/_11ssp" />
+
+                <TextView
+                    android:id="@+id/cal_mem_sub"
+                    style="@style/Ws.Text.Medium"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:textColor="@color/ws_grey"
+                    android:textSize="@dimen/_10ssp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/cal_mem_counts_block"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/_11sdp"
+                android:layout_marginBottom="@dimen/_11sdp"
+                android:background="@color/ws_divider" />
+
+            <GridLayout
+                android:id="@+id/cal_mem_counts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:columnCount="3" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="@dimen/_11sdp"
+            android:layout_marginBottom="@dimen/_8sdp"
+            android:background="@color/ws_divider" />
+
+        <LinearLayout
+            android:id="@+id/cal_mem_toggle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingTop="@dimen/_3sdp"
+            android:paddingBottom="@dimen/_3sdp">
+
+            <ImageView
+                android:layout_width="@dimen/_14sdp"
+                android:layout_height="@dimen/_14sdp"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ws_ic_calendar"
+                app:tint="@color/ws_primary" />
+
+            <TextView
+                android:id="@+id/cal_mem_toggle_label"
+                style="@style/Ws.Text.Medium"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_6sdp"
+                android:layout_weight="1"
+                android:textColor="@color/ws_primary"
+                android:textSize="@dimen/_11ssp" />
+
+            <ImageView
+                android:id="@+id/cal_mem_chevron"
+                android:layout_width="@dimen/_16sdp"
+                android:layout_height="@dimen/_16sdp"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ws_ic_expand_more"
+                app:tint="@color/ws_primary" />
+        </LinearLayout>
+
+        <GridLayout
+            android:id="@+id/cal_mem_grid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:columnCount="7"
+            android:visibility="gone" />
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

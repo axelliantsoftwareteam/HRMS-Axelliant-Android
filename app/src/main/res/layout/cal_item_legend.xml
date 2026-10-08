@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingStart="@dimen/_7sdp"
+    android:paddingTop="@dimen/_4sdp"
+    android:paddingEnd="@dimen/_7sdp"
+    android:paddingBottom="@dimen/_4sdp">
+
+    <View
+        android:id="@+id/cal_legend_swatch"
+        android:layout_width="@dimen/_10sdp"
+        android:layout_height="@dimen/_10sdp" />
+
+    <TextView
+        android:id="@+id/cal_legend_label"
+        style="@style/Ws.Text.Medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_5sdp"
+        android:textSize="@dimen/_9ssp" />
+</LinearLayout>

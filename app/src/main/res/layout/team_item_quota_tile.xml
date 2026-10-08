@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="@dimen/_8sdp">
+
+    <TextView
+        android:id="@+id/team_tile_value"
+        style="@style/Ws.Text.SemiBold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/_14ssp" />
+
+    <TextView
+        android:id="@+id/team_tile_name"
+        style="@style/Ws.Text.Medium"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:textColor="@color/ws_grey"
+        android:textSize="@dimen/_9ssp" />
+
+    <TextView
+        android:id="@+id/team_tile_detail"
+        style="@style/Ws.Text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:textColor="@color/ws_grey"
+        android:textSize="@dimen/_9ssp" />
+</LinearLayout>
