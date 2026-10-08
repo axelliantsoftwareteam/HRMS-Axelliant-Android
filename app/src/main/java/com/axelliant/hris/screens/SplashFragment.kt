@@ -120,7 +120,7 @@ class SplashFragment : BaseFragment() {
                         resource.registerAnimationCallback(object :
                             Animatable2Compat.AnimationCallback() {
                             override fun onAnimationEnd(drawable: Drawable) {
-                                AppNavigator.navigateToHome()
+                                if (sessionManager.checkLogin() && !sessionManager.getToken().isNullOrBlank()) AppNavigator.navigateToHome() else AppNavigator.navigateToLogin()
                             }
                         })
                         return false

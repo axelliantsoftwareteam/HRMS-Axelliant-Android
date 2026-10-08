@@ -12,5 +12,17 @@
         <attr name="buttonIcon" format="reference" />
     </declare-styleable>
 
+    <declare-styleable name="WsToolbar">
+        <attr name="wsTitle" format="string" />
+        <attr name="wsShowBack" format="boolean" />
+        <attr name="wsActionIcon" format="reference" />
+        <attr name="wsActionDescription" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="WsEmptyState">
+        <attr name="wsEmptyIcon" format="reference" />
+        <attr name="wsEmptyTitle" format="string" />
+        <attr name="wsEmptyMessage" format="string" />
+    </declare-styleable>
 
 </resources>

@@ -8,7 +8,7 @@ import com.axelliant.hris.repos.HomeRepo
 import com.axelliant.hris.repos.LeaveRepo
 import com.axelliant.hris.repos.LoginRepo
 import com.axelliant.hris.repos.RequestRepo
-import com.axelliant.hris.repos.ResourceManageRepo
+import com.axelliant.hris.repos.ProfileRepo
 import com.axelliant.hris.utils.SessionManager
 import com.axelliant.hris.utils.Validator
 import com.axelliant.hris.viewmodel.AttendanceViewModel
@@ -18,13 +18,19 @@ import com.axelliant.hris.viewmodel.HomeViewModel
 import com.axelliant.hris.viewmodel.LeaveViewModel
 import com.axelliant.hris.viewmodel.LoginViewModel
 import com.axelliant.hris.viewmodel.RequestViewModel
-import com.axelliant.hris.viewmodel.ResourceManageViewModel
+import com.axelliant.hris.viewmodel.ApprovalsViewModel
+import com.axelliant.hris.viewmodel.NotificationsViewModel
+import com.axelliant.hris.viewmodel.OrganogramViewModel
+import com.axelliant.hris.viewmodel.PayslipsViewModel
+import com.axelliant.hris.viewmodel.ProfileViewModel
+import com.axelliant.hris.viewmodel.RequestsOverviewViewModel
+import com.axelliant.hris.viewmodel.TeamActivityViewModel
+import com.axelliant.hris.viewmodel.TeamCalendarViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val singletonModule = module {
-    single { TestModelInjection() }
     single { GlobalConfig.getInstance() }
     single { ApiHandler.getApiInterface() }
     single { SessionManager(androidContext()) }
@@ -41,7 +47,14 @@ val viewModelModule = module {
     viewModel { ExpenseViewModel(get(),get()) }
     viewModel { RequestViewModel(get()) }
     viewModel { BaseViewModel() }
-    viewModel { ResourceManageViewModel(get(),get()) }
+    viewModel { ProfileViewModel(get()) }
+    viewModel { PayslipsViewModel(get()) }
+    viewModel { NotificationsViewModel(get()) }
+    viewModel { RequestsOverviewViewModel(get()) }
+    viewModel { TeamActivityViewModel(get()) }
+    viewModel { TeamCalendarViewModel(get()) }
+    viewModel { OrganogramViewModel(get()) }
+    viewModel { ApprovalsViewModel(get()) }
 
 
 }
@@ -53,6 +66,6 @@ val factoryModule = module {
     factory { LeaveRepo(get()) }
     factory { ExpenseRepo(get()) }
     factory { RequestRepo(get()) }
-    factory { ResourceManageRepo(get()) }
+    factory { ProfileRepo(get()) }
 
 }

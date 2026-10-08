@@ -72,4 +72,30 @@
     <color name="quota_usage_value">#09589B</color>
     <color name="quota_card_stroke">#EAEAEA</color>
 
+    <!-- iOS design parity palette (ws = workspace) -->
+    <color name="ws_primary">#09589B</color>
+    <color name="ws_secondary">#25A8E0</color>
+    <color name="ws_grey">#888A8C</color>
+    <color name="ws_red">#D83242</color>
+    <color name="ws_green">#199262</color>
+    <color name="ws_amber">#FEB333</color>
+    <color name="ws_bittersweet">#F88162</color>
+    <color name="ws_melrose">#A1A9FE</color>
+    <color name="ws_azure">#DBE6FC</color>
+    <color name="ws_dark_sky">#8CC4DD</color>
+    <color name="ws_light_green">#8ED17D</color>
+    <color name="ws_purple">#A16AE8</color>
+    <color name="ws_yellow">#FFB532</color>
+    <color name="ws_dark_purple">#4120A9</color>
+    <color name="ws_navy">#050159</color>
+    <color name="ws_payslip">#0B8F8C</color>
+    <color name="ws_weekend">#AF52DE</color>
+    <color name="ws_card_green">#15D06D</color>
+    <color name="ws_screen_bg">#F9F9F9</color>
+    <color name="ws_card_stroke">#66888A8C</color>
+    <color name="ws_divider">#33888A8C</color>
+    <color name="ws_scrim">#59000000</color>
+    <color name="ws_text_primary">#000000</color>
+    <color name="ws_text_secondary">#888A8C</color>
+
 </resources>

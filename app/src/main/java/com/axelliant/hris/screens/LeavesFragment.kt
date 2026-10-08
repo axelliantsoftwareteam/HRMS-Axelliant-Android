@@ -93,11 +93,11 @@ class LeavesFragment : BaseFragment() {
             })
 
         binding?.tvView?.setOnClickListener {
-            AppNavigator.navigateToMyLeaveDetail()
+            Unit
         }
 
         binding?.tvMyTeamView?.setOnClickListener {
-            AppNavigator.navigateToTeamLeaveDetail()
+            Unit
 
         }
 

@@ -35,15 +35,29 @@
             app:layout_constraintRight_toLeftOf="@id/end_guideline"
             app:layout_constraintTop_toBottomOf="@id/top_guideline">
 
+            <ImageView
+                android:id="@+id/iv_menu"
+                android:layout_width="@dimen/_30sdp"
+                android:layout_height="@dimen/_30sdp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/ws_menu"
+                android:padding="@dimen/_4sdp"
+                android:src="@drawable/ws_ic_menu"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/black" />
+
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/profile_img"
                 android:layout_width="@dimen/_35sdp"
                 android:layout_height="@dimen/_35sdp"
                 app:civ_border_width="@dimen/_1sdp"
                 app:civ_border_color="@color/black"
+                android:layout_marginStart="@dimen/_4sdp"
                 android:src="@drawable/ic_place_holder"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@id/iv_menu"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.textview.MaterialTextView
@@ -101,12 +115,32 @@
                 android:layout_width="@dimen/_30sdp"
                 android:layout_height="@dimen/_30sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
-                android:src="@drawable/logout"
+                android:contentDescription="@string/ws_notifications_cd"
+                android:src="@drawable/ws_ic_bell"
                 app:tint="@color/black"
                 android:padding="@dimen/_5sdp"
                 app:layout_constraintBottom_toBottomOf="@+id/profile_img"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/profile_img" />
+
+
+            <TextView
+                android:id="@+id/tv_notification_badge"
+                style="@style/Ws.Text.Medium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ws_badge_bg"
+                android:backgroundTint="@color/ws_red"
+                android:gravity="center"
+                android:minWidth="@dimen/_14sdp"
+                android:minHeight="@dimen/_14sdp"
+                android:paddingStart="@dimen/_3sdp"
+                android:paddingEnd="@dimen/_3sdp"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_8ssp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="@id/iv_notification"
+                app:layout_constraintTop_toTopOf="@id/iv_notification" />
 
             <ImageView
                 android:id="@+id/iv_qr"

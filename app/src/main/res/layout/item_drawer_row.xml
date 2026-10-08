@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingStart="@dimen/_16sdp"
+    android:paddingTop="@dimen/_10sdp"
+    android:paddingEnd="@dimen/_16sdp"
+    android:paddingBottom="@dimen/_10sdp">
+
+    <ImageView
+        android:id="@+id/row_icon"
+        android:layout_width="@dimen/_20sdp"
+        android:layout_height="@dimen/_20sdp"
+        android:importantForAccessibility="no"
+        app:tint="@color/ws_primary" />
+
+    <TextView
+        android:id="@+id/row_title"
+        style="@style/Ws.Text.Medium"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_weight="1"
+        android:textSize="@dimen/_12ssp" />
+
+    <TextView
+        android:id="@+id/row_badge"
+        style="@style/Ws.Text.Medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ws_badge_bg"
+        android:backgroundTint="@color/ws_red"
+        android:minWidth="@dimen/_16sdp"
+        android:gravity="center"
+        android:paddingStart="@dimen/_5sdp"
+        android:paddingTop="@dimen/_1sdp"
+        android:paddingEnd="@dimen/_5sdp"
+        android:paddingBottom="@dimen/_1sdp"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_8ssp"
+        android:visibility="gone" />
+</LinearLayout>

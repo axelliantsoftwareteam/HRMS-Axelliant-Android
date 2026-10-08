@@ -2,8 +2,6 @@ package com.axelliant.hris.network
 
 import com.axelliant.hris.model.attendance.AttRequest
 import com.axelliant.hris.model.attendance.LeaveCountRequest
-import com.axelliant.hris.model.documentRequest.CreateDocument
-import com.axelliant.hris.model.documentRequest.SubmitDocument
 import com.axelliant.hris.model.approval.ApprovalActionRequest
 import com.axelliant.hris.model.approval.BulkApprovalActionRequest
 import com.axelliant.hris.model.expense.CreateExpense
@@ -17,8 +15,6 @@ import com.axelliant.hris.model.login.LoginRequest
 import com.axelliant.hris.model.post.AttendanceRequest
 import com.axelliant.hris.model.post.LeaveRequest
 import com.axelliant.hris.model.post.TeamListRequest
-import com.axelliant.hris.model.resourceManage.CreateResourceHour
-import com.axelliant.hris.model.resourceManage.DeleteProject
 import com.axelliant.hris.model.profile.CertificationCreateRequest
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody;
@@ -30,6 +26,8 @@ import retrofit2.http.Headers;
 import retrofit2.http.Multipart
 import retrofit2.http.POST;
 import retrofit2.http.Part
+import retrofit2.http.Query
+import retrofit2.http.Streaming
 
 interface ApiInterface {
 
@@ -100,12 +98,6 @@ interface ApiInterface {
 
 
 
-    @Headers("Content-Type: application/json")
-    @POST("hrms.hr.doctype.employee.employee_request_form.get_employee_forms") // my leave detail
-    fun callDocumentRequestDetail(
-        @Header("Authorization") auth: String?,
-        @Body attRequest: AttRequest
-    ): Call<ResponseBody>
 
 
     @Multipart
@@ -232,12 +224,6 @@ interface ApiInterface {
     ): Call<ResponseBody>
 
 
-    @Headers("Content-Type: application/json")
-    @POST("hrms.hr.doctype.employee.employee_request_form.create_employee_form") // create expense
-    fun callCreateDocument(
-        @Header("Authorization") auth: String?,
-        @Body createDocument: CreateDocument
-    ): Call<ResponseBody>
 
     @Headers("Content-Type: application/json")
     @POST("hrms.api.mobile_v1.update_expense") // update expense
@@ -341,55 +327,95 @@ interface ApiInterface {
         @Body teamListRequest: TeamListRequest?
     ): Call<ResponseBody>
 
+    // ---------------------------------------------------------------------------------------------
+    // iOS-parity redesign endpoints (parsed through ApiParser / BaseViewModel.request)
+    // ---------------------------------------------------------------------------------------------
 
-
-    @Headers("Content-Type: application/json")
-    @POST("hrms.hr.doctype.employee.employee_resource_hours.get_resource_hour_requests") // my leave detail
-    fun callMyResourceHoursDetail(
+    @GET("hrms.api.mobile_v1.get_salary_slips")
+    fun getSalarySlips(
         @Header("Authorization") auth: String?,
-        @Body attRequest: AttRequest
+        @Query("limit") limit: Int,
+        @Query("offset") offset: Int
     ): Call<ResponseBody>
 
-
-    @Headers("Content-Type: application/json")
-    @GET("hrms.hr.doctype.employee.employee_resource_hours.get_projects")  // Leave types for request section
-    fun getProjectTypeList(@Header("Authorization") auth: String?): Call<ResponseBody>
-
-    @Headers("Content-Type: application/json")
-    @POST("hrms.hr.doctype.employee.employee_resource_hours.update_resource_hours") // update resource hours
-    fun callUpdateResourceType(
+    /** Returns raw PDF bytes (not the JSON envelope). */
+    @Streaming
+    @GET("hrms.api.mobile_v1.get_salary_slip_pdf")
+    fun getSalarySlipPdf(
         @Header("Authorization") auth: String?,
-        @Body createResourceHour: CreateResourceHour
+        @Query("name") name: String
     ): Call<ResponseBody>
 
-
-    @Headers("Content-Type: application/json")
-    @POST("hrms.hr.doctype.employee.employee_resource_hours.create_resource_hours") // create resource hours
-    fun callCreateResourceHour(
+    @GET("hrms.api.mobile_v1.get_notifications")
+    fun getNotifications(
         @Header("Authorization") auth: String?,
-        @Body createResourceHour: CreateResourceHour
+        @Query("limit") limit: Int,
+        @Query("offset") offset: Int
     ): Call<ResponseBody>
 
-    @Headers("Content-Type: application/json")
-    @POST("hrms.hr.doctype.employee.employee_resource_hours.delete_employee_resource_hours") // delete resource hours
-    fun deleteHoursCall(
+    @POST("hrms.api.mobile_v1.mark_all_notifications_read")
+    fun markAllNotificationsRead(@Header("Authorization") auth: String?): Call<ResponseBody>
+
+    @GET("hrms.api.mobile_v1.get_team_calendar")
+    fun getTeamCalendar(
         @Header("Authorization") auth: String?,
-        @Body deleteProject: DeleteProject
+        @Query("start_date") startDate: String,
+        @Query("end_date") endDate: String
     ): Call<ResponseBody>
 
-    @Headers("Content-Type: application/json")
-    @POST("hrms.hr.doctype.employee.employee_resource_hours.submit_resource_hours") // update resource hours
-    fun callSubmitResource(
+    @GET("hrms.api.mobile_v1.get_team_organogram")
+    fun getTeamOrganogram(@Header("Authorization") auth: String?): Call<ResponseBody>
+
+    @GET("hrms.api.mobile_v1.get_approvals")
+    fun getApprovals(
         @Header("Authorization") auth: String?,
-        @Body submitDocument: SubmitDocument
+        @Query("limit") limit: Int,
+        @Query("offset") offset: Int
     ): Call<ResponseBody>
 
+    /** Team check-ins for one location ("In Office" / "Work From Home"), same method as [callTodayTeamList] but GET. */
+    @GET("hrms.api.mobile_v1.get_team_checkin_detail_list")
+    fun getTeamCheckins(
+        @Header("Authorization") auth: String?,
+        @Query("filters") filters: String
+    ): Call<ResponseBody>
+
+    /** Team attendance summary via query parameters (the older [callTeamAttendanceDetail] posts a body). */
+    @GET("hrms.api.mobile_v1.get_team_attendance")
+    fun getTeamAttendance(
+        @Header("Authorization") auth: String?,
+        @Query("start_date") startDate: String,
+        @Query("end_date") endDate: String
+    ): Call<ResponseBody>
+
+    /** Team leave balances; iOS posts an empty body, the first Android version used GET ([callTeamLeaveQuota]). */
+    @Headers("Content-Type: application/json")
+    @POST("hrms.api.mobile_v1.get_leaves_detail_team")
+    fun postTeamLeaveQuota(
+        @Header("Authorization") auth: String?,
+        @Body body: Map<String, @JvmSuppressWildcards Any?>
+    ): Call<ResponseBody>
+
+    /** Generic JSON POST helper for request bodies that are plain maps (certification, expense lines, ...). */
+    @Headers("Content-Type: application/json")
+    @POST("hrms.api.mobile_v1.get_leave_application_requests")
+    fun postLeaveRequestsMap(
+        @Header("Authorization") auth: String?,
+        @Body body: Map<String, @JvmSuppressWildcards Any?>
+    ): Call<ResponseBody>
 
     @Headers("Content-Type: application/json")
-    @POST("hrms.hr.doctype.employee.employee_resource_hours.get_resource_hour_approvals")  // attendance approval
-    fun callResourcesApproval(
-        @Header("Authorization") auth: String?, @Body attendanceRequest: AttRequest
+    @POST("hrms.api.mobile_v1.get_employee_checkins")
+    fun postCheckinsMap(
+        @Header("Authorization") auth: String?,
+        @Body body: Map<String, @JvmSuppressWildcards Any?>
     ): Call<ResponseBody>
 
+    @Headers("Content-Type: application/json")
+    @POST("hrms.api.mobile_v1.get_expense_approvals")
+    fun postExpenseApprovalsMap(
+        @Header("Authorization") auth: String?,
+        @Body body: Map<String, @JvmSuppressWildcards Any?>
+    ): Call<ResponseBody>
 
 }

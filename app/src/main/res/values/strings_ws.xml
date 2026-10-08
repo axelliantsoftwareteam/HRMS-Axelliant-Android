@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Shared -->
+    <string name="ws_back">Back</string>
+    <string name="ws_close">Close</string>
+    <string name="ws_menu">Open menu</string>
+    <string name="ws_notifications_cd">Notifications</string>
+    <string name="ws_try_again">Try again</string>
+
+    <!-- Drawer -->
+    <string name="drawer_section_employee">Employee</string>
+    <string name="drawer_section_manager">Manager</string>
+    <string name="drawer_attendance">Attendance</string>
+    <string name="drawer_leave">Leave</string>
+    <string name="drawer_requests">Requests</string>
+    <string name="drawer_expenses">Expenses</string>
+    <string name="drawer_payslips">Pay slips</string>
+    <string name="drawer_certifications">Certifications</string>
+    <string name="drawer_notifications">Notifications</string>
+    <string name="drawer_approvals">Approvals</string>
+    <string name="drawer_expense_approvals">Expense approvals</string>
+    <string name="drawer_team_activity">Team activity</string>
+    <string name="drawer_team_calendar">Team calendar</string>
+    <string name="drawer_organogram">Organogram</string>
+    <string name="drawer_sign_out">Sign Out</string>
+    <string name="drawer_default_name">User</string>
+    <string name="drawer_default_designation">Employee</string>
+    <string name="drawer_emp_id">Emp ID: %1$s</string>
+    <string name="drawer_logout_title">Logout</string>
+    <string name="drawer_logout_message">Are you sure you want to log out?</string>
+</resources>

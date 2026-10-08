@@ -14,6 +14,7 @@ class GlobalConfig {
 
         fun setCurrentEmployee(employee: EmployProfile) {
             currEmployee = employee
+            AppState.currentEmployee.value = employee
         }
 
         fun isCurrentManager(): Boolean {

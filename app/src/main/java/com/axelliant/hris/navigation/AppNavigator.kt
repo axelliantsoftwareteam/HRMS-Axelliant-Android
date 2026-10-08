@@ -1,382 +1,86 @@
 package com.axelliant.hris.navigation
 
 import android.os.Bundle
-import android.util.Log
-import androidx.navigation.NavAction
-import androidx.navigation.NavController
-import androidx.navigation.NavDestination
+import androidx.annotation.IdRes
 import androidx.navigation.NavOptions
 import com.axelliant.hris.R
 import com.axelliant.hris.config.GlobalConfig
 
-
+/**
+ * Single place that moves between screens. Every destination lives in `nav_graph.xml`; this class
+ * navigates straight to a destination id (no per-screen action ids), pushing it on the back stack.
+ * Login and Home reset the stack so Back never returns to a signed-out or splash screen.
+ */
 class AppNavigator {
     companion object {
-        private const val TAG = "Navigator"
-        private fun getController(): NavController {
-            return GlobalConfig.getInstance().navController
-        }
 
-        fun getCurrentDestinationId(): Int? {
-            return getController().currentDestination?.id
-        }
+        private fun controller() = GlobalConfig.getInstance().navController
+
+        fun getCurrentDestinationId(): Int? = controller().currentDestination?.id
 
         fun moveBackToPreviousFragment() {
-            getController().popBackStack()
+            controller().popBackStack()
         }
 
-        fun navigateToSplash(args: Bundle = Bundle()) {
-            Log.i(TAG, "navigateToLogin: $args")
-            val navAction = NavAction(R.id.splashFragment)
-            val navOptions = NavOptions.Builder()
-                .setPopUpTo(getCurrentDestinationId()!!, true).build()
-            navAction.navOptions = navOptions
-
-            val destination: NavDestination? = getCurrentDestinationId()?.let {
-                getController().graph.findNode(it)
-            }
-            if (destination != null) {
-                destination.putAction(R.id.splash_fragment_action, navAction)
-                getController().navigate(R.id.splash_fragment_action, args)
-            }
+        /** Pushes [destination] on top of the current screen (ignored when it is already showing). */
+        private fun push(@IdRes destination: Int, args: Bundle = Bundle()) {
+            val nav = controller()
+            if (nav.currentDestination?.id == destination) return
+            nav.navigate(destination, args)
         }
+
+        /** Navigates to [destination] after clearing the whole back stack. */
+        private fun resetTo(@IdRes destination: Int, args: Bundle = Bundle()) {
+            val nav = controller()
+            val options = NavOptions.Builder().setPopUpTo(nav.graph.id, true).build()
+            nav.navigate(destination, args, options)
+        }
+
+        fun navigateToSplash(args: Bundle = Bundle()) = resetTo(R.id.splashFragment, args)
 
         fun navigateToLogin(args: Bundle = Bundle()) {
-            Log.i(TAG, "navigateToLogin: $args")
-            val navAction = NavAction(R.id.loginFragment)
-            val navOptions = NavOptions.Builder()
-                .setPopUpTo(getCurrentDestinationId()!!, true).build()
-            navAction.navOptions = navOptions
-
-            val destination: NavDestination? = getCurrentDestinationId()?.let {
-                getController().graph.findNode(it)
-            }
-            if (destination != null) {
-                destination.putAction(R.id.login_fragment_action, navAction)
-                getController().navigate(R.id.login_fragment_action, args)
-            }
+            if (controller().currentDestination?.id == R.id.loginFragment) return
+            resetTo(R.id.loginFragment, args)
         }
-
 
         fun navigateToHome(args: Bundle = Bundle()) {
-            Log.i(TAG, "navigateToHome: $args")
-            val navAction = NavAction(R.id.homeFragment)
-            val navOptions = NavOptions.Builder()
-                .setPopUpTo(getCurrentDestinationId()!!, false).build()
-            navAction.navOptions = navOptions
-
-            val destination: NavDestination? = getCurrentDestinationId()?.let {
-                getController().graph.findNode(it)
-            }
-            if (destination != null) {
-                destination.putAction(R.id.home_fragment_action, navAction)
-                getController().navigate(R.id.home_fragment_action, args)
-            }
+            if (controller().currentDestination?.id == R.id.homeFragment) return
+            resetTo(R.id.homeFragment, args)
         }
 
-        fun navigateToLeaves(args: Bundle = Bundle()) {
-            Log.i(TAG, "navigateToLeaves: $args")
-            val navAction = NavAction(R.id.leavesFragment)
-            val navOptions = NavOptions.Builder()
-                .setPopUpTo(getCurrentDestinationId()!!, false).build()
-            navAction.navOptions = navOptions
+        fun navigateToLeaves(args: Bundle = Bundle()) = push(R.id.leavesFragment, args)
 
-            val destination: NavDestination? = getCurrentDestinationId()?.let {
-                getController().graph.findNode(it)
-            }
-            if (destination != null) {
-                destination.putAction(R.id.leaves_fragment_action, navAction)
-                getController().navigate(R.id.leaves_fragment_action, args)
-            }
-        }
+        fun navigateToApprovals(args: Bundle = Bundle()) = push(R.id.approvalFragment, args)
 
-        fun navigateToApprovals(args: Bundle = Bundle()) {
-            Log.i(TAG, "navigateToLeaves: $args")
-            val navAction = NavAction(R.id.approvalFragment)
-            val navOptions = NavOptions.Builder()
-                .setPopUpTo(getCurrentDestinationId()!!, false).build()
-            navAction.navOptions = navOptions
+        fun navigateToExpenseApprovals(args: Bundle = Bundle()) = push(R.id.expenseApprovalsFragment, args)
 
-            val destination: NavDestination? = getCurrentDestinationId()?.let {
-                getController().graph.findNode(it)
-            }
-            if (destination != null) {
-                destination.putAction(R.id.approvals_fragment_action, navAction)
-                getController().navigate(R.id.approvals_fragment_action, args)
-            }
-        }
+        fun navigateToProfile(args: Bundle = Bundle()) = push(R.id.profileFragment, args)
 
-        fun navigateToProfile(args: Bundle = Bundle()) {
-            Log.i(TAG, "navigateToProfile: $args")
-            val navAction = NavAction(R.id.profileFragment)
-            val navOptions = NavOptions.Builder()
-                .setPopUpTo(getCurrentDestinationId()!!, false).build()
-            navAction.navOptions = navOptions
+        fun navigateToExpense(args: Bundle = Bundle()) = push(R.id.expenseFragment, args)
 
-            val destination: NavDestination? = getCurrentDestinationId()?.let {
-                getController().graph.findNode(it)
-            }
-            if (destination != null) {
-                destination.putAction(R.id.profile_fragment_action, navAction)
-                getController().navigate(R.id.profile_fragment_action, args)
-            }
-        }
+        fun navigateToAddExpenseFragment(args: Bundle = Bundle()) = push(R.id.addExpenseFragment, args)
 
-        fun navigateToExpense(args: Bundle = Bundle()) {
-            Log.i(TAG, "navigateToProfile: $args")
-            val navAction = NavAction(R.id.expenseFragment)
-            val navOptions = NavOptions.Builder()
-                .setPopUpTo(getCurrentDestinationId()!!, false).build()
-            navAction.navOptions = navOptions
+        fun navigateToImageDetailFragment(args: Bundle = Bundle()) = push(R.id.imageDetailFragment, args)
 
-            val destination: NavDestination? = getCurrentDestinationId()?.let {
-                getController().graph.findNode(it)
-            }
-            if (destination != null) {
-                destination.putAction(R.id.expense_fragment_action, navAction)
-                getController().navigate(R.id.expense_fragment_action, args)
-            }
-        }
+        /** Leave / attendance request form (create or edit, see `AppConst.RequestType`). */
+        fun navigateToRequest(args: Bundle = Bundle()) = push(R.id.requestFragment, args)
 
+        /** Requests overview (leave + check-in + expense activity). */
+        fun navigateToRequestsOverview(args: Bundle = Bundle()) = push(R.id.requestsOverviewFragment, args)
 
-        fun navigateToRequest(args: Bundle = Bundle()) {
-            Log.i(TAG, "navigateToRequest: $args")
-            val navAction = NavAction(R.id.requestFragment)
-            val navOptions = NavOptions.Builder()
-                .setPopUpTo(getCurrentDestinationId()!!, false).build()
-            navAction.navOptions = navOptions
+        /** The attendance list; pass `AppConst.KEY_ID` for another employee, none for the signed-in user. */
+        fun navigateToMyAttendanceDetail(args: Bundle = Bundle()) = push(R.id.myAttendanceDetailFragment, args)
 
-            val destination: NavDestination? = getCurrentDestinationId()?.let {
-                getController().graph.findNode(it)
-            }
-            if (destination != null) {
-                destination.putAction(R.id.request_fragment_action, navAction)
-                getController().navigate(R.id.request_fragment_action, args)
-            }
-        }
+        fun navigateToPayslips(args: Bundle = Bundle()) = push(R.id.payslipsFragment, args)
 
-        fun navigateToAttendanceStats(args: Bundle = Bundle()) {
-            Log.i(TAG, "navigateToAttendanceStats: $args")
-            val navAction = NavAction(R.id.attendanceStatsFragment)
-            val navOptions = NavOptions.Builder()
-                .setPopUpTo(getCurrentDestinationId()!!, false).build()
-            navAction.navOptions = navOptions
+        fun navigateToCertifications(args: Bundle = Bundle()) = push(R.id.certificationsFragment, args)
 
-            val destination: NavDestination? = getCurrentDestinationId()?.let {
-                getController().graph.findNode(it)
-            }
-            if (destination != null) {
-                destination.putAction(R.id.attendance_stats_fragment_action, navAction)
-                getController().navigate(R.id.attendance_stats_fragment_action, args)
-            }
-        }
+        fun navigateToNotifications(args: Bundle = Bundle()) = push(R.id.notificationsFragment, args)
 
-        fun navigateToMyAttendanceDetail(args: Bundle = Bundle()) {
-            Log.i(TAG, "navigateToAttendanceStats: $args")
-            val navAction = NavAction(R.id.myAttendanceDetailFragment)
-            val navOptions = NavOptions.Builder()
-                .setPopUpTo(getCurrentDestinationId()!!, false).build()
-            navAction.navOptions = navOptions
+        fun navigateToTeamActivity(args: Bundle = Bundle()) = push(R.id.teamActivityFragment, args)
 
-            val destination: NavDestination? = getCurrentDestinationId()?.let {
-                getController().graph.findNode(it)
-            }
-            if (destination != null) {
-                destination.putAction(R.id.my_attendance_detail_fragment_action, navAction)
-                getController().navigate(R.id.my_attendance_detail_fragment_action, args)
-            }
+        fun navigateToTeamCalendar(args: Bundle = Bundle()) = push(R.id.teamCalendarFragment, args)
 
-
-        }
-
-
-        fun navigateToTeamAttendanceDetail(args: Bundle = Bundle()) {
-            Log.i(TAG, "navigateToTeamAttendanceStats: $args")
-            val navAction = NavAction(R.id.teamAttendanceDetailFragment)
-            val navOptions = NavOptions.Builder()
-                .setPopUpTo(getCurrentDestinationId()!!, false).build()
-            navAction.navOptions = navOptions
-
-            val destination: NavDestination? = getCurrentDestinationId()?.let {
-                getController().graph.findNode(it)
-            }
-            if (destination != null) {
-                destination.putAction(R.id.team_attendance_detail_fragment_action, navAction)
-                getController().navigate(R.id.team_attendance_detail_fragment_action, args)
-            }
-
-
-        }
-
-
-        fun navigateToMyLeaveDetail(args: Bundle = Bundle()) {
-            Log.i(TAG, "navigateToMyLeaveDetail: $args")
-            val navAction = NavAction(R.id.myLeaveDetailFragment)
-            val navOptions = NavOptions.Builder()
-                .setPopUpTo(getCurrentDestinationId()!!, false).build()
-            navAction.navOptions = navOptions
-
-            val destination: NavDestination? = getCurrentDestinationId()?.let {
-                getController().graph.findNode(it)
-            }
-            if (destination != null) {
-                destination.putAction(R.id.my_leave_detail_fragment_action, navAction)
-                getController().navigate(R.id.my_leave_detail_fragment_action, args)
-            }
-
-
-        }
-
-        fun navigateToTeamLeaveDetail(args: Bundle = Bundle()) {
-            Log.i(TAG, "navigateToTeamLeaveDetail: $args")
-            val navAction = NavAction(R.id.teamLeaveDetailFragment)
-            val navOptions = NavOptions.Builder()
-                .setPopUpTo(getCurrentDestinationId()!!, false).build()
-            navAction.navOptions = navOptions
-
-            val destination: NavDestination? = getCurrentDestinationId()?.let {
-                getController().graph.findNode(it)
-            }
-            if (destination != null) {
-                destination.putAction(R.id.team_leave_detail_fragment_action, navAction)
-                getController().navigate(R.id.team_leave_detail_fragment_action, args)
-            }
-
-
-        }
-
-
-        fun navigateToCheckInFragment(args: Bundle = Bundle()) {
-            Log.i(TAG, "navigateToCheckInFragment: $args")
-            val navAction = NavAction(R.id.checkInListFragment)
-            val navOptions = NavOptions.Builder()
-                .setPopUpTo(getCurrentDestinationId()!!, false).build()
-            navAction.navOptions = navOptions
-
-            val destination: NavDestination? = getCurrentDestinationId()?.let {
-                getController().graph.findNode(it)
-            }
-            if (destination != null) {
-                destination.putAction(R.id.check_in_list_fragment_action, navAction)
-                getController().navigate(R.id.check_in_list_fragment_action, args)
-            }
-
-        }
-        fun navigateToExpenseFragment(args: Bundle = Bundle()) {
-            Log.i(TAG, "navigateToExpenseFragment: $args")
-            val navAction = NavAction(R.id.expenseFragment)
-            val navOptions = NavOptions.Builder()
-                .setPopUpTo(getCurrentDestinationId()!!, false).build()
-            navAction.navOptions = navOptions
-
-            val destination: NavDestination? = getCurrentDestinationId()?.let {
-                getController().graph.findNode(it)
-            }
-            if (destination != null) {
-                destination.putAction(R.id.expense_fragment_action, navAction)
-                getController().navigate(R.id.expense_fragment_action, args)
-            }
-
-        }
-
-        fun navigateToAddExpenseFragment(args: Bundle = Bundle()) {
-            Log.i(TAG, "navigateToAddExpenseFragment: $args")
-            val navAction = NavAction(R.id.addExpenseFragment)
-            val navOptions = NavOptions.Builder()
-                .setPopUpTo(getCurrentDestinationId()!!, false).build()
-            navAction.navOptions = navOptions
-
-            val destination: NavDestination? = getCurrentDestinationId()?.let {
-                getController().graph.findNode(it)
-            }
-            if (destination != null) {
-                destination.putAction(R.id.add_expense_fragment_action, navAction)
-                getController().navigate(R.id.add_expense_fragment_action, args)
-            }
-
-        }
-        fun navigateToImageDetailFragment(args: Bundle = Bundle()) {
-            Log.i(TAG, "navigateToImageDetailFragment: $args")
-            val navAction = NavAction(R.id.imageDetailFragment)
-            val navOptions = NavOptions.Builder()
-                .setPopUpTo(getCurrentDestinationId()!!, false).build()
-            navAction.navOptions = navOptions
-
-            val destination: NavDestination? = getCurrentDestinationId()?.let {
-                getController().graph.findNode(it)
-            }
-            if (destination != null) {
-                destination.putAction(R.id.image_detail_fragment_action, navAction)
-                getController().navigate(R.id.image_detail_fragment_action, args)
-            }
-
-        }
-        fun navigateToDocumentManageFragment(args: Bundle = Bundle()) {
-            Log.i(TAG, "navigateToDocumentManageFragment: $args")
-            val navAction = NavAction(R.id.documentManageFragment)
-            val navOptions = NavOptions.Builder()
-                .setPopUpTo(getCurrentDestinationId()!!, false).build()
-            navAction.navOptions = navOptions
-
-            val destination: NavDestination? = getCurrentDestinationId()?.let {
-                getController().graph.findNode(it)
-            }
-            if (destination != null) {
-                destination.putAction(R.id.document_manage_fragment_action, navAction)
-                getController().navigate(R.id.document_manage_fragment_action, args)
-            }
-
-        }
-
-        fun navigateToAddDocumentFragment(args: Bundle = Bundle()) {
-            Log.i(TAG, "navigateToAddDocumentFragment: $args")
-            val navAction = NavAction(R.id.addDocumentFragment)
-            val navOptions = NavOptions.Builder()
-                .setPopUpTo(getCurrentDestinationId()!!, false).build()
-            navAction.navOptions = navOptions
-
-            val destination: NavDestination? = getCurrentDestinationId()?.let {
-                getController().graph.findNode(it)
-            }
-            if (destination != null) {
-                destination.putAction(R.id.add_document_fragment_action, navAction)
-                getController().navigate(R.id.add_document_fragment_action, args)
-            }
-
-        }
-        fun navigateToResourceManageFragment(args: Bundle = Bundle()) {
-            Log.i(TAG, "navigateToResourceManageFragment: $args")
-            val navAction = NavAction(R.id.resourceManageFragment)
-            val navOptions = NavOptions.Builder()
-                .setPopUpTo(getCurrentDestinationId()!!, false).build()
-            navAction.navOptions = navOptions
-
-            val destination: NavDestination? = getCurrentDestinationId()?.let {
-                getController().graph.findNode(it)
-            }
-            if (destination != null) {
-                destination.putAction(R.id.resource_manage_fragment_action, navAction)
-                getController().navigate(R.id.resource_manage_fragment_action, args)
-            }
-
-        }
-
-        fun navigateToAddResourceManageFragment(args: Bundle = Bundle()) {
-            Log.i(TAG, "navigateToAddResourceManageFragment: $args")
-            val navAction = NavAction(R.id.addResourceManageFragment)
-            val navOptions = NavOptions.Builder()
-                .setPopUpTo(getCurrentDestinationId()!!, false).build()
-            navAction.navOptions = navOptions
-
-            val destination: NavDestination? = getCurrentDestinationId()?.let {
-                getController().graph.findNode(it)
-            }
-            if (destination != null) {
-                destination.putAction(R.id.add_resource_manage_fragment_action, navAction)
-                getController().navigate(R.id.add_resource_manage_fragment_action, args)
-            }
-
-        }
-
+        fun navigateToOrganogram(args: Bundle = Bundle()) = push(R.id.organogramFragment, args)
     }
 }

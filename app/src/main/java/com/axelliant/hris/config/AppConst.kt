@@ -9,6 +9,9 @@ object AppConst {
 */
     var TOKEN: String? = ""
 
+    /** Value for the `Authorization` header of every authenticated call. */
+    fun authHeader(): String = "token ${TOKEN}"
+
 //    const val KEY_PARAM  = "key"
     const val KEY_ID  = "employeeId"
     const val LeaveRequestParam  = "leaveRequest"

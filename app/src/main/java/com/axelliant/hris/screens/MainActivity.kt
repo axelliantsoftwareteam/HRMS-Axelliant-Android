@@ -7,18 +7,21 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import android.view.View
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.setupWithNavController
 import com.axelliant.hris.R
 import com.axelliant.hris.config.AppConst
+import com.axelliant.hris.config.AppState
+import com.axelliant.hris.databinding.ActivityMainBinding
 import com.axelliant.hris.di.Components
-import com.axelliant.hris.extention.showErrorMsg
 import com.axelliant.hris.navigation.AppNavigator
+import com.axelliant.hris.ui.DrawerController
 import com.axelliant.hris.utils.SessionManager
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.play.core.appupdate.AppUpdateManager
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
@@ -27,13 +30,19 @@ import com.google.android.play.core.install.InstallStateUpdatedListener
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.InstallStatus
 import com.google.android.play.core.install.model.UpdateAvailability
-import com.microsoft.identity.client.IAccount
+import com.microsoft.identity.client.IPublicClientApplication
 import com.microsoft.identity.client.ISingleAccountPublicClientApplication
+import com.microsoft.identity.client.PublicClientApplication
 import com.microsoft.identity.client.exception.MsalException
 import org.koin.android.ext.android.inject
 
 
 class MainActivity : BaseActivity() {
+
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var drawerController: DrawerController
+    private lateinit var diComponents: Components
+    private val sessionManager: SessionManager by inject()
 
     private val appUpdateManager: AppUpdateManager by lazy { AppUpdateManagerFactory.create(this) }
     private val appUpdatedListener: InstallStateUpdatedListener by lazy {
@@ -42,170 +51,189 @@ class MainActivity : BaseActivity() {
                 when {
                     installState.installStatus() == InstallStatus.DOWNLOADED -> popupSnackbarForCompleteUpdate()
                     installState.installStatus() == InstallStatus.INSTALLED -> appUpdateManager.unregisterListener(this)
-                    else -> Log.d("MainActivity","InstallStateUpdatedListener: state: %s"+installState.installStatus())
+                    else -> Log.d("MainActivity", "InstallStateUpdatedListener: state: " + installState.installStatus())
                 }
             }
         }
     }
-    private lateinit var diComponents: Components
+
     private var lastBackPressedTime: Long = 0
-    private val exitThreshold: Long = 2000 // Time threshold in milliseconds
-    private val sessionManager: SessionManager by inject()
-    private var mSingleAccountApp: ISingleAccountPublicClientApplication? = null
-    private var mAccount: IAccount? = null
+    private val exitThreshold: Long = 2000 // ms
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         diComponents = Components()
-
-        val bottomNavigation: BottomNavigationView = findViewById(R.id.bottomNavigation)
 
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        // above will assign it
         diComponents.globalConfig.navController = navHostFragment.navController
-        diComponents.globalConfig.navController.addOnDestinationChangedListener { controller, destination, arguments ->
-
-            Handler(Looper.getMainLooper()).postDelayed({
-                hideDialog()
-            }, 200)
-
-            when (destination.id) {
-                R.id.homeFragment, R.id.profileFragment -> {
-                    bottomNavigation.visibility = View.GONE
-                }
-
-                else -> {
-                    bottomNavigation.visibility = View.GONE
-                }
-            }
-
+        diComponents.globalConfig.navController.addOnDestinationChangedListener { _, destination, _ ->
+            Handler(Looper.getMainLooper()).postDelayed({ hideDialog() }, 200)
+            binding.drawerLayout.closeDrawer(GravityCompat.START)
         }
 
-
-        if (sessionManager.checkLogin()) {
-
-            AppConst.observableCode.observe(this) { code ->
-                if (code == 401) {
-                    mSingleAccountApp!!.signOut(object :
-                        ISingleAccountPublicClientApplication.SignOutCallback {
-                        override fun onSignOut() {
-                            mAccount = null
-                        }
-
-                        override fun onError(exception: MsalException) {
-                            this@MainActivity.showErrorMsg(exception.toString())
-                        }
-                    })
-                    AppNavigator.navigateToLogin()
-                }
-
-            }
-        }
-
-
-//        R.id.homeFragment, R.id.leavesFragment, R.id.profileFragment -> {
-//            bottomNavigation.visibility = View.VISIBLE
-//        }
-
-        bottomNavigation.setupWithNavController(diComponents.globalConfig.navController)
-
-        AppConst.observableCode.observe(this) { code ->
-            if (code == 401) {
-                AppNavigator.navigateToLogin()
-            }
-        }
+        setupDrawer()
+        setupBackNavigation()
+        observeSessionExpiry()
         checkForAppUpdate()
     }
-    private fun checkForAppUpdate() {
-        // Returns an intent object that you use to check for an update.
-        val appUpdateInfoTask = appUpdateManager.appUpdateInfo
 
-        // Checks that the platform will allow the specified type of update.
-        appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
+    // ------------------------------------------------------------------ drawer
+
+    private fun setupDrawer() {
+        // Opened only by the hamburger on Home (openDrawer); never by an edge swipe.
+        binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+        binding.drawerLayout.addDrawerListener(object : DrawerLayout.SimpleDrawerListener() {
+            override fun onDrawerClosed(drawerView: android.view.View) {
+                binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+            }
+        })
+        drawerController = DrawerController(binding.drawerLayout, binding.drawer) { confirmLogout() }
+        AppState.currentEmployee.observe(this) { drawerController.bind(it) }
+        AppState.unreadNotifications.observe(this) { drawerController.setUnread(it ?: 0) }
+    }
+
+    /** Called by the Home hamburger. */
+    fun openDrawer() {
+        binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+        binding.drawerLayout.openDrawer(GravityCompat.START)
+    }
+
+    // ------------------------------------------------------------------ sign out / session
+
+    /** Asks for confirmation, then signs the user out of Microsoft and HRIS. */
+    fun confirmLogout() {
+        MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.drawer_logout_title)
+            .setMessage(R.string.drawer_logout_message)
+            .setPositiveButton(R.string.drawer_logout_title) { _, _ -> signOut() }
+            .setNegativeButton(android.R.string.cancel, null)
+            .show()
+    }
+
+    private fun observeSessionExpiry() {
+        AppConst.observableCode.observe(this) { code ->
+            if (code == 401) {
+                AppConst.observableCode.set(0) // consume, the LiveData would otherwise replay it
+                val current = AppNavigator.getCurrentDestinationId()
+                if (current != R.id.loginFragment) signOut()
+            }
+        }
+    }
+
+    private fun signOut() {
+        PublicClientApplication.createSingleAccountPublicClientApplication(
+            this,
+            R.raw.auth_config_ciam_auth,
+            object : IPublicClientApplication.ISingleAccountApplicationCreatedListener {
+                override fun onCreated(application: ISingleAccountPublicClientApplication) {
+                    application.signOut(object : ISingleAccountPublicClientApplication.SignOutCallback {
+                        override fun onSignOut() = finishSignOut()
+                        override fun onError(exception: MsalException) = finishSignOut()
+                    })
+                }
+
+                override fun onError(exception: MsalException) = finishSignOut()
+            })
+    }
+
+    private fun finishSignOut() {
+        sessionManager.logoutUser()
+        AppConst.TOKEN = ""
+        AppState.reset()
+        AppNavigator.navigateToLogin()
+    }
+
+    // ------------------------------------------------------------------ back
+
+    private fun setupBackNavigation() {
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                when {
+                    binding.drawerLayout.isDrawerOpen(GravityCompat.START) ->
+                        binding.drawerLayout.closeDrawer(GravityCompat.START)
+
+                    diComponents.globalConfig.navController.currentDestination?.id == R.id.homeFragment -> {
+                        val now = System.currentTimeMillis()
+                        if (now - lastBackPressedTime < exitThreshold) {
+                            finish()
+                        } else {
+                            Toast.makeText(this@MainActivity, "Press back again to exit", Toast.LENGTH_SHORT).show()
+                            lastBackPressedTime = now
+                        }
+                    }
+
+                    else -> if (!diComponents.globalConfig.navController.popBackStack()) finish()
+                }
+            }
+        })
+    }
+
+    // ------------------------------------------------------------------ in-app updates
+
+    private fun checkForAppUpdate() {
+        appUpdateManager.appUpdateInfo.addOnSuccessListener { appUpdateInfo ->
             if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE) {
-                // Request the update.
                 try {
                     val installType = when {
                         appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE) -> AppUpdateType.FLEXIBLE
                         appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE) -> AppUpdateType.IMMEDIATE
                         else -> null
-                    }
+                    } ?: return@addOnSuccessListener
                     if (installType == AppUpdateType.FLEXIBLE) appUpdateManager.registerListener(appUpdatedListener)
 
                     appUpdateManager.startUpdateFlowForResult(
                         appUpdateInfo,
-                        installType!!,
+                        installType,
                         this,
-                        APP_UPDATE_REQUEST_CODE)
+                        APP_UPDATE_REQUEST_CODE
+                    )
                 } catch (e: IntentSender.SendIntentException) {
                     e.printStackTrace()
                 }
             }
         }
     }
+
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == APP_UPDATE_REQUEST_CODE) {
-            if (resultCode != Activity.RESULT_OK) {
-                Toast.makeText(this,
-                    "App Update failed, please try again on the next app launch.",
-                    Toast.LENGTH_SHORT)
-                    .show()
+        if (requestCode == APP_UPDATE_REQUEST_CODE && resultCode != Activity.RESULT_OK) {
+            Toast.makeText(this, "App Update failed, please try again on the next app launch.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun popupSnackbarForCompleteUpdate() {
+        Snackbar.make(binding.rootLayout, "An update has just been downloaded.", Snackbar.LENGTH_INDEFINITE).apply {
+            setAction("RESTART") { appUpdateManager.completeUpdate() }
+            setActionTextColor(ContextCompat.getColor(this@MainActivity, R.color.colorApp))
+            show()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        appUpdateManager.appUpdateInfo.addOnSuccessListener { appUpdateInfo ->
+            if (appUpdateInfo.installStatus() == InstallStatus.DOWNLOADED) {
+                popupSnackbarForCompleteUpdate()
+            }
+            try {
+                if (appUpdateInfo.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
+                    appUpdateManager.startUpdateFlowForResult(
+                        appUpdateInfo,
+                        AppUpdateType.IMMEDIATE,
+                        this,
+                        APP_UPDATE_REQUEST_CODE
+                    )
+                }
+            } catch (e: IntentSender.SendIntentException) {
+                e.printStackTrace()
             }
         }
     }
-    private fun popupSnackbarForCompleteUpdate() {
-        val snackbar = Snackbar.make(
-            findViewById(R.id.rootLayout),
-            "An update has just been downloaded.",
-            Snackbar.LENGTH_INDEFINITE)
-        snackbar.setAction("RESTART") { appUpdateManager.completeUpdate() }
-        snackbar.setActionTextColor(ContextCompat.getColor(this, R.color.colorApp))
-        snackbar.show()
-    }
-    override fun onResume() {
-        super.onResume()
-        appUpdateManager
-            .appUpdateInfo
-            .addOnSuccessListener { appUpdateInfo ->
 
-                // If the update is downloaded but not installed,
-                // notify the user to complete the update.
-                if (appUpdateInfo.installStatus() == InstallStatus.DOWNLOADED) {
-                    popupSnackbarForCompleteUpdate()
-                }
-
-                //Check if Immediate update is required
-                try {
-                    if (appUpdateInfo.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
-                        // If an in-app update is already running, resume the update.
-                        appUpdateManager.startUpdateFlowForResult(
-                            appUpdateInfo,
-                            AppUpdateType.IMMEDIATE,
-                            this,
-                            APP_UPDATE_REQUEST_CODE)
-                    }
-                } catch (e: IntentSender.SendIntentException) {
-                    e.printStackTrace()
-                }
-            }
-    }
-
-    override fun onBackPressed() {
-        if (diComponents.globalConfig.navController.currentDestination?.id == R.id.homeFragment) {
-            val currentTime = System.currentTimeMillis()
-            if (currentTime - lastBackPressedTime < exitThreshold) {
-                finish()
-            } else {
-                Toast.makeText(this, "Press back again to exit", Toast.LENGTH_SHORT).show()
-                lastBackPressedTime = currentTime
-            }
-        } else
-            super.onBackPressed()
-
-    }
     companion object {
         private const val APP_UPDATE_REQUEST_CODE = 1991
     }

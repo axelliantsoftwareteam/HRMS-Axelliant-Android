@@ -37,6 +37,7 @@ import com.axelliant.hris.base.BaseFragment
 import com.axelliant.hris.bottomSheet.TodayTeamAttendanceDetailBottomSheet
 import com.axelliant.hris.callback.AdapterItemClick
 import com.axelliant.hris.config.AppConst
+import com.axelliant.hris.config.AppState
 import com.axelliant.hris.config.GlobalConfig
 import com.axelliant.hris.databinding.FragmentHomeBinding
 import com.axelliant.hris.enums.CheckRequestFilter
@@ -62,12 +63,8 @@ import com.axelliant.hris.model.todayTeam.EmployTeamProfile
 import com.axelliant.hris.navigation.AppNavigator
 import com.axelliant.hris.utils.SessionManager
 import com.axelliant.hris.viewmodel.HomeViewModel
+import com.axelliant.hris.viewmodel.NotificationsViewModel
 import com.google.android.gms.maps.model.LatLng
-import com.microsoft.identity.client.IAccount
-import com.microsoft.identity.client.IPublicClientApplication
-import com.microsoft.identity.client.ISingleAccountPublicClientApplication
-import com.microsoft.identity.client.PublicClientApplication
-import com.microsoft.identity.client.exception.MsalException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -103,12 +100,8 @@ class HomeFragment : BaseFragment() {
     private lateinit var locationManager: LocationManager
 
     private val homeViewModel: HomeViewModel by inject()
+    private val notificationsViewModel: NotificationsViewModel by inject()
     private val sessionManager: SessionManager by inject()
-
-    /* Azure AD Variables */
-    private var mSingleAccountApp: ISingleAccountPublicClientApplication? = null
-    private var mAccount: IAccount? = null
-
 
     private val gpsLocationListener: LocationListener = object : LocationListener {
         override fun onLocationChanged(location: Location) {
@@ -370,41 +363,15 @@ class HomeFragment : BaseFragment() {
         binding?.ivQr?.setOnClickListener {
             requireContext().showSuccessMsg()
         }
-        binding?.ivNotification?.setOnClickListener {
+        binding?.ivMenu?.setOnClickListener { (requireActivity() as MainActivity).openDrawer() }
+        binding?.ivNotification?.setOnClickListener { AppNavigator.navigateToNotifications() }
 
-            AlertDialog.Builder(requireContext())
-                .setMessage(getString(R.string.logout_message))
-                .setTitle(getString(R.string.info))
-                .setPositiveButton(getString(R.string.yes)) { dialog, which ->
-                    if (mSingleAccountApp == null) {
-                        return@setPositiveButton
-                    }
-                    /*
-                     * Removes the signed-in account and cached tokens from this app (or device, if the device is in shared mode).
-                   */
-                    mSingleAccountApp!!.signOut(object :
-                        ISingleAccountPublicClientApplication.SignOutCallback {
-                        override fun onSignOut() {
-                            mAccount = null
-                            requireContext().showErrorMsg("Sign Out")
-                            sessionManager.logoutUser()
-                            AppNavigator.navigateToLogin()
-                        }
-
-                        override fun onError(exception: MsalException) {
-                            requireContext().showErrorMsg(exception.toString())
-                            sessionManager.logoutUser()
-                            AppNavigator.navigateToLogin()
-                        }
-                    })
-                }
-                .setNegativeButton(getString(R.string.no)) { dialog, which ->
-                    // Do nothing
-                }
-                .show()
-
-
+        AppState.unreadNotifications.observe(viewLifecycleOwner) { count ->
+            val badge = binding?.tvNotificationBadge ?: return@observe
+            badge.isVisible = (count ?: 0) > 0
+            badge.text = if ((count ?: 0) > 99) "99+" else (count ?: 0).toString()
         }
+        notificationsViewModel.refreshUnreadCount()
 
 //        targetLocList.add(BranchDataResponse(LocationFilter.NTC_OFFICE.value, 31.5494, 74.3333))
 //        targetLocList.add(
@@ -454,22 +421,6 @@ class HomeFragment : BaseFragment() {
 
 
         }
-
-        PublicClientApplication.createSingleAccountPublicClientApplication(
-            requireContext(),
-            R.raw.auth_config_ciam_auth,
-            object : IPublicClientApplication.ISingleAccountApplicationCreatedListener {
-                override fun onCreated(application: ISingleAccountPublicClientApplication) {
-                    mSingleAccountApp = application
-                }
-
-                override fun onError(exception: MsalException) {
-                    // Handle the exception
-                    requireContext().showErrorMsg(exception.toString())
-                    Log.d(TAG, exception.toString())
-
-                }
-            })
 
     }
 
@@ -691,19 +642,6 @@ class HomeFragment : BaseFragment() {
 
     private fun dataPopulate() {
 
-        if (isManager) {
-            homeViewModel.getTodayTeamInfo()
-            gridList?.add(
-                Modules(
-                    id = 3,
-                    name = HomeMenu.Approval.gridName,
-                    description = HomeMenu.Approval.description,
-                    color = ContextCompat.getDrawable(requireContext(), R.drawable.gradient_bg),
-                    drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_approv)
-                )
-            )
-        }
-
         gridList = arrayListOf(
             Modules(
                 id = 0,
@@ -728,34 +666,11 @@ class HomeFragment : BaseFragment() {
 
             ),
             Modules(
-                id = 4,
-                name = HomeMenu.CheckIN.gridName,
-                description = HomeMenu.CheckIN.description,
-                color = ContextCompat.getDrawable(requireContext(), R.drawable.checkin_gradient),
-                drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_checkin)
-
-
-            ),
-            Modules(
                 id = 5,
                 name = HomeMenu.Expense.gridName,
                 description = HomeMenu.Expense.description,
                 color = ContextCompat.getDrawable(requireContext(), R.drawable.expense_gradient),
                 drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_expe)
-            ), Modules(
-                id = 6,
-                name = HomeMenu.DocumentManagement.gridName,
-                description = HomeMenu.DocumentManagement.description,
-                color = ContextCompat.getDrawable(requireContext(), R.drawable.documt_gradient),
-                drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_payslip)
-            ),
-
-            Modules(
-                id = 7,
-                name = HomeMenu.ResourceManagement.gridName,
-                description = HomeMenu.ResourceManagement.description,
-                color = ContextCompat.getDrawable(requireContext(), R.drawable.resource_gradient),
-                drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_manage)
             )
         )
         if (isManager) {
@@ -785,7 +700,7 @@ class HomeFragment : BaseFragment() {
                     when (currentObject.name) {
                         HomeMenu.Attendance.gridName -> {
                             showDialog()
-                            AppNavigator.navigateToAttendanceStats()
+                            AppNavigator.navigateToMyAttendanceDetail()
                         }
 
                         HomeMenu.Leaves.gridName -> {
@@ -795,7 +710,7 @@ class HomeFragment : BaseFragment() {
 
                         HomeMenu.Request.gridName -> {
                             showDialog()
-                            AppNavigator.navigateToRequest()
+                            AppNavigator.navigateToRequestsOverview()
                         }
 
                         HomeMenu.Approval.gridName -> {
@@ -803,22 +718,9 @@ class HomeFragment : BaseFragment() {
                             AppNavigator.navigateToApprovals()
                         }
 
-                        HomeMenu.CheckIN.gridName -> {
-                            showDialog()
-                            AppNavigator.navigateToCheckInFragment()
-                        }
-
                         HomeMenu.Expense.gridName -> {
                             showDialog()
-                            AppNavigator.navigateToExpenseFragment()
-                        }
-                        HomeMenu.DocumentManagement.gridName -> {
-                            showDialog()
-                            AppNavigator.navigateToDocumentManageFragment()
-                        }
-                        HomeMenu.ResourceManagement.gridName -> {
-                            showDialog()
-                            AppNavigator.navigateToResourceManageFragment()
+                            AppNavigator.navigateToExpense()
                         }
 
                         else -> {
