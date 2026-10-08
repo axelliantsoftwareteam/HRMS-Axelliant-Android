@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Text size of the weekday header in the Team Calendar month grid (SSP-scaled). -->
+    <dimen name="cal_weekday_text">@dimen/_9ssp</dimen>
+</resources>

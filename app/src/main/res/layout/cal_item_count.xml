@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/_8sdp">
+
+    <TextView
+        android:id="@+id/cal_count_value"
+        style="@style/Ws.Text.SemiBold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/_15ssp" />
+
+    <TextView
+        android:id="@+id/cal_count_label"
+        style="@style/Ws.Text.Medium"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:maxLines="2"
+        android:textColor="@color/ws_grey"
+        android:textSize="@dimen/_9ssp" />
+</LinearLayout>

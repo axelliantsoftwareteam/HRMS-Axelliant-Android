@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <!-- Header band -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ws_sheet_header_bg"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/_16sdp"
+        android:paddingTop="@dimen/_12sdp"
+        android:paddingEnd="@dimen/_12sdp"
+        android:paddingBottom="@dimen/_12sdp">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/Ws.Text.SemiBold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/cal_filters_title"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_14ssp" />
+
+            <TextView
+                style="@style/Ws.Text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:alpha="0.85"
+                android:text="@string/cal_filters_subtitle"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_10ssp" />
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/cal_sheet_close"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_30sdp"
+            android:background="@drawable/ws_circle_bg"
+            android:backgroundTint="#33FFFFFF"
+            android:contentDescription="@string/ws_close"
+            android:padding="@dimen/_7sdp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ws_ic_close"
+            app:tint="@color/white" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="false">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/_16sdp">
+
+            <LinearLayout
+                android:id="@+id/cal_row_start"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ws_input_bg"
+                android:foreground="?attr/selectableItemBackground"
+                android:gravity="center_vertical"
+                android:minHeight="@dimen/_38sdp"
+                android:orientation="horizontal"
+                android:paddingStart="@dimen/_11sdp"
+                android:paddingEnd="@dimen/_11sdp">
+
+                <ImageView
+                    android:layout_width="@dimen/_14sdp"
+                    android:layout_height="@dimen/_14sdp"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ws_ic_calendar"
+                    app:tint="@color/ws_primary" />
+
+                <TextView
+                    style="@style/Ws.Text.Medium"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_6sdp"
+                    android:layout_weight="1"
+                    android:text="@string/team_start_date"
+                    android:textSize="@dimen/_11ssp" />
+
+                <TextView
+                    android:id="@+id/cal_start_value"
+                    style="@style/Ws.Text.Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/ws_primary"
+                    android:textSize="@dimen/_11ssp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/cal_row_end"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:background="@drawable/ws_input_bg"
+                android:foreground="?attr/selectableItemBackground"
+                android:gravity="center_vertical"
+                android:minHeight="@dimen/_38sdp"
+                android:orientation="horizontal"
+                android:paddingStart="@dimen/_11sdp"
+                android:paddingEnd="@dimen/_11sdp">
+
+                <ImageView
+                    android:layout_width="@dimen/_14sdp"
+                    android:layout_height="@dimen/_14sdp"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ws_ic_calendar"
+                    app:tint="@color/ws_primary" />
+
+                <TextView
+                    style="@style/Ws.Text.Medium"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_6sdp"
+                    android:layout_weight="1"
+                    android:text="@string/team_end_date"
+                    android:textSize="@dimen/_11ssp" />
+
+                <TextView
+                    android:id="@+id/cal_end_value"
+                    style="@style/Ws.Text.Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/ws_primary"
+                    android:textSize="@dimen/_11ssp" />
+            </LinearLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.Ws.TextInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_12sdp"
+                android:hint="@string/team_employee">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/cal_input_employee"
+                    style="@style/Ws.Text.Input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionNext"
+                    android:inputType="textPersonName"
+                    android:maxLines="1" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.Ws.TextInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:hint="@string/team_designation">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/cal_input_designation"
+                    style="@style/Ws.Text.Input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionDone"
+                    android:inputType="text"
+                    android:maxLines="1" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_16sdp"
+                android:orientation="horizontal">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/cal_btn_sheet_reset"
+                    style="@style/Widget.Ws.Button.Tonal"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/cal_reset" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/cal_btn_sheet_apply"
+                    style="@style/Widget.Ws.Button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_weight="1"
+                    android:text="@string/cal_apply" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

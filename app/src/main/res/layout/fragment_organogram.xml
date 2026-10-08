@@ -4,23 +4,140 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/ws_screen_bg"
-    android:orientation="vertical"
-    android:paddingStart="@dimen/_12sdp"
-    android:paddingEnd="@dimen/_12sdp">
+    android:orientation="vertical">
 
     <com.axelliant.hris.ui.WsToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_12sdp"
         android:layout_marginTop="@dimen/_6sdp"
-        app:wsTitle="Organogram" />
+        android:layout_marginEnd="@dimen/_12sdp"
+        app:wsTitle="@string/org_title" />
+
+    <LinearLayout
+        android:id="@+id/org_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_16sdp"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:layout_marginEnd="@dimen/_16sdp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/Ws.Text.Medium"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/org_structure"
+                    android:textSize="@dimen/_11ssp" />
+
+                <TextView
+                    android:id="@+id/org_team_count"
+                    style="@style/Ws.Text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_2sdp"
+                    android:textColor="@color/ws_grey"
+                    android:textSize="@dimen/_10ssp" />
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/org_btn_zoom_out"
+                android:layout_width="@dimen/_33sdp"
+                android:layout_height="@dimen/_33sdp"
+                android:background="@drawable/ws_circle_bg"
+                android:backgroundTint="#1F09589B"
+                android:contentDescription="@string/org_zoom_out"
+                android:padding="@dimen/_8sdp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ws_ic_zoom_out"
+                app:tint="@color/ws_primary" />
+
+            <TextView
+                android:id="@+id/org_zoom_percent"
+                style="@style/Ws.Text.Medium"
+                android:layout_width="@dimen/_36sdp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/ws_grey"
+                android:textSize="@dimen/_10ssp" />
+
+            <ImageButton
+                android:id="@+id/org_btn_zoom_in"
+                android:layout_width="@dimen/_33sdp"
+                android:layout_height="@dimen/_33sdp"
+                android:background="@drawable/ws_circle_bg"
+                android:backgroundTint="#1F09589B"
+                android:contentDescription="@string/org_zoom_in"
+                android:padding="@dimen/_8sdp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ws_ic_zoom_in"
+                app:tint="@color/ws_primary" />
+
+            <TextView
+                android:id="@+id/org_btn_reset"
+                style="@style/Ws.Text.Medium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_4sdp"
+                android:background="?attr/selectableItemBackground"
+                android:contentDescription="@string/org_reset_view"
+                android:padding="@dimen/_6sdp"
+                android:text="@string/org_reset"
+                android:textColor="@color/ws_primary"
+                android:textSize="@dimen/_10ssp" />
+        </LinearLayout>
+
+        <com.google.android.material.card.MaterialCardView
+            style="@style/Widget.Ws.Card"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="@dimen/_16sdp"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:layout_marginEnd="@dimen/_16sdp"
+            android:layout_weight="1">
+
+            <com.axelliant.hris.components.OrgChartView
+                android:id="@+id/org_chart"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            style="@style/Ws.Text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingTop="@dimen/_6sdp"
+            android:paddingBottom="@dimen/_8sdp"
+            android:text="@string/org_hint"
+            android:textColor="@color/ws_grey"
+            android:textSize="@dimen/_10ssp" />
+    </LinearLayout>
 
     <com.axelliant.hris.ui.WsEmptyState
-        android:id="@+id/empty_state"
+        android:id="@+id/org_empty_state"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_16sdp"
         android:layout_marginTop="@dimen/_12sdp"
-        app:wsEmptyIcon="@drawable/ws_ic_info"
-        app:wsEmptyMessage="This screen is being built."
-        app:wsEmptyTitle="Organogram" />
+        android:layout_marginEnd="@dimen/_16sdp"
+        android:visibility="gone"
+        app:wsEmptyIcon="@drawable/ws_ic_account_tree"
+        app:wsEmptyMessage="@string/org_empty_message"
+        app:wsEmptyTitle="@string/org_empty_title" />
 </LinearLayout>
