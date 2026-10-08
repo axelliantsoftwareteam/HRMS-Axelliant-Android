@@ -2,12 +2,9 @@ package com.axelliant.hris.di
 
 import com.axelliant.hris.config.GlobalConfig
 import com.axelliant.hris.network.ApiHandler
-import com.axelliant.hris.repos.AttendanceRepo
 import com.axelliant.hris.repos.ExpenseRepo
 import com.axelliant.hris.repos.HomeRepo
-import com.axelliant.hris.repos.LeaveRepo
 import com.axelliant.hris.repos.LoginRepo
-import com.axelliant.hris.repos.RequestRepo
 import com.axelliant.hris.repos.ProfileRepo
 import com.axelliant.hris.utils.SessionManager
 import com.axelliant.hris.utils.Validator
@@ -62,10 +59,7 @@ val viewModelModule = module {
 val factoryModule = module {
     factory { LoginRepo(get()) }
     factory { HomeRepo(get()) }
-    factory { AttendanceRepo(get()) }
-    factory { LeaveRepo(get()) }
     factory { ExpenseRepo(get()) }
-    factory { RequestRepo(get()) }
     factory { ProfileRepo(get()) }
 
 }

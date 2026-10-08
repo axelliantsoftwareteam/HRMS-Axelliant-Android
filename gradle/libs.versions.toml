@@ -33,6 +33,8 @@ ssp-android = "1.1.0"
 play-services-location = "21.2.0"
 activity = "1.9.0"
 constraintlayout = "2.1.4"
+recyclerview = "1.3.2"
+swiperefreshlayout = "1.1.0"
 play-services-maps = "19.0.0"
 
 [libraries]
@@ -73,6 +75,8 @@ smoothbottombar = { module = "com.github.ibrahimsn98:SmoothBottomBar", version.r
 ssp-android = { module = "com.intuit.ssp:ssp-android", version.ref = "ssp-android" }
 play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "play-services-location" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
+androidx-recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "recyclerview" }
+androidx-swiperefreshlayout = { group = "androidx.swiperefreshlayout", name = "swiperefreshlayout", version.ref = "swiperefreshlayout" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "play-services-maps" }
 
