@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- ======================================================= Pay slips -->
+    <string name="pay_title">Pay Slips</string>
+    <string name="pay_header_title">Payroll</string>
+    <string name="pay_header_subtitle">Your salary slips and payroll history</string>
+    <string name="pay_count_cd">%1$d pay slips</string>
+    <string name="pay_view">View</string>
+    <string name="pay_view_cd">View pay slip %1$s</string>
+    <string name="pay_default_status">Submitted</string>
+    <string name="pay_empty_title">No pay slips</string>
+    <string name="pay_empty_message">No salary slips are available right now.</string>
+    <string name="pay_failed_title">Could not load pay slips</string>
+    <string name="pay_failed_message">Pull down to try again.</string>
+    <string name="pay_error_load">We could not load your pay slips right now.</string>
+    <string name="pay_error_preview">This pay slip could not be opened. Please try again.</string>
+    <string name="pay_error_share">This pay slip could not be shared right now.</string>
+    <string name="pay_preview_label">Pay slip</string>
+    <string name="pay_share">Share pay slip</string>
+    <string name="pay_close">Close</string>
+    <string name="pay_page_cd">Pay slip page %1$d</string>
+
+    <!-- ======================================================= Certifications -->
+    <string name="cert_title">Certifications</string>
+    <string name="cert_chip_total">Total</string>
+    <string name="cert_chip_expiring">Expiring soon</string>
+    <string name="cert_chip_renewal">Renewal due</string>
+    <string name="cert_default_title">Certification</string>
+    <string name="cert_status_unknown">Unknown</string>
+    <string name="cert_status_renewal_due">%1$s · renewal due</string>
+    <string name="cert_meta_id">ID %1$s</string>
+    <string name="cert_meta_expires">Expires %1$s</string>
+    <string name="cert_no_expiry">No expiry date</string>
+    <string name="cert_hint_overdue">Renewal is overdue.</string>
+    <plurals name="cert_hint_renews_in">
+        <item quantity="one">Renews in %1$d day.</item>
+        <item quantity="other">Renews in %1$d days.</item>
+    </plurals>
+    <plurals name="cert_hint_until_expiry">
+        <item quantity="one">%1$d day until expiry.</item>
+        <item quantity="other">%1$d days until expiry.</item>
+    </plurals>
+    <string name="cert_hint_keep_up">Keep this credential up to date.</string>
+    <string name="cert_hint_none">No renewal required.</string>
+    <string name="cert_open_credential">Open credential</string>
+    <string name="cert_empty_title">No certifications yet</string>
+    <string name="cert_empty_message">Tap + to add a certification or licence and track its renewal.</string>
+    <string name="cert_failed_title">Could not load certifications</string>
+    <string name="cert_failed_message">Pull down to try again.</string>
+    <string name="cert_error_load">We could not load your certifications right now.</string>
+    <string name="cert_add_cd">Add certification</string>
+    <string name="cert_open_failed">This link could not be opened.</string>
+
+    <!-- Add form -->
+    <string name="cert_form_title">Add Certification</string>
+    <string name="cert_field_name">Certification name *</string>
+    <string name="cert_field_name_hint">e.g. AWS Certified Developer</string>
+    <string name="cert_field_authority">Issuing authority</string>
+    <string name="cert_field_authority_hint">e.g. Amazon Web Services</string>
+    <string name="cert_field_credential_id">Credential ID</string>
+    <string name="cert_field_credential_id_hint">Optional</string>
+    <string name="cert_field_url">Credential URL</string>
+    <string name="cert_field_url_hint">https://</string>
+    <string name="cert_field_issue">Issue date</string>
+    <string name="cert_field_expiry">Expiry date</string>
+    <string name="cert_field_renewal">Renewal required</string>
+    <string name="cert_field_notes">Notes</string>
+    <string name="cert_field_notes_hint">Training notes, provider info, or renewal context</string>
+    <string name="cert_submit">Add certification</string>
+    <string name="cert_submitting">Saving...</string>
+    <string name="cert_error_name">Enter the certification name.</string>
+    <string name="cert_error_expiry_before_issue">The expiry date cannot be before the issue date.</string>
+    <string name="cert_added">Certification has been added.</string>
+    <string name="cert_error_add">We could not add this certification right now.</string>
+
+    <!-- ======================================================= Profile -->
+    <string name="prof_title">Profile</string>
+    <string name="prof_default_name">Axelliant user</string>
+    <string name="prof_default_designation">Designation not available</string>
+    <string name="prof_not_available">Not available</string>
+    <string name="prof_unavailable">Your profile is unavailable right now.</string>
+    <string name="prof_error_load">We could not load your profile right now.</string>
+    <string name="prof_try_again">Try again</string>
+
+    <string name="prof_sec_details">Employee details</string>
+    <string name="prof_sec_personal">Personal information</string>
+    <string name="prof_sec_employment">Employment</string>
+    <string name="prof_sec_contact">Contact and emergency</string>
+    <string name="prof_sec_benefits">Benefits</string>
+    <string name="prof_sec_skills">Skills</string>
+    <string name="prof_sec_education">Education</string>
+    <string name="prof_sec_work">Work history</string>
+
+    <string name="prof_f_code">Employee code</string>
+    <string name="prof_f_company">Company</string>
+    <string name="prof_f_joined">Joined</string>
+    <string name="prof_f_manager">Manager</string>
+    <string name="prof_f_confirmed">Confirmed</string>
+    <string name="prof_f_full_name">Full name</string>
+    <string name="prof_f_father">Father / emergency contact</string>
+    <string name="prof_f_dob">Date of birth</string>
+    <string name="prof_f_gender">Gender</string>
+    <string name="prof_f_cnic">CNIC</string>
+    <string name="prof_f_current_role">Current role</string>
+    <string name="prof_f_work_email">Work email</string>
+    <string name="prof_f_personal_email">Personal email</string>
+    <string name="prof_f_phone">Phone</string>
+    <string name="prof_f_emergency_phone">Emergency phone</string>
+    <string name="prof_f_relation">Relation</string>
+    <string name="prof_f_address">Address</string>
+    <string name="prof_f_policy">Policy number</string>
+
+    <string name="prof_health_insurance">Health insurance</string>
+    <string name="prof_provider_missing">Provider not available</string>
+    <string name="prof_dependents">Dependents</string>
+    <string name="prof_no_dependents">No dependents recorded.</string>
+    <string name="prof_dependent_dob">DOB: %1$s</string>
+    <string name="prof_dependent_age">Age: %1$d</string>
+    <string name="prof_dependent_cnic">CNIC: %1$s</string>
+    <string name="prof_other_schemes">Other schemes</string>
+    <string name="prof_life_insurance">Life insurance</string>
+    <string name="prof_eobi">EOBI</string>
+    <string name="prof_provident_fund">Provident fund</string>
+    <string name="prof_registered">Registered</string>
+    <string name="prof_not_registered">Not registered</string>
+    <string name="prof_salary">Salary · %1$s</string>
+
+    <!-- ======================================================= Notifications -->
+    <string name="notif_title">Notifications</string>
+    <string name="notif_summary">%1$d notifications · %2$d unread</string>
+    <string name="notif_mark_all_read">Mark all read</string>
+    <string name="notif_default_message">Notification</string>
+    <string name="notif_unread_cd">Unread</string>
+    <string name="notif_empty_title">No notifications yet</string>
+    <string name="notif_empty_message">HR updates about your requests will appear here.</string>
+    <string name="notif_failed_title">Notifications unavailable</string>
+    <string name="notif_error_load">We could not load notifications right now.</string>
+    <string name="notif_error_update">We could not update notifications right now.</string>
+    <string name="notif_marked_read">Notifications have been marked as read.</string>
+    <string name="notif_caught_up">You\'re all caught up.</string>
+    <string name="notif_sheet_title">Notification</string>
+    <string name="notif_sheet_read">Read</string>
+    <string name="notif_sheet_unread">Unread</string>
+    <string name="notif_f_message">Message</string>
+    <string name="notif_f_from">From</string>
+    <string name="notif_f_received">Received</string>
+    <string name="notif_f_document">Document</string>
+    <string name="notif_f_reference">Reference</string>
+    <string name="notif_open_in_hris">Open in HRIS</string>
+    <string name="notif_open_failed">This link could not be opened.</string>
+</resources>

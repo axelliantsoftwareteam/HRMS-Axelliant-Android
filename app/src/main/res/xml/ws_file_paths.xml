@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- FileProvider roots used to share files from the app (pay slip PDFs are cached in cache/payslips). -->
+<paths>
+    <cache-path
+        name="ws_payslips"
+        path="payslips/" />
+</paths>
