@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/Widget.Ws.Card"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/_2sdp"
+    android:layout_marginBottom="@dimen/_10sdp"
+    android:clickable="true"
+    android:focusable="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="@dimen/_14sdp">
+
+        <ImageView
+            android:id="@+id/notif_icon"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:background="@drawable/ws_icon_badge_bg"
+            android:importantForAccessibility="no"
+            android:padding="@dimen/_9sdp"
+            android:src="@drawable/ws_ic_bell" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_12sdp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/notif_message"
+                style="@style/Ws.Text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/_11ssp" />
+
+            <TextView
+                android:id="@+id/notif_meta"
+                style="@style/Ws.Text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:textColor="@color/ws_text_secondary"
+                android:textSize="@dimen/_10ssp" />
+
+            <TextView
+                android:id="@+id/notif_type"
+                style="@style/Ws.Text.Badge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp" />
+        </LinearLayout>
+
+        <View
+            android:id="@+id/notif_unread_dot"
+            android:layout_width="@dimen/_9sdp"
+            android:layout_height="@dimen/_9sdp"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:background="@drawable/ws_circle_bg"
+            android:backgroundTint="@color/ws_red"
+            android:contentDescription="@string/notif_unread_cd" />
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/prof_health_bg"
+    android:orientation="vertical"
+    android:padding="@dimen/_14sdp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <FrameLayout
+            android:layout_width="@dimen/_38sdp"
+            android:layout_height="@dimen/_38sdp">
+
+            <View
+                android:id="@+id/prof_health_circle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/ws_circle_bg" />
+
+            <ImageView
+                android:id="@+id/prof_health_icon"
+                android:layout_width="@dimen/_18sdp"
+                android:layout_height="@dimen/_18sdp"
+                android:layout_gravity="center"
+                android:importantForAccessibility="no"
+                android:src="@drawable/prof_ic_medical" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_12sdp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/Ws.Text.SemiBold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/prof_health_insurance"
+                android:textSize="@dimen/_13ssp" />
+
+            <TextView
+                android:id="@+id/prof_health_provider"
+                style="@style/Ws.Text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:textColor="@color/ws_text_secondary"
+                android:textSize="@dimen/_10ssp" />
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/prof_health_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_8sdp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/_14sdp"
+        android:layout_marginBottom="@dimen/_14sdp"
+        android:background="@color/ws_divider" />
+
+    <FrameLayout
+        android:id="@+id/prof_health_policy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</LinearLayout>
