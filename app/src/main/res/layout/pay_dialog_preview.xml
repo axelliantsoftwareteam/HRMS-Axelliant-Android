@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/pay_preview_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <!-- Header band: pay slip colour, period title, share and close. -->
+    <LinearLayout
+        android:id="@+id/pay_preview_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/ws_payslip"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/_20sdp"
+        android:paddingTop="@dimen/_16sdp"
+        android:paddingEnd="@dimen/_20sdp"
+        android:paddingBottom="@dimen/_16sdp">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/Ws.Text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:alpha="0.85"
+                android:text="@string/pay_preview_label"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_10ssp" />
+
+            <TextView
+                android:id="@+id/pay_preview_title"
+                style="@style/Ws.Text.SemiBold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_14ssp" />
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/pay_preview_share"
+            android:layout_width="@dimen/_44sdp"
+            android:layout_height="@dimen/_44sdp"
+            android:layout_marginStart="@dimen/_12sdp"
+            android:background="@drawable/ws_circle_bg"
+            android:backgroundTint="#33FFFFFF"
+            android:contentDescription="@string/pay_share"
+            android:padding="@dimen/_12sdp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ws_ic_share"
+            app:tint="@color/white" />
+
+        <ImageButton
+            android:id="@+id/pay_preview_close"
+            android:layout_width="@dimen/_44sdp"
+            android:layout_height="@dimen/_44sdp"
+            android:layout_marginStart="@dimen/_12sdp"
+            android:background="@drawable/ws_circle_bg"
+            android:backgroundTint="#33FFFFFF"
+            android:contentDescription="@string/pay_close"
+            android:padding="@dimen/_12sdp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ws_ic_close"
+            app:tint="@color/white" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/ws_divider" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/ws_screen_bg">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/pay_pages"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingStart="@dimen/_10sdp"
+            android:paddingTop="@dimen/_10sdp"
+            android:paddingEnd="@dimen/_10sdp"
+            android:paddingBottom="@dimen/_10sdp" />
+
+        <ProgressBar
+            android:id="@+id/pay_preview_progress"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_30sdp"
+            android:layout_gravity="center"
+            android:indeterminate="true"
+            android:indeterminateTint="@color/ws_payslip" />
+    </FrameLayout>
+</LinearLayout>

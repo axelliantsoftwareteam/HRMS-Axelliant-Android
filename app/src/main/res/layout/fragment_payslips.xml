@@ -4,23 +4,105 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/ws_screen_bg"
-    android:orientation="vertical"
-    android:paddingStart="@dimen/_12sdp"
-    android:paddingEnd="@dimen/_12sdp">
+    android:orientation="vertical">
 
     <com.axelliant.hris.ui.WsToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_8sdp"
         android:layout_marginTop="@dimen/_6sdp"
-        app:wsTitle="Pay Slips" />
+        android:layout_marginEnd="@dimen/_8sdp"
+        app:wsTitle="@string/pay_title" />
 
-    <com.axelliant.hris.ui.WsEmptyState
-        android:id="@+id/empty_state"
+    <!-- Header card: stays above the list. -->
+    <com.google.android.material.card.MaterialCardView
+        style="@style/Widget.Ws.Card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_12sdp"
-        app:wsEmptyIcon="@drawable/ws_ic_info"
-        app:wsEmptyMessage="This screen is being built."
-        app:wsEmptyTitle="Pay Slips" />
+        android:layout_marginStart="@dimen/_20sdp"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:layout_marginEnd="@dimen/_20sdp"
+        android:layout_marginBottom="@dimen/_10sdp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="@dimen/_14sdp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/Ws.Text.SemiBold"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/pay_header_title"
+                    android:textSize="@dimen/_14ssp" />
+
+                <TextView
+                    style="@style/Ws.Text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_2sdp"
+                    android:text="@string/pay_header_subtitle"
+                    android:textColor="@color/ws_text_secondary"
+                    android:textSize="@dimen/_11ssp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/pay_count"
+                style="@style/Ws.Text.Medium"
+                android:layout_width="@dimen/_28sdp"
+                android:layout_height="@dimen/_28sdp"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:background="@drawable/ws_circle_bg"
+                android:backgroundTint="@color/ws_primary"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_10ssp"
+                android:visibility="gone" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/pay_refresh"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/pay_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:paddingStart="@dimen/_18sdp"
+                android:paddingTop="@dimen/_2sdp"
+                android:paddingEnd="@dimen/_18sdp"
+                android:paddingBottom="@dimen/_24sdp"
+                android:scrollbars="none" />
+
+            <com.axelliant.hris.ui.WsEmptyState
+                android:id="@+id/pay_empty"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:layout_marginStart="@dimen/_20sdp"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:layout_marginEnd="@dimen/_20sdp"
+                android:visibility="gone"
+                app:wsEmptyIcon="@drawable/ws_ic_description"
+                app:wsEmptyMessage="@string/pay_empty_message"
+                app:wsEmptyTitle="@string/pay_empty_title" />
+        </FrameLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </LinearLayout>
