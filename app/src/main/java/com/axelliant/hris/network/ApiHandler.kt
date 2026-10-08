@@ -1,5 +1,6 @@
 package com.axelliant.hris.network
 
+import com.axelliant.hris.BuildConfig
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.logging.HttpLoggingInterceptor
@@ -32,7 +33,9 @@ private const val BASE_URL = "https://hris.axelliant.com/api/method/" // Local t
                     chain.proceed(request)
                 }
                 .addInterceptor(HttpLoggingInterceptor().apply {
-                    level = HttpLoggingInterceptor.Level.BODY
+                    // Never log request/response bodies or auth headers in release builds.
+                    level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
+                    redactHeader("Authorization")
                 })
                 .build()
 

@@ -261,7 +261,7 @@ suspend fun getNtpTimeFormatted(): String {
         val ntpTime = getNtpTime()
         Log.d("ntpTime",ntpTime.toString())
         if (ntpTime != null) {
-            val dateFormat = SimpleDateFormat(AppConst.ATTENDANCE_DATE_FORMAT, Locale.getDefault())
+            val dateFormat = SimpleDateFormat(AppConst.ATTENDANCE_DATE_FORMAT, Locale.US)
             "${dateFormat.format(ntpTime)}"
         } else {
             "Failed to retrieve NTP time."

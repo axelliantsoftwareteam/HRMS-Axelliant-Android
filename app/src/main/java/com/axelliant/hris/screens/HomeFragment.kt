@@ -19,6 +19,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import java.util.Locale
+import java.util.Date
+import java.text.SimpleDateFormat
+import androidx.lifecycle.lifecycleScope
+import androidx.core.location.LocationManagerCompat
 
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -178,21 +183,21 @@ class HomeFragment : BaseFragment() {
                     val hasNetwork =
                         locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
 
-                    if (hasGps) {
-                        locationManager.requestLocationUpdates(
-                            LocationManager.GPS_PROVIDER,
-                            5000,
-                            0F,
-                            gpsLocationListener
-                        )
-                    }
-                    if (hasNetwork) {
-                        locationManager.requestLocationUpdates(
-                            LocationManager.NETWORK_PROVIDER,
-                            5000,
-                            0F,
-                            networkLocationListener
-                        )
+                    try {
+                        if (hasGps) {
+                            locationManager.requestLocationUpdates(
+                                LocationManager.GPS_PROVIDER, 5000, 0F, gpsLocationListener
+                            )
+                        }
+                        if (hasNetwork) {
+                            locationManager.requestLocationUpdates(
+                                LocationManager.NETWORK_PROVIDER, 5000, 0F, networkLocationListener
+                            )
+                        }
+                    } catch (e: SecurityException) {
+                        Log.w(TAG, "Location permission revoked", e)
+                    } catch (e: IllegalArgumentException) {
+                        Log.w(TAG, "Location provider unavailable", e)
                     }
 
 
@@ -226,9 +231,9 @@ class HomeFragment : BaseFragment() {
                     employProfileResponse?.let { GlobalConfig.setCurrentEmployee(it) }
                     isManager = GlobalConfig.isCurrentManager()
 
-                    birthdayPopulate(response.birthday_data!!)
+                    birthdayPopulate(response.birthday_data ?: arrayListOf())
                     response.shift_detail?.let { dashBoardShiftPopulate(it) }
-                    checkInInfoPopulate(response.checkin_info!!)
+                    response.checkin_info?.let { checkInInfoPopulate(it) }
                     checkInInfoResponse = response.checkin_info
 
                     if (response.branch_data != null)
@@ -304,9 +309,9 @@ class HomeFragment : BaseFragment() {
 
 
         // Call the NTP time method in a coroutine
-        CoroutineScope(Dispatchers.Main).launch {
-            ntpTimeString = getNtpTimeFormatted() // Call the method that returns a string
-            Log.d("NTP", ntpTimeString!!)
+        viewLifecycleOwner.lifecycleScope.launch {
+            ntpTimeString = getNtpTimeFormatted()
+            Log.d("NTP", ntpTimeString.orEmpty())
         }
 
 
@@ -403,7 +408,15 @@ class HomeFragment : BaseFragment() {
           /*  if (employProfileResponse?.allow_punch_in == 1) return@setOnClickListener
             else {*/
                 if (checkLocationPermission()) {
+                    if (!isLocationServiceOn()) {
+                        showLocationOffDialog()
+                        return@setOnClickListener
+                    }
                     setCurrentLocationText()
+                    if (checkInInfoResponse == null) {
+                        requireContext().showErrorMsg("Your attendance details are still loading. Please try again in a moment.")
+                        return@setOnClickListener
+                    }
                     if (checkInInfoResponse?.is_check_in_button == true) {
                         showAttendanceDialog(LeaveStatus.CHECKIN.value)
                     } else {
@@ -422,6 +435,15 @@ class HomeFragment : BaseFragment() {
 
         }
 
+    }
+
+    override fun onDestroyView() {
+        if (::locationManager.isInitialized) {
+            locationManager.removeUpdates(gpsLocationListener)
+            locationManager.removeUpdates(networkLocationListener)
+        }
+        _binding = null
+        super.onDestroyView()
     }
 
     private fun getEmployeeList() {
@@ -489,40 +511,58 @@ class HomeFragment : BaseFragment() {
             else -> "Are you sure you want to proceed?"
         }
 
-        // Example showing dialog
-        AlertDialog.Builder(context)
+        AlertDialog.Builder(requireContext())
             .setTitle(title)
             .setMessage(description)
             .setPositiveButton("Yes") { dialog, _ ->
-
-                if (loc != null) {
-                    if (isCheckIn) {
-                        checkInAnimate()
-                    } else {
-                        checkOutAnimate()
-                    }
-
-                    var type = CheckRequestFilter.OUT.name
-
-                    if (isCheckIn)
-                        type = CheckRequestFilter.IN.name
-
-                    homeViewModel.postCheckIn(CheckInRequest().apply {
-                        this.log_type = type
-                        this.date_time = ntpTimeString
-                        this.location = loc
-                        this.request_status = LeaveStatus.APPROVED.value
-                        this.attendance_reason = "Punch from application"
-                    })
-//                    this.date_time = getCurrentTime()
-                } else {
-                    requireContext().showErrorMsg("Please wait we are fetching your location")
-                }
                 dialog.dismiss()
+                submitPunch()
             }
             .setNegativeButton("No") { dialog, _ ->
                 dialog.dismiss()
             }
+            .show()
+    }
+
+    /** Sends the punch. The check-in widget only flips after the server confirms (dashboard reload). */
+    private fun submitPunch() {
+        if (checkInInfoResponse == null) {
+            requireContext().showErrorMsg("Your attendance details are still loading. Please try again in a moment.")
+            return
+        }
+        val where = loc
+        if (where == null) {
+            requireContext().showErrorMsg("Please wait we are fetching your location")
+            return
+        }
+        val type = if (isCheckIn) CheckRequestFilter.IN.name else CheckRequestFilter.OUT.name
+        homeViewModel.postCheckIn(CheckInRequest().apply {
+            this.log_type = type
+            this.date_time = punchTimestamp()
+            this.location = where
+            this.request_status = LeaveStatus.APPROVED.value
+            this.attendance_reason = "Punch from application"
+        })
+    }
+
+    /** NTP time when it was fetched, otherwise the phone clock (never an error string). */
+    private fun punchTimestamp(): String {
+        val ntp = ntpTimeString
+        if (!ntp.isNullOrBlank() && TIMESTAMP.matches(ntp)) return ntp
+        return SimpleDateFormat(AppConst.ATTENDANCE_DATE_FORMAT, Locale.US).format(Date())
+    }
+
+    private fun isLocationServiceOn(): Boolean {
+        val manager = requireContext().getSystemService(Context.LOCATION_SERVICE) as? LocationManager ?: return false
+        return LocationManagerCompat.isLocationEnabled(manager)
+    }
+
+    private fun showLocationOffDialog() {
+        AlertDialog.Builder(requireContext())
+            .setTitle("Location Is Off")
+            .setMessage("AXE HR needs your location to punch in and out. Turn on location in Settings.")
+            .setPositiveButton("Settings") { _, _ -> startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)) }
+            .setNegativeButton("Cancel", null)
             .show()
     }
 
@@ -589,33 +629,21 @@ class HomeFragment : BaseFragment() {
     }
 
     private fun setCurrentLocationText() {
-//        binding?.tvLocTxt?.text = getLocationAddress(currentLocation)
-
-       /* currentLocation = Location("").apply {
-            latitude = 31.5226884
-            longitude = 74.3490491
-        }*/
-        for (targetloc in targetLocList) {
-            if (currentLocation != null) {
-                Log.d("loc", " ${currentLocation!!.latitude} ${currentLocation!!.longitude}")
-                val isWithinRadius = isLocationWithinRadius(
-                    currentLocation!!.latitude,
-                    currentLocation!!.longitude,
-                    targetloc.latitude!!,
-                    targetloc.longitude!!,
-                    radiusInMeters
-                )
-                if (isWithinRadius) {
-                    binding?.tvCurrentLocs?.text = targetloc.name
-                    loc = LocationFilter.OFFICE.value
-                    return
-                } else {
-                    binding?.tvCurrentLocs?.text = LocationFilter.WHF.value
-                    loc = LocationFilter.WHF.value
-                }
-            }
+        val here = currentLocation ?: return
+        Log.d("loc", " ${here.latitude} ${here.longitude}")
+        val office = targetLocList.firstOrNull { branch ->
+            val lat = branch.latitude
+            val lng = branch.longitude
+            lat != null && lng != null &&
+                isLocationWithinRadius(here.latitude, here.longitude, lat, lng, radiusInMeters)
         }
-
+        if (office != null) {
+            binding?.tvCurrentLocs?.text = office.name
+            loc = LocationFilter.OFFICE.value
+        } else {
+            binding?.tvCurrentLocs?.text = LocationFilter.WHF.value
+            loc = LocationFilter.WHF.value
+        }
     }
 
     private fun isLocationWithinRadius(
@@ -840,6 +868,7 @@ class HomeFragment : BaseFragment() {
     companion object {
         private val TAG = HomeFragment::class.java.simpleName
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1001
+        private val TIMESTAMP = Regex("\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}")
     }
 }
 

@@ -18,11 +18,7 @@ class GlobalConfig {
         }
 
         fun isCurrentManager(): Boolean {
-            if (AppConst.FORCE_MANAGER_FOR_TESTING) return true
-            return if (currEmployee == null)
-                true
-            else
-                currEmployee!!.is_manager
+            return currEmployee?.is_manager == true
         }
 
         fun getReportingEmploys(): ArrayList<EmployProfile> {

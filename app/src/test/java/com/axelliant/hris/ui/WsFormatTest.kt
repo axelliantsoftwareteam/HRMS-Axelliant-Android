@@ -79,4 +79,18 @@ class WsFormatTest {
         assertEquals("Approved", WsStatus.displayLeave("Approved"))
         assertEquals("Pending", WsStatus.displayDraft("Draft"))
     }
+
+    @Test
+    fun `clock text keeps am and pm and rejects garbage`() {
+        fun hour(text: String): Int? =
+            WsFormat.clockDate(text)?.let { java.util.Calendar.getInstance().apply { time = it }.get(java.util.Calendar.HOUR_OF_DAY) }
+        assertEquals(21, hour("09:00 PM"))
+        assertEquals(9, hour("09:00 AM"))
+        assertEquals(21, hour("09:02:15 PM"))
+        assertEquals(21, hour("21:02"))
+        assertEquals(0, hour("12:05 AM"))
+        assertNull(WsFormat.clockDate("--:--"))
+        assertNull(WsFormat.clockDate("Weekend"))
+        assertNull(WsFormat.clockDate(""))
+    }
 }

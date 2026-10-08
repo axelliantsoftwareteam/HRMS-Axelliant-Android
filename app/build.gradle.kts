@@ -23,10 +23,10 @@ android {
         applicationId = "com.axelliant.hris"
         minSdk = 24
         targetSdk = 36
-        // Must exceed Play Store production versionCode (currently 260911137).
-        // CI uses date -u +%y%j%H%M; keep manual builds above the latest store value.
-        versionCode = 262031249
-        versionName = "1.17"
+        // Must exceed the latest Play production versionCode (check Play Console; the previous file value was 262031249).
+        // Format yyDDDHHmm (UTC), same as CI: date -u +%y%j%H%M. CI overwrites this on release builds.
+        versionCode = 262811613
+        versionName = "1.18"
         multiDexEnabled = true
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -69,6 +69,7 @@ android {
     buildFeatures {
         viewBinding = true
         dataBinding = true
+        buildConfig = true
     }
 
     packaging {

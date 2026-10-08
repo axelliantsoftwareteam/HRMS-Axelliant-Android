@@ -21,6 +21,14 @@ Verified on a device: app launches, Home header, drawer (real profile data, unre
 `get_notifications` / `mobile_dashboard` responses parse. The phone blocks adb input injection, so the
 other screens were checked by compiling and code review only; they need a manual pass.
 
+## Release readiness
+
+* Demo data, the offline sandbox and the forced-manager flag were removed. Manager is `false` until the
+  dashboard says `is_manager`.
+* Version 1.18, versionCode 262811613 (CI recomputes the code with `date -u +%y%j%H%M`).
+* Network logging is `NONE` in release builds (it used to log bodies and the auth header).
+* `assembleRelease` builds unsigned locally (signing comes from CI secrets), lint has 0 errors, 23 unit tests pass.
+
 ## Please test on a device (not exercised at runtime yet)
 
 Leave, Leave request (create/edit/delete), Attendance request, Attendance list + sheet, Requests overview,

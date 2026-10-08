@@ -2,6 +2,7 @@ package com.axelliant.hris.ui
 
 import android.content.Context
 import android.text.format.DateFormat
+import java.text.ParsePosition
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -18,12 +19,14 @@ import java.util.TimeZone
 object WsFormat {
 
     private val KARACHI: TimeZone = TimeZone.getTimeZone("Asia/Karachi")
+    /** HRIS sends microseconds ("…:45.123456"); SimpleDateFormat only understands milliseconds. */
+    private val FRACTION = Regex("""\.(\d+)""")
     const val MEDIA_HOST = "https://hris.axelliant.com/"
 
     private val dateTimePatterns = listOf(
-        "yyyy-MM-dd HH:mm:ss.SSSSSS",
+        "yyyy-MM-dd HH:mm:ss.SSS",
         "yyyy-MM-dd HH:mm:ss",
-        "yyyy-MM-dd'T'HH:mm:ss.SSSSSS",
+        "yyyy-MM-dd'T'HH:mm:ss.SSS",
         "yyyy-MM-dd'T'HH:mm:ss",
         "yyyy-MM-dd'T'HH:mm"
     )
@@ -32,24 +35,24 @@ object WsFormat {
         "yyyy-MM-dd'T'HH:mm:ssXXX"
     )
 
+    /** Parses with [pattern] and only accepts it when the whole text was consumed (no prefix matches). */
+    private fun parseExact(pattern: String, text: String, zone: TimeZone? = null): Date? {
+        val format = SimpleDateFormat(pattern, Locale.US).apply {
+            isLenient = false
+            zone?.let { timeZone = it }
+        }
+        val position = ParsePosition(0)
+        val date = format.parse(text, position)
+        return if (date != null && position.index == text.length) date else null
+    }
+
     /** Parses an HRIS timestamp/date string; null when it cannot be read. */
     fun parse(value: String?): Date? {
-        val text = value?.trim().orEmpty()
+        val text = value?.trim().orEmpty().replace(FRACTION) { "." + it.groupValues[1].padEnd(3, '0').take(3) }
         if (text.isEmpty()) return null
-        for (p in offsetPatterns) {
-            runCatching { return SimpleDateFormat(p, Locale.US).parse(text) }
-        }
-        for (p in dateTimePatterns) {
-            runCatching {
-                val f = SimpleDateFormat(p, Locale.US).apply { timeZone = KARACHI }
-                return f.parse(text)
-            }
-        }
-        runCatching {
-            val f = SimpleDateFormat("yyyy-MM-dd", Locale.US).apply { timeZone = KARACHI }
-            return f.parse(text)
-        }
-        return null
+        for (p in offsetPatterns) parseExact(p, text)?.let { return it }
+        for (p in dateTimePatterns) parseExact(p, text, KARACHI)?.let { return it }
+        return parseExact("yyyy-MM-dd", text, KARACHI)
     }
 
     private fun hasTime(value: String): Boolean = value.trim().length > 10
@@ -70,20 +73,20 @@ object WsFormat {
         return formatClock(context, d)
     }
 
-    /** Re-formats clock-only text such as "09:02:15 PM"/"21:02:15"; unparseable text ("--:--", "Weekend") is returned as is. */
+    /** Clock-only text such as "09:02:15 PM", "9:00 PM" or "21:02" as a [Date] (today), or null when unreadable. */
+    fun clockDate(text: String?): Date? {
+        val raw = text?.trim().orEmpty()
+        if (raw.isEmpty()) return null
+        val patterns = listOf("hh:mm:ss a", "h:mm:ss a", "hh:mm a", "h:mm a", "HH:mm:ss", "HH:mm")
+        for (p in patterns) parseExact(p, raw)?.let { return it }
+        return null
+    }
+
+    /** Re-formats clock-only text to the phone's 12/24 h style; unparseable text ("--:--", "Weekend") is returned as is. */
     fun clockText(context: Context, text: String?): String {
         val raw = text?.trim().orEmpty()
-        if (raw.isEmpty()) return raw
-        val patterns = listOf("hh:mm:ss a", "h:mm:ss a", "HH:mm:ss", "HH:mm", "hh:mm a", "h:mm a")
-        for (p in patterns) {
-            runCatching {
-                val f = SimpleDateFormat(p, Locale.US)
-                f.isLenient = false
-                val d = f.parse(raw) ?: return@runCatching
-                return formatClock(context, d)
-            }
-        }
-        return raw
+        val date = clockDate(raw) ?: return raw
+        return formatClock(context, date)
     }
 
     private fun formatClock(context: Context, d: Date): String {
