@@ -1,898 +1,624 @@
 package com.axelliant.hris.screens
 
-import android.annotation.SuppressLint
-import android.app.DatePickerDialog
-import android.app.TimePickerDialog
+import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
+import android.text.format.DateFormat
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
+import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
+import androidx.core.widget.doAfterTextChanged
 import com.axelliant.hris.R
-import com.axelliant.hris.adapter.LeaveSpinnerAdapter
-import com.axelliant.hris.adapter.LeaveWithCountSpinnerAdapter
 import com.axelliant.hris.base.BaseFragment
-import com.axelliant.hris.config.AppConst.AttendanceRequestParam
-import com.axelliant.hris.config.AppConst.LeaveRequestParam
-import com.axelliant.hris.config.AppConst.RequestType
-import com.axelliant.hris.config.AppConst.SERVER_DATE_FORMAT_ATTENDANCE
+import com.axelliant.hris.config.AppConst
+import com.axelliant.hris.config.GlobalConfig
 import com.axelliant.hris.databinding.FragmentRequestBinding
 import com.axelliant.hris.enums.RequestFilter
 import com.axelliant.hris.event.EventObserver
-import com.axelliant.hris.extention.nullToEmpty
 import com.axelliant.hris.extention.showErrorMsg
 import com.axelliant.hris.extention.showSuccessMsg
-import com.axelliant.hris.model.checkin.CheckInDetail
-import com.axelliant.hris.model.leave.LeaveDetail
-import com.axelliant.hris.model.leave.SpinnerType
-import com.axelliant.hris.model.leave.leaveCount.LeaveAllocation
-import com.axelliant.hris.model.leave.leaveCount.LeaveCountByDaysRequest
-import com.axelliant.hris.model.leave.leaveCount.Leaves
-import com.axelliant.hris.model.post.AttendanceRequest
-import com.axelliant.hris.model.post.LeaveRequest
+import com.axelliant.hris.model.leaveatt.AttendanceRequestRecord
+import com.axelliant.hris.model.leaveatt.LeaveQuota
+import com.axelliant.hris.model.leaveatt.LeaveRecord
+import com.axelliant.hris.model.leaveatt.toNumber
 import com.axelliant.hris.navigation.AppNavigator
-import com.axelliant.hris.network.ErrorMessages
-import com.axelliant.hris.utils.Utils
+import com.axelliant.hris.network.observeResult
+import com.axelliant.hris.ui.WsFormat
 import com.axelliant.hris.viewmodel.RequestViewModel
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.button.MaterialButtonToggleGroup
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.CompositeDateValidator
+import com.google.android.material.datepicker.DateValidatorPointBackward
+import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.textfield.TextInputLayout
+import com.google.android.material.timepicker.MaterialTimePicker
+import com.google.android.material.timepicker.TimeFormat
 import com.google.gson.Gson
-import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Date
 import java.util.Locale
+import java.util.TimeZone
 
-
-const val leaveType = "Select leave type"
-const val attendanceType = "Select attendance type"
-const val locationType = "Select location"
-
+/**
+ * The leave request and attendance request forms (iOS "Request"). One mode per entry:
+ * `AppConst.RequestType` = `RequestFilter.LEAVE` or `ATTENDANCE`; edit mode is entered when the matching
+ * `LeaveRequestParam` / `AttendanceRequestParam` JSON is in the arguments.
+ */
 class RequestFragment : BaseFragment() {
 
-    private var halfDayCount: Double? = null
-    private var ishalfday: Boolean? = null
-    private var daysCount: Long? = null
-    private var currentFilter = RequestFilter.LEAVE
-    private var currentDateString: String? = null
-    private var currentTimeString: String? = null
-
-    private var halfDateString: String? = null
-    private var startDateString: String? = null
-    private var endDateString: String? = null
-    private var selectedDateRange: String? = null
+    private enum class Op { CREATE, UPDATE, DELETE }
 
     private var _binding: FragmentRequestBinding? = null
-    private val binding get() = _binding
+    private val binding get() = _binding!!
 
-    private val requestViewModel: RequestViewModel by inject()
+    private val viewModel: RequestViewModel by viewModel()
 
-    private var isUpdate: Boolean = false
-    private var leaveId: String = ""
-    private var checkInId: String = ""
+    private var mode = RequestFilter.LEAVE
+    private var isUpdate = false
+    private var recordId = ""
+    private var lastOp = Op.CREATE
 
-    private var selectedLeaveType: String? = ""
-    private var preLeaveType: String = leaveType
-    private var preAttendanceType: String = attendanceType
-    private var preLocationType: String = locationType
+    // Leave form state
+    private var quotas: List<LeaveQuota> = emptyList()
+    private var leaveType: String? = null
+    private var startDate: String? = null // yyyy-MM-dd
+    private var endDate: String? = null
+    private var halfDate: String? = null
+    private var leaveDays = 0.0
 
-    private fun selectedLeaveBalance(): Double {
-        return binding?.tvRemainingLeaveTxt?.text?.toString()?.toDoubleOrNull() ?: 0.0
-    }
+    // Attendance form state
+    private var attendanceType: String? = null
+    private var location: String? = null
+    private var attendanceDate: String? = null // yyyy-MM-dd
+    private var attendanceTime: String? = null // HH:mm
+    private var typeOptions: List<String> = emptyList()
+    private var locationOptions: List<String> = emptyList()
 
-    private fun requestedLeaveDays(): Double {
-        return binding?.tvLeaveCountTxt?.text?.toString()?.toDoubleOrNull() ?: 0.0
-    }
-
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-
-
-        _binding = FragmentRequestBinding.inflate(inflater).also { _binding = it }
-        return binding?.root
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        _binding = FragmentRequestBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        if (arguments != null && requireArguments().containsKey(RequestType)) {
-            isUpdate = true
-
-            val type = arguments?.getString(RequestType, RequestFilter.LEAVE.name)
-            if (type == RequestFilter.LEAVE.name) {
-                currentFilter = RequestFilter.LEAVE
-                val leaveDetail = Gson().fromJson(
-                    arguments?.getString(LeaveRequestParam),
-                    LeaveDetail::class.java
-                )
-                startDateString = leaveDetail.from_date
-                endDateString = leaveDetail.to_date
-
-                binding?.etLeaveReason?.setText(leaveDetail.leave_reason.nullToEmpty())
-                preLeaveType = leaveDetail.leave_type
-                leaveId = leaveDetail.name
-                setDateView()
-
-                binding?.btnApply?.isVisible = false
-                binding?.btnUpdate?.isVisible = true
-                binding?.btnDeleted?.isVisible = true
-                binding?.tvMonth?.isVisible = false
-
-
-            } else {
-                currentFilter = RequestFilter.ATTENDANCE
-
-
-                val checkInDetail = Gson().fromJson(
-                    arguments?.getString(AttendanceRequestParam),
-                    CheckInDetail::class.java
-                )
-                checkInId = checkInDetail.name
-                val dateTimeParts = checkInDetail.time
-                    ?.trim()
-                    ?.split(Regex("\\s+"), limit = 2)
-                    .orEmpty()
-
-                currentDateString = dateTimeParts.getOrNull(0)
-                currentTimeString = dateTimeParts.getOrNull(1)
-
-                binding?.etAttendanceReason?.setText(checkInDetail.reason)
-                preAttendanceType = checkInDetail.log_type
-                preLocationType = checkInDetail.location
-                setCurrentDate()
-                setCurrentTime()
-
-                binding?.btnApply?.isVisible = false
-                binding?.btnUpdate?.isVisible = true
-                binding?.btnDeleted?.isVisible = true
-                binding?.tvWeek?.isVisible = false
-
-            }
-        }
-
-
-        requestViewModel.getIsLoading()
-            .observe(viewLifecycleOwner, EventObserver { isLoading ->
-                if (isLoading) {
-                    showDialog()
-                } else {
-                    hideDialog()
-                }
-            })
-
-        requestViewModel.postLeaveResponse.observe(
-            viewLifecycleOwner,
-            EventObserver { response ->
-
-                if (response?.meta?.status == true) {
-                    requireActivity().showSuccessMsg(response.status_message)
-                    clearLeaveForm()
-                } else {
-                    requireContext().showErrorMsg(response?.meta?.message.toString())
-                }
-
-            })
-
-        requestViewModel.updateLeaveResponse.observe(
-            viewLifecycleOwner,
-            EventObserver { response ->
-
-                if (response?.meta?.status == true) {
-
-                    requireActivity().showSuccessMsg(response.status_message)
-                    if (currentFilter == RequestFilter.LEAVE)
-                        clearLeaveForm()
-                    else
-                        clearAttendanceForm()
-
-                    Handler(Looper.getMainLooper()).postDelayed({
-                        // do stuff
-                        AppNavigator.moveBackToPreviousFragment()
-                    }, 200)
-
-                } else {
-                    requireContext().showErrorMsg(response?.meta?.message.toString())
-                }
-
-            })
-        requestViewModel.leaveCountByDate.observe(
-            viewLifecycleOwner,
-            EventObserver { response ->
-
-                if (response?.meta?.status == true) {
-                    halfDayCount = response.days
-                    binding?.tvLeaveCountTxt?.text = halfDayCount.toString()
-
-                } else {
-                    requireContext().showErrorMsg(response?.meta?.message.toString())
-                }
-
-            })
-
-        requestViewModel.deleteLeaveResponse.observe(
-            viewLifecycleOwner,
-            EventObserver { response ->
-
-                if (response?.meta?.status == true) {
-
-                    requireActivity().showSuccessMsg(response.status_message)
-                    if (currentFilter == RequestFilter.LEAVE)
-                        clearLeaveForm()
-                    else
-                        clearAttendanceForm()
-
-
-                    Handler(Looper.getMainLooper()).postDelayed({
-                        // do stuff
-                        AppNavigator.moveBackToPreviousFragment()
-                    }, 200)
-
-                } else {
-                    requireContext().showErrorMsg(response?.meta?.message.toString())
-                }
-
-            })
-
-        requestViewModel.attendanceRequestResponse.observe(
-            viewLifecycleOwner,
-            EventObserver { response ->
-
-                if (response?.meta?.status == true) {
-                    requireActivity().showSuccessMsg(response.status_message)
-                    clearAttendanceForm()
-                } else {
-                    requireContext().showErrorMsg(response?.meta?.message.toString())
-                }
-
-            })
-
-
-//        requestViewModel.getLeaves()
-//        requestViewModel.leaveTypes.observe(
-//            viewLifecycleOwner,
-//            EventObserver { response ->
-//
-//                requestViewModel.getAttendanceRequestInfo()
-//                if (response?.meta?.status == true) {
-//                    spinnerLeavePopulations(response.leaves)
-//                } else {
-//                    requireContext().showErrorMsg(response?.meta?.message.toString())
-//                }
-//
-//            })
-
-
-        requestViewModel.getLeavesCount()
-        requestViewModel.getLeaveTypesCount.observe(
-            viewLifecycleOwner,
-            EventObserver { response ->
-
-                requestViewModel.getAttendanceRequestInfo()
-                if (response?.meta?.status == true) {
-                    spinnerLeavePopulations(response.leaves)
-                } else {
-                    requireContext().showErrorMsg(response?.meta?.message.toString())
-                }
-
-            })
-
-        requestViewModel.attendanceRequestInfo.observe(
-            viewLifecycleOwner,
-            EventObserver { response ->
-
-                if (response?.meta?.status == true) {
-//                    spinnerLeavePopulations(response.leaves)
-
-                    spinnerAttendTypePopulations(response.checkin)
-                    spinnerLocTypePopulations(response.location)
-                    //parse leave spinner here
-
-
-                } else {
-                    requireContext().showErrorMsg(response?.meta?.message.toString())
-                }
-
-            })
-
-
-        eventSelection()
-
-        binding?.halfDay?.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                ishalfday = isChecked
-                binding?.lyHalfday?.isVisible = (halfDayCount?.toInt() ?: 0) > 1
-            } else {
-                ishalfday = isChecked
-                binding?.lyHalfday?.isVisible = false
-                halfDateString = null
-                binding?.tvHalfDateTxt?.text = halfDateString
-            }
-            if (startDateString != null && endDateString != null)
-                getDayCount()
-        }
-
-        binding?.btnApply?.setOnClickListener {
-
-            addUpdateCall()
-
-        }
-
-        binding?.btnUpdate?.setOnClickListener {
-            addUpdateCall()
-        }
-
-        binding?.btnDeleted?.setOnClickListener {
-
-            if (currentFilter == RequestFilter.LEAVE) {
-                requestViewModel.deleteLeaveQuest(LeaveRequest().apply {
-                    this.leave_id = leaveId
-
-                })
-
-            } else {
-                requestViewModel.deleteAttendanceQuest(LeaveRequest().apply {
-                    this.checkin_id = checkInId
-
-                })
-
-            }
-
-        }
-
-        binding?.ivBack?.setOnClickListener {
-            AppNavigator.moveBackToPreviousFragment()
-        }
-
-        binding?.lyDate?.setOnClickListener {
-            pickDate()
-        }
-
-        binding?.lyTime?.setOnClickListener {
-            pickTime()
-        }
-        binding?.lyStartDate?.setOnClickListener {
-            binding?.halfDay?.isChecked = false
-            datePickerDialog()
-        }
-
-        binding?.lyHalfdayDate?.setOnClickListener {
-
-            showDatePicker()
-        }
-
-
+        readArguments(savedInstanceState == null)
+        setupChrome()
+        observeViewModel()
+        if (mode == RequestFilter.LEAVE) setupLeaveForm() else setupAttendanceForm()
     }
 
-    private fun addUpdateCall() {
-        when (currentFilter) {
-            RequestFilter.LEAVE -> {
+    // ---------------------------------------------------------------------------------------------
+    // Entry: mode and edit prefill
+    // ---------------------------------------------------------------------------------------------
 
-                if (binding?.spLeaveType?.selectedItemPosition == 0) {
-                    requireContext().showErrorMsg("Please select leave type")
-                } else if (startDateString == null) {
-                    requireContext().showErrorMsg("Please select start date")
-                } else if (endDateString == null) {
-                    requireContext().showErrorMsg("Please select end date")
-                } else if (binding?.etLeaveReason?.text?.isEmpty() == true) {
-                    requireContext().showErrorMsg("Please add reason for leave")
-                } else if (requestedLeaveDays() > selectedLeaveBalance()) {
-                    requireContext().showErrorMsg("Requested leave exceeds your remaining quota for this leave type")
-                } else {
-                    val leaveItem = binding?.spLeaveType?.selectedItem as LeaveAllocation
-
-                    if (isUpdate) {
-                        requestViewModel.updateLeaveQuest(LeaveRequest().apply {
-                            this.start_date = startDateString
-                            this.end_date = endDateString
-                            this.leave_reason = binding?.etLeaveReason?.text.toString()
-                            this.leave_type = leaveItem.name
-                            this.post_date = Utils.getServerFormat()
-                            this.leave_id = leaveId
-                            this.half_day_date = halfDateString
-                            this.half_day = ishalfday
-
-                        })
-                    } else {
-                        requestViewModel.postLeaveQuest(LeaveRequest().apply {
-                            this.start_date = startDateString
-                            this.end_date = endDateString
-                            this.leave_reason = binding?.etLeaveReason?.text.toString()
-                            this.leave_type = leaveItem.name
-                            this.post_date = Utils.getServerFormat()
-                            this.half_day_date = halfDateString
-                            this.half_day = ishalfday
-
-                        })
-                    }
-
-
-                }
-
-            }
-
-            RequestFilter.ATTENDANCE -> {
-
-                if (binding?.spAttendType?.selectedItemPosition == 0) {
-                    requireContext().showErrorMsg("Please select attendance type")
-                } else if (binding?.spLocType?.selectedItemPosition == 0) {
-                    requireContext().showErrorMsg("Please select location")
-                } else if (currentDateString == null) {
-                    requireContext().showErrorMsg("Please select date")
-                } else if (currentTimeString == null) {
-                    requireContext().showErrorMsg("Please select time")
-                } else if (binding?.etAttendanceReason?.text?.isEmpty() == true) {
-                    requireContext().showErrorMsg("Please add reason for attendance")
-                } else {
-
-                    val attendanceType = binding?.spAttendType?.selectedItem as SpinnerType
-                    val locationType = binding?.spLocType?.selectedItem as SpinnerType
-                    if (isUpdate) {
-
-                        requestViewModel.updateAttendanceQuest(AttendanceRequest().apply {
-                            this.date_time = currentDateString.plus(" ").plus(currentTimeString)
-                            this.location = locationType.type
-                            this.log_type = attendanceType.type
-                            this.attendance_reason = binding?.etAttendanceReason?.text.toString()
-                            this.request_status = "Pending"
-                            this.checkin_id = checkInId
-
-                        })
-
-                    } else {
-                        requestViewModel.postAttendanceQuest(AttendanceRequest().apply {
-                            this.date_time = currentDateString.plus(" ").plus(currentTimeString)
-                            this.location = locationType.type
-                            this.log_type = attendanceType.type
-                            this.attendance_reason = binding?.etAttendanceReason?.text.toString()
-                            this.request_status = "Pending"
-
-                        })
-                    }
-
-
-                }
-
-            }
-
-            else -> {}
-        }
-    }
-
-    private fun clearLeaveForm() {
-        isUpdate = false
-        startDateString = null
-        endDateString = null
-        leaveId = ""
-        binding?.spLeaveType?.setSelection(0)
-        binding?.etLeaveReason?.text?.clear()
-        setDateView()
-
-    }
-
-    private fun clearAttendanceForm() {
-        currentDateString = null
-        currentTimeString = null
-        binding?.spAttendType?.setSelection(0)
-        binding?.spLocType?.setSelection(0)
-        binding?.etAttendanceReason?.text?.clear()
-        binding?.tvDateTxt?.text = null
-        binding?.tvDateTxt?.hint = requireContext().getString(R.string.date)
-
-        binding?.tvTimeTxt?.text = null
-        binding?.tvTimeTxt?.hint = requireContext().getString(R.string.time)
-
-
-    }
-
-
-    private fun pickDate() {
-        val c = Calendar.getInstance()
-        val year = c.get(Calendar.YEAR)
-        val month = c.get(Calendar.MONTH)
-        val day = c.get(Calendar.DAY_OF_MONTH)
-        val datePickerDialog = DatePickerDialog(
-            requireActivity(), R.style.my_dialog_theme, // Apply the theme here
-            { view, year, monthOfYear, dayOfMonth ->
-                val selectedDate = Calendar.getInstance()
-                selectedDate.set(year, monthOfYear, dayOfMonth)
-
-                // Format the date using SimpleDateFormat
-                currentDateString = Utils.getServerFormat(
-                    dateFormat = SERVER_DATE_FORMAT_ATTENDANCE, date = selectedDate.time
-                )
-                setCurrentDate()
-            },
-            year,
-            month,
-            day
-        )
-        // Set the maximum date to today
-        datePickerDialog.datePicker.maxDate = c.timeInMillis
-        datePickerDialog.show()
-    }
-
-    private fun pickTime() {
-        val c = Calendar.getInstance()
-
-        val hour = c[Calendar.HOUR_OF_DAY]
-        val minutes = c[Calendar.MINUTE]
-        val timePickerDialog = TimePickerDialog(
-            requireActivity(), R.style.my_dialog_theme,
-            { view, hourOfDay, minute ->
-
-                currentTimeString =
-                    hourOfDay.toString().plus(":").plus(minute)
-
-                setCurrentTime()
-
-            }, hour, minutes, false
-
-        )
-
-        timePickerDialog.show()
-    }
-
-
-    private fun setCurrentTime() {
-        if (currentTimeString != null)
-            binding?.tvTimeTxt?.text = currentTimeString
-        else
-            binding?.tvTimeTxt?.text = ""
-    }
-
-    private fun setCurrentDate() {
-        binding?.tvDateTxt?.text = currentDateString
-
-    }
-
-    private fun showDatePicker() {
-        val calendar = Calendar.getInstance()
-        val year = calendar.get(Calendar.YEAR)
-        val month = calendar.get(Calendar.MONTH)
-        val day = calendar.get(Calendar.DAY_OF_MONTH)
-
-        val datePickerDialog = DatePickerDialog(
-            requireContext(),
-            { _, selectedYear, selectedMonth, selectedDay ->
-                // Set the selected date in a Calendar instance
-                val selectedCalendar = Calendar.getInstance().apply {
-                    set(selectedYear, selectedMonth, selectedDay)
-                }
-
-                // Format the date as "yyyy-MM-dd"
-                val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-                halfDateString = dateFormat.format(selectedCalendar.time)
-
-                binding?.tvHalfDateTxt?.text = halfDateString
-                getDayCount()
-            }, year, month, day
-        )
-
-        datePickerDialog.show()
-    }
-
-    private fun datePickerDialog() {
-        // Creating a MaterialDatePicker builder for selecting a date range
-        val builder = MaterialDatePicker.Builder.dateRangePicker()
-        builder.setTitleText("Select a date range")
-
-        // Building the date picker dialog
-        val datePicker = builder.build()
-        datePicker.addOnPositiveButtonClickListener { selection ->
-            // Retrieving the selected start and end dates
-            val startDate = selection.first
-            val endDate = selection.second
-
-            // Formatting the selected dates as strings
-
-            startDateString = Utils.getServerFormat(date = Date(startDate))
-            endDateString = Utils.getServerFormat(date = Date(endDate))
-
-            // Calculate the difference in days
-            val differenceInMillis = endDate - startDate
-            daysCount = differenceInMillis / (1000 * 60 * 60 * 24) // Convert milliseconds to days
-
-            Log.d("DateRange", "Number of days: $daysCount")
-            // Creating the date range string
-            selectedDateRange = "$startDateString - $endDateString"
-            setDateView()
-        }
-
-        // Showing the date picker dialog
-        datePicker.show(activity?.supportFragmentManager!!, "DATE_PICKER")
-    }
-
-    private fun setDateView() {
-        if (startDateString != null && endDateString != null) {
-            binding?.tvStartDateTxt?.text = startDateString
-            binding?.tvEndDateTxt?.text = endDateString
-            getDayCount()
-
+    private fun readArguments(prefill: Boolean) {
+        val args = arguments
+        val leaveJson = args?.getString(AppConst.LeaveRequestParam)
+        val attendanceJson = args?.getString(AppConst.AttendanceRequestParam)
+        val type = args?.getString(AppConst.RequestType)
+        mode = if (type == RequestFilter.ATTENDANCE.name || (type == null && leaveJson.isNullOrBlank() && !attendanceJson.isNullOrBlank())) {
+            RequestFilter.ATTENDANCE
         } else {
-            binding?.tvStartDateTxt?.text = null
-            binding?.tvEndDateTxt?.text = null
-            binding?.tvLeaveCountTxt?.text = "0"
-            binding?.tvStartDateTxt?.hint = requireContext().getString(R.string.start_date)
-            binding?.tvEndDateTxt?.hint = requireContext().getString(R.string.end_date)
-
+            RequestFilter.LEAVE
         }
+        if (!prefill) return
 
+        val gson = Gson()
+        if (mode == RequestFilter.LEAVE && !leaveJson.isNullOrBlank()) {
+            val record = runCatching { gson.fromJson(leaveJson, LeaveRecord::class.java) }.getOrNull() ?: return
+            isUpdate = true
+            recordId = record.name.orEmpty()
+            leaveType = record.leave_type
+            startDate = record.from_date?.let { dayPart(it) }
+            endDate = record.to_date?.let { dayPart(it) }
+            binding.reqEtLeaveReason.setText(record.reason)
+        } else if (mode == RequestFilter.ATTENDANCE && !attendanceJson.isNullOrBlank()) {
+            val record = runCatching { gson.fromJson(attendanceJson, AttendanceRequestRecord::class.java) }.getOrNull() ?: return
+            isUpdate = true
+            recordId = record.name.orEmpty()
+            attendanceType = record.log_type
+            location = record.location
+            attendanceDate = record.time?.let { dayPart(it) }
+            attendanceTime = record.time?.let { timePart(it) }
+            binding.reqEtReason.setText(record.reason)
+        }
     }
 
-    private fun getDayCount() {
+    private fun setupChrome() {
+        val leave = mode == RequestFilter.LEAVE
+        binding.reqToolbar.title = getString(if (leave) R.string.req_title_leave else R.string.req_title_attendance)
+        binding.reqTvHeader.setText(
+            when {
+                leave && isUpdate -> R.string.req_header_update_leave
+                leave -> R.string.req_header_create_leave
+                isUpdate -> R.string.req_header_update_attendance
+                else -> R.string.req_header_create_attendance
+            }
+        )
+        binding.reqGroupLeave.visibility = if (leave) View.VISIBLE else View.GONE
+        binding.reqGroupAttendance.visibility = if (leave) View.GONE else View.VISIBLE
+        binding.reqBtnApply.visibility = if (isUpdate) View.GONE else View.VISIBLE
+        binding.reqGroupEditActions.visibility = if (isUpdate) View.VISIBLE else View.GONE
 
+        binding.reqBtnApply.setOnClickListener { submit() }
+        binding.reqBtnUpdate.setOnClickListener { submit() }
+        binding.reqBtnDelete.setOnClickListener { confirmDelete() }
+    }
 
-        requestViewModel.getLeaveCountOnDate(LeaveCountByDaysRequest().apply {
-            this.leave_type = selectedLeaveType
-            this.from_date = startDateString
-            this.to_date = endDateString
-            this.half_day = ishalfday
-            this.half_day_date = halfDateString
+    private fun observeViewModel() {
+        viewModel.getIsLoading().observe(viewLifecycleOwner, EventObserver { loading ->
+            if (loading) showDialog() else hideDialog()
         })
+
+        viewModel.quotas.observeResult(viewLifecycleOwner, onError = ::showError) { data, _ ->
+            quotas = data.allocations.filter { !it.name.isNullOrBlank() }
+            when {
+                // Edit keeps the request's own type; create starts on the first type, as the web form does.
+                leaveType.isNullOrBlank() && quotas.isNotEmpty() -> selectLeaveType(quotas.first().name!!)
+                !leaveType.isNullOrBlank() -> selectLeaveType(leaveType!!)
+                else -> toast(R.string.req_no_leave_types)
+            }
+        }
+
+        viewModel.options.observeResult(viewLifecycleOwner, onError = ::showError) { data, _ ->
+            typeOptions = data.checkin.orEmpty().mapNotNull { it.type?.takeIf(String::isNotBlank) }
+            locationOptions = data.location.orEmpty().mapNotNull { it.type?.takeIf(String::isNotBlank) }
+            buildToggle(binding.reqToggleType, typeOptions, ::typeLabel, ::typeIcon, attendanceType) {
+                attendanceType = it
+                binding.reqErrType.visibility = View.GONE
+            }
+            buildToggle(binding.reqToggleLocation, locationOptions, { it }, ::locationIcon, location) {
+                location = it
+                binding.reqErrLocation.visibility = View.GONE
+            }
+            if (typeOptions.isEmpty() || locationOptions.isEmpty()) toast(R.string.req_no_options)
+        }
+
+        viewModel.leaveDays.observeResult(viewLifecycleOwner, onError = { showLeaveDays(0.0) }) { data, _ ->
+            showLeaveDays(data.days.toNumber())
+        }
+
+        viewModel.action.observeResult(viewLifecycleOwner, onError = ::showError) { data, _ ->
+            requireContext().showSuccessMsg(data.status_message?.takeIf { it.isNotBlank() } ?: getString(successText()))
+            binding.reqBtnApply.isEnabled = false
+            binding.reqBtnUpdate.isEnabled = false
+            binding.reqBtnDelete.isEnabled = false
+            Handler(Looper.getMainLooper()).postDelayed({
+                if (_binding != null) AppNavigator.moveBackToPreviousFragment()
+            }, POP_DELAY_MS)
+        }
     }
 
-    private fun eventSelection() {
-        binding?.tvWeek?.background =
-            ContextCompat.getDrawable(requireContext(), R.drawable.rounded_disabled)
+    private fun showError(message: String) {
+        requireContext().showErrorMsg(message, "Request")
+    }
 
-        binding?.tvMonth?.background =
-            ContextCompat.getDrawable(requireContext(), R.drawable.rounded_disabled)
+    private fun toast(@StringRes text: Int) {
+        Toast.makeText(requireContext(), text, Toast.LENGTH_SHORT).show()
+    }
 
-        binding?.tvWeek?.setTextColor(requireContext().getColor(R.color.btn_text_color))
-        binding?.tvMonth?.setTextColor(requireContext().getColor(R.color.btn_text_color))
-
-        binding?.tvWeek?.setOnClickListener {
-            currentFilter = RequestFilter.LEAVE
-            eventSelection()
+    @StringRes
+    private fun successText(): Int = when (mode) {
+        RequestFilter.LEAVE -> when (lastOp) {
+            Op.CREATE -> R.string.req_toast_leave_created
+            Op.UPDATE -> R.string.req_toast_leave_updated
+            Op.DELETE -> R.string.req_toast_leave_deleted
         }
-
-        binding?.tvMonth?.setOnClickListener {
-            currentFilter = RequestFilter.ATTENDANCE
-            eventSelection()
+        else -> when (lastOp) {
+            Op.CREATE -> R.string.req_toast_attendance_created
+            Op.UPDATE -> R.string.req_toast_attendance_updated
+            Op.DELETE -> R.string.req_toast_attendance_deleted
         }
+    }
 
-        when (currentFilter) {
-            RequestFilter.LEAVE -> {
-                binding?.tvWeek?.background =
-                    ContextCompat.getDrawable(requireContext(), R.drawable.rounded_enabled)
-                binding?.tvWeek?.setTextColor(requireContext().getColor(R.color.white))
-                binding?.lyCreateLeave!!.visibility = View.VISIBLE
-                binding?.lyCreateAttend!!.visibility = View.GONE
+    // ---------------------------------------------------------------------------------------------
+    // Leave form
+    // ---------------------------------------------------------------------------------------------
 
+    private fun setupLeaveForm() {
+        with(binding) {
+            // Leave type is fixed once a request exists.
+            reqTilLeaveType.isEnabled = !isUpdate
+            reqEtLeaveType.isEnabled = !isUpdate
+            if (!isUpdate) {
+                reqEtLeaveType.setOnClickListener { pickLeaveType() }
+                reqTilLeaveType.setEndIconOnClickListener { pickLeaveType() }
             }
 
-            RequestFilter.ATTENDANCE -> {
+            reqEtStartDate.setOnClickListener { pickStartDate() }
+            reqTilStartDate.setEndIconOnClickListener { pickStartDate() }
+            reqEtEndDate.setOnClickListener { pickEndDate() }
+            reqTilEndDate.setEndIconOnClickListener { pickEndDate() }
+            reqEtHalfDate.setOnClickListener { pickHalfDate() }
+            reqTilHalfDate.setEndIconOnClickListener { pickHalfDate() }
 
-                binding?.tvMonth?.background =
-                    ContextCompat.getDrawable(requireContext(), R.drawable.rounded_enabled)
-                binding?.tvMonth?.setTextColor(requireContext().getColor(R.color.white))
-                binding?.lyCreateAttend!!.visibility = View.VISIBLE
-                binding?.lyCreateLeave!!.visibility = View.GONE
+            reqCbHalfDay.setOnCheckedChangeListener { _, checked ->
+                if (!checked) halfDate = null
+                renderLeaveDates()
+                refreshLeaveDays()
             }
-
-            else -> {}
+            reqEtLeaveReason.doAfterTextChanged { reqTilLeaveReason.error = null }
         }
+        renderLeaveDates()
+        viewModel.loadLeaveQuotas()
     }
 
-    @SuppressLint("ClickableViewAccessibility")
-    private fun spinnerLeavePopulations(leaves: Leaves?) {
+    private fun pickLeaveType() {
+        if (quotas.isEmpty()) {
+            toast(R.string.req_no_leave_types)
+            viewModel.loadLeaveQuotas()
+            return
+        }
+        val names = quotas.map { it.name.orEmpty() }.toTypedArray()
+        val checked = names.indexOfFirst { it.equals(leaveType, true) }
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(R.string.req_pick_leave_type)
+            .setSingleChoiceItems(names, checked) { dialog, which ->
+                selectLeaveType(names[which])
+                dialog.dismiss()
+            }
+            .show()
+    }
 
-        val finalLeavesArray = arrayListOf<LeaveAllocation>()
+    private fun selectLeaveType(name: String) {
+        leaveType = name
+        val quota = quotas.firstOrNull { it.name.equals(name, true) }
+        binding.reqEtLeaveType.setText(quota?.name ?: name)
+        binding.reqTilLeaveType.error = null
+        binding.reqEtRemaining.setText(WsFormat.number(quota?.remaining ?: 0.0))
+        refreshLeaveDays()
+    }
 
-        finalLeavesArray.add(0, LeaveAllocation().apply {
-            this.name = leaveType
-            this.remaining_leaves = 0.0
-        })
-        if (leaves?.leave_allocation != null) {
-            finalLeavesArray.addAll(
-                leaves.leave_allocation.filter { !it.name.isNullOrBlank() }
+    private fun pickStartDate() {
+        val picker = MaterialDatePicker.Builder.datePicker()
+            .setTitleText(R.string.req_pick_start_date)
+            .apply { startDate?.let { setSelection(dayToUtcMillis(it)) } }
+            .build()
+        picker.addOnPositiveButtonClickListener { millis ->
+            startDate = utcMillisToDay(millis)
+            // The end must not be before the start.
+            if (endDate != null && endDate!! < startDate!!) endDate = null
+            if (halfDate != null && (halfDate!! < startDate!! || endDate == null || halfDate!! > endDate!!)) halfDate = null
+            binding.reqTilStartDate.error = null
+            renderLeaveDates()
+            refreshLeaveDays()
+        }
+        picker.show(childFragmentManager, "leaveStart")
+    }
+
+    private fun pickEndDate() {
+        val builder = MaterialDatePicker.Builder.datePicker().setTitleText(R.string.req_pick_end_date)
+        startDate?.let {
+            val startMillis = dayToUtcMillis(it)
+            builder.setCalendarConstraints(
+                CalendarConstraints.Builder()
+                    .setStart(startMillis)
+                    .setValidator(DateValidatorPointForward.from(startMillis))
+                    .build()
             )
         }
-
-        val adapter = LeaveWithCountSpinnerAdapter(
-            requireContext(), finalLeavesArray
-        )
-        binding?.spLeaveType?.adapter = adapter
-
-        if (isUpdate) {
-
-            for (index in 0..<finalLeavesArray.size) {
-                if (finalLeavesArray[index].name.equals(preLeaveType)) {
-                    binding?.spLeaveType?.setSelection(index)
-                    break
-                }
-            }
-
-            binding?.spLeaveType?.isClickable = false
-            binding?.spLeaveType?.setOnTouchListener { _, event ->
-                if (event.action == MotionEvent.ACTION_UP) {
-                    //Your code
-                    requireContext().showErrorMsg(ErrorMessages.UNABLE_TO_EDIT_LEAVE.errorString)
-                }
-                true
-            }
+        (endDate ?: startDate)?.let { builder.setSelection(dayToUtcMillis(it)) }
+        val picker = builder.build()
+        picker.addOnPositiveButtonClickListener { millis ->
+            endDate = utcMillisToDay(millis)
+            if (halfDate != null && (startDate == null || halfDate!! < startDate!! || halfDate!! > endDate!!)) halfDate = null
+            binding.reqTilEndDate.error = null
+            renderLeaveDates()
+            refreshLeaveDays()
         }
+        picker.show(childFragmentManager, "leaveEnd")
+    }
 
+    private fun pickHalfDate() {
+        val s = startDate ?: return
+        val e = endDate ?: return
+        val sMillis = dayToUtcMillis(s)
+        val eMillis = dayToUtcMillis(e)
+        val picker = MaterialDatePicker.Builder.datePicker()
+            .setTitleText(R.string.req_pick_half_date)
+            .setCalendarConstraints(
+                CalendarConstraints.Builder()
+                    .setStart(sMillis)
+                    .setEnd(eMillis)
+                    .setValidator(
+                        CompositeDateValidator.allOf(
+                            listOf<CalendarConstraints.DateValidator>(
+                                DateValidatorPointForward.from(sMillis),
+                                DateValidatorPointBackward.before(eMillis)
+                            )
+                        )
+                    )
+                    .build()
+            )
+            .apply { halfDate?.let { setSelection(dayToUtcMillis(it)) } }
+            .build()
+        picker.addOnPositiveButtonClickListener { millis ->
+            halfDate = utcMillisToDay(millis)
+            binding.reqTilHalfDate.error = null
+            renderLeaveDates()
+            refreshLeaveDays()
+        }
+        picker.show(childFragmentManager, "leaveHalf")
+    }
 
-        binding?.spLeaveType?.onItemSelectedListener = object :
-            AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-
-                selectedLeaveType = finalLeavesArray[position].name.toString()
-
-                binding?.tvRemainingLeaveTxt?.text =
-                    finalLeavesArray[position].remaining_leaves.toString()
-
-                if (startDateString != null && endDateString != null && !selectedLeaveType.isNullOrEmpty()) {
-                    requestViewModel.getLeaveCountOnDate(LeaveCountByDaysRequest().apply {
-                        this.leave_type = selectedLeaveType
-                        this.from_date = startDateString
-                        this.to_date = endDateString
-                    })
-                }
-
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-
+    private fun renderLeaveDates() {
+        with(binding) {
+            reqEtStartDate.setText(WsFormat.reversedDay(startDate))
+            reqEtEndDate.setText(WsFormat.reversedDay(endDate))
+            reqEtHalfDate.setText(WsFormat.reversedDay(halfDate))
+            // A half day inside a multi-day leave needs its own date.
+            val multiDay = startDate != null && endDate != null && startDate != endDate
+            reqColHalfDate.visibility = if (reqCbHalfDay.isChecked && multiDay) View.VISIBLE else View.GONE
         }
     }
 
-//    @SuppressLint("ClickableViewAccessibility")
-//    private fun spinnerLeavePopulations(leaves: ArrayList<SpinnerType>?) {
-//
-//        val finalLeavesArray = arrayListOf<SpinnerType>()
-//
-//        finalLeavesArray.add(0, SpinnerType().apply {
-//            this.type = leaveType
-//        })
-//        if (leaves != null) {
-//            finalLeavesArray.addAll(leaves)
-//        }
-//
-//        val adapter = LeaveSpinnerAdapter(
-//            requireContext(), finalLeavesArray
-//        )
-//        binding?.spLeaveType?.adapter = adapter
-//
-//        if (isUpdate) {
-//
-//            for (index in 0..<finalLeavesArray.size) {
-//                if (finalLeavesArray[index].type.equals(preLeaveType)) {
-//                    binding?.spLeaveType?.setSelection(index)
-//                    break
-//                }
-//            }
-//
-//            binding?.spLeaveType?.isClickable = false
-//            binding?.spLeaveType?.setOnTouchListener { _, event ->
-//                if (event.action == MotionEvent.ACTION_UP) {
-//                    //Your code
-//                    requireContext().showErrorMsg(ErrorMessages.UNABLE_TO_EDIT_LEAVE.errorString)
-//                }
-//                true
-//            }
-//        }
-//
-//
-//        binding?.spLeaveType?.onItemSelectedListener = object :
-//            AdapterView.OnItemSelectedListener {
-//            override fun onItemSelected(
-//                parent: AdapterView<*>?,
-//                view: View?,
-//                position: Int,
-//                id: Long
-//            ) {
-//            }
-//
-//            override fun onNothingSelected(parent: AdapterView<*>?) {}
-//
-//        }
-//    }
-
-    private fun spinnerAttendTypePopulations(leaves: ArrayList<SpinnerType>?) {
-
-
-        val finalLeavesArray = arrayListOf<SpinnerType>()
-
-        finalLeavesArray.add(0, SpinnerType().apply {
-            this.type = attendanceType
-        })
-        if (leaves != null) {
-            finalLeavesArray.addAll(leaves)
+    /** Server-side day count; "0" while anything is missing. */
+    private fun refreshLeaveDays() {
+        val type = leaveType
+        val from = startDate
+        val to = endDate
+        if (type.isNullOrBlank() || from == null || to == null) {
+            showLeaveDays(0.0)
+            return
         }
-
-        val adapter = LeaveSpinnerAdapter(
-            requireContext(), finalLeavesArray
-        )
-        binding?.spAttendType?.adapter = adapter
-
-        if (isUpdate) {
-
-            for (index in 0..<finalLeavesArray.size) {
-                if (finalLeavesArray[index].type.equals(preAttendanceType)) {
-                    binding?.spAttendType?.setSelection(index)
-                    break
-                }
-            }
-        }
-
-
-
-        binding?.spAttendType?.onItemSelectedListener = object :
-            AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-
-        }
-
-
+        viewModel.loadLeaveDays(type, from, to, binding.reqCbHalfDay.isChecked, halfDate)
     }
 
-    private fun spinnerLocTypePopulations(leaves: ArrayList<SpinnerType>?) {
+    private fun showLeaveDays(days: Double) {
+        leaveDays = days
+        _binding?.reqEtLeaveCount?.setText(WsFormat.number(days))
+    }
 
-
-        val finalLeavesArray = arrayListOf<SpinnerType>()
-
-        finalLeavesArray.add(0, SpinnerType().apply {
-            this.type = locationType
-        })
-        if (leaves != null) {
-            finalLeavesArray.addAll(leaves)
+    private fun validateLeave(): Boolean {
+        with(binding) {
+            val reason = reqEtLeaveReason.text?.toString().orEmpty().trim()
+            val needsHalfDate = reqCbHalfDay.isChecked && startDate != null && endDate != null && startDate != endDate
+            reqTilLeaveType.error = if (leaveType.isNullOrBlank()) getString(R.string.req_err_leave_type) else null
+            reqTilStartDate.error = if (startDate == null) getString(R.string.req_err_start_date) else null
+            reqTilEndDate.error = if (endDate == null) getString(R.string.req_err_end_date) else null
+            reqTilHalfDate.error = if (needsHalfDate && halfDate == null) getString(R.string.req_err_half_date) else null
+            reqTilLeaveReason.error = if (reason.isEmpty()) getString(R.string.req_err_leave_reason) else null
+            val valid = listOf(reqTilLeaveType, reqTilStartDate, reqTilEndDate, reqTilHalfDate, reqTilLeaveReason)
+                .all { it.error == null }
+            if (!valid) {
+                toast(R.string.req_toast_leave_fields)
+                return false
+            }
         }
+        // A new request must fit the quota; the server re-checks edits.
+        val remaining = quotas.firstOrNull { it.name.equals(leaveType, true) }?.remaining ?: 0.0
+        if (!isUpdate && leaveDays > remaining) {
+            toast(R.string.req_toast_quota_exceeded)
+            return false
+        }
+        return true
+    }
 
-        val adapter = LeaveSpinnerAdapter(
-            requireContext(), finalLeavesArray
+    private fun submitLeave() {
+        if (!validateLeave()) return
+        val body = mutableMapOf<String, Any?>(
+            "leave_type" to leaveType,
+            "start_date" to startDate,
+            "end_date" to endDate,
+            "leave_reason" to binding.reqEtLeaveReason.text?.toString().orEmpty().trim()
         )
-        binding?.spLocType?.adapter = adapter
-
+        if (binding.reqCbHalfDay.isChecked) {
+            body["half_day"] = true
+            halfDate?.let { body["half_day_date"] = it }
+        }
         if (isUpdate) {
-
-            for (index in 0..<finalLeavesArray.size) {
-                if (finalLeavesArray[index].type.equals(preLocationType)) {
-                    binding?.spLocType?.setSelection(index)
-                    break
-                }
-            }
+            body["leave_id"] = recordId
+            lastOp = Op.UPDATE
+            viewModel.updateLeave(body)
+        } else {
+            lastOp = Op.CREATE
+            viewModel.createLeave(body)
         }
+    }
 
+    // ---------------------------------------------------------------------------------------------
+    // Attendance form
+    // ---------------------------------------------------------------------------------------------
 
-        binding?.spLocType?.onItemSelectedListener = object :
-            AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-
+    private fun setupAttendanceForm() {
+        with(binding) {
+            reqEtDate.setOnClickListener { pickAttendanceDate() }
+            reqTilDate.setEndIconOnClickListener { pickAttendanceDate() }
+            reqEtTime.setOnClickListener { pickAttendanceTime() }
+            reqTilTime.setEndIconOnClickListener { pickAttendanceTime() }
+            reqEtReason.doAfterTextChanged { reqTilReason.error = null }
         }
+        renderAttendanceDateTime()
+        viewModel.loadOptions()
+    }
 
+    /** Fills [group] with one segmented button per option and selects [selected] (or the first). */
+    private fun buildToggle(
+        group: MaterialButtonToggleGroup,
+        options: List<String>,
+        label: (String) -> String,
+        icon: (String) -> Int,
+        selected: String?,
+        onSelect: (String) -> Unit
+    ) {
+        group.clearOnButtonCheckedListeners()
+        group.removeAllViews()
+        val buttons = options.map { option ->
+            val button = layoutInflater.inflate(R.layout.req_toggle_button, group, false) as MaterialButton
+            button.id = View.generateViewId()
+            button.text = label(option)
+            button.setIconResource(icon(option))
+            button.tag = option
+            group.addView(button)
+            button
+        }
+        group.addOnButtonCheckedListener { _, checkedId, isChecked ->
+            if (isChecked) group.findViewById<View>(checkedId)?.tag?.let { onSelect(it as String) }
+        }
+        val initial = buttons.firstOrNull { (it.tag as String).equals(selected, true) } ?: buttons.firstOrNull()
+        initial?.let { group.check(it.id) }
+    }
 
+    private fun typeLabel(value: String): String = when (value.uppercase()) {
+        "IN" -> getString(R.string.req_check_in)
+        "OUT" -> getString(R.string.req_check_out)
+        else -> value
+    }
+
+    @DrawableRes
+    private fun typeIcon(value: String): Int =
+        if (value.equals("OUT", true)) R.drawable.ws_ic_arrow_out else R.drawable.ws_ic_arrow_in
+
+    @DrawableRes
+    private fun locationIcon(value: String): Int {
+        val text = value.lowercase()
+        return when {
+            text.contains("home") -> R.drawable.ws_ic_home
+            text.contains("office") -> R.drawable.ws_ic_apartment
+            else -> R.drawable.ws_ic_location
+        }
+    }
+
+    private fun pickAttendanceDate() {
+        // Only days up to today can be requested.
+        val today = MaterialDatePicker.todayInUtcMilliseconds()
+        val picker = MaterialDatePicker.Builder.datePicker()
+            .setTitleText(R.string.req_pick_date)
+            .setCalendarConstraints(
+                CalendarConstraints.Builder()
+                    .setEnd(today)
+                    .setOpenAt(attendanceDate?.let { dayToUtcMillis(it) } ?: today)
+                    .setValidator(DateValidatorPointBackward.before(today))
+                    .build()
+            )
+            .setSelection(attendanceDate?.let { dayToUtcMillis(it) } ?: today)
+            .build()
+        picker.addOnPositiveButtonClickListener { millis ->
+            attendanceDate = utcMillisToDay(millis)
+            binding.reqTilDate.error = null
+            renderAttendanceDateTime()
+        }
+        picker.show(childFragmentManager, "attendanceDate")
+    }
+
+    private fun pickAttendanceTime() {
+        val now = Calendar.getInstance()
+        val parts = attendanceTime?.split(":")
+        val hour = parts?.getOrNull(0)?.toIntOrNull() ?: now.get(Calendar.HOUR_OF_DAY)
+        val minute = parts?.getOrNull(1)?.toIntOrNull() ?: now.get(Calendar.MINUTE)
+        val picker = MaterialTimePicker.Builder()
+            .setTimeFormat(if (DateFormat.is24HourFormat(requireContext())) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H)
+            .setHour(hour)
+            .setMinute(minute)
+            .setTitleText(R.string.req_pick_time)
+            .build()
+        picker.addOnPositiveButtonClickListener {
+            attendanceTime = String.format(Locale.US, "%02d:%02d", picker.hour, picker.minute)
+            binding.reqTilTime.error = null
+            renderAttendanceDateTime()
+        }
+        picker.show(childFragmentManager, "attendanceTime")
+    }
+
+    private fun renderAttendanceDateTime() {
+        binding.reqEtDate.setText(WsFormat.reversedDay(attendanceDate))
+        binding.reqEtTime.setText(attendanceTime?.let { WsFormat.clockText(requireContext(), it) }.orEmpty())
+    }
+
+    private fun validateAttendance(): Boolean {
+        val valid = with(binding) {
+            val reason = reqEtReason.text?.toString().orEmpty().trim()
+            reqErrType.visibility = if (attendanceType.isNullOrBlank()) View.VISIBLE else View.GONE
+            reqErrLocation.visibility = if (location.isNullOrBlank()) View.VISIBLE else View.GONE
+            reqTilDate.error = if (attendanceDate == null) getString(R.string.req_err_date) else null
+            reqTilTime.error = if (attendanceTime == null) getString(R.string.req_err_time) else null
+            reqTilReason.error = if (reason.isEmpty()) getString(R.string.req_err_reason) else null
+            reqErrType.visibility == View.GONE && reqErrLocation.visibility == View.GONE &&
+                listOf<TextInputLayout>(reqTilDate, reqTilTime, reqTilReason).all { it.error == null }
+        }
+        if (!valid) toast(R.string.req_toast_attendance_fields)
+        return valid
+    }
+
+    private fun submitAttendance() {
+        if (!validateAttendance()) return
+        val body = mutableMapOf<String, Any?>(
+            "log_type" to attendanceType,
+            "location" to location,
+            "date_time" to "$attendanceDate $attendanceTime:00",
+            "attendance_reason" to binding.reqEtReason.text?.toString().orEmpty().trim(),
+            "request_status" to "Pending",
+            "checkin_id" to if (isUpdate) recordId else ""
+        )
+        if (isUpdate) {
+            lastOp = Op.UPDATE
+            viewModel.updateAttendance(body)
+        } else {
+            lastOp = Op.CREATE
+            GlobalConfig.currentEmployeeId().takeIf { it.isNotBlank() }?.let { body["employee"] = it }
+            viewModel.createAttendance(body)
+        }
+    }
+
+    // ---------------------------------------------------------------------------------------------
+    // Footer actions
+    // ---------------------------------------------------------------------------------------------
+
+    private fun submit() {
+        hideKeyboard()
+        if (mode == RequestFilter.LEAVE) submitLeave() else submitAttendance()
+    }
+
+    private fun confirmDelete() {
+        hideKeyboard()
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(R.string.req_delete_title)
+            .setMessage(R.string.req_delete_message)
+            .setNegativeButton(R.string.req_cancel, null)
+            .setPositiveButton(R.string.req_delete) { _, _ ->
+                lastOp = Op.DELETE
+                if (mode == RequestFilter.LEAVE) viewModel.deleteLeave(recordId) else viewModel.deleteAttendance(recordId)
+            }
+            .show()
+    }
+
+    private fun hideKeyboard() {
+        val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(binding.root.windowToken, 0)
+    }
+
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
+    }
+
+    private companion object {
+        const val POP_DELAY_MS = 600L
+
+        private val DAY = Regex("""\d{4}-\d{2}-\d{2}""")
+        private val TIME = Regex("""[ T](\d{1,2}):(\d{1,2})""")
+
+        /** "2026-07-09 09:30:00" -> "2026-07-09" (null when there is no date). */
+        fun dayPart(value: String): String? = DAY.find(value)?.value
+
+        /** "2026-07-09 9:5:00" -> "09:05" (null when there is no time). */
+        fun timePart(value: String): String? =
+            TIME.find(value)?.destructured?.let { (h, m) -> String.format(Locale.US, "%02d:%02d", h.toInt(), m.toInt()) }
+
+        private fun dayFormat() = SimpleDateFormat("yyyy-MM-dd", Locale.US).apply { timeZone = TimeZone.getTimeZone("UTC") }
+
+        /** Material date pickers speak UTC midnight. */
+        fun dayToUtcMillis(day: String): Long = runCatching { dayFormat().parse(day)?.time }.getOrNull() ?: MaterialDatePicker.todayInUtcMilliseconds()
+
+        fun utcMillisToDay(millis: Long): String = dayFormat().format(millis)
     }
 }
-

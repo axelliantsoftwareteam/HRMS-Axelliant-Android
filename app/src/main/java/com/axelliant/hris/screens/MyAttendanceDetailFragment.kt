@@ -4,272 +4,257 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
+import androidx.annotation.IdRes
+import androidx.core.util.Pair
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.axelliant.hris.R
-import com.axelliant.hris.adapter.MyAttendanceDetailAdapter
+import com.axelliant.hris.adapter.AttDayAdapter
+import com.axelliant.hris.adapter.AttFormat
 import com.axelliant.hris.adapter.SubFilterAdapter
 import com.axelliant.hris.base.BaseFragment
 import com.axelliant.hris.callback.AdapterItemClick
 import com.axelliant.hris.config.AppConst
-import com.axelliant.hris.config.AppConst.KEY_ID
 import com.axelliant.hris.config.GlobalConfig
 import com.axelliant.hris.databinding.FragmentMyAttendanceDetailBinding
-import com.axelliant.hris.enums.AttendanceFilter
-import com.axelliant.hris.enums.AttendanceFilter.Custom
-import com.axelliant.hris.enums.AttendanceFilter.MONTH
-import com.axelliant.hris.enums.AttendanceFilter.WEEK
-import com.axelliant.hris.enums.RequestFilter
 import com.axelliant.hris.event.EventObserver
 import com.axelliant.hris.extention.showErrorMsg
-import com.axelliant.hris.model.attendance.AttendanceDetail
-import com.axelliant.hris.model.attendance.AttendanceInput
 import com.axelliant.hris.model.dashboard.FilterModel
-import com.axelliant.hris.navigation.AppNavigator
-import com.axelliant.hris.utils.Utils
+import com.axelliant.hris.model.leaveatt.AttendanceDay
+import com.axelliant.hris.model.leaveatt.ShiftDetail
+import com.axelliant.hris.network.observeResult
+import com.axelliant.hris.ui.WsDetailSheet
+import com.axelliant.hris.ui.WsFormat
+import com.axelliant.hris.ui.WsStatus
+import com.axelliant.hris.ui.WsTone
 import com.axelliant.hris.viewmodel.AttendanceViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
-import com.google.gson.Gson
-import org.koin.android.ext.android.inject
-import java.util.Date
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
+import java.util.TimeZone
 
-
+/**
+ * Attendance screen (iOS "Attendance"): the shift card, a period selector with a date line, status
+ * chips and one card per day. A day opens its details in a [WsDetailSheet].
+ */
 class MyAttendanceDetailFragment : BaseFragment() {
 
-    private var startDateString: String? = null
-    private var endDateString: String? = null
+    private enum class Period { WEEK, MONTH, CUSTOM }
+
     private var _binding: FragmentMyAttendanceDetailBinding? = null
-    private val binding get() = _binding
-    private var currentFilter = WEEK
-    private val attendanceViewModel: AttendanceViewModel by inject()
+    private val binding get() = _binding!!
 
-    private var emplId = ""
+    private val viewModel: AttendanceViewModel by viewModel()
+
+    private val dayAdapter = AttDayAdapter { showDetails(it) }
+
+    private var employeeId = ""
+    private var period = Period.WEEK
+    private var startDate = ""
+    private var endDate = ""
     private var filterId = ""
+    private var chips: List<FilterModel> = emptyList()
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-
-        _binding = FragmentMyAttendanceDetailBinding.inflate(inflater).also { _binding = it }
-        return binding?.root
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        _binding = FragmentMyAttendanceDetailBinding.inflate(inflater, container, false)
+        return binding.root
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        employeeId = arguments?.getString(AppConst.KEY_ID)?.takeIf { it.isNotBlank() } ?: GlobalConfig.currentEmployeeId()
 
-        val bundle = this.arguments
-        if (bundle != null) {
-            emplId = bundle.getString(KEY_ID, GlobalConfig.currentEmployeeId())
-        }
-        attendanceViewModel.getIsLoading()
-            .observe(viewLifecycleOwner, EventObserver { isLoading ->
-                if (isLoading) {
-                    showDialog()
-                } else {
-                    hideDialog()
-                }
-            })
+        binding.attRvDays.layoutManager = LinearLayoutManager(requireContext())
+        binding.attRvDays.adapter = dayAdapter
+        binding.attRvFilters.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
 
-        attendanceViewModel.getAttendanceDetail(getCurrentObject())
-        eventSelection()
-
-        attendanceViewModel.attendanceDetailResponse.observe(
-            viewLifecycleOwner,
-            EventObserver { response ->
-
-                if (response?.meta?.status == true) {
-                    dataPopulate(response.attendance_data!!)
-                    subFilterPopulations(response.attendance_status!!)
-
-
-                } else {
-                    requireContext().showErrorMsg(response?.meta?.message.toString())
-                }
-
-            })
-
-        binding?.ivBack?.setOnClickListener {
-            previousFragmentNavigation()
+        binding.attSwipe.setColorSchemeResources(R.color.ws_primary)
+        binding.attSwipe.setOnRefreshListener {
+            viewModel.loadShift()
+            load()
         }
 
+        binding.attBtnWeek.setOnClickListener { selectPeriod(Period.WEEK) }
+        binding.attBtnMonth.setOnClickListener { selectPeriod(Period.MONTH) }
+        binding.attBtnCustom.setOnClickListener { pickRange() }
 
+        observeViewModel()
+
+        computeDates(Period.WEEK)
+        renderRange()
+        viewModel.loadShift()
+        load()
     }
 
+    private fun observeViewModel() {
+        viewModel.getIsLoading().observe(viewLifecycleOwner, EventObserver { loading ->
+            if (loading) showDialog() else hideDialog()
+        })
 
-    private fun dataPopulate(attendanceData: ArrayList<AttendanceDetail>) {
+        // The shift card is optional: a failed call just leaves it hidden.
+        viewModel.shift.observeResult(viewLifecycleOwner) { data, _ ->
+            data.shift_detail?.let { showShift(it) }
+        }
 
-        binding?.rvAttendanceDetail?.layoutManager = LinearLayoutManager(requireActivity())
-        val weeklyAdapter = MyAttendanceDetailAdapter(attendanceData,requireContext(),object :AdapterItemClick{
+        viewModel.attendance.observeResult(viewLifecycleOwner, onError = { message ->
+            binding.attSwipe.isRefreshing = false
+            requireContext().showErrorMsg(message, "Attendance")
+        }) { data, _ ->
+            binding.attSwipe.isRefreshing = false
+            val days = data.attendance_data.orEmpty().sortedByDescending { WsFormat.parse(it.date)?.time ?: 0L }
+            dayAdapter.submitList(days)
+            if (days.isEmpty()) binding.attEmpty.show() else binding.attEmpty.hide()
+            showChips(data.attendance_status.orEmpty())
+        }
+    }
+
+    // ---------------------------------------------------------------------------------------------
+    // Period and chips
+    // ---------------------------------------------------------------------------------------------
+
+    private fun selectPeriod(newPeriod: Period) {
+        if (newPeriod == period) return
+        computeDates(newPeriod)
+        renderRange()
+        load()
+    }
+
+    /** Last 7 days = today-7 .. today; this month = first .. last day. Custom keeps its picked dates. */
+    private fun computeDates(newPeriod: Period) {
+        period = newPeriod
+        val cal = Calendar.getInstance()
+        when (newPeriod) {
+            Period.WEEK -> {
+                endDate = WsFormat.apiDay(cal)
+                cal.add(Calendar.DAY_OF_YEAR, -7)
+                startDate = WsFormat.apiDay(cal)
+            }
+            Period.MONTH -> {
+                cal.set(Calendar.DAY_OF_MONTH, 1)
+                startDate = WsFormat.apiDay(cal)
+                cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH))
+                endDate = WsFormat.apiDay(cal)
+            }
+            Period.CUSTOM -> Unit
+        }
+    }
+
+    private fun renderRange() {
+        binding.attTvRange.text = getString(R.string.att_date_range, WsFormat.reversedDay(startDate), WsFormat.reversedDay(endDate))
+    }
+
+    @IdRes
+    private fun buttonFor(p: Period): Int = when (p) {
+        Period.WEEK -> R.id.att_btn_week
+        Period.MONTH -> R.id.att_btn_month
+        Period.CUSTOM -> R.id.att_btn_custom
+    }
+
+    private fun pickRange() {
+        val previous = period
+        val builder = MaterialDatePicker.Builder.dateRangePicker().setTitleText(R.string.att_range_picker_title)
+        if (period == Period.CUSTOM && startDate.isNotEmpty() && endDate.isNotEmpty()) {
+            builder.setSelection(Pair(dayToUtcMillis(startDate), dayToUtcMillis(endDate)))
+        }
+        val picker = builder.build()
+        var applied = false
+        picker.addOnPositiveButtonClickListener { selection ->
+            val first = selection.first ?: return@addOnPositiveButtonClickListener
+            val second = selection.second ?: first
+            applied = true
+            period = Period.CUSTOM
+            startDate = utcMillisToDay(first)
+            endDate = utcMillisToDay(second)
+            renderRange()
+            load()
+        }
+        // A cancelled picker puts the selector back on the period that is still showing.
+        picker.addOnDismissListener {
+            if (!applied && _binding != null) binding.attSegment.check(buttonFor(previous))
+        }
+        picker.show(childFragmentManager, "attendanceRange")
+    }
+
+    private fun showChips(server: List<FilterModel>) {
+        if (server.isNotEmpty() || chips.isEmpty()) {
+            val all = FilterModel().apply {
+                id = ""
+                title = getString(R.string.att_filter_all)
+                count = "0"
+            }
+            chips = listOf(all) + server
+        }
+        val layoutManager = binding.attRvFilters.layoutManager
+        // Rebuilding the adapter would otherwise jump the chip row back to the start.
+        val scrollState = layoutManager?.onSaveInstanceState()
+        binding.attRvFilters.adapter = SubFilterAdapter(filterId, chips, requireContext(), object : AdapterItemClick {
             override fun onItemClick(customObject: Any, position: Int) {
-
-                val attendanceDetail = customObject as AttendanceDetail
-//                AppNavigator.navigateToRequest(Bundle().apply {
-//                    this.putString(AppConst.RequestType, RequestFilter.ATTENDANCE.name)
-//                    this.putString(AppConst.AttendanceRequestParam, Gson().toJson(attendanceDetail))
-//                })
-
-
+                filterId = (customObject as FilterModel).id.orEmpty()
+                load()
             }
         })
-        binding?.rvAttendanceDetail?.adapter = weeklyAdapter
-
-
-
+        layoutManager?.onRestoreInstanceState(scrollState)
+        binding.attRvFilters.visibility = if (chips.size > 1) View.VISIBLE else View.GONE
     }
 
-    private fun subFilterPopulations(attendanceStatusList: ArrayList<FilterModel>) {
-        attendanceStatusList.add(0,FilterModel().apply {
-            this.id = ""
-            this.title = "All"
-            this.count = "0"
-        })
+    private fun load() {
+        if (startDate.isEmpty() || endDate.isEmpty()) return
+        viewModel.loadAttendance(startDate, endDate, employeeId, filterId, showLoading = !binding.attSwipe.isRefreshing)
+    }
 
-        binding?.rvSubFilter?.layoutManager =
-            LinearLayoutManager(requireActivity(), RecyclerView.HORIZONTAL, false)
-        val weeklyAdapter = SubFilterAdapter(filterId,
-            attendanceStatusList, requireContext(),
-            object : AdapterItemClick {
-                override fun onItemClick(customObject: Any, position: Int) {
-                    val filterObject = customObject as FilterModel
+    // ---------------------------------------------------------------------------------------------
+    // Shift card and details sheet
+    // ---------------------------------------------------------------------------------------------
 
-                    filterId = filterObject.id.toString()
-                    attendanceViewModel.getAttendanceDetail(getCurrentObject())
+    private fun showShift(shift: ShiftDetail) {
+        val ctx = requireContext()
+        val placeholder = getString(R.string.att_shift_placeholder)
+        val start = shift.actual_start?.takeIf { it.isNotBlank() }?.let { WsFormat.clockText(ctx, it) } ?: placeholder
+        val end = shift.actual_end?.takeIf { it.isNotBlank() }?.let { WsFormat.clockText(ctx, it) } ?: placeholder
+        val times = getString(R.string.att_shift_times, start, end)
+        val place = shift.location?.takeIf { it.isNotBlank() }
 
-                }
+        binding.attCardShift.visibility = View.VISIBLE
+        WsStatus.iconBadge(binding.attShiftIcon, WsTone.attendance(ctx))
+        binding.attShiftName.text = shift.name?.takeIf { it.isNotBlank() } ?: getString(R.string.att_shift_not_assigned)
+        binding.attShiftDetails.text = if (place == null) times else times + getString(R.string.att_shift_separator) + place
+    }
 
-            }
+    private fun showDetails(day: AttendanceDay) {
+        val ctx = requireContext()
+        val fields = listOf(
+            WsDetailSheet.Field(getString(R.string.att_field_location), day.custom_attendance_status, half = true),
+            WsDetailSheet.Field(getString(R.string.att_field_working_hours), AttFormat.hours(ctx, day), half = true),
+            WsDetailSheet.Field(getString(R.string.att_field_shift), day.shift, half = true),
+            WsDetailSheet.Field(getString(R.string.att_field_shift_timings), day.shift_timings, half = true),
+            WsDetailSheet.Field(getString(R.string.att_field_actual_in), AttFormat.timeText(ctx, day.in_time_iso, day.in_time), half = true),
+            WsDetailSheet.Field(getString(R.string.att_field_expected_in), AttFormat.timeText(ctx, day.expected_in_iso, day.expected_in), half = true),
+            WsDetailSheet.Field(getString(R.string.att_field_actual_out), AttFormat.timeText(ctx, day.out_time_iso, day.out_time), half = true),
+            WsDetailSheet.Field(getString(R.string.att_field_expected_out), AttFormat.timeText(ctx, day.expected_out_iso, day.expected_out), half = true)
         )
-        binding?.rvSubFilter?.adapter = weeklyAdapter
-
+        WsDetailSheet.show(
+            childFragmentManager,
+            title = AttFormat.sheetTitle(day.date),
+            subtitle = getString(R.string.att_sheet_subtitle),
+            status = day.shownStatus,
+            fields = fields
+        )
     }
 
-    private fun eventSelection() {
-        binding?.tvWeek?.background =
-            ContextCompat.getDrawable(requireContext(), R.drawable.rounded_disabled)
-
-        binding?.tvMonth?.background =
-            ContextCompat.getDrawable(requireContext(), R.drawable.rounded_disabled)
-
-        binding?.tvCustom?.background =
-            ContextCompat.getDrawable(requireContext(), R.drawable.rounded_disabled)
-
-
-        binding?.tvWeek?.setTextColor(requireContext().getColor(R.color.btn_text_color))
-        binding?.tvMonth?.setTextColor(requireContext().getColor(R.color.btn_text_color))
-        binding?.tvCustom?.setTextColor(requireContext().getColor(R.color.btn_text_color))
-
-
-        binding?.tvWeek?.setOnClickListener {
-            currentFilter = WEEK
-            attendanceViewModel.getAttendanceDetail(getCurrentObject())
-            eventSelection()
-        }
-
-        binding?.tvMonth?.setOnClickListener {
-            currentFilter = MONTH
-            attendanceViewModel.getAttendanceDetail(getCurrentObject())
-            eventSelection()
-        }
-
-        binding?.tvCustom?.setOnClickListener {
-            datePickerDialog()
-        }
-
-        when (currentFilter) {
-            WEEK -> {
-                binding?.tvWeek?.background =
-                    ContextCompat.getDrawable(requireContext(), R.drawable.rounded_enabled)
-                binding?.tvWeek?.setTextColor(requireContext().getColor(R.color.white))
-
-            }
-
-            MONTH -> {
-
-                binding?.tvMonth?.background =
-                    ContextCompat.getDrawable(requireContext(), R.drawable.rounded_enabled)
-                binding?.tvMonth?.setTextColor(requireContext().getColor(R.color.white))
-            }
-
-            Custom -> {
-
-                binding?.tvCustom?.background =
-                    ContextCompat.getDrawable(requireContext(), R.drawable.rounded_enabled)
-                binding?.tvCustom?.setTextColor(requireContext().getColor(R.color.white))
-            }
-
-            else -> {}
-        }
+    override fun onDestroyView() {
+        binding.attSwipe.isRefreshing = false
+        _binding = null
+        super.onDestroyView()
     }
 
-    private fun getCurrentObject(): AttendanceInput {
+    private companion object {
+        private fun dayFormat() = SimpleDateFormat("yyyy-MM-dd", Locale.US).apply { timeZone = TimeZone.getTimeZone("UTC") }
 
-        when (currentFilter) {
-            WEEK -> {
-                startDateString = Utils.getServerFormat(date = Utils.getLastWeek())
-                endDateString = Utils.getServerFormat()
+        /** Material date pickers speak UTC midnight. */
+        fun dayToUtcMillis(day: String): Long = dayFormat().parse(day)?.time ?: MaterialDatePicker.todayInUtcMilliseconds()
 
-                setDateView()
-            }
-
-            MONTH -> {
-                startDateString = Utils.getServerFormat(date = Utils.getFirstDayOfMonth())
-                endDateString =
-                    Utils.getServerFormat(date = Utils.getLastDayOfMonth())
-
-                setDateView()
-            }
-
-            Custom -> {}
-        }
-        return AttendanceInput().apply {
-            this.startDate = startDateString!!
-            this.endDate = endDateString!!
-            this.employeeId = listOf(emplId)
-            this.filter = currentFilter
-            this.filters = filterId
-
-        }
-
-    }
-
-
-    private fun setDateView() {
-        if (startDateString != null && endDateString != null) {
-            binding?.tvStartDateTxt?.text = startDateString
-            binding?.tvEndDateTxt?.text = endDateString
-        }
-
-    }
-
-    private fun datePickerDialog() {
-        // Creating a MaterialDatePicker builder for selecting a date range
-        val builder = MaterialDatePicker.Builder.dateRangePicker()
-        builder.setTitleText("Select a date range")
-
-        // Building the date picker dialog
-        val datePicker = builder.build()
-        datePicker.addOnPositiveButtonClickListener { selection ->
-            // Retrieving the selected start and end dates
-            val startDate = selection.first
-            val endDate = selection.second
-
-            // Formatting the selected dates as strings
-
-            startDateString = Utils.getServerFormat(date = Date(startDate))
-            endDateString = Utils.getServerFormat(date = Date(endDate))
-
-            setDateView()
-
-            currentFilter = AttendanceFilter.Custom
-            attendanceViewModel.getAttendanceDetail(getCurrentObject())
-            eventSelection()
-        }
-
-        // Showing the date picker dialog
-        datePicker.show(activity?.supportFragmentManager!!, "DATE_PICKER")
+        fun utcMillisToDay(millis: Long): String = dayFormat().format(millis)
     }
 }

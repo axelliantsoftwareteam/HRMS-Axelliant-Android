@@ -1,180 +1,36 @@
 package com.axelliant.hris.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import com.axelliant.hris.config.AppConst
 import com.axelliant.hris.event.Event
-import com.axelliant.hris.model.attendance.AttendanceApproval
-import com.axelliant.hris.model.attendance.AttendanceInput
-import com.axelliant.hris.model.attendance.AttendanceResponse
-import com.axelliant.hris.model.attendance.AttendanceStatsResponse
-import com.axelliant.hris.model.attendance.LeaveCountInput
-import com.axelliant.hris.model.attendance.TeamAttendanceResponse
-import com.axelliant.hris.model.checkin.CheckInListResponse
-import com.axelliant.hris.model.leave.LeaveApproval
-import com.axelliant.hris.model.leave.PostResponse
-import com.axelliant.hris.repos.AttendanceRepo
+import com.axelliant.hris.model.attendance.AttRequest
+import com.axelliant.hris.model.leaveatt.AttendancePayload
+import com.axelliant.hris.model.leaveatt.WeekStatsPayload
+import com.axelliant.hris.network.ApiInterface
+import com.axelliant.hris.network.ApiResult
 
-class AttendanceViewModel(private val attendanceRepo: AttendanceRepo) : BaseViewModel() {
+/** Attendance screen: the shift card and the day-by-day attendance of one employee. */
+class AttendanceViewModel(private val api: ApiInterface) : BaseViewModel() {
 
-     val attendanceResponse: MutableLiveData<Event<AttendanceStatsResponse?>> by lazy { MutableLiveData<Event<AttendanceStatsResponse?>>() }
-     val attendanceDetailResponse: MutableLiveData<Event<AttendanceResponse?>> by lazy { MutableLiveData<Event<AttendanceResponse?>>() }
-     val teamAttendanceResponse: MutableLiveData<Event<TeamAttendanceResponse?>> by lazy { MutableLiveData<Event<TeamAttendanceResponse?>>() }
-     val attendanceApproval: MutableLiveData<Event<AttendanceApproval?>> by lazy { MutableLiveData<Event<AttendanceApproval?>>() }
-    val attendanceApprovalResponse: MutableLiveData<Event<PostResponse?>> by lazy { MutableLiveData<Event<PostResponse?>>() }
-    val checkInListResponse: MutableLiveData<Event<CheckInListResponse?>> by lazy { MutableLiveData<Event<CheckInListResponse?>>() }
+    val shift: MutableLiveData<Event<ApiResult<WeekStatsPayload>>> by lazy { MutableLiveData() }
+    val attendance: MutableLiveData<Event<ApiResult<AttendancePayload>>> by lazy { MutableLiveData() }
 
-    fun getAttendanceStats(attendanceInput: AttendanceInput) {
-        isLoading.value = Event(true)
-        attendanceRepo.getAttendanceStats(attendanceInput)
-            .observeForever { data ->
-                // Handle the login response
-                data?.let { baseModel ->
-                    isLoading.value = Event(false)
-                    // Handle success
-                    attendanceResponse.value = Event(baseModel.message?.data)
-
-                } ?: run {
-                    isLoading.value = Event(false)
-                    // Handle error
-                    Log.d("Success VieModel->", "false")
-
-
-                }
-            }
-
-
+    /** The shift is a nice-to-have, so it never shows the loading overlay. */
+    fun loadShift() {
+        request(api.callAttendanceWeekStats(AppConst.authHeader()), WeekStatsPayload::class.java, shift, false)
     }
 
-    fun getAttendanceDetail(inputObject: AttendanceInput) {
-        isLoading.value = Event(true)
-        attendanceRepo.getAttendanceDetail(inputObject)
-            .observeForever { data ->
-                // Handle the login response
-                data?.let { baseModel ->
-                    isLoading.value = Event(false)
-                    // Handle success
-                    attendanceDetailResponse.value = Event(baseModel.message?.data)
-
-                } ?: run {
-                    isLoading.value = Event(false)
-                    // Handle error
-                    Log.d("Success VieModel->", "false")
-
-
-                }
-            }
-
-
+    /**
+     * [startDate] / [endDate] are `yyyy-MM-dd`; [filterId] is the status chip id ("" for all).
+     * [showLoading] is false while pull-to-refresh already shows its own spinner.
+     */
+    fun loadAttendance(startDate: String, endDate: String, employeeId: String, filterId: String, showLoading: Boolean = true) {
+        val body = AttRequest().apply {
+            start_date = startDate
+            end_date = endDate
+            filters = filterId
+            employee_list = listOfNotNull(employeeId.takeIf { it.isNotBlank() })
+        }
+        request(api.callAttendanceDetail(AppConst.authHeader(), body), AttendancePayload::class.java, attendance, showLoading)
     }
-
-
-
-
-    fun getTeamAttendance(inputObject: AttendanceInput) {
-        isLoading.value = Event(true)
-        attendanceRepo.getTeamAttendanceDetail(inputObject)
-            .observeForever { data ->
-                // Handle the login response
-                data?.let { baseModel ->
-                    isLoading.value = Event(false)
-                    // Handle success
-                    teamAttendanceResponse.value = Event(baseModel.message?.data)
-
-                } ?: run {
-                    isLoading.value = Event(false)
-                    // Handle error
-                    Log.d("Success VieModel->", "false")
-
-
-                }
-            }
-
-
-    }
-
-
-    fun getAttendanceApproval(inputObject: AttendanceInput) {
-        isLoading.value = Event(true)
-        attendanceRepo.attendanceApproval(inputObject)
-            .observeForever { data ->
-                // Handle the login response
-                data?.let { baseModel ->
-                    isLoading.value = Event(false)
-                    // Handle success
-                    attendanceApproval.value = Event(baseModel.message?.data)
-
-                } ?: run {
-                    isLoading.value = Event(false)
-                    // Handle error
-                    Log.d("Success VieModel->", "false")
-
-
-                }
-            }
-
-
-    }
-
-
-
-    fun attendanceApprovalStatus(inputObject: LeaveApproval) {
-        isLoading.value = Event(true)
-        attendanceRepo.attendanceApprovalStatus(inputObject)
-            .observeForever { data ->
-                // Handle the login response
-                data?.let { baseModel ->
-                    isLoading.value = Event(false)
-                    // Handle success
-                    attendanceApprovalResponse.value = Event(baseModel.message?.data)
-
-                } ?: run {
-                    isLoading.value = Event(false)
-                    // Handle error
-                    Log.d("Success VieModel->", "false")
-
-
-                }
-            }
-
-
-    }
-
-    fun bulkAttendanceApprovalStatus(checkinIds: List<String>, status: String) {
-        isLoading.value = Event(true)
-        attendanceRepo.bulkAttendanceApprovalStatus(checkinIds, status)
-            .observeForever { data ->
-                data?.let { baseModel ->
-                    isLoading.value = Event(false)
-                    attendanceApprovalResponse.value = Event(baseModel.message?.data)
-                } ?: run {
-                    isLoading.value = Event(false)
-                    Log.d("Success VieModel->", "false")
-                }
-            }
-    }
-
-    fun getCheckInList(inputObject: LeaveCountInput) {
-        isLoading.value = Event(true)
-        attendanceRepo.checkInList(inputObject)
-            .observeForever { data ->
-                // Handle the login response
-                data?.let { baseModel ->
-                    isLoading.value = Event(false)
-                    // Handle success
-                    checkInListResponse.value = Event(baseModel.message?.data)
-
-                } ?: run {
-                    isLoading.value = Event(false)
-                    // Handle error
-                    Log.d("Success VieModel->", "false")
-
-
-                }
-            }
-
-
-    }
-
-
-
 }

@@ -1,266 +1,195 @@
 package com.axelliant.hris.screens
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
+import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.axelliant.hris.R
-import com.axelliant.hris.adapter.RemainingLeaveAdapter
-import com.axelliant.hris.adapter.UpcomingLeaveAdapter
-
+import com.axelliant.hris.adapter.LvGridGapDecoration
+import com.axelliant.hris.adapter.LvQuotaTileAdapter
+import com.axelliant.hris.adapter.LvRequestAdapter
 import com.axelliant.hris.base.BaseFragment
-import com.axelliant.hris.config.AppConst.SERVER_DATE_FORMAT
-import com.axelliant.hris.config.GlobalConfig
+import com.axelliant.hris.config.AppConst
 import com.axelliant.hris.databinding.FragmentLeavesBinding
-import com.axelliant.hris.enums.AttendanceFilter
+import com.axelliant.hris.enums.RequestFilter
 import com.axelliant.hris.event.EventObserver
 import com.axelliant.hris.extention.showErrorMsg
-import com.axelliant.hris.model.attendance.AttendanceInput
-import com.axelliant.hris.model.leave.LeaveType
-import com.axelliant.hris.model.leave.SelfLeaveStats
-import com.axelliant.hris.model.leave.TeamLeaveStats
-import com.axelliant.hris.model.leave.UpcomingLeaveInput
-import com.axelliant.hris.model.leave.UpcomingLeaves
+import com.axelliant.hris.model.leaveatt.LeaveRecord
 import com.axelliant.hris.navigation.AppNavigator
-import com.axelliant.hris.utils.Utils
+import com.axelliant.hris.network.observeResult
+import com.axelliant.hris.ui.WsDetailSheet
+import com.axelliant.hris.ui.WsFormat
+import com.axelliant.hris.ui.WsStatus
 import com.axelliant.hris.viewmodel.LeaveViewModel
-import org.koin.android.ext.android.inject
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
+import com.google.gson.Gson
+import com.intuit.sdp.R as SdpR
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-
+/**
+ * Leave screen (iOS "Leave"): the assigned quotas as tiles, this year's leave requests as cards, and a
+ * FAB that opens the leave request form. A request opens its details in a [WsDetailSheet].
+ */
 class LeavesFragment : BaseFragment() {
-    private var currentFilter = AttendanceFilter.WEEK
 
     private var _binding: FragmentLeavesBinding? = null
-    private val binding get() = _binding
-    private val leaveViewModel: LeaveViewModel by inject()
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    private val binding get() = _binding!!
 
-        _binding = FragmentLeavesBinding.inflate(inflater).also { _binding = it }
-        return binding?.root
+    private val viewModel: LeaveViewModel by viewModel()
+
+    private val quotaAdapter = LvQuotaTileAdapter()
+    private val historyAdapter = LvRequestAdapter { showDetails(it) }
+
+    private var quotasLoaded = false
+    private var pendingCalls = 0
+    private var errorShown = false
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        _binding = FragmentLeavesBinding.inflate(inflater, container, false)
+        return binding.root
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val gap = resources.getDimensionPixelSize(SdpR.dimen._10sdp)
 
-        leaveViewModel.getIsLoading()
-            .observe(viewLifecycleOwner, EventObserver { isLoading ->
-                if (isLoading) {
-                    showDialog()
-                } else {
-                    hideDialog()
-                }
-            })
+        binding.lvRvQuotas.layoutManager = GridLayoutManager(requireContext(), QUOTA_COLUMNS)
+        binding.lvRvQuotas.addItemDecoration(LvGridGapDecoration(gap, QUOTA_COLUMNS))
+        binding.lvRvQuotas.adapter = quotaAdapter
 
-        val isManager = GlobalConfig.isCurrentManager()
-        binding?.tvMyTeam?.isVisible = isManager
-        binding?.tvMyTeamView?.isVisible = isManager
-        binding?.lyMyteamAttend?.isVisible = isManager
+        binding.lvRvHistory.layoutManager = LinearLayoutManager(requireContext())
+        binding.lvRvHistory.addItemDecoration(LvGridGapDecoration(gap, 1))
+        binding.lvRvHistory.adapter = historyAdapter
 
-        leaveViewModel.getLeaveStats(getCurrentObject())
-        eventSelection()
+        binding.lvSwipe.setColorSchemeResources(R.color.ws_primary)
+        binding.lvSwipe.setOnRefreshListener { load() }
 
-        leaveViewModel.leaveStatResponse.observe(
-            viewLifecycleOwner,
-            EventObserver { response ->
-
-                if (response?.meta?.status == true) {
-
-                    selfAttendanceStats(response.self_count!!)
-
-                    if(currentFilter == AttendanceFilter.WEEK)
-                        teamAttendanceStats(response.team_count!!)
-
-                    remainingLeaveDataPopulate(response.remaining_balance!!)
-
-                } else {
-                    requireContext().showErrorMsg(response?.meta?.message.toString())
-                }
-
-            })
-
-        binding?.tvView?.setOnClickListener {
-            Unit
+        binding.lvFab.setOnClickListener {
+            AppNavigator.navigateToRequest(bundleOf(AppConst.RequestType to RequestFilter.LEAVE.name))
         }
 
-        binding?.tvMyTeamView?.setOnClickListener {
-            Unit
+        observeViewModel()
 
-        }
-
-        binding?.ivBack?.setOnClickListener {
-            AppNavigator.moveBackToPreviousFragment()
-
-        }
-
-
-        leaveViewModel.getUpcomingLeaveDetail(UpcomingLeaveInput().apply {
-            val formatter = SimpleDateFormat(SERVER_DATE_FORMAT, Locale.getDefault())
-            val tomorrow = Calendar.getInstance().apply {
-                add(Calendar.DAY_OF_YEAR, 1)
+        childFragmentManager.setFragmentResultListener(SHEET_KEY, viewLifecycleOwner) { _, result ->
+            if (result.getString(WsDetailSheet.RESULT_ACTION) == ACTION_EDIT) {
+                viewModel.selectedLeave?.let { editRequest(it) }
             }
-            val lastDayOfYear = Calendar.getInstance().apply {
-                set(Calendar.MONTH, Calendar.DECEMBER)
-                set(Calendar.DAY_OF_MONTH, getActualMaximum(Calendar.DAY_OF_MONTH))
-            }
-            val formattedTomorrow = formatter.format(tomorrow.time)
-            val formattedLastDayOfYear = formatter.format(lastDayOfYear.time)
+        }
+    }
 
-            Log.d("Upcoming Leaves date", "dates:" + formattedLastDayOfYear + formattedTomorrow)
-            this.start_date = formattedTomorrow
-            this.end_date = formattedLastDayOfYear
+    override fun onResume() {
+        super.onResume()
+        load()
+    }
+
+    private fun observeViewModel() {
+        viewModel.getIsLoading().observe(viewLifecycleOwner, EventObserver { loading ->
+            if (loading) showDialog() else hideDialog()
         })
-        leaveViewModel.upcomingLeavesResponse.observe(
-            viewLifecycleOwner,
-            EventObserver { response ->
-                if (response?.meta?.status == true) {
-                    if (response.upcoming_leaves?.size?: 0 > 0){
-                        binding?.tvMyShift?.isVisible=true
-                        upcomingLeavePopulate(response.upcoming_leaves)
-                    }
-                    else{
-                        binding?.tvMyShift?.isVisible=false
-                        binding?.rvUpcomingLeaves?.isVisible=false
-                    }
-                } else {
-                    requireContext().showErrorMsg(response?.meta?.message.toString())
-                }
-            })
-    }
 
-    private fun eventSelection() {
-        binding?.tvWeek?.background =
-            ContextCompat.getDrawable(requireContext(), R.drawable.rounded_disabled)
-
-        binding?.tvMonth?.background =
-            ContextCompat.getDrawable(requireContext(), R.drawable.rounded_disabled)
-
-        binding?.tvWeek?.setTextColor(requireContext().getColor(R.color.btn_text_color))
-        binding?.tvMonth?.setTextColor(requireContext().getColor(R.color.btn_text_color))
-
-        binding?.tvWeek?.setOnClickListener {
-            currentFilter = AttendanceFilter.WEEK
-            leaveViewModel.getLeaveStats(getCurrentObject())
-            eventSelection()
+        viewModel.quotas.observeResult(viewLifecycleOwner, onError = ::onLoadError) { data, _ ->
+            quotasLoaded = true
+            val quotas = data.allocations
+            quotaAdapter.submitList(quotas)
+            binding.lvRvQuotas.visibility = if (quotas.isEmpty()) View.GONE else View.VISIBLE
+            if (quotas.isEmpty()) binding.lvQuotaEmpty.show() else binding.lvQuotaEmpty.hide()
+            callFinished()
         }
 
-        binding?.tvMonth?.setOnClickListener {
-            currentFilter = AttendanceFilter.MONTH
-            leaveViewModel.getLeaveStats(getCurrentObject())
-            eventSelection()
-        }
-
-        when (currentFilter) {
-            AttendanceFilter.WEEK -> {
-                binding?.tvWeek?.background =
-                    ContextCompat.getDrawable(requireContext(), R.drawable.rounded_enabled)
-                binding?.tvWeek?.setTextColor(requireContext().getColor(R.color.white))
-
-            }
-
-            AttendanceFilter.MONTH -> {
-
-                binding?.tvMonth?.background =
-                    ContextCompat.getDrawable(requireContext(), R.drawable.rounded_enabled)
-                binding?.tvMonth?.setTextColor(requireContext().getColor(R.color.white))
-            }
-
-
-            else -> {}
+        viewModel.history.observeResult(viewLifecycleOwner, onError = ::onLoadError) { data, _ ->
+            showHistory(data.leaves.orEmpty())
+            callFinished()
         }
     }
 
+    /** Pull-to-refresh and resume both land here; only the first balances load shows the overlay. */
+    private fun load() {
+        pendingCalls = 2
+        errorShown = false
+        viewModel.loadQuotas(showLoading = !quotasLoaded && !binding.lvSwipe.isRefreshing)
+        viewModel.loadHistory()
+    }
 
-    private fun remainingLeaveDataPopulate(leaves: ArrayList<LeaveType>) {
-        binding?.rvRemaining?.layoutManager = GridLayoutManager(requireContext(), 3)
-        val modulesAdapter = RemainingLeaveAdapter(
-            leaves
+    private fun callFinished() {
+        if (--pendingCalls <= 0) binding.lvSwipe.isRefreshing = false
+    }
+
+    private fun onLoadError(message: String) {
+        callFinished()
+        // Quotas and history usually fail together; one message is enough.
+        if (!errorShown) {
+            errorShown = true
+            requireContext().showErrorMsg(message, "Leave")
+        }
+    }
+
+    private fun showHistory(leaves: List<LeaveRecord>) {
+        val sorted = leaves.sortedByDescending { WsFormat.parse(it.from_date)?.time ?: 0L }
+        historyAdapter.submitList(sorted)
+        binding.lvRvHistory.visibility = if (sorted.isEmpty()) View.GONE else View.VISIBLE
+        if (sorted.isEmpty()) binding.lvHistoryEmpty.show() else binding.lvHistoryEmpty.hide()
+
+        binding.lvChipRow.visibility = if (sorted.isEmpty()) View.GONE else View.VISIBLE
+        val pending = sorted.count { it.rawStatus.equals("Open", true) || it.rawStatus.equals("Pending", true) }
+        val approved = sorted.count { it.rawStatus.equals("Approved", true) }
+        WsStatus.badge(binding.lvChipPending, getString(R.string.lv_count_pending, pending), WsStatus.colorFor(requireContext(), "Pending"))
+        WsStatus.badge(binding.lvChipApproved, getString(R.string.lv_count_approved, approved), WsStatus.colorFor(requireContext(), "Approved"))
+    }
+
+    private fun showDetails(leave: LeaveRecord) {
+        viewModel.selectedLeave = leave
+        val fields = listOf(
+            WsDetailSheet.Field(getString(R.string.lv_field_from), WsFormat.date(leave.from_date), half = true),
+            WsDetailSheet.Field(getString(R.string.lv_field_to), WsFormat.date(leave.to_date), half = true),
+            WsDetailSheet.Field(getString(R.string.lv_field_days), WsFormat.days(leave.days), half = true),
+            WsDetailSheet.Field(
+                getString(R.string.lv_field_paid),
+                leave.paid?.let { getString(if (it) R.string.lv_yes else R.string.lv_no) },
+                half = true,
+                accent = leave.paid == false
+            ),
+            WsDetailSheet.Field(getString(R.string.lv_field_reason), leave.reason),
+            WsDetailSheet.Field(getString(R.string.lv_field_approver), leave.leave_approver),
+            WsDetailSheet.Field(getString(R.string.lv_field_submitted), WsFormat.date(leave.post_date)),
+            WsDetailSheet.Field(getString(R.string.lv_field_reference), leave.name)
         )
-        binding?.rvRemaining?.adapter = modulesAdapter
-        binding?.rvRemaining?.isNestedScrollingEnabled = false
-
-
+        // Only a request HRIS still calls "Open" can be changed.
+        val actions = if (leave.rawStatus.equals("Open", true)) {
+            listOf(WsDetailSheet.Action(ACTION_EDIT, getString(R.string.lv_edit_request)))
+        } else {
+            emptyList()
+        }
+        WsDetailSheet.show(
+            childFragmentManager,
+            title = leave.leave_type?.takeIf { it.isNotBlank() } ?: getString(R.string.lv_leave_fallback),
+            subtitle = getString(R.string.lv_sheet_subtitle),
+            status = WsStatus.displayLeave(leave.rawStatus),
+            fields = fields,
+            actions = actions,
+            requestKey = SHEET_KEY
+        )
     }
 
-
-    private fun upcomingLeavePopulate(upcomingLeaves: ArrayList<UpcomingLeaves>?) {
-        Log.d("upcomingLeaves", ""+upcomingLeaves)
-        if (upcomingLeaves != null) {
-            binding?.rvUpcomingLeaves?.layoutManager =
-                LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
-            val modulesAdapter = UpcomingLeaveAdapter(
-                upcomingLeaves
+    private fun editRequest(leave: LeaveRecord) {
+        AppNavigator.navigateToRequest(
+            bundleOf(
+                AppConst.RequestType to RequestFilter.LEAVE.name,
+                AppConst.LeaveRequestParam to Gson().toJson(leave)
             )
-            binding?.rvUpcomingLeaves?.adapter = modulesAdapter
-            binding?.rvUpcomingLeaves?.isNestedScrollingEnabled = false
-        }
+        )
     }
 
-    private fun selfAttendanceStats(selfStats: SelfLeaveStats) {
-
-        binding?.tvTotalLeaveTxt?.text = selfStats.total_leave.toString() //total leaves
-
-        binding?.tvPendingTxt?.text = selfStats.self_pending.toString()
-        binding?.tvApprovedTxt?.text = selfStats.self_approved.toString()
-        binding?.tvRejectedTxt?.text = selfStats.self_reject.toString()
-        binding?.tvUsedLeavesTxt?.text = selfStats.remaining_leave.toString()  // reamining leave
-
-        /*        binding?.tvCasualTxt?.text = selfAttendanceStats.week_count.toString()
-                binding?.tvSickTxt?.text = selfAttendanceStats.week_count.toString()
-                binding?.tvAnnualTxt?.text = selfAttendanceStats.week_count.toString()*/
-
+    override fun onDestroyView() {
+        binding.lvSwipe.isRefreshing = false
+        _binding = null
+        super.onDestroyView()
     }
 
-    private fun teamAttendanceStats(teamLeaveStats: TeamLeaveStats) {
-
-        binding?.tvTotalMemberTxt?.text = teamLeaveStats.total_team_members.toString()
-        binding?.tvPresentTxt?.text = teamLeaveStats.all_leaves.toString()
-        binding?.tvWorkHomeTxt?.text = teamLeaveStats.team_approved.toString()
-        binding?.tvTeamsAbsentTxt?.text = teamLeaveStats.team_reject.toString()
-        binding?.tvTeamsOnleaveTxt?.text = teamLeaveStats.team_pending.toString()
-
+    private companion object {
+        const val QUOTA_COLUMNS = 2
+        const val SHEET_KEY = "leaveDetailSheet"
+        const val ACTION_EDIT = "edit"
     }
-
-    private fun getCurrentObject(): AttendanceInput {
-
-        var localStart = ""
-        var localEnd = ""
-        when (currentFilter) {
-            AttendanceFilter.WEEK -> {
-                localStart = Utils.getServerFormat(date = Utils.getLastWeek())
-                localEnd = Utils.getServerFormat()
-
-            }
-
-            AttendanceFilter.MONTH -> {
-                localStart = Utils.getServerFormat(date = Utils.getFirstDayOfMonth())
-                localEnd =
-                    Utils.getServerFormat(date = Utils.getLastDayOfMonth())
-            }
-
-            else -> {}
-
-        }
-        return AttendanceInput().apply {
-            this.startDate = localStart
-            this.endDate = localEnd
-            this.filter = currentFilter
-
-        }
-
-    }
-
 }

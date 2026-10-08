@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/Widget.Ws.Card"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="@dimen/_14sdp">
+
+        <ImageView
+            android:id="@+id/lv_leave_icon"
+            android:layout_width="@dimen/_46sdp"
+            android:layout_height="@dimen/_46sdp"
+            android:background="@drawable/ws_icon_badge_bg"
+            android:importantForAccessibility="no"
+            android:padding="@dimen/_11sdp"
+            android:src="@drawable/ws_ic_event_busy" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_12sdp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/lv_leave_type"
+                style="@style/Ws.Text.SemiBold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/_16ssp" />
+
+            <TextView
+                android:id="@+id/lv_leave_dates"
+                style="@style/Ws.Text.Medium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_6sdp"
+                android:textColor="@color/ws_grey"
+                android:textSize="@dimen/_13ssp" />
+
+            <TextView
+                android:id="@+id/lv_leave_status"
+                style="@style/Ws.Text.Badge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_6sdp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/lv_leave_days"
+            style="@style/Ws.Text.SemiBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:maxLines="1"
+            android:textColor="@color/ws_red"
+            android:textSize="@dimen/_22ssp" />
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

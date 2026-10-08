@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- ===== Leave screen ===== -->
+    <string name="lv_title">Leave</string>
+    <string name="lv_quotas_title">Assigned leave quotas</string>
+    <string name="lv_history_title">Recent leave requests</string>
+    <string name="lv_fab_cd">Submit a new leave request</string>
+    <string name="lv_quota_of">of %1$s</string>
+    <string name="lv_quota_allocated">Allocated</string>
+    <string name="lv_quota_caption">remaining days</string>
+    <string name="lv_count_pending">%1$d Pending</string>
+    <string name="lv_count_approved">%1$d Approved</string>
+    <string name="lv_empty_quota_title">No quotas</string>
+    <string name="lv_empty_quota_message">No leave allocations are available right now.</string>
+    <string name="lv_empty_history_title">No leave requests</string>
+    <string name="lv_empty_history_message">No recent leave requests are available. Tap + to submit one.</string>
+    <string name="lv_leave_fallback">Leave request</string>
+    <string name="lv_quota_fallback">Leave</string>
+
+    <!-- Leave details sheet -->
+    <string name="lv_sheet_subtitle">Leave details</string>
+    <string name="lv_field_from">From date</string>
+    <string name="lv_field_to">To date</string>
+    <string name="lv_field_days">Days</string>
+    <string name="lv_field_paid">Paid leave</string>
+    <string name="lv_field_reason">Reason</string>
+    <string name="lv_field_approver">Approver</string>
+    <string name="lv_field_submitted">Submitted on</string>
+    <string name="lv_field_reference">Reference</string>
+    <string name="lv_yes">Yes</string>
+    <string name="lv_no">No</string>
+    <string name="lv_edit_request">Edit request</string>
+
+    <!-- ===== Request forms ===== -->
+    <string name="req_title_leave">Leave Request</string>
+    <string name="req_title_attendance">Attendance Request</string>
+    <string name="req_header_create_leave">Create Leave Request</string>
+    <string name="req_header_update_leave">Update Leave Request</string>
+    <string name="req_header_create_attendance">Create Attendance Request</string>
+    <string name="req_header_update_attendance">Update Attendance Request</string>
+
+    <string name="req_label_leave_type">Leave Type *</string>
+    <string name="req_label_start_date">Start Date *</string>
+    <string name="req_label_end_date">End Date *</string>
+    <string name="req_label_leave_count">Leave Count</string>
+    <string name="req_label_remaining">Remaining Leaves</string>
+    <string name="req_label_leave_reason">Reason for Leave *</string>
+    <string name="req_label_attendance_type">Attendance Type *</string>
+    <string name="req_label_location">Location *</string>
+    <string name="req_label_date">Date *</string>
+    <string name="req_label_time">Time *</string>
+    <string name="req_label_reason">Reason *</string>
+    <string name="req_label_half_day_date">Half Day Date *</string>
+    <string name="req_half_day">Half day</string>
+    <string name="req_placeholder_date">--/--/----</string>
+    <string name="req_placeholder_time">--:--</string>
+    <string name="req_zero">0</string>
+
+    <string name="req_apply">Apply</string>
+    <string name="req_update">Update</string>
+    <string name="req_delete">Delete</string>
+
+    <string name="req_check_in">Check-In</string>
+    <string name="req_check_out">Check-Out</string>
+
+    <string name="req_pick_leave_type">Select Leave Type</string>
+    <string name="req_pick_start_date">Select start date</string>
+    <string name="req_pick_end_date">Select end date</string>
+    <string name="req_pick_half_date">Select half day date</string>
+    <string name="req_pick_date">Select date</string>
+    <string name="req_pick_time">Select time</string>
+
+    <string name="req_err_leave_type">Select Leave Type</string>
+    <string name="req_err_start_date">Select Start Date</string>
+    <string name="req_err_end_date">Select End Date</string>
+    <string name="req_err_leave_reason">Enter leave reason</string>
+    <string name="req_err_half_date">Select Half Day Date</string>
+    <string name="req_err_attendance_type">Select Attendance Type</string>
+    <string name="req_err_location">Select Location Type</string>
+    <string name="req_err_date">Select Date</string>
+    <string name="req_err_time">Select Time</string>
+    <string name="req_err_reason">Enter a reason</string>
+    <string name="req_toast_leave_fields">Complete the highlighted leave fields and try again.</string>
+    <string name="req_toast_attendance_fields">Complete the highlighted attendance fields and try again.</string>
+    <string name="req_toast_quota_exceeded">Requested leave exceeds your remaining quota for this leave type.</string>
+
+    <string name="req_toast_leave_created">Leave application has been submitted.</string>
+    <string name="req_toast_leave_updated">Leave application has been updated.</string>
+    <string name="req_toast_leave_deleted">Leave application has been deleted.</string>
+    <string name="req_toast_attendance_created">Attendance request has been submitted.</string>
+    <string name="req_toast_attendance_updated">Attendance request has been updated.</string>
+    <string name="req_toast_attendance_deleted">Attendance request has been deleted.</string>
+
+    <string name="req_no_leave_types">No leave types are assigned to you yet. Please contact HR.</string>
+    <string name="req_no_options">Attendance options are not available right now. Please try again.</string>
+
+    <string name="req_delete_title">Delete this request?</string>
+    <string name="req_delete_message">This cannot be undone.</string>
+    <string name="req_cancel">Cancel</string>
+
+    <!-- ===== Attendance screen ===== -->
+    <string name="att_title">Attendance</string>
+    <string name="att_shift_label">MY SHIFT</string>
+    <string name="att_shift_not_assigned">Not assigned</string>
+    <string name="att_shift_times">%1$s – %2$s</string>
+    <string name="att_shift_placeholder">--:--</string>
+    <string name="att_shift_separator">" · "</string>
+    <string name="att_period_week">Last 7 Days</string>
+    <string name="att_period_month">This Month</string>
+    <string name="att_period_custom">Custom</string>
+    <string name="att_filter_all">All</string>
+    <string name="att_range_picker_title">Select a date range</string>
+    <string name="att_date_range">%1$s – %2$s</string>
+    <string name="att_hours_value">%1$.2f h</string>
+    <string name="att_none">--</string>
+    <string name="att_time_range">%1$s – %2$s</string>
+    <string name="att_time_in_only">%1$s –</string>
+    <string name="att_time_out_only">– %1$s</string>
+    <string name="att_empty_title">No attendance records</string>
+    <string name="att_empty_message">No records are available for this period.</string>
+
+    <!-- Attendance details sheet -->
+    <string name="att_sheet_subtitle">Attendance details</string>
+    <string name="att_field_location">Location</string>
+    <string name="att_field_working_hours">Working hours</string>
+    <string name="att_field_shift">Shift</string>
+    <string name="att_field_shift_timings">Shift timings</string>
+    <string name="att_field_actual_in">Actual in</string>
+    <string name="att_field_expected_in">Expected in</string>
+    <string name="att_field_actual_out">Actual out</string>
+    <string name="att_field_expected_out">Expected out</string>
+
+</resources>

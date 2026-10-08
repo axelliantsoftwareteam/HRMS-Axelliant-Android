@@ -1,165 +1,40 @@
 package com.axelliant.hris.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import com.axelliant.hris.config.AppConst
+import com.axelliant.hris.config.GlobalConfig
 import com.axelliant.hris.event.Event
-import com.axelliant.hris.model.attendance.AttendanceInput
-import com.axelliant.hris.model.leave.LeaveApproval
-import com.axelliant.hris.model.leave.LeaveResponse
-import com.axelliant.hris.model.leave.MyLeaveDetailResponse
-import com.axelliant.hris.model.leave.MyUpcomingLeaveDetailResponse
-import com.axelliant.hris.model.leave.PostResponse
-import com.axelliant.hris.model.leave.TeamLeaveDetailResponse
-import com.axelliant.hris.model.leave.TeamLeaveQuotaResponse
-import com.axelliant.hris.model.leave.UpcomingLeaveInput
-import com.axelliant.hris.repos.LeaveRepo
+import com.axelliant.hris.model.attendance.AttRequest
+import com.axelliant.hris.model.leaveatt.LeaveHistoryPayload
+import com.axelliant.hris.model.leaveatt.LeaveRecord
+import com.axelliant.hris.model.leaveatt.LeaveQuotaPayload
+import com.axelliant.hris.network.ApiInterface
+import com.axelliant.hris.network.ApiResult
+import java.util.Calendar
 
-class LeaveViewModel(private val leaveRepo: LeaveRepo) : BaseViewModel() {
+/** Leave screen: assigned quotas (`get_leaves_detail`) and this year's leave requests. */
+class LeaveViewModel(private val api: ApiInterface) : BaseViewModel() {
 
-     val leaveStatResponse: MutableLiveData<Event<LeaveResponse?>> by lazy { MutableLiveData<Event<LeaveResponse?>>() }
-     val upcomingLeavesResponse: MutableLiveData<Event<MyUpcomingLeaveDetailResponse?>> by lazy { MutableLiveData<Event<MyUpcomingLeaveDetailResponse?>>() }
-     val myLeaveDetailResponse: MutableLiveData<Event<MyLeaveDetailResponse?>> by lazy { MutableLiveData<Event<MyLeaveDetailResponse?>>() }
-     val teamLeaveDetailResponse: MutableLiveData<Event<TeamLeaveDetailResponse?>> by lazy { MutableLiveData<Event<TeamLeaveDetailResponse?>>() }
-     val teamLeaveQuotaResponse: MutableLiveData<Event<TeamLeaveQuotaResponse?>> by lazy { MutableLiveData<Event<TeamLeaveQuotaResponse?>>() }
-     val leaveApprovalResponse: MutableLiveData<Event<PostResponse?>> by lazy { MutableLiveData<Event<PostResponse?>>() }
+    val quotas: MutableLiveData<Event<ApiResult<LeaveQuotaPayload>>> by lazy { MutableLiveData() }
+    val history: MutableLiveData<Event<ApiResult<LeaveHistoryPayload>>> by lazy { MutableLiveData() }
 
-    fun getLeaveStats(attendanceInput: AttendanceInput) {
-        isLoading.value = Event(true)
-        leaveRepo.getLeaveStats(attendanceInput)
-            .observeForever { data ->
-                // Handle the login response
-                data?.let { baseModel ->
-                    isLoading.value = Event(false)
-                    // Handle success
-                    leaveStatResponse.value = Event(baseModel.message?.data)
+    /** The request whose details sheet is open; kept here so "Edit request" survives a rotation. */
+    var selectedLeave: LeaveRecord? = null
 
-                } ?: run {
-                    isLoading.value = Event(false)
-                    // Handle error
-                    Log.d("Success VieModel->", "false")
-
-
-                }
-            }
-
-
+    /** [showLoading] is true only for the very first balances load; later loads refresh silently. */
+    fun loadQuotas(showLoading: Boolean) {
+        request(api.getLeaveTypesWithCount(AppConst.authHeader()), LeaveQuotaPayload::class.java, quotas, showLoading)
     }
 
-
-    fun getMyLeaveDetail(attendanceInput: AttendanceInput) {
-        isLoading.value = Event(true)
-        leaveRepo.getMyLeaveDetail(attendanceInput)
-            .observeForever { data ->
-                // Handle the login response
-                data?.let { baseModel ->
-                    isLoading.value = Event(false)
-                    // Handle success
-                    myLeaveDetailResponse.value = Event(baseModel.message?.data)
-
-                } ?: run {
-                    isLoading.value = Event(false)
-                    // Handle error
-                    Log.d("Success VieModel->", "false")
-
-
-                }
-            }
-
-
-    }
-
-
-    fun getTeamLeaveDetail(attendanceInput: AttendanceInput) {
-        isLoading.value = Event(true)
-        leaveRepo.getTeamLeaveDetail(attendanceInput)
-            .observeForever { data ->
-                // Handle the login response
-                data?.let { baseModel ->
-                    isLoading.value = Event(false)
-                    // Handle success
-                    teamLeaveDetailResponse.value = Event(baseModel.message?.data)
-
-                } ?: run {
-                    isLoading.value = Event(false)
-                    // Handle error
-                    Log.d("Success VieModel->", "false")
-
-
-                }
-            }
-
-
-    }
-    fun getTeamLeaveQuota() {
-        isLoading.value = Event(true)
-        leaveRepo.getTeamLeaveQuota()
-            .observeForever { data ->
-                data?.let { baseModel ->
-                    isLoading.value = Event(false)
-                    teamLeaveQuotaResponse.value = Event(baseModel.message?.data)
-                } ?: run {
-                    isLoading.value = Event(false)
-                    Log.d("Success VieModel->", "false")
-                }
-            }
-    }
-
-    fun getUpcomingLeaveDetail(upcomingLeaveInput: UpcomingLeaveInput) {
-        isLoading.value = Event(true)
-        leaveRepo.getUpcomingLeaveDetail(upcomingLeaveInput)
-            .observeForever { data ->
-                // Handle the login response
-                data?.let { baseModel ->
-                    isLoading.value = Event(false)
-                    // Handle success
-                    upcomingLeavesResponse.value = Event(baseModel.message?.data)
-
-                } ?: run {
-                    isLoading.value = Event(false)
-                    // Handle error
-                    Log.d("Success VieModel->", "false")
-
-
-                }
-            }
-
-
-    }
-
-
-    fun leaveApprovalStatus(attendanceInput: LeaveApproval) {
-        isLoading.value = Event(true)
-        leaveRepo.leaveApproval(attendanceInput)
-            .observeForever { data ->
-                // Handle the login response
-                data?.let { baseModel ->
-                    isLoading.value = Event(false)
-                    // Handle success
-                    leaveApprovalResponse.value = Event(baseModel.message?.data)
-
-                } ?: run {
-                    isLoading.value = Event(false)
-                    // Handle error
-                    Log.d("Success VieModel->", "false")
-
-
-                }
-            }
-
-
-    }
-
-    fun bulkLeaveApprovalStatus(leaveIds: List<String>, status: String) {
-        isLoading.value = Event(true)
-        leaveRepo.bulkLeaveApproval(leaveIds, status)
-            .observeForever { data ->
-                data?.let { baseModel ->
-                    isLoading.value = Event(false)
-                    leaveApprovalResponse.value = Event(baseModel.message?.data)
-                } ?: run {
-                    isLoading.value = Event(false)
-                    Log.d("Success VieModel->", "false")
-                }
-            }
+    /** All of the signed-in employee's leave requests for the current calendar year. */
+    fun loadHistory() {
+        val year = Calendar.getInstance().get(Calendar.YEAR)
+        val body = AttRequest().apply {
+            start_date = "$year-01-01"
+            end_date = "$year-12-31"
+            filters = ""
+            employee_list = listOfNotNull(GlobalConfig.currentEmployeeId().takeIf { it.isNotBlank() })
+        }
+        request(api.callMyLeaveDetail(AppConst.authHeader(), body), LeaveHistoryPayload::class.java, history, false)
     }
 }

@@ -3,6 +3,7 @@ package com.axelliant.hris.adapter
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.axelliant.hris.R
@@ -10,6 +11,11 @@ import com.axelliant.hris.callback.AdapterItemClick
 import com.axelliant.hris.databinding.SubFilterRowBinding
 import com.axelliant.hris.model.dashboard.FilterModel
 
+/**
+ * Horizontal status chips (iOS look): the selected chip is filled with the primary colour and white
+ * text, the others are white with a grey stroke; a count bubble follows every chip except "All"
+ * (the chip whose id is empty).
+ */
 class SubFilterAdapter(
     private var filterId: String? = null,
     private val list: List<FilterModel>,
@@ -18,6 +24,10 @@ class SubFilterAdapter(
 ) :
     RecyclerView.Adapter<SubFilterAdapter.AccountsVH>() {
 
+    private val primary = ContextCompat.getColor(context, R.color.ws_primary)
+    private val white = ContextCompat.getColor(context, R.color.white)
+    private val black = ContextCompat.getColor(context, R.color.black)
+    private val stroke = ContextCompat.getColor(context, R.color.ws_card_stroke)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccountsVH {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -27,8 +37,19 @@ class SubFilterAdapter(
 
     override fun onBindViewHolder(holder: AccountsVH, position: Int) {
         val item = list[position]
-        holder.bind(item, position, context)
-        holder.binding.lyWorkHome.setOnClickListener {
+        val selected = filterId == item.id
+        val chip = holder.binding.lyWorkHome
+
+        holder.binding.tvWorkFrom.text = item.title
+        holder.binding.tvWorkFrom.setTextColor(if (selected) white else black)
+        chip.setCardBackgroundColor(if (selected) primary else white)
+        chip.strokeColor = if (selected) primary else stroke
+
+        holder.binding.tvWorkTxt.isVisible = item.id != ""
+        holder.binding.tvWorkTxt.text = item.count
+
+        chip.setOnClickListener {
+            @Suppress("DEPRECATION")
             val adapterPosition = holder.adapterPosition
             if (adapterPosition != RecyclerView.NO_POSITION) {
                 val currentItem = list[adapterPosition]
@@ -36,27 +57,7 @@ class SubFilterAdapter(
                 notifyDataSetChanged()
                 itemClick.onItemClick(currentItem, adapterPosition)
             }
-
         }
-
-        holder.binding.tvWorkTxt.isVisible = item.id != ""
-
-        if (filterId == item.id)
-        {
-            holder.binding.tvWorkFrom.setTextColor(context.getColor(R.color.white))
-            holder.binding.lyWorkHome.background =
-                context.resources.getDrawable(R.drawable.enable_rounded_bgg)
-        } else {
-            holder.binding.tvWorkFrom.setTextColor(context.getColor(R.color.black))
-
-            holder.binding.lyWorkHome.background =
-                context.resources.getDrawable(R.drawable.rounded_bgg)
-        }
-
-        holder.binding.tvWorkFrom.text = item.title
-        holder.binding.tvWorkTxt.text = item.count
-
-
     }
 
     override fun getItemCount(): Int {
@@ -64,9 +65,6 @@ class SubFilterAdapter(
     }
 
     class AccountsVH(val binding: SubFilterRowBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-
-        fun bind(item: FilterModel, position: Int, context: Context) {}
-    }
+        RecyclerView.ViewHolder(binding.root)
 
 }

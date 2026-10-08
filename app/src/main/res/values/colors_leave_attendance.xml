@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Request form card: grey at 5 % with a primary header band at 20 % (same as the iOS form). -->
+    <color name="req_form_bg">#0D888A8C</color>
+    <color name="req_header_bg">#3309589B</color>
+    <!-- Progress track of the leave quota tiles. -->
+    <color name="lv_progress_track">#33888A8C</color>
+</resources>

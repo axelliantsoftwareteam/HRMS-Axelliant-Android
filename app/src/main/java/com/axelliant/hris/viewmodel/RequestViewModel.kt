@@ -1,249 +1,55 @@
 package com.axelliant.hris.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import com.axelliant.hris.config.AppConst
 import com.axelliant.hris.event.Event
-import com.axelliant.hris.model.leave.GetAttendanceResponse
-import com.axelliant.hris.model.leave.GetLeavesResponse
-import com.axelliant.hris.model.leave.PostResponse
-import com.axelliant.hris.model.leave.leaveCount.GetLeaveCount
-import com.axelliant.hris.model.leave.leaveCount.LeaveCountByDate
-import com.axelliant.hris.model.leave.leaveCount.LeaveCountByDaysRequest
-import com.axelliant.hris.model.post.AttendanceRequest
-import com.axelliant.hris.model.post.LeaveRequest
-import com.axelliant.hris.repos.RequestRepo
+import com.axelliant.hris.model.leaveatt.ActionPayload
+import com.axelliant.hris.model.leaveatt.CheckinOptionsPayload
+import com.axelliant.hris.model.leaveatt.LeaveDaysPayload
+import com.axelliant.hris.model.leaveatt.LeaveQuotaPayload
+import com.axelliant.hris.network.ApiInterface
+import com.axelliant.hris.network.ApiResult
 
-class RequestViewModel(private val leaveRepo: RequestRepo) : BaseViewModel() {
+/** Leave and attendance request forms: lookups plus create / update / delete. */
+class RequestViewModel(private val api: ApiInterface) : BaseViewModel() {
 
-    val deleteLeaveResponse: MutableLiveData<Event<PostResponse?>> by lazy { MutableLiveData<Event<PostResponse?>>() }
-    val updateLeaveResponse: MutableLiveData<Event<PostResponse?>> by lazy { MutableLiveData<Event<PostResponse?>>() }
-    val leaveCountByDate: MutableLiveData<Event<LeaveCountByDate?>> by lazy { MutableLiveData<Event<LeaveCountByDate?>>() }
-    val postLeaveResponse: MutableLiveData<Event<PostResponse?>> by lazy { MutableLiveData<Event<PostResponse?>>() }
-    val attendanceRequestResponse: MutableLiveData<Event<PostResponse?>> by lazy { MutableLiveData<Event<PostResponse?>>() }
+    val quotas: MutableLiveData<Event<ApiResult<LeaveQuotaPayload>>> by lazy { MutableLiveData() }
+    val options: MutableLiveData<Event<ApiResult<CheckinOptionsPayload>>> by lazy { MutableLiveData() }
+    val leaveDays: MutableLiveData<Event<ApiResult<LeaveDaysPayload>>> by lazy { MutableLiveData() }
 
-    val leaveTypes: MutableLiveData<Event<GetLeavesResponse?>> by lazy { MutableLiveData<Event<GetLeavesResponse?>>() }
-    val getLeaveTypesCount: MutableLiveData<Event<GetLeaveCount?>> by lazy { MutableLiveData<Event<GetLeaveCount?>>() }
-    val attendanceRequestInfo: MutableLiveData<Event<GetAttendanceResponse?>> by lazy { MutableLiveData<Event<GetAttendanceResponse?>>() }
+    /** Result of the last create / update / delete call. */
+    val action: MutableLiveData<Event<ApiResult<ActionPayload>>> by lazy { MutableLiveData() }
 
-    fun getLeaves() {
-        isLoading.value = Event(true)
-        leaveRepo.getLeaves()
-            .observeForever { data ->
-                // Handle the login response
-                data?.let { baseModel ->
-                    isLoading.value = Event(false)
-                    // Handle success
-                    leaveTypes.value = Event(baseModel.message?.data)
+    private fun auth() = AppConst.authHeader()
 
-                } ?: run {
-                    isLoading.value = Event(false)
-                    // Handle error
-                    Log.d("Success VieModel->", "false")
+    fun loadLeaveQuotas() =
+        request(api.getLeaveTypesWithCount(auth()), LeaveQuotaPayload::class.java, quotas)
 
+    fun loadOptions() =
+        request(api.getAttendanceRequestInformation(auth()), CheckinOptionsPayload::class.java, options)
 
-                }
-            }
-
-
+    /** Server-side day count; silent because it re-runs on every type or date change. */
+    fun loadLeaveDays(leaveType: String, from: String, to: String, halfDay: Boolean, halfDayDate: String?) {
+        val body = mutableMapOf<String, Any?>("leave_type" to leaveType, "from_date" to from, "to_date" to to)
+        if (halfDay) {
+            body["half_day"] = true
+            if (!halfDayDate.isNullOrBlank()) body["half_day_date"] = halfDayDate
+        }
+        request(api.fetchLeaveDays(auth(), body), LeaveDaysPayload::class.java, leaveDays, false)
     }
 
+    fun createLeave(body: Map<String, Any?>) = send(api.submitLeaveApplication(auth(), body))
 
-    fun getLeavesCount() {
-        isLoading.value = Event(true)
-        leaveRepo.getLeavesTypeWithCount()
-            .observeForever { data ->
-                // Handle the login response
-                data?.let { baseModel ->
-                    isLoading.value = Event(false)
-                    // Handle success
-                    getLeaveTypesCount.value = Event(baseModel.message?.data)
+    fun updateLeave(body: Map<String, Any?>) = send(api.changeLeaveApplication(auth(), body))
 
-                } ?: run {
-                    isLoading.value = Event(false)
-                    // Handle error
-                    Log.d("Success VieModel->", "false")
+    fun deleteLeave(leaveId: String) = send(api.cancelLeaveApplication(auth(), mapOf("leave_id" to leaveId)))
 
+    fun createAttendance(body: Map<String, Any?>) = send(api.submitCheckinRequest(auth(), body))
 
-                }
-            }
+    fun updateAttendance(body: Map<String, Any?>) = send(api.changeCheckinRequest(auth(), body))
 
+    fun deleteAttendance(checkinId: String) = send(api.cancelCheckinRequest(auth(), mapOf("checkin_id" to checkinId)))
 
-    }
-
-
-    fun getAttendanceRequestInfo() {
-        isLoading.value = Event(true)
-        leaveRepo.getAttendanceInfo()
-            .observeForever { data ->
-                // Handle the login response
-                data?.let { baseModel ->
-                    isLoading.value = Event(false)
-                    // Handle success
-                    attendanceRequestInfo.value = Event(baseModel.message?.data)
-
-                } ?: run {
-                    isLoading.value = Event(false)
-                    // Handle error
-                    Log.d("Success VieModel->", "false")
-
-
-                }
-            }
-
-
-    }
-
-    fun deleteLeaveQuest(leaveRequest: LeaveRequest) {
-        isLoading.value = Event(true)
-        leaveRepo.deleteLeaveRequest(leaveRequest)
-            .observeForever { data ->
-                // Handle the login response
-                data?.let { baseModel ->
-                    isLoading.value = Event(false)
-                    // Handle success
-                    updateLeaveResponse.value = Event(baseModel.message?.data)
-
-                } ?: run {
-                    isLoading.value = Event(false)
-                    // Handle error
-                    Log.d("Success VieModel->", "false")
-
-
-                }
-            }
-
-
-    }
-
-    fun getLeaveCountOnDate(leaveCountByDaysRequest: LeaveCountByDaysRequest) {
-        isLoading.value = Event(true)
-        leaveRepo.getLeaveCountRequest(leaveCountByDaysRequest)
-            .observeForever { data ->
-                // Handle the login response
-                data?.let { baseModel ->
-                    isLoading.value = Event(false)
-                    // Handle success
-                    leaveCountByDate.value = Event(baseModel.message?.data)
-
-                } ?: run {
-                    isLoading.value = Event(false)
-                    // Handle error
-                    Log.d("Success VieModel->", "false")
-
-
-                }
-            }
-
-
-    }
-
-    fun updateLeaveQuest(leaveRequest: LeaveRequest) {
-        isLoading.value = Event(true)
-        leaveRepo.updateLeaveRequest(leaveRequest)
-            .observeForever { data ->
-                // Handle the login response
-                data?.let { baseModel ->
-                    isLoading.value = Event(false)
-                    // Handle success
-                    updateLeaveResponse.value = Event(baseModel.message?.data)
-
-                } ?: run {
-                    isLoading.value = Event(false)
-                    // Handle error
-                    Log.d("Success VieModel->", "false")
-
-
-                }
-            }
-
-
-    }
-    fun postLeaveQuest(leaveRequest: LeaveRequest) {
-        isLoading.value = Event(true)
-        leaveRepo.postLeaveRequest(leaveRequest)
-            .observeForever { data ->
-                // Handle the login response
-                data?.let { baseModel ->
-                    isLoading.value = Event(false)
-                    // Handle success
-                    postLeaveResponse.value = Event(baseModel.message?.data)
-
-                } ?: run {
-                    isLoading.value = Event(false)
-                    // Handle error
-                    Log.d("Success VieModel->", "false")
-
-
-                }
-            }
-
-
-    }
-    fun postAttendanceQuest(attendanceRequest: AttendanceRequest) {
-        isLoading.value = Event(true)
-        leaveRepo.postAttendanceRequest(attendanceRequest)
-            .observeForever { data ->
-                // Handle the login response
-                data?.let { baseModel ->
-                    isLoading.value = Event(false)
-                    // Handle success
-                    attendanceRequestResponse.value = Event(baseModel.message?.data)
-
-                } ?: run {
-                    isLoading.value = Event(false)
-                    // Handle error
-                    Log.d("Success VieModel->", "false")
-
-
-                }
-            }
-
-
-    }
-
-
-    fun updateAttendanceQuest(leaveRequest: AttendanceRequest) {
-        isLoading.value = Event(true)
-        leaveRepo.updateAttendanceRequest(leaveRequest)
-            .observeForever { data ->
-                // Handle the login response
-                data?.let { baseModel ->
-                    isLoading.value = Event(false)
-                    // Handle success
-                    updateLeaveResponse.value = Event(baseModel.message?.data)
-
-                } ?: run {
-                    isLoading.value = Event(false)
-                    // Handle error
-                    Log.d("Success VieModel->", "false")
-
-
-                }
-            }
-
-
-    }
-
-
-    fun deleteAttendanceQuest(leaveRequest: LeaveRequest) {
-        isLoading.value = Event(true)
-        leaveRepo.deleteAttendanceRequest(leaveRequest)
-            .observeForever { data ->
-                // Handle the login response
-                data?.let { baseModel ->
-                    isLoading.value = Event(false)
-                    // Handle success
-                    updateLeaveResponse.value = Event(baseModel.message?.data)
-
-                } ?: run {
-                    isLoading.value = Event(false)
-                    // Handle error
-                    Log.d("Success VieModel->", "false")
-
-
-                }
-            }
-
-
-    }
+    private fun send(call: retrofit2.Call<okhttp3.ResponseBody>) =
+        request(call, ActionPayload::class.java, action)
 }

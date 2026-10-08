@@ -418,4 +418,57 @@ interface ApiInterface {
         @Body body: Map<String, @JvmSuppressWildcards Any?>
     ): Call<ResponseBody>
 
+
+    // ---- leave / attendance / request forms ----
+    // Write calls take plain maps so the exact HRIS field set stays visible at the call site.
+
+    @Headers("Content-Type: application/json")
+    @POST("hrms.api.mobile_v1.create_leave_application")
+    fun submitLeaveApplication(
+        @Header("Authorization") auth: String?,
+        @Body body: Map<String, @JvmSuppressWildcards Any?>
+    ): Call<ResponseBody>
+
+    @Headers("Content-Type: application/json")
+    @POST("hrms.api.mobile_v1.update_leave_application")
+    fun changeLeaveApplication(
+        @Header("Authorization") auth: String?,
+        @Body body: Map<String, @JvmSuppressWildcards Any?>
+    ): Call<ResponseBody>
+
+    @Headers("Content-Type: application/json")
+    @POST("hrms.api.mobile_v1.removed_leave_application")
+    fun cancelLeaveApplication(
+        @Header("Authorization") auth: String?,
+        @Body body: Map<String, @JvmSuppressWildcards Any?>
+    ): Call<ResponseBody>
+
+    @Headers("Content-Type: application/json")
+    @POST("hrms.api.mobile_v1.get_leave_days")
+    fun fetchLeaveDays(
+        @Header("Authorization") auth: String?,
+        @Body body: Map<String, @JvmSuppressWildcards Any?>
+    ): Call<ResponseBody>
+
+    @Headers("Content-Type: application/json")
+    @POST("hrms.api.mobile_v1.create_checkin")
+    fun submitCheckinRequest(
+        @Header("Authorization") auth: String?,
+        @Body body: Map<String, @JvmSuppressWildcards Any?>
+    ): Call<ResponseBody>
+
+    @Headers("Content-Type: application/json")
+    @POST("hrms.api.mobile_v1.update_checkin_request")
+    fun changeCheckinRequest(
+        @Header("Authorization") auth: String?,
+        @Body body: Map<String, @JvmSuppressWildcards Any?>
+    ): Call<ResponseBody>
+
+    @Headers("Content-Type: application/json")
+    @POST("hrms.api.mobile_v1.removed_checkin")
+    fun cancelCheckinRequest(
+        @Header("Authorization") auth: String?,
+        @Body body: Map<String, @JvmSuppressWildcards Any?>
+    ): Call<ResponseBody>
+
 }
