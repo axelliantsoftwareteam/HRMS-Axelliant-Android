@@ -1,70 +1,58 @@
 package com.axelliant.hris.adapter
 
-import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.axelliant.hris.callback.AdapterItemClick
-import com.axelliant.hris.databinding.AttachmentRowBinding
-import com.axelliant.hris.extention.setLocalImage
-import com.axelliant.hris.extention.setUrlImage
+import com.axelliant.hris.R
+import com.axelliant.hris.databinding.ExpItemAttachmentBinding
 import com.axelliant.hris.model.expense.ImageType
+import com.bumptech.glide.Glide
 
+/**
+ * Attachment thumbnails (80 x 80, rounded). With [showRemove] each thumbnail has a small round "x"
+ * (create/edit screen); otherwise tapping a thumbnail opens it (claim lists).
+ */
 class AttachmentsAdapter(
-    private val isDeleteShow:Boolean =true,
-    private val context: Context,
-    private val list: List<ImageType>,
-    private val itemClick: AdapterItemClick
-) :
-    RecyclerView.Adapter<AttachmentsAdapter.AccountsVH>() {
+    private val showRemove: Boolean,
+    private val onClick: (ImageType, Int) -> Unit = { _, _ -> },
+    private val onRemove: (ImageType, Int) -> Unit = { _, _ -> }
+) : ListAdapter<ImageType, AttachmentsAdapter.VH>(AttachmentDiff) {
 
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccountsVH {
-        val layoutInflater = LayoutInflater.from(parent.context)
-        val binding = AttachmentRowBinding.inflate(layoutInflater, parent, false)
-        return AccountsVH(binding)
-    }
-
-    override fun onBindViewHolder(holder: AccountsVH, position: Int) {
-        holder.bind(list[position], context)
-
-        holder.binding.imgClose.isVisible = isDeleteShow
-
-        if(isDeleteShow){
-            holder.binding.imgClose.setOnClickListener {
-                val adapterPosition = holder.adapterPosition
-                if (adapterPosition != RecyclerView.NO_POSITION) {
-                    itemClick.onItemClick(list[adapterPosition], adapterPosition)
-                }
-            }
-        }else{
-            holder.binding.ivImg.setOnClickListener {
-                val adapterPosition = holder.adapterPosition
-                if (adapterPosition != RecyclerView.NO_POSITION) {
-                    itemClick.onItemClick(list[adapterPosition], adapterPosition)
-                }
-            }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
+        val binding = ExpItemAttachmentBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val holder = VH(binding)
+        binding.root.setOnClickListener {
+            val position = holder.bindingAdapterPosition
+            if (position != RecyclerView.NO_POSITION) onClick(getItem(position), position)
         }
-
-
-
+        binding.expAttRemove.setOnClickListener {
+            val position = holder.bindingAdapterPosition
+            if (position != RecyclerView.NO_POSITION) onRemove(getItem(position), position)
+        }
+        binding.expAttRemove.visibility = if (showRemove) View.VISIBLE else View.GONE
+        return holder
     }
 
-    override fun getItemCount(): Int {
-        return list.size
-    }
+    override fun onBindViewHolder(holder: VH, position: Int) = holder.bind(getItem(position))
 
-    class AccountsVH(val binding: AttachmentRowBinding) : RecyclerView.ViewHolder(binding.root) {
-
-        fun bind(item: ImageType, context: Context) {
-
-            if(item.isMediaQuery)
-                binding.ivImg.setLocalImage(item.uri!!,context)
-            else
-                binding.ivImg.setUrlImage(item.imageUrl!!,context)
-
+    class VH(private val binding: ExpItemAttachmentBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(item: ImageType) {
+            val source: Any? = item.uri ?: item.imageUrl
+            Glide.with(binding.expAttImage)
+                .load(source)
+                .placeholder(R.drawable.ic_place_holder)
+                .error(R.drawable.ic_place_holder)
+                .centerCrop()
+                .into(binding.expAttImage)
         }
     }
+}
 
+/** Thumbnails are the same object for as long as they exist, so identity is enough. */
+private object AttachmentDiff : DiffUtil.ItemCallback<ImageType>() {
+    override fun areItemsTheSame(oldItem: ImageType, newItem: ImageType) = oldItem === newItem
+    override fun areContentsTheSame(oldItem: ImageType, newItem: ImageType) = true
 }

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- #8CC4DD at 20 % -->
+    <color name="exp_banner_bg">#338CC4DD</color>
+    <!-- white overlays on the primary summary card -->
+    <color name="rq_white_18">#2EFFFFFF</color>
+    <color name="rq_white_16">#29FFFFFF</color>
+    <color name="rq_white_85">#D9FFFFFF</color>
+    <color name="rq_white_90">#E6FFFFFF</color>
+</resources>

@@ -34,7 +34,12 @@ class ImageDetailFragment : BaseFragment() {
 
         if (arguments != null) {
             val parsedData = arguments?.getString("images", "")
-            listOfAttachments =    Gson().fromJson(parsedData, object : TypeToken<List<Attachments>>() {}.type)
+            listOfAttachments = try {
+                Gson().fromJson<List<Attachments>>(parsedData, object : TypeToken<List<Attachments>>() {}.type)
+                    ?: listOf()
+            } catch (e: Exception) {
+                listOf()
+            }
 
          }
 
@@ -46,7 +51,10 @@ class ImageDetailFragment : BaseFragment() {
 
         val adapter = ImagePagerAdapter(requireContext(), listOfAttachments)
         binding?.viewPager?.adapter = adapter
-        binding?.tvTitle?.text = "0".plus(0 + 1).plus("/0").plus(listOfAttachments?.size)
+        val startIndex = (arguments?.getInt("index", 0) ?: 0).coerceIn(0, maxOf(listOfAttachments.size - 1, 0))
+        binding?.viewPager?.currentItem = startIndex
+        mCurrentPosition = startIndex
+        updateCounter()
 
 
         binding?.viewPager?.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
@@ -61,7 +69,7 @@ class ImageDetailFragment : BaseFragment() {
             override fun onPageSelected(position: Int) {
                 // This method will be invoked when a new page becomes selected
                 mCurrentPosition = position
-                binding?.tvTitle?.text = "0".plus(position + 1).plus("/0").plus(listOfAttachments?.size)
+                updateCounter()
             }
 
             override fun onPageScrollStateChanged(state: Int) {
@@ -72,5 +80,9 @@ class ImageDetailFragment : BaseFragment() {
 
     }
 
+    /** "{n}/{total}", for example "3/12". */
+    private fun updateCounter() {
+        binding?.tvTitle?.text = "${mCurrentPosition + 1}/${listOfAttachments.size}"
+    }
 
 }

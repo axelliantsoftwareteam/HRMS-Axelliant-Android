@@ -9,6 +9,7 @@ import androidx.viewpager.widget.PagerAdapter
 import com.axelliant.hris.R
 import com.axelliant.hris.extention.setUrlImage
 import com.axelliant.hris.model.expense.Attachments
+import com.axelliant.hris.ui.WsFormat
 import com.bumptech.glide.Glide
 
 
@@ -24,7 +25,7 @@ class ImagePagerAdapter(private val context: Context, private val images: List<A
 
         val imageView = view.findViewById<ImageView>(R.id.imageView)
         Glide.with(context)
-            .load(images[position].file_url) // image url
+            .load(WsFormat.mediaUrl(images[position].file_url)) // image url
             .placeholder(R.drawable.ic_place_holder) // any placeholder to load at start
             .error(R.drawable.ic_place_holder)  // any image in case of error
             .centerCrop()

@@ -1,125 +1,103 @@
 package com.axelliant.hris.adapter
 
-import android.content.Context
-import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.axelliant.hris.callback.AdapterItemClick
-import com.axelliant.hris.databinding.MyTeamExpenseApprovalRowBinding
-import com.axelliant.hris.extention.setUrlImage
-import com.axelliant.hris.model.expense.Attachments
-import com.axelliant.hris.model.expense.Expense
-import com.axelliant.hris.model.expense.ImageType
-import com.axelliant.hris.navigation.AppNavigator
-import com.axelliant.hris.utils.Utils.hideShow
-import com.google.gson.Gson
+import com.axelliant.hris.R
+import com.axelliant.hris.databinding.ExpItemApprovalBinding
+import com.axelliant.hris.model.requests.ExpenseClaim
+import com.axelliant.hris.ui.WsFormat
+import com.axelliant.hris.ui.WsStatus
+import com.axelliant.hris.ui.WsTone
 
+/**
+ * The team's expense claims for a manager: accordion cards (one open at a time) with the line items,
+ * attachments and, while a claim is pending, Reject and Approve.
+ */
 class ExpenseApprovalsDetailAdapter(
-    private val mContext: Context,
-    private val detailArrayList: ArrayList<Expense>,
-    private val approvedItemClick: AdapterItemClick,
-    private val rejectItemClick: AdapterItemClick,
-) :
-    RecyclerView.Adapter<ExpenseApprovalsDetailAdapter.AccountsVH>() {
+    private val onDecision: (claim: ExpenseClaim, approve: Boolean) -> Unit,
+    private val onPreview: (ExpenseClaim, Int) -> Unit
+) : ListAdapter<ExpenseClaim, ExpenseApprovalsDetailAdapter.VH>(ApprovalDiff) {
 
+    private var expandedName: String? = null
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccountsVH {
-        val layoutInflater = LayoutInflater.from(parent.context)
-        val binding = MyTeamExpenseApprovalRowBinding.inflate(layoutInflater, parent, false)
-        return AccountsVH(binding)
+    private fun indexOfName(name: String?): Int =
+        if (name == null) -1 else currentList.indexOfFirst { it.name == name }
+
+    private fun toggle(position: Int) {
+        val claim = getItem(position)
+        val previous = indexOfName(expandedName)
+        expandedName = if (expandedName == claim.name) null else claim.name
+        if (previous >= 0) notifyItemChanged(previous, PAYLOAD_EXPANSION)
+        if (previous != position) notifyItemChanged(position, PAYLOAD_EXPANSION)
     }
 
-    override fun onBindViewHolder(holder: AccountsVH, position: Int) {
-        val currentItem = detailArrayList[position]
-        holder.bind(currentItem, mContext)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
+        val binding = ExpItemApprovalBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val holder = VH(binding)
+        binding.expApprHeaderRow.setOnClickListener {
+            val position = holder.bindingAdapterPosition
+            if (position != RecyclerView.NO_POSITION) toggle(position)
+        }
+        binding.expApprBtnReject.setOnClickListener {
+            val position = holder.bindingAdapterPosition
+            if (position != RecyclerView.NO_POSITION) onDecision(getItem(position), false)
+        }
+        binding.expApprBtnApprove.setOnClickListener {
+            val position = holder.bindingAdapterPosition
+            if (position != RecyclerView.NO_POSITION) onDecision(getItem(position), true)
+        }
+        return holder
+    }
 
-        holder.binding.rvLeaveCount.layoutManager = GridLayoutManager(mContext, 1)
-        holder.binding.rvLeaveCount.adapter =
-            currentItem.expenses_detail?.let { ExpenseRowAdapter(it, mContext) }
-        holder.binding.rvLeaveCount.isNestedScrollingEnabled = false
+    override fun onBindViewHolder(holder: VH, position: Int) {
+        val claim = getItem(position)
+        holder.bindHeader(claim)
+        holder.bindExpansion(claim, claim.name == expandedName, onPreview)
+    }
 
-        holder.binding.dropDown.setOnClickListener {
-            holder.binding.lyAttendStatus.hideShow(it)
-            holder.binding.divider.isVisible = holder.binding.lyAttendStatus.isVisible
+    override fun onBindViewHolder(holder: VH, position: Int, payloads: MutableList<Any>) {
+        if (payloads.isEmpty()) {
+            onBindViewHolder(holder, position)
+        } else {
+            val claim = getItem(position)
+            holder.bindExpansion(claim, claim.name == expandedName, onPreview)
+        }
+    }
+
+    class VH(private val binding: ExpItemApprovalBinding) : RecyclerView.ViewHolder(binding.root) {
+
+        fun bindHeader(claim: ExpenseClaim) {
+            val ctx = binding.root.context
+            WsStatus.iconBadge(binding.expApprIcon, WsTone.expense(ctx))
+            binding.expApprName.text = claim.employee_name?.takeIf { it.isNotBlank() } ?: claim.name.orEmpty()
+            binding.expApprLabel.text = ctx.getString(R.string.exp_appr_label_fmt, WsFormat.date(claim.posting_date))
+            WsStatus.badge(binding.expApprStatus, claim.displayStatus(ctx.getString(R.string.exp_unknown_status)))
+            binding.expApprAmount.text = claim.amountText()
         }
 
-        holder.binding.tvApproved.setOnClickListener {
-            val adapterPosition = holder.adapterPosition
-            if (adapterPosition != RecyclerView.NO_POSITION) {
-                approvedItemClick.onItemClick(detailArrayList[adapterPosition], adapterPosition)
+        fun bindExpansion(claim: ExpenseClaim, expanded: Boolean, onPreview: (ExpenseClaim, Int) -> Unit) {
+            val pending = claim.displayStatus().equals("Pending", ignoreCase = true)
+            binding.expApprChevron.setImageResource(
+                if (expanded) R.drawable.ws_ic_expand_less else R.drawable.ws_ic_expand_more
+            )
+            binding.expDetail.root.visibility = if (expanded) View.VISIBLE else View.GONE
+            binding.expApprActions.visibility = if (expanded && pending) View.VISIBLE else View.GONE
+            if (expanded) {
+                ExpenseDetailBinder.bind(binding.expDetail, claim) { index -> onPreview(claim, index) }
             }
         }
-
-        holder.binding.tvReject.setOnClickListener {
-            val adapterPosition = holder.adapterPosition
-            if (adapterPosition != RecyclerView.NO_POSITION) {
-                rejectItemClick.onItemClick(detailArrayList[adapterPosition], adapterPosition)
-            }
-        }
-
-
-        holder.binding.rvAttachments.layoutManager =
-            LinearLayoutManager(mContext, RecyclerView.HORIZONTAL, false)
-        holder.binding.rvAttachments.adapter =
-            AttachmentsAdapter(
-                false,
-                mContext,
-                attachmentTypeMapping(currentItem.attachments),
-                object : AdapterItemClick {
-                    override fun onItemClick(customObject: Any, pos: Int) {
-                        val adapterPosition = holder.adapterPosition
-                        if (adapterPosition != RecyclerView.NO_POSITION) {
-                            AppNavigator.navigateToImageDetailFragment(Bundle().apply {
-                                this.putString("images", Gson().toJson(detailArrayList[adapterPosition].attachments))
-                            })
-                        }
-
-                    }
-
-                })
-    }
-    private fun attachmentTypeMapping(attachmentArray: List<Attachments>?): ArrayList<ImageType> {
-
-        val localItems: ArrayList<ImageType> = arrayListOf()
-
-        if (attachmentArray != null) {
-            for (serverItem in attachmentArray) {
-
-                localItems.add(ImageType().apply {
-                    this.isUploaded = true
-                    this.isMediaQuery = false
-                    this.uri = null
-                    this.imageUrl = serverItem.file_url
-                    this.file_id = serverItem.name
-
-                })
-
-            }
-        }
-
-
-        return localItems
     }
 
-    override fun getItemCount(): Int {
-        return detailArrayList.size
+    private companion object {
+        const val PAYLOAD_EXPANSION = "expansion"
     }
+}
 
-    class AccountsVH(val binding: MyTeamExpenseApprovalRowBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-
-        fun bind(item: Expense, mContext: Context)
-        {
-            binding.tvEmployeName.text = item.employee_name
-            binding.tvEmployeDesignation.text = item.posting_date
-            binding.tvPosting.text = item.department
-            binding.profileImg.setUrlImage(item.image, mContext)
-
-        }
-    }
-
+private object ApprovalDiff : DiffUtil.ItemCallback<ExpenseClaim>() {
+    override fun areItemsTheSame(oldItem: ExpenseClaim, newItem: ExpenseClaim) = oldItem.name == newItem.name
+    override fun areContentsTheSame(oldItem: ExpenseClaim, newItem: ExpenseClaim) = oldItem == newItem
 }

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Requests overview -->
+    <string name="rq_title">Requests</string>
+    <string name="rq_summary_title">Your latest activity</string>
+    <plurals name="rq_requests_shown">
+        <item quantity="one">%d request shown</item>
+        <item quantity="other">%d requests shown</item>
+    </plurals>
+    <string name="rq_pending">Pending</string>
+    <string name="rq_approved">Approved</string>
+    <string name="rq_rejected">Rejected</string>
+    <string name="rq_period_week">Last 7 Days</string>
+    <string name="rq_period_month">This Month</string>
+    <string name="rq_empty_title">No requests yet</string>
+    <string name="rq_empty_message">No requests in this period. Tap + to create one.</string>
+    <string name="rq_fab_cd">New attendance request</string>
+    <string name="rq_load_failed">We could not load your requests right now.</string>
+
+    <string name="rq_title_checkin">Check-in</string>
+    <string name="rq_title_checkout">Check-out</string>
+    <string name="rq_title_attendance_update">Attendance update</string>
+    <string name="rq_title_leave">Leave request</string>
+    <string name="rq_title_expense">Expense claim</string>
+    <string name="rq_title_request">Request</string>
+    <string name="rq_type_checkin">Checkin</string>
+    <string name="rq_type_leave">Leave</string>
+    <string name="rq_type_expense">Expense</string>
+    <string name="rq_type_request">Request</string>
+    <string name="rq_details_fmt">%1$s details</string>
+    <string name="rq_status_open">Open</string>
+    <string name="rq_currency_default">PKR</string>
+    <string name="rq_headline_amount_fmt">%1$s %2$s</string>
+
+    <string name="rq_f_request_for">Request for</string>
+    <string name="rq_f_date">Date</string>
+    <string name="rq_f_days">Days</string>
+    <string name="rq_f_time">Time</string>
+    <string name="rq_f_amount">Amount</string>
+    <string name="rq_f_submitted">Submitted on</string>
+    <string name="rq_f_location">Location</string>
+    <string name="rq_f_hours">Working hours</string>
+    <string name="rq_f_reason">Reason</string>
+    <string name="rq_f_reference">Reference</string>
+
+    <!-- Expense claim list -->
+    <string name="exp_title">Expense Claim</string>
+    <string name="exp_all">All</string>
+    <string name="exp_empty_title">No expense claims</string>
+    <string name="exp_empty_message">No claims in this period. Tap + to submit one.</string>
+    <string name="exp_dates_fmt">%1$s – %2$s</string>
+    <string name="exp_fab_cd">New expense claim</string>
+    <string name="exp_load_failed">We could not load the expense claims right now.</string>
+    <string name="exp_attachments_label">ATTACHMENTS</string>
+    <string name="exp_f_type">Type</string>
+    <string name="exp_f_amount">Amount</string>
+    <string name="exp_f_description">Description</string>
+    <string name="exp_delete">Delete</string>
+    <string name="exp_edit">Edit</string>
+    <string name="exp_cancel">Cancel</string>
+    <string name="exp_ok">OK</string>
+    <string name="exp_delete_title">Delete expense claim?</string>
+    <string name="exp_delete_message">This will delete %1$s. It cannot be undone.</string>
+    <string name="exp_delete_unnamed">this claim</string>
+    <string name="exp_deleted_toast">Expense claim has been deleted.</string>
+    <string name="exp_delete_failed">We could not delete this expense claim right now.</string>
+    <string name="exp_cd_expand">Expand or collapse</string>
+    <string name="exp_cd_attachment">Attachment</string>
+    <string name="exp_unknown_status">Unknown</string>
+
+    <!-- Create / edit expense claim -->
+    <string name="exp_banner_create">Create Expense Claim</string>
+    <string name="exp_banner_update">Update Expense Claim</string>
+    <string name="exp_grand_total">GRAND TOTAL</string>
+    <string name="exp_posting_date">POSTING DATE</string>
+    <string name="exp_line_title">Expense details</string>
+    <string name="exp_hint_type">Expense Type *</string>
+    <string name="exp_hint_date">Due Date *</string>
+    <string name="exp_hint_amount">Amount *</string>
+    <string name="exp_hint_description">Description</string>
+    <string name="exp_date_placeholder">--/--/----</string>
+    <string name="exp_select_type">Select Expense Type</string>
+    <string name="exp_date_picker_title">Due Date</string>
+    <string name="exp_attachments_title">Attachments</string>
+    <string name="exp_choose_source">Choose Image Source</string>
+    <string name="exp_camera">Camera</string>
+    <string name="exp_gallery">Photo Library</string>
+    <string name="exp_create">Create</string>
+    <string name="exp_update">Update</string>
+    <string name="exp_validation">Please ensure all expense details are filled out correctly.</string>
+    <string name="exp_err_type">Select an expense type</string>
+    <string name="exp_err_date">Choose a date</string>
+    <string name="exp_err_amount">Enter an amount greater than 0</string>
+    <string name="exp_created">Expense Claim has been created</string>
+    <string name="exp_updated">Expense Claim has been Updated</string>
+    <string name="exp_deleted_simple">Expense has been deleted</string>
+    <string name="exp_cd_paperclip">Add attachment</string>
+    <string name="exp_cd_add_line">Add another expense</string>
+    <string name="exp_cd_remove_line">Remove this expense</string>
+    <string name="exp_cd_remove_attachment">Remove attachment</string>
+    <string name="exp_cd_dropdown">Choose</string>
+    <string name="exp_cd_calendar">Choose date</string>
+    <string name="exp_camera_perm_title">Camera Permission Required</string>
+    <string name="exp_camera_perm_message">Please enable camera access in settings to use this feature.</string>
+    <string name="exp_open_settings">Open Settings</string>
+    <string name="exp_pick_none">You have not picked an image.</string>
+    <string name="exp_pick_unreadable">We could not read the selected image.</string>
+    <string name="exp_types_failed">We could not load the expense types right now.</string>
+    <string name="exp_save_failed">We could not save this expense claim right now.</string>
+    <string name="exp_attach_remove_failed">We could not remove this attachment right now.</string>
+    <string name="exp_uploads_partial">The expense claim was saved, but %1$d attachment(s) could not be uploaded. Open the claim and add them again.</string>
+    <string name="exp_uploads_partial_title">Some attachments were not uploaded</string>
+    <string name="exp_missing_id">This expense claim is missing its reference, so it cannot be updated.</string>
+
+    <!-- Expense approvals -->
+    <string name="exp_appr_title">Expense approvals</string>
+    <string name="exp_appr_header">Expense claims</string>
+    <string name="exp_appr_empty_message">There are no team expense claims to review.</string>
+    <string name="exp_appr_label_fmt">EXPENSE CLAIM · %1$s</string>
+    <string name="exp_approve">Approve</string>
+    <string name="exp_reject">Reject</string>
+    <string name="exp_approve_title">Approve expense claim?</string>
+    <string name="exp_reject_title">Reject expense claim?</string>
+    <string name="exp_approve_message">This will approve %1$s. The employee will be notified.</string>
+    <string name="exp_reject_message">This will reject %1$s. The employee will be notified.</string>
+    <string name="exp_approved_toast">Request has been approved.</string>
+    <string name="exp_rejected_toast">Request has been rejected.</string>
+    <string name="exp_approve_failed">We could not approve this expense claim right now.</string>
+    <string name="exp_reject_failed">We could not reject this expense claim right now.</string>
+    <string name="exp_missing_reference">This request is missing its reference, so it cannot be updated.</string>
+</resources>
