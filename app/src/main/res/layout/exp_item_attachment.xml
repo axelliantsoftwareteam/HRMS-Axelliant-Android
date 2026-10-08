@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/Widget.Ws.Card"
+    android:layout_width="@dimen/_80sdp"
+    android:layout_height="@dimen/_80sdp"
+    android:layout_marginEnd="@dimen/_8sdp"
+    app:cardBackgroundColor="@color/ws_card_stroke"
+    app:cardCornerRadius="@dimen/_14sdp"
+    app:cardElevation="0dp"
+    app:strokeWidth="0dp">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/exp_att_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/exp_cd_attachment"
+            android:scaleType="centerCrop" />
+
+        <ImageView
+            android:id="@+id/exp_att_remove"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:layout_gravity="top|end"
+            android:layout_margin="@dimen/_4sdp"
+            android:background="@drawable/ws_circle_bg"
+            android:contentDescription="@string/exp_cd_remove_attachment"
+            android:padding="@dimen/_4sdp"
+            android:src="@drawable/ws_ic_close"
+            android:visibility="gone"
+            app:tint="@color/black" />
+    </FrameLayout>
+</com.google.android.material.card.MaterialCardView>

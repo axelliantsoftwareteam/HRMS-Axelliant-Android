@@ -1,218 +1,85 @@
 package com.axelliant.hris.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.axelliant.hris.event.Event
-import com.axelliant.hris.model.ImagePath
-import com.axelliant.hris.model.attendance.AttendanceInput
-import com.axelliant.hris.model.attendance.expenseApprovalList
 import com.axelliant.hris.model.expense.CreateExpense
-import com.axelliant.hris.model.expense.DeleteAttachment
-import com.axelliant.hris.model.expense.GetExpenseResponse
-import com.axelliant.hris.model.expense.MyExpenseDetailResponse
-import com.axelliant.hris.model.expense.MyExpensePostResponse
-import com.axelliant.hris.model.leave.ExpenseApprovalStatus
-import com.axelliant.hris.model.leave.PostExpenseImageResponse
-import com.axelliant.hris.model.leave.PostResponse
+import com.axelliant.hris.model.requests.ExpenseClaimsPayload
+import com.axelliant.hris.model.requests.ExpenseSavePayload
+import com.axelliant.hris.model.requests.ExpenseTypesPayload
+import com.axelliant.hris.model.requests.StatusPayload
+import com.axelliant.hris.network.ApiResult
+import com.axelliant.hris.network.enqueueResult
 import com.axelliant.hris.repos.ExpenseRepo
 import com.axelliant.hris.utils.Validator
+import com.google.gson.reflect.TypeToken
+import java.io.File
+import java.lang.reflect.Type
 
-class ExpenseViewModel(private val expenseRepo: ExpenseRepo,private val validator: Validator) : BaseViewModel() {
+/**
+ * State for the expense screens: the claim list, create/edit (types, save, attachments, delete) and
+ * the manager's approvals. Each screen owns its own instance (`by viewModel()`), so only the streams
+ * it observes are used.
+ */
+class ExpenseViewModel(private val expenseRepo: ExpenseRepo, private val validator: Validator) : BaseViewModel() {
 
-    val expenseResponse: MutableLiveData<Event<MyExpenseDetailResponse?>> by lazy { MutableLiveData<Event<MyExpenseDetailResponse?>>() }
+    val claims = MutableLiveData<Event<ApiResult<ExpenseClaimsPayload>>>()
+    val approvals = MutableLiveData<Event<ApiResult<ExpenseClaimsPayload>>>()
+    val expenseTypes = MutableLiveData<Event<ApiResult<ExpenseTypesPayload>>>()
+    val saveResult = MutableLiveData<Event<ApiResult<ExpenseSavePayload>>>()
+    val uploadResult = MutableLiveData<Event<ApiResult<StatusPayload>>>()
+    val deleteClaimResult = MutableLiveData<Event<ApiResult<StatusPayload>>>()
+    val deleteAttachmentResult = MutableLiveData<Event<ApiResult<StatusPayload>>>()
+    val decisionResult = MutableLiveData<Event<ApiResult<StatusPayload>>>()
 
-    val postExpenseResponse: MutableLiveData<Event<PostExpenseImageResponse?>> by lazy { MutableLiveData<Event<PostExpenseImageResponse?>>() }
-    val myPostExpenseResponse: MutableLiveData<Event<MyExpensePostResponse?>> by lazy { MutableLiveData<Event<MyExpensePostResponse?>>() }
-    val deleteExpenseResponse: MutableLiveData<Event<MyExpensePostResponse?>> by lazy { MutableLiveData<Event<MyExpensePostResponse?>>() }
-    val deleteAttachmentResponse: MutableLiveData<Event<MyExpensePostResponse?>> by lazy { MutableLiveData<Event<MyExpensePostResponse?>>() }
+    private var claimsGeneration = 0
+    private var approvalsGeneration = 0
 
-    val expenseTypeResponse: MutableLiveData<Event<GetExpenseResponse?>> by lazy { MutableLiveData<Event<GetExpenseResponse?>>() }
-    val expenseApproval: MutableLiveData<Event<expenseApprovalList?>> by lazy { MutableLiveData<Event<expenseApprovalList?>>() }
-
-    val expenseApprovalResponse: MutableLiveData<Event<PostResponse?>> by lazy { MutableLiveData<Event<PostResponse?>>() }
-
-
-    fun getMyExpenseDetail(attendanceInput: AttendanceInput) {
-        isLoading.value = Event(true)
-        expenseRepo.getMyExpenseDetail(attendanceInput)
-            .observeForever { data ->
-                // Handle the login response
-                data?.let { baseModel ->
-                    isLoading.value = Event(false)
-                    // Handle success
-                    expenseResponse.value = Event(baseModel.message?.data)
-
-                } ?: run {
-                    isLoading.value = Event(false)
-                    // Handle error
-                    Log.d("Success VieModel->", "false")
-
-
-                }
+    /**
+     * Loads the employee's claims. When the period or filter changes quickly only the newest answer is
+     * delivered. [showLoading] is false for pull-to-refresh and reloads of a list that already has data.
+     */
+    fun loadClaims(startDate: String, endDate: String, statusFilter: String, showLoading: Boolean) {
+        val generation = ++claimsGeneration
+        if (showLoading) isLoading.value = Event(true)
+        expenseRepo.claims(startDate, endDate, statusFilter)
+            .enqueueResult<ExpenseClaimsPayload>(typeOf<ExpenseClaimsPayload>()) { result ->
+                if (showLoading) isLoading.value = Event(false)
+                if (generation == claimsGeneration) claims.value = Event(result)
             }
     }
 
-
-    fun getMyExpenseFile(imagePath: ImagePath) {
-        isLoading.value = Event(true)
-        expenseRepo.createMyExpenseImage(imagePath)
-            .observeForever { data ->
-                // Handle the login response
-                data?.let { baseModel ->
-                    isLoading.value = Event(false)
-                    // Handle success
-                    postExpenseResponse.value = Event(baseModel.message?.data)
-
-                } ?: run {
-                    isLoading.value = Event(false)
-                    // Handle error
-                    Log.d("Success VieModel->", "false")
-
-
-                }
+    fun loadApprovals(startDate: String, endDate: String, showLoading: Boolean) {
+        val generation = ++approvalsGeneration
+        if (showLoading) isLoading.value = Event(true)
+        expenseRepo.approvals(startDate, endDate)
+            .enqueueResult<ExpenseClaimsPayload>(typeOf<ExpenseClaimsPayload>()) { result ->
+                if (showLoading) isLoading.value = Event(false)
+                if (generation == approvalsGeneration) approvals.value = Event(result)
             }
     }
 
-    fun postExpense(isUpdate:Boolean,createExpense: CreateExpense) {
-        isLoading.value = Event(true)
-        expenseRepo.createExpense(isUpdate,createExpense)
-            .observeForever { data ->
-                // Handle the login response
-                data?.let { baseModel ->
-                    isLoading.value = Event(false)
-                    // Handle success
-                    myPostExpenseResponse.value = Event(baseModel.message?.data)
+    fun loadExpenseTypes() =
+        request(expenseRepo.expenseTypes(), typeOf<ExpenseTypesPayload>(), expenseTypes)
 
-                } ?: run {
-                    isLoading.value = Event(false)
-                    // Handle error
-                    Log.d("Success VieModel->", "false")
+    fun saveClaim(isUpdate: Boolean, body: CreateExpense) =
+        request(expenseRepo.saveClaim(isUpdate, body), typeOf<ExpenseSavePayload>(), saveResult)
 
+    fun uploadAttachment(file: File, docName: String) =
+        request(expenseRepo.uploadAttachment(file, docName), typeOf<StatusPayload>(), uploadResult)
 
-                }
-            }
+    fun deleteClaim(expenseId: String) =
+        request(expenseRepo.deleteClaim(expenseId), typeOf<StatusPayload>(), deleteClaimResult)
 
+    fun deleteAttachment(fileId: String) =
+        request(expenseRepo.deleteAttachment(fileId), typeOf<StatusPayload>(), deleteAttachmentResult)
 
-    }
-    fun deleteExpense(createExpense: CreateExpense) {
-        isLoading.value = Event(true)
-        expenseRepo.deleteExpense(createExpense)
-            .observeForever { data ->
-                // Handle the login response
-                data?.let { baseModel ->
-                    isLoading.value = Event(false)
-                    // Handle success
-                    deleteExpenseResponse.value = Event(baseModel.message?.data)
+    /** Approves ([approve] = true) or rejects one claim awaiting the signed-in manager. */
+    fun decide(expenseId: String, approve: Boolean) =
+        request(
+            expenseRepo.decide(expenseId, if (approve) "Approved" else "Rejected"),
+            typeOf<StatusPayload>(),
+            decisionResult
+        )
 
-                } ?: run {
-                    isLoading.value = Event(false)
-                    // Handle error
-                    Log.d("Success VieModel->", "false")
-
-
-                }
-            }
-
-
-    }
-    fun deleteAttachment(deleteAttachment: DeleteAttachment) {
-        isLoading.value = Event(true)
-        expenseRepo.deleteAttachment(deleteAttachment)
-            .observeForever { data ->
-                // Handle the login response
-                data?.let { baseModel ->
-                    isLoading.value = Event(false)
-                    // Handle success
-                    deleteAttachmentResponse.value = Event(baseModel.message?.data)
-                } ?: run {
-                    isLoading.value = Event(false)
-                    // Handle error
-                    Log.d("Success VieModel->", "false")
-
-
-                }
-            }
-
-
-    }
-
-    fun getExpenseTypeList() {
-        isLoading.value = Event(true)
-        expenseRepo.getExpenseTypes()
-            .observeForever { data ->
-                // Handle the login response
-                data?.let { baseModel ->
-                    isLoading.value = Event(false)
-                    // Handle success
-                    expenseTypeResponse.value = Event(baseModel.message?.data)
-
-                } ?: run {
-                    isLoading.value = Event(false)
-                    // Handle error
-                    Log.d("Success VieModel->", "false")
-
-
-                }
-            }
-
-
-    }
-
-    fun getExpenseApproval(inputObject: AttendanceInput) {
-        isLoading.value = Event(true)
-        expenseRepo.expenseListApproval(inputObject)
-            .observeForever { data ->
-                // Handle the login response
-                data?.let { baseModel ->
-                    isLoading.value = Event(false)
-                    // Handle success
-                    expenseApproval.value = Event(baseModel.message?.data)
-
-                } ?: run {
-                    isLoading.value = Event(false)
-                    // Handle error
-                    Log.d("Success VieModel->", "false")
-
-
-                }
-            }
-
-
-    }
-
-    fun expenseApprovalStatus(inputObject: ExpenseApprovalStatus) {
-        isLoading.value = Event(true)
-        expenseRepo.expenseApprovalStatus(inputObject)
-            .observeForever { data ->
-                // Handle the login response
-                data?.let { baseModel ->
-                    isLoading.value = Event(false)
-                    // Handle success
-                    expenseApprovalResponse.value = Event(baseModel.message?.data)
-
-                } ?: run {
-                    isLoading.value = Event(false)
-                    // Handle error
-                    Log.d("Success VieModel->", "false")
-
-
-                }
-            }
-
-
-    }
-
-    fun bulkExpenseApprovalStatus(expenseIds: List<String>, status: String) {
-        isLoading.value = Event(true)
-        expenseRepo.bulkExpenseApprovalStatus(expenseIds, status)
-            .observeForever { data ->
-                data?.let { baseModel ->
-                    isLoading.value = Event(false)
-                    expenseApprovalResponse.value = Event(baseModel.message?.data)
-                } ?: run {
-                    isLoading.value = Event(false)
-                    Log.d("Success VieModel->", "false")
-                }
-            }
-    }
+    private inline fun <reified T> typeOf(): Type = object : TypeToken<T>() {}.type
 }

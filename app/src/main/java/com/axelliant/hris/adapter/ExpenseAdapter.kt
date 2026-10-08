@@ -1,156 +1,107 @@
 package com.axelliant.hris.adapter
 
-import android.content.Context
-import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.axelliant.hris.R
-import com.axelliant.hris.callback.AdapterItemClick
-import com.axelliant.hris.databinding.MyTeamExpenseRowBinding
-import com.axelliant.hris.enums.LeaveStatus
-import com.axelliant.hris.extention.valueQualifier
-import com.axelliant.hris.model.expense.Attachments
-import com.axelliant.hris.model.expense.Expense
-import com.axelliant.hris.model.expense.ImageType
-import com.axelliant.hris.navigation.AppNavigator
-import com.axelliant.hris.utils.Utils.hideShow
-import com.google.gson.Gson
+import com.axelliant.hris.databinding.ExpItemClaimBinding
+import com.axelliant.hris.model.requests.ExpenseClaim
+import com.axelliant.hris.ui.WsFormat
+import com.axelliant.hris.ui.WsStatus
+import com.axelliant.hris.ui.WsTone
 
+/**
+ * The employee's expense claims as accordion cards: one is expanded at a time and shows its line items,
+ * attachments and, for a draft claim, Delete and Edit.
+ */
 class ExpenseAdapter(
-    private val list: ArrayList<Expense>,
-    private val mContext: Context,
-    private val itemClick: AdapterItemClick
-) :
-    RecyclerView.Adapter<ExpenseAdapter.AccountsVH>() {
+    private val onEdit: (ExpenseClaim) -> Unit,
+    private val onDelete: (ExpenseClaim) -> Unit,
+    private val onPreview: (ExpenseClaim, Int) -> Unit
+) : ListAdapter<ExpenseClaim, ExpenseAdapter.VH>(ClaimDiff) {
 
+    private var expandedName: String? = null
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccountsVH {
-        val layoutInflater = LayoutInflater.from(parent.context)
-        val binding = MyTeamExpenseRowBinding.inflate(layoutInflater, parent, false)
-        return AccountsVH(binding)
-
+    /** Collapses whichever card is open. */
+    fun collapseAll() {
+        val previous = indexOfName(expandedName)
+        expandedName = null
+        if (previous >= 0) notifyItemChanged(previous, PAYLOAD_EXPANSION)
     }
 
-    override fun onBindViewHolder(holder: AccountsVH, position: Int) {
-        val currentItem = list[position]
-        holder.bind(currentItem, mContext)
+    private fun indexOfName(name: String?): Int =
+        if (name == null) -1 else currentList.indexOfFirst { it.name == name }
 
-//        holder.binding.tvViewDetail.setOnClickListener {
-//            itemClick.onItemClick(list[position], position)
-//        }
-        holder.binding.rvLeaveCount.layoutManager = GridLayoutManager(mContext, 1)
-        holder.binding.rvLeaveCount.adapter =
-            currentItem.expenses_detail?.let { ExpenseRowAdapter(it, mContext) }
-        holder.binding.rvLeaveCount.isNestedScrollingEnabled = false
-
-        holder.binding.rvAttachments.layoutManager =
-            LinearLayoutManager(mContext, RecyclerView.HORIZONTAL, false)
-        holder.binding.rvAttachments.adapter =
-            AttachmentsAdapter(
-                false,
-                mContext,
-                attachmentTypeMapping(currentItem.attachments),
-                object : AdapterItemClick {
-                    override fun onItemClick(customObject: Any, position: Int) {
-                        val adapterPosition = holder.adapterPosition
-                        if (adapterPosition != RecyclerView.NO_POSITION) {
-                            AppNavigator.navigateToImageDetailFragment(Bundle().apply {
-                                this.putString("images", Gson().toJson(list[adapterPosition].attachments))
-                            })
-                        }
-                    }
-                })
-
-
-
-        holder.binding.tvAttendStatus.setOnClickListener {
-            val adapterPosition = holder.adapterPosition
-            if (adapterPosition != RecyclerView.NO_POSITION) {
-                itemClick.onItemClick(list[adapterPosition], adapterPosition)
-            }
-        }
-
-        holder.binding.icDropDown.setOnClickListener {
-            holder.binding.lyDropDown.hideShow(it)
-            holder.binding.lineDiv.isVisible = holder.binding.rvLeaveCount.isVisible
-
-        }
-
-        when (currentItem.approval_status) {
-            LeaveStatus.DRAFT.value -> {
-                holder.binding.tvDate.backgroundTintList = ContextCompat.getColorStateList(mContext, R.color.light_yellow)
-                holder.binding.tvDate.setTextColor(ContextCompat.getColorStateList(mContext, R.color.yellow))
-            }
-            LeaveStatus.APPROVED.value -> {
-                holder.binding.tvDate.backgroundTintList = ContextCompat.getColorStateList(mContext, R.color.light_green)
-                holder.binding.tvDate.setTextColor(ContextCompat.getColorStateList(mContext, R.color.green))
-            }
-            LeaveStatus.REJECTED.value -> {
-                holder.binding.tvDate.backgroundTintList = ContextCompat.getColorStateList(mContext, R.color.color_third_light)
-                holder.binding.tvDate.setTextColor(ContextCompat.getColorStateList(mContext, R.color.color_third))
-            }
-        }
-
+    private fun toggle(position: Int) {
+        val claim = getItem(position)
+        val previous = indexOfName(expandedName)
+        expandedName = if (expandedName == claim.name) null else claim.name
+        if (previous >= 0) notifyItemChanged(previous, PAYLOAD_EXPANSION)
+        if (previous != position) notifyItemChanged(position, PAYLOAD_EXPANSION)
     }
 
-    override fun getItemCount(): Int {
-        return list.size
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
+        val binding = ExpItemClaimBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val holder = VH(binding)
+        binding.expHeader.setOnClickListener {
+            val position = holder.bindingAdapterPosition
+            if (position != RecyclerView.NO_POSITION) toggle(position)
+        }
+        binding.expBtnDelete.setOnClickListener {
+            val position = holder.bindingAdapterPosition
+            if (position != RecyclerView.NO_POSITION) onDelete(getItem(position))
+        }
+        binding.expBtnEdit.setOnClickListener {
+            val position = holder.bindingAdapterPosition
+            if (position != RecyclerView.NO_POSITION) onEdit(getItem(position))
+        }
+        return holder
     }
 
+    override fun onBindViewHolder(holder: VH, position: Int) {
+        val claim = getItem(position)
+        holder.bindHeader(claim)
+        holder.bindExpansion(claim, claim.name == expandedName, onPreview)
+    }
 
-    class AccountsVH(val binding: MyTeamExpenseRowBinding) : RecyclerView.ViewHolder(binding.root) {
-
-        fun bind(item: Expense, mContext: Context) {
-//            binding.tvTitle.text = item.title.toString()
-//            when(expenseEvent){
-//                Pending -> {
-//                    binding.tvDelete.visibility = View.VISIBLE
-//                }
-//                Approved -> {
-//                    binding.tvDelete.visibility = View.GONE
-//                }
-//            }
-            if (item.approval_status.toString() == "Draft") {
-                binding.tvDate.text = "Pending"
-            } else {
-                binding.tvDate.text = item.approval_status.toString()
-            }
-
-            binding.tvAttendStatus.text = "Edit"
-//            binding.profileImg.setUrlImage(item.image, mContext)
-
-            binding.status.text = item.total_claimed_amount.toString().valueQualifier()
-            binding.tvHour.text = item.posting_date.valueQualifier()
+    override fun onBindViewHolder(holder: VH, position: Int, payloads: MutableList<Any>) {
+        if (payloads.isEmpty()) {
+            onBindViewHolder(holder, position)
+        } else {
+            val claim = getItem(position)
+            holder.bindExpansion(claim, claim.name == expandedName, onPreview)
         }
     }
 
-    private fun attachmentTypeMapping(attachmentArray: List<Attachments>?): ArrayList<ImageType> {
+    class VH(private val binding: ExpItemClaimBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        val localItems: ArrayList<ImageType> = arrayListOf()
-
-        if (attachmentArray != null) {
-            for (serverItem in attachmentArray) {
-
-                localItems.add(ImageType().apply {
-                    this.isUploaded = true
-                    this.isMediaQuery = false
-                    this.uri = null
-                    this.imageUrl = serverItem.file_url
-                    this.file_id = serverItem.name
-
-                })
-
-            }
+        fun bindHeader(claim: ExpenseClaim) {
+            val ctx = binding.root.context
+            WsStatus.iconBadge(binding.expIcon, WsTone.expense(ctx))
+            binding.expDate.text = WsFormat.date(claim.posting_date)
+            WsStatus.badge(binding.expStatus, claim.displayStatus(ctx.getString(R.string.exp_unknown_status)))
+            binding.expAmount.text = claim.amountText()
         }
 
-
-        return localItems
+        fun bindExpansion(claim: ExpenseClaim, expanded: Boolean, onPreview: (ExpenseClaim, Int) -> Unit) {
+            binding.expChevron.setImageResource(if (expanded) R.drawable.ws_ic_expand_less else R.drawable.ws_ic_expand_more)
+            binding.expDetail.root.visibility = if (expanded) View.VISIBLE else View.GONE
+            binding.expActions.visibility = if (expanded && claim.isDraft) View.VISIBLE else View.GONE
+            if (expanded) {
+                ExpenseDetailBinder.bind(binding.expDetail, claim) { index -> onPreview(claim, index) }
+            }
+        }
     }
 
+    private companion object {
+        const val PAYLOAD_EXPANSION = "expansion"
+    }
+}
 
+private object ClaimDiff : DiffUtil.ItemCallback<ExpenseClaim>() {
+    override fun areItemsTheSame(oldItem: ExpenseClaim, newItem: ExpenseClaim) = oldItem.name == newItem.name
+    override fun areContentsTheSame(oldItem: ExpenseClaim, newItem: ExpenseClaim) = oldItem == newItem
 }

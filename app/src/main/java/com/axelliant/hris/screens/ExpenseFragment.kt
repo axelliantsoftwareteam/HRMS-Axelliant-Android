@@ -1,300 +1,178 @@
 package com.axelliant.hris.screens
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.axelliant.hris.R
+import com.axelliant.hris.adapter.ExpChipAdapter
 import com.axelliant.hris.adapter.ExpenseAdapter
-import com.axelliant.hris.adapter.SubFilterAdapter
+import com.axelliant.hris.adapter.ExpenseDetailBinder
 import com.axelliant.hris.base.BaseFragment
-import com.axelliant.hris.callback.AdapterItemClick
 import com.axelliant.hris.config.AppConst
 import com.axelliant.hris.databinding.FragmentExpenseBinding
-import com.axelliant.hris.enums.AttendanceFilter
 import com.axelliant.hris.event.EventObserver
 import com.axelliant.hris.extention.showErrorMsg
-import com.axelliant.hris.model.attendance.AttendanceInput
-import com.axelliant.hris.model.dashboard.FilterModel
-import com.axelliant.hris.model.expense.Expense
+import com.axelliant.hris.extention.showSuccessMsg
+import com.axelliant.hris.model.requests.ExpenseClaim
+import com.axelliant.hris.model.requests.ExpenseStatusChip
 import com.axelliant.hris.navigation.AppNavigator
-import com.axelliant.hris.network.ErrorMessages
+import com.axelliant.hris.network.observeResult
+import com.axelliant.hris.ui.WsFormat
 import com.axelliant.hris.utils.Utils
 import com.axelliant.hris.viewmodel.ExpenseViewModel
-import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.Gson
-import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.Date
 
-
+/**
+ * The expense claim list: the period and status filters stay at the top, each claim is a card below
+ * that opens to its line items and, while it is a draft, to Edit and Delete.
+ */
 class ExpenseFragment : BaseFragment() {
 
+    private enum class Period { LAST_7_DAYS, THIS_MONTH }
+
     private var _binding: FragmentExpenseBinding? = null
-    private val binding get() = _binding
-    private var currentFilter = AttendanceFilter.WEEK
-    private val expenseViewModel: ExpenseViewModel by inject()
-    private var startDateString: String? = null
-    private var endDateString: String? = null
-    private var filterId = ""
+    private val binding get() = _binding!!
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    private val viewModel: ExpenseViewModel by viewModel()
+    private lateinit var claimsAdapter: ExpenseAdapter
+    private lateinit var chipAdapter: ExpChipAdapter
 
-        _binding = FragmentExpenseBinding.inflate(inflater).also { _binding = it }
-        return binding?.root
+    private var period = Period.LAST_7_DAYS
+    private var statusFilter = ""
+    private var ignoreSegment = false
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        _binding = FragmentExpenseBinding.inflate(inflater, container, false)
+        return binding.root
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-        expenseViewModel.getIsLoading()
-            .observe(viewLifecycleOwner, EventObserver { isLoading ->
-                if (isLoading) {
-                    showDialog()
-                } else {
-                    hideDialog()
-                }
-            })
-
-
-
-        binding?.ivBack?.setOnClickListener {
-            previousFragmentNavigation()
-        }
-        eventSelection()
-        expenseViewModel.getMyExpenseDetail(getCurrentObject())
-
-
-        expenseViewModel.expenseResponse.observe(
-            viewLifecycleOwner,
-            EventObserver { response ->
-
-                if (response?.meta?.status == true && response.expenses != null) {
-                    subFilterPopulations(response.expense_status)
-
-                    if (response.expenses.size > 0) {
-                        binding?.rvExpense?.visibility=View.VISIBLE
-                        binding?.tvNoRecord?.visibility=View.GONE
-
-                        dataPopulate(response.expenses)
-                    } else {
-                        binding?.rvExpense?.visibility=View.GONE
-                        binding?.tvNoRecord?.visibility=View.VISIBLE
-                    }
-
-                } else {
-                    requireContext().showErrorMsg(response?.meta?.message.toString())
-                }
-
-            })
-
-
-        binding?.addExpense?.setOnClickListener {
-            AppNavigator.navigateToAddExpenseFragment()
-        }
-    }
-
-
-    private fun dataPopulate(expenseList: ArrayList<Expense>?) {
-
-        binding?.rvExpense?.layoutManager = LinearLayoutManager(requireActivity())
-        val expenseAdapter = ExpenseAdapter(
-            expenseList!!, requireContext(), object : AdapterItemClick {
-                override fun onItemClick(customObject: Any, position: Int) {
-
-                    val expense = customObject as Expense
-                    if (expense.status == "Draft") {
-                        AppNavigator.navigateToAddExpenseFragment(Bundle().apply {
-                            this.putString(AppConst.ExpenseRequestIDParam, expense.name)
-                            this.putString(
-                                AppConst.ExpenseRequestParam,
-                                Gson().toJson(expense.expenses_detail)
-                            )
-                            this.putString(
-                                AppConst.ExpenseRequestAttachments,
-                                Gson().toJson(expense.attachments)
-                            )
-                        })
-                    } else {
-                        requireContext().showErrorMsg(
-                            ErrorMessages.DRAFT_EXPENSE_ONLY.errorString.plus(
-                                expense.approval_status
-                            )
-                        )
-                    }
-
-
-                }
-
-            }
+        claimsAdapter = ExpenseAdapter(
+            onEdit = ::editClaim,
+            onDelete = ::confirmDelete,
+            onPreview = { claim, index -> ExpenseDetailBinder.openPreview(claim, index) }
         )
-        binding?.rvExpense?.adapter = expenseAdapter
-    }
+        binding.expList.layoutManager = LinearLayoutManager(requireContext())
+        binding.expList.adapter = claimsAdapter
 
-    private fun eventSelection() {
-        binding?.tvWeek?.background =
-            ContextCompat.getDrawable(requireContext(), R.drawable.rounded_disabled)
+        chipAdapter = ExpChipAdapter { chip -> selectStatus(chip) }
+        binding.expChips.adapter = chipAdapter
 
-        binding?.tvMonth?.background =
-            ContextCompat.getDrawable(requireContext(), R.drawable.rounded_disabled)
+        binding.expRefresh.setColorSchemeResources(R.color.ws_primary)
+        binding.expRefresh.setOnRefreshListener { load(showLoading = false) }
 
-        binding?.tvCustom?.background =
-            ContextCompat.getDrawable(requireContext(), R.drawable.rounded_disabled)
-
-
-        binding?.tvWeek?.setTextColor(requireContext().getColor(R.color.btn_text_color))
-        binding?.tvMonth?.setTextColor(requireContext().getColor(R.color.btn_text_color))
-        binding?.tvCustom?.setTextColor(requireContext().getColor(R.color.btn_text_color))
-
-        binding?.tvWeek?.setOnClickListener {
-            currentFilter = AttendanceFilter.WEEK
-            expenseViewModel.getMyExpenseDetail(getCurrentObject())
-            eventSelection()
-        }
-        binding?.tvMonth?.setOnClickListener {
-            currentFilter = AttendanceFilter.MONTH
-            expenseViewModel.getMyExpenseDetail(getCurrentObject())
-            eventSelection()
+        binding.expSegment.addOnButtonCheckedListener { _, checkedId, isChecked ->
+            if (!isChecked || ignoreSegment) return@addOnButtonCheckedListener
+            period = if (checkedId == R.id.exp_btn_month) Period.THIS_MONTH else Period.LAST_7_DAYS
+            claimsAdapter.collapseAll()
+            load(showLoading = claimsAdapter.itemCount == 0)
         }
 
-        binding?.tvCustom?.setOnClickListener {
-            datePickerDialog()
-            currentFilter = AttendanceFilter.Custom
-            expenseViewModel.getMyExpenseDetail(getCurrentObject())
-            eventSelection()
-        }
+        binding.expFab.setOnClickListener { AppNavigator.navigateToAddExpenseFragment() }
 
-        when (currentFilter) {
-            AttendanceFilter.WEEK -> {
-                binding?.tvWeek?.background =
-                    ContextCompat.getDrawable(requireContext(), R.drawable.rounded_enabled)
-                binding?.tvWeek?.setTextColor(requireContext().getColor(R.color.white))
-
-            }
-
-            AttendanceFilter.MONTH -> {
-
-                binding?.tvMonth?.background =
-                    ContextCompat.getDrawable(requireContext(), R.drawable.rounded_enabled)
-                binding?.tvMonth?.setTextColor(requireContext().getColor(R.color.white))
-            }
-
-            AttendanceFilter.Custom -> {
-
-                binding?.tvCustom?.background =
-                    ContextCompat.getDrawable(requireContext(), R.drawable.rounded_enabled)
-                binding?.tvCustom?.setTextColor(requireContext().getColor(R.color.white))
-            }
-
-            else -> {}
-        }
-    }
-
-    private fun getCurrentObject(): AttendanceInput {
-
-
-        when (currentFilter) {
-            AttendanceFilter.WEEK -> {
-
-
-                startDateString = Utils.getServerFormat(date = Utils.getLastWeek())
-                endDateString = Utils.getServerFormat()
-
-                setDateView()
-            }
-
-            AttendanceFilter.MONTH -> {
-                startDateString = Utils.getServerFormat(date = Utils.getFirstDayOfMonth())
-                endDateString =
-                    Utils.getServerFormat(date = Utils.getLastDayOfMonth())
-
-                setDateView()
-            }
-
-            else -> {}
-
-        }
-        return AttendanceInput().apply {
-            this.startDate = startDateString!!
-            this.endDate = endDateString!!
-            this.filter = currentFilter
-            this.filters = filterId
-
-        }
-
-    }
-
-    private fun setDateView() {
-        if (startDateString != null && endDateString != null) {
-            binding?.tvStartDateTxt?.text = startDateString
-            binding?.tvEndDateTxt?.text = endDateString
-        }
-
-    }
-
-    private fun datePickerDialog() {
-        // Creating a MaterialDatePicker builder for selecting a date range
-        val builder = MaterialDatePicker.Builder.dateRangePicker()
-        builder.setTitleText("Select a date range")
-
-        // Building the date picker dialog
-        val datePicker = builder.build()
-        datePicker.addOnPositiveButtonClickListener { selection ->
-            // Retrieving the selected start and end dates
-            val startDate = selection.first
-            val endDate = selection.second
-
-            // Formatting the selected dates as strings
-
-            startDateString = Utils.getServerFormat(date = Date(startDate))
-            endDateString = Utils.getServerFormat(date = Date(endDate))
-
-            setDateView()
-
-            currentFilter = AttendanceFilter.Custom
-            expenseViewModel.getMyExpenseDetail(getCurrentObject())
-            eventSelection()
-        }
-
-        // Showing the date picker dialog
-        datePicker.show(activity?.supportFragmentManager!!, "DATE_PICKER")
-    }
-
-    private fun subFilterPopulations(leaveStatus: ArrayList<FilterModel>?) {
-
-        leaveStatus?.add(0, FilterModel().apply {
-            this.id = ""
-            this.title = "All"
-            this.count = "0"
+        viewModel.getIsLoading().observe(viewLifecycleOwner, EventObserver { loading ->
+            if (loading) showDialog() else hideDialog()
         })
-
-        binding?.rvSubFilter?.layoutManager =
-            LinearLayoutManager(requireActivity(), RecyclerView.HORIZONTAL, false)
-        val weeklyAdapter = SubFilterAdapter(
-            filterId,
-            leaveStatus!!, requireContext(),
-            object : AdapterItemClick {
-                override fun onItemClick(customObject: Any, position: Int) {
-                    val filterObject = customObject as FilterModel
-
-
-                    filterId = filterObject.id.toString()
-                    expenseViewModel.getMyExpenseDetail(getCurrentObject())
-                }
-
+        viewModel.claims.observeResult(
+            viewLifecycleOwner,
+            onError = { message ->
+                binding.expRefresh.isRefreshing = false
+                requireContext().showErrorMsg(message.ifBlank { getString(R.string.exp_load_failed) })
             }
-        )
-        binding?.rvSubFilter?.adapter = weeklyAdapter
-
+        ) { payload, _ ->
+            binding.expRefresh.isRefreshing = false
+            showClaims(payload.expenses.orEmpty(), payload.expense_status.orEmpty())
+        }
+        viewModel.deleteClaimResult.observeResult(
+            viewLifecycleOwner,
+            onError = { message -> requireContext().showErrorMsg(message.ifBlank { getString(R.string.exp_delete_failed) }) }
+        ) { payload, _ ->
+            requireContext().showSuccessMsg(payload.status_message?.takeIf { it.isNotBlank() } ?: getString(R.string.exp_deleted_toast))
+            claimsAdapter.collapseAll()
+            load(showLoading = false)
+        }
     }
 
+    override fun onResume() {
+        super.onResume()
+        // Like iOS, the list opens on the last 7 days every time the screen appears (this also
+        // refreshes it after a claim was created, edited or deleted).
+        period = Period.LAST_7_DAYS
+        ignoreSegment = true
+        binding.expSegment.check(R.id.exp_btn_week)
+        ignoreSegment = false
+        claimsAdapter.collapseAll()
+        load(showLoading = claimsAdapter.itemCount == 0)
+    }
 
+    private fun load(showLoading: Boolean) {
+        val (start, end) = dateRange()
+        binding.expTvDates.text = getString(
+            R.string.exp_dates_fmt,
+            WsFormat.reversedDay(start),
+            WsFormat.reversedDay(end)
+        )
+        viewModel.loadClaims(start, end, statusFilter, showLoading)
+    }
+
+    /** Last 7 days (the same window as the other lists) or the current calendar month, as "yyyy-MM-dd". */
+    private fun dateRange(): Pair<String, String> = when (period) {
+        Period.LAST_7_DAYS -> WsFormat.apiDay(Utils.getLastWeek()) to WsFormat.apiDay(Date())
+        Period.THIS_MONTH -> WsFormat.apiDay(Utils.getFirstDayOfMonth()) to WsFormat.apiDay(Utils.getLastDayOfMonth())
+    }
+
+    private fun showClaims(claims: List<ExpenseClaim>, statuses: List<ExpenseStatusChip>) {
+        val chips = listOf(ExpenseStatusChip(id = "", title = getString(R.string.exp_all), count = null)) + statuses
+        chipAdapter.selectedId = statusFilter
+        chipAdapter.submitList(chips)
+        claimsAdapter.submitList(claims)
+        if (claims.isEmpty()) binding.emptyState.show() else binding.emptyState.hide()
+    }
+
+    private fun selectStatus(chip: ExpenseStatusChip) {
+        val id = chip.id.orEmpty()
+        if (id == statusFilter) return
+        statusFilter = id
+        chipAdapter.selectedId = id
+        claimsAdapter.collapseAll()
+        load(showLoading = claimsAdapter.itemCount == 0)
+    }
+
+    private fun editClaim(claim: ExpenseClaim) {
+        AppNavigator.navigateToAddExpenseFragment(Bundle().apply {
+            putString(AppConst.ExpenseRequestIDParam, claim.name)
+            putString(AppConst.ExpenseRequestParam, Gson().toJson(claim.editLines()))
+            putString(AppConst.ExpenseRequestAttachments, Gson().toJson(claim.attachmentList()))
+        })
+    }
+
+    private fun confirmDelete(claim: ExpenseClaim) {
+        val name = claim.name?.takeIf { it.isNotBlank() }
+        if (name == null) {
+            requireContext().showErrorMsg(getString(R.string.exp_missing_id))
+            return
+        }
+        val dialog = MaterialAlertDialogBuilder(requireContext())
+            .setTitle(R.string.exp_delete_title)
+            .setMessage(getString(R.string.exp_delete_message, name))
+            .setPositiveButton(R.string.exp_delete) { _, _ -> viewModel.deleteClaim(name) }
+            .setNegativeButton(R.string.exp_cancel, null)
+            .show()
+        dialog.getButton(DialogInterface.BUTTON_POSITIVE)
+            ?.setTextColor(requireContext().getColor(R.color.ws_red))
+    }
+
+    override fun onDestroyView() {
+        hideDialog()
+        _binding = null
+        super.onDestroyView()
+    }
 }
