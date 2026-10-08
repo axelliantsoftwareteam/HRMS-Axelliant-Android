@@ -10,9 +10,9 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_8sdp"
-        android:layout_marginTop="@dimen/_6sdp"
-        android:layout_marginEnd="@dimen/_8sdp"
+        android:layout_marginStart="@dimen/_5sdp"
+        android:layout_marginTop="@dimen/_4sdp"
+        android:layout_marginEnd="@dimen/_5sdp"
         app:wsTitle="@string/notif_title" />
 
     <!-- Summary bar: only while there are notifications. -->
@@ -22,9 +22,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_20sdp"
-        android:layout_marginTop="@dimen/_6sdp"
+        android:layout_marginTop="@dimen/_4sdp"
         android:layout_marginEnd="@dimen/_20sdp"
-        android:layout_marginBottom="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_6sdp"
         android:visibility="gone">
 
         <LinearLayout
@@ -32,10 +32,10 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingStart="@dimen/_14sdp"
-            android:paddingTop="@dimen/_8sdp"
-            android:paddingEnd="@dimen/_8sdp"
-            android:paddingBottom="@dimen/_8sdp">
+            android:paddingStart="@dimen/_9sdp"
+            android:paddingTop="@dimen/_5sdp"
+            android:paddingEnd="@dimen/_5sdp"
+            android:paddingBottom="@dimen/_5sdp">
 
             <TextView
                 android:id="@+id/notif_summary_text"
@@ -44,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textColor="@color/ws_text_secondary"
-                android:textSize="@dimen/_10ssp" />
+                android:textSize="@dimen/_9ssp" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/notif_mark_all"
@@ -54,11 +54,11 @@
                 android:fontFamily="@font/poppins_medium"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
-                android:minHeight="@dimen/_32sdp"
+                android:minHeight="@dimen/_27sdp"
                 android:text="@string/notif_mark_all_read"
                 android:textAllCaps="false"
                 android:textColor="@color/ws_primary"
-                android:textSize="@dimen/_11ssp"
+                android:textSize="@dimen/_10ssp"
                 android:visibility="gone" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
@@ -78,9 +78,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:clipToPadding="false"
-                android:paddingStart="@dimen/_18sdp"
+                android:paddingStart="@dimen/_11sdp"
                 android:paddingTop="@dimen/_2sdp"
-                android:paddingEnd="@dimen/_18sdp"
+                android:paddingEnd="@dimen/_11sdp"
                 android:paddingBottom="@dimen/_24sdp"
                 android:scrollbars="none" />
 
@@ -109,12 +109,12 @@
                     style="@style/Widget.MaterialComponents.Button.TextButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_6sdp"
+                    android:layout_marginTop="@dimen/_4sdp"
                     android:fontFamily="@font/poppins_medium"
                     android:text="@string/prof_try_again"
                     android:textAllCaps="false"
                     android:textColor="@color/ws_primary"
-                    android:textSize="@dimen/_12ssp"
+                    android:textSize="@dimen/_10ssp"
                     android:visibility="gone" />
             </LinearLayout>
         </FrameLayout>

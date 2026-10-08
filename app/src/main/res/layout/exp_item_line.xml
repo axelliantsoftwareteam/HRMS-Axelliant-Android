@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingTop="@dimen/_14sdp">
+    android:paddingTop="@dimen/_9sdp">
 
     <TextView
         style="@style/Ws.Text.Label"
@@ -21,7 +21,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_14sdp"
+        android:layout_marginTop="@dimen/_9sdp"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -47,7 +47,7 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_14sdp"
+            android:layout_marginStart="@dimen/_9sdp"
             android:layout_weight="1"
             android:orientation="vertical">
 
@@ -70,7 +70,7 @@
         android:id="@+id/exp_line_desc_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_14sdp"
+        android:layout_marginTop="@dimen/_9sdp"
         android:orientation="vertical">
 
         <TextView
@@ -91,6 +91,6 @@
         android:id="@+id/exp_line_divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="@dimen/_14sdp"
+        android:layout_marginTop="@dimen/_9sdp"
         android:background="@color/ws_divider" />
 </LinearLayout>

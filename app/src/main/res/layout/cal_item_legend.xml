@@ -4,21 +4,21 @@
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:paddingStart="@dimen/_7sdp"
+    android:paddingStart="@dimen/_5sdp"
     android:paddingTop="@dimen/_4sdp"
-    android:paddingEnd="@dimen/_7sdp"
+    android:paddingEnd="@dimen/_5sdp"
     android:paddingBottom="@dimen/_4sdp">
 
     <View
         android:id="@+id/cal_legend_swatch"
-        android:layout_width="@dimen/_10sdp"
-        android:layout_height="@dimen/_10sdp" />
+        android:layout_width="@dimen/_8sdp"
+        android:layout_height="@dimen/_8sdp" />
 
     <TextView
         android:id="@+id/cal_legend_label"
         style="@style/Ws.Text.Medium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_5sdp"
-        android:textSize="@dimen/_9ssp" />
+        android:layout_marginStart="@dimen/_4sdp"
+        android:textSize="@dimen/_8ssp" />
 </LinearLayout>

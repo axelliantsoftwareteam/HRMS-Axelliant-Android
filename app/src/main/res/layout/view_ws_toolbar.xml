@@ -4,12 +4,12 @@
 
     <ImageButton
         android:id="@+id/ws_btn_back"
-        android:layout_width="@dimen/_36sdp"
-        android:layout_height="@dimen/_36sdp"
+        android:layout_width="@dimen/_31sdp"
+        android:layout_height="@dimen/_31sdp"
         android:layout_gravity="start|center_vertical"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="@string/ws_back"
-        android:padding="@dimen/_8sdp"
+        android:padding="@dimen/_5sdp"
         android:scaleType="fitCenter"
         android:src="@drawable/ws_ic_back"
         app:tint="@color/black" />
@@ -28,8 +28,8 @@
 
     <FrameLayout
         android:id="@+id/ws_action_container"
-        android:layout_width="@dimen/_36sdp"
-        android:layout_height="@dimen/_36sdp"
+        android:layout_width="@dimen/_31sdp"
+        android:layout_height="@dimen/_31sdp"
         android:layout_gravity="end|center_vertical"
         android:visibility="gone">
 
@@ -38,18 +38,18 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:padding="@dimen/_8sdp"
+            android:padding="@dimen/_5sdp"
             android:scaleType="fitCenter"
             android:src="@drawable/ws_ic_filter"
             app:tint="@color/ws_primary" />
 
         <View
             android:id="@+id/ws_action_dot"
-            android:layout_width="@dimen/_7sdp"
-            android:layout_height="@dimen/_7sdp"
+            android:layout_width="@dimen/_6sdp"
+            android:layout_height="@dimen/_6sdp"
             android:layout_gravity="top|end"
-            android:layout_marginTop="@dimen/_5sdp"
-            android:layout_marginEnd="@dimen/_5sdp"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:layout_marginEnd="@dimen/_4sdp"
             android:background="@drawable/ws_circle_bg"
             android:backgroundTint="@color/ws_red"
             android:visibility="gone" />

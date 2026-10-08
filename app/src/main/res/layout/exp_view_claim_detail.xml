@@ -10,7 +10,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="@dimen/_12sdp"
+        android:layout_marginTop="@dimen/_8sdp"
         android:background="@color/ws_divider" />
 
     <LinearLayout
@@ -29,23 +29,23 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginTop="@dimen/_14sdp"
+            android:layout_marginTop="@dimen/_9sdp"
             android:background="@color/ws_divider" />
 
         <TextView
             style="@style/Ws.Text.Medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_14sdp"
+            android:layout_marginTop="@dimen/_9sdp"
             android:text="@string/exp_attachments_label"
             android:textColor="@color/ws_grey"
-            android:textSize="@dimen/_14ssp" />
+            android:textSize="@dimen/_12ssp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/exp_attach_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_8sdp"
+            android:layout_marginTop="@dimen/_5sdp"
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
     </LinearLayout>

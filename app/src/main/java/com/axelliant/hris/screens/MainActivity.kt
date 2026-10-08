@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
+import androidx.core.view.WindowCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.fragment.NavHostFragment
 import com.axelliant.hris.R
@@ -64,6 +65,8 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        // dark clock/battery icons on the white status bar (also covers edge-to-edge on Android 15+)
+        WindowCompat.getInsetsController(window, binding.root).isAppearanceLightStatusBars = true
         diComponents = Components()
 
         val navHostFragment =

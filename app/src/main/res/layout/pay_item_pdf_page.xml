@@ -2,7 +2,7 @@
 <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/_300sdp"
-    android:layout_marginBottom="@dimen/_8sdp"
+    android:layout_marginBottom="@dimen/_5sdp"
     android:background="@color/white"
     android:importantForAccessibility="yes"
     android:scaleType="fitXY" />

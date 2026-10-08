@@ -6,13 +6,13 @@
     android:layout_height="wrap_content"
     android:layout_marginStart="@dimen/_2sdp"
     android:layout_marginEnd="@dimen/_2sdp"
-    android:layout_marginBottom="@dimen/_10sdp">
+    android:layout_marginBottom="@dimen/_6sdp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="@dimen/_11sdp">
+        android:padding="@dimen/_7sdp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -22,15 +22,15 @@
 
             <ImageView
                 android:id="@+id/cal_mem_avatar"
-                android:layout_width="@dimen/_34sdp"
-                android:layout_height="@dimen/_34sdp"
+                android:layout_width="@dimen/_29sdp"
+                android:layout_height="@dimen/_29sdp"
                 android:contentDescription="@null"
                 android:scaleType="centerCrop" />
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_8sdp"
+                android:layout_marginStart="@dimen/_5sdp"
                 android:layout_weight="1"
                 android:orientation="vertical">
 
@@ -39,7 +39,7 @@
                     style="@style/Ws.Text.Medium"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="@dimen/_11ssp" />
+                    android:textSize="@dimen/_10ssp" />
 
                 <TextView
                     android:id="@+id/cal_mem_sub"
@@ -50,7 +50,7 @@
                     android:ellipsize="end"
                     android:maxLines="2"
                     android:textColor="@color/ws_grey"
-                    android:textSize="@dimen/_10ssp" />
+                    android:textSize="@dimen/_9ssp" />
             </LinearLayout>
         </LinearLayout>
 
@@ -63,8 +63,8 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginTop="@dimen/_11sdp"
-                android:layout_marginBottom="@dimen/_11sdp"
+                android:layout_marginTop="@dimen/_7sdp"
+                android:layout_marginBottom="@dimen/_7sdp"
                 android:background="@color/ws_divider" />
 
             <GridLayout
@@ -77,8 +77,8 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginTop="@dimen/_11sdp"
-            android:layout_marginBottom="@dimen/_8sdp"
+            android:layout_marginTop="@dimen/_7sdp"
+            android:layout_marginBottom="@dimen/_5sdp"
             android:background="@color/ws_divider" />
 
         <LinearLayout
@@ -92,8 +92,8 @@
             android:paddingBottom="@dimen/_3sdp">
 
             <ImageView
-                android:layout_width="@dimen/_14sdp"
-                android:layout_height="@dimen/_14sdp"
+                android:layout_width="@dimen/_12sdp"
+                android:layout_height="@dimen/_12sdp"
                 android:importantForAccessibility="no"
                 android:src="@drawable/ws_ic_calendar"
                 app:tint="@color/ws_primary" />
@@ -103,15 +103,15 @@
                 style="@style/Ws.Text.Medium"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_6sdp"
+                android:layout_marginStart="@dimen/_4sdp"
                 android:layout_weight="1"
                 android:textColor="@color/ws_primary"
-                android:textSize="@dimen/_11ssp" />
+                android:textSize="@dimen/_10ssp" />
 
             <ImageView
                 android:id="@+id/cal_mem_chevron"
-                android:layout_width="@dimen/_16sdp"
-                android:layout_height="@dimen/_16sdp"
+                android:layout_width="@dimen/_14sdp"
+                android:layout_height="@dimen/_14sdp"
                 android:importantForAccessibility="no"
                 android:src="@drawable/ws_ic_expand_more"
                 app:tint="@color/ws_primary" />
@@ -121,7 +121,7 @@
             android:id="@+id/cal_mem_grid"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_8sdp"
+            android:layout_marginTop="@dimen/_5sdp"
             android:columnCount="7"
             android:visibility="gone" />
     </LinearLayout>

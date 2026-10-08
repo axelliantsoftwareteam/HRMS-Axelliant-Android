@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_marginStart="@dimen/_2sdp"
     android:layout_marginEnd="@dimen/_2sdp"
-    android:layout_marginBottom="@dimen/_10sdp"
+    android:layout_marginBottom="@dimen/_6sdp"
     android:clickable="true"
     android:focusable="true">
 
@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="@dimen/_11sdp">
+        android:padding="@dimen/_7sdp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -24,15 +24,15 @@
 
             <ImageView
                 android:id="@+id/team_mem_avatar"
-                android:layout_width="@dimen/_36sdp"
-                android:layout_height="@dimen/_36sdp"
+                android:layout_width="@dimen/_31sdp"
+                android:layout_height="@dimen/_31sdp"
                 android:contentDescription="@null"
                 android:scaleType="centerCrop" />
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginStart="@dimen/_6sdp"
                 android:layout_weight="1"
                 android:orientation="vertical">
 
@@ -43,7 +43,7 @@
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:maxLines="1"
-                    android:textSize="@dimen/_11ssp" />
+                    android:textSize="@dimen/_10ssp" />
 
                 <TextView
                     android:id="@+id/team_mem_designation"
@@ -54,12 +54,12 @@
                     android:ellipsize="end"
                     android:maxLines="1"
                     android:textColor="@color/ws_grey"
-                    android:textSize="@dimen/_10ssp" />
+                    android:textSize="@dimen/_9ssp" />
             </LinearLayout>
 
             <ImageView
-                android:layout_width="@dimen/_12sdp"
-                android:layout_height="@dimen/_12sdp"
+                android:layout_width="@dimen/_10sdp"
+                android:layout_height="@dimen/_10sdp"
                 android:importantForAccessibility="no"
                 android:src="@drawable/ws_ic_chevron_right"
                 app:tint="@color/ws_grey" />
@@ -68,8 +68,8 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:layout_marginBottom="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_6sdp"
+            android:layout_marginBottom="@dimen/_6sdp"
             android:background="@color/ws_divider" />
 
         <LinearLayout
@@ -90,20 +90,20 @@
                     android:layout_height="wrap_content"
                     android:maxLines="1"
                     android:textColor="@color/ws_primary"
-                    android:textSize="@dimen/_15ssp" />
+                    android:textSize="@dimen/_13ssp" />
 
                 <TextView
                     style="@style/Ws.Text.Label"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_6sdp"
+                    android:layout_marginTop="@dimen/_4sdp"
                     android:text="@string/team_stat_total_hours" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_6sdp"
+                android:layout_marginStart="@dimen/_4sdp"
                 android:layout_weight="1"
                 android:orientation="vertical">
 
@@ -114,20 +114,20 @@
                     android:layout_height="wrap_content"
                     android:maxLines="1"
                     android:textColor="@color/ws_primary"
-                    android:textSize="@dimen/_15ssp" />
+                    android:textSize="@dimen/_13ssp" />
 
                 <TextView
                     style="@style/Ws.Text.Label"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_6sdp"
+                    android:layout_marginTop="@dimen/_4sdp"
                     android:text="@string/team_stat_avg_hours" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_6sdp"
+                android:layout_marginStart="@dimen/_4sdp"
                 android:layout_weight="1"
                 android:orientation="vertical">
 
@@ -138,13 +138,13 @@
                     android:layout_height="wrap_content"
                     android:maxLines="1"
                     android:textColor="@color/ws_green"
-                    android:textSize="@dimen/_15ssp" />
+                    android:textSize="@dimen/_13ssp" />
 
                 <TextView
                     style="@style/Ws.Text.Label"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_6sdp"
+                    android:layout_marginTop="@dimen/_4sdp"
                     android:text="@string/team_stat_present" />
             </LinearLayout>
         </LinearLayout>
@@ -153,21 +153,21 @@
             android:id="@+id/team_mem_chips"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_10sdp"
-            app:chipSpacingHorizontal="@dimen/_5sdp"
-            app:chipSpacingVertical="@dimen/_5sdp" />
+            android:layout_marginTop="@dimen/_6sdp"
+            app:chipSpacingHorizontal="@dimen/_4sdp"
+            app:chipSpacingVertical="@dimen/_4sdp" />
 
         <LinearLayout
             android:id="@+id/team_mem_balance_row"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_6sdp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <ImageView
-                android:layout_width="@dimen/_13sdp"
-                android:layout_height="@dimen/_13sdp"
+                android:layout_width="@dimen/_11sdp"
+                android:layout_height="@dimen/_11sdp"
                 android:importantForAccessibility="no"
                 android:src="@drawable/ws_ic_calendar"
                 app:tint="@color/ws_primary" />
@@ -177,10 +177,10 @@
                 style="@style/Ws.Text.Medium"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_marginStart="@dimen/_4sdp"
                 android:layout_weight="1"
                 android:textColor="@color/ws_primary"
-                android:textSize="@dimen/_10ssp" />
+                android:textSize="@dimen/_9ssp" />
 
             <TextView
                 style="@style/Ws.Text.Medium"
@@ -188,11 +188,11 @@
                 android:layout_height="wrap_content"
                 android:text="@string/team_details"
                 android:textColor="@color/ws_primary"
-                android:textSize="@dimen/_10ssp" />
+                android:textSize="@dimen/_9ssp" />
 
             <ImageView
-                android:layout_width="@dimen/_12sdp"
-                android:layout_height="@dimen/_12sdp"
+                android:layout_width="@dimen/_10sdp"
+                android:layout_height="@dimen/_10sdp"
                 android:importantForAccessibility="no"
                 android:src="@drawable/ws_ic_chevron_right"
                 app:tint="@color/ws_primary" />

@@ -12,12 +12,12 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:orientation="vertical"
-            android:padding="@dimen/_18sdp">
+            android:padding="@dimen/_11sdp">
 
             <ImageView
                 android:id="@+id/ws_empty_icon"
-                android:layout_width="@dimen/_30sdp"
-                android:layout_height="@dimen/_30sdp"
+                android:layout_width="@dimen/_26sdp"
+                android:layout_height="@dimen/_26sdp"
                 android:importantForAccessibility="no"
                 android:src="@drawable/ws_ic_calendar"
                 app:tint="@color/ws_grey" />
@@ -27,7 +27,7 @@
                 style="@style/Ws.Text.Section"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_8sdp"
+                android:layout_marginTop="@dimen/_5sdp"
                 android:gravity="center" />
 
             <TextView

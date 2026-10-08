@@ -4,13 +4,13 @@
     style="@style/Widget.Ws.Card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/_16sdp">
+    android:layout_marginBottom="@dimen/_10sdp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="@dimen/_16sdp">
+        android:padding="@dimen/_10sdp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -24,15 +24,15 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/exp_line_title"
-                android:textSize="@dimen/_16ssp" />
+                android:textSize="@dimen/_14ssp" />
 
             <ImageButton
                 android:id="@+id/exp_line_delete"
-                android:layout_width="@dimen/_36sdp"
-                android:layout_height="@dimen/_36sdp"
+                android:layout_width="@dimen/_31sdp"
+                android:layout_height="@dimen/_31sdp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/exp_cd_remove_line"
-                android:padding="@dimen/_8sdp"
+                android:padding="@dimen/_5sdp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/ws_ic_delete"
                 android:visibility="gone"
@@ -44,7 +44,7 @@
             style="@style/Widget.Ws.TextInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_16sdp"
+            android:layout_marginTop="@dimen/_10sdp"
             android:hint="@string/exp_hint_type"
             app:endIconContentDescription="@string/exp_cd_dropdown"
             app:endIconDrawable="@drawable/ws_ic_expand_more"
@@ -66,7 +66,7 @@
             style="@style/Widget.Ws.TextInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_16sdp"
+            android:layout_marginTop="@dimen/_10sdp"
             android:hint="@string/exp_hint_date"
             app:endIconContentDescription="@string/exp_cd_calendar"
             app:endIconDrawable="@drawable/ws_ic_calendar"
@@ -88,7 +88,7 @@
             style="@style/Widget.Ws.TextInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_16sdp"
+            android:layout_marginTop="@dimen/_10sdp"
             android:hint="@string/exp_hint_amount">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -105,7 +105,7 @@
             style="@style/Widget.Ws.TextInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_16sdp"
+            android:layout_marginTop="@dimen/_10sdp"
             android:hint="@string/exp_hint_description"
             app:counterEnabled="true"
             app:counterMaxLength="500">

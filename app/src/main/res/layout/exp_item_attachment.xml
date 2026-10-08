@@ -2,9 +2,9 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/Widget.Ws.Card"
-    android:layout_width="@dimen/_80sdp"
-    android:layout_height="@dimen/_80sdp"
-    android:layout_marginEnd="@dimen/_8sdp"
+    android:layout_width="@dimen/_68sdp"
+    android:layout_height="@dimen/_68sdp"
+    android:layout_marginEnd="@dimen/_5sdp"
     app:cardBackgroundColor="@color/ws_card_stroke"
     app:cardCornerRadius="@dimen/_14sdp"
     app:cardElevation="0dp"
@@ -23,8 +23,8 @@
 
         <ImageView
             android:id="@+id/exp_att_remove"
-            android:layout_width="@dimen/_20sdp"
-            android:layout_height="@dimen/_20sdp"
+            android:layout_width="@dimen/_17sdp"
+            android:layout_height="@dimen/_17sdp"
             android:layout_gravity="top|end"
             android:layout_margin="@dimen/_4sdp"
             android:background="@drawable/ws_circle_bg"

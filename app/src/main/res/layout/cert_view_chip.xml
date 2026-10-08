@@ -10,22 +10,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="@dimen/_12sdp">
+        android:padding="@dimen/_8sdp">
 
         <TextView
             android:id="@+id/cert_chip_value"
             style="@style/Ws.Text.SemiBold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/_15ssp" />
+            android:textSize="@dimen/_13ssp" />
 
         <TextView
             android:id="@+id/cert_chip_label"
             style="@style/Ws.Text.Label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_8sdp"
+            android:layout_marginTop="@dimen/_5sdp"
             android:maxLines="2"
-            android:textSize="@dimen/_10ssp" />
+            android:textSize="@dimen/_9ssp" />
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

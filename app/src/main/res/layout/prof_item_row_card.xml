@@ -3,15 +3,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/_10sdp"
+    android:layout_marginTop="@dimen/_6sdp"
     android:background="@drawable/ws_pill_stroke_bg"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:padding="@dimen/_12sdp">
+    android:padding="@dimen/_8sdp">
 
     <FrameLayout
-        android:layout_width="@dimen/_38sdp"
-        android:layout_height="@dimen/_38sdp">
+        android:layout_width="@dimen/_32sdp"
+        android:layout_height="@dimen/_32sdp">
 
         <View
             android:id="@+id/prof_row_circle"
@@ -21,8 +21,8 @@
 
         <ImageView
             android:id="@+id/prof_row_icon"
-            android:layout_width="@dimen/_18sdp"
-            android:layout_height="@dimen/_18sdp"
+            android:layout_width="@dimen/_15sdp"
+            android:layout_height="@dimen/_15sdp"
             android:layout_gravity="center"
             android:importantForAccessibility="no"
             android:visibility="gone" />
@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:textColor="@color/ws_primary"
-            android:textSize="@dimen/_11ssp"
+            android:textSize="@dimen/_10ssp"
             android:visibility="gone" />
     </FrameLayout>
 
@@ -42,7 +42,7 @@
         android:id="@+id/prof_row_content"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_12sdp"
+        android:layout_marginStart="@dimen/_8sdp"
         android:layout_weight="1"
         android:orientation="vertical" />
 
@@ -50,5 +50,5 @@
         android:id="@+id/prof_row_trailing"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_8sdp" />
+        android:layout_marginStart="@dimen/_5sdp" />
 </LinearLayout>

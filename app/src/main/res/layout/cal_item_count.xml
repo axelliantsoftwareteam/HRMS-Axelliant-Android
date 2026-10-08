@@ -3,22 +3,22 @@
     android:layout_width="0dp"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/_8sdp">
+    android:paddingBottom="@dimen/_5sdp">
 
     <TextView
         android:id="@+id/cal_count_value"
         style="@style/Ws.Text.SemiBold"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/_15ssp" />
+        android:textSize="@dimen/_13ssp" />
 
     <TextView
         android:id="@+id/cal_count_label"
         style="@style/Ws.Text.Medium"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginTop="@dimen/_4sdp"
         android:maxLines="2"
         android:textColor="@color/ws_grey"
-        android:textSize="@dimen/_9ssp" />
+        android:textSize="@dimen/_8ssp" />
 </LinearLayout>

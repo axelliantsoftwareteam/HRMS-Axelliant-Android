@@ -10,9 +10,9 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_8sdp"
-        android:layout_marginTop="@dimen/_6sdp"
-        android:layout_marginEnd="@dimen/_8sdp"
+        android:layout_marginStart="@dimen/_5sdp"
+        android:layout_marginTop="@dimen/_4sdp"
+        android:layout_marginEnd="@dimen/_5sdp"
         app:wsTitle="@string/pay_title" />
 
     <!-- Header card: stays above the list. -->
@@ -21,16 +21,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_20sdp"
-        android:layout_marginTop="@dimen/_8sdp"
+        android:layout_marginTop="@dimen/_5sdp"
         android:layout_marginEnd="@dimen/_20sdp"
-        android:layout_marginBottom="@dimen/_10sdp">
+        android:layout_marginBottom="@dimen/_6sdp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:padding="@dimen/_14sdp">
+            android:padding="@dimen/_9sdp">
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -43,7 +43,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/pay_header_title"
-                    android:textSize="@dimen/_14ssp" />
+                    android:textSize="@dimen/_12ssp" />
 
                 <TextView
                     style="@style/Ws.Text"
@@ -52,20 +52,20 @@
                     android:layout_marginTop="@dimen/_2sdp"
                     android:text="@string/pay_header_subtitle"
                     android:textColor="@color/ws_text_secondary"
-                    android:textSize="@dimen/_11ssp" />
+                    android:textSize="@dimen/_10ssp" />
             </LinearLayout>
 
             <TextView
                 android:id="@+id/pay_count"
                 style="@style/Ws.Text.Medium"
-                android:layout_width="@dimen/_28sdp"
-                android:layout_height="@dimen/_28sdp"
-                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_width="@dimen/_24sdp"
+                android:layout_height="@dimen/_24sdp"
+                android:layout_marginStart="@dimen/_6sdp"
                 android:background="@drawable/ws_circle_bg"
                 android:backgroundTint="@color/ws_primary"
                 android:gravity="center"
                 android:textColor="@color/white"
-                android:textSize="@dimen/_10ssp"
+                android:textSize="@dimen/_9ssp"
                 android:visibility="gone" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
@@ -85,9 +85,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:clipToPadding="false"
-                android:paddingStart="@dimen/_18sdp"
+                android:paddingStart="@dimen/_11sdp"
                 android:paddingTop="@dimen/_2sdp"
-                android:paddingEnd="@dimen/_18sdp"
+                android:paddingEnd="@dimen/_11sdp"
                 android:paddingBottom="@dimen/_24sdp"
                 android:scrollbars="none" />
 

@@ -9,6 +9,13 @@ object AppConst {
 */
     var TOKEN: String? = ""
 
+    /**
+     * TESTING ONLY: treats every user as a manager so the manager screens (drawer MANAGER section,
+     * Team Presence, Approval tile) can be exercised. The server still authorises each call.
+     * TODO: set to false (or remove) before release.
+     */
+    const val FORCE_MANAGER_FOR_TESTING = true
+
     /** Value for the `Authorization` header of every authenticated call. */
     fun authHeader(): String = "token ${TOKEN}"
 

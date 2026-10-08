@@ -10,13 +10,13 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:orientation="vertical"
-        android:paddingStart="@dimen/_6sdp"
-        android:paddingEnd="@dimen/_6sdp">
+        android:paddingStart="@dimen/_4sdp"
+        android:paddingEnd="@dimen/_4sdp">
 
         <ImageView
             android:id="@+id/org_node_avatar"
-            android:layout_width="@dimen/_33sdp"
-            android:layout_height="@dimen/_33sdp"
+            android:layout_width="@dimen/_28sdp"
+            android:layout_height="@dimen/_28sdp"
             android:contentDescription="@null"
             android:scaleType="centerCrop" />
 
@@ -29,7 +29,7 @@
             android:ellipsize="end"
             android:gravity="center"
             android:maxLines="3"
-            android:textSize="@dimen/_10ssp" />
+            android:textSize="@dimen/_9ssp" />
 
         <TextView
             android:id="@+id/org_node_title"
@@ -41,6 +41,6 @@
             android:gravity="center"
             android:maxLines="3"
             android:textColor="@color/ws_grey"
-            android:textSize="@dimen/_9ssp" />
+            android:textSize="@dimen/_8ssp" />
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

@@ -14,9 +14,9 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_8sdp"
-            android:layout_marginTop="@dimen/_6sdp"
-            android:layout_marginEnd="@dimen/_8sdp"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:layout_marginEnd="@dimen/_5sdp"
             app:wsTitle="@string/cert_title" />
 
         <!-- Summary chips: total, expiring soon, renewal due. -->
@@ -24,9 +24,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_20sdp"
-            android:layout_marginTop="@dimen/_8sdp"
+            android:layout_marginTop="@dimen/_5sdp"
             android:layout_marginEnd="@dimen/_20sdp"
-            android:layout_marginBottom="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_6sdp"
             android:baselineAligned="false"
             android:orientation="horizontal">
 
@@ -38,7 +38,7 @@
                 android:id="@+id/cert_chip_expiring"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginStart="@dimen/_6sdp"
                 android:layout_weight="1"
                 layout="@layout/cert_view_chip" />
 
@@ -46,7 +46,7 @@
                 android:id="@+id/cert_chip_renewal"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginStart="@dimen/_6sdp"
                 android:layout_weight="1"
                 layout="@layout/cert_view_chip" />
         </LinearLayout>
@@ -66,9 +66,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:clipToPadding="false"
-                    android:paddingStart="@dimen/_18sdp"
+                    android:paddingStart="@dimen/_11sdp"
                     android:paddingTop="@dimen/_2sdp"
-                    android:paddingEnd="@dimen/_18sdp"
+                    android:paddingEnd="@dimen/_11sdp"
                     android:paddingBottom="@dimen/_100sdp"
                     android:scrollbars="none" />
 

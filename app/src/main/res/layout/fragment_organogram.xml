@@ -10,9 +10,9 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_12sdp"
-        android:layout_marginTop="@dimen/_6sdp"
-        android:layout_marginEnd="@dimen/_12sdp"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_marginTop="@dimen/_4sdp"
+        android:layout_marginEnd="@dimen/_8sdp"
         app:wsTitle="@string/org_title" />
 
     <LinearLayout
@@ -26,9 +26,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_16sdp"
-            android:layout_marginTop="@dimen/_8sdp"
-            android:layout_marginEnd="@dimen/_16sdp"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -43,7 +43,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/org_structure"
-                    android:textSize="@dimen/_11ssp" />
+                    android:textSize="@dimen/_10ssp" />
 
                 <TextView
                     android:id="@+id/org_team_count"
@@ -52,17 +52,17 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_2sdp"
                     android:textColor="@color/ws_grey"
-                    android:textSize="@dimen/_10ssp" />
+                    android:textSize="@dimen/_9ssp" />
             </LinearLayout>
 
             <ImageButton
                 android:id="@+id/org_btn_zoom_out"
-                android:layout_width="@dimen/_33sdp"
-                android:layout_height="@dimen/_33sdp"
+                android:layout_width="@dimen/_28sdp"
+                android:layout_height="@dimen/_28sdp"
                 android:background="@drawable/ws_circle_bg"
                 android:backgroundTint="#1F09589B"
                 android:contentDescription="@string/org_zoom_out"
-                android:padding="@dimen/_8sdp"
+                android:padding="@dimen/_5sdp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/ws_ic_zoom_out"
                 app:tint="@color/ws_primary" />
@@ -70,20 +70,20 @@
             <TextView
                 android:id="@+id/org_zoom_percent"
                 style="@style/Ws.Text.Medium"
-                android:layout_width="@dimen/_36sdp"
+                android:layout_width="@dimen/_31sdp"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:textColor="@color/ws_grey"
-                android:textSize="@dimen/_10ssp" />
+                android:textSize="@dimen/_9ssp" />
 
             <ImageButton
                 android:id="@+id/org_btn_zoom_in"
-                android:layout_width="@dimen/_33sdp"
-                android:layout_height="@dimen/_33sdp"
+                android:layout_width="@dimen/_28sdp"
+                android:layout_height="@dimen/_28sdp"
                 android:background="@drawable/ws_circle_bg"
                 android:backgroundTint="#1F09589B"
                 android:contentDescription="@string/org_zoom_in"
-                android:padding="@dimen/_8sdp"
+                android:padding="@dimen/_5sdp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/ws_ic_zoom_in"
                 app:tint="@color/ws_primary" />
@@ -96,19 +96,19 @@
                 android:layout_marginStart="@dimen/_4sdp"
                 android:background="?attr/selectableItemBackground"
                 android:contentDescription="@string/org_reset_view"
-                android:padding="@dimen/_6sdp"
+                android:padding="@dimen/_4sdp"
                 android:text="@string/org_reset"
                 android:textColor="@color/ws_primary"
-                android:textSize="@dimen/_10ssp" />
+                android:textSize="@dimen/_9ssp" />
         </LinearLayout>
 
         <com.google.android.material.card.MaterialCardView
             style="@style/Widget.Ws.Card"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginStart="@dimen/_16sdp"
-            android:layout_marginTop="@dimen/_8sdp"
-            android:layout_marginEnd="@dimen/_16sdp"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
             android:layout_weight="1">
 
             <com.axelliant.hris.components.OrgChartView
@@ -122,20 +122,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:paddingTop="@dimen/_6sdp"
-            android:paddingBottom="@dimen/_8sdp"
+            android:paddingTop="@dimen/_4sdp"
+            android:paddingBottom="@dimen/_5sdp"
             android:text="@string/org_hint"
             android:textColor="@color/ws_grey"
-            android:textSize="@dimen/_10ssp" />
+            android:textSize="@dimen/_9ssp" />
     </LinearLayout>
 
     <com.axelliant.hris.ui.WsEmptyState
         android:id="@+id/org_empty_state"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_16sdp"
-        android:layout_marginTop="@dimen/_12sdp"
-        android:layout_marginEnd="@dimen/_16sdp"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
         android:visibility="gone"
         app:wsEmptyIcon="@drawable/ws_ic_account_tree"
         app:wsEmptyMessage="@string/org_empty_message"

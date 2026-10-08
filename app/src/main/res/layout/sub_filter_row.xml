@@ -4,12 +4,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:paddingEnd="@dimen/_8sdp">
+    android:paddingEnd="@dimen/_5sdp">
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/ly_work_home"
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/_32sdp"
+        android:layout_height="@dimen/_27sdp"
         android:clickable="true"
         android:focusable="true"
         app:cardBackgroundColor="@color/white"
@@ -23,29 +23,29 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingStart="@dimen/_12sdp"
-            android:paddingEnd="@dimen/_6sdp">
+            android:paddingStart="@dimen/_8sdp"
+            android:paddingEnd="@dimen/_4sdp">
 
             <TextView
                 android:id="@+id/tv_work_from"
                 style="@style/Ws.Text.Medium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/_6sdp"
+                android:layout_marginEnd="@dimen/_4sdp"
                 android:maxLines="1"
-                android:textSize="@dimen/_12ssp" />
+                android:textSize="@dimen/_10ssp" />
 
             <TextView
                 android:id="@+id/tv_work_txt"
                 style="@style/Ws.Text.Medium"
-                android:layout_width="@dimen/_20sdp"
-                android:layout_height="@dimen/_20sdp"
+                android:layout_width="@dimen/_17sdp"
+                android:layout_height="@dimen/_17sdp"
                 android:background="@drawable/ws_circle_bg"
                 android:backgroundTint="@color/ws_azure"
                 android:gravity="center"
                 android:maxLines="1"
                 android:textColor="@color/black"
-                android:textSize="@dimen/_10ssp" />
+                android:textSize="@dimen/_9ssp" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 </FrameLayout>

@@ -5,7 +5,7 @@
     style="@style/Widget.Ws.Card"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginEnd="@dimen/_8sdp"
+    android:layout_marginEnd="@dimen/_5sdp"
     android:layout_marginBottom="@dimen/_2sdp"
     android:clickable="true"
     android:focusable="true"
@@ -14,29 +14,29 @@
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/_32sdp"
+        android:layout_height="@dimen/_27sdp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingStart="@dimen/_10sdp"
-        android:paddingEnd="@dimen/_10sdp">
+        android:paddingStart="@dimen/_6sdp"
+        android:paddingEnd="@dimen/_6sdp">
 
         <TextView
             android:id="@+id/exp_chip_title"
             style="@style/Ws.Text.Medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/_12ssp" />
+            android:textSize="@dimen/_10ssp" />
 
         <TextView
             android:id="@+id/exp_chip_count"
             style="@style/Ws.Text.Medium"
-            android:layout_width="@dimen/_20sdp"
-            android:layout_height="@dimen/_20sdp"
-            android:layout_marginStart="@dimen/_6sdp"
+            android:layout_width="@dimen/_17sdp"
+            android:layout_height="@dimen/_17sdp"
+            android:layout_marginStart="@dimen/_4sdp"
             android:background="@drawable/ws_circle_bg"
             android:backgroundTint="@color/ws_azure"
             android:gravity="center"
             android:textColor="@color/black"
-            android:textSize="@dimen/_11ssp" />
+            android:textSize="@dimen/_10ssp" />
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

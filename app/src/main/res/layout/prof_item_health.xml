@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:background="@drawable/prof_health_bg"
     android:orientation="vertical"
-    android:padding="@dimen/_14sdp">
+    android:padding="@dimen/_9sdp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,8 +13,8 @@
         android:orientation="horizontal">
 
         <FrameLayout
-            android:layout_width="@dimen/_38sdp"
-            android:layout_height="@dimen/_38sdp">
+            android:layout_width="@dimen/_32sdp"
+            android:layout_height="@dimen/_32sdp">
 
             <View
                 android:id="@+id/prof_health_circle"
@@ -24,8 +24,8 @@
 
             <ImageView
                 android:id="@+id/prof_health_icon"
-                android:layout_width="@dimen/_18sdp"
-                android:layout_height="@dimen/_18sdp"
+                android:layout_width="@dimen/_15sdp"
+                android:layout_height="@dimen/_15sdp"
                 android:layout_gravity="center"
                 android:importantForAccessibility="no"
                 android:src="@drawable/prof_ic_medical" />
@@ -34,7 +34,7 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_12sdp"
+            android:layout_marginStart="@dimen/_8sdp"
             android:layout_weight="1"
             android:orientation="vertical">
 
@@ -43,7 +43,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/prof_health_insurance"
-                android:textSize="@dimen/_13ssp" />
+                android:textSize="@dimen/_11ssp" />
 
             <TextView
                 android:id="@+id/prof_health_provider"
@@ -52,21 +52,21 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_2sdp"
                 android:textColor="@color/ws_text_secondary"
-                android:textSize="@dimen/_10ssp" />
+                android:textSize="@dimen/_9ssp" />
         </LinearLayout>
 
         <FrameLayout
             android:id="@+id/prof_health_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_8sdp" />
+            android:layout_marginStart="@dimen/_5sdp" />
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="@dimen/_14sdp"
-        android:layout_marginBottom="@dimen/_14sdp"
+        android:layout_marginTop="@dimen/_9sdp"
+        android:layout_marginBottom="@dimen/_9sdp"
         android:background="@color/ws_divider" />
 
     <FrameLayout

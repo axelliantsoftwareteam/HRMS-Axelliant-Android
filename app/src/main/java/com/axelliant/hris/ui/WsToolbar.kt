@@ -6,6 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
 import androidx.core.content.res.use
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import com.axelliant.hris.R
 import com.intuit.sdp.R as SdpR
 import com.axelliant.hris.databinding.ViewWsToolbarBinding
@@ -26,7 +29,7 @@ class WsToolbar @JvmOverloads constructor(
     private val binding = ViewWsToolbarBinding.inflate(LayoutInflater.from(context), this)
 
     init {
-        minimumHeight = resources.getDimensionPixelSize(SdpR.dimen._40sdp)
+        minimumHeight = resources.getDimensionPixelSize(SdpR.dimen._34sdp)
         context.obtainStyledAttributes(attrs, R.styleable.WsToolbar).use { a ->
             binding.wsTvTitle.text = a.getString(R.styleable.WsToolbar_wsTitle).orEmpty()
             binding.wsBtnBack.visibility =
@@ -39,6 +42,15 @@ class WsToolbar @JvmOverloads constructor(
             binding.wsBtnAction.contentDescription = a.getString(R.styleable.WsToolbar_wsActionDescription)
         }
         binding.wsBtnBack.setOnClickListener { AppNavigator.moveBackToPreviousFragment() }
+
+        // Edge-to-edge (targetSdk 35+): keep the toolbar below the status bar. Where the window already
+        // fits system bars the inset is 0, so this is a no-op.
+        val basePaddingTop = paddingTop
+        ViewCompat.setOnApplyWindowInsetsListener(this) { v, insets ->
+            val top = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top
+            v.updatePadding(top = basePaddingTop + top)
+            insets
+        }
     }
 
     var title: CharSequence

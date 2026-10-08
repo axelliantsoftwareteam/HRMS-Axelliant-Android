@@ -4,13 +4,13 @@
     style="@style/Widget.Ws.Card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/_12sdp">
+    android:layout_marginBottom="@dimen/_8sdp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="@dimen/_14sdp">
+        android:padding="@dimen/_9sdp">
 
         <LinearLayout
             android:id="@+id/exp_appr_header_row"
@@ -24,17 +24,17 @@
 
             <ImageView
                 android:id="@+id/exp_appr_icon"
-                android:layout_width="@dimen/_42sdp"
-                android:layout_height="@dimen/_42sdp"
+                android:layout_width="@dimen/_36sdp"
+                android:layout_height="@dimen/_36sdp"
                 android:background="@drawable/ws_icon_badge_bg"
                 android:importantForAccessibility="no"
-                android:padding="@dimen/_10sdp"
+                android:padding="@dimen/_6sdp"
                 android:src="@drawable/ws_ic_credit_card" />
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_12sdp"
+                android:layout_marginStart="@dimen/_8sdp"
                 android:layout_weight="1"
                 android:orientation="vertical">
 
@@ -43,24 +43,24 @@
                     style="@style/Ws.Text.Medium"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="@dimen/_14ssp" />
+                    android:textSize="@dimen/_12ssp" />
 
                 <TextView
                     android:id="@+id/exp_appr_label"
                     style="@style/Ws.Text.Medium"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_6sdp"
+                    android:layout_marginTop="@dimen/_4sdp"
                     android:textColor="@color/ws_grey"
-                    android:textSize="@dimen/_12ssp" />
+                    android:textSize="@dimen/_10ssp" />
 
                 <TextView
                     android:id="@+id/exp_appr_status"
                     style="@style/Ws.Text.Badge"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_6sdp"
-                    android:textSize="@dimen/_12ssp" />
+                    android:layout_marginTop="@dimen/_4sdp"
+                    android:textSize="@dimen/_10ssp" />
             </LinearLayout>
 
             <TextView
@@ -68,15 +68,15 @@
                 style="@style/Ws.Text.SemiBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_8sdp"
+                android:layout_marginStart="@dimen/_5sdp"
                 android:textColor="@color/ws_purple"
-                android:textSize="@dimen/_20ssp" />
+                android:textSize="@dimen/_13ssp" />
 
             <ImageView
                 android:id="@+id/exp_appr_chevron"
-                android:layout_width="@dimen/_20sdp"
-                android:layout_height="@dimen/_20sdp"
-                android:layout_marginStart="@dimen/_8sdp"
+                android:layout_width="@dimen/_17sdp"
+                android:layout_height="@dimen/_17sdp"
+                android:layout_marginStart="@dimen/_5sdp"
                 android:importantForAccessibility="no"
                 android:src="@drawable/ws_ic_expand_more"
                 app:tint="@color/black" />
@@ -90,7 +90,7 @@
             android:id="@+id/exp_appr_actions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_12sdp"
+            android:layout_marginTop="@dimen/_8sdp"
             android:orientation="horizontal"
             android:visibility="gone">
 
@@ -101,17 +101,17 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/exp_reject"
-                android:textSize="@dimen/_13ssp" />
+                android:textSize="@dimen/_11ssp" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/exp_appr_btn_approve"
                 style="@style/Widget.Ws.Button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginStart="@dimen/_6sdp"
                 android:layout_weight="1"
                 android:text="@string/exp_approve"
-                android:textSize="@dimen/_13ssp" />
+                android:textSize="@dimen/_11ssp" />
         </LinearLayout>
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

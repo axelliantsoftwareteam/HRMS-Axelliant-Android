@@ -5,7 +5,7 @@
     style="@style/Widget.Ws.Card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/_14sdp"
+    android:layout_marginTop="@dimen/_9sdp"
     app:cardCornerRadius="@dimen/_16sdp"
     app:cardElevation="0dp"
     app:strokeColor="#2E888A8C">
@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="@dimen/_16sdp">
+        android:padding="@dimen/_10sdp">
 
         <TextView
             android:id="@+id/prof_section_title"
@@ -22,13 +22,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/ws_primary"
-            android:textSize="@dimen/_13ssp" />
+            android:textSize="@dimen/_11ssp" />
 
         <LinearLayout
             android:id="@+id/prof_section_body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_12sdp"
+            android:layout_marginTop="@dimen/_8sdp"
             android:orientation="vertical" />
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

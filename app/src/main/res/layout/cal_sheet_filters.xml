@@ -12,10 +12,10 @@
         android:background="@drawable/ws_sheet_header_bg"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingStart="@dimen/_16sdp"
-        android:paddingTop="@dimen/_12sdp"
-        android:paddingEnd="@dimen/_12sdp"
-        android:paddingBottom="@dimen/_12sdp">
+        android:paddingStart="@dimen/_10sdp"
+        android:paddingTop="@dimen/_8sdp"
+        android:paddingEnd="@dimen/_8sdp"
+        android:paddingBottom="@dimen/_8sdp">
 
         <LinearLayout
             android:layout_width="0dp"
@@ -29,7 +29,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/cal_filters_title"
                 android:textColor="@color/white"
-                android:textSize="@dimen/_14ssp" />
+                android:textSize="@dimen/_12ssp" />
 
             <TextView
                 style="@style/Ws.Text"
@@ -38,17 +38,17 @@
                 android:alpha="0.85"
                 android:text="@string/cal_filters_subtitle"
                 android:textColor="@color/white"
-                android:textSize="@dimen/_10ssp" />
+                android:textSize="@dimen/_9ssp" />
         </LinearLayout>
 
         <ImageButton
             android:id="@+id/cal_sheet_close"
-            android:layout_width="@dimen/_30sdp"
-            android:layout_height="@dimen/_30sdp"
+            android:layout_width="@dimen/_26sdp"
+            android:layout_height="@dimen/_26sdp"
             android:background="@drawable/ws_circle_bg"
             android:backgroundTint="#33FFFFFF"
             android:contentDescription="@string/ws_close"
-            android:padding="@dimen/_7sdp"
+            android:padding="@dimen/_5sdp"
             android:scaleType="fitCenter"
             android:src="@drawable/ws_ic_close"
             app:tint="@color/white" />
@@ -63,7 +63,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="@dimen/_16sdp">
+            android:padding="@dimen/_10sdp">
 
             <LinearLayout
                 android:id="@+id/cal_row_start"
@@ -72,14 +72,14 @@
                 android:background="@drawable/ws_input_bg"
                 android:foreground="?attr/selectableItemBackground"
                 android:gravity="center_vertical"
-                android:minHeight="@dimen/_38sdp"
+                android:minHeight="@dimen/_32sdp"
                 android:orientation="horizontal"
-                android:paddingStart="@dimen/_11sdp"
-                android:paddingEnd="@dimen/_11sdp">
+                android:paddingStart="@dimen/_7sdp"
+                android:paddingEnd="@dimen/_7sdp">
 
                 <ImageView
-                    android:layout_width="@dimen/_14sdp"
-                    android:layout_height="@dimen/_14sdp"
+                    android:layout_width="@dimen/_12sdp"
+                    android:layout_height="@dimen/_12sdp"
                     android:importantForAccessibility="no"
                     android:src="@drawable/ws_ic_calendar"
                     app:tint="@color/ws_primary" />
@@ -88,10 +88,10 @@
                     style="@style/Ws.Text.Medium"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_6sdp"
+                    android:layout_marginStart="@dimen/_4sdp"
                     android:layout_weight="1"
                     android:text="@string/team_start_date"
-                    android:textSize="@dimen/_11ssp" />
+                    android:textSize="@dimen/_10ssp" />
 
                 <TextView
                     android:id="@+id/cal_start_value"
@@ -99,25 +99,25 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/ws_primary"
-                    android:textSize="@dimen/_11ssp" />
+                    android:textSize="@dimen/_10ssp" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/cal_row_end"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_8sdp"
+                android:layout_marginTop="@dimen/_5sdp"
                 android:background="@drawable/ws_input_bg"
                 android:foreground="?attr/selectableItemBackground"
                 android:gravity="center_vertical"
-                android:minHeight="@dimen/_38sdp"
+                android:minHeight="@dimen/_32sdp"
                 android:orientation="horizontal"
-                android:paddingStart="@dimen/_11sdp"
-                android:paddingEnd="@dimen/_11sdp">
+                android:paddingStart="@dimen/_7sdp"
+                android:paddingEnd="@dimen/_7sdp">
 
                 <ImageView
-                    android:layout_width="@dimen/_14sdp"
-                    android:layout_height="@dimen/_14sdp"
+                    android:layout_width="@dimen/_12sdp"
+                    android:layout_height="@dimen/_12sdp"
                     android:importantForAccessibility="no"
                     android:src="@drawable/ws_ic_calendar"
                     app:tint="@color/ws_primary" />
@@ -126,10 +126,10 @@
                     style="@style/Ws.Text.Medium"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_6sdp"
+                    android:layout_marginStart="@dimen/_4sdp"
                     android:layout_weight="1"
                     android:text="@string/team_end_date"
-                    android:textSize="@dimen/_11ssp" />
+                    android:textSize="@dimen/_10ssp" />
 
                 <TextView
                     android:id="@+id/cal_end_value"
@@ -137,14 +137,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/ws_primary"
-                    android:textSize="@dimen/_11ssp" />
+                    android:textSize="@dimen/_10ssp" />
             </LinearLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.Ws.TextInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_12sdp"
+                android:layout_marginTop="@dimen/_8sdp"
                 android:hint="@string/team_employee">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -161,7 +161,7 @@
                 style="@style/Widget.Ws.TextInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_6sdp"
                 android:hint="@string/team_designation">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -177,7 +177,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_16sdp"
+                android:layout_marginTop="@dimen/_10sdp"
                 android:orientation="horizontal">
 
                 <com.google.android.material.button.MaterialButton
@@ -193,7 +193,7 @@
                     style="@style/Widget.Ws.Button"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginStart="@dimen/_6sdp"
                     android:layout_weight="1"
                     android:text="@string/cal_apply" />
             </LinearLayout>

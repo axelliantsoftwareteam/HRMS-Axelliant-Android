@@ -114,7 +114,7 @@ class ProfileRenderer(private val context: Context, private val container: Linea
         p.department.cleaned()?.let {
             body.addView(text(R.style.Ws_Text, it, 11, grey, top = SdpR.dimen._3sdp))
         }
-        body.addView(divider(SdpR.dimen._12sdp, SdpR.dimen._12sdp))
+        body.addView(divider(SdpR.dimen._8sdp, SdpR.dimen._8sdp))
         grid(
             body,
             listOf(
@@ -158,18 +158,18 @@ class ProfileRenderer(private val context: Context, private val container: Linea
         if (dependents.isNotEmpty()) {
             header.addView(capsule(dependents.size.toString(), primary, 9))
         }
-        body.addView(header, topMargin(px(SdpR.dimen._16sdp)))
+        body.addView(header, topMargin(px(SdpR.dimen._10sdp)))
 
         if (dependents.isEmpty()) {
             val empty = text(R.style.Ws_Text, context.getString(R.string.prof_no_dependents), 11, grey).apply {
                 gravity = Gravity.CENTER_VERTICAL
-                compoundDrawablePadding = px(SdpR.dimen._8sdp)
-                val pad = px(SdpR.dimen._12sdp)
+                compoundDrawablePadding = px(SdpR.dimen._5sdp)
+                val pad = px(SdpR.dimen._8sdp)
                 setPadding(pad, pad, pad, pad)
                 background = tinted(R.drawable.prof_pill_bg, WsStatus.tint(grey, 8))
-                setCompoundDrawablesRelative(icon(R.drawable.prof_ic_group, grey, SdpR.dimen._16sdp), null, null, null)
+                setCompoundDrawablesRelative(icon(R.drawable.prof_ic_group, grey, SdpR.dimen._14sdp), null, null, null)
             }
-            body.addView(empty, topMargin(px(SdpR.dimen._10sdp)))
+            body.addView(empty, topMargin(px(SdpR.dimen._6sdp)))
         } else {
             dependents.forEach { dependentCard(body, it) }
         }
@@ -177,7 +177,7 @@ class ProfileRenderer(private val context: Context, private val container: Linea
         // Other schemes.
         body.addView(
             text(R.style.Ws_Text_SemiBold, context.getString(R.string.prof_other_schemes), 12),
-            topMargin(px(SdpR.dimen._16sdp))
+            topMargin(px(SdpR.dimen._10sdp))
         )
         schemeTile(body, R.string.prof_life_insurance, R.drawable.prof_ic_heart, p.lifeInsuranceRegistered)
         schemeTile(body, R.string.prof_eobi, R.drawable.prof_ic_bank, p.eobiRegistered)
@@ -212,7 +212,7 @@ class ProfileRenderer(private val context: Context, private val container: Linea
             nameRow.addView(
                 capsule(dependent.relation, primary, 9),
                 LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-                    .apply { marginStart = px(SdpR.dimen._8sdp) }
+                    .apply { marginStart = px(SdpR.dimen._5sdp) }
             )
         }
         b.profRowContent.addView(nameRow)
@@ -223,11 +223,11 @@ class ProfileRenderer(private val context: Context, private val container: Linea
             dependent.age?.let { context.getString(R.string.prof_dependent_age, it) }
         ).joinToString(" · ")
         if (details.isNotEmpty()) {
-            b.profRowContent.addView(text(R.style.Ws_Text, details, 10, grey, top = SdpR.dimen._5sdp))
+            b.profRowContent.addView(text(R.style.Ws_Text, details, 10, grey, top = SdpR.dimen._4sdp))
         }
         if (dependent.cnic.isNotEmpty()) {
             b.profRowContent.addView(
-                text(R.style.Ws_Text, context.getString(R.string.prof_dependent_cnic, dependent.cnic), 10, grey, top = SdpR.dimen._5sdp)
+                text(R.style.Ws_Text, context.getString(R.string.prof_dependent_cnic, dependent.cnic), 10, grey, top = SdpR.dimen._4sdp)
             )
         }
         body.addView(b.root)
@@ -246,8 +246,8 @@ class ProfileRenderer(private val context: Context, private val container: Linea
     private fun skillsSection(skills: List<String>) {
         val body = section(R.string.prof_sec_skills)
         val group = ChipGroup(context).apply {
-            chipSpacingHorizontal = px(SdpR.dimen._8sdp)
-            chipSpacingVertical = px(SdpR.dimen._8sdp)
+            chipSpacingHorizontal = px(SdpR.dimen._5sdp)
+            chipSpacingVertical = px(SdpR.dimen._5sdp)
         }
         val font = ResourcesCompat.getFont(context, R.font.poppins_medium)
         skills.forEach { skill ->
@@ -270,7 +270,7 @@ class ProfileRenderer(private val context: Context, private val container: Linea
     private fun educationSection(rows: List<ProfileEducation>) {
         val body = section(R.string.prof_sec_education)
         rows.forEachIndexed { index, item ->
-            if (index > 0) body.addView(divider(SdpR.dimen._12sdp, SdpR.dimen._12sdp))
+            if (index > 0) body.addView(divider(SdpR.dimen._8sdp, SdpR.dimen._8sdp))
             body.addView(text(R.style.Ws_Text_SemiBold, item.school.cleaned() ?: notAvailable, 11))
             val line = LinearLayout(context).apply {
                 orientation = LinearLayout.HORIZONTAL
@@ -284,17 +284,17 @@ class ProfileRenderer(private val context: Context, private val container: Linea
                 line.addView(
                     capsule(it, primary, 9, 10),
                     LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-                        .apply { marginStart = px(SdpR.dimen._8sdp) }
+                        .apply { marginStart = px(SdpR.dimen._5sdp) }
                 )
             }
-            body.addView(line, topMargin(px(SdpR.dimen._6sdp)))
+            body.addView(line, topMargin(px(SdpR.dimen._4sdp)))
         }
     }
 
     private fun workSection(rows: List<ProfileWork>) {
         val body = section(R.string.prof_sec_work)
         rows.forEachIndexed { index, item ->
-            if (index > 0) body.addView(divider(SdpR.dimen._12sdp, SdpR.dimen._12sdp))
+            if (index > 0) body.addView(divider(SdpR.dimen._8sdp, SdpR.dimen._8sdp))
             body.addView(text(R.style.Ws_Text_SemiBold, item.company.cleaned() ?: notAvailable, 11))
             body.addView(text(R.style.Ws_Text, item.designation.cleaned() ?: notAvailable, 11, grey, top = SdpR.dimen._4sdp))
             item.salary.cleaned()?.let {
@@ -323,7 +323,7 @@ class ProfileRenderer(private val context: Context, private val container: Linea
     /** Fields stacked with a divider between them. */
     private fun rows(body: LinearLayout, fields: List<Pair<Int, String?>>) {
         fields.forEachIndexed { index, (label, value) ->
-            if (index > 0) body.addView(divider(SdpR.dimen._8sdp, SdpR.dimen._8sdp))
+            if (index > 0) body.addView(divider(SdpR.dimen._5sdp, SdpR.dimen._5sdp))
             body.addView(field(body, label, value))
         }
     }
@@ -334,11 +334,11 @@ class ProfileRenderer(private val context: Context, private val container: Linea
             val row = LinearLayout(context).apply { orientation = LinearLayout.HORIZONTAL }
             pair.forEachIndexed { column, (label, value) ->
                 val params = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)
-                if (column > 0) params.marginStart = px(SdpR.dimen._14sdp)
+                if (column > 0) params.marginStart = px(SdpR.dimen._9sdp)
                 row.addView(field(row, label, value), params)
             }
             if (pair.size == 1) row.addView(View(context), LinearLayout.LayoutParams(0, 1, 1f))
-            body.addView(row, topMargin(if (index == 0) 0 else px(SdpR.dimen._14sdp)))
+            body.addView(row, topMargin(if (index == 0) 0 else px(SdpR.dimen._9sdp)))
         }
     }
 
@@ -374,7 +374,7 @@ class ProfileRenderer(private val context: Context, private val container: Linea
             text = value
             setTextSize(TypedValue.COMPLEX_UNIT_PX, ssp(sizeSsp))
             setTextColor(color)
-            setPadding(px(SdpR.dimen._8sdp), px(SdpR.dimen._2sdp), px(SdpR.dimen._8sdp), px(SdpR.dimen._2sdp))
+            setPadding(px(SdpR.dimen._5sdp), px(SdpR.dimen._2sdp), px(SdpR.dimen._5sdp), px(SdpR.dimen._2sdp))
             background = tinted(R.drawable.prof_pill_bg, WsStatus.tint(color, alphaPercent))
         }
 
@@ -386,7 +386,7 @@ class ProfileRenderer(private val context: Context, private val container: Linea
         pill.setTextColor(tint)
         pill.background?.mutate()?.setTint(WsStatus.tint(tint, 12))
         pill.setCompoundDrawablesRelative(
-            icon(if (registered) R.drawable.ws_ic_check_circle else R.drawable.prof_ic_minus_circle, tint, SdpR.dimen._11sdp),
+            icon(if (registered) R.drawable.ws_ic_check_circle else R.drawable.prof_ic_minus_circle, tint, SdpR.dimen._9sdp),
             null, null, null
         )
         return pill
@@ -414,10 +414,10 @@ class ProfileRenderer(private val context: Context, private val container: Linea
     /** Text size in px for an ssp step (so it scales with the screen like the XML layouts). */
     private fun ssp(size: Int): Float = context.resources.getDimension(
         when (size) {
-            9 -> SspR.dimen._9ssp
-            10 -> SspR.dimen._10ssp
-            11 -> SspR.dimen._11ssp
-            else -> SspR.dimen._12ssp
+            9 -> SspR.dimen._8ssp
+            10 -> SspR.dimen._9ssp
+            11 -> SspR.dimen._10ssp
+            else -> SspR.dimen._11ssp
         }
     )
 }

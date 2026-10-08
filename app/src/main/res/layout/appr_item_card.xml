@@ -6,13 +6,13 @@
     android:layout_height="wrap_content"
     android:layout_marginStart="@dimen/_2sdp"
     android:layout_marginEnd="@dimen/_2sdp"
-    android:layout_marginBottom="@dimen/_10sdp">
+    android:layout_marginBottom="@dimen/_6sdp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="@dimen/_11sdp">
+        android:padding="@dimen/_7sdp">
 
         <!-- Tappable top area: opens the details sheet -->
         <LinearLayout
@@ -30,15 +30,15 @@
 
                 <ImageView
                     android:id="@+id/appr_avatar"
-                    android:layout_width="@dimen/_34sdp"
-                    android:layout_height="@dimen/_34sdp"
+                    android:layout_width="@dimen/_29sdp"
+                    android:layout_height="@dimen/_29sdp"
                     android:contentDescription="@null"
                     android:scaleType="centerCrop" />
 
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginStart="@dimen/_6sdp"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
@@ -49,7 +49,7 @@
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
                         android:maxLines="2"
-                        android:textSize="@dimen/_11ssp" />
+                        android:textSize="@dimen/_10ssp" />
 
                     <TextView
                         android:id="@+id/appr_code"
@@ -58,7 +58,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_2sdp"
                         android:textColor="@color/ws_grey"
-                        android:textSize="@dimen/_10ssp" />
+                        android:textSize="@dimen/_9ssp" />
                 </LinearLayout>
 
                 <TextView
@@ -66,29 +66,29 @@
                     style="@style/Ws.Text.Badge"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_6sdp" />
+                    android:layout_marginStart="@dimen/_4sdp" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_6sdp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <ImageView
                     android:id="@+id/appr_type_icon"
-                    android:layout_width="@dimen/_28sdp"
-                    android:layout_height="@dimen/_28sdp"
+                    android:layout_width="@dimen/_24sdp"
+                    android:layout_height="@dimen/_24sdp"
                     android:background="@drawable/ws_icon_badge_bg"
                     android:contentDescription="@null"
-                    android:padding="@dimen/_6sdp"
+                    android:padding="@dimen/_4sdp"
                     android:scaleType="fitCenter" />
 
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_8sdp"
+                    android:layout_marginStart="@dimen/_5sdp"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
@@ -98,7 +98,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/appr_request_for"
                         android:textColor="@color/ws_grey"
-                        android:textSize="@dimen/_9ssp" />
+                        android:textSize="@dimen/_8ssp" />
 
                     <TextView
                         android:id="@+id/appr_type"
@@ -106,7 +106,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_2sdp"
-                        android:textSize="@dimen/_11ssp" />
+                        android:textSize="@dimen/_10ssp" />
                 </LinearLayout>
 
                 <TextView
@@ -114,9 +114,9 @@
                     style="@style/Ws.Text.Medium"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_6sdp"
+                    android:layout_marginStart="@dimen/_4sdp"
                     android:gravity="end"
-                    android:textSize="@dimen/_10ssp" />
+                    android:textSize="@dimen/_9ssp" />
             </LinearLayout>
 
             <TextView
@@ -124,17 +124,17 @@
                 style="@style/Ws.Text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_6sdp"
                 android:ellipsize="end"
                 android:maxLines="3"
                 android:textColor="@color/ws_grey"
-                android:textSize="@dimen/_10ssp" />
+                android:textSize="@dimen/_9ssp" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_6sdp"
             android:orientation="horizontal">
 
             <com.google.android.material.button.MaterialButton
@@ -143,9 +143,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:minHeight="@dimen/_32sdp"
+                android:minHeight="@dimen/_27sdp"
                 android:text="@string/appr_reject"
-                android:textSize="@dimen/_10ssp"
+                android:textSize="@dimen/_9ssp"
                 app:cornerRadius="@dimen/_8sdp" />
 
             <com.google.android.material.button.MaterialButton
@@ -153,11 +153,11 @@
                 style="@style/Widget.Ws.Button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginStart="@dimen/_6sdp"
                 android:layout_weight="1"
-                android:minHeight="@dimen/_32sdp"
+                android:minHeight="@dimen/_27sdp"
                 android:text="@string/appr_approve"
-                android:textSize="@dimen/_10ssp"
+                android:textSize="@dimen/_9ssp"
                 app:cornerRadius="@dimen/_8sdp" />
         </LinearLayout>
     </LinearLayout>

@@ -6,11 +6,11 @@
     android:elevation="@dimen/_3sdp"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:padding="@dimen/_18sdp">
+    android:padding="@dimen/_11sdp">
 
     <FrameLayout
-        android:layout_width="@dimen/_68sdp"
-        android:layout_height="@dimen/_68sdp"
+        android:layout_width="@dimen/_58sdp"
+        android:layout_height="@dimen/_58sdp"
         android:background="@drawable/ws_circle_bg"
         android:padding="@dimen/_2sdp">
 
@@ -25,7 +25,7 @@
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_14sdp"
+        android:layout_marginStart="@dimen/_9sdp"
         android:layout_weight="1"
         android:orientation="vertical">
 
@@ -35,7 +35,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/white"
-            android:textSize="@dimen/_15ssp" />
+            android:textSize="@dimen/_13ssp" />
 
         <TextView
             android:id="@+id/prof_hero_designation"
@@ -44,7 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_4sdp"
             android:textColor="@color/white"
-            android:textSize="@dimen/_11ssp" />
+            android:textSize="@dimen/_10ssp" />
 
         <TextView
             android:id="@+id/prof_hero_department"
@@ -54,7 +54,7 @@
             android:layout_marginTop="@dimen/_4sdp"
             android:alpha="0.85"
             android:textColor="@color/white"
-            android:textSize="@dimen/_10ssp"
+            android:textSize="@dimen/_9ssp"
             android:visibility="gone" />
     </LinearLayout>
 </LinearLayout>

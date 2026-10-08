@@ -16,9 +16,9 @@
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingStart="@dimen/_20sdp"
-        android:paddingTop="@dimen/_16sdp"
+        android:paddingTop="@dimen/_10sdp"
         android:paddingEnd="@dimen/_20sdp"
-        android:paddingBottom="@dimen/_16sdp">
+        android:paddingBottom="@dimen/_10sdp">
 
         <LinearLayout
             android:layout_width="0dp"
@@ -33,7 +33,7 @@
                 android:alpha="0.85"
                 android:text="@string/pay_preview_label"
                 android:textColor="@color/white"
-                android:textSize="@dimen/_10ssp" />
+                android:textSize="@dimen/_9ssp" />
 
             <TextView
                 android:id="@+id/pay_preview_title"
@@ -42,31 +42,31 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_2sdp"
                 android:textColor="@color/white"
-                android:textSize="@dimen/_14ssp" />
+                android:textSize="@dimen/_12ssp" />
         </LinearLayout>
 
         <ImageButton
             android:id="@+id/pay_preview_share"
-            android:layout_width="@dimen/_44sdp"
-            android:layout_height="@dimen/_44sdp"
-            android:layout_marginStart="@dimen/_12sdp"
+            android:layout_width="@dimen/_37sdp"
+            android:layout_height="@dimen/_37sdp"
+            android:layout_marginStart="@dimen/_8sdp"
             android:background="@drawable/ws_circle_bg"
             android:backgroundTint="#33FFFFFF"
             android:contentDescription="@string/pay_share"
-            android:padding="@dimen/_12sdp"
+            android:padding="@dimen/_8sdp"
             android:scaleType="fitCenter"
             android:src="@drawable/ws_ic_share"
             app:tint="@color/white" />
 
         <ImageButton
             android:id="@+id/pay_preview_close"
-            android:layout_width="@dimen/_44sdp"
-            android:layout_height="@dimen/_44sdp"
-            android:layout_marginStart="@dimen/_12sdp"
+            android:layout_width="@dimen/_37sdp"
+            android:layout_height="@dimen/_37sdp"
+            android:layout_marginStart="@dimen/_8sdp"
             android:background="@drawable/ws_circle_bg"
             android:backgroundTint="#33FFFFFF"
             android:contentDescription="@string/pay_close"
-            android:padding="@dimen/_12sdp"
+            android:padding="@dimen/_8sdp"
             android:scaleType="fitCenter"
             android:src="@drawable/ws_ic_close"
             app:tint="@color/white" />
@@ -88,15 +88,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
-            android:paddingStart="@dimen/_10sdp"
-            android:paddingTop="@dimen/_10sdp"
-            android:paddingEnd="@dimen/_10sdp"
-            android:paddingBottom="@dimen/_10sdp" />
+            android:paddingStart="@dimen/_6sdp"
+            android:paddingTop="@dimen/_6sdp"
+            android:paddingEnd="@dimen/_6sdp"
+            android:paddingBottom="@dimen/_6sdp" />
 
         <ProgressBar
             android:id="@+id/pay_preview_progress"
-            android:layout_width="@dimen/_30sdp"
-            android:layout_height="@dimen/_30sdp"
+            android:layout_width="@dimen/_26sdp"
+            android:layout_height="@dimen/_26sdp"
             android:layout_gravity="center"
             android:indeterminate="true"
             android:indeterminateTint="@color/ws_payslip" />

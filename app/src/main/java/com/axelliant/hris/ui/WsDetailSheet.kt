@@ -61,7 +61,7 @@ class WsDetailSheet : BottomSheetDialogFragment() {
             binding.wsSheetStatus.visibility = View.VISIBLE
             WsStatus.badge(binding.wsSheetStatus, it)
             (binding.wsSheetStatus.layoutParams as ViewGroup.MarginLayoutParams).bottomMargin =
-                resources.getDimensionPixelSize(SdpR.dimen._10sdp)
+                resources.getDimensionPixelSize(SdpR.dimen._6sdp)
         }
 
         bindFields(args)
@@ -73,7 +73,7 @@ class WsDetailSheet : BottomSheetDialogFragment() {
         val values = args.getStringArray(ARG_VALUES) ?: return
         val halves = args.getBooleanArray(ARG_HALVES) ?: BooleanArray(labels.size)
         val accents = args.getBooleanArray(ARG_ACCENTS) ?: BooleanArray(labels.size)
-        val gap = resources.getDimensionPixelSize(SdpR.dimen._10sdp)
+        val gap = resources.getDimensionPixelSize(SdpR.dimen._6sdp)
 
         var i = 0
         while (i < labels.size) {
@@ -125,14 +125,14 @@ class WsDetailSheet : BottomSheetDialogFragment() {
         if (ids.isEmpty()) return
         binding.wsSheetActions.visibility = View.VISIBLE
         val requestKey = args.getString(ARG_REQUEST_KEY).orEmpty()
-        val gap = resources.getDimensionPixelSize(SdpR.dimen._10sdp)
+        val gap = resources.getDimensionPixelSize(SdpR.dimen._6sdp)
         ids.forEachIndexed { index, id ->
             val button = MaterialButton(requireContext()).apply {
                 text = labels[index]
                 isAllCaps = false
                 typeface = androidx.core.content.res.ResourcesCompat.getFont(context, R.font.poppins_medium)
-                cornerRadius = resources.getDimensionPixelSize(SdpR.dimen._10sdp)
-                minimumHeight = resources.getDimensionPixelSize(SdpR.dimen._38sdp)
+                cornerRadius = resources.getDimensionPixelSize(SdpR.dimen._6sdp)
+                minimumHeight = resources.getDimensionPixelSize(SdpR.dimen._32sdp)
                 when (styles[index]) {
                     STYLE_OUTLINE -> {
                         setTextColor(context.getColor(R.color.ws_primary))

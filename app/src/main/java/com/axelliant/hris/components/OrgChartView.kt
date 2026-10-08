@@ -266,7 +266,7 @@ class OrgChartView @JvmOverloads constructor(
         const val ZOOM_STEP = 0.15f
 
         /** Design units are the iOS points; this maps them to sdp (0.82 matches the rest of the redesign). */
-        private const val UNIT_SCALE = 0.82f
+        private const val UNIT_SCALE = 0.7f
         private const val CHART_PADDING = 20f
     }
 }

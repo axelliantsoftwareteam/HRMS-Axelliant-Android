@@ -10,9 +10,9 @@
         android:id="@+id/req_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_12sdp"
-        android:layout_marginTop="@dimen/_6sdp"
-        android:layout_marginEnd="@dimen/_12sdp"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_marginTop="@dimen/_4sdp"
+        android:layout_marginEnd="@dimen/_8sdp"
         app:wsTitle="@string/req_title_leave" />
 
     <androidx.core.widget.NestedScrollView
@@ -22,9 +22,9 @@
         android:clipToPadding="false"
         android:fillViewport="true"
         android:overScrollMode="never"
-        android:paddingStart="@dimen/_16sdp"
-        android:paddingTop="@dimen/_8sdp"
-        android:paddingEnd="@dimen/_16sdp"
+        android:paddingStart="@dimen/_10sdp"
+        android:paddingTop="@dimen/_5sdp"
+        android:paddingEnd="@dimen/_10sdp"
         android:paddingBottom="@dimen/_24sdp">
 
         <LinearLayout
@@ -53,14 +53,14 @@
                         android:background="@color/req_header_bg"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
-                        android:paddingStart="@dimen/_16sdp"
-                        android:paddingTop="@dimen/_12sdp"
-                        android:paddingEnd="@dimen/_16sdp"
-                        android:paddingBottom="@dimen/_12sdp">
+                        android:paddingStart="@dimen/_10sdp"
+                        android:paddingTop="@dimen/_8sdp"
+                        android:paddingEnd="@dimen/_10sdp"
+                        android:paddingBottom="@dimen/_8sdp">
 
                         <ImageView
-                            android:layout_width="@dimen/_24sdp"
-                            android:layout_height="@dimen/_24sdp"
+                            android:layout_width="@dimen/_20sdp"
+                            android:layout_height="@dimen/_20sdp"
                             android:importantForAccessibility="no"
                             android:src="@drawable/ws_ic_schedule"
                             app:tint="@color/ws_primary" />
@@ -70,16 +70,16 @@
                             style="@style/Ws.Text.Medium"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/_8sdp"
+                            android:layout_marginStart="@dimen/_5sdp"
                             android:layout_weight="1"
-                            android:textSize="@dimen/_15ssp" />
+                            android:textSize="@dimen/_13ssp" />
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="@dimen/_14sdp">
+                        android:padding="@dimen/_9sdp">
 
                         <!-- ===================== Leave form ===================== -->
                         <LinearLayout
@@ -93,9 +93,9 @@
                                 style="@style/Ws.Text.Medium"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginBottom="@dimen/_6sdp"
+                                android:layout_marginBottom="@dimen/_4sdp"
                                 android:text="@string/req_label_leave_type"
-                                android:textSize="@dimen/_13ssp" />
+                                android:textSize="@dimen/_11ssp" />
 
                             <com.google.android.material.textfield.TextInputLayout
                                 android:id="@+id/req_til_leave_type"
@@ -122,7 +122,7 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/_14sdp"
+                                android:layout_marginTop="@dimen/_9sdp"
                                 android:baselineAligned="false"
                                 android:orientation="horizontal">
 
@@ -136,9 +136,9 @@
                                         style="@style/Ws.Text.Medium"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginBottom="@dimen/_6sdp"
+                                        android:layout_marginBottom="@dimen/_4sdp"
                                         android:text="@string/req_label_start_date"
-                                        android:textSize="@dimen/_13ssp" />
+                                        android:textSize="@dimen/_11ssp" />
 
                                     <com.google.android.material.textfield.TextInputLayout
                                         android:id="@+id/req_til_start_date"
@@ -167,7 +167,7 @@
                                 <LinearLayout
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginStart="@dimen/_10sdp"
+                                    android:layout_marginStart="@dimen/_6sdp"
                                     android:layout_weight="1"
                                     android:orientation="vertical">
 
@@ -175,9 +175,9 @@
                                         style="@style/Ws.Text.Medium"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginBottom="@dimen/_6sdp"
+                                        android:layout_marginBottom="@dimen/_4sdp"
                                         android:text="@string/req_label_end_date"
-                                        android:textSize="@dimen/_13ssp" />
+                                        android:textSize="@dimen/_11ssp" />
 
                                     <com.google.android.material.textfield.TextInputLayout
                                         android:id="@+id/req_til_end_date"
@@ -212,7 +212,7 @@
                                 android:layout_marginTop="@dimen/_4sdp"
                                 android:fontFamily="@font/poppins_regular"
                                 android:text="@string/req_half_day"
-                                android:textSize="@dimen/_12ssp" />
+                                android:textSize="@dimen/_10ssp" />
 
                             <LinearLayout
                                 android:id="@+id/req_col_half_date"
@@ -225,10 +225,10 @@
                                     style="@style/Ws.Text.Medium"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_6sdp"
-                                    android:layout_marginBottom="@dimen/_6sdp"
+                                    android:layout_marginTop="@dimen/_4sdp"
+                                    android:layout_marginBottom="@dimen/_4sdp"
                                     android:text="@string/req_label_half_day_date"
-                                    android:textSize="@dimen/_13ssp" />
+                                    android:textSize="@dimen/_11ssp" />
 
                                 <com.google.android.material.textfield.TextInputLayout
                                     android:id="@+id/req_til_half_date"
@@ -257,7 +257,7 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/_14sdp"
+                                android:layout_marginTop="@dimen/_9sdp"
                                 android:baselineAligned="false"
                                 android:orientation="horizontal">
 
@@ -271,9 +271,9 @@
                                         style="@style/Ws.Text.Medium"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginBottom="@dimen/_6sdp"
+                                        android:layout_marginBottom="@dimen/_4sdp"
                                         android:text="@string/req_label_leave_count"
-                                        android:textSize="@dimen/_13ssp" />
+                                        android:textSize="@dimen/_11ssp" />
 
                                     <com.google.android.material.textfield.TextInputLayout
                                         style="@style/Widget.Ws.TextInput"
@@ -297,7 +297,7 @@
                                 <LinearLayout
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginStart="@dimen/_10sdp"
+                                    android:layout_marginStart="@dimen/_6sdp"
                                     android:layout_weight="1"
                                     android:orientation="vertical">
 
@@ -305,9 +305,9 @@
                                         style="@style/Ws.Text.Medium"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginBottom="@dimen/_6sdp"
+                                        android:layout_marginBottom="@dimen/_4sdp"
                                         android:text="@string/req_label_remaining"
-                                        android:textSize="@dimen/_13ssp" />
+                                        android:textSize="@dimen/_11ssp" />
 
                                     <com.google.android.material.textfield.TextInputLayout
                                         style="@style/Widget.Ws.TextInput"
@@ -333,10 +333,10 @@
                                 style="@style/Ws.Text.Medium"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/_14sdp"
-                                android:layout_marginBottom="@dimen/_6sdp"
+                                android:layout_marginTop="@dimen/_9sdp"
+                                android:layout_marginBottom="@dimen/_4sdp"
                                 android:text="@string/req_label_leave_reason"
-                                android:textSize="@dimen/_13ssp" />
+                                android:textSize="@dimen/_11ssp" />
 
                             <com.google.android.material.textfield.TextInputLayout
                                 android:id="@+id/req_til_leave_reason"
@@ -370,9 +370,9 @@
                                 style="@style/Ws.Text.Medium"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginBottom="@dimen/_6sdp"
+                                android:layout_marginBottom="@dimen/_4sdp"
                                 android:text="@string/req_label_attendance_type"
-                                android:textSize="@dimen/_13ssp" />
+                                android:textSize="@dimen/_11ssp" />
 
                             <com.google.android.material.button.MaterialButtonToggleGroup
                                 android:id="@+id/req_toggle_type"
@@ -389,17 +389,17 @@
                                 android:layout_marginTop="@dimen/_4sdp"
                                 android:text="@string/req_err_attendance_type"
                                 android:textColor="@color/ws_red"
-                                android:textSize="@dimen/_10ssp"
+                                android:textSize="@dimen/_9ssp"
                                 android:visibility="gone" />
 
                             <TextView
                                 style="@style/Ws.Text.Medium"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/_14sdp"
-                                android:layout_marginBottom="@dimen/_6sdp"
+                                android:layout_marginTop="@dimen/_9sdp"
+                                android:layout_marginBottom="@dimen/_4sdp"
                                 android:text="@string/req_label_location"
-                                android:textSize="@dimen/_13ssp" />
+                                android:textSize="@dimen/_11ssp" />
 
                             <com.google.android.material.button.MaterialButtonToggleGroup
                                 android:id="@+id/req_toggle_location"
@@ -416,13 +416,13 @@
                                 android:layout_marginTop="@dimen/_4sdp"
                                 android:text="@string/req_err_location"
                                 android:textColor="@color/ws_red"
-                                android:textSize="@dimen/_10ssp"
+                                android:textSize="@dimen/_9ssp"
                                 android:visibility="gone" />
 
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/_14sdp"
+                                android:layout_marginTop="@dimen/_9sdp"
                                 android:baselineAligned="false"
                                 android:orientation="horizontal">
 
@@ -436,9 +436,9 @@
                                         style="@style/Ws.Text.Medium"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginBottom="@dimen/_6sdp"
+                                        android:layout_marginBottom="@dimen/_4sdp"
                                         android:text="@string/req_label_date"
-                                        android:textSize="@dimen/_13ssp" />
+                                        android:textSize="@dimen/_11ssp" />
 
                                     <com.google.android.material.textfield.TextInputLayout
                                         android:id="@+id/req_til_date"
@@ -467,7 +467,7 @@
                                 <LinearLayout
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginStart="@dimen/_10sdp"
+                                    android:layout_marginStart="@dimen/_6sdp"
                                     android:layout_weight="1"
                                     android:orientation="vertical">
 
@@ -475,9 +475,9 @@
                                         style="@style/Ws.Text.Medium"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginBottom="@dimen/_6sdp"
+                                        android:layout_marginBottom="@dimen/_4sdp"
                                         android:text="@string/req_label_time"
-                                        android:textSize="@dimen/_13ssp" />
+                                        android:textSize="@dimen/_11ssp" />
 
                                     <com.google.android.material.textfield.TextInputLayout
                                         android:id="@+id/req_til_time"
@@ -508,10 +508,10 @@
                                 style="@style/Ws.Text.Medium"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/_14sdp"
-                                android:layout_marginBottom="@dimen/_6sdp"
+                                android:layout_marginTop="@dimen/_9sdp"
+                                android:layout_marginBottom="@dimen/_4sdp"
                                 android:text="@string/req_label_reason"
-                                android:textSize="@dimen/_13ssp" />
+                                android:textSize="@dimen/_11ssp" />
 
                             <com.google.android.material.textfield.TextInputLayout
                                 android:id="@+id/req_til_reason"
@@ -542,15 +542,15 @@
                 style="@style/Widget.Ws.Button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_16sdp"
-                android:minHeight="@dimen/_50sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:minHeight="@dimen/_42sdp"
                 android:text="@string/req_apply" />
 
             <LinearLayout
                 android:id="@+id/req_group_edit_actions"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_16sdp"
+                android:layout_marginTop="@dimen/_10sdp"
                 android:orientation="horizontal"
                 android:visibility="gone">
 
@@ -560,7 +560,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:minHeight="@dimen/_50sdp"
+                    android:minHeight="@dimen/_42sdp"
                     android:text="@string/req_delete" />
 
                 <com.google.android.material.button.MaterialButton
@@ -568,9 +568,9 @@
                     style="@style/Widget.Ws.Button"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginStart="@dimen/_6sdp"
                     android:layout_weight="1"
-                    android:minHeight="@dimen/_50sdp"
+                    android:minHeight="@dimen/_42sdp"
                     android:text="@string/req_update" />
             </LinearLayout>
         </LinearLayout>

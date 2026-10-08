@@ -53,7 +53,7 @@ class LeavesFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val gap = resources.getDimensionPixelSize(SdpR.dimen._10sdp)
+        val gap = resources.getDimensionPixelSize(SdpR.dimen._6sdp)
 
         binding.lvRvQuotas.layoutManager = GridLayoutManager(requireContext(), QUOTA_COLUMNS)
         binding.lvRvQuotas.addItemDecoration(LvGridGapDecoration(gap, QUOTA_COLUMNS))

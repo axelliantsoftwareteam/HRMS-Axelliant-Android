@@ -5,7 +5,7 @@
     android:clickable="true"
     android:focusable="true"
     android:gravity="center"
-    android:minHeight="@dimen/_34sdp"
+    android:minHeight="@dimen/_29sdp"
     android:orientation="vertical">
 
     <TextView
@@ -13,12 +13,12 @@
         style="@style/Ws.Text.Medium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/_10ssp" />
+        android:textSize="@dimen/_9ssp" />
 
     <TextView
         android:id="@+id/cal_day_mark"
         style="@style/Ws.Text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/_8ssp" />
+        android:textSize="@dimen/_7ssp" />
 </LinearLayout>

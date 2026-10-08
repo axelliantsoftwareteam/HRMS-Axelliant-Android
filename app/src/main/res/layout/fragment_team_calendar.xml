@@ -10,9 +10,9 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_12sdp"
-        android:layout_marginTop="@dimen/_6sdp"
-        android:layout_marginEnd="@dimen/_12sdp"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_marginTop="@dimen/_4sdp"
+        android:layout_marginEnd="@dimen/_8sdp"
         app:wsActionDescription="@string/cal_filter"
         app:wsActionIcon="@drawable/ws_ic_filter"
         app:wsTitle="@string/cal_title" />
@@ -21,9 +21,9 @@
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_16sdp"
-        android:layout_marginTop="@dimen/_8sdp"
-        android:layout_marginEnd="@dimen/_16sdp"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
         app:cardBackgroundColor="@color/ws_primary"
         app:cardCornerRadius="@dimen/_12sdp"
         app:cardElevation="@dimen/_2sdp"
@@ -33,7 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="@dimen/_10sdp">
+            android:padding="@dimen/_6sdp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -43,12 +43,12 @@
 
                 <ImageButton
                     android:id="@+id/cal_btn_prev"
-                    android:layout_width="@dimen/_30sdp"
-                    android:layout_height="@dimen/_30sdp"
+                    android:layout_width="@dimen/_26sdp"
+                    android:layout_height="@dimen/_26sdp"
                     android:background="@drawable/ws_circle_bg"
                     android:backgroundTint="#2EFFFFFF"
                     android:contentDescription="@string/cal_prev_month"
-                    android:padding="@dimen/_6sdp"
+                    android:padding="@dimen/_4sdp"
                     android:scaleType="fitCenter"
                     android:src="@drawable/ws_ic_chevron_left"
                     app:tint="@color/white" />
@@ -68,7 +68,7 @@
                         android:ellipsize="end"
                         android:maxLines="1"
                         android:textColor="@color/white"
-                        android:textSize="@dimen/_14ssp" />
+                        android:textSize="@dimen/_12ssp" />
 
                     <TextView
                         android:id="@+id/cal_days_label"
@@ -78,17 +78,17 @@
                         android:layout_marginTop="@dimen/_2sdp"
                         android:alpha="0.85"
                         android:textColor="@color/white"
-                        android:textSize="@dimen/_10ssp" />
+                        android:textSize="@dimen/_9ssp" />
                 </LinearLayout>
 
                 <ImageButton
                     android:id="@+id/cal_btn_next"
-                    android:layout_width="@dimen/_30sdp"
-                    android:layout_height="@dimen/_30sdp"
+                    android:layout_width="@dimen/_26sdp"
+                    android:layout_height="@dimen/_26sdp"
                     android:background="@drawable/ws_circle_bg"
                     android:backgroundTint="#2EFFFFFF"
                     android:contentDescription="@string/cal_next_month"
-                    android:padding="@dimen/_6sdp"
+                    android:padding="@dimen/_4sdp"
                     android:scaleType="fitCenter"
                     android:src="@drawable/ws_ic_chevron_right"
                     app:tint="@color/white" />
@@ -97,7 +97,7 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_6sdp">
+                android:layout_marginTop="@dimen/_4sdp">
 
                 <TextView
                     android:id="@+id/cal_members_pill"
@@ -106,12 +106,12 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:background="@drawable/cal_pill_bg"
-                    android:paddingStart="@dimen/_10sdp"
+                    android:paddingStart="@dimen/_6sdp"
                     android:paddingTop="@dimen/_3sdp"
-                    android:paddingEnd="@dimen/_10sdp"
+                    android:paddingEnd="@dimen/_6sdp"
                     android:paddingBottom="@dimen/_3sdp"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/_10ssp" />
+                    android:textSize="@dimen/_9ssp" />
 
                 <TextView
                     android:id="@+id/cal_btn_reset"
@@ -123,7 +123,7 @@
                     android:padding="@dimen/_3sdp"
                     android:text="@string/cal_reset"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/_10ssp"
+                    android:textSize="@dimen/_9ssp"
                     android:visibility="gone" />
             </FrameLayout>
         </LinearLayout>
@@ -133,17 +133,17 @@
         style="@style/Widget.Ws.Card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_16sdp"
-        android:layout_marginTop="@dimen/_8sdp"
-        android:layout_marginEnd="@dimen/_16sdp">
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginEnd="@dimen/_10sdp">
 
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/cal_legend"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/_10sdp"
-            app:chipSpacingHorizontal="@dimen/_5sdp"
-            app:chipSpacingVertical="@dimen/_5sdp" />
+            android:padding="@dimen/_6sdp"
+            app:chipSpacingHorizontal="@dimen/_4sdp"
+            app:chipSpacingVertical="@dimen/_4sdp" />
     </com.google.android.material.card.MaterialCardView>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -161,9 +161,9 @@
                 android:id="@+id/cal_empty_state"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_16sdp"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:layout_marginEnd="@dimen/_16sdp"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_6sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
                 android:visibility="gone" />
 
             <androidx.recyclerview.widget.RecyclerView
@@ -174,9 +174,9 @@
                 android:clipChildren="false"
                 android:clipToPadding="false"
                 android:overScrollMode="never"
-                android:paddingStart="@dimen/_16sdp"
-                android:paddingTop="@dimen/_10sdp"
-                android:paddingEnd="@dimen/_16sdp"
+                android:paddingStart="@dimen/_10sdp"
+                android:paddingTop="@dimen/_6sdp"
+                android:paddingEnd="@dimen/_10sdp"
                 android:paddingBottom="@dimen/_24sdp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
         </LinearLayout>

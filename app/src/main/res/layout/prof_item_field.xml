@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/ws_text_secondary"
-        android:textSize="@dimen/_10ssp" />
+        android:textSize="@dimen/_9ssp" />
 
     <TextView
         android:id="@+id/prof_field_value"
@@ -20,5 +20,5 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_2sdp"
         android:textColor="@color/black"
-        android:textSize="@dimen/_12ssp" />
+        android:textSize="@dimen/_10ssp" />
 </LinearLayout>

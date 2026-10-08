@@ -6,7 +6,7 @@
     android:layout_width="0dp"
     android:layout_height="wrap_content"
     android:layout_weight="1"
-    android:minHeight="@dimen/_48sdp"
+    android:minHeight="@dimen/_41sdp"
     app:iconGravity="textStart"
-    app:iconPadding="@dimen/_8sdp"
+    app:iconPadding="@dimen/_5sdp"
     app:iconTint="@color/ws_segment_text" />

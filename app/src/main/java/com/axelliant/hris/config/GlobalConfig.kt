@@ -18,6 +18,7 @@ class GlobalConfig {
         }
 
         fun isCurrentManager(): Boolean {
+            if (AppConst.FORCE_MANAGER_FOR_TESTING) return true
             return if (currEmployee == null)
                 true
             else

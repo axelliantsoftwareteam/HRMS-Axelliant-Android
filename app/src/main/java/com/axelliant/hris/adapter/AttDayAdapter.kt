@@ -20,7 +20,7 @@ class AttDayAdapter(private val onClick: (AttendanceDay) -> Unit) :
         val holder = Holder(AttItemDayBinding.inflate(LayoutInflater.from(parent.context), parent, false))
         // Cards are separated by a gap, not by margins, so the left edge stays flush.
         (holder.itemView.layoutParams as? ViewGroup.MarginLayoutParams)?.bottomMargin =
-            parent.resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._10sdp)
+            parent.resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._6sdp)
         holder.itemView.setOnClickListener {
             @Suppress("DEPRECATION")
             val position = holder.adapterPosition

@@ -4,6 +4,9 @@
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/button_bg_color</item>
         <item name="colorPrimaryDark">@color/white</item>
+        <!-- white status bar: draw the clock/battery icons dark -->
+        <item name="android:statusBarColor">@color/white</item>
+        <item name="android:windowLightStatusBar">true</item>
         <item name="shapeAppearanceLargeComponent">@style/ShapeAppearanceOverlay.Demo</item>
         <item name="background">@color/layout_bg</item>
     </style>

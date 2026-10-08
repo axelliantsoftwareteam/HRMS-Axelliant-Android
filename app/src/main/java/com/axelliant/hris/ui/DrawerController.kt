@@ -7,6 +7,7 @@ import androidx.annotation.StringRes
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.axelliant.hris.R
+import com.axelliant.hris.config.AppConst
 import com.axelliant.hris.databinding.ItemDrawerRowBinding
 import com.axelliant.hris.databinding.ItemDrawerSectionBinding
 import com.axelliant.hris.databinding.ViewDrawerBinding
@@ -32,7 +33,7 @@ class DrawerController(
 
     private val inflater = LayoutInflater.from(binding.root.context)
     private val context = binding.root.context
-    private var isManager = false
+    private var isManager = AppConst.FORCE_MANAGER_FOR_TESTING
     private var unreadBadge: ItemDrawerRowBinding? = null
     private var unread = 0
 
@@ -74,7 +75,7 @@ class DrawerController(
         if (!code.isNullOrBlank()) binding.drawerEmpId.text = context.getString(R.string.drawer_emp_id, code)
         binding.drawerAvatar.setAvatar(profile?.image, name)
 
-        val manager = profile?.is_manager == true
+        val manager = AppConst.FORCE_MANAGER_FOR_TESTING || profile?.is_manager == true
         if (manager != isManager) {
             isManager = manager
             rebuild()

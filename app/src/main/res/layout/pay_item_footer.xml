@@ -3,13 +3,13 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="@dimen/_8sdp"
-    android:paddingBottom="@dimen/_8sdp">
+    android:paddingTop="@dimen/_5sdp"
+    android:paddingBottom="@dimen/_5sdp">
 
     <ProgressBar
         android:id="@+id/pay_footer_progress"
-        android:layout_width="@dimen/_22sdp"
-        android:layout_height="@dimen/_22sdp"
+        android:layout_width="@dimen/_19sdp"
+        android:layout_height="@dimen/_19sdp"
         android:layout_gravity="center"
         android:indeterminate="true"
         android:indeterminateTint="@color/ws_primary"
@@ -21,6 +21,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:textSize="@dimen/_10ssp"
+        android:textSize="@dimen/_9ssp"
         android:visibility="gone" />
 </FrameLayout>

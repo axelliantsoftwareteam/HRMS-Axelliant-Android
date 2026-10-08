@@ -24,10 +24,10 @@
             android:layout_weight="1"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingStart="@dimen/_12sdp"
-            android:paddingTop="@dimen/_14sdp"
-            android:paddingEnd="@dimen/_10sdp"
-            android:paddingBottom="@dimen/_14sdp">
+            android:paddingStart="@dimen/_8sdp"
+            android:paddingTop="@dimen/_9sdp"
+            android:paddingEnd="@dimen/_6sdp"
+            android:paddingBottom="@dimen/_9sdp">
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -41,18 +41,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/ws_grey"
-                    android:textSize="@dimen/_13ssp" />
+                    android:textSize="@dimen/_11ssp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_8sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_width="@dimen/_18sdp"
-                        android:layout_height="@dimen/_18sdp"
+                        android:layout_width="@dimen/_15sdp"
+                        android:layout_height="@dimen/_15sdp"
                         android:importantForAccessibility="no"
                         android:src="@drawable/ws_ic_schedule"
                         app:tint="@color/black" />
@@ -62,12 +62,12 @@
                         style="@style/Ws.Text.SemiBold"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_8sdp"
+                        android:layout_marginStart="@dimen/_5sdp"
                         android:layout_weight="1"
                         android:maxLines="1"
-                        android:textSize="@dimen/_17ssp"
-                        app:autoSizeMaxTextSize="@dimen/_17ssp"
-                        app:autoSizeMinTextSize="@dimen/_11ssp"
+                        android:textSize="@dimen/_12ssp"
+                        app:autoSizeMaxTextSize="@dimen/_15ssp"
+                        app:autoSizeMinTextSize="@dimen/_10ssp"
                         app:autoSizeTextType="uniform" />
                 </LinearLayout>
 
@@ -75,13 +75,13 @@
                     android:id="@+id/att_day_location_row"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_8sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_width="@dimen/_14sdp"
-                        android:layout_height="@dimen/_14sdp"
+                        android:layout_width="@dimen/_12sdp"
+                        android:layout_height="@dimen/_12sdp"
                         android:importantForAccessibility="no"
                         android:src="@drawable/ws_ic_location"
                         app:tint="@color/ws_grey" />
@@ -91,18 +91,18 @@
                         style="@style/Ws.Text"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_8sdp"
+                        android:layout_marginStart="@dimen/_5sdp"
                         android:layout_weight="1"
                         android:maxLines="1"
                         android:textColor="@color/ws_grey"
-                        android:textSize="@dimen/_12ssp" />
+                        android:textSize="@dimen/_10ssp" />
                 </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_8sdp"
+                android:layout_marginStart="@dimen/_5sdp"
                 android:gravity="end"
                 android:orientation="vertical">
 
@@ -117,14 +117,14 @@
                     style="@style/Ws.Text.SemiBold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_6sdp"
                     android:textColor="@color/ws_primary"
-                    android:textSize="@dimen/_17ssp" />
+                    android:textSize="@dimen/_12ssp" />
             </LinearLayout>
 
             <ImageView
-                android:layout_width="@dimen/_18sdp"
-                android:layout_height="@dimen/_18sdp"
+                android:layout_width="@dimen/_15sdp"
+                android:layout_height="@dimen/_15sdp"
                 android:layout_marginStart="@dimen/_4sdp"
                 android:importantForAccessibility="no"
                 android:src="@drawable/ws_ic_chevron_right"
