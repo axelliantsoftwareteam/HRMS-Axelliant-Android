@@ -58,6 +58,17 @@
                     android:scheme="msauth" />
             </intent-filter>
         </activity>
+
+        <!-- Share downloaded pay-slip PDFs (cache/payslips) -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/ws_file_paths" />
+        </provider>
     </application>
 
 </manifest>
