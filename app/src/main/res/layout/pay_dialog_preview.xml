@@ -15,9 +15,9 @@
         android:background="@color/ws_payslip"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingStart="@dimen/_20sdp"
+        android:paddingStart="@dimen/_11sdp"
         android:paddingTop="@dimen/_10sdp"
-        android:paddingEnd="@dimen/_20sdp"
+        android:paddingEnd="@dimen/_11sdp"
         android:paddingBottom="@dimen/_10sdp">
 
         <LinearLayout

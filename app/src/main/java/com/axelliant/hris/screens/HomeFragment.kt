@@ -53,6 +53,8 @@ import com.axelliant.hris.enums.TodayTeamStatus
 import com.axelliant.hris.event.EventObserver
 import com.axelliant.hris.extention.getNtpTimeFormatted
 import com.axelliant.hris.extention.setUrlImage
+import com.axelliant.hris.ui.WsFormat
+import com.axelliant.hris.ui.setAvatar
 import com.axelliant.hris.extention.showErrorMsg
 import com.axelliant.hris.extention.showSuccessMsg
 import com.axelliant.hris.extention.valueQualifier
@@ -581,22 +583,39 @@ class HomeFragment : BaseFragment() {
         backAnimation.start()
     }
 
+    /** "--" stays "--"; otherwise the server clock text without seconds, in the phone's 12/24 h style. */
+    private fun clockOrDash(raw: String?): String {
+        val text = raw.valueQualifier()
+        return if (text == "--") text else WsFormat.clockText(requireContext(), text)
+    }
+
     private fun checkInInfoPopulate(checkInInfo: CheckInInfoResponse) {
 
         binding?.tvLocation?.text = checkInInfo.location.valueQualifier()
 
         if (checkInInfo.is_check_in_button == false && checkInInfo.is_check_out_button == false) {
+            // Day is complete: show a dimmed "Completed" button. Stop any flip animation first, it leaves
+            // the button face transparent (alpha 0) which showed up as an empty white square.
+            if (::frontAnimation.isInitialized) frontAnimation.cancel()
+            if (::backAnimation.isInitialized) backAnimation.cancel()
             binding?.btnCheckIn?.isEnabled = false
-
-            binding?.lyCheckIn?.visibility = View.VISIBLE
+            binding?.btnCheckIn?.alpha = 0.55f
+            binding?.lyCheckIn?.apply {
+                alpha = 1f
+                rotationY = 0f
+                visibility = View.VISIBLE
+            }
             binding?.lyCheckOut?.visibility = View.GONE
+            binding?.tvCheckInStatus?.setText(R.string.home_punch_done)
 
-            binding?.tvCheckInTxt?.text = checkInInfo.check_in.valueQualifier()
-            binding?.tvCheckOutTxt?.text = checkInInfo.check_out.valueQualifier()
+            binding?.tvCheckInTxt?.text = clockOrDash(checkInInfo.check_in)
+            binding?.tvCheckOutTxt?.text = clockOrDash(checkInInfo.check_out)
 
 
         } else {
             binding?.btnCheckIn?.isEnabled = true
+            binding?.btnCheckIn?.alpha = 1f
+            binding?.tvCheckInStatus?.setText(R.string.check_in)
 
             if (checkInInfo.is_check_in_button == true && checkInInfo.is_check_out_button == true) {
                 checkOutAnimate()
@@ -611,15 +630,15 @@ class HomeFragment : BaseFragment() {
                     binding?.lyCheckIn?.visibility = View.VISIBLE
                     binding?.lyCheckOut?.visibility = View.GONE
 
-                    binding?.tvCheckInTxt?.text = checkInInfo.check_in.valueQualifier()
+                    binding?.tvCheckInTxt?.text = clockOrDash(checkInInfo.check_in)
 
                 } else if (checkInInfo.is_check_out_button == true) {
                     checkInAnimate()
-                    binding?.tvCheckInTxt?.text = checkInInfo.check_in.valueQualifier()
+                    binding?.tvCheckInTxt?.text = clockOrDash(checkInInfo.check_in)
                     isCheckIn = false
                     binding?.lyCheckIn?.visibility = View.GONE
                     binding?.lyCheckOut?.visibility = View.VISIBLE
-                    binding?.tvCheckOutTxt?.text = checkInInfo.check_out.valueQualifier()
+                    binding?.tvCheckOutTxt?.text = clockOrDash(checkInInfo.check_out)
 
 
                 }
@@ -776,7 +795,7 @@ class HomeFragment : BaseFragment() {
         binding?.tvEmployeName?.text = employProfile.employee_name
         binding?.tvEmployeDesignation?.text = employProfile.designation
         binding?.tvEmployeId?.text = "Emp ID: ${employProfile.custom_employee_code}"
-        binding?.profileImg?.setUrlImage(employProfile.image, requireContext())
+        binding?.profileImg?.setAvatar(employProfile.image, employProfile.employee_name)
 
 
     }

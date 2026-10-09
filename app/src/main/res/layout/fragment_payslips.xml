@@ -20,9 +20,9 @@
         style="@style/Widget.Ws.Card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_20sdp"
+        android:layout_marginStart="@dimen/_11sdp"
         android:layout_marginTop="@dimen/_5sdp"
-        android:layout_marginEnd="@dimen/_20sdp"
+        android:layout_marginEnd="@dimen/_11sdp"
         android:layout_marginBottom="@dimen/_6sdp">
 
         <LinearLayout
@@ -96,9 +96,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="top"
-                android:layout_marginStart="@dimen/_20sdp"
+                android:layout_marginStart="@dimen/_11sdp"
                 android:layout_marginTop="@dimen/_2sdp"
-                android:layout_marginEnd="@dimen/_20sdp"
+                android:layout_marginEnd="@dimen/_11sdp"
                 android:visibility="gone"
                 app:wsEmptyIcon="@drawable/ws_ic_description"
                 app:wsEmptyMessage="@string/pay_empty_message"

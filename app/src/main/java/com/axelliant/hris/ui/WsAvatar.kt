@@ -37,6 +37,10 @@ class InitialsDrawable(
         canvas.drawText(initials, b.exactCenterX(), y, textPaint)
     }
 
+    // Views such as CircleImageView copy the drawable into a bitmap and need a real size.
+    override fun getIntrinsicWidth(): Int = 192
+    override fun getIntrinsicHeight(): Int = 192
+
     override fun setAlpha(alpha: Int) {
         bgPaint.alpha = alpha
         textPaint.alpha = alpha
