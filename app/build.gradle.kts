@@ -91,6 +91,7 @@ dependencies {
     implementation(libs.androidx.swiperefreshlayout)
     implementation(libs.play.services.maps)
     testImplementation(libs.junit)
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test-jvm:1.8.1")
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     implementation(libs.koin.android)

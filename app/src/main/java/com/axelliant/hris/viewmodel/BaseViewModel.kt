@@ -12,6 +12,7 @@ import java.lang.reflect.Type
 
 
 open class BaseViewModel  : ViewModel()  {
+    private val activeCalls = mutableSetOf<Call<ResponseBody>>()
 
     val isLoading : MutableLiveData<Event<Boolean>> by lazy { MutableLiveData<Event<Boolean>>() }
     fun getIsLoading(): LiveData<Event<Boolean>> = isLoading
@@ -27,10 +28,18 @@ open class BaseViewModel  : ViewModel()  {
         showLoading: Boolean = true
     ) {
         if (showLoading) isLoading.value = Event(true)
+        activeCalls.add(call)
         call.enqueueResult<T>(type) { result ->
+            activeCalls.remove(call)
             if (showLoading) isLoading.value = Event(false)
             target.value = Event(result)
         }
+    }
+
+    override fun onCleared() {
+        activeCalls.toList().forEach { it.cancel() }
+        activeCalls.clear()
+        super.onCleared()
     }
 
 }

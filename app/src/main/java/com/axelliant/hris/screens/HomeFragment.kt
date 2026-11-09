@@ -63,6 +63,7 @@ import com.axelliant.hris.viewmodel.NotificationsViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.android.ext.android.inject
 
 class HomeFragment : BaseFragment() {
@@ -70,6 +71,7 @@ class HomeFragment : BaseFragment() {
     private var employProfileResponse: EmployProfile? = null
     private var isManager: Boolean = false
     private var gridList: ArrayList<Modules>? = null
+    private var renderedManager: Boolean? = null
     private var teamattend: TodayTeamResponse? = null
     private var ntpTimeString: String? = null
     private var currentStatus: String? = null
@@ -96,8 +98,8 @@ class HomeFragment : BaseFragment() {
     private var checkInInfoResponse: CheckInInfoResponse? = null
 
 
-    private val homeViewModel: HomeViewModel by inject()
-    private val notificationsViewModel: NotificationsViewModel by inject()
+    private val homeViewModel: HomeViewModel by viewModel()
+    private val notificationsViewModel: NotificationsViewModel by viewModel()
     private val sessionManager: SessionManager by inject()
 
     override fun onCreateView(
@@ -113,6 +115,20 @@ class HomeFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val scale = requireContext().resources.displayMetrics.density
+        binding?.tvCheckInStatus?.cameraDistance = 8000 * scale
+        binding?.tvCheckInStatus?.cameraDistance = 8000 * scale
+
+
+        // Now we will set the front animation
+        frontAnimation = AnimatorInflater.loadAnimator(
+            requireContext(),
+            R.animator.front_animator
+        ) as AnimatorSet
+        backAnimation =
+            AnimatorInflater.loadAnimator(requireContext(), R.animator.back_animator) as AnimatorSet
+
+
 
         homeLocation = com.axelliant.hris.location.HomeLocationController(
             this,
@@ -129,18 +145,18 @@ class HomeFragment : BaseFragment() {
        AppConst.TOKEN = "8b87d8a458a89e9:a1705cecb80d093"
 */
        AppConst.TOKEN = sessionManager.getToken()
-        homeViewModel.getDashboardInformation()
+
         // data population
         dataPopulate()
         homeViewModel.dashboardResponse.observe(
             viewLifecycleOwner,
-            EventObserver { response ->
+            { response ->
 
                 if (response?.meta?.status == true) {
                     // success
 
                     employProfileResponse = response.employee_profile
-                    employProfileResponse?.let { GlobalConfig.setCurrentEmployee(it) }
+                    GlobalConfig.setCurrentEmployee(employProfileResponse)
                     isManager = GlobalConfig.isCurrentManager()
 
                     birthdayPopulate(response.birthday_data ?: arrayListOf())
@@ -153,8 +169,11 @@ class HomeFragment : BaseFragment() {
                     response.employee_profile?.let { dashBoardPopulate(it) }
 
                     dataPopulate()
+                    if (isManager) homeViewModel.getTodayTeamInfo() else binding?.lyMyTeam?.isVisible = false
                 } else {
-                    requireContext().showErrorMsg(response?.meta?.message.toString())
+                    checkInInfoResponse = null
+                    binding?.btnCheckIn?.isEnabled = false
+                    binding?.lyMyTeam?.isVisible = false
                 }
 
             })
@@ -165,7 +184,6 @@ class HomeFragment : BaseFragment() {
 
                 if (response?.meta?.status == true) {
                     requireContext().showSuccessMsg(response.status_message)
-                    homeViewModel.getDashboardInformation()
 
                 } else {
                     requireContext().showErrorMsg(response?.meta?.message.toString())
@@ -175,20 +193,17 @@ class HomeFragment : BaseFragment() {
 
         homeViewModel.todayTeamResponse.observe(
             viewLifecycleOwner,
-            EventObserver { response ->
+            { response ->
 
-                if (response?.meta?.status == true) {
+                if (response?.meta?.status == true && isManager) {
                     // success
-                    if (response != null) {
-                        binding?.tvShift?.isVisible = true
-                        binding?.lyMyTeam?.isVisible = true
-                        teamattend=response
-                        teamsToday(response)
-
-                    }
+                    binding?.tvShift?.isVisible = true
+                    binding?.lyMyTeam?.isVisible = true
+                    teamattend = response
+                    teamsToday(response)
 
                 } else {
-                    requireContext().showErrorMsg(response?.meta?.message.toString())
+                    binding?.lyMyTeam?.isVisible = false
                 }
 
             })
@@ -216,6 +231,14 @@ class HomeFragment : BaseFragment() {
                 }
             })
 
+
+        homeViewModel.homeError.observe(viewLifecycleOwner, EventObserver { message ->
+            requireContext().showErrorMsg(message)
+        })
+        homeViewModel.refreshing.observe(viewLifecycleOwner) { busy ->
+            binding?.homeRefreshProgress?.isVisible = busy
+        }
+        binding?.tvTodayTitle?.setOnClickListener { homeViewModel.getDashboardInformation(force = true) }
 
         // Call the NTP time method in a coroutine
         viewLifecycleOwner.lifecycleScope.launch {
@@ -279,9 +302,9 @@ class HomeFragment : BaseFragment() {
         }
         binding?.ivMenu?.setOnClickListener { (requireActivity() as MainActivity).openDrawer() }
         binding?.ivNotification?.setOnClickListener { AppNavigator.navigateToNotifications() }
-        listOfNotNull(binding?.tvEmployeName, binding?.tvEmployeDesignation, binding?.tvEmployeId).forEach { view ->
-            view.setOnClickListener { AppNavigator.navigateToProfile() }
-            view.isFocusable = true
+        listOfNotNull(binding?.tvEmployeName, binding?.tvEmployeDesignation, binding?.tvEmployeId).forEach { profileView ->
+            profileView.setOnClickListener { AppNavigator.navigateToProfile() }
+            profileView.isFocusable = true
         }
 
         AppState.unreadNotifications.observe(viewLifecycleOwner) { count ->
@@ -303,19 +326,6 @@ class HomeFragment : BaseFragment() {
 
         setCurrentLocationText()
 
-        val scale = requireContext().resources.displayMetrics.density
-        binding?.tvCheckInStatus?.cameraDistance = 8000 * scale
-        binding?.tvCheckInStatus?.cameraDistance = 8000 * scale
-
-
-        // Now we will set the front animation
-        frontAnimation = AnimatorInflater.loadAnimator(
-            requireContext(),
-            R.animator.front_animator
-        ) as AnimatorSet
-        backAnimation =
-            AnimatorInflater.loadAnimator(requireContext(), R.animator.back_animator) as AnimatorSet
-
         binding?.btnCheckIn?.setOnClickListener {
             if (!requireAttendanceInternet()) return@setOnClickListener
             if (checkInInfoResponse == null) {
@@ -326,7 +336,14 @@ class HomeFragment : BaseFragment() {
             if (homeLocation?.ready(action) == true) showAttendanceDialog(action)
         }
     }
+    override fun onResume() {
+        super.onResume()
+        homeViewModel.getDashboardInformation()
+    }
+
     override fun onDestroyView() {
+        renderedManager = null
+        hideDialog()
         internetDialog?.dismiss()
         internetDialog = null
         homeLocation = null
@@ -554,6 +571,8 @@ class HomeFragment : BaseFragment() {
 
 
     private fun dataPopulate() {
+        if (renderedManager == isManager) return
+        renderedManager = isManager
 
         gridList = arrayListOf(
             Modules(
@@ -587,7 +606,7 @@ class HomeFragment : BaseFragment() {
             )
         )
         if (isManager) {
-            homeViewModel.getTodayTeamInfo()
+
             gridList?.add(
                 Modules(
                     id = 3,

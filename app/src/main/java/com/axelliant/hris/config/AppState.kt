@@ -12,7 +12,8 @@ object AppState {
     val unreadNotifications = MutableLiveData(0)
 
     fun reset() {
-        currentEmployee.value = null
+        com.axelliant.hris.cache.HomeMemoryCache.clear()
+        GlobalConfig.setCurrentEmployee(null)
         unreadNotifications.value = 0
     }
 }

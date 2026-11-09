@@ -1,6 +1,8 @@
 package com.axelliant.hris.network
 
 import com.axelliant.hris.config.AppConst.observableCode
+import com.axelliant.hris.config.AppConst
+import com.axelliant.hris.config.SessionVersion
 
 import retrofit2.Call
 import retrofit2.Callback
@@ -10,6 +12,8 @@ import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
 abstract class BaseCallBack<T>(private val call: Call<T>) : Callback<T> {
+    private val session = AppConst.TOKEN
+    private val version = SessionVersion.current
     abstract fun onFinalSuccess(call: Call<T>, response: Response<T>)
 
     abstract fun onFinalFailure(
@@ -17,11 +21,17 @@ abstract class BaseCallBack<T>(private val call: Call<T>) : Callback<T> {
     )
 
     override fun onResponse(call: Call<T>, response: Response<T>) {
+        if (call.isCanceled || session != AppConst.TOKEN || version != SessionVersion.current) {
+            (response.body() as? java.io.Closeable)?.close()
+            response.errorBody()?.close()
+            return
+        }
         onResponseValidator(call, response)
 
     }
 
     override fun onFailure(call: Call<T>, t: Throwable) {
+        if (call.isCanceled || session != AppConst.TOKEN || version != SessionVersion.current) return
         onFinalFailure(getErrorFromThrowable(t))
     }
 

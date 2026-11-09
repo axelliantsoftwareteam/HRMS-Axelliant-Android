@@ -12,7 +12,7 @@ class GlobalConfig {
         private var instance: GlobalConfig? = null
         private var currEmployee: EmployProfile? = null
 
-        fun setCurrentEmployee(employee: EmployProfile) {
+        fun setCurrentEmployee(employee: EmployProfile?) {
             currEmployee = employee
             AppState.currentEmployee.value = employee
         }

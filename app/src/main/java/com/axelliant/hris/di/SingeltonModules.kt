@@ -58,7 +58,7 @@ val viewModelModule = module {
 
 val factoryModule = module {
     factory { LoginRepo(get()) }
-    factory { HomeRepo(get()) }
+    factory<com.axelliant.hris.repos.HomeSource> { HomeRepo(get()) }
     factory { ExpenseRepo(get()) }
     factory { ProfileRepo(get()) }
 

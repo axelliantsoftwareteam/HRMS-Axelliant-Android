@@ -3,6 +3,7 @@ package com.axelliant.hris.network
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import com.axelliant.hris.config.AppConst
+import com.axelliant.hris.config.SessionVersion
 import com.axelliant.hris.event.Event
 import com.axelliant.hris.event.EventObserver
 import com.google.gson.Gson
@@ -48,7 +49,6 @@ object ApiParser {
         val statusCode = meta?.get("status_code")?.takeIf { it.isJsonPrimitive }?.asString?.toDoubleOrNull()?.toInt()
         val metaText = meta?.get("message")?.takeIf { it.isJsonPrimitive }?.asString
         if (statusCode == 401) {
-            AppConst.observableCode.set(401)
             return ApiResult.Failure(ErrorMessages.SessionExpired401.errorString, 401)
         }
         val okFlag = meta?.get("status")?.takeIf { it.isJsonPrimitive }?.asBoolean
@@ -66,18 +66,16 @@ object ApiParser {
 
 /** Enqueues a Retrofit call and delivers an [ApiResult] on the main thread (401s feed the global session observer). */
 fun <T> Call<ResponseBody>.enqueueResult(type: Type, onResult: (ApiResult<T>) -> Unit) {
+    val session = AppConst.TOKEN
+    val version = SessionVersion.current
     enqueue(object : BaseCallBack<ResponseBody>(this) {
         override fun onFinalSuccess(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-            val raw = try {
-                response.body()?.string()
-            } catch (e: Exception) {
-                null
-            }
-            onResult(ApiParser.parse(raw, type))
+            ResponseParsing.execute(call, response, type, session, version, onResult)
         }
 
         override fun onFinalFailure(errorString: String?) {
-            onResult(ApiResult.Failure(errorString ?: ErrorMessages.UnknownError.errorString))
+            if (!this@enqueueResult.isCanceled && session == AppConst.TOKEN && version == SessionVersion.current)
+                onResult(ApiResult.Failure(errorString ?: ErrorMessages.UnknownError.errorString))
         }
     })
 }

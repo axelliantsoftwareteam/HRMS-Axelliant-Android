@@ -5,7 +5,7 @@
     <string name="home_location_fetching">Getting your location. Please try again shortly.</string>
     <string name="home_location_fetching_short">Finding location…</string>
     <string name="home_location_open_settings">Open settings</string>
-    <string name="home_location_find">Find location</string>
+    <string name="home_location_find">Tap to locate</string>
     <string name="home_location_find_action">find your location</string>
     <string name="home_location_timeout">Unable to get location. Please try again.</string>
     <string name="home_location_unresolved">Your attendance location is unavailable. Refresh Home and try again.</string>
