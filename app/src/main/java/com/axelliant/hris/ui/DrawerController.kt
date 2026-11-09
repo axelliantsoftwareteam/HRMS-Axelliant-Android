@@ -14,7 +14,7 @@ import com.axelliant.hris.model.dashboard.EmployProfile
 import com.axelliant.hris.navigation.AppNavigator
 
 /**
- * Builds and updates the left navigation drawer: profile header, EMPLOYEE section, MANAGER section
+ * Builds and updates the left navigation drawer: profile header, employee links, MANAGER section
  * (managers only) and the Sign Out footer. The drawer itself is a native [DrawerLayout].
  */
 class DrawerController(
@@ -67,8 +67,9 @@ class DrawerController(
     fun bind(profile: EmployProfile?) {
         val name = profile?.employee_name?.takeIf { it.isNotBlank() }
         binding.drawerName.text = name ?: context.getString(R.string.drawer_default_name)
-        binding.drawerDesignation.text =
-            profile?.designation?.takeIf { it.isNotBlank() } ?: context.getString(R.string.drawer_default_designation)
+        val designation = profile?.designation?.takeIf { it.isNotBlank() }
+        binding.drawerDesignation.text = designation.orEmpty()
+        binding.drawerDesignation.visibility = if (designation == null) View.GONE else View.VISIBLE
         val code = profile?.custom_employee_code
         binding.drawerEmpId.visibility = if (code.isNullOrBlank()) View.GONE else View.VISIBLE
         if (!code.isNullOrBlank()) binding.drawerEmpId.text = context.getString(R.string.drawer_emp_id, code)
@@ -94,7 +95,6 @@ class DrawerController(
         val container = binding.drawerItems
         container.removeAllViews()
         unreadBadge = null
-        addSection(R.string.drawer_section_employee)
         employeeItems.forEach { addRow(it) }
         if (isManager) {
             addSection(R.string.drawer_section_manager)
