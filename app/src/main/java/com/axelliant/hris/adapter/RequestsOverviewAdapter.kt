@@ -78,14 +78,14 @@ object RequestRowFormat {
 
     /** The date a request is about: a check-in's day, a leave's dates or a claim's posting date. */
     fun dateLine(row: RequestRow): String = when (row.kind) {
-        RequestRow.Kind.CHECKIN -> WsFormat.date(row.effectiveOn).ifEmpty { row.effectiveOn }
+        RequestRow.Kind.CHECKIN -> RequestAttendanceFormat.date(row.effectiveOn)
         RequestRow.Kind.LEAVE -> WsFormat.dateRange(row.fromDate.ifEmpty { row.effectiveOn }, row.toDate)
         RequestRow.Kind.EXPENSE -> WsFormat.date(row.effectiveOn)
     }
 
     /** The main figure of a request: a check-in's time, a leave's days, a claim's amount (empty when none). */
     fun headline(ctx: Context, row: RequestRow): String = when (row.kind) {
-        RequestRow.Kind.CHECKIN -> WsFormat.time(ctx, row.effectiveOn)
+        RequestRow.Kind.CHECKIN -> RequestAttendanceFormat.time(row.effectiveOn)
         RequestRow.Kind.LEAVE -> WsFormat.days(row.totalDays)
         RequestRow.Kind.EXPENSE ->
             if (row.totalAmount > 0) {
@@ -95,6 +95,12 @@ object RequestRowFormat {
                     String.format(Locale.US, "%.0f", row.totalAmount)
                 )
             } else ""
+    }
+
+    /** Attendance timestamps retain the received date and clock without timezone conversion. */
+    fun submittedOn(ctx: Context, row: RequestRow): String = when (row.kind) {
+        RequestRow.Kind.CHECKIN -> RequestAttendanceFormat.submittedOn(row.submittedOn)
+        else -> WsFormat.dateTime(ctx, row.submittedOn)
     }
 
     /** The status in the badge; "Open" when HRIS sends none. */

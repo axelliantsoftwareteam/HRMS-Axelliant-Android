@@ -128,4 +128,5 @@
     <string name="exp_approve_failed">We could not approve this expense claim right now.</string>
     <string name="exp_reject_failed">We could not reject this expense claim right now.</string>
     <string name="exp_missing_reference">This request is missing its reference, so it cannot be updated.</string>
+    <string name="rq_period_custom">Custom</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.axelliant.hris.viewmodel
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.axelliant.hris.config.AppConst
@@ -27,12 +28,30 @@ import java.util.Calendar
  * into one list, newest first. The three calls run in parallel and the list is replaced only when
  * all of them have answered.
  */
-class RequestsOverviewViewModel(private val api: ApiInterface) : BaseViewModel() {
+class RequestsOverviewViewModel(private val api: ApiInterface, private val savedState: SavedStateHandle) : BaseViewModel() {
 
-    enum class Period { LAST_7_DAYS, THIS_MONTH }
+    enum class Period { LAST_7_DAYS, THIS_MONTH, CUSTOM }
 
     /** The period shown; the screen restores its toggle from this. */
-    var period: Period = Period.LAST_7_DAYS
+    var period: Period
+        get() = Period.values().firstOrNull { it.name == savedState.get<String>("requests-period") } ?: Period.LAST_7_DAYS
+        set(value) { savedState["requests-period"] = value.name }
+
+    /** Applies confirmed UTC picker dates to every request category. */
+    fun setCustomRange(start: Long, end: Long) {
+        val range = RequestsDateRange.selected(start, end)
+        savedState["requests-range"] = arrayListOf(range.first, range.second)
+        period = Period.CUSTOM
+    }
+
+    /** Restores the applied range for refreshes and return navigation. */
+    fun currentRange(): Pair<String, String> {
+        if (period == Period.CUSTOM) {
+            savedState.get<ArrayList<String>>("requests-range")?.takeIf { it.size == 2 }
+                ?.let { return it[0] to it[1] }
+        }
+        return RequestsDateRange.preset(if (period == Period.CUSTOM) Period.LAST_7_DAYS else period, Calendar.getInstance())
+    }
 
     private val _rows = MutableLiveData<List<RequestRow>?>()
 
@@ -49,7 +68,7 @@ class RequestsOverviewViewModel(private val api: ApiInterface) : BaseViewModel()
     /** [showLoading] is false for pull-to-refresh and for reloads of a list that already has rows. */
     fun load(showLoading: Boolean) {
         val current = ++generation
-        val (start, end) = range(period)
+        val (start, end) = currentRange()
         if (showLoading) isLoading.value = Event(true)
 
         var pending = 3
@@ -163,20 +182,4 @@ class RequestsOverviewViewModel(private val api: ApiInterface) : BaseViewModel()
     /** Orders rows by when they happened; rows with an unreadable date go last. */
     private fun sortKey(row: RequestRow): Long = WsFormat.parse(row.effectiveOn)?.time ?: Long.MIN_VALUE
 
-    private fun range(period: Period): Pair<String, String> {
-        val today = Calendar.getInstance()
-        return when (period) {
-            Period.LAST_7_DAYS -> {
-                val start = (today.clone() as Calendar).apply { add(Calendar.DAY_OF_YEAR, -6) }
-                WsFormat.apiDay(start) to WsFormat.apiDay(today)
-            }
-            Period.THIS_MONTH -> {
-                val first = (today.clone() as Calendar).apply { set(Calendar.DAY_OF_MONTH, 1) }
-                val last = (today.clone() as Calendar).apply {
-                    set(Calendar.DAY_OF_MONTH, getActualMaximum(Calendar.DAY_OF_MONTH))
-                }
-                WsFormat.apiDay(first) to WsFormat.apiDay(last)
-            }
-        }
-    }
 }

@@ -46,19 +46,7 @@ class RequestsOverviewFragment : BaseFragment() {
         binding.rqRefresh.setColorSchemeResources(R.color.ws_primary)
         binding.rqRefresh.setOnRefreshListener { viewModel.load(showLoading = false) }
 
-        // Restore the toggle before listening, so restoring it does not trigger a load.
-        binding.rqSegment.check(
-            if (viewModel.period == RequestsOverviewViewModel.Period.THIS_MONTH) R.id.rq_btn_month else R.id.rq_btn_week
-        )
-        binding.rqSegment.addOnButtonCheckedListener { _, checkedId, isChecked ->
-            if (!isChecked) return@addOnButtonCheckedListener
-            viewModel.period = if (checkedId == R.id.rq_btn_month) {
-                RequestsOverviewViewModel.Period.THIS_MONTH
-            } else {
-                RequestsOverviewViewModel.Period.LAST_7_DAYS
-            }
-            viewModel.load(showLoading = adapter.itemCount == 0)
-        }
+        RequestsPeriodPicker(this, binding, viewModel).bind()
 
         binding.rqFab.setOnClickListener {
             AppNavigator.navigateToRequest(Bundle().apply {
@@ -117,7 +105,7 @@ class RequestsOverviewFragment : BaseFragment() {
                 WsDetailSheet.Field(getString(R.string.rq_f_request_for), title),
                 WsDetailSheet.Field(getString(R.string.rq_f_date), RequestRowFormat.dateLine(row), half = true),
                 WsDetailSheet.Field(getString(valueLabel), RequestRowFormat.headline(ctx, row), half = true),
-                WsDetailSheet.Field(getString(R.string.rq_f_submitted), WsFormat.dateTime(ctx, row.submittedOn)),
+                WsDetailSheet.Field(getString(R.string.rq_f_submitted), RequestRowFormat.submittedOn(ctx, row)),
                 WsDetailSheet.Field(getString(R.string.rq_f_location), row.location, half = true, accent = true),
                 WsDetailSheet.Field(getString(R.string.rq_f_hours), WsFormat.hours(row.workingHours), half = true),
                 WsDetailSheet.Field(getString(R.string.rq_f_reason), row.reason),

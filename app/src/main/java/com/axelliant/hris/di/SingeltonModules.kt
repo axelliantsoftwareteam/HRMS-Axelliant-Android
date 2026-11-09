@@ -47,7 +47,7 @@ val viewModelModule = module {
     viewModel { ProfileViewModel(get()) }
     viewModel { PayslipsViewModel(get()) }
     viewModel { NotificationsViewModel(get()) }
-    viewModel { RequestsOverviewViewModel(get()) }
+    viewModel { RequestsOverviewViewModel(get(), get()) }
     viewModel { TeamActivityViewModel(get()) }
     viewModel { TeamCalendarViewModel(get()) }
     viewModel { OrganogramViewModel(get()) }

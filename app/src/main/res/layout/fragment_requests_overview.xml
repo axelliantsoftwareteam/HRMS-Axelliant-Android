@@ -198,7 +198,23 @@
                     android:layout_height="@dimen/_34sdp"
                     android:layout_weight="1"
                     android:text="@string/rq_period_month" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/rq_btn_custom"
+                    style="@style/Widget.Ws.Segment.Button"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_34sdp"
+                    android:layout_weight="1"
+                    android:text="@string/rq_period_custom" />
             </com.google.android.material.button.MaterialButtonToggleGroup>
+
+            <TextView
+                android:id="@+id/rq_tv_range"
+                style="@style/Ws.Text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_6sdp"
+                android:gravity="center"
+                android:textSize="@dimen/_10ssp" />
         </LinearLayout>
 
         <FrameLayout
