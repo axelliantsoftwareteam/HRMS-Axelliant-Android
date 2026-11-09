@@ -151,6 +151,7 @@
     </LinearLayout>
 
     <FrameLayout
+        android:id="@+id/att_list_host"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="@dimen/_4sdp"
@@ -172,18 +173,5 @@
                 android:paddingEnd="@dimen/_10sdp"
                 android:paddingBottom="@dimen/_24sdp" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-        <com.axelliant.hris.ui.WsEmptyState
-            android:id="@+id/att_empty"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_4sdp"
-            android:layout_marginEnd="@dimen/_10sdp"
-            android:visibility="gone"
-            app:wsEmptyIcon="@drawable/ws_ic_calendar"
-            app:wsEmptyMessage="@string/att_empty_message"
-            app:wsEmptyTitle="@string/att_empty_title" />
     </FrameLayout>
 </LinearLayout>

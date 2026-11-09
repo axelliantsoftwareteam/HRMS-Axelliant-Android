@@ -1,0 +1,9 @@
+<resources>
+    <string name="rq_source_leave">Leave</string>
+    <string name="rq_source_attendance">Attendance</string>
+    <string name="rq_source_expense">Expenses</string>
+    <string name="rq_batch_failed">Could not load all request types: %1$s. Please try again.</string>
+    <string name="rq_batch_refresh_failed">Could not refresh %1$s. Previous results are still shown. Please try again.</string>
+    <string name="list_previous_results">Showing previous results</string>
+    <string name="rq_previous_count">%1$s — showing previous results</string>
+</resources>

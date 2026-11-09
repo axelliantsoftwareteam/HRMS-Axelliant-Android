@@ -1,8 +1,8 @@
 # Shared loading foundation
 
-This implements the shared foundation (plan steps 1–3). Attendance, Requests and
-the other list migrations are separate follow-ups; the new shimmer does not
-automatically replace their existing dialogs.
+This implements the shared foundation (plan steps 1–3) and the Attendance/Requests
+integration (steps 4–5). Other lists still use their existing presentation until
+their separate migration.
 
 ## Ownership
 
@@ -63,6 +63,7 @@ Presentation:
 - Failed initial load: inline error card and Retry.
 - Failed refresh/page: retain content and show an error banner with Retry.
 - Successful zero rows: empty state, configurable through constructor copy.
+  A Refresh action remains available when an empty list cannot be pulled down.
 
 Retry only calls the supplied handler; it does not submit/replay mutations. A
 pending operation disables Retry. Shimmer/progress animations stop on lifecycle
@@ -75,5 +76,32 @@ Regression tests cover overlapping actions/reads, silent reads, replacement,
 stale callbacks, cancellation, view-observer reattachment, independent list keys,
 empty vs error, partial failures, retained content, pull-refresh indicators, and
 pagination. Debug resource compilation and lint validate the reusable layouts.
-Actual list integration, device lifecycle checks and visual QA belong to the
-screen migration steps.
+## Attendance and Requests integration
+
+Both lists use the shared component below their unchanged toolbars/filters and
+retain data in lifecycle-scoped ViewModels. Selections live in SavedStateHandle;
+process recreation restores selection and fetches data again, while ordinary
+view recreation replays retained content/in-flight progress. RecyclerView state
+restoration waits for rows before applying the saved scroll position.
+
+Attendance cancels replaced date/status reads and rejects late results. Optional
+shift reads have separate cancellation/progress and never stop attendance's
+spinner or replace its errors. Pull refresh finishes with attendance, even if
+the shift is still loading. Restored custom pickers reconnect to the new view.
+
+Requests runs leave/check-in/expense calls under one aggregate ticket. It publishes
+a complete, sorted snapshot only when all three succeed. Any partial or total
+failure names the failed sources, retains the last complete snapshot, and offers
+Retry. A first-load partial failure shows an error, not a misleading partial or
+empty result. It never mixes old/new ranges or silently drops failed categories.
+Returning from a request form forces a new batch; view recreation does not replace
+an active batch. Period/custom dates remain applied to all three API calls.
+
+When selections change while old results remain visible, the existing date/count
+caption labels them as previous results until the new selection loads successfully.
+No blocking list dialogs or duplicate pull-refresh indicators are used.
+
+Additional regression tests cover both screen ViewModels, atomic batch outcomes,
+cancelled/late callbacks, optional shift independence, data/selection restoration,
+explicit refresh, empty results and consistent dates across APIs. Device lifecycle
+checks and visual QA remain necessary.

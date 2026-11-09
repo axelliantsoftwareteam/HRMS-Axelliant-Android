@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.IdRes
 import androidx.core.util.Pair
+import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.axelliant.hris.R
@@ -17,44 +18,30 @@ import com.axelliant.hris.callback.AdapterItemClick
 import com.axelliant.hris.config.AppConst
 import com.axelliant.hris.config.GlobalConfig
 import com.axelliant.hris.databinding.FragmentMyAttendanceDetailBinding
-import com.axelliant.hris.event.EventObserver
-import com.axelliant.hris.extention.showErrorMsg
+import com.axelliant.hris.loading.ListLoadKind
 import com.axelliant.hris.model.dashboard.FilterModel
 import com.axelliant.hris.model.leaveatt.AttendanceDay
 import com.axelliant.hris.model.leaveatt.ShiftDetail
-import com.axelliant.hris.network.observeResult
 import com.axelliant.hris.ui.WsDetailSheet
 import com.axelliant.hris.ui.WsFormat
+import com.axelliant.hris.ui.WsListLoading
 import com.axelliant.hris.ui.WsStatus
 import com.axelliant.hris.ui.WsTone
 import com.axelliant.hris.viewmodel.AttendanceViewModel
+import com.axelliant.hris.viewmodel.AttendanceViewModel.Period
 import com.google.android.material.datepicker.MaterialDatePicker
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
-import java.util.Calendar
 import java.util.Locale
 import java.util.TimeZone
 
-/**
- * Attendance screen (iOS "Attendance"): the shift card, a period selector with a date line, status
- * chips and one card per day. A day opens its details in a [WsDetailSheet].
- */
+/** Attendance list with retained selection/content and independent optional shift loading. */
 class MyAttendanceDetailFragment : BaseFragment() {
-
-    private enum class Period { WEEK, MONTH, CUSTOM }
-
     private var _binding: FragmentMyAttendanceDetailBinding? = null
     private val binding get() = _binding!!
-
     private val viewModel: AttendanceViewModel by viewModel()
-
     private val dayAdapter = AttDayAdapter { showDetails(it) }
-
-    private var employeeId = ""
-    private var period = Period.WEEK
-    private var startDate = ""
-    private var endDate = ""
-    private var filterId = ""
+    private var loading: WsListLoading? = null
     private var chips: List<FilterModel> = emptyList()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -64,144 +51,95 @@ class MyAttendanceDetailFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        employeeId = arguments?.getString(AppConst.KEY_ID)?.takeIf { it.isNotBlank() } ?: GlobalConfig.currentEmployeeId()
-
+        viewModel.initialize(arguments?.getString(AppConst.KEY_ID)?.takeIf { it.isNotBlank() } ?: GlobalConfig.currentEmployeeId())
+        dayAdapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         binding.attRvDays.layoutManager = LinearLayoutManager(requireContext())
         binding.attRvDays.adapter = dayAdapter
         binding.attRvFilters.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
-
+        loading = WsListLoading(viewLifecycleOwner, binding.attListHost, { viewModel.reload() },
+            emptyTitle = getString(R.string.att_empty_title), emptyMessage = getString(R.string.att_empty_message))
+            .also { it.bind(viewModel.listLoading()) }
         binding.attSwipe.setColorSchemeResources(R.color.ws_primary)
         binding.attSwipe.setOnRefreshListener {
-            viewModel.loadShift()
-            load()
+            viewModel.loadShift(force = true)
+            viewModel.reload(ListLoadKind.PULL_REFRESH)
         }
-
-        binding.attBtnWeek.setOnClickListener { selectPeriod(Period.WEEK) }
-        binding.attBtnMonth.setOnClickListener { selectPeriod(Period.MONTH) }
+        binding.attBtnWeek.setOnClickListener { viewModel.selectPeriod(Period.WEEK) }
+        binding.attBtnMonth.setOnClickListener { viewModel.selectPeriod(Period.MONTH) }
         binding.attBtnCustom.setOnClickListener { pickRange() }
-
-        observeViewModel()
-
-        computeDates(Period.WEEK)
-        renderRange()
-        viewModel.loadShift()
-        load()
-    }
-
-    private fun observeViewModel() {
-        viewModel.getIsLoading().observe(viewLifecycleOwner, EventObserver { loading ->
-            if (loading) showDialog() else hideDialog()
-        })
-
-        // The shift card is optional: a failed call just leaves it hidden.
-        viewModel.shift.observeResult(viewLifecycleOwner) { data, _ ->
-            data.shift_detail?.let { showShift(it) }
+        viewModel.selection.observe(viewLifecycleOwner) {
+            renderRange()
+            showChips(viewModel.attendance.value?.attendance_status.orEmpty())
         }
-
-        viewModel.attendance.observeResult(viewLifecycleOwner, onError = { message ->
-            binding.attSwipe.isRefreshing = false
-            requireContext().showErrorMsg(message, "Attendance")
-        }) { data, _ ->
-            binding.attSwipe.isRefreshing = false
-            val days = data.attendance_data.orEmpty().sortedByDescending { WsFormat.parse(it.date)?.time ?: 0L }
-            dayAdapter.submitList(days)
-            if (days.isEmpty()) binding.attEmpty.show() else binding.attEmpty.hide()
-            showChips(data.attendance_status.orEmpty())
+        viewModel.attendance.observe(viewLifecycleOwner) { data ->
+            dayAdapter.submitList(data?.attendance_data.orEmpty())
+            showChips(data?.attendance_status.orEmpty())
+            renderRange()
         }
-    }
-
-    // ---------------------------------------------------------------------------------------------
-    // Period and chips
-    // ---------------------------------------------------------------------------------------------
-
-    private fun selectPeriod(newPeriod: Period) {
-        if (newPeriod == period) return
-        computeDates(newPeriod)
-        renderRange()
-        load()
-    }
-
-    /** Last 7 days = today-7 .. today; this month = first .. last day. Custom keeps its picked dates. */
-    private fun computeDates(newPeriod: Period) {
-        period = newPeriod
-        val cal = Calendar.getInstance()
-        when (newPeriod) {
-            Period.WEEK -> {
-                endDate = WsFormat.apiDay(cal)
-                cal.add(Calendar.DAY_OF_YEAR, -7)
-                startDate = WsFormat.apiDay(cal)
-            }
-            Period.MONTH -> {
-                cal.set(Calendar.DAY_OF_MONTH, 1)
-                startDate = WsFormat.apiDay(cal)
-                cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH))
-                endDate = WsFormat.apiDay(cal)
-            }
-            Period.CUSTOM -> Unit
+        viewModel.shift.observe(viewLifecycleOwner) { shift ->
+            if (shift == null) binding.attCardShift.visibility = View.GONE else showShift(shift)
         }
+        viewModel.listLoading().observe(viewLifecycleOwner) { state ->
+            binding.attSwipe.isRefreshing = state.pullRefreshing
+            renderRange()
+        }
+        @Suppress("UNCHECKED_CAST")
+        val restored = childFragmentManager.findFragmentByTag("attendanceRange") as? MaterialDatePicker<Pair<Long, Long>>
+        restored?.let(::connectPicker)
+        viewModel.ensureLoaded()
     }
 
     private fun renderRange() {
-        binding.attTvRange.text = getString(R.string.att_date_range, WsFormat.reversedDay(startDate), WsFormat.reversedDay(endDate))
+        val selected = viewModel.selection.value ?: return
+        binding.attSegment.check(buttonFor(selected.period))
+        val dates = getString(R.string.att_date_range, WsFormat.reversedDay(selected.from), WsFormat.reversedDay(selected.to))
+        val previous = viewModel.displayedSelection?.let { it != selected } == true
+        binding.attTvRange.text = if (previous) dates + "\n" + getString(R.string.list_previous_results) else dates
     }
 
-    @IdRes
-    private fun buttonFor(p: Period): Int = when (p) {
+    @IdRes private fun buttonFor(period: Period): Int = when (period) {
         Period.WEEK -> R.id.att_btn_week
         Period.MONTH -> R.id.att_btn_month
         Period.CUSTOM -> R.id.att_btn_custom
     }
 
     private fun pickRange() {
-        val previous = period
-        val builder = MaterialDatePicker.Builder.dateRangePicker().setTitleText(R.string.att_range_picker_title)
-        if (period == Period.CUSTOM && startDate.isNotEmpty() && endDate.isNotEmpty()) {
-            builder.setSelection(Pair(dayToUtcMillis(startDate), dayToUtcMillis(endDate)))
-        }
-        val picker = builder.build()
-        var applied = false
-        picker.addOnPositiveButtonClickListener { selection ->
-            val first = selection.first ?: return@addOnPositiveButtonClickListener
-            val second = selection.second ?: first
-            applied = true
-            period = Period.CUSTOM
-            startDate = utcMillisToDay(first)
-            endDate = utcMillisToDay(second)
-            renderRange()
-            load()
-        }
-        // A cancelled picker puts the selector back on the period that is still showing.
-        picker.addOnDismissListener {
-            if (!applied && _binding != null) binding.attSegment.check(buttonFor(previous))
-        }
+        if (childFragmentManager.isStateSaved || childFragmentManager.findFragmentByTag("attendanceRange") != null) return
+        val selected = viewModel.selection.value ?: return
+        val picker = MaterialDatePicker.Builder.dateRangePicker().setTitleText(R.string.att_range_picker_title)
+            .setSelection(Pair(dayToUtcMillis(selected.from), dayToUtcMillis(selected.to))).build()
+        connectPicker(picker)
         picker.show(childFragmentManager, "attendanceRange")
+    }
+
+    private fun connectPicker(picker: MaterialDatePicker<Pair<Long, Long>>) {
+        val owner = viewLifecycleOwner
+        picker.addOnPositiveButtonClickListener { range ->
+            if (owner.lifecycle.currentState == Lifecycle.State.DESTROYED) return@addOnPositiveButtonClickListener
+            val first = range.first ?: return@addOnPositiveButtonClickListener
+            val last = range.second ?: return@addOnPositiveButtonClickListener
+            viewModel.setCustomRange(first, last)
+        }
+        picker.addOnDismissListener {
+            if (owner.lifecycle.currentState != Lifecycle.State.DESTROYED) renderRange()
+        }
     }
 
     private fun showChips(server: List<FilterModel>) {
         if (server.isNotEmpty() || chips.isEmpty()) {
-            val all = FilterModel().apply {
-                id = ""
-                title = getString(R.string.att_filter_all)
-                count = "0"
-            }
+            val all = FilterModel().apply { id = ""; title = getString(R.string.att_filter_all); count = "0" }
             chips = listOf(all) + server
         }
         val layoutManager = binding.attRvFilters.layoutManager
-        // Rebuilding the adapter would otherwise jump the chip row back to the start.
         val scrollState = layoutManager?.onSaveInstanceState()
-        binding.attRvFilters.adapter = SubFilterAdapter(filterId, chips, requireContext(), object : AdapterItemClick {
-            override fun onItemClick(customObject: Any, position: Int) {
-                filterId = (customObject as FilterModel).id.orEmpty()
-                load()
-            }
-        })
+        binding.attRvFilters.adapter = SubFilterAdapter(viewModel.selection.value?.filter.orEmpty(), chips,
+            requireContext(), object : AdapterItemClick {
+                override fun onItemClick(customObject: Any, position: Int) {
+                    viewModel.selectFilter((customObject as FilterModel).id.orEmpty())
+                }
+            }).apply { stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY }
         layoutManager?.onRestoreInstanceState(scrollState)
         binding.attRvFilters.visibility = if (chips.size > 1) View.VISIBLE else View.GONE
-    }
-
-    private fun load() {
-        if (startDate.isEmpty() || endDate.isEmpty()) return
-        viewModel.loadAttendance(startDate, endDate, employeeId, filterId, showLoading = !binding.attSwipe.isRefreshing)
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -244,17 +182,17 @@ class MyAttendanceDetailFragment : BaseFragment() {
     }
 
     override fun onDestroyView() {
+        loading?.release()
+        loading = null
         binding.attSwipe.isRefreshing = false
+        binding.attRvDays.adapter = null
+        binding.attRvFilters.adapter = null
         _binding = null
         super.onDestroyView()
     }
 
     private companion object {
-        private fun dayFormat() = SimpleDateFormat("yyyy-MM-dd", Locale.US).apply { timeZone = TimeZone.getTimeZone("UTC") }
-
-        /** Material date pickers speak UTC midnight. */
-        fun dayToUtcMillis(day: String): Long = dayFormat().parse(day)?.time ?: MaterialDatePicker.todayInUtcMilliseconds()
-
-        fun utcMillisToDay(millis: Long): String = dayFormat().format(millis)
+        fun dayToUtcMillis(day: String): Long = SimpleDateFormat("yyyy-MM-dd", Locale.US)
+            .apply { timeZone = TimeZone.getTimeZone("UTC") }.parse(day)?.time ?: MaterialDatePicker.todayInUtcMilliseconds()
     }
 }

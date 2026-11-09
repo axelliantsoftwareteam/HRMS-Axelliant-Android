@@ -3,6 +3,7 @@ package com.axelliant.hris.screens
 import androidx.core.util.Pair
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
+import com.axelliant.hris.loading.ListLoadKind
 import com.axelliant.hris.ui.WsFormat
 import com.axelliant.hris.viewmodel.RequestsOverviewViewModel
 import com.axelliant.hris.viewmodel.RequestsOverviewViewModel.Period
@@ -28,7 +29,7 @@ internal class RequestsPeriodPicker(
             if (id == R.id.rq_btn_custom) pickRange() else {
                 model.period = if (id == R.id.rq_btn_month) Period.THIS_MONTH else Period.LAST_7_DAYS
                 render()
-                model.load(showLoading = model.rows.value.isNullOrEmpty())
+                model.load(ListLoadKind.FILTER)
             }
         }
         binding.rqBtnCustom.setOnClickListener { if (model.period == Period.CUSTOM) pickRange() }
@@ -69,7 +70,7 @@ internal class RequestsPeriodPicker(
             val last = selection.second ?: return@addOnPositiveButtonClickListener
             model.setCustomRange(first, last)
             render()
-            model.load(showLoading = model.rows.value.isNullOrEmpty())
+            model.load(ListLoadKind.FILTER)
         }
         picker.addOnDismissListener {
             if (owner.lifecycle.currentState != Lifecycle.State.DESTROYED) render()

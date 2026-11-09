@@ -1,50 +1,42 @@
 package com.axelliant.hris.viewmodel
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.axelliant.hris.R
 import com.axelliant.hris.config.AppConst
 import com.axelliant.hris.config.GlobalConfig
-import com.axelliant.hris.event.Event
+import com.axelliant.hris.loading.ListLoadKind
 import com.axelliant.hris.model.attendance.AttRequest
-import com.axelliant.hris.model.requests.CheckinRequestItem
-import com.axelliant.hris.model.requests.CheckinRequestsPayload
-import com.axelliant.hris.model.requests.ExpenseClaim
-import com.axelliant.hris.model.requests.ExpenseClaimsPayload
-import com.axelliant.hris.model.requests.LeaveRequestItem
-import com.axelliant.hris.model.requests.LeaveRequestsPayload
-import com.axelliant.hris.model.requests.RequestRow
-import com.axelliant.hris.model.requests.toAmount
+import com.axelliant.hris.model.requests.*
 import com.axelliant.hris.network.ApiInterface
 import com.axelliant.hris.network.ApiResult
-import com.axelliant.hris.network.enqueueResult
 import com.axelliant.hris.ui.WsFormat
 import com.axelliant.hris.ui.WsStatus
-import com.google.gson.reflect.TypeToken
 import java.util.Calendar
 
-/**
- * "Your latest activity": the employee's check-in, leave and expense requests for a period, merged
- * into one list, newest first. The three calls run in parallel and the list is replaced only when
- * all of them have answered.
- */
-class RequestsOverviewViewModel(private val api: ApiInterface, private val savedState: SavedStateHandle) : BaseViewModel() {
-
+/** Three cancellable API reads form one atomic snapshot. Failed batches retain the last complete result. */
+open class RequestsOverviewViewModel(
+    private val api: ApiInterface,
+    private val savedState: SavedStateHandle,
+    private val incompleteMessage: (List<Source>, Boolean) -> String
+) : BaseViewModel() {
     enum class Period { LAST_7_DAYS, THIS_MONTH, CUSTOM }
+    enum class Source(@StringRes val label: Int) {
+        LEAVE(R.string.rq_source_leave), ATTENDANCE(R.string.rq_source_attendance), EXPENSE(R.string.rq_source_expense)
+    }
 
-    /** The period shown; the screen restores its toggle from this. */
     var period: Period
         get() = Period.values().firstOrNull { it.name == savedState.get<String>("requests-period") } ?: Period.LAST_7_DAYS
         set(value) { savedState["requests-period"] = value.name }
 
-    /** Applies confirmed UTC picker dates to every request category. */
     fun setCustomRange(start: Long, end: Long) {
         val range = RequestsDateRange.selected(start, end)
         savedState["requests-range"] = arrayListOf(range.first, range.second)
         period = Period.CUSTOM
     }
 
-    /** Restores the applied range for refreshes and return navigation. */
     fun currentRange(): Pair<String, String> {
         if (period == Period.CUSTOM) {
             savedState.get<ArrayList<String>>("requests-range")?.takeIf { it.size == 2 }
@@ -54,77 +46,73 @@ class RequestsOverviewViewModel(private val api: ApiInterface, private val saved
     }
 
     private val _rows = MutableLiveData<List<RequestRow>?>()
-
-    /** The loaded rows; null until the first load has finished. */
     val rows: LiveData<List<RequestRow>?> = _rows
+    var displayedRange: Pair<String, String>? = null
+        private set
+    private var activeRange: Pair<String, String>? = null
 
-    private val _failed = MutableLiveData<Event<Boolean>>()
-
-    /** Fires once per load in which at least one of the three calls failed. */
-    val failed: LiveData<Event<Boolean>> = _failed
-
-    private var generation = 0
-
-    /** [showLoading] is false for pull-to-refresh and for reloads of a list that already has rows. */
-    fun load(showLoading: Boolean) {
-        val current = ++generation
-        val (start, end) = currentRange()
-        if (showLoading) isLoading.value = Event(true)
-
+    fun load(kind: ListLoadKind = ListLoadKind.REFRESH, force: Boolean = false) {
+        val range = currentRange()
+        if (!force && listLoading().value?.isLoading == true && activeRange == range) return
+        activeRange = range
+        val ticket = beginListLoad(kind = kind, replace = true)
+        val (start, end) = range
+        val auth = AppConst.authHeader()
         var pending = 3
-        var anyFailed = false
+        val failures = mutableListOf<Source>()
         var leaves: List<RequestRow> = emptyList()
         var checkins: List<RequestRow> = emptyList()
         var expenses: List<RequestRow> = emptyList()
 
         fun finishOne() {
+            if (!isCurrentListLoad("list", ticket)) return
             pending--
             if (pending > 0) return
-            if (showLoading) isLoading.value = Event(false)
-            if (current != generation) return
-            _rows.value = (leaves + checkins + expenses).sortedByDescending { sortKey(it) }
-            if (anyFailed) _failed.value = Event(true)
+            if (failures.isEmpty()) {
+                val merged = (leaves + checkins + expenses).sortedByDescending { sortKey(it) }
+                displayedRange = range
+                _rows.value = merged
+                finishListLoad("list", ticket, merged.size)
+            } else {
+                // No category is silently removed and no old/new date ranges are mixed.
+                finishListLoad("list", ticket, itemCount = _rows.value?.size,
+                    error = incompleteMessage(failures.sortedBy { it.ordinal }, _rows.value != null))
+            }
         }
 
         val employeeId = GlobalConfig.currentEmployeeId()
-        api.postLeaveRequestsMap(
-            AppConst.authHeader(),
-            mapOf(
-                "start_date" to start,
-                "end_date" to end,
-                "employee_list" to if (employeeId.isBlank()) emptyList() else listOf(employeeId),
-                "filters" to ""
-            )
-        ).enqueueResult<LeaveRequestsPayload>(object : TypeToken<LeaveRequestsPayload>() {}.type) { result ->
-            when (result) {
-                is ApiResult.Success -> leaves = result.data.leaves.orEmpty().map(::leaveRow)
-                is ApiResult.Failure -> anyFailed = true
-            }
+        requestListPart<LeaveRequestsPayload>(api.postLeaveRequestsMap(auth, mapOf(
+            "start_date" to start, "end_date" to end,
+            "employee_list" to if (employeeId.isBlank()) emptyList() else listOf(employeeId), "filters" to ""
+        )), LeaveRequestsPayload::class.java, "list", ticket) { result ->
+            try {
+                when (result) {
+                    is ApiResult.Success -> leaves = result.data.leaves.orEmpty().map(::leaveRow)
+                    is ApiResult.Failure -> failures += Source.LEAVE
+                }
+            } catch (_: Exception) { failures += Source.LEAVE }
             finishOne()
         }
-
-        api.postCheckinsMap(
-            AppConst.authHeader(),
-            mapOf("start_date" to start, "end_date" to end, "filters" to listOf(""))
-        ).enqueueResult<CheckinRequestsPayload>(object : TypeToken<CheckinRequestsPayload>() {}.type) { result ->
-            when (result) {
-                is ApiResult.Success -> checkins = result.data.checkin.orEmpty().map(::checkinRow)
-                is ApiResult.Failure -> anyFailed = true
-            }
+        requestListPart<CheckinRequestsPayload>(api.postCheckinsMap(auth, mapOf(
+            "start_date" to start, "end_date" to end, "filters" to listOf("")
+        )), CheckinRequestsPayload::class.java, "list", ticket) { result ->
+            try {
+                when (result) {
+                    is ApiResult.Success -> checkins = result.data.checkin.orEmpty().map(::checkinRow)
+                    is ApiResult.Failure -> failures += Source.ATTENDANCE
+                }
+            } catch (_: Exception) { failures += Source.ATTENDANCE }
             finishOne()
         }
-
-        api.callMyExpenseDetail(
-            AppConst.authHeader(),
-            AttRequest().apply {
-                start_date = start
-                end_date = end
-            }
-        ).enqueueResult<ExpenseClaimsPayload>(object : TypeToken<ExpenseClaimsPayload>() {}.type) { result ->
-            when (result) {
-                is ApiResult.Success -> expenses = result.data.expenses.orEmpty().map(::expenseRow)
-                is ApiResult.Failure -> anyFailed = true
-            }
+        requestListPart<ExpenseClaimsPayload>(api.callMyExpenseDetail(auth, AttRequest().apply {
+            start_date = start; end_date = end
+        }), ExpenseClaimsPayload::class.java, "list", ticket) { result ->
+            try {
+                when (result) {
+                    is ApiResult.Success -> expenses = result.data.expenses.orEmpty().map(::expenseRow)
+                    is ApiResult.Failure -> failures += Source.EXPENSE
+                }
+            } catch (_: Exception) { failures += Source.EXPENSE }
             finishOne()
         }
     }
@@ -179,7 +167,8 @@ class RequestsOverviewViewModel(private val api: ApiInterface, private val saved
         submittedOn = ""
     )
 
-    /** Orders rows by when they happened; rows with an unreadable date go last. */
-    private fun sortKey(row: RequestRow): Long = WsFormat.parse(row.effectiveOn)?.time ?: Long.MIN_VALUE
+    /** Accepts minute-precision space-separated API timestamps for sorting without changing display/model values. */
+    private fun sortKey(row: RequestRow): Long = WsFormat.parse(row.effectiveOn)?.time
+        ?: WsFormat.parse(row.effectiveOn.replaceFirst(' ', 'T'))?.time ?: Long.MIN_VALUE
 
 }

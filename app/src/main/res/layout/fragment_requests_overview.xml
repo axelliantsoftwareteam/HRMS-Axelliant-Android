@@ -233,6 +233,7 @@
         </LinearLayout>
 
         <FrameLayout
+            android:id="@+id/rq_list_host"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="@dimen/_8sdp"
@@ -253,17 +254,6 @@
                     android:paddingEnd="@dimen/_8sdp"
                     android:paddingBottom="@dimen/_90sdp" />
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-            <com.axelliant.hris.ui.WsEmptyState
-                android:id="@+id/empty_state"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_8sdp"
-                android:layout_marginEnd="@dimen/_8sdp"
-                android:visibility="gone"
-                app:wsEmptyIcon="@drawable/rq_ic_list"
-                app:wsEmptyMessage="@string/rq_empty_message"
-                app:wsEmptyTitle="@string/rq_empty_title" />
         </FrameLayout>
     </LinearLayout>
 

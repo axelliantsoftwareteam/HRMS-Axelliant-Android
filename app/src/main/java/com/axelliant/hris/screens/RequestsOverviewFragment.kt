@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.axelliant.hris.R
 import com.axelliant.hris.adapter.RequestRowFormat
 import com.axelliant.hris.adapter.RequestsOverviewAdapter
@@ -12,12 +13,12 @@ import com.axelliant.hris.base.BaseFragment
 import com.axelliant.hris.config.AppConst
 import com.axelliant.hris.databinding.FragmentRequestsOverviewBinding
 import com.axelliant.hris.enums.RequestFilter
-import com.axelliant.hris.event.EventObserver
-import com.axelliant.hris.extention.showErrorMsg
+import com.axelliant.hris.loading.ListLoadKind
 import com.axelliant.hris.model.requests.RequestRow
 import com.axelliant.hris.navigation.AppNavigator
 import com.axelliant.hris.ui.WsDetailSheet
 import com.axelliant.hris.ui.WsFormat
+import com.axelliant.hris.ui.WsListLoading
 import com.axelliant.hris.viewmodel.RequestsOverviewViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.Locale
@@ -30,6 +31,8 @@ class RequestsOverviewFragment : BaseFragment() {
 
     private val viewModel: RequestsOverviewViewModel by viewModel()
     private lateinit var adapter: RequestsOverviewAdapter
+    private var loading: WsListLoading? = null
+    private var hasResumed = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentRequestsOverviewBinding.inflate(inflater, container, false)
@@ -40,11 +43,16 @@ class RequestsOverviewFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         adapter = RequestsOverviewAdapter { showDetail(it) }
+        adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         binding.rqList.layoutManager = LinearLayoutManager(requireContext())
         binding.rqList.adapter = adapter
 
         binding.rqRefresh.setColorSchemeResources(R.color.ws_primary)
-        binding.rqRefresh.setOnRefreshListener { viewModel.load(showLoading = false) }
+        binding.rqRefresh.setOnRefreshListener { viewModel.load(ListLoadKind.PULL_REFRESH, force = true) }
+
+        loading = WsListLoading(viewLifecycleOwner, binding.rqListHost, { viewModel.load() },
+            emptyTitle = getString(R.string.rq_empty_title), emptyMessage = getString(R.string.rq_empty_message))
+            .also { it.bind(viewModel.listLoading()) }
 
         RequestsPeriodPicker(this, binding, viewModel).bind()
 
@@ -54,23 +62,23 @@ class RequestsOverviewFragment : BaseFragment() {
             })
         }
 
-        viewModel.getIsLoading().observe(viewLifecycleOwner, EventObserver { loading ->
-            if (loading) showDialog() else hideDialog()
-        })
         viewModel.rows.observe(viewLifecycleOwner) { rows ->
-            binding.rqRefresh.isRefreshing = false
             if (rows != null) render(rows)
         }
-        viewModel.failed.observe(viewLifecycleOwner, EventObserver {
-            requireContext().showErrorMsg(getString(R.string.rq_load_failed))
-        })
+        viewModel.listLoading().observe(viewLifecycleOwner) { state ->
+            binding.rqRefresh.isRefreshing = state.pullRefreshing
+            render(viewModel.rows.value.orEmpty())
+        }
         render(viewModel.rows.value.orEmpty())
     }
 
     override fun onResume() {
         super.onResume()
-        // Coming back from the request form shows the new request.
-        viewModel.load(showLoading = viewModel.rows.value.isNullOrEmpty())
+        // Recreating the view retains data/errors/in-flight work; returning from a form refreshes it.
+        if (hasResumed) viewModel.load(force = true)
+        else if (viewModel.rows.value == null && viewModel.listLoading().value?.error == null)
+            viewModel.load(ListLoadKind.INITIAL)
+        hasResumed = true
     }
 
     private fun render(rows: List<RequestRow>) {
@@ -78,14 +86,17 @@ class RequestsOverviewFragment : BaseFragment() {
         adapter.submitList(rows)
 
         val loaded = viewModel.rows.value != null
-        if (loaded && rows.isEmpty()) binding.emptyState.show() else binding.emptyState.hide()
-
-        binding.rqTvShown.text = resources.getQuantityString(R.plurals.rq_requests_shown, rows.size, rows.size)
+        val count = resources.getQuantityString(R.plurals.rq_requests_shown, rows.size, rows.size)
+        binding.rqTvShown.text = when {
+            !loaded -> getString(if (viewModel.listLoading().value?.error != null) R.string.ws_list_error_title else R.string.ws_loading_list)
+            viewModel.displayedRange != viewModel.currentRange() -> getString(R.string.rq_previous_count, count)
+            else -> count
+        }
         val statuses = rows.map { RequestRowFormat.status(ctx, it).lowercase(Locale.ROOT) }
         binding.rqTvPendingCount.text =
-            statuses.count { it.contains("pend") || it.contains("open") || it.contains("wait") }.toString()
-        binding.rqTvApprovedCount.text = statuses.count { it.contains("approv") || it.contains("process") }.toString()
-        binding.rqTvRejectedCount.text = statuses.count { it.contains("reject") }.toString()
+            if (loaded) statuses.count { it.contains("pend") || it.contains("open") || it.contains("wait") }.toString() else "--"
+        binding.rqTvApprovedCount.text = if (loaded) statuses.count { it.contains("approv") || it.contains("process") }.toString() else "--"
+        binding.rqTvRejectedCount.text = if (loaded) statuses.count { it.contains("reject") }.toString() else "--"
     }
 
     private fun showDetail(row: RequestRow) {
@@ -115,7 +126,10 @@ class RequestsOverviewFragment : BaseFragment() {
     }
 
     override fun onDestroyView() {
-        hideDialog()
+        loading?.release()
+        loading = null
+        binding.rqRefresh.isRefreshing = false
+        binding.rqList.adapter = null
         _binding = null
         super.onDestroyView()
     }

@@ -80,7 +80,8 @@ class WsListLoading(
             title = b.root.context.getString(R.string.ws_list_error_title),
             message = state.error?.takeIf { it.isNotBlank() } ?: b.root.context.getString(R.string.ws_list_error_message))
         else if (presentation.empty) b.wsListMessageCard.show(title = emptyTitle, message = emptyMessage)
-        b.wsListRetry.isVisible = presentation.fullError
+        b.wsListRetry.isVisible = presentation.fullError || presentation.empty
+        b.wsListRetry.setText(if (presentation.empty) R.string.ws_refresh_list else R.string.ws_try_again)
         b.wsListRetry.isEnabled = !state.isLoading
     }
 

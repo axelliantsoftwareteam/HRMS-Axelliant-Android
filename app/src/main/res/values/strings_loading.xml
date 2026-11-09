@@ -1,6 +1,7 @@
 <resources>
     <string name="ws_loading_list">Loading data</string>
     <string name="ws_loading_more">Loading more</string>
+    <string name="ws_refresh_list">Refresh</string>
     <string name="ws_list_error_title">Could not load data</string>
     <string name="ws_list_error_message">Please try again.</string>
     <string name="ws_list_empty_title">No results</string>

@@ -39,7 +39,7 @@ val singletonModule = module {
 val viewModelModule = module {
     viewModel { LoginViewModel(get()) }
     viewModel { HomeViewModel(get()) }
-    viewModel { AttendanceViewModel(get()) }
+    viewModel { AttendanceViewModel(get(), get()) }
     viewModel { LeaveViewModel(get()) }
     viewModel { ExpenseViewModel(get(),get()) }
     viewModel { RequestViewModel(get()) }
@@ -47,7 +47,12 @@ val viewModelModule = module {
     viewModel { ProfileViewModel(get()) }
     viewModel { PayslipsViewModel(get()) }
     viewModel { NotificationsViewModel(get()) }
-    viewModel { RequestsOverviewViewModel(get(), get()) }
+    viewModel { RequestsOverviewViewModel(get(), get()) { sources, previous ->
+        val context = androidContext()
+        val names = sources.joinToString(", ") { context.getString(it.label) }
+        context.getString(if (previous) com.axelliant.hris.R.string.rq_batch_refresh_failed
+            else com.axelliant.hris.R.string.rq_batch_failed, names)
+    } }
     viewModel { TeamActivityViewModel(get()) }
     viewModel { TeamCalendarViewModel(get()) }
     viewModel { OrganogramViewModel(get()) }

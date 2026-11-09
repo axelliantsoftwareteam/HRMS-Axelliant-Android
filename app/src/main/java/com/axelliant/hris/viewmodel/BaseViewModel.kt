@@ -49,6 +49,29 @@ open class BaseViewModel : ViewModel() {
 
     protected fun isCurrentListLoad(key: String, ticket: ListLoadTicket): Boolean = tracker(key).isCurrent(ticket)
 
+    /** Registers one cancellable member of an aggregate load without ending the aggregate ticket. */
+    protected fun <T> requestListPart(call: Call<ResponseBody>, type: Type, key: String,
+                                      ticket: ListLoadTicket, complete: (ApiResult<T>) -> Unit) {
+        activeCalls[call] = ActiveCall(false, key, ticket)
+        enqueue<T>(call, type) { result ->
+            if (activeCalls.remove(call) == null || !isCurrentListLoad(key, ticket)) return@enqueue
+            complete(result)
+        }
+    }
+
+    /** Optional lookups have their own lifetime and never alter the list's progress/error state. */
+    protected fun <T> requestData(call: Call<ResponseBody>, type: Type, complete: (ApiResult<T>) -> Unit) {
+        activeCalls[call] = ActiveCall(false)
+        enqueue<T>(call, type) { result ->
+            if (activeCalls.remove(call) != null) complete(result)
+        }
+    }
+
+    protected fun clearListLoading(key: String = "list") {
+        activeCalls.filterValues { it.listKey == key }.keys.toList().forEach(::cancelRequest)
+        tracker(key).clear()
+    }
+
     /** A list read never opens the blocking action dialog. Replacement rejects obsolete callbacks. */
     protected fun <T> requestList(call: Call<ResponseBody>, type: Type,
                                   target: MutableLiveData<Event<ApiResult<T>>>, itemCount: (T) -> Int,
