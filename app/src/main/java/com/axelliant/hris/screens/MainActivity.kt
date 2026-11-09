@@ -4,8 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.content.IntentSender
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
@@ -73,7 +71,6 @@ class MainActivity : BaseActivity() {
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         diComponents.globalConfig.navController = navHostFragment.navController
         diComponents.globalConfig.navController.addOnDestinationChangedListener { _, destination, _ ->
-            Handler(Looper.getMainLooper()).postDelayed({ hideDialog() }, 200)
             binding.drawerLayout.closeDrawer(GravityCompat.START)
         }
 

@@ -1,30 +1,60 @@
 package com.axelliant.hris.base
 
 import android.os.Build
+import android.os.Bundle
+import android.view.View
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.fragment.app.Fragment
+import com.axelliant.hris.dialog.LoadingDialog
 import com.axelliant.hris.navigation.AppNavigator
-import com.axelliant.hris.screens.BaseActivity
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 open class BaseFragment : Fragment() {
-
-
+    private var screenDialog: LoadingDialog? = null
+    private var dialogRequested = false
 
     fun previousFragmentNavigation(){
-        showDialog()
         AppNavigator.moveBackToPreviousFragment()
     }
 
      fun showDialog() {
-        if (requireActivity() is BaseActivity) {
-            if (!(requireActivity() as BaseActivity).isFinishing)
-                (requireActivity() as BaseActivity).loadingDialog.show()
-        }
+        dialogRequested = true
+        showOwnedDialog()
     }
 
      fun hideDialog() {
-        if (requireActivity() is BaseActivity)
-            (requireActivity() as BaseActivity).loadingDialog.dismiss()
+        dialogRequested = false
+        screenDialog?.dismiss()
+    }
+
+    private fun showOwnedDialog() {
+        val host = activity ?: return
+        if (!dialogRequested || host.isFinishing || host.isDestroyed || view == null ||
+            !viewLifecycleOwner.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) return
+        val dialog = screenDialog ?: LoadingDialog(host).also {
+            it.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            it.setCanceledOnTouchOutside(false)
+            screenDialog = it
+        }
+        if (!dialog.isShowing) dialog.show()
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewLifecycleOwner.lifecycle.addObserver(object : DefaultLifecycleObserver {
+            override fun onStart(owner: LifecycleOwner) { showOwnedDialog() }
+            override fun onStop(owner: LifecycleOwner) { screenDialog?.dismiss() }
+        })
+    }
+
+    override fun onDestroyView() {
+        hideDialog()
+        screenDialog = null
+        super.onDestroyView()
     }
 
     fun navigateToBottomSheet(bottomSheetFragment: BottomSheetDialogFragment) {

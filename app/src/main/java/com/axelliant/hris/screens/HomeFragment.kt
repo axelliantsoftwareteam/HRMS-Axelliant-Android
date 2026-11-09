@@ -631,27 +631,22 @@ class HomeFragment : BaseFragment() {
 
                     when (currentObject.name) {
                         HomeMenu.Attendance.gridName -> {
-                            showDialog()
                             AppNavigator.navigateToMyAttendanceDetail()
                         }
 
                         HomeMenu.Leaves.gridName -> {
-                            showDialog()
                             AppNavigator.navigateToLeaves()
                         }
 
                         HomeMenu.Request.gridName -> {
-                            showDialog()
                             AppNavigator.navigateToRequestsOverview()
                         }
 
                         HomeMenu.Approval.gridName -> {
-                            showDialog()
                             AppNavigator.navigateToApprovals()
                         }
 
                         HomeMenu.Expense.gridName -> {
-                            showDialog()
                             AppNavigator.navigateToExpense()
                         }
 

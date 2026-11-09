@@ -1,0 +1,8 @@
+<resources>
+    <string name="ws_loading_list">Loading data</string>
+    <string name="ws_loading_more">Loading more</string>
+    <string name="ws_list_error_title">Could not load data</string>
+    <string name="ws_list_error_message">Please try again.</string>
+    <string name="ws_list_empty_title">No results</string>
+    <string name="ws_list_empty_message">There is nothing to show for this selection.</string>
+</resources>

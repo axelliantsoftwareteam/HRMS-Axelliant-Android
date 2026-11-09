@@ -1,0 +1,114 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/ws_list_progress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/ws_loading_list"
+        android:indeterminate="true"
+        android:visibility="gone"
+        app:indicatorColor="@color/ws_primary" />
+
+    <LinearLayout
+        android:id="@+id/ws_list_error_banner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/ws_screen_bg"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="@dimen/_8sdp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/ws_list_error_text"
+            style="@style/Ws.Text.Caption"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:maxLines="3"
+            android:ellipsize="end"
+            android:accessibilityLiveRegion="polite" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/ws_list_banner_retry"
+            style="@style/Widget.Ws.Button.Outline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:minHeight="48dp"
+            android:text="@string/ws_try_again" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/ws_list_body"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <FrameLayout
+            android:id="@+id/ws_list_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <com.axelliant.hris.ui.WsShimmerLayout
+            android:id="@+id/ws_list_skeleton"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/ws_screen_bg"
+            android:contentDescription="@string/ws_loading_list"
+            android:importantForAccessibility="yes"
+            android:orientation="vertical"
+            android:padding="@dimen/_8sdp"
+            android:visibility="gone" />
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/ws_list_message"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/ws_screen_bg"
+            android:fillViewport="true"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="@dimen/_12sdp">
+
+            <com.axelliant.hris.ui.WsEmptyState
+                android:id="@+id/ws_list_message_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:accessibilityLiveRegion="polite"
+                app:wsEmptyIcon="@drawable/rq_ic_list" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/ws_list_retry"
+                style="@style/Widget.Ws.Button.Outline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_12sdp"
+                android:minHeight="48dp"
+                android:text="@string/ws_try_again" />
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+    </FrameLayout>
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/ws_list_page_progress"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="@dimen/_8sdp"
+        android:contentDescription="@string/ws_loading_more"
+        android:indeterminate="true"
+        android:visibility="gone"
+        app:indicatorColor="@color/ws_primary"
+        app:indicatorSize="28dp"
+        app:trackThickness="3dp" />
+</LinearLayout>
