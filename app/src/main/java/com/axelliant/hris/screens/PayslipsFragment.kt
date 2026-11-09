@@ -13,6 +13,7 @@ import com.axelliant.hris.adapter.FooterListAdapter
 import com.axelliant.hris.adapter.PayslipAdapter
 import com.axelliant.hris.base.BaseFragment
 import com.axelliant.hris.databinding.FragmentPayslipsBinding
+import com.axelliant.hris.ui.WsListLoading
 import com.axelliant.hris.event.EventObserver
 import com.axelliant.hris.extention.showErrorMsg
 import com.axelliant.hris.viewmodel.PayslipError
@@ -28,6 +29,7 @@ class PayslipsFragment : BaseFragment() {
 
     private val adapter = PayslipAdapter { slip -> viewModel.open(slip, requireContext().cacheDir) }
     private var renderedCount = -1
+    private var loading: WsListLoading? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentPayslipsBinding.inflate(inflater, container, false)
@@ -51,9 +53,10 @@ class PayslipsFragment : BaseFragment() {
         binding.payRefresh.setOnChildScrollUpCallback { _, _ -> binding.payList.canScrollVertically(-1) }
         binding.payRefresh.setOnRefreshListener { viewModel.reload(pull = true) }
 
-        viewModel.getIsLoading().observe(viewLifecycleOwner, EventObserver { loading ->
-            if (loading) showDialog() else hideDialog()
-        })
+        loading = WsListLoading.attach(viewLifecycleOwner, binding.payRefresh, { viewModel.retryLoad() }, showPageProgress = false,
+            emptyTitle = getString(R.string.pay_empty_title), emptyMessage = getString(R.string.pay_empty_message))
+            .also { it.bind(viewModel.listLoading()) }
+        viewModel.listLoading().observe(viewLifecycleOwner) { binding.payRefresh.isRefreshing = it.pullRefreshing }
         viewModel.state.observe(viewLifecycleOwner) { render(it) }
         viewModel.errors.observe(viewLifecycleOwner, EventObserver { error ->
             val message = when (error) {
@@ -66,7 +69,8 @@ class PayslipsFragment : BaseFragment() {
             PayslipPreviewDialog.show(childFragmentManager, preview.title, preview.path)
         })
 
-        if (viewModel.state.value?.hasLoaded != true) viewModel.reload()
+        if (viewModel.state.value?.hasLoaded != true && viewModel.listLoading().value?.isLoading != true &&
+                viewModel.listLoading().value?.error == null) viewModel.reload()
     }
 
     private fun render(state: PayslipsViewModel.UiState) {
@@ -79,17 +83,8 @@ class PayslipsFragment : BaseFragment() {
         adapter.footer = if (state.loadingMore) FooterListAdapter.Footer.LOADING else FooterListAdapter.Footer.NONE
         binding.payRefresh.isRefreshing = state.refreshing
 
-        if (state.items.isEmpty() && state.hasLoaded) {
-            binding.payList.visibility = View.GONE
-            if (state.loadFailed) {
-                binding.payEmpty.show(R.drawable.ws_ic_description, getString(R.string.pay_failed_title), getString(R.string.pay_failed_message))
-            } else {
-                binding.payEmpty.show(R.drawable.ws_ic_description, getString(R.string.pay_empty_title), getString(R.string.pay_empty_message))
-            }
-        } else {
-            binding.payEmpty.hide()
-            binding.payList.visibility = View.VISIBLE
-        }
+        binding.payEmpty.hide()
+        binding.payList.visibility = View.VISIBLE
 
         // A new page arrived: if the list is still short enough to show its last row, keep going.
         if (state.items.size != renderedCount) {
@@ -105,6 +100,8 @@ class PayslipsFragment : BaseFragment() {
     }
 
     override fun onDestroyView() {
+        loading?.release()
+        loading = null
         binding.payList.adapter = null
         _binding = null
         super.onDestroyView()

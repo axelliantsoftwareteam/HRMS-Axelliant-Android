@@ -12,6 +12,8 @@ import com.axelliant.hris.adapter.TeamActivityAdapter
 import com.axelliant.hris.adapter.TeamRow
 import com.axelliant.hris.base.BaseFragment
 import com.axelliant.hris.databinding.FragmentTeamActivityBinding
+import com.axelliant.hris.loading.ListLoadKind
+import com.axelliant.hris.ui.WsListLoading
 import com.axelliant.hris.event.EventObserver
 import com.axelliant.hris.extention.showErrorMsg
 import com.axelliant.hris.model.team.TeamArrival
@@ -29,6 +31,7 @@ class TeamActivityFragment : BaseFragment() {
 
     private var _binding: FragmentTeamActivityBinding? = null
     private val binding get() = _binding!!
+    private var loading: WsListLoading? = null
 
     private val viewModel: TeamActivityViewModel by viewModel()
 
@@ -57,7 +60,7 @@ class TeamActivityFragment : BaseFragment() {
         binding.teamList.itemAnimator = null
         binding.teamRefresh.setOnChildScrollUpCallback { _, _ -> _binding?.teamList?.canScrollVertically(-1) ?: false }
         binding.teamRefresh.setOnRefreshListener {
-            viewModel.load { _binding?.teamRefresh?.isRefreshing = false }
+            viewModel.load(ListLoadKind.PULL_REFRESH)
         }
         binding.teamBtnRetry.setOnClickListener { viewModel.load() }
 
@@ -95,13 +98,12 @@ class TeamActivityFragment : BaseFragment() {
         })
         binding.teamSearchClear.setOnClickListener { binding.teamSearchInput.setText("") }
 
-        viewModel.getIsLoading().observe(viewLifecycleOwner, EventObserver { loading ->
-            if (loading) showDialog() else hideDialog()
-        })
-        viewModel.error.observe(viewLifecycleOwner, EventObserver { requireContext().showErrorMsg(it) })
+        loading = WsListLoading.attach(viewLifecycleOwner, binding.teamRefresh, { viewModel.load() })
+            .also { it.bind(viewModel.listLoading()) }
+        viewModel.listLoading().observe(viewLifecycleOwner) { binding.teamRefresh.isRefreshing = it.pullRefreshing }
         viewModel.changed.observe(viewLifecycleOwner) { render() }
 
-        if (!viewModel.hasLoaded) viewModel.load() else render()
+        if (!viewModel.hasLoaded && viewModel.listLoading().value?.isLoading != true && viewModel.listLoading().value?.error == null) viewModel.load() else render()
     }
 
     private fun segmentButton(segment: TeamSegment): Int = when (segment) {
@@ -118,7 +120,7 @@ class TeamActivityFragment : BaseFragment() {
         b.toolbar.setActionVisible(segment != TeamSegment.QUOTA)
         b.toolbar.setActionDotVisible(viewModel.hasActiveFilters)
         b.teamSearchCard.visibility = if (segment == TeamSegment.QUOTA) View.VISIBLE else View.GONE
-        b.teamErrorBlock.visibility = if (viewModel.loadFailed) View.VISIBLE else View.GONE
+        b.teamErrorBlock.visibility = View.GONE
 
         val rows: List<TeamRow>
         val title: String
@@ -139,10 +141,10 @@ class TeamActivityFragment : BaseFragment() {
                 title = getString(R.string.team_title_quota, list.size)
             }
         }
-        b.teamListTitle.text = title
+        b.teamListTitle.text = if (viewModel.showingPreviousRange) title + " — " + getString(R.string.list_previous_results) else title
         adapter.submitList(rows)
 
-        if (viewModel.hasLoaded && rows.isEmpty() && !viewModel.loadFailed) {
+        if (viewModel.hasLoaded && rows.isEmpty()) {
             when (segment) {
                 TeamSegment.ARRIVALS -> b.teamEmptyState.show(
                     R.drawable.ws_ic_person, getString(R.string.team_empty_arrivals_title), getString(R.string.team_empty_arrivals_message)
@@ -289,6 +291,8 @@ class TeamActivityFragment : BaseFragment() {
     }
 
     override fun onDestroyView() {
+        loading?.release()
+        loading = null
         _binding = null
         super.onDestroyView()
     }

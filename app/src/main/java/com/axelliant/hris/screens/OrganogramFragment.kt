@@ -10,6 +10,8 @@ import androidx.core.widget.ImageViewCompat
 import com.axelliant.hris.R
 import com.axelliant.hris.base.BaseFragment
 import com.axelliant.hris.databinding.FragmentOrganogramBinding
+import com.axelliant.hris.loading.ListLoadKind
+import com.axelliant.hris.ui.WsListLoading
 import com.axelliant.hris.event.EventObserver
 import com.axelliant.hris.extention.showErrorMsg
 import com.axelliant.hris.viewmodel.OrganogramViewModel
@@ -20,6 +22,7 @@ class OrganogramFragment : BaseFragment() {
 
     private var _binding: FragmentOrganogramBinding? = null
     private val binding get() = _binding!!
+    private var loading: WsListLoading? = null
 
     private val viewModel: OrganogramViewModel by viewModel()
 
@@ -37,10 +40,9 @@ class OrganogramFragment : BaseFragment() {
         binding.orgBtnReset.setOnClickListener { binding.orgChart.fit() }
         updateZoomUi()
 
-        viewModel.getIsLoading().observe(viewLifecycleOwner, EventObserver { loading ->
-            if (loading) showDialog() else hideDialog()
-        })
-        viewModel.error.observe(viewLifecycleOwner, EventObserver { requireContext().showErrorMsg(it) })
+        loading = WsListLoading.attach(viewLifecycleOwner, binding.orgContent, { viewModel.reload() },
+            emptyTitle = getString(R.string.org_empty_title), emptyMessage = getString(R.string.org_empty_message))
+            .also { it.bind(viewModel.listLoading()) }
         viewModel.changed.observe(viewLifecycleOwner) { render() }
         render()
     }
@@ -59,7 +61,7 @@ class OrganogramFragment : BaseFragment() {
             if (!b.orgChart.isShowing(viewModel.nodes)) b.orgChart.setChart(viewModel.nodes)
         } else {
             b.orgContent.visibility = View.GONE
-            if (viewModel.hasLoaded) b.orgEmptyState.show() else b.orgEmptyState.hide()
+            b.orgEmptyState.hide()
         }
     }
 
@@ -78,6 +80,8 @@ class OrganogramFragment : BaseFragment() {
 
     override fun onDestroyView() {
         binding.orgChart.onZoomChanged = null
+        loading?.release()
+        loading = null
         _binding = null
         super.onDestroyView()
     }

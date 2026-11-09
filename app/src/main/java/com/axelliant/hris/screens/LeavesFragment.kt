@@ -21,6 +21,8 @@ import com.axelliant.hris.model.leaveatt.LeaveRecord
 import com.axelliant.hris.navigation.AppNavigator
 import com.axelliant.hris.network.observeResult
 import com.axelliant.hris.ui.WsDetailSheet
+import com.axelliant.hris.loading.ListLoadKind
+import com.axelliant.hris.ui.WsListLoading
 import com.axelliant.hris.ui.WsFormat
 import com.axelliant.hris.ui.WsStatus
 import com.axelliant.hris.viewmodel.LeaveViewModel
@@ -42,9 +44,8 @@ class LeavesFragment : BaseFragment() {
     private val quotaAdapter = LvQuotaTileAdapter()
     private val historyAdapter = LvRequestAdapter { showDetails(it) }
 
-    private var quotasLoaded = false
-    private var pendingCalls = 0
-    private var errorShown = false
+    private var loading: WsListLoading? = null
+    private var hasResumed = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentLeavesBinding.inflate(inflater, container, false)
@@ -64,7 +65,7 @@ class LeavesFragment : BaseFragment() {
         binding.lvRvHistory.adapter = historyAdapter
 
         binding.lvSwipe.setColorSchemeResources(R.color.ws_primary)
-        binding.lvSwipe.setOnRefreshListener { load() }
+        binding.lvSwipe.setOnRefreshListener { viewModel.load(ListLoadKind.PULL_REFRESH) }
 
         binding.lvFab.setOnClickListener {
             AppNavigator.navigateToRequest(bundleOf(AppConst.RequestType to RequestFilter.LEAVE.name))
@@ -81,50 +82,25 @@ class LeavesFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        load()
+        if (hasResumed || (viewModel.data.value == null && viewModel.listLoading().value?.error == null &&
+                viewModel.listLoading().value?.isLoading != true)) viewModel.load()
+        hasResumed = true
     }
 
     private fun observeViewModel() {
-        viewModel.getIsLoading().observe(viewLifecycleOwner, EventObserver { loading ->
-            if (loading) showDialog() else hideDialog()
-        })
-
-        viewModel.quotas.observeResult(viewLifecycleOwner, onError = ::onLoadError) { data, _ ->
-            quotasLoaded = true
-            val quotas = data.allocations
-            quotaAdapter.submitList(quotas)
-            binding.lvRvQuotas.visibility = if (quotas.isEmpty()) View.GONE else View.VISIBLE
-            if (quotas.isEmpty()) binding.lvQuotaEmpty.show() else binding.lvQuotaEmpty.hide()
-            callFinished()
-        }
-
-        viewModel.history.observeResult(viewLifecycleOwner, onError = ::onLoadError) { data, _ ->
-            showHistory(data.leaves.orEmpty())
-            callFinished()
+        loading = WsListLoading.attach(viewLifecycleOwner, binding.lvSwipe, { viewModel.load() })
+            .also { it.bind(viewModel.listLoading()) }
+        viewModel.listLoading().observe(viewLifecycleOwner) { binding.lvSwipe.isRefreshing = it.pullRefreshing }
+        viewModel.data.observe(viewLifecycleOwner) { snapshot ->
+            snapshot?.let {
+                val quotas = it.quotas.allocations
+                quotaAdapter.submitList(quotas)
+                binding.lvRvQuotas.visibility = if (quotas.isEmpty()) View.GONE else View.VISIBLE
+                if (quotas.isEmpty()) binding.lvQuotaEmpty.show() else binding.lvQuotaEmpty.hide()
+                showHistory(it.history.leaves.orEmpty())
+            }
         }
     }
-
-    /** Pull-to-refresh and resume both land here; only the first balances load shows the overlay. */
-    private fun load() {
-        pendingCalls = 2
-        errorShown = false
-        viewModel.loadQuotas(showLoading = !quotasLoaded && !binding.lvSwipe.isRefreshing)
-        viewModel.loadHistory()
-    }
-
-    private fun callFinished() {
-        if (--pendingCalls <= 0) binding.lvSwipe.isRefreshing = false
-    }
-
-    private fun onLoadError(message: String) {
-        callFinished()
-        // Quotas and history usually fail together; one message is enough.
-        if (!errorShown) {
-            errorShown = true
-            requireContext().showErrorMsg(message, "Leave")
-        }
-    }
-
     private fun showHistory(leaves: List<LeaveRecord>) {
         val sorted = leaves.sortedByDescending { WsFormat.parse(it.from_date)?.time ?: 0L }
         historyAdapter.submitList(sorted)
@@ -182,7 +158,11 @@ class LeavesFragment : BaseFragment() {
     }
 
     override fun onDestroyView() {
+        loading?.release()
+        loading = null
         binding.lvSwipe.isRefreshing = false
+        binding.lvRvQuotas.adapter = null
+        binding.lvRvHistory.adapter = null
         _binding = null
         super.onDestroyView()
     }

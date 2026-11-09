@@ -10,8 +10,13 @@ object AppState {
 
     /** Unread notification count for the bell / drawer pill. */
     val unreadNotifications = MutableLiveData(0)
+    var unreadRevision: Long = 0L
+        private set
+
+    fun invalidateUnreadFetches() { unreadRevision++ }
 
     fun reset() {
+        invalidateUnreadFetches()
         com.axelliant.hris.cache.HomeMemoryCache.clear()
         GlobalConfig.setCurrentEmployee(null)
         unreadNotifications.value = 0

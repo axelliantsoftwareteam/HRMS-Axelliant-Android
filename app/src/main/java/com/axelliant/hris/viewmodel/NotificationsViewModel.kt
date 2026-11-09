@@ -4,12 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.axelliant.hris.config.AppConst
 import com.axelliant.hris.config.AppState
+import com.axelliant.hris.loading.ListLoadKind
 import com.axelliant.hris.event.Event
 import com.axelliant.hris.model.notification.NotificationPage
 import com.axelliant.hris.model.notification.WorkflowNotification
 import com.axelliant.hris.network.ApiInterface
 import com.axelliant.hris.network.ApiResult
-import com.axelliant.hris.network.enqueueResult
 
 /** What happened that deserves a toast. */
 sealed class NotificationEvent {
@@ -20,9 +20,9 @@ sealed class NotificationEvent {
 }
 
 /** Notification feed (20 per page) and "mark all read"; also feeds the unread badge on Home and the drawer. */
-class NotificationsViewModel(private val api: ApiInterface) : BaseViewModel() {
+open class NotificationsViewModel(private val api: ApiInterface) : BaseViewModel() {
 
-    private data class UnreadPayload(val unread_count: Any? = null)
+    internal data class UnreadPayload(val unread_count: Any? = null)
 
     data class UiState(
         val items: List<WorkflowNotification> = emptyList(),
@@ -53,9 +53,9 @@ class NotificationsViewModel(private val api: ApiInterface) : BaseViewModel() {
 
     /** Silent refresh of the unread badge shown on Home and in the drawer. Failures are ignored. */
     fun refreshUnreadCount() {
-        api.getNotifications(AppConst.authHeader(), 1, 0)
-            .enqueueResult<UnreadPayload>(UnreadPayload::class.java) { result ->
-                if (result is ApiResult.Success) {
+        val revision = AppState.unreadRevision
+        requestData<UnreadPayload>(api.getNotifications(AppConst.authHeader(), 1, 0), UnreadPayload::class.java) { result ->
+                if (result is ApiResult.Success && revision == AppState.unreadRevision) {
                     val count = result.data.unread_count?.toString()?.toDoubleOrNull()?.toInt() ?: 0
                     AppState.unreadNotifications.value = count
                 }
@@ -65,21 +65,18 @@ class NotificationsViewModel(private val api: ApiInterface) : BaseViewModel() {
     /** Loads the first page again, replacing the list. [pull] is true for pull-to-refresh. */
     fun reload(pull: Boolean = false) {
         val before = current()
-        if (reloading) {
-            if (pull) _state.value = before.copy(refreshing = true)
-            return
-        }
+        if (before.updating) return
+        if (reloading && !pull) return
         reloading = true
+        loadMoreFailed = false
         generation++
         val myGeneration = generation
-        val showOverlay = !pull && before.items.isEmpty()
-        if (showOverlay) isLoading.value = Event(true)
+        val ticket = beginListLoad(kind = if (pull) ListLoadKind.PULL_REFRESH else ListLoadKind.REFRESH, replace = true)
         _state.value = before.copy(refreshing = pull, loadingMore = false)
-        api.getNotifications(AppConst.authHeader(), PAGE_SIZE, 0)
-            .enqueueResult<NotificationPage>(NotificationPage::class.java) { result ->
-                if (myGeneration != generation) return@enqueueResult
+        requestListPart<NotificationPage>(api.getNotifications(AppConst.authHeader(), PAGE_SIZE, 0), NotificationPage::class.java, "list", ticket) { result ->
+                if (myGeneration != generation) return@requestListPart
                 reloading = false
-                if (showOverlay) isLoading.value = Event(false)
+
                 val latest = current()
                 when (result) {
                     is ApiResult.Success -> {
@@ -93,31 +90,38 @@ class NotificationsViewModel(private val api: ApiInterface) : BaseViewModel() {
                             unread = result.data.unread(),
                             hasLoaded = true,
                             loadFailed = false,
-                            refreshing = false
+                            refreshing = false, loadingMore = false
                         )
                     }
                     is ApiResult.Failure -> {
                         _state.value = latest.copy(
                             hasLoaded = true,
                             loadFailed = latest.items.isEmpty(),
-                            refreshing = false
+                            refreshing = false, loadingMore = false
                         )
-                        _events.value = Event(NotificationEvent.LoadFailed)
+
                     }
                 }
+                finishListLoad("list", ticket, itemCount = if (result is ApiResult.Success) current().items.size else null,
+                    error = (result as? ApiResult.Failure)?.message)
             }
+    }
+
+    /** Retries a failed page at the same offset; ordinary reloads still start at zero. */
+    fun retryLoad() {
+        if (loadMoreFailed) { loadMoreFailed = false; loadMore() } else reload()
     }
 
     /** Loads the next page; call when the last notification is on screen. */
     fun loadMore() {
         val s = current()
-        if (!s.hasLoaded || s.loadFailed || s.loadingMore || s.refreshing || reloading) return
+        if (!s.hasLoaded || s.loadFailed || s.loadingMore || s.refreshing || reloading || s.updating) return
         if (exhausted || loadMoreFailed || !s.canLoadMore) return
         val myGeneration = generation
+        val ticket = beginListLoad(kind = ListLoadKind.PAGE)
         _state.value = s.copy(loadingMore = true)
-        api.getNotifications(AppConst.authHeader(), PAGE_SIZE, s.items.size)
-            .enqueueResult<NotificationPage>(NotificationPage::class.java) { result ->
-                if (myGeneration != generation) return@enqueueResult
+        requestListPart<NotificationPage>(api.getNotifications(AppConst.authHeader(), PAGE_SIZE, s.items.size), NotificationPage::class.java, "list", ticket) { result ->
+                if (myGeneration != generation) return@requestListPart
                 val latest = current()
                 when (result) {
                     is ApiResult.Success -> {
@@ -136,9 +140,11 @@ class NotificationsViewModel(private val api: ApiInterface) : BaseViewModel() {
                     is ApiResult.Failure -> {
                         loadMoreFailed = true
                         _state.value = latest.copy(loadingMore = false)
-                        _events.value = Event(NotificationEvent.LoadFailed)
+
                     }
                 }
+                finishListLoad("list", ticket, itemCount = if (result is ApiResult.Success) current().items.size else null,
+                    error = (result as? ApiResult.Failure)?.message)
             }
     }
 
@@ -146,9 +152,12 @@ class NotificationsViewModel(private val api: ApiInterface) : BaseViewModel() {
     fun markAllRead() {
         val s = current()
         if (s.unread <= 0 || s.updating) return
-        _state.value = s.copy(updating = true)
-        api.markAllNotificationsRead(AppConst.authHeader())
-            .enqueueResult<Any>(Any::class.java) { result ->
+        AppState.invalidateUnreadFetches()
+        cancelListLoads()
+        reloading = false
+        generation++
+        _state.value = s.copy(updating = true, refreshing = false, loadingMore = false)
+        requestData<Any>(api.markAllNotificationsRead(AppConst.authHeader()), Any::class.java) { result ->
                 val latest = current()
                 when (result) {
                     is ApiResult.Success -> {

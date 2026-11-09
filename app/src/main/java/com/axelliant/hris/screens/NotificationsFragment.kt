@@ -15,6 +15,7 @@ import com.axelliant.hris.adapter.FooterListAdapter
 import com.axelliant.hris.adapter.NotificationAdapter
 import com.axelliant.hris.base.BaseFragment
 import com.axelliant.hris.databinding.FragmentNotificationsBinding
+import com.axelliant.hris.ui.WsListLoading
 import com.axelliant.hris.event.EventObserver
 import com.axelliant.hris.extention.showErrorMsg
 import com.axelliant.hris.extention.showSuccessMsg
@@ -35,6 +36,7 @@ class NotificationsFragment : BaseFragment() {
 
     private val adapter = NotificationAdapter { showDetails(it) }
     private var renderedCount = -1
+    private var loading: WsListLoading? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentNotificationsBinding.inflate(inflater, container, false)
@@ -66,9 +68,10 @@ class NotificationsFragment : BaseFragment() {
             if (action.startsWith(ACTION_OPEN)) openUrl(action.removePrefix(ACTION_OPEN))
         }
 
-        viewModel.getIsLoading().observe(viewLifecycleOwner, EventObserver { loading ->
-            if (loading) showDialog() else hideDialog()
-        })
+        loading = WsListLoading.attach(viewLifecycleOwner, binding.notifRefresh, { viewModel.retryLoad() }, showPageProgress = false,
+            emptyTitle = getString(R.string.notif_empty_title), emptyMessage = getString(R.string.notif_empty_message))
+            .also { it.bind(viewModel.listLoading()) }
+        viewModel.listLoading().observe(viewLifecycleOwner) { binding.notifRefresh.isRefreshing = it.pullRefreshing }
         viewModel.state.observe(viewLifecycleOwner) { render(it) }
         viewModel.events.observe(viewLifecycleOwner, EventObserver { event ->
             val context = requireContext()
@@ -80,7 +83,8 @@ class NotificationsFragment : BaseFragment() {
             }
         })
 
-        if (viewModel.state.value?.hasLoaded != true) viewModel.reload()
+        if (viewModel.state.value?.hasLoaded != true && viewModel.listLoading().value?.isLoading != true &&
+                viewModel.listLoading().value?.error == null) viewModel.reload()
     }
 
     private fun render(state: NotificationsViewModel.UiState) {
@@ -97,19 +101,9 @@ class NotificationsFragment : BaseFragment() {
         }
         binding.notifRefresh.isRefreshing = state.refreshing
 
-        if (state.items.isEmpty() && state.hasLoaded) {
-            binding.notifList.visibility = View.GONE
-            binding.notifEmptyGroup.visibility = View.VISIBLE
-            if (state.loadFailed) {
-                binding.notifEmpty.show(R.drawable.notif_ic_bell_off, getString(R.string.notif_failed_title), getString(R.string.notif_error_load))
-            } else {
-                binding.notifEmpty.show(R.drawable.ws_ic_bell, getString(R.string.notif_empty_title), getString(R.string.notif_empty_message))
-            }
-            binding.notifTryAgain.isVisible = state.loadFailed
-        } else {
-            binding.notifEmptyGroup.visibility = View.GONE
-            binding.notifList.visibility = View.VISIBLE
-        }
+        binding.notifEmptyGroup.visibility = View.GONE
+        binding.notifList.visibility = View.VISIBLE
+        binding.notifRefresh.isEnabled = !state.updating
 
         if (state.items.size != renderedCount) {
             renderedCount = state.items.size
@@ -161,6 +155,8 @@ class NotificationsFragment : BaseFragment() {
     }
 
     override fun onDestroyView() {
+        loading?.release()
+        loading = null
         binding.notifList.adapter = null
         _binding = null
         super.onDestroyView()

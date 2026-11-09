@@ -5,6 +5,8 @@ import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.axelliant.hris.config.AppConst
+import com.axelliant.hris.config.SessionVersion
+import com.axelliant.hris.loading.ListLoadKind
 import com.axelliant.hris.event.Event
 import com.axelliant.hris.model.payslip.PayslipFormat
 import com.axelliant.hris.model.payslip.PayslipPreview
@@ -13,7 +15,6 @@ import com.axelliant.hris.model.payslip.SalarySlipPage
 import com.axelliant.hris.network.ApiInterface
 import com.axelliant.hris.network.ApiResult
 import com.axelliant.hris.network.BaseCallBack
-import com.axelliant.hris.network.enqueueResult
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
@@ -26,7 +27,7 @@ import java.util.concurrent.Executors
 enum class PayslipError { LOAD_FAILED, PREVIEW_FAILED }
 
 /** Pay slips list (12 per page, loaded as the user scrolls) and the PDF download behind "View". */
-class PayslipsViewModel(private val api: ApiInterface) : BaseViewModel() {
+open class PayslipsViewModel(private val api: ApiInterface) : BaseViewModel() {
 
     data class UiState(
         val items: List<SalarySlip> = emptyList(),
@@ -48,8 +49,10 @@ class PayslipsViewModel(private val api: ApiInterface) : BaseViewModel() {
     private val _preview = MutableLiveData<Event<PayslipPreview>>()
     val preview: LiveData<Event<PayslipPreview>> get() = _preview
 
-    private val main = Handler(Looper.getMainLooper())
+    private val main by lazy { Handler(Looper.getMainLooper()) }
     private var io: ExecutorService? = null
+    private var pdfCall: Call<ResponseBody>? = null
+    private var cleared = false
 
     /** Bumped on every reload so a slow older page can never overwrite newer data. */
     private var generation = 0
@@ -62,21 +65,17 @@ class PayslipsViewModel(private val api: ApiInterface) : BaseViewModel() {
     /** Loads the first page again, replacing the list. [pull] is true for pull-to-refresh. */
     fun reload(pull: Boolean = false) {
         val before = current()
-        if (reloading) {
-            if (pull) _state.value = before.copy(refreshing = true)
-            return
-        }
+        if (reloading && !pull) return
         reloading = true
+        loadMoreFailed = false
         generation++
         val myGeneration = generation
-        val showOverlay = !pull && before.items.isEmpty()
-        if (showOverlay) isLoading.value = Event(true)
+        val ticket = beginListLoad(kind = if (pull) ListLoadKind.PULL_REFRESH else ListLoadKind.REFRESH, replace = true)
         _state.value = before.copy(refreshing = pull, loadingMore = false)
-        api.getSalarySlips(AppConst.authHeader(), PAGE_SIZE, 0)
-            .enqueueResult<SalarySlipPage>(SalarySlipPage::class.java) { result ->
-                if (myGeneration != generation) return@enqueueResult
+        requestListPart<SalarySlipPage>(api.getSalarySlips(AppConst.authHeader(), PAGE_SIZE, 0), SalarySlipPage::class.java, "list", ticket) { result ->
+                if (myGeneration != generation) return@requestListPart
                 reloading = false
-                if (showOverlay) isLoading.value = Event(false)
+
                 val latest = current()
                 when (result) {
                     is ApiResult.Success -> {
@@ -88,19 +87,26 @@ class PayslipsViewModel(private val api: ApiInterface) : BaseViewModel() {
                             total = result.data.totalCount(),
                             hasLoaded = true,
                             loadFailed = false,
-                            refreshing = false
+                            refreshing = false, loadingMore = false
                         )
                     }
                     is ApiResult.Failure -> {
                         _state.value = latest.copy(
                             hasLoaded = true,
                             loadFailed = latest.items.isEmpty(),
-                            refreshing = false
+                            refreshing = false, loadingMore = false
                         )
-                        _errors.value = Event(PayslipError.LOAD_FAILED)
+
                     }
                 }
+                finishListLoad("list", ticket, itemCount = if (result is ApiResult.Success) current().items.size else null,
+                    error = (result as? ApiResult.Failure)?.message)
             }
+    }
+
+    /** Retries a failed page at the same offset; ordinary reloads still start at zero. */
+    fun retryLoad() {
+        if (loadMoreFailed) { loadMoreFailed = false; loadMore() } else reload()
     }
 
     /** Loads the next page; call when the last slip is on screen. */
@@ -109,10 +115,10 @@ class PayslipsViewModel(private val api: ApiInterface) : BaseViewModel() {
         if (!s.hasLoaded || s.loadFailed || s.loadingMore || s.refreshing || reloading) return
         if (exhausted || loadMoreFailed || s.items.size >= s.total) return
         val myGeneration = generation
+        val ticket = beginListLoad(kind = ListLoadKind.PAGE)
         _state.value = s.copy(loadingMore = true)
-        api.getSalarySlips(AppConst.authHeader(), PAGE_SIZE, s.items.size)
-            .enqueueResult<SalarySlipPage>(SalarySlipPage::class.java) { result ->
-                if (myGeneration != generation) return@enqueueResult
+        requestListPart<SalarySlipPage>(api.getSalarySlips(AppConst.authHeader(), PAGE_SIZE, s.items.size), SalarySlipPage::class.java, "list", ticket) { result ->
+                if (myGeneration != generation) return@requestListPart
                 val latest = current()
                 when (result) {
                     is ApiResult.Success -> {
@@ -128,35 +134,45 @@ class PayslipsViewModel(private val api: ApiInterface) : BaseViewModel() {
                     is ApiResult.Failure -> {
                         loadMoreFailed = true
                         _state.value = latest.copy(loadingMore = false)
-                        _errors.value = Event(PayslipError.LOAD_FAILED)
+
                     }
                 }
+                finishListLoad("list", ticket, itemCount = if (result is ApiResult.Success) current().items.size else null,
+                    error = (result as? ApiResult.Failure)?.message)
             }
     }
 
     /** Downloads the slip's PDF into [cacheDir] and posts it to [preview]. */
     fun open(slip: SalarySlip, cacheDir: File) {
+        if (cleared) return
         val name = slip.name ?: return
         if (current().openingName != null) return
         _state.value = current().copy(openingName = name)
         val title = PayslipFormat.period(slip)
         val call = api.getSalarySlipPdf(AppConst.authHeader(), name)
+        pdfCall = call
+        val session = SessionVersion.current
         call.enqueue(object : BaseCallBack<ResponseBody>(call) {
             override fun onFinalSuccess(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 val body = response.body()
+                if (cleared) { body?.close(); return }
                 executor().execute {
                     val file = savePdf(body, name, cacheDir)
-                    main.post { finishOpening(if (file != null) PayslipPreview(title, file.absolutePath) else null) }
+                    main.post {
+                        if (!cleared && session == SessionVersion.current)
+                            finishOpening(if (file != null) PayslipPreview(title, file.absolutePath) else null)
+                    }
                 }
             }
 
             override fun onFinalFailure(errorString: String?) {
-                finishOpening(null)
+                if (!cleared) finishOpening(null)
             }
         })
     }
 
     private fun finishOpening(preview: PayslipPreview?) {
+        pdfCall = null
         _state.value = current().copy(openingName = null)
         if (preview != null) _preview.value = Event(preview) else _errors.value = Event(PayslipError.PREVIEW_FAILED)
     }
@@ -202,6 +218,9 @@ class PayslipsViewModel(private val api: ApiInterface) : BaseViewModel() {
     }
 
     override fun onCleared() {
+        cleared = true
+        pdfCall?.cancel()
+        pdfCall = null
         io?.shutdown()
         super.onCleared()
     }

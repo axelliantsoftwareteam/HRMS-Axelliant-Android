@@ -3,7 +3,7 @@ package com.axelliant.hris.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.axelliant.hris.config.AppConst
-import com.axelliant.hris.event.Event
+import com.axelliant.hris.loading.ListLoadKind
 import com.axelliant.hris.model.team.TeamArrival
 import com.axelliant.hris.model.team.TeamAttendanceData
 import com.axelliant.hris.model.team.TeamCheckinData
@@ -13,7 +13,6 @@ import com.axelliant.hris.model.team.TeamQuotaData
 import com.axelliant.hris.model.team.TeamQuotaEmployee
 import com.axelliant.hris.network.ApiInterface
 import com.axelliant.hris.network.ApiResult
-import com.axelliant.hris.network.enqueueResult
 
 /** The three lists Team Activity shows, one at a time. */
 enum class TeamSegment { ARRIVALS, HOURS, QUOTA }
@@ -36,7 +35,7 @@ data class TeamActivityFilters(
  * Loads Team Activity for managers: working hours for the date range, today's arrivals in the office
  * and from home, and team leave balances. Text filters apply to the loaded data on the device.
  */
-class TeamActivityViewModel(private val api: ApiInterface) : BaseViewModel() {
+open class TeamActivityViewModel(private val api: ApiInterface, private val batchFailure: (Boolean) -> String) : BaseViewModel() {
 
     var members: List<TeamMember> = emptyList()
         private set
@@ -60,12 +59,7 @@ class TeamActivityViewModel(private val api: ApiInterface) : BaseViewModel() {
     /** Fires whenever loaded data changes so the screen re-renders its list. */
     val changed: LiveData<Unit> get() = _changed
 
-    private val _error = MutableLiveData<Event<String>>()
-    val error: LiveData<Event<String>> get() = _error
 
-    private var pending = 0
-    private var officeArrivals: List<TeamArrival> = emptyList()
-    private var homeArrivals: List<TeamArrival> = emptyList()
 
     /** Whether any filter differs from the default (dates this month so far, no text). */
     val hasActiveFilters: Boolean
@@ -116,77 +110,56 @@ class TeamActivityViewModel(private val api: ApiInterface) : BaseViewModel() {
             ?: balances.firstOrNull { it.employee_name.equals(name, ignoreCase = true) }
     }
 
-    /** Loads all four sources together; [done] runs when every request has finished. */
-    fun load(done: (() -> Unit)? = null) {
-        if (pending > 0) {
-            done?.invoke()
-            return
-        }
-        if (!hasLoaded) isLoading.value = Event(true)
-        loadFailed = false
-        pending = 4
-        val auth = AppConst.authHeader()
-        val finish: () -> Unit = {
-            pending -= 1
-            if (pending == 0) {
-                arrivals = (officeArrivals + homeArrivals)
-                    .sortedByDescending { it.time_iso ?: it.date ?: "" }
-                    .take(10)
+    /** Replaces obsolete batches; four sources (including the GET quota fallback) commit atomically. */
+    fun load(kind: ListLoadKind = ListLoadKind.REFRESH) {
+        val ticket = beginListLoad(kind = kind, replace = true)
+        val selected = filters
+        var remaining = 4
+        var failed = false
+        var newMembers: List<TeamMember> = emptyList()
+        var office: List<TeamArrival> = emptyList()
+        var home: List<TeamArrival> = emptyList()
+        var quota: List<TeamQuotaEmployee> = emptyList()
+        fun finish() {
+            if (!isCurrentListLoad("list", ticket) || --remaining > 0) return
+            loadFailed = failed
+            if (!failed) {
+                members = newMembers
+                arrivals = (office + home).sortedByDescending { it.time_iso ?: it.date ?: "" }.take(10)
+                balances = quota
                 hasLoaded = true
-                isLoading.value = Event(false)
-                if (loadFailed) _error.value = Event("We could not load team activity right now.")
-                _changed.value = Unit
-                done?.invoke()
+                displayedFilters = selected
+                finishListLoad("list", ticket, members.size + arrivals.size + balances.size)
+            } else finishListLoad("list", ticket, error = batchFailure(hasLoaded))
+            _changed.value = Unit
+        }
+        val auth = AppConst.authHeader()
+        requestListPart<TeamAttendanceData>(api.getTeamAttendance(auth, selected.startDate, selected.endDate),
+            TeamAttendanceData::class.java, "list", ticket) {
+            if (it is ApiResult.Success) newMembers = it.data.attendance_data.orEmpty() else failed = true
+            finish()
+        }
+        requestListPart<TeamCheckinData>(api.getTeamCheckins(auth, "In Office"), TeamCheckinData::class.java, "list", ticket) {
+            if (it is ApiResult.Success) office = it.data.employee_list.orEmpty() else failed = true
+            finish()
+        }
+        requestListPart<TeamCheckinData>(api.getTeamCheckins(auth, "Work From Home"), TeamCheckinData::class.java, "list", ticket) {
+            if (it is ApiResult.Success) home = it.data.employee_list.orEmpty() else failed = true
+            finish()
+        }
+        requestListPart<TeamQuotaData>(api.postTeamLeaveQuota(auth, emptyMap()), TeamQuotaData::class.java, "list", ticket) {
+            if (it is ApiResult.Success) { quota = it.data.employees.orEmpty(); finish() }
+            else requestListPart<TeamQuotaData>(api.callTeamLeaveQuota(auth), TeamQuotaData::class.java, "list", ticket) { fallback ->
+                if (fallback is ApiResult.Success) quota = fallback.data.employees.orEmpty() else failed = true
+                finish()
             }
         }
-        val fail: () -> Unit = { loadFailed = true }
-
-        api.getTeamAttendance(auth, filters.startDate, filters.endDate)
-            .enqueueResult<TeamAttendanceData>(TeamAttendanceData::class.java) { result ->
-                when (result) {
-                    is ApiResult.Success -> members = result.data.attendance_data.orEmpty()
-                    is ApiResult.Failure -> fail()
-                }
-                finish()
-            }
-        api.getTeamCheckins(auth, "In Office")
-            .enqueueResult<TeamCheckinData>(TeamCheckinData::class.java) { result ->
-                when (result) {
-                    is ApiResult.Success -> officeArrivals = result.data.employee_list.orEmpty()
-                    is ApiResult.Failure -> fail()
-                }
-                finish()
-            }
-        api.getTeamCheckins(auth, "Work From Home")
-            .enqueueResult<TeamCheckinData>(TeamCheckinData::class.java) { result ->
-                when (result) {
-                    is ApiResult.Success -> homeArrivals = result.data.employee_list.orEmpty()
-                    is ApiResult.Failure -> fail()
-                }
-                finish()
-            }
-        api.postTeamLeaveQuota(auth, emptyMap())
-            .enqueueResult<TeamQuotaData>(TeamQuotaData::class.java) { result ->
-                when (result) {
-                    is ApiResult.Success -> {
-                        balances = result.data.employees.orEmpty()
-                        finish()
-                    }
-                    is ApiResult.Failure -> {
-                        // The first Android version used GET; try it before giving up.
-                        api.callTeamLeaveQuota(auth)
-                            .enqueueResult<TeamQuotaData>(TeamQuotaData::class.java) { fallback ->
-                                when (fallback) {
-                                    is ApiResult.Success -> balances = fallback.data.employees.orEmpty()
-                                    is ApiResult.Failure -> fail()
-                                }
-                                finish()
-                            }
-                    }
-                }
-            }
     }
 
+    private var displayedFilters: TeamActivityFilters? = null
+    val showingPreviousRange: Boolean get() = displayedFilters?.let {
+        it.startDate != filters.startDate || it.endDate != filters.endDate
+    } == true
     /**
      * Applies the filter sheet and reloads (the dates may have changed).
      * Returns false when the start date is after the end date.
@@ -195,7 +168,7 @@ class TeamActivityViewModel(private val api: ApiInterface) : BaseViewModel() {
         if (newFilters.startDate > newFilters.endDate) return false
         filters = newFilters
         _changed.value = Unit
-        load()
+        load(ListLoadKind.FILTER)
         return true
     }
 

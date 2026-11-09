@@ -68,8 +68,12 @@ open class BaseViewModel : ViewModel() {
     }
 
     protected fun clearListLoading(key: String = "list") {
-        activeCalls.filterValues { it.listKey == key }.keys.toList().forEach(::cancelRequest)
+        cancelListLoads(key)
         tracker(key).clear()
+    }
+
+    protected fun cancelListLoads(key: String = "list") {
+        activeCalls.filterValues { it.listKey == key }.keys.toList().forEach(::cancelRequest)
     }
 
     /** A list read never opens the blocking action dialog. Replacement rejects obsolete callbacks. */

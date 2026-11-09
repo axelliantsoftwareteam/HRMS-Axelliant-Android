@@ -9,6 +9,8 @@ import com.axelliant.hris.adapter.ApprovalRow
 import com.axelliant.hris.adapter.ApprovalsAdapter
 import com.axelliant.hris.base.BaseFragment
 import com.axelliant.hris.databinding.FragmentApprovalsBinding
+import com.axelliant.hris.loading.ListLoadKind
+import com.axelliant.hris.ui.WsListLoading
 import com.axelliant.hris.event.EventObserver
 import com.axelliant.hris.extention.showErrorMsg
 import com.axelliant.hris.extention.showSuccessMsg
@@ -24,6 +26,7 @@ class ApprovalsFragment : BaseFragment() {
 
     private var _binding: FragmentApprovalsBinding? = null
     private val binding get() = _binding!!
+    private var loading: WsListLoading? = null
 
     private val viewModel: ApprovalsViewModel by viewModel()
 
@@ -49,7 +52,7 @@ class ApprovalsFragment : BaseFragment() {
         binding.apprList.adapter = adapter
         binding.apprList.itemAnimator = null
         binding.apprRefresh.setOnRefreshListener {
-            viewModel.load(viewModel.pageIndex, silent = true) { _binding?.apprRefresh?.isRefreshing = false }
+            viewModel.load(viewModel.pageIndex, ListLoadKind.PULL_REFRESH)
         }
         binding.apprBtnRetry.setOnClickListener { viewModel.load(viewModel.pageIndex) }
         binding.apprBtnRejectAll.setOnClickListener { confirm(null, approve = false) }
@@ -65,42 +68,34 @@ class ApprovalsFragment : BaseFragment() {
             }
         }
 
-        viewModel.getIsLoading().observe(viewLifecycleOwner, EventObserver { loading ->
-            if (loading) showDialog() else hideDialog()
-        })
+        loading = WsListLoading.attach(viewLifecycleOwner, binding.apprRefresh, { viewModel.load() },
+            emptyTitle = getString(R.string.appr_empty_title), emptyMessage = getString(R.string.appr_empty_message))
+            .also { it.bind(viewModel.listLoading()) }
+        viewModel.listLoading().observe(viewLifecycleOwner) { binding.apprRefresh.isRefreshing = it.pullRefreshing }
+        viewModel.acting.observe(viewLifecycleOwner) { if (it) showDialog() else hideDialog() }
         viewModel.message.observe(viewLifecycleOwner, EventObserver { msg ->
             if (msg.isError) requireContext().showErrorMsg(msg.text) else requireContext().showSuccessMsg(msg.text)
         })
         viewModel.changed.observe(viewLifecycleOwner) { render() }
 
         render()
-        if (!viewModel.hasLoaded) viewModel.load(0)
+        if (!viewModel.hasLoaded && viewModel.listLoading().value?.isLoading != true && viewModel.listLoading().value?.error == null) viewModel.load(0)
     }
 
     private fun render() {
         val b = _binding ?: return
         val visible = viewModel.visibleItems
+        b.apprRefresh.isEnabled = !viewModel.isActing
         b.apprCount.text = visible.size.toString()
         b.apprBulkRow.visibility = if (visible.isEmpty()) View.GONE else View.VISIBLE
-        b.apprBtnRejectAll.isEnabled = !viewModel.isActing
-        b.apprBtnApproveAll.isEnabled = !viewModel.isActing
-        adapter.submitList(visible.map { ApprovalRow(it, !viewModel.isActing) })
+        b.apprBtnRejectAll.isEnabled = viewModel.canAct
+        b.apprBtnApproveAll.isEnabled = viewModel.canAct
+        adapter.submitList(visible.map { ApprovalRow(it, viewModel.canAct) })
 
-        val error = viewModel.loadError
-        when {
-            error != null -> {
-                b.apprStateBlock.visibility = View.VISIBLE
-                b.apprState.show(R.drawable.ws_ic_warning, getString(R.string.appr_error_title), error)
-                b.apprBtnRetry.visibility = View.VISIBLE
-            }
-            viewModel.hasLoaded && visible.isEmpty() -> {
-                b.apprStateBlock.visibility = View.VISIBLE
-                b.apprState.show(R.drawable.ws_ic_verified, getString(R.string.appr_empty_title), getString(R.string.appr_empty_message))
-                b.apprBtnRetry.visibility = View.GONE
-            }
-            else -> b.apprStateBlock.visibility = View.GONE
-        }
-
+        b.apprStateBlock.visibility = if (viewModel.hasLoaded && visible.isEmpty()) View.VISIBLE else View.GONE
+        if (viewModel.hasLoaded && visible.isEmpty()) b.apprState.show(R.drawable.ws_ic_verified,
+            getString(R.string.appr_empty_title), getString(R.string.appr_empty_message))
+        b.apprBtnRetry.visibility = View.GONE
         val showPager = viewModel.total > viewModel.items.size || viewModel.pageIndex > 0
         b.apprPager.visibility = if (showPager) View.VISIBLE else View.GONE
         b.apprPageRange.text = viewModel.pageRange
@@ -166,6 +161,8 @@ class ApprovalsFragment : BaseFragment() {
     }
 
     override fun onDestroyView() {
+        loading?.release()
+        loading = null
         _binding = null
         super.onDestroyView()
     }

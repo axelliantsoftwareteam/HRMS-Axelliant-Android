@@ -27,7 +27,8 @@ class WsListLoading(
     onRetry: () -> Unit,
     skeletonRows: Int = 6,
     private val emptyTitle: CharSequence = host.context.getString(R.string.ws_list_empty_title),
-    private val emptyMessage: CharSequence = host.context.getString(R.string.ws_list_empty_message)
+    private val emptyMessage: CharSequence = host.context.getString(R.string.ws_list_empty_message),
+    private val showPageProgress: Boolean = true
 ) : DefaultLifecycleObserver {
     private var owner: LifecycleOwner? = owner
     private var host: FrameLayout? = host
@@ -37,6 +38,7 @@ class WsListLoading(
     private var source: LiveData<ListLoadState>? = null
     private val observer = Observer<ListLoadState> { render(it) }
     private var lastState = ListLoadState()
+    private var onReleased: (() -> Unit)? = null
 
     init {
         require(skeletonRows in 1..12)
@@ -70,7 +72,7 @@ class WsListLoading(
         b.wsListSkeleton.setAnimating(visible && presentation.skeleton)
         b.wsListContent.isVisible = presentation.showContent
         b.wsListProgress.isVisible = visible && presentation.inlineProgress
-        b.wsListPageProgress.isVisible = visible && presentation.pageProgress
+        b.wsListPageProgress.isVisible = visible && presentation.pageProgress && showPageProgress
         b.wsListErrorBanner.isVisible = presentation.errorBanner
         b.wsListErrorText.text = state.error?.takeIf { it.isNotBlank() }
             ?: b.root.context.getString(R.string.ws_list_error_message)
@@ -110,5 +112,34 @@ class WsListLoading(
         host = null
         owner = null
         retry = null
+        onReleased?.invoke()
+        onReleased = null
+    }
+
+    companion object {
+        /** Wraps an existing list/scroll region in place, preserving its parent's layout parameters. */
+        fun attach(owner: LifecycleOwner, region: View, onRetry: () -> Unit,
+                   showPageProgress: Boolean = true,
+                   emptyTitle: CharSequence = region.context.getString(R.string.ws_list_empty_title),
+                   emptyMessage: CharSequence = region.context.getString(R.string.ws_list_empty_message)): WsListLoading {
+            val parent = region.parent as ViewGroup
+            val index = parent.indexOfChild(region)
+            val params = region.layoutParams
+            parent.removeView(region)
+            val host = FrameLayout(region.context)
+            parent.addView(host, index, params)
+            host.addView(region, FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
+            return WsListLoading(owner, host, onRetry, showPageProgress = showPageProgress,
+                emptyTitle = emptyTitle, emptyMessage = emptyMessage).also { controller ->
+                controller.onReleased = {
+                    if (host.parent === parent) {
+                        host.removeView(region)
+                        val position = parent.indexOfChild(host)
+                        parent.removeView(host)
+                        parent.addView(region, position, params)
+                    }
+                }
+            }
+        }
     }
 }

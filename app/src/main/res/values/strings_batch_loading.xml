@@ -1,0 +1,4 @@
+<resources>
+    <string name="list_batch_failed">Could not load all sections. Please try again.</string>
+    <string name="list_batch_refresh_failed">Could not refresh all sections. Previous results are still shown. Please try again.</string>
+</resources>

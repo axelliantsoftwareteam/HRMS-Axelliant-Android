@@ -16,6 +16,8 @@ import com.axelliant.hris.extention.showErrorMsg
 import com.axelliant.hris.extention.showSuccessMsg
 import com.axelliant.hris.model.requests.ExpenseClaim
 import com.axelliant.hris.network.observeResult
+import com.axelliant.hris.loading.ListLoadKind
+import com.axelliant.hris.ui.WsListLoading
 import com.axelliant.hris.ui.WsFormat
 import com.axelliant.hris.viewmodel.ExpenseViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -33,7 +35,8 @@ class ExpenseApprovalsFragment : BaseFragment() {
 
     /** The decision being sent, so the success toast matches it. */
     private var lastDecisionApprove = true
-    private var hasLoaded = false
+    private var loading: WsListLoading? = null
+    private var hasResumed = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentExpenseApprovalsBinding.inflate(inflater, container, false)
@@ -52,24 +55,22 @@ class ExpenseApprovalsFragment : BaseFragment() {
         binding.expApprCount.text = "0"
 
         binding.expApprRefresh.setColorSchemeResources(R.color.ws_primary)
-        binding.expApprRefresh.setOnRefreshListener { load(showLoading = false) }
+        binding.expApprRefresh.setOnRefreshListener { load(ListLoadKind.PULL_REFRESH) }
 
-        viewModel.getIsLoading().observe(viewLifecycleOwner, EventObserver { loading ->
-            if (loading) showDialog() else hideDialog()
-        })
-        viewModel.approvals.observeResult(
-            viewLifecycleOwner,
-            onError = { message ->
-                binding.expApprRefresh.isRefreshing = false
-                requireContext().showErrorMsg(message.ifBlank { getString(R.string.exp_load_failed) })
+        viewModel.blockingLoading.observe(viewLifecycleOwner) { busy ->
+            if (busy) showDialog() else hideDialog()
+        }
+        loading = WsListLoading.attach(viewLifecycleOwner, binding.expApprRefresh, { load(ListLoadKind.REFRESH) },
+            emptyTitle = getString(R.string.exp_empty_title), emptyMessage = getString(R.string.exp_appr_empty_message))
+            .also { it.bind(viewModel.listLoading("approvals")) }
+        binding.emptyState.hide()
+        viewModel.listLoading("approvals").observe(viewLifecycleOwner) { binding.expApprRefresh.isRefreshing = it.pullRefreshing }
+        viewModel.approvals.observe(viewLifecycleOwner) { payload ->
+            payload?.let {
+                val claims = it.expenses.orEmpty()
+                adapter.submitList(claims)
+                binding.expApprCount.text = claims.size.toString()
             }
-        ) { payload, _ ->
-            binding.expApprRefresh.isRefreshing = false
-            hasLoaded = true
-            val claims = payload.expenses.orEmpty()
-            adapter.submitList(claims)
-            binding.expApprCount.text = claims.size.toString()
-            if (claims.isEmpty()) binding.emptyState.show() else binding.emptyState.hide()
         }
         viewModel.decisionResult.observeResult(
             viewLifecycleOwner,
@@ -80,20 +81,22 @@ class ExpenseApprovalsFragment : BaseFragment() {
         ) { payload, _ ->
             val fallback = if (lastDecisionApprove) R.string.exp_approved_toast else R.string.exp_rejected_toast
             requireContext().showSuccessMsg(payload.status_message?.takeIf { it.isNotBlank() } ?: getString(fallback))
-            load(showLoading = false)
+            load(ListLoadKind.REFRESH)
         }
     }
 
     override fun onResume() {
         super.onResume()
-        load(showLoading = !hasLoaded)
+        if (hasResumed || (viewModel.approvals.value == null && viewModel.listLoading("approvals").value?.error == null &&
+                viewModel.listLoading("approvals").value?.isLoading != true)) load(ListLoadKind.REFRESH)
+        hasResumed = true
     }
 
     /** Claims wait for a manager past a month end, so the list starts a year back. */
-    private fun load(showLoading: Boolean) {
+    private fun load(kind: ListLoadKind) {
         val today = Calendar.getInstance()
         val yearAgo = (today.clone() as Calendar).apply { add(Calendar.YEAR, -1) }
-        viewModel.loadApprovals(WsFormat.apiDay(yearAgo), WsFormat.apiDay(today), showLoading)
+        viewModel.loadApprovals(WsFormat.apiDay(yearAgo), WsFormat.apiDay(today), kind)
     }
 
     private fun confirmDecision(claim: ExpenseClaim, approve: Boolean) {
@@ -117,7 +120,9 @@ class ExpenseApprovalsFragment : BaseFragment() {
     }
 
     override fun onDestroyView() {
-        hideDialog()
+        loading?.release()
+        loading = null
+        binding.expApprList.adapter = null
         _binding = null
         super.onDestroyView()
     }

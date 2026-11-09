@@ -1,6 +1,8 @@
 package com.axelliant.hris.viewmodel
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
+import com.axelliant.hris.loading.ListLoadKind
 import com.axelliant.hris.event.Event
 import com.axelliant.hris.model.expense.CreateExpense
 import com.axelliant.hris.model.requests.ExpenseClaimsPayload
@@ -8,7 +10,6 @@ import com.axelliant.hris.model.requests.ExpenseSavePayload
 import com.axelliant.hris.model.requests.ExpenseTypesPayload
 import com.axelliant.hris.model.requests.StatusPayload
 import com.axelliant.hris.network.ApiResult
-import com.axelliant.hris.network.enqueueResult
 import com.axelliant.hris.repos.ExpenseRepo
 import com.axelliant.hris.utils.Validator
 import com.google.gson.reflect.TypeToken
@@ -20,10 +21,12 @@ import java.lang.reflect.Type
  * the manager's approvals. Each screen owns its own instance (`by viewModel()`), so only the streams
  * it observes are used.
  */
-class ExpenseViewModel(private val expenseRepo: ExpenseRepo, private val validator: Validator) : BaseViewModel() {
+open class ExpenseViewModel(private val expenseRepo: ExpenseRepo, private val validator: Validator, private val savedState: SavedStateHandle) : BaseViewModel() {
 
-    val claims = MutableLiveData<Event<ApiResult<ExpenseClaimsPayload>>>()
-    val approvals = MutableLiveData<Event<ApiResult<ExpenseClaimsPayload>>>()
+    val claims = MutableLiveData<ExpenseClaimsPayload?>()
+    val approvals = MutableLiveData<ExpenseClaimsPayload?>()
+    var displayedClaimsQuery: Triple<String, String, String>? = null
+        private set
     val expenseTypes = MutableLiveData<Event<ApiResult<ExpenseTypesPayload>>>()
     val saveResult = MutableLiveData<Event<ApiResult<ExpenseSavePayload>>>()
     val uploadResult = MutableLiveData<Event<ApiResult<StatusPayload>>>()
@@ -31,33 +34,41 @@ class ExpenseViewModel(private val expenseRepo: ExpenseRepo, private val validat
     val deleteAttachmentResult = MutableLiveData<Event<ApiResult<StatusPayload>>>()
     val decisionResult = MutableLiveData<Event<ApiResult<StatusPayload>>>()
 
-    private var claimsGeneration = 0
-    private var approvalsGeneration = 0
+    var selectedPeriod: String
+        get() = savedState.get<String>("expense-period") ?: "LAST_7_DAYS"
+        set(value) { savedState["expense-period"] = value }
+    var selectedStatus: String
+        get() = savedState.get<String>("expense-status").orEmpty()
+        set(value) { savedState["expense-status"] = value }
 
-    /**
-     * Loads the employee's claims. When the period or filter changes quickly only the newest answer is
-     * delivered. [showLoading] is false for pull-to-refresh and reloads of a list that already has data.
-     */
-    fun loadClaims(startDate: String, endDate: String, statusFilter: String, showLoading: Boolean) {
-        val generation = ++claimsGeneration
-        if (showLoading) isLoading.value = Event(true)
-        expenseRepo.claims(startDate, endDate, statusFilter)
-            .enqueueResult<ExpenseClaimsPayload>(typeOf<ExpenseClaimsPayload>()) { result ->
-                if (showLoading) isLoading.value = Event(false)
-                if (generation == claimsGeneration) claims.value = Event(result)
+    fun loadClaims(startDate: String, endDate: String, statusFilter: String, kind: ListLoadKind) {
+        val ticket = beginListLoad("claims", kind, replace = true)
+        requestListPart<ExpenseClaimsPayload>(expenseRepo.claims(startDate, endDate, statusFilter),
+            typeOf<ExpenseClaimsPayload>(), "claims", ticket) { result ->
+            when (result) {
+                is ApiResult.Success -> {
+                    displayedClaimsQuery = Triple(startDate, endDate, statusFilter)
+                    claims.value = result.data
+                    finishListLoad("claims", ticket, result.data.expenses.orEmpty().size)
+                }
+                is ApiResult.Failure -> finishListLoad("claims", ticket, error = result.message)
             }
+        }
     }
 
-    fun loadApprovals(startDate: String, endDate: String, showLoading: Boolean) {
-        val generation = ++approvalsGeneration
-        if (showLoading) isLoading.value = Event(true)
-        expenseRepo.approvals(startDate, endDate)
-            .enqueueResult<ExpenseClaimsPayload>(typeOf<ExpenseClaimsPayload>()) { result ->
-                if (showLoading) isLoading.value = Event(false)
-                if (generation == approvalsGeneration) approvals.value = Event(result)
+    fun loadApprovals(startDate: String, endDate: String, kind: ListLoadKind) {
+        val ticket = beginListLoad("approvals", kind, replace = true)
+        requestListPart<ExpenseClaimsPayload>(expenseRepo.approvals(startDate, endDate),
+            typeOf<ExpenseClaimsPayload>(), "approvals", ticket) { result ->
+            when (result) {
+                is ApiResult.Success -> {
+                    approvals.value = result.data
+                    finishListLoad("approvals", ticket, result.data.expenses.orEmpty().size)
+                }
+                is ApiResult.Failure -> finishListLoad("approvals", ticket, error = result.message)
             }
+        }
     }
-
     fun loadExpenseTypes() =
         request(expenseRepo.expenseTypes(), typeOf<ExpenseTypesPayload>(), expenseTypes)
 

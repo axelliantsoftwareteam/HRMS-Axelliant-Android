@@ -13,6 +13,8 @@ import com.axelliant.hris.adapter.TeamCalendarAdapter
 import com.axelliant.hris.base.BaseFragment
 import com.axelliant.hris.databinding.CalItemLegendBinding
 import com.axelliant.hris.databinding.FragmentTeamCalendarBinding
+import com.axelliant.hris.loading.ListLoadKind
+import com.axelliant.hris.ui.WsListLoading
 import com.axelliant.hris.event.EventObserver
 import com.axelliant.hris.extention.showErrorMsg
 import com.axelliant.hris.model.team.CalendarStatus
@@ -31,6 +33,7 @@ class TeamCalendarFragment : BaseFragment() {
 
     private var _binding: FragmentTeamCalendarBinding? = null
     private val binding get() = _binding!!
+    private var loading: WsListLoading? = null
 
     private val viewModel: TeamCalendarViewModel by viewModel()
 
@@ -59,7 +62,7 @@ class TeamCalendarFragment : BaseFragment() {
         binding.calList.itemAnimator = null
         binding.calRefresh.setOnChildScrollUpCallback { _, _ -> _binding?.calList?.canScrollVertically(-1) ?: false }
         binding.calRefresh.setOnRefreshListener {
-            viewModel.load { _binding?.calRefresh?.isRefreshing = false }
+            viewModel.load(ListLoadKind.PULL_REFRESH)
         }
 
         binding.calBtnPrev.setOnClickListener { viewModel.shiftMonth(-1) }
@@ -87,21 +90,22 @@ class TeamCalendarFragment : BaseFragment() {
             }
         }
 
-        viewModel.getIsLoading().observe(viewLifecycleOwner, EventObserver { loading ->
-            if (loading) showDialog() else hideDialog()
-        })
-        viewModel.error.observe(viewLifecycleOwner, EventObserver { requireContext().showErrorMsg(it) })
+        loading = WsListLoading.attach(viewLifecycleOwner, binding.calRefresh, { viewModel.load() },
+            emptyTitle = getString(R.string.cal_empty_title), emptyMessage = getString(R.string.cal_empty_message))
+            .also { it.bind(viewModel.listLoading()) }
+        viewModel.listLoading().observe(viewLifecycleOwner) { binding.calRefresh.isRefreshing = it.pullRefreshing }
         viewModel.changed.observe(viewLifecycleOwner) { render() }
 
         render()
-        if (!viewModel.hasLoaded) viewModel.load()
+        if (!viewModel.hasLoaded && viewModel.listLoading().value?.isLoading != true && viewModel.listLoading().value?.error == null) viewModel.load()
     }
 
     private fun render() {
         val b = _binding ?: return
         b.toolbar.setActionDotVisible(viewModel.hasActiveFilters)
         b.calRangeTitle.text = viewModel.rangeTitle
-        b.calDaysLabel.text = getString(R.string.cal_days_view, viewModel.dates.size)
+        b.calDaysLabel.text = getString(R.string.cal_days_view, viewModel.dates.size) +
+            if (viewModel.showingPreviousRange) " — " + getString(R.string.list_previous_results) else ""
         val visible = viewModel.visibleMembers
         b.calMembersPill.text = getString(R.string.cal_members_count, visible.size, viewModel.members.size)
         b.calBtnReset.visibility = if (viewModel.hasActiveFilters) View.VISIBLE else View.GONE
@@ -191,6 +195,8 @@ class TeamCalendarFragment : BaseFragment() {
     }
 
     override fun onDestroyView() {
+        loading?.release()
+        loading = null
         _binding = null
         super.onDestroyView()
     }

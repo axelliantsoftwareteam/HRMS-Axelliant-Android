@@ -3,6 +3,7 @@ package com.axelliant.hris.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.axelliant.hris.config.AppConst
+import com.axelliant.hris.loading.ListLoadKind
 import com.axelliant.hris.event.Event
 import com.axelliant.hris.model.approval.ApprovalActionItem
 import com.axelliant.hris.model.approval.ApprovalActionRequest
@@ -14,7 +15,6 @@ import com.axelliant.hris.model.approvals.BulkApprovalResult
 import com.axelliant.hris.model.team.TeamNum
 import com.axelliant.hris.network.ApiInterface
 import com.axelliant.hris.network.ApiResult
-import com.axelliant.hris.network.enqueueResult
 
 /** A toast the screen should show. */
 data class ApprovalsMessage(val text: String, val isError: Boolean)
@@ -23,7 +23,7 @@ data class ApprovalsMessage(val text: String, val isError: Boolean)
  * The manager's pending approvals: every kind of request in one list, a page at a time, with
  * approve/reject for one request or for every visible one.
  */
-class ApprovalsViewModel(private val api: ApiInterface) : BaseViewModel() {
+open class ApprovalsViewModel(private val api: ApiInterface) : BaseViewModel() {
 
     var items: List<ApprovalItem> = emptyList()
         private set
@@ -53,8 +53,10 @@ class ApprovalsViewModel(private val api: ApiInterface) : BaseViewModel() {
     /** The requests still waiting for a decision. */
     val visibleItems: List<ApprovalItem> get() = items.filter { it.isPending }
 
-    val canGoBack: Boolean get() = pageIndex > 0 && !busy
-    val canGoForward: Boolean get() = (pageIndex + 1) * PAGE_SIZE < total && !busy
+    val canAct: Boolean get() = !busy && !isActing
+
+    val canGoBack: Boolean get() = pageIndex > 0 && !busy && !isActing
+    val canGoForward: Boolean get() = (pageIndex + 1) * PAGE_SIZE < total && !busy && !isActing
 
     /** "1–10 of 24". */
     val pageRange: String
@@ -64,52 +66,45 @@ class ApprovalsViewModel(private val api: ApiInterface) : BaseViewModel() {
             return "$first–$last of $total"
         }
 
-    /** Loads one page. [silent] skips the loading overlay (pull-to-refresh shows its own spinner). */
-    fun load(page: Int = pageIndex, silent: Boolean = false, done: (() -> Unit)? = null) {
-        if (page < 0 || busy) {
-            done?.invoke()
-            return
-        }
-        busy = true
-        if (!silent) isLoading.value = Event(true)
-        _changed.value = Unit
-        api.getApprovals(AppConst.authHeader(), PAGE_SIZE, page * PAGE_SIZE)
-            .enqueueResult<ApprovalsPage>(ApprovalsPage::class.java) { result ->
-                busy = false
-                if (!silent) isLoading.value = Event(false)
-                hasLoaded = true
-                when (result) {
-                    is ApiResult.Success -> {
-                        loadError = null
-                        items = result.data.items.orEmpty()
-                        total = TeamNum.int(result.data.total) ?: items.size
-                        pageIndex = page
-                        _changed.value = Unit
-                        // Everything on the last page was handled: step back to the previous page.
-                        if (items.isEmpty() && page > 0 && total > 0) {
-                            load(page - 1, silent, done)
-                            return@enqueueResult
-                        }
-                    }
-                    is ApiResult.Failure -> {
-                        loadError = result.message
-                        _message.value = Event(ApprovalsMessage("We could not load your approvals right now.", true))
-                        _changed.value = Unit
-                    }
-                }
-                done?.invoke()
-            }
-    }
+    val acting = MutableLiveData(false)
 
+    /** Read progress is independent from action progress; only successful pages replace rows. */
+    fun load(page: Int = pageIndex, kind: ListLoadKind = ListLoadKind.REFRESH) {
+        if (page < 0 || isActing) return
+        val ticket = beginListLoad(kind = kind, replace = true)
+        busy = true
+        _changed.value = Unit
+        requestListPart<ApprovalsPage>(api.getApprovals(AppConst.authHeader(), PAGE_SIZE, page * PAGE_SIZE),
+            ApprovalsPage::class.java, "list", ticket) { result ->
+            busy = false
+            when (result) {
+                is ApiResult.Success -> {
+                    loadError = null
+                    items = result.data.items.orEmpty()
+                    total = TeamNum.int(result.data.total) ?: items.size
+                    pageIndex = page
+                    hasLoaded = true
+                    finishListLoad("list", ticket, items.size)
+                    _changed.value = Unit
+                    if (items.isEmpty() && page > 0 && total > 0) load(page - 1)
+                }
+                is ApiResult.Failure -> {
+                    loadError = result.message
+                    finishListLoad("list", ticket, error = result.message)
+                    _changed.value = Unit
+                }
+            }
+        }
+    }
     fun movePage(offset: Int) {
         val next = pageIndex + offset
         if (next < 0 || next * PAGE_SIZE >= total) return
-        load(next)
+        load(next, ListLoadKind.FILTER)
     }
 
     /** Approves or rejects one request, then reloads the current page. */
     fun act(item: ApprovalItem, approve: Boolean) {
-        if (isActing || !item.isPending) return
+        if (isActing || busy || !item.isPending) return
         val type = item.approval_type
         val reference = item.reference_name
         if (type.isNullOrEmpty() || reference.isNullOrEmpty()) {
@@ -118,8 +113,7 @@ class ApprovalsViewModel(private val api: ApiInterface) : BaseViewModel() {
         }
         setActing(true)
         val fallback = if (approve) "We could not approve this request right now." else "We could not reject this request right now."
-        api.takeApprovalAction(AppConst.authHeader(), ApprovalActionRequest(type, reference, statusOf(approve)))
-            .enqueueResult<ApprovalActionResult>(ApprovalActionResult::class.java) { result ->
+        requestData<ApprovalActionResult>(api.takeApprovalAction(AppConst.authHeader(), ApprovalActionRequest(type, reference, statusOf(approve))), ApprovalActionResult::class.java) { result ->
                 setActing(false)
                 when (result) {
                     is ApiResult.Success -> {
@@ -139,7 +133,7 @@ class ApprovalsViewModel(private val api: ApiInterface) : BaseViewModel() {
 
     /** Approves or rejects every visible pending request, then reports how many succeeded and why any failed. */
     fun actOnVisible(approve: Boolean) {
-        if (isActing) return
+        if (isActing || busy) return
         val actions = visibleItems.mapNotNull { item ->
             val type = item.approval_type
             val reference = item.reference_name
@@ -151,8 +145,7 @@ class ApprovalsViewModel(private val api: ApiInterface) : BaseViewModel() {
         }
         setActing(true)
         val fallback = if (approve) "We could not approve the visible approvals right now." else "We could not reject the visible approvals right now."
-        api.bulkTakeApprovalAction(AppConst.authHeader(), BulkApprovalActionRequest(actions, statusOf(approve)))
-            .enqueueResult<BulkApprovalResult>(BulkApprovalResult::class.java) { result ->
+        requestData<BulkApprovalResult>(api.bulkTakeApprovalAction(AppConst.authHeader(), BulkApprovalActionRequest(actions, statusOf(approve))), BulkApprovalResult::class.java) { result ->
                 setActing(false)
                 when (result) {
                     is ApiResult.Success -> {
@@ -189,7 +182,7 @@ class ApprovalsViewModel(private val api: ApiInterface) : BaseViewModel() {
 
     private fun setActing(value: Boolean) {
         isActing = value
-        isLoading.value = Event(value)
+        acting.value = value
         _changed.value = Unit
     }
 

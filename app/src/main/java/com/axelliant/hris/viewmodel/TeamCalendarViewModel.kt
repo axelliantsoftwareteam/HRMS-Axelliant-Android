@@ -3,14 +3,13 @@ package com.axelliant.hris.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.axelliant.hris.config.AppConst
-import com.axelliant.hris.event.Event
+import com.axelliant.hris.loading.ListLoadKind
 import com.axelliant.hris.model.team.CalendarStatus
 import com.axelliant.hris.model.team.TeamCalendarData
 import com.axelliant.hris.model.team.TeamCalendarMember
 import com.axelliant.hris.model.team.TeamDates
 import com.axelliant.hris.network.ApiInterface
 import com.axelliant.hris.network.ApiResult
-import com.axelliant.hris.network.enqueueResult
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -19,7 +18,7 @@ import java.util.Locale
  * Loads and filters the team calendar: the current month by default, with start/end date reloads and
  * client-side employee and designation filters (HRIS returns the whole team whatever they are).
  */
-class TeamCalendarViewModel(private val api: ApiInterface) : BaseViewModel() {
+open class TeamCalendarViewModel(private val api: ApiInterface) : BaseViewModel() {
 
     var startDate: String = TeamDates.firstOfMonth()
         private set
@@ -43,10 +42,7 @@ class TeamCalendarViewModel(private val api: ApiInterface) : BaseViewModel() {
     private val _changed = MutableLiveData<Unit>()
     val changed: LiveData<Unit> get() = _changed
 
-    private val _error = MutableLiveData<Event<String>>()
-    val error: LiveData<Event<String>> get() = _error
 
-    private var requestId = 0
 
     val visibleMembers: List<TeamCalendarMember>
         get() = members.filter { m ->
@@ -119,27 +115,25 @@ class TeamCalendarViewModel(private val api: ApiInterface) : BaseViewModel() {
         load()
     }
 
-    /** Loads the calendar for the current range; [done] runs when the request ends. */
-    fun load(done: (() -> Unit)? = null) {
-        val id = ++requestId
-        if (members.isEmpty()) isLoading.value = Event(true)
-        api.getTeamCalendar(AppConst.authHeader(), startDate, endDate)
-            .enqueueResult<TeamCalendarData>(TeamCalendarData::class.java) { result ->
-                if (id != requestId) {
-                    done?.invoke()
-                    return@enqueueResult
+    private var displayedRange: Pair<String, String>? = null
+    val showingPreviousRange: Boolean get() = displayedRange?.let { it != (startDate to endDate) } == true
+
+    fun load(kind: ListLoadKind = ListLoadKind.REFRESH) {
+        val range = startDate to endDate
+        val ticket = beginListLoad(kind = kind, replace = true)
+        requestListPart<TeamCalendarData>(api.getTeamCalendar(AppConst.authHeader(), range.first, range.second),
+            TeamCalendarData::class.java, "list", ticket) { result ->
+            when (result) {
+                is ApiResult.Success -> {
+                    dates = result.data.dates.orEmpty()
+                    members = result.data.employees.orEmpty()
+                    displayedRange = range
+                    hasLoaded = true
+                    finishListLoad("list", ticket, members.size)
                 }
-                isLoading.value = Event(false)
-                hasLoaded = true
-                when (result) {
-                    is ApiResult.Success -> {
-                        dates = result.data.dates.orEmpty()
-                        members = result.data.employees.orEmpty()
-                    }
-                    is ApiResult.Failure -> _error.value = Event("We could not load the team calendar right now.")
-                }
-                _changed.value = Unit
-                done?.invoke()
+                is ApiResult.Failure -> finishListLoad("list", ticket, error = result.message)
             }
+            _changed.value = Unit
+        }
     }
 }

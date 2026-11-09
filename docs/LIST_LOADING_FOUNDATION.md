@@ -1,8 +1,9 @@
 # Shared loading foundation
 
-This implements the shared foundation (plan steps 1–3) and the Attendance/Requests
-integration (steps 4–5). Other lists still use their existing presentation until
-their separate migration.
+This implements the shared foundation, Attendance/Requests integration, and the
+remaining list rollout: Expenses, Leaves, Approvals, Expense Approvals, Team Activity,
+Team Calendar, Organogram, Payslips and Notifications. Form and profile/certification
+flows keep their existing presentation.
 
 ## Ownership
 
@@ -105,3 +106,37 @@ Additional regression tests cover both screen ViewModels, atomic batch outcomes,
 cancelled/late callbacks, optional shift independence, data/selection restoration,
 explicit refresh, empty results and consistent dates across APIs. Device lifecycle
 checks and visual QA remain necessary.
+
+## Remaining list rollout
+
+`WsListLoading.attach(...)` wraps an existing list or scroll region in place while
+preserving the parent's layout parameters. It unwraps the region on release.
+Toolbars, filters and outer FABs remain outside; per-screen empty-state copy is
+preserved. Existing list/section content stays available during refreshes.
+
+- Expenses and Expense Approvals retain their last successful payload on failure.
+  Replaced date/status reads are cancelled. Expense selection uses SavedStateHandle,
+  and previous-query content is labelled until replacement succeeds. Delete and
+  decision requests retain separate, persistent blocking progress.
+- Leaves commits quotas/history as one snapshot. Team Activity similarly commits
+  all four sources together, including the legacy GET fallback for quota. A failed
+  batch retains the previous complete snapshot and reports the incomplete refresh.
+- Approvals keeps page index/data on read failure, handles empty-last-page fallback,
+  disables actions while reading/mutating, and uses persistent action progress.
+  Approval writes are never retried by the loading component.
+- Team Calendar cancels replaced date ranges; previous-range results are labelled.
+  Organogram preserves the tree and zoomed view when a refresh fails.
+- Payslips keeps its 12-row API limit; Notifications keeps its 20-row limit. Both
+  preserve next-page offsets, duplicate filtering, exhaustion guards and existing
+  adapter footer spinners. `showPageProgress = false` prevents a second footer.
+  Failed-page Retry uses the same offset; a full refresh starts at zero and cancels
+  any obsolete page. Refresh failure keeps all previously loaded rows.
+- Notification updates cancel feed reads so a late page cannot undo Mark All Read.
+  A shared unread revision also rejects badge fetches started before that update.
+  Payslip PDF opening remains separate from list loading and is cancelled on clear;
+  late PDF results cannot reopen a disposed screen or an ended session.
+
+Regression coverage includes each list's failure/cancellation behavior, atomic
+multi-source snapshots, preserved approval paging/actions, feed pagination/retry,
+refresh/page races, duplicate-page exhaustion, and notification read/badge races.
+Device visual QA, slow-network interactions and lifecycle checks are still needed.

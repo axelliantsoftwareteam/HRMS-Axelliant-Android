@@ -40,8 +40,8 @@ val viewModelModule = module {
     viewModel { LoginViewModel(get()) }
     viewModel { HomeViewModel(get()) }
     viewModel { AttendanceViewModel(get(), get()) }
-    viewModel { LeaveViewModel(get()) }
-    viewModel { ExpenseViewModel(get(),get()) }
+    viewModel { LeaveViewModel(get()) { previous -> androidContext().getString(if (previous) com.axelliant.hris.R.string.list_batch_refresh_failed else com.axelliant.hris.R.string.list_batch_failed) } }
+    viewModel { ExpenseViewModel(get(), get(), get()) }
     viewModel { RequestViewModel(get()) }
     viewModel { BaseViewModel() }
     viewModel { ProfileViewModel(get()) }
@@ -53,7 +53,7 @@ val viewModelModule = module {
         context.getString(if (previous) com.axelliant.hris.R.string.rq_batch_refresh_failed
             else com.axelliant.hris.R.string.rq_batch_failed, names)
     } }
-    viewModel { TeamActivityViewModel(get()) }
+    viewModel { TeamActivityViewModel(get()) { previous -> androidContext().getString(if (previous) com.axelliant.hris.R.string.list_batch_refresh_failed else com.axelliant.hris.R.string.list_batch_failed) } }
     viewModel { TeamCalendarViewModel(get()) }
     viewModel { OrganogramViewModel(get()) }
     viewModel { ApprovalsViewModel(get()) }
