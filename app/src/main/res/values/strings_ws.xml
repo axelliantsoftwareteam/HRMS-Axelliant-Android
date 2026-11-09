@@ -8,6 +8,7 @@
     <string name="ws_try_again">Try again</string>
 
     <!-- Drawer -->
+    <string name="drawer_profile">Profile</string>
     <string name="drawer_section_employee">Employee</string>
     <string name="drawer_section_manager">Manager</string>
     <string name="drawer_attendance">Attendance</string>

@@ -1,0 +1,4 @@
+<resources>
+    <string name="home_internet_title">No internet connection</string>
+    <string name="home_internet_message">Connect to the internet to check in or check out, then try again.</string>
+</resources>

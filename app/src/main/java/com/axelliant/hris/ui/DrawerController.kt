@@ -37,6 +37,7 @@ class DrawerController(
     private var unread = 0
 
     private val employeeItems = listOf(
+        Item(R.string.drawer_profile, R.drawable.ws_ic_person) { AppNavigator.navigateToProfile() },
         Item(R.string.drawer_attendance, R.drawable.ws_ic_attendance) { AppNavigator.navigateToMyAttendanceDetail() },
         Item(R.string.drawer_leave, R.drawable.ws_ic_description) { AppNavigator.navigateToLeaves() },
         Item(R.string.drawer_requests, R.drawable.ws_ic_help) { AppNavigator.navigateToRequestsOverview() },

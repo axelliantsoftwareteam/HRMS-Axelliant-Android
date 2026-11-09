@@ -3,6 +3,9 @@ package com.axelliant.hris.screens
 import android.animation.AnimatorInflater
 import android.animation.AnimatorSet
 import android.app.AlertDialog
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
@@ -84,6 +87,7 @@ class HomeFragment : BaseFragment() {
     private var employeeTodayList = ArrayList<EmployTeamProfile>()
     private var homeLocation: com.axelliant.hris.location.HomeLocationController? = null
     private var locationFetching = false
+    private var internetDialog: AlertDialog? = null
 
 
     private val binding get() = _binding
@@ -275,6 +279,10 @@ class HomeFragment : BaseFragment() {
         }
         binding?.ivMenu?.setOnClickListener { (requireActivity() as MainActivity).openDrawer() }
         binding?.ivNotification?.setOnClickListener { AppNavigator.navigateToNotifications() }
+        listOfNotNull(binding?.tvEmployeName, binding?.tvEmployeDesignation, binding?.tvEmployeId).forEach { view ->
+            view.setOnClickListener { AppNavigator.navigateToProfile() }
+            view.isFocusable = true
+        }
 
         AppState.unreadNotifications.observe(viewLifecycleOwner) { count ->
             val badge = binding?.tvNotificationBadge ?: return@observe
@@ -309,6 +317,7 @@ class HomeFragment : BaseFragment() {
             AnimatorInflater.loadAnimator(requireContext(), R.animator.back_animator) as AnimatorSet
 
         binding?.btnCheckIn?.setOnClickListener {
+            if (!requireAttendanceInternet()) return@setOnClickListener
             if (checkInInfoResponse == null) {
                 requireContext().showErrorMsg(getString(R.string.home_attendance_loading))
                 return@setOnClickListener
@@ -318,6 +327,8 @@ class HomeFragment : BaseFragment() {
         }
     }
     override fun onDestroyView() {
+        internetDialog?.dismiss()
+        internetDialog = null
         homeLocation = null
         _binding = null
         super.onDestroyView()
@@ -374,6 +385,7 @@ class HomeFragment : BaseFragment() {
 
     /** Sends the punch. The check-in widget only flips after the server confirms (dashboard reload). */
     private fun submitPunch() {
+        if (!requireAttendanceInternet()) return
         if (checkInInfoResponse == null) {
             requireContext().showErrorMsg(getString(R.string.home_attendance_loading))
             return
@@ -394,6 +406,23 @@ class HomeFragment : BaseFragment() {
             this.request_status = LeaveStatus.APPROVED.value
             this.attendance_reason = "Punch from application"
         })
+    }
+
+    /** Requires working internet, including validation beyond merely being connected to Wi-Fi. */
+    private fun requireAttendanceInternet(): Boolean {
+        val connectivity = requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val capabilities = connectivity.getNetworkCapabilities(connectivity.activeNetwork)
+        if (capabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) == true &&
+            capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)) return true
+
+        if (internetDialog?.isShowing != true) {
+            internetDialog = AlertDialog.Builder(requireContext())
+                .setTitle(R.string.home_internet_title)
+                .setMessage(R.string.home_internet_message)
+                .setPositiveButton(android.R.string.ok, null)
+                .show()
+        }
+        return false
     }
 
     /** NTP time when it was fetched, otherwise the phone clock (never an error string). */
