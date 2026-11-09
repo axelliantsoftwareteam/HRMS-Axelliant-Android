@@ -1,0 +1,14 @@
+<resources>
+    <string name="home_location_enable">Turn on location to %1$s.</string>
+    <string name="home_location_permission_settings">Allow precise location permission in settings to %1$s.</string>
+    <string name="home_location_permission_needed">Precise location permission is required for attendance.</string>
+    <string name="home_location_fetching">Getting your location. Please try again shortly.</string>
+    <string name="home_location_fetching_short">Finding location…</string>
+    <string name="home_location_open_settings">Open settings</string>
+    <string name="home_location_find">Find location</string>
+    <string name="home_location_find_action">find your location</string>
+    <string name="home_location_timeout">Unable to get location. Please try again.</string>
+    <string name="home_location_unresolved">Your attendance location is unavailable. Refresh Home and try again.</string>
+    <string name="home_location_refresh_hint">Tap to refresh location</string>
+    <string name="home_attendance_loading">Your attendance details are still loading. Please try again in a moment.</string>
+</resources>

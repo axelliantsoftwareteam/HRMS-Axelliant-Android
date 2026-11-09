@@ -1,35 +1,21 @@
 package com.axelliant.hris.screens
 
-import android.Manifest
 import android.animation.AnimatorInflater
 import android.animation.AnimatorSet
-import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.content.Context
-import android.content.Intent
-import android.content.pm.PackageManager
 import android.location.Location
-import android.location.LocationListener
-import android.location.LocationManager
-import android.net.Uri
 import android.os.Bundle
-import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import java.util.Locale
 import java.util.Date
 import java.text.SimpleDateFormat
 import androidx.lifecycle.lifecycleScope
-import androidx.core.location.LocationManagerCompat
 
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -71,7 +57,6 @@ import com.axelliant.hris.navigation.AppNavigator
 import com.axelliant.hris.utils.SessionManager
 import com.axelliant.hris.viewmodel.HomeViewModel
 import com.axelliant.hris.viewmodel.NotificationsViewModel
-import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -97,42 +82,19 @@ class HomeFragment : BaseFragment() {
     // Create an ArrayList to store the converted time strings
     private var targetLocList = ArrayList<BranchDataResponse>()
     private var employeeTodayList = ArrayList<EmployTeamProfile>()
-    private lateinit var locationPermissionLauncher: ActivityResultLauncher<String>
+    private var homeLocation: com.axelliant.hris.location.HomeLocationController? = null
+    private var locationFetching = false
 
 
     private val binding get() = _binding
 
     private var currentLocation: Location? = null
     private var checkInInfoResponse: CheckInInfoResponse? = null
-    private lateinit var locationManager: LocationManager
+
 
     private val homeViewModel: HomeViewModel by inject()
     private val notificationsViewModel: NotificationsViewModel by inject()
     private val sessionManager: SessionManager by inject()
-
-    private val gpsLocationListener: LocationListener = object : LocationListener {
-        override fun onLocationChanged(location: Location) {
-            currentLocation = location
-            setCurrentLocationText()
-        }
-
-        override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {}
-        override fun onProviderEnabled(provider: String) {}
-        override fun onProviderDisabled(provider: String) {}
-    }
-
-    //------------------------------------------------------//
-    private val networkLocationListener: LocationListener = object : LocationListener {
-        override fun onLocationChanged(location: Location) {
-            currentLocation = location
-            setCurrentLocationText()
-        }
-
-        override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {}
-        override fun onProviderEnabled(provider: String) {}
-        override fun onProviderDisabled(provider: String) {}
-    }
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -145,76 +107,20 @@ class HomeFragment : BaseFragment() {
     }
 
 
-    @SuppressLint("MissingPermission")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        locationPermissionLauncher = registerForActivityResult(
-            ActivityResultContracts.RequestPermission()
-        ) { isGranted ->
-            if (isGranted) {
-                // Permission granted, perform location-based task
-                binding?.btnCheckIn?.performClick()
-            } else {
-                // Permission denied, check if "Don't ask again" was selected
-                if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)) {
-                    // User clicked "Don't Allow", show rationale
-                    showPermissionRationale()
-                } else {
-                    // User selected "Don't ask again", guide them to app settings
-                    showSettingsDialog()
-                }
+        homeLocation = com.axelliant.hris.location.HomeLocationController(
+            this,
+            changed = { location -> currentLocation = location; setCurrentLocationText() },
+            fetchingChanged = { busy ->
+                locationFetching = busy
+                binding?.tvCurrentLocs?.isEnabled = !busy
+                if (busy) binding?.tvCurrentLocs?.setText(R.string.home_location_fetching_short)
+                else setCurrentLocationText()
             }
-        }
-
-
-        val activityResultLauncher: ActivityResultLauncher<Array<String>> =
-            registerForActivityResult(
-                ActivityResultContracts.RequestMultiplePermissions()
-            ) { result ->
-                var allAreGranted = true
-                for (b in result.values) {
-                    allAreGranted = allAreGranted && b
-                }
-
-                if (allAreGranted) {
-                    locationManager =
-                        requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
-
-                    val hasGps = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
-                    val hasNetwork =
-                        locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
-
-                    try {
-                        if (hasGps) {
-                            locationManager.requestLocationUpdates(
-                                LocationManager.GPS_PROVIDER, 5000, 0F, gpsLocationListener
-                            )
-                        }
-                        if (hasNetwork) {
-                            locationManager.requestLocationUpdates(
-                                LocationManager.NETWORK_PROVIDER, 5000, 0F, networkLocationListener
-                            )
-                        }
-                    } catch (e: SecurityException) {
-                        Log.w(TAG, "Location permission revoked", e)
-                    } catch (e: IllegalArgumentException) {
-                        Log.w(TAG, "Location provider unavailable", e)
-                    }
-
-
-                } else {
-//                    requireContext().showSuccessMsg("Ask Location permission")
-
-                }
-            }
-
-        val appPerms = arrayOf(
-            Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.ACCESS_FINE_LOCATION
-        )
-        activityResultLauncher.launch(appPerms)
-
+        ).also { viewLifecycleOwner.lifecycle.addObserver(it) }
+        binding?.tvCurrentLocs?.setOnClickListener { homeLocation?.findLocation() }
 /*
        AppConst.TOKEN = "8b87d8a458a89e9:a1705cecb80d093"
 */
@@ -238,11 +144,8 @@ class HomeFragment : BaseFragment() {
                     response.checkin_info?.let { checkInInfoPopulate(it) }
                     checkInInfoResponse = response.checkin_info
 
-                    if (response.branch_data != null)
-                    {
-                        targetLocList = response.branch_data
-
-                    }
+                    targetLocList = response.branch_data ?: arrayListOf()
+                    setCurrentLocationText()
                     response.employee_profile?.let { dashBoardPopulate(it) }
 
                     dataPopulate()
@@ -406,44 +309,16 @@ class HomeFragment : BaseFragment() {
             AnimatorInflater.loadAnimator(requireContext(), R.animator.back_animator) as AnimatorSet
 
         binding?.btnCheckIn?.setOnClickListener {
-
-          /*  if (employProfileResponse?.allow_punch_in == 1) return@setOnClickListener
-            else {*/
-                if (checkLocationPermission()) {
-                    if (!isLocationServiceOn()) {
-                        showLocationOffDialog()
-                        return@setOnClickListener
-                    }
-                    setCurrentLocationText()
-                    if (checkInInfoResponse == null) {
-                        requireContext().showErrorMsg("Your attendance details are still loading. Please try again in a moment.")
-                        return@setOnClickListener
-                    }
-                    if (checkInInfoResponse?.is_check_in_button == true) {
-                        showAttendanceDialog(LeaveStatus.CHECKIN.value)
-                    } else {
-                        showAttendanceDialog(LeaveStatus.CHECKOUT.value)
-                    }
-                } else {
-                    requireContext().showErrorMsg("Permission denied")
-                    // Request permission if not granted
-//                requestLocationPermission()
-                    locationPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
-
-
-                }
-           /* }*/
-
-
+            if (checkInInfoResponse == null) {
+                requireContext().showErrorMsg(getString(R.string.home_attendance_loading))
+                return@setOnClickListener
+            }
+            val action = if (isCheckIn) LeaveStatus.CHECKIN.value else LeaveStatus.CHECKOUT.value
+            if (homeLocation?.ready(action) == true) showAttendanceDialog(action)
         }
-
     }
-
     override fun onDestroyView() {
-        if (::locationManager.isInitialized) {
-            locationManager.removeUpdates(gpsLocationListener)
-            locationManager.removeUpdates(networkLocationListener)
-        }
+        homeLocation = null
         _binding = null
         super.onDestroyView()
     }
@@ -476,35 +351,6 @@ class HomeFragment : BaseFragment() {
 
     }
 
-    // Show a rationale dialog explaining why the permission is needed
-    private fun showPermissionRationale() {
-        AlertDialog.Builder(requireContext())
-            .setTitle("Location Permission Needed")
-            .setMessage("This app requires location permission to perform check-in and check-out. Please grant the permission.")
-            .setPositiveButton("OK") { _, _ ->
-                // Try requesting the permission again
-                requestLocationPermission()
-            }
-            .setNegativeButton("Cancel", null)
-            .show()
-    }
-
-    // Show a dialog guiding the user to the app's settings
-    private fun showSettingsDialog() {
-        AlertDialog.Builder(requireContext())
-            .setTitle("Permission Denied")
-            .setMessage("Location permission is denied. You need to enable it in the app settings.")
-            .setPositiveButton("Go to Settings") { _, _ ->
-                // Open app settings
-                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                val uri: Uri = Uri.fromParts("package", requireContext().packageName, null)
-                intent.data = uri
-                startActivity(intent)
-            }
-            .setNegativeButton("Cancel", null)
-            .show()
-    }
-
     fun showAttendanceDialog(action: String) {
         val title = "Confirm Action"
         val description = when (action) {
@@ -529,12 +375,15 @@ class HomeFragment : BaseFragment() {
     /** Sends the punch. The check-in widget only flips after the server confirms (dashboard reload). */
     private fun submitPunch() {
         if (checkInInfoResponse == null) {
-            requireContext().showErrorMsg("Your attendance details are still loading. Please try again in a moment.")
+            requireContext().showErrorMsg(getString(R.string.home_attendance_loading))
             return
         }
+        val action = if (isCheckIn) LeaveStatus.CHECKIN.value else LeaveStatus.CHECKOUT.value
+        if (homeLocation?.ready(action) != true) return
+        setCurrentLocationText()
         val where = loc
         if (where == null) {
-            requireContext().showErrorMsg("Please wait we are fetching your location")
+            requireContext().showErrorMsg(getString(R.string.home_location_unresolved))
             return
         }
         val type = if (isCheckIn) CheckRequestFilter.IN.name else CheckRequestFilter.OUT.name
@@ -553,21 +402,6 @@ class HomeFragment : BaseFragment() {
         if (!ntp.isNullOrBlank() && TIMESTAMP.matches(ntp)) return ntp
         return SimpleDateFormat(AppConst.ATTENDANCE_DATE_FORMAT, Locale.US).format(Date())
     }
-
-    private fun isLocationServiceOn(): Boolean {
-        val manager = requireContext().getSystemService(Context.LOCATION_SERVICE) as? LocationManager ?: return false
-        return LocationManagerCompat.isLocationEnabled(manager)
-    }
-
-    private fun showLocationOffDialog() {
-        AlertDialog.Builder(requireContext())
-            .setTitle("Location Is Off")
-            .setMessage("AXE HR needs your location to punch in and out. Turn on location in Settings.")
-            .setPositiveButton("Settings") { _, _ -> startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)) }
-            .setNegativeButton("Cancel", null)
-            .show()
-    }
-
 
     private fun checkOutAnimate() {
         frontAnimation.setTarget(binding?.lyCheckOut)
@@ -648,8 +482,11 @@ class HomeFragment : BaseFragment() {
     }
 
     private fun setCurrentLocationText() {
+        loc = null
+        binding?.tvCurrentLocs?.setText(if (locationFetching) R.string.home_location_fetching_short else R.string.home_location_find)
         val here = currentLocation ?: return
-        Log.d("loc", " ${here.latitude} ${here.longitude}")
+        if (targetLocList.none { it.latitude != null && it.longitude != null }) return
+
         val office = targetLocList.firstOrNull { branch ->
             val lat = branch.latitude
             val lng = branch.longitude
@@ -833,60 +670,9 @@ class HomeFragment : BaseFragment() {
 
     }
 
-    // Check if location permission is granted
-    private fun checkLocationPermission(): Boolean {
-        return ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.ACCESS_FINE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED
-    }
-
-    private fun requestLocationPermission() {
-        if (ActivityCompat.shouldShowRequestPermissionRationale(
-                requireActivity(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            )
-        ) {
-            // Show rationale to the user
-            requireContext().showErrorMsg("Location permission is needed to access your location for check-in/out.")
-        } else {
-            // User has permanently denied the permission, open settings
-            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-            val uri: Uri = Uri.fromParts("package", requireContext().packageName, null)
-            intent.data = uri
-            startActivity(intent)
-        }
-    }
-
-    // Request location permission
-//    private fun requestLocationPermission() {
-//        ActivityCompat.requestPermissions(
-//            requireActivity(),
-//            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-//            LOCATION_PERMISSION_REQUEST_CODE
-//        )
-//    }
-
-    // Handle permission result
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
-            if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                // Permission granted, retry check-in/out logic
-                binding?.btnCheckIn?.performClick() // Call the check-in logic again
-            } else {
-                requireContext().showErrorMsg("Location permission is required to check in/out.")
-            }
-        }
-    }
-
     companion object {
         private val TAG = HomeFragment::class.java.simpleName
-        private const val LOCATION_PERMISSION_REQUEST_CODE = 1001
+
         private val TIMESTAMP = Regex("\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}")
     }
 }
