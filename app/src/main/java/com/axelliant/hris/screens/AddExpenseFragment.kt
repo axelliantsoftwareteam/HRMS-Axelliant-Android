@@ -10,6 +10,8 @@ import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AlertDialog
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -60,6 +62,9 @@ class AddExpenseFragment : BaseFragment(), AddExpenseAdapter.Listener {
     private lateinit var linesAdapter: AddExpenseAdapter
     private lateinit var attachmentsAdapter: AttachmentsAdapter
 
+    private var initialSnapshot: ExpenseFormSnapshot? = null
+    private var discardDialog: AlertDialog? = null
+    private var removedSavedAttachment = false
     private var initialised = false
     private var isUpdate = false
     private var expenseId = ""
@@ -121,9 +126,36 @@ class AddExpenseFragment : BaseFragment(), AddExpenseAdapter.Listener {
         binding.expBtnSubmit.setOnClickListener { submit() }
         binding.expBtnDelete.setOnClickListener { confirmDeleteClaim() }
 
+        ensureFirstLine()
+        if (initialSnapshot == null) initialSnapshot = formSnapshot()
+        binding.toolbar.setOnBackClickListener { confirmLeave() }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() = confirmLeave()
+            })
         updateTotal()
         updateAttachmentSection()
         observeViewModel()
+    }
+
+    private fun formSnapshot() = ExpenseFormSnapshot(
+        lines.map { ExpenseFormSnapshot.Line(it.type.orEmpty(), it.dateApi.orEmpty(),
+            it.amountText, it.description.orEmpty()) },
+        attachments.map { listOf(it.file_id.orEmpty(), it.imageUrl.orEmpty(), it.uri?.toString().orEmpty()) }
+    )
+
+    private fun confirmLeave() {
+        if (initialSnapshot == formSnapshot()) {
+            AppNavigator.moveBackToPreviousFragment()
+            return
+        }
+        if (discardDialog?.isShowing == true) return
+        discardDialog = MaterialAlertDialogBuilder(requireContext())
+            .setTitle(R.string.exp_discard_title)
+            .setMessage(if (removedSavedAttachment) R.string.exp_discard_removed_message else R.string.exp_discard_message)
+            .setNegativeButton(R.string.exp_keep_editing, null)
+            .setPositiveButton(R.string.exp_discard) { _, _ -> AppNavigator.moveBackToPreviousFragment() }
+            .show()
     }
 
     // ---- arguments ----
@@ -216,7 +248,10 @@ class AddExpenseFragment : BaseFragment(), AddExpenseAdapter.Listener {
                 requireContext().showErrorMsg(message.ifBlank { getString(R.string.exp_attach_remove_failed) })
             }
         ) { _, _ ->
-            pendingRemoval?.let { attachments.remove(it) }
+            pendingRemoval?.let {
+                attachments.remove(it)
+                removedSavedAttachment = true
+            }
             pendingRemoval = null
             refreshAttachments()
         }
@@ -472,6 +507,8 @@ class AddExpenseFragment : BaseFragment(), AddExpenseAdapter.Listener {
         if (amount % 1.0 == 0.0) amount.toLong().toString() else String.format(Locale.US, "%.2f", amount)
 
     override fun onDestroyView() {
+        discardDialog?.dismiss()
+        discardDialog = null
         hideDialog()
         _binding = null
         super.onDestroyView()

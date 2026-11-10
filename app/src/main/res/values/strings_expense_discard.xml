@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="exp_discard_title">Discard changes?</string>
+    <string name="exp_discard_message">Your unsaved expense changes will be lost.</string>
+    <string name="exp_discard_removed_message">Your unsaved expense changes will be lost. Attachments already deleted from this claim cannot be restored by leaving.</string>
+    <string name="exp_keep_editing">Keep editing</string>
+    <string name="exp_discard">Discard</string>
+</resources>
