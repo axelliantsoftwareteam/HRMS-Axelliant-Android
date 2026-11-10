@@ -1,10 +1,15 @@
 package com.axelliant.hris.screens
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.Toast
+import androidx.activity.ComponentDialog
+import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
@@ -24,6 +29,7 @@ import com.axelliant.hris.model.profile.CertificationCreateRequest
 import com.axelliant.hris.network.observeResult
 import com.axelliant.hris.viewmodel.ProfileViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -44,6 +50,16 @@ class CertificationFormDialog : DialogFragment() {
     /** Picked dates as UTC-midnight milliseconds (what MaterialDatePicker returns); null = not set. */
     private var issueUtc: Long? = null
     private var expiryUtc: Long? = null
+    private var discardDialog: AlertDialog? = null
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog =
+        ComponentDialog(requireContext(), theme).apply {
+            setCanceledOnTouchOutside(false)
+            onBackPressedDispatcher.addCallback(this@CertificationFormDialog,
+                object : OnBackPressedCallback(true) {
+                    override fun handleOnBackPressed() = confirmLeave()
+                })
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,7 +100,7 @@ class CertificationFormDialog : DialogFragment() {
             insets
         }
 
-        binding.certFormToolbar.setOnBackClickListener { dismiss() }
+        binding.certFormToolbar.setOnBackClickListener { confirmLeave() }
         binding.certNameInput.doAfterTextChanged { binding.certNameLayout.error = null }
 
         binding.certIssueSwitch.isChecked = issueUtc != null
@@ -124,6 +140,30 @@ class CertificationFormDialog : DialogFragment() {
             requireContext().showSuccessMsg(message.cleaned() ?: getString(R.string.cert_added))
             dismissAllowingStateLoss()
         }
+    }
+
+    private fun confirmLeave() {
+        if (_binding == null) return
+        if (viewModel.submitting.value == true) {
+            Toast.makeText(requireContext(), R.string.cert_wait_submitting, Toast.LENGTH_SHORT).show()
+            return
+        }
+        // This is a create-only form. Compare with its empty defaults, including renewal enabled.
+        val changed = listOf(binding.certNameInput, binding.certAuthorityInput,
+            binding.certCredentialIdInput, binding.certUrlInput, binding.certNotesInput)
+            .any { !it.text.isNullOrEmpty() } || issueUtc != null || expiryUtc != null ||
+            !binding.certRenewalSwitch.isChecked
+        if (!changed) {
+            dismiss()
+            return
+        }
+        if (discardDialog?.isShowing == true) return
+        discardDialog = MaterialAlertDialogBuilder(requireContext())
+            .setTitle(R.string.cert_discard_title)
+            .setMessage(R.string.cert_discard_message)
+            .setNegativeButton(R.string.cert_keep_editing, null)
+            .setPositiveButton(R.string.cert_discard) { _, _ -> dismiss() }
+            .show()
     }
 
     private fun showPicker(titleRes: Int, current: Long?, onPicked: (Long) -> Unit) {
@@ -182,6 +222,8 @@ class CertificationFormDialog : DialogFragment() {
     private fun text(value: CharSequence?): String = value?.toString().orEmpty().trim()
 
     override fun onDestroyView() {
+        discardDialog?.dismiss()
+        discardDialog = null
         _binding = null
         super.onDestroyView()
     }
